@@ -1228,7 +1228,7 @@ const ChatBot = () => {
         </div>
 
         {/* Dynamic Messages */}
-        {planChatMessages.map((msg) => (
+        {planChatMessages.map((msg, index) => (
           <div key={msg.id} className="flex items-start space-x-2">
             {msg.isBot && (
               <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
@@ -1247,6 +1247,17 @@ const ChatBot = () => {
                   : 'bg-brand-red text-white rounded-tr-none max-w-[80%]'
               }`}>
                 <p className="text-sm">{msg.text}</p>
+                
+                {/* Show Fill Details button in the same message */}
+                {msg.isBot && planChatStep === 'details-form' && 
+                 index === planChatMessages.length - 1 && !showDetailsForm && (
+                  <button 
+                    onClick={handleFillDetailsClick}
+                    className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                  >
+                    Fill details
+                  </button>
+                )}
               </div>
               {msg.isBot && (
                 <span className="text-xs text-gray-400 mt-1 block">
@@ -1256,25 +1267,6 @@ const ChatBot = () => {
             </div>
           </div>
         ))}
-
-        {/* Fill Details Button - shown after budget message */}
-        {planChatStep === 'details-form' && !showDetailsForm && (
-          <div className="flex items-start space-x-2">
-            <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-              <Home size={14} className="text-white" />
-            </div>
-            <div className="flex-1">
-              <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-                <button 
-                  onClick={handleFillDetailsClick}
-                  className="w-full bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
-                >
-                  Fill details
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Details Form */}
         {showDetailsForm && (
