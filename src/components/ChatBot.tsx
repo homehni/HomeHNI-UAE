@@ -329,6 +329,266 @@ const ChatBot = () => {
   };
 
   const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
+    'nri_services': [
+      {
+        question: 'What NRI services do you offer?',
+        answer: 'We offer comprehensive NRI services including property management, tenant verification, rent collection, and property maintenance for NRIs living abroad.'
+      },
+      {
+        question: 'How can I manage my property from abroad?',
+        answer: 'Our dedicated team handles all aspects of property management including finding tenants, collecting rent, and ensuring regular maintenance while you stay updated through our portal.'
+      },
+      {
+        question: 'What are the charges for NRI services?',
+        answer: 'Our charges vary based on the services selected. Contact us for a detailed pricing structure tailored to your requirements.'
+      },
+      {
+        question: 'Do you handle legal documentation for NRIs?',
+        answer: 'Yes, we assist with all legal documentation including rental agreements, power of attorney, and property-related paperwork.'
+      }
+    ],
+    'ac_service': [
+      {
+        question: 'What AC services do you provide?',
+        answer: 'We provide AC installation, repair, maintenance, gas filling, deep cleaning, and annual maintenance contracts for all AC brands.'
+      },
+      {
+        question: 'How often should I service my AC?',
+        answer: 'We recommend servicing your AC at least twice a year - before summer and after monsoon for optimal performance.'
+      },
+      {
+        question: 'Do you provide same-day service?',
+        answer: 'Yes, we offer same-day service for urgent AC repairs subject to technician availability in your area.'
+      },
+      {
+        question: 'What is the warranty on AC repairs?',
+        answer: 'All our AC repair services come with a 30-day service warranty on parts and labor.'
+      }
+    ],
+    'buyer_plans': [
+      {
+        question: 'What buyer plans are available?',
+        answer: 'We offer Basic, Premium, and Elite buyer plans with varying levels of property search assistance, site visits, and negotiation support.'
+      },
+      {
+        question: 'How do buyer plans help me?',
+        answer: 'Our buyer plans provide dedicated relationship managers, curated property listings, legal assistance, and end-to-end support in your home buying journey.'
+      },
+      {
+        question: 'Can I cancel my buyer plan?',
+        answer: 'Yes, buyer plans can be cancelled within 7 days of purchase with a full refund as per our cancellation policy.'
+      }
+    ],
+    'carpentry': [
+      {
+        question: 'What carpentry services do you offer?',
+        answer: 'We provide custom furniture making, repairs, wardrobe installation, door and window fitting, and all types of woodwork services.'
+      },
+      {
+        question: 'Do you provide free estimates?',
+        answer: 'Yes, our carpenters visit your location to provide free, no-obligation estimates for all carpentry work.'
+      },
+      {
+        question: 'What materials do you use?',
+        answer: 'We use high-quality wood and materials as per your preference including plywood, MDF, solid wood, and engineered wood.'
+      }
+    ],
+    'cpms': [
+      {
+        question: 'What is CPMS?',
+        answer: 'CPMS (Comprehensive Property Management System) is our end-to-end property management solution for landlords and property owners.'
+      },
+      {
+        question: 'What services are included in CPMS?',
+        answer: 'CPMS includes tenant finding, rent collection, maintenance coordination, legal documentation, and property inspections.'
+      },
+      {
+        question: 'How much does CPMS cost?',
+        answer: 'CPMS pricing is based on property value and services selected. Contact us for a customized quote.'
+      }
+    ],
+    'electrician': [
+      {
+        question: 'What electrical services do you provide?',
+        answer: 'We provide electrical repairs, new installations, wiring, MCB replacement, fan installation, light fitting, and electrical safety audits.'
+      },
+      {
+        question: 'Are your electricians certified?',
+        answer: 'Yes, all our electricians are licensed, certified professionals with extensive experience in residential and commercial work.'
+      },
+      {
+        question: 'Do you handle emergency electrical issues?',
+        answer: 'Yes, we provide 24/7 emergency electrical services for urgent issues like power outages and short circuits.'
+      }
+    ],
+    'furniture': [
+      {
+        question: 'What furniture services do you offer?',
+        answer: 'We offer furniture assembly, installation, repair, restoration, and custom furniture design and manufacturing.'
+      },
+      {
+        question: 'Do you provide furniture on rent?',
+        answer: 'Yes, we offer furniture rental packages for residential and commercial properties with flexible terms.'
+      },
+      {
+        question: 'Can you repair antique furniture?',
+        answer: 'Yes, our skilled craftsmen specialize in antique furniture restoration and repair.'
+      }
+    ],
+    'home_cleaning': [
+      {
+        question: 'What cleaning services do you provide?',
+        answer: 'We offer deep cleaning, regular cleaning, move-in/move-out cleaning, bathroom cleaning, kitchen cleaning, and carpet cleaning services.'
+      },
+      {
+        question: 'Are cleaning products eco-friendly?',
+        answer: 'Yes, we use eco-friendly, non-toxic cleaning products that are safe for your family and pets.'
+      },
+      {
+        question: 'How long does a deep cleaning session take?',
+        answer: 'A typical deep cleaning session takes 4-6 hours depending on the size of your home.'
+      }
+    ],
+    'home_interiors': [
+      {
+        question: 'What interior design services do you offer?',
+        answer: 'We provide complete interior design solutions including space planning, 3D visualization, modular kitchens, wardrobes, and home décor.'
+      },
+      {
+        question: 'Do you provide design consultations?',
+        answer: 'Yes, we offer free initial design consultations to understand your requirements and style preferences.'
+      },
+      {
+        question: 'What is the timeline for interior projects?',
+        answer: 'Project timelines vary from 4-12 weeks depending on scope, with detailed schedules provided during planning.'
+      }
+    ],
+    'home_renovation': [
+      {
+        question: 'What renovation services do you provide?',
+        answer: 'We handle complete home renovations including structural changes, bathroom and kitchen remodeling, flooring, painting, and electrical work.'
+      },
+      {
+        question: 'Do you handle permits and approvals?',
+        answer: 'Yes, we assist with obtaining necessary permits and approvals from local authorities for renovation work.'
+      },
+      {
+        question: 'Can I stay in my home during renovation?',
+        answer: 'It depends on the scope of work. For minor renovations, yes. For major structural work, temporary relocation is recommended.'
+      }
+    ],
+    'legal_services': [
+      {
+        question: 'What legal services do you offer for property?',
+        answer: 'We provide title verification, agreement drafting, property registration, legal consultation, and dispute resolution services.'
+      },
+      {
+        question: 'How long does property verification take?',
+        answer: 'Property title verification typically takes 7-10 working days depending on document availability.'
+      },
+      {
+        question: 'Do you help with property disputes?',
+        answer: 'Yes, our legal team provides consultation and representation for property-related disputes and litigation.'
+      }
+    ],
+    'loan_services': [
+      {
+        question: 'What types of home loans do you assist with?',
+        answer: 'We assist with home loans, home improvement loans, balance transfer, and loan against property from multiple banks.'
+      },
+      {
+        question: 'What documents are required for a home loan?',
+        answer: 'Typically required documents include ID proof, address proof, income proof, property documents, and bank statements.'
+      },
+      {
+        question: 'How long does loan approval take?',
+        answer: 'Loan approval typically takes 7-15 days after document submission, depending on the bank and verification process.'
+      }
+    ],
+    'owner_plans': [
+      {
+        question: 'What are owner plans?',
+        answer: 'Owner plans are subscription packages that help property owners with tenant finding, legal documentation, and property management services.'
+      },
+      {
+        question: 'What benefits do owner plans offer?',
+        answer: 'Benefits include tenant verification, rental agreement drafting, rent collection support, and priority customer service.'
+      },
+      {
+        question: 'Can I upgrade my owner plan?',
+        answer: 'Yes, you can upgrade your plan anytime with the price difference being adjusted proportionally.'
+      }
+    ],
+    'packers_movers': [
+      {
+        question: 'What packing and moving services do you provide?',
+        answer: 'We provide local and intercity moving, packing services, loading/unloading, vehicle transportation, and storage solutions.'
+      },
+      {
+        question: 'Is insurance included in moving services?',
+        answer: 'Basic transit insurance is included. Comprehensive insurance can be purchased for high-value items.'
+      },
+      {
+        question: 'How is the cost calculated?',
+        answer: 'Moving costs are based on distance, volume of goods, packing materials required, and additional services selected.'
+      }
+    ],
+    'painting': [
+      {
+        question: 'What painting services do you offer?',
+        answer: 'We offer interior and exterior painting, texture painting, waterproofing, wall putty, and wall repair services.'
+      },
+      {
+        question: 'Which paint brands do you use?',
+        answer: 'We work with premium brands like Asian Paints, Berger, Dulux, and Nerolac, or as per your preference.'
+      },
+      {
+        question: 'How long does painting take?',
+        answer: 'A typical 2BHK painting project takes 4-7 days depending on the scope and weather conditions.'
+      }
+    ],
+    'plumbing': [
+      {
+        question: 'What plumbing services do you provide?',
+        answer: 'We provide leak repairs, pipe installation, bathroom fitting, water tank cleaning, drain cleaning, and emergency plumbing services.'
+      },
+      {
+        question: 'Do you provide 24/7 plumbing services?',
+        answer: 'Yes, we offer 24/7 emergency plumbing services for urgent issues like pipe bursts and major leaks.'
+      },
+      {
+        question: 'What is the warranty on plumbing work?',
+        answer: 'All plumbing work comes with a 30-day service warranty on parts and labor.'
+      }
+    ],
+    'post_property': [
+      {
+        question: 'How do I post my property?',
+        answer: 'You can post your property through our platform by filling in property details, uploading photos, and selecting visibility options.'
+      },
+      {
+        question: 'Is posting a property free?',
+        answer: 'Basic listing is free. Premium listings with better visibility and features require a subscription.'
+      },
+      {
+        question: 'Can I edit my property listing?',
+        answer: 'Yes, you can edit your property listing anytime through your account dashboard.'
+      }
+    ],
+    'rental_agreement': [
+      {
+        question: 'How do I create a rental agreement?',
+        answer: 'We provide online rental agreement creation with legal templates. Simply fill in details, and we handle printing and registration.'
+      },
+      {
+        question: 'Is e-stamping included?',
+        answer: 'Yes, we provide e-stamping services as per state regulations included in the package.'
+      },
+      {
+        question: 'How long does agreement registration take?',
+        answer: 'Agreement registration typically takes 3-5 working days after document submission.'
+      }
+    ],
     'rent_pay': [
       {
         question: 'What are fees/charges for using NoBrokerPay?',
@@ -355,23 +615,106 @@ const ChatBot = () => {
         answer: 'Payments are processed within 1-2 business days and directly credited to the landlord\'s registered bank account.'
       }
     ],
-    // Add default FAQs for other services
-    'default': [
+    'school_fee': [
       {
-        question: 'How do I use this service?',
-        answer: 'You can use this service by registering on our platform and following the simple steps provided.'
+        question: 'How do I pay school fees online?',
+        answer: 'You can pay school fees through our platform by selecting your school, entering student details, and making secure online payment.'
       },
       {
-        question: 'What are the charges for this service?',
-        answer: 'Service charges vary based on your requirements. Contact us for detailed pricing information.'
+        question: 'Which schools are supported?',
+        answer: 'We support major schools across cities. Search for your school on our platform to check availability.'
       },
       {
-        question: 'How long does it take to complete?',
-        answer: 'Service completion time depends on the specific requirements. Our team will provide you with an estimated timeline.'
+        question: 'Are there any transaction charges?',
+        answer: 'Transaction charges vary by payment method. Details are displayed before payment confirmation.'
       },
       {
-        question: 'Is this service available in my area?',
-        answer: 'We offer services in major cities. Please check with our team for availability in your specific location.'
+        question: 'Will I get a payment receipt?',
+        answer: 'Yes, payment receipts are sent via email and SMS immediately after successful payment.'
+      }
+    ],
+    'seller_plans': [
+      {
+        question: 'What seller plans are available?',
+        answer: 'We offer Basic, Premium, and Elite seller plans with varying levels of property promotion, photography, and sales assistance.'
+      },
+      {
+        question: 'How do seller plans help me sell faster?',
+        answer: 'Seller plans provide professional photography, premium listing placement, dedicated sales support, and wider visibility to potential buyers.'
+      },
+      {
+        question: 'What is included in the Elite plan?',
+        answer: 'Elite plan includes premium photography, virtual tours, social media promotion, legal assistance, and priority customer support.'
+      }
+    ],
+    'tenant_plans': [
+      {
+        question: 'What are tenant plans?',
+        answer: 'Tenant plans are subscription packages that help tenants find verified properties, get rental agreements, and access move-in services.'
+      },
+      {
+        question: 'Do tenant plans include property visits?',
+        answer: 'Yes, tenant plans include scheduled property visits with our relationship managers.'
+      },
+      {
+        question: 'Can I get a refund if I don\'t find a property?',
+        answer: 'Refund policy varies by plan. Check terms and conditions or contact support for details.'
+      }
+    ],
+    'unsubscribe': [
+      {
+        question: 'How do I unsubscribe from services?',
+        answer: 'You can unsubscribe from any service through your account settings or by contacting customer support.'
+      },
+      {
+        question: 'Will I get a refund on unsubscribing?',
+        answer: 'Refunds are processed as per our refund policy based on service usage and cancellation timeline.'
+      },
+      {
+        question: 'Can I pause my subscription instead?',
+        answer: 'Yes, some services allow subscription pause. Check with customer support for availability.'
+      }
+    ],
+    'user_registration': [
+      {
+        question: 'How do I register on the platform?',
+        answer: 'Click on Sign Up, enter your mobile number, verify OTP, and complete your profile to start using our services.'
+      },
+      {
+        question: 'Is registration free?',
+        answer: 'Yes, registration on our platform is completely free for all users.'
+      },
+      {
+        question: 'What information do I need to provide?',
+        answer: 'Basic information required includes name, mobile number, email, and city. Additional details can be added for better service.'
+      }
+    ],
+    'utility_payments': [
+      {
+        question: 'What utility payments can I make?',
+        answer: 'You can pay electricity bills, water bills, gas bills, property tax, and maintenance charges through our platform.'
+      },
+      {
+        question: 'Are there any charges for utility payments?',
+        answer: 'Most utility payments are free. Some service providers may charge a convenience fee.'
+      },
+      {
+        question: 'How long does payment processing take?',
+        answer: 'Payments are processed instantly and reflected in your account within 24-48 hours.'
+      }
+    ],
+    'others': [
+      {
+        question: 'What other services do you offer?',
+        answer: 'We offer various additional services including pest control, security services, solar installation, and more. Contact us for specific requirements.'
+      },
+      {
+        question: 'How can I request a custom service?',
+        answer: 'You can submit custom service requests through our platform or contact customer support with your requirements.'
+      },
+      {
+        question: 'Do you provide commercial services?',
+        answer: 'Yes, we provide services for both residential and commercial properties. Contact us for commercial service details.'
       }
     ]
   };
