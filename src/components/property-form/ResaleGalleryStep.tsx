@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -39,19 +39,6 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
 
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
-
-  // Sync form data with parent immediately when images/video change
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-      const galleryData: PropertyGallery = {
-        images: value.images || [],
-        video: value.video
-      };
-      // Update parent state immediately to prevent data loss on navigation
-      onNext(galleryData);
-    });
-    return () => subscription.unsubscribe();
-  }, [form, onNext]);
   const handleFormSubmit = (data: ResaleGalleryFormData) => {
     const galleryData: PropertyGallery = {
       images: data.images || [],
