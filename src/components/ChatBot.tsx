@@ -1524,7 +1524,23 @@ const ChatBot = () => {
     <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
       {!isOpen && (
         <Button
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setIsOpen(true);
+            // If on plans page, open directly to plan support chat
+            if (location.pathname === '/plans') {
+              setCurrentView('plan-support');
+              setPlanChatStep('budget');
+              setShowDetailsForm(false);
+              setPlanChatMessages([
+                {
+                  id: '1',
+                  text: 'Hi, I can help you with selection of right plan. What is your rent budget?',
+                  isBot: true,
+                  timestamp: new Date()
+                }
+              ]);
+            }
+          }}
           className="h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <Home size={24} className="text-white sm:w-7 sm:h-7" />
