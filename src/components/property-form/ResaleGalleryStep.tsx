@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -40,15 +40,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   const form = useForm<ResaleGalleryFormData>({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
-      images: initialData.categorizedImages ? {
-        bathroom: initialData.categorizedImages.bathroom || [],
-        bedroom: initialData.categorizedImages.bedroom || [],
-        hall: initialData.categorizedImages.hall || [],
-        kitchen: initialData.categorizedImages.kitchen || [],
-        frontView: initialData.categorizedImages.frontView || [],
-        balcony: initialData.categorizedImages.balcony || [],
-        others: initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : [])
-      } : {
+      images: initialData.categorizedImages || {
         bathroom: [],
         bedroom: [],
         hall: [],
