@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle } from 'lucide-react';
+import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -318,32 +318,186 @@ const ChatBot = () => {
 
   const services = [
     {
+      id: 'nri',
+      icon: Globe,
+      label: 'NRI Services',
+      description: 'Services for NRIs',
+      action: 'nri_services'
+    },
+    {
+      id: 'ac',
+      icon: Wind,
+      label: 'Ac Service & Repair',
+      description: 'AC maintenance',
+      action: 'ac_service'
+    },
+    {
       id: 'buyer',
       icon: Search,
-      label: 'Want to Buy',
-      description: 'Find your dream property',
+      label: 'Buyer Plans',
+      description: 'Find your property',
       action: 'Want to buy a property'
     },
     {
-      id: 'seller',
+      id: 'carpentry',
+      icon: Hammer,
+      label: 'Carpentry',
+      description: 'Wood work services',
+      action: 'carpentry'
+    },
+    {
+      id: 'cpms',
+      icon: FileCheck,
+      label: 'CPMS',
+      description: 'Property management',
+      action: 'cpms'
+    },
+    {
+      id: 'electrician',
+      icon: Zap,
+      label: 'Electrician',
+      description: 'Electrical services',
+      action: 'electrician'
+    },
+    {
+      id: 'furniture',
+      icon: Sofa,
+      label: 'Furniture',
+      description: 'Furniture services',
+      action: 'furniture'
+    },
+    {
+      id: 'cleaning',
+      icon: Sparkles,
+      label: 'Home Cleaning',
+      description: 'Cleaning services',
+      action: 'home_cleaning'
+    },
+    {
+      id: 'interiors',
+      icon: PaintBucket,
+      label: 'Home Interiors',
+      description: 'Interior design',
+      action: 'home_interiors'
+    },
+    {
+      id: 'renovation',
+      icon: Wrench,
+      label: 'Home Renovation',
+      description: 'Renovation services',
+      action: 'home_renovation'
+    },
+    {
+      id: 'legal',
+      icon: Scale,
+      label: 'Legal Services',
+      description: 'Legal assistance',
+      action: 'legal_services'
+    },
+    {
+      id: 'loan',
+      icon: BadgeDollarSign,
+      label: 'Loan Services',
+      description: 'Home loans',
+      action: 'loan_services'
+    },
+    {
+      id: 'owner',
+      icon: Shield,
+      label: 'Owner Plans',
+      description: 'Property owner',
+      action: 'owner_plans'
+    },
+    {
+      id: 'movers',
+      icon: TruckIcon,
+      label: 'Packers & Movers',
+      description: 'Moving services',
+      action: 'packers_movers'
+    },
+    {
+      id: 'painting',
+      icon: Brush,
+      label: 'Painting',
+      description: 'Painting services',
+      action: 'painting'
+    },
+    {
+      id: 'plumbing',
+      icon: Droplet,
+      label: 'Plumbing',
+      description: 'Plumbing services',
+      action: 'plumbing'
+    },
+    {
+      id: 'post',
       icon: Home,
-      label: 'Seller',
-      description: 'List your property',
+      label: 'Post / Remove Property',
+      description: 'Manage listings',
       action: 'Seller'
     },
     {
-      id: 'agent',
-      icon: UserCircle,
-      label: 'Agent',
-      description: 'Manage listings',
-      action: 'Agent'
+      id: 'rental',
+      icon: FileText,
+      label: 'Rental Agreement',
+      description: 'Rental contracts',
+      action: 'rental_agreement'
     },
     {
-      id: 'builder',
-      icon: Building2,
-      label: 'Builder',
-      description: 'Showcase projects',
-      action: 'Builder'
+      id: 'rentpay',
+      icon: CreditCard,
+      label: 'Rent Pay',
+      description: 'Pay rent online',
+      action: 'rent_pay'
+    },
+    {
+      id: 'school',
+      icon: GraduationCap,
+      label: 'School Fee Payments',
+      description: 'Pay school fees',
+      action: 'school_fee'
+    },
+    {
+      id: 'seller',
+      icon: ShoppingBag,
+      label: 'Seller Plans',
+      description: 'Sell property',
+      action: 'Seller'
+    },
+    {
+      id: 'tenant',
+      icon: UserCheck,
+      label: 'Tenant Plans',
+      description: 'Rental services',
+      action: 'tenant_plans'
+    },
+    {
+      id: 'unsubscribe',
+      icon: Ban,
+      label: 'Unsubscribe',
+      description: 'Manage subscription',
+      action: 'unsubscribe'
+    },
+    {
+      id: 'registration',
+      icon: UserPlus,
+      label: 'User Registration',
+      description: 'Create account',
+      action: 'user_registration'
+    },
+    {
+      id: 'utility',
+      icon: Receipt,
+      label: 'Utility Payments',
+      description: 'Pay bills',
+      action: 'utility_payments'
+    },
+    {
+      id: 'others',
+      icon: MoreHorizontal,
+      label: 'Others',
+      description: 'Other services',
+      action: 'others'
     }
   ];
 
@@ -363,23 +517,20 @@ const ChatBot = () => {
         <h2 className="text-xs font-semibold text-brand-red uppercase tracking-wider mb-3">
           CHOOSE A SERVICE
         </h2>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-2 pb-4">
           {services.map((service) => {
             const IconComponent = service.icon;
             return (
               <button
                 key={service.id}
                 onClick={() => handleOptionClick(service.action)}
-                className="flex flex-col items-center p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 hover:border-brand-red group"
+                className="flex flex-col items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 hover:border-brand-red group"
               >
-                <div className="w-14 h-14 bg-white rounded-lg flex items-center justify-center mb-2 group-hover:shadow-md transition-shadow">
-                  <IconComponent className="w-7 h-7 text-brand-red" />
+                <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-1.5 group-hover:shadow-md transition-shadow">
+                  <IconComponent className="w-6 h-6 text-brand-red" />
                 </div>
-                <span className="text-xs font-medium text-gray-800 text-center">
+                <span className="text-[10px] font-medium text-gray-800 text-center leading-tight">
                   {service.label}
-                </span>
-                <span className="text-[10px] text-gray-500 text-center mt-0.5">
-                  {service.description}
                 </span>
               </button>
             );
