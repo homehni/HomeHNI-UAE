@@ -98,7 +98,7 @@ const ChatBot = () => {
   const [planChatStep, setPlanChatStep] = useState<'budget' | 'details-form' | 'follow-up' | 'complete'>('budget');
   const [planChatInput, setPlanChatInput] = useState('');
   const [showDetailsForm, setShowDetailsForm] = useState(false);
-  const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '' });
+  const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -1096,6 +1096,7 @@ const ChatBot = () => {
     if (location.pathname === '/plans') {
       setCurrentView('plan-support');
       setPlanChatStep('budget');
+      setShowDetailsForm(false);
       setPlanChatMessages([
         {
           id: '1',
@@ -1118,6 +1119,7 @@ const ChatBot = () => {
     };
 
     setPlanChatMessages(prev => [...prev, userMessage]);
+    const budgetValue = planChatInput;
     setPlanChatInput('');
 
     // Bot response based on step
@@ -1127,14 +1129,13 @@ const ChatBot = () => {
       if (planChatStep === 'budget') {
         botResponse = {
           id: String(Date.now() + 1),
-          text: `Got it, your budget is ${planChatInput}. Before moving forward, kindly provide your details below`,
+          text: 'Before moving forward, kindly provide your details below',
           isBot: true,
           timestamp: new Date()
         };
         setPlanChatMessages(prev => [...prev, botResponse]);
-        setTimeout(() => {
-          setShowDetailsForm(true);
-        }, 500);
+        setPlanChatStep('details-form');
+        setUserDetails(prev => ({ ...prev, budget: budgetValue }));
       } else if (planChatStep === 'follow-up') {
         botResponse = {
           id: String(Date.now() + 1),
@@ -1148,6 +1149,10 @@ const ChatBot = () => {
     }, 1000);
   };
 
+  const handleFillDetailsClick = () => {
+    setShowDetailsForm(true);
+  };
+
   const handleDetailsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -1155,26 +1160,28 @@ const ChatBot = () => {
       return;
     }
 
-    const detailsMessage: Message = {
-      id: String(Date.now()),
-      text: `Name: ${userDetails.name}, Email: ${userDetails.email}, Phone: ${userDetails.phone}`,
-      isBot: false,
-      timestamp: new Date()
-    };
-
-    setPlanChatMessages(prev => [...prev, detailsMessage]);
     setShowDetailsForm(false);
 
     setTimeout(() => {
-      const botResponse: Message = {
-        id: String(Date.now() + 1),
-        text: 'Thank you for providing your details! Could you also let me know your preferred location and the BHK type you are looking for?',
+      const thankYouMessage: Message = {
+        id: String(Date.now()),
+        text: 'Thank you for providing your details!',
         isBot: true,
         timestamp: new Date()
       };
-      setPlanChatMessages(prev => [...prev, botResponse]);
-      setPlanChatStep('follow-up');
-    }, 1000);
+      setPlanChatMessages(prev => [...prev, thankYouMessage]);
+
+      setTimeout(() => {
+        const followUpMessage: Message = {
+          id: String(Date.now() + 1),
+          text: `Got it, your budget is ${userDetails.budget || 'your specified amount'}. Could you also let me know your preferred location and the BHK type you are looking for?`,
+          isBot: true,
+          timestamp: new Date()
+        };
+        setPlanChatMessages(prev => [...prev, followUpMessage]);
+        setPlanChatStep('follow-up');
+      }, 1000);
+    }, 500);
   };
 
   const renderPlanSupportView = () => (
@@ -1193,7 +1200,7 @@ const ChatBot = () => {
             setCurrentView('initial');
             setPlanChatMessages([]);
             setShowDetailsForm(false);
-            setUserDetails({ name: '', email: '', phone: '' });
+            setUserDetails({ name: '', email: '', phone: '', budget: '' });
           }}
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
@@ -1249,6 +1256,25 @@ const ChatBot = () => {
             </div>
           </div>
         ))}
+
+        {/* Fill Details Button - shown after budget message */}
+        {planChatStep === 'details-form' && !showDetailsForm && (
+          <div className="flex items-start space-x-2">
+            <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+              <Home size={14} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+                <button 
+                  onClick={handleFillDetailsClick}
+                  className="w-full bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                >
+                  Fill details
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Details Form */}
         {showDetailsForm && (
