@@ -36,6 +36,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
   const [selectedBedrooms, setSelectedBedrooms] = useState<string[]>([]);
   const [selectedConstructionStatus, setSelectedConstructionStatus] = useState<string[]>([]);
+  // Rent-specific availability selections
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [selectedFurnishing, setSelectedFurnishing] = useState<string[]>([]);
   const [budget, setBudget] = useState<[number, number]>([0, 500000]);
   const [area, setArea] = useState<[number, number]>([0, 10000]);
@@ -91,16 +93,24 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       params.set('bhk', bhkValues.join(','));
     }
 
-    // Availability and Construction (not for land)
+    // Availability/Construction handling per tab (not for land)
     if (activeTab !== 'land') {
-      const availabilityVals = selectedConstructionStatus
-        .map(mapStatusToAvailability)
-        .filter(Boolean) as string[];
-      if (availabilityVals.length > 0) params.set('availability', availabilityVals.join(','));
-      const constructionVals = selectedConstructionStatus
-        .map(mapStatusToConstruction)
-        .filter(Boolean) as string[];
-      if (constructionVals.length > 0) params.set('construction', constructionVals.join(','));
+      if (activeTab === 'rent') {
+        // For RENT, use dedicated Availability values and do NOT set construction
+        if (selectedAvailability.length > 0) {
+          params.set('availability', selectedAvailability.join(','));
+        }
+      } else {
+        // For BUY/COMMERCIAL, map Property Status selections
+        const availabilityVals = selectedConstructionStatus
+          .map(mapStatusToAvailability)
+          .filter(Boolean) as string[];
+        if (availabilityVals.length > 0) params.set('availability', availabilityVals.join(','));
+        const constructionVals = selectedConstructionStatus
+          .map(mapStatusToConstruction)
+          .filter(Boolean) as string[];
+        if (constructionVals.length > 0) params.set('construction', constructionVals.join(','));
+      }
     }
 
     // Budget
@@ -457,16 +467,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </div>
                   )}
 
-                  {/* Property Status (not for land) */}
+                  {/* Availability for RENT, Property Status otherwise (not for land) */}
                   {activeTab !== 'land' && (
                   <div className="relative">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => { setOpenDropdown('construction'); setIsMobileOverlayOpen(true); }}
+                      onClick={() => { setOpenDropdown(activeTab === 'rent' ? 'availability' : 'construction'); setIsMobileOverlayOpen(true); }}
                       className={`h-9 text-xs flex items-center gap-1`}
                     >
-                      Property Status <ChevronRight size={14} />
+                      {activeTab === 'rent' ? 'Availability' : 'Property Status'} <ChevronRight size={14} />
                     </Button>
                   </div>
                   )}
@@ -594,17 +604,30 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </Button>
                     </div>
 
-                    {/* Property Status */}
-                    <div className="relative">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                        className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
-                      >
-                        Property Status <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                      </Button>
-                    </div>
+                    {/* Availability for RENT; Property Status for others */}
+                    {activeTab === 'rent' ? (
+                      <div className="relative">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOpenDropdown(openDropdown === 'availability' ? null : 'availability')}
+                          className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400' : ''}`}
+                        >
+                          Availability <ChevronRight size={14} className={`transition-transform ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
+                          className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
+                        >
+                          Property Status <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
+                        </Button>
+                      </div>
+                    )}
 
                     {/* Furnishing */}
                     <div className="relative">
@@ -682,7 +705,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       ))}
                     </div>
                   )}
-                  {openDropdown === 'construction' && activeTab !== 'land' && (
+                  {openDropdown === 'construction' && activeTab !== 'land' && activeTab !== 'rent' && (
                     <div className="flex flex-wrap gap-2">
                       {['Under Construction', 'Ready'].map(status => (
                         <Button
@@ -695,6 +718,23 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           }}
                         >
                           + {status}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                  {openDropdown === 'availability' && activeTab === 'rent' && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
+                        <Button
+                          key={option}
+                          variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
+                          size="sm"
+                          className="h-8 text-xs"
+                          onClick={() => {
+                            setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
+                          }}
+                        >
+                          {option}
                         </Button>
                       ))}
                     </div>
@@ -800,6 +840,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   setSelectedLocations([]);
                   setSelectedCity('');
                   setSearchQuery('');
+                  setSelectedAvailability([]);
                   if (mobileInputRef.current) mobileInputRef.current.value = '';
                 }}
               >
@@ -947,39 +988,73 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
                       )}
 
-                      {/* Property Status (not for land) */}
+                      {/* Availability for RENT; Property Status for others (not for land) */}
                       {activeTab !== 'land' && (
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                          className={`flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
-                        >
-                          <span className="text-sm">Property Status</span>
-                          <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                        </Button>
-                        {openDropdown === 'construction' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
-                            <h4 className="text-sm font-semibold mb-3">Property Status</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {['Under Construction', 'Ready'].map(status => (
-                                <Button
-                                  key={status}
-                                  variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
-                                  size="sm"
-                                  className="text-xs px-3"
-                                  onClick={() => {
-                                    setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
-                                  }}
-                                >
-                                  + {status}
-                                </Button>
-                              ))}
-                            </div>
+                        activeTab === 'rent' ? (
+                          <div className="relative">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setOpenDropdown(openDropdown === 'availability' ? null : 'availability')}
+                              className={`flex items-center gap-1 ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400' : ''}`}
+                            >
+                              <span className="text-sm">Availability</span>
+                              <ChevronRight size={14} className={`transition-transform ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
+                            </Button>
+                            {openDropdown === 'availability' && (
+                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
+                                <h4 className="text-sm font-semibold mb-3">Availability</h4>
+                                <div className="grid grid-cols-2 gap-2">
+                                  {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
+                                    <Button
+                                      key={option}
+                                      variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
+                                      size="sm"
+                                      className="text-xs px-3"
+                                      onClick={() => {
+                                        setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
+                                      }}
+                                    >
+                                      {option}
+                                    </Button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
+                        ) : (
+                          <div className="relative">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
+                              className={`flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
+                            >
+                              <span className="text-sm">Property Status</span>
+                              <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
+                            </Button>
+                            {openDropdown === 'construction' && (
+                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
+                                <h4 className="text-sm font-semibold mb-3">Property Status</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {['Under Construction', 'Ready'].map(status => (
+                                    <Button
+                                      key={status}
+                                      variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
+                                      size="sm"
+                                      className="text-xs px-3"
+                                      onClick={() => {
+                                        setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
+                                      }}
+                                    >
+                                      + {status}
+                                    </Button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )
                       )}
 
                       {/* Furnishing */}
@@ -1058,7 +1133,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
 
                       {/* Clear (UI only) */}
-                      {(selectedPropertyTypes.length || selectedBedrooms.length || selectedConstructionStatus.length || selectedFurnishing.length) > 0 && (
+                      {(selectedPropertyTypes.length || selectedBedrooms.length || selectedConstructionStatus.length || selectedFurnishing.length || selectedAvailability.length) > 0 && (
                         <Button
                           variant="ghost"
                           size="sm"
@@ -1068,6 +1143,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             setSelectedBedrooms([]);
                             setSelectedConstructionStatus([]);
                             setSelectedFurnishing([]);
+                            setSelectedAvailability([]);
                             setBudget([0, getBudgetSliderMaxHome(activeTab)]);
                             setArea([0, 10000]);
                           }}
