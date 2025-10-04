@@ -10,13 +10,13 @@ import { PropertyGallery } from '@/types/property';
 
 const resaleGallerySchema = z.object({
   images: z.object({
-    bathroom: z.array(z.any()),
-    bedroom: z.array(z.any()),
-    hall: z.array(z.any()),
-    kitchen: z.array(z.any()),
-    frontView: z.array(z.any()),
-    balcony: z.array(z.any()),
-    others: z.array(z.any())
+    bathroom: z.array(z.any()).default([]),
+    bedroom: z.array(z.any()).default([]),
+    hall: z.array(z.any()).default([]),
+    kitchen: z.array(z.any()).default([]),
+    frontView: z.array(z.any()).default([]),
+    balcony: z.array(z.any()).default([]),
+    others: z.array(z.any()).default([])
   }),
   video: z.any().optional()
 });
@@ -37,18 +37,23 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   isSubmitting = false,
   formId
 }) => {
-  const form = useForm<ResaleGalleryFormData>({
+  const form = useForm({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
-      images: initialData.categorizedImages || {
-        bathroom: [],
-        bedroom: [],
-        hall: [],
-        kitchen: [],
-        frontView: [],
-        balcony: [],
-        others: Array.isArray(initialData.images) ? initialData.images : []
-      },
+      images: (() => {
+        const defaults = {
+          bathroom: [] as any[],
+          bedroom: [] as any[],
+          hall: [] as any[],
+          kitchen: [] as any[],
+          frontView: [] as any[],
+          balcony: [] as any[],
+          others: Array.isArray(initialData.images) ? (initialData.images as any[]) : []
+        };
+        return initialData.categorizedImages
+          ? { ...defaults, ...(initialData.categorizedImages as any) }
+          : defaults;
+      })(),
       video: initialData.video
     }
   });
@@ -90,7 +95,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
     
     const galleryData: PropertyGallery = {
       images: allImages,
-      categorizedImages: currentFormData.images,
+      categorizedImages: currentFormData.images as any,
       video: currentFormData.video
     };
 
