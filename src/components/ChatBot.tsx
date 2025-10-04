@@ -1044,7 +1044,10 @@ const ChatBot = () => {
 
           <div className="bg-gradient-to-br from-red-50 to-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-red-100/50">
             <p className="text-xs sm:text-sm text-gray-700 font-semibold mb-3 sm:mb-4">Still have an issue? Chat with us</p>
-            <button className="w-full p-3 sm:p-4 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-white rounded-xl border border-gray-200 hover:border-brand-red transition-all duration-300 flex items-center justify-between group hover:shadow-md">
+            <a 
+              href="mailto:homehni8@gmail.com?subject=Support Query - Need Assistance"
+              className="w-full p-3 sm:p-4 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-white rounded-xl border border-gray-200 hover:border-brand-red transition-all duration-300 flex items-center justify-between group hover:shadow-md"
+            >
               <div className="flex items-center">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-50 to-white rounded-lg sm:rounded-xl flex items-center justify-center mr-2 sm:mr-3 group-hover:shadow-sm transition-shadow border border-red-100/50">
                   <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-brand-red" />
@@ -1055,7 +1058,7 @@ const ChatBot = () => {
                 </div>
               </div>
               <span className="text-gray-400 group-hover:text-brand-red text-lg sm:text-xl transition-colors">›</span>
-            </button>
+            </a>
           </div>
         </div>
 
