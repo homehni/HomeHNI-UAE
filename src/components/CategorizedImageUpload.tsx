@@ -148,11 +148,6 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
     };
     
     onImagesChange(updatedImages);
-    
-    toast({
-      title: "File added",
-      description: `${processedFile.name} has been added to ${categories.find(c => c.key === category)?.label}`
-    });
   }, [images, onImagesChange, toast]);
 
   const removeImage = useCallback((category: keyof CategorizedImages, index: number) => {
@@ -193,16 +188,18 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
                 <div className="text-center">
                   <h4 className="text-xs font-medium text-foreground">{category.label}</h4>
                 </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleUploadClick(category.key)}
-                  className="h-7 text-xs px-2"
-                >
-                  <Upload className="w-3 h-3 mr-1" />
-                  Upload
-                </Button>
+                {categoryImages.length === 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleUploadClick(category.key)}
+                    className="h-7 text-xs px-2"
+                  >
+                    <Upload className="w-3 h-3 mr-1" />
+                    Upload
+                  </Button>
+                )}
               </div>
               
               <input
