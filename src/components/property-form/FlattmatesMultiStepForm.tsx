@@ -1235,7 +1235,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         <div className="flex-1 min-w-0 bg-white flex flex-col">
           {/* Form Content - Scrollable */}
           <div className="flex-1 p-2 pb-20">
-            <div className="bg-white max-w-4xl mx-auto">
               {currentStep === 1 && (
                 <FlattmatesPropertyDetailsStep
                   key={`mobile-step-1-${JSON.stringify(propertyDetails)}`}
@@ -1320,7 +1319,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                   previewPropertyId={createdSubmissionId || undefined}
                 />
               )}
-            </div>
           </div>
 
 
