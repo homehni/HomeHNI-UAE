@@ -1080,7 +1080,13 @@ const ChatBot = () => {
   const renderInitialView = () => (
     <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
       {/* Header */}
-      <div className="px-5 pt-7 pb-5 bg-gradient-to-br from-red-50 to-white border-b border-red-100/50">
+      <div className="px-5 pt-7 pb-5 bg-gradient-to-br from-red-50 to-white border-b border-red-100/50 relative">
+        <button
+          onClick={() => setIsOpen(false)}
+          className="absolute top-4 right-4 text-gray-600 hover:text-brand-red p-2 hover:bg-red-50 rounded-lg transition-all duration-200"
+        >
+          <X size={20} />
+        </button>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Help Center</h1>
         <p className="text-sm text-gray-600 flex items-center">
           <span className="text-brand-red mr-2">✓</span>
@@ -1254,46 +1260,36 @@ const ChatBot = () => {
       )}
 
       {isOpen && (
-        <div className="relative">
-          <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl bg-white sm:w-96 sm:h-[600px] rounded-3xl border-0 overflow-hidden">
-            {!showInitialView && currentView === 'initial' && (
-              <CardHeader className="bg-brand-red text-white p-3 sm:p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center">
-                      <Home size={12} className="text-brand-red sm:w-4 sm:h-4" />
-                    </div>
-                    <CardTitle className="text-base sm:text-lg font-semibold">Real Estate Assistant</CardTitle>
+        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl bg-white sm:w-96 sm:h-[600px] rounded-3xl border-0 overflow-hidden">
+          {!showInitialView && currentView === 'initial' && (
+            <CardHeader className="bg-brand-red text-white p-3 sm:p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center">
+                    <Home size={12} className="text-brand-red sm:w-4 sm:h-4" />
                   </div>
+                  <CardTitle className="text-base sm:text-lg font-semibold">Real Estate Assistant</CardTitle>
                 </div>
-              </CardHeader>
-            )}
+              </div>
+            </CardHeader>
+          )}
 
-            {currentView === 'service-faq' ? (
-              <div className="h-full flex flex-col">
-                {renderServiceFAQView()}
-              </div>
-            ) : currentView === 'faq-detail' ? (
-              <div className="h-full flex flex-col">
-                {renderFAQDetailView()}
-              </div>
-            ) : showInitialView ? (
-              <div className="h-full flex flex-col">
-                {renderInitialView()}
-              </div>
-            ) : (
-              renderChatView()
-            )}
-          </Card>
-
-          <button
-            onClick={() => setIsOpen(false)}
-            className="absolute -bottom-12 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
-            aria-label="Close chatbot"
-          >
-            <X size={24} />
-          </button>
-        </div>
+          {currentView === 'service-faq' ? (
+            <div className="h-full flex flex-col">
+              {renderServiceFAQView()}
+            </div>
+          ) : currentView === 'faq-detail' ? (
+            <div className="h-full flex flex-col">
+              {renderFAQDetailView()}
+            </div>
+          ) : showInitialView ? (
+            <div className="h-full flex flex-col">
+              {renderInitialView()}
+            </div>
+          ) : (
+            renderChatView()
+          )}
+        </Card>
       )}
     </div>
   );
