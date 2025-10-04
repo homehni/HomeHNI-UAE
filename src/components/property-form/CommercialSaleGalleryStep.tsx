@@ -39,11 +39,11 @@ export const CommercialSaleGalleryStep = ({
       images: initialData?.categorizedImages ? {
         frontView: initialData.categorizedImages.frontView || [],
         interiorView: initialData.categorizedImages.interiorView || [],
-        others: initialData.categorizedImages.others || []
+        others: initialData.categorizedImages.others || Array.isArray(initialData.images) ? initialData.images : []
       } : {
         frontView: [],
         interiorView: [],
-        others: []
+        others: Array.isArray(initialData?.images) ? initialData.images : []
       },
       video: initialData?.video
     }

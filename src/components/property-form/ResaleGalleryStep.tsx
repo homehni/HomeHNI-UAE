@@ -9,15 +9,7 @@ import { VideoUpload } from './VideoUpload';
 import { PropertyGallery } from '@/types/property';
 import { Camera, ImageIcon } from 'lucide-react';
 const resaleGallerySchema = z.object({
-  images: z.object({
-    bathroom: z.array(z.any()).default([]),
-    bedroom: z.array(z.any()).default([]),
-    hall: z.array(z.any()).default([]),
-    kitchen: z.array(z.any()).default([]),
-    frontView: z.array(z.any()).default([]),
-    balcony: z.array(z.any()).default([]),
-    others: z.array(z.any()).default([])
-  }),
+  images: z.array(z.any()).optional(),
   video: z.any().optional()
 });
 type ResaleGalleryFormData = z.infer<typeof resaleGallerySchema>;
@@ -37,30 +29,19 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   isSubmitting = false,
   formId
 }) => {
-  const form = useForm({
+  const form = useForm<ResaleGalleryFormData>({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
-      images: initialData.categorizedImages || {
-        bathroom: [],
-        bedroom: [],
-        hall: [],
-        kitchen: [],
-        frontView: [],
-        balcony: [],
-        others: Array.isArray(initialData.images) ? initialData.images : []
-      },
+      images: initialData.images || [],
       video: initialData.video
     }
   });
 
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
-  const handleFormSubmit = (data: any) => {
-    // Convert categorized images to flat array for backward compatibility
-    const allImages = [...data.images.bathroom, ...data.images.bedroom, ...data.images.hall, ...data.images.kitchen, ...data.images.frontView, ...data.images.balcony, ...data.images.others];
+  const handleFormSubmit = (data: ResaleGalleryFormData) => {
     const galleryData: PropertyGallery = {
-      images: allImages,
-      categorizedImages: data.images,
+      images: data.images || [],
       video: data.video
     };
     onNext(galleryData);
@@ -68,12 +49,8 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   const handleSubmitProperty = () => {
     // First, capture the current form data and update the parent form state
     const currentFormData = form.getValues();
-    
-    // Convert categorized images to flat array for backward compatibility
-    const allImages = [...currentFormData.images.bathroom, ...currentFormData.images.bedroom, ...currentFormData.images.hall, ...currentFormData.images.kitchen, ...currentFormData.images.frontView, ...currentFormData.images.balcony, ...currentFormData.images.others];
     const galleryData: PropertyGallery = {
-      images: allImages,
-      categorizedImages: currentFormData.images as any,
+      images: currentFormData.images || [],
       video: currentFormData.video
     };
 
@@ -100,12 +77,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
                     <div className="space-y-6">
 
                       {/* Image Upload Component */}
-                      <ImageUpload 
-                        images={field.value as any} 
-                        onImagesChange={field.onChange} 
-                        maxImages={35}
-                        showCategories={true}
-                      />
+                      <ImageUpload images={field.value || []} onImagesChange={field.onChange} maxImages={15} />
                     </div>
                   </FormControl>
                   <FormMessage />
