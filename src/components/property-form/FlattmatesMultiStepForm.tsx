@@ -1234,7 +1234,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
         {/* Main Content */}
         <div className="flex-1 min-w-0 bg-white flex flex-col">
           {/* Form Content - Scrollable */}
-          <div className="flex-1 p-4 pb-20">
+          <div className="flex-1 p-2 pb-20">
             <div className="bg-white max-w-4xl mx-auto">
               {currentStep === 1 && (
                 <FlattmatesPropertyDetailsStep
