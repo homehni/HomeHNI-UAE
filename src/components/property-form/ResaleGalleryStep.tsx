@@ -4,12 +4,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { ImageUpload } from './ImageUpload';
+import { CategorizedImageUpload } from './CategorizedImageUpload';
 import { VideoUpload } from './VideoUpload';
 import { PropertyGallery } from '@/types/property';
-import { Camera, ImageIcon } from 'lucide-react';
+
 const resaleGallerySchema = z.object({
-  images: z.array(z.any()).optional(),
+  images: z.object({
+    bathroom: z.array(z.any()),
+    bedroom: z.array(z.any()),
+    hall: z.array(z.any()),
+    kitchen: z.array(z.any()),
+    frontView: z.array(z.any()),
+    balcony: z.array(z.any()),
+    others: z.array(z.any())
+  }),
   video: z.any().optional()
 });
 type ResaleGalleryFormData = z.infer<typeof resaleGallerySchema>;
@@ -32,16 +40,45 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   const form = useForm<ResaleGalleryFormData>({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
-      images: initialData.images || [],
+      images: initialData.categorizedImages ? {
+        bathroom: initialData.categorizedImages.bathroom || [],
+        bedroom: initialData.categorizedImages.bedroom || [],
+        hall: initialData.categorizedImages.hall || [],
+        kitchen: initialData.categorizedImages.kitchen || [],
+        frontView: initialData.categorizedImages.frontView || [],
+        balcony: initialData.categorizedImages.balcony || [],
+        others: initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : [])
+      } : {
+        bathroom: [],
+        bedroom: [],
+        hall: [],
+        kitchen: [],
+        frontView: [],
+        balcony: [],
+        others: Array.isArray(initialData.images) ? initialData.images : []
+      },
       video: initialData.video
     }
   });
 
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
+  
   const handleFormSubmit = (data: ResaleGalleryFormData) => {
+    // Convert categorized images to flat array for backward compatibility
+    const allImages = [
+      ...data.images.bathroom,
+      ...data.images.bedroom,
+      ...data.images.hall,
+      ...data.images.kitchen,
+      ...data.images.frontView,
+      ...data.images.balcony,
+      ...data.images.others
+    ];
+    
     const galleryData: PropertyGallery = {
-      images: data.images || [],
+      images: allImages,
+      categorizedImages: data.images,
       video: data.video
     };
     onNext(galleryData);
@@ -49,8 +86,19 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   const handleSubmitProperty = () => {
     // First, capture the current form data and update the parent form state
     const currentFormData = form.getValues();
+    const allImages = [
+      ...currentFormData.images.bathroom,
+      ...currentFormData.images.bedroom,
+      ...currentFormData.images.hall,
+      ...currentFormData.images.kitchen,
+      ...currentFormData.images.frontView,
+      ...currentFormData.images.balcony,
+      ...currentFormData.images.others
+    ];
+    
     const galleryData: PropertyGallery = {
-      images: currentFormData.images || [],
+      images: allImages,
+      categorizedImages: currentFormData.images,
       video: currentFormData.video
     };
 
@@ -75,9 +123,8 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
           }) => <FormItem>
                   <FormControl>
                     <div className="space-y-6">
-
-                      {/* Image Upload Component */}
-                      <ImageUpload images={field.value || []} onImagesChange={field.onChange} maxImages={15} />
+                      {/* Categorized Image Upload Component */}
+                      <CategorizedImageUpload images={field.value as any} onImagesChange={field.onChange} maxImagesPerCategory={5} />
                     </div>
                   </FormControl>
                   <FormMessage />
