@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -76,6 +76,7 @@ const ChatBot = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const chatMessagesEndRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -1092,6 +1093,13 @@ const ChatBot = () => {
     );
   };
 
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (currentView === 'plan-support') {
+      chatMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [planChatMessages, showDetailsForm, currentView]);
+
   const handleHistoryClick = () => {
     if (location.pathname === '/plans') {
       setCurrentView('plan-support');
@@ -1312,6 +1320,9 @@ const ChatBot = () => {
             </div>
           </div>
         )}
+        
+        {/* Invisible element at the end for auto-scroll */}
+        <div ref={chatMessagesEndRef} />
       </div>
 
       {/* Input Area */}
