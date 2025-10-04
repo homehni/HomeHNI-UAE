@@ -90,6 +90,9 @@ const ChatBot = () => {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
+  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail'>('initial');
+  const [selectedService, setSelectedService] = useState<string>('');
+  const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -306,14 +309,91 @@ const ChatBot = () => {
   };
 
   const handleOptionClick = (option: string) => {
-    const newMessage: Message = {
-      id: String(Date.now()),
-      text: option,
-      isBot: false,
-      timestamp: new Date()
-    };
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-    simulateBotResponse(option);
+    // Check if it's one of the 4 original functionalities
+    const originalActions = ['Want to buy a property', 'Seller', 'Agent', 'Builder'];
+    
+    if (originalActions.includes(option)) {
+      const newMessage: Message = {
+        id: String(Date.now()),
+        text: option,
+        isBot: false,
+        timestamp: new Date()
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      simulateBotResponse(option);
+    } else {
+      // For other services, show FAQ view
+      setSelectedService(option);
+      setCurrentView('service-faq');
+    }
+  };
+
+  const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
+    'rent_pay': [
+      {
+        question: 'What are fees/charges for using NoBrokerPay?',
+        answer: 'The fee levied depends on the amount being transferred, more details will be available on the payment page. Click here to know more'
+      },
+      {
+        question: 'Why should I use NoBroker Pay?',
+        answer: 'NoBroker Pay offers secure, convenient rent payments with cashback rewards and instant payment confirmation.'
+      },
+      {
+        question: 'How do I make my house rent payment on NoBrokerPay?',
+        answer: 'Simply register on NoBroker, add your landlord details, and make payments through multiple payment options available.'
+      },
+      {
+        question: 'How can I know my payment status?',
+        answer: 'You can check your payment status in the History section or receive instant notifications on your registered mobile number.'
+      },
+      {
+        question: 'How do I earn cashback/rewards with NoBrokerPay?',
+        answer: 'Cashback is automatically credited to your account after successful payment. Check our rewards program for more details.'
+      },
+      {
+        question: 'How will my rent payment reflect in my landlord\'s bank account?',
+        answer: 'Payments are processed within 1-2 business days and directly credited to the landlord\'s registered bank account.'
+      }
+    ],
+    // Add default FAQs for other services
+    'default': [
+      {
+        question: 'How do I use this service?',
+        answer: 'You can use this service by registering on our platform and following the simple steps provided.'
+      },
+      {
+        question: 'What are the charges for this service?',
+        answer: 'Service charges vary based on your requirements. Contact us for detailed pricing information.'
+      },
+      {
+        question: 'How long does it take to complete?',
+        answer: 'Service completion time depends on the specific requirements. Our team will provide you with an estimated timeline.'
+      },
+      {
+        question: 'Is this service available in my area?',
+        answer: 'We offer services in major cities. Please check with our team for availability in your specific location.'
+      }
+    ]
+  };
+
+  const getCurrentFAQs = () => {
+    return serviceFAQs[selectedService] || serviceFAQs['default'];
+  };
+
+  const handleFAQClick = (faq: {question: string, answer: string}) => {
+    setSelectedFAQ(faq);
+    setCurrentView('faq-detail');
+  };
+
+  const handleBackToFAQs = () => {
+    setCurrentView('service-faq');
+    setSelectedFAQ(null);
+  };
+
+  const handleBackToServices = () => {
+    setCurrentView('initial');
+    setSelectedService('');
+    setSelectedFAQ(null);
   };
 
   const services = [
@@ -529,6 +609,127 @@ const ChatBot = () => {
     }
   ];
 
+  const renderServiceFAQView = () => {
+    const service = services.find(s => s.action === selectedService);
+    const faqs = getCurrentFAQs();
+    
+    return (
+      <div className="flex flex-col h-full">
+        {/* Header */}
+        <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-red-50 to-white border-b">
+          <button
+            onClick={handleBackToServices}
+            className="flex items-center text-gray-700 hover:text-brand-red mb-3"
+          >
+            <span className="text-xl mr-2">←</span>
+            <span className="text-sm font-semibold uppercase tracking-wider">
+              {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
+            </span>
+          </button>
+        </div>
+
+        {/* FAQ List */}
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+          <div className="space-y-2">
+            {faqs.map((faq, index) => (
+              <button
+                key={index}
+                onClick={() => handleFAQClick(faq)}
+                className="w-full p-4 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 hover:border-brand-red transition-colors text-left group"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-800 flex-1 pr-2">
+                    {faq.question}
+                  </span>
+                  <span className="text-gray-400 group-hover:text-brand-red">›</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="flex border-t bg-white">
+          <button 
+            onClick={handleBackToServices}
+            className="flex-1 flex flex-col items-center py-3 text-brand-red border-r"
+          >
+            <HelpCircle className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Help Center</span>
+          </button>
+          <button className="flex-1 flex flex-col items-center py-3 text-gray-500 hover:text-brand-red transition-colors">
+            <History className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">History</span>
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderFAQDetailView = () => {
+    const service = services.find(s => s.action === selectedService);
+    
+    return (
+      <div className="flex flex-col h-full">
+        {/* Header */}
+        <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-red-50 to-white border-b">
+          <button
+            onClick={handleBackToFAQs}
+            className="flex items-center text-gray-700 hover:text-brand-red mb-3"
+          >
+            <span className="text-xl mr-2">←</span>
+            <span className="text-sm font-semibold uppercase tracking-wider">
+              {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
+            </span>
+          </button>
+        </div>
+
+        {/* FAQ Detail */}
+        <div className="flex-1 overflow-y-auto px-4 py-6">
+          <div className="bg-white rounded-lg p-4 mb-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-3">
+              {selectedFAQ?.question}
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {selectedFAQ?.answer}
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-sm text-gray-600 mb-3">Still have an issue? Chat with us</p>
+            <button className="w-full p-4 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 hover:border-brand-red transition-colors flex items-center justify-between group">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                  <Send className="w-5 h-5 text-brand-red" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-gray-900">Message us</p>
+                  <p className="text-xs text-gray-500">Let us know about your query</p>
+                </div>
+              </div>
+              <span className="text-gray-400 group-hover:text-brand-red">›</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="flex border-t bg-white">
+          <button 
+            onClick={handleBackToServices}
+            className="flex-1 flex flex-col items-center py-3 text-brand-red border-r"
+          >
+            <HelpCircle className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">Help Center</span>
+          </button>
+          <button className="flex-1 flex flex-col items-center py-3 text-gray-500 hover:text-brand-red transition-colors">
+            <History className="w-5 h-5 mb-1" />
+            <span className="text-xs font-medium">History</span>
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   const renderInitialView = () => (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -685,7 +886,7 @@ const ChatBot = () => {
     </CardContent>
   );
 
-  const showInitialView = messages.length === 1 && conversationStep === 'role_selection';
+  const showInitialView = messages.length === 1 && conversationStep === 'role_selection' && currentView === 'initial';
 
   return (
     <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
@@ -700,7 +901,7 @@ const ChatBot = () => {
 
       {isOpen && (
         <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl border-2 border-brand-red/30 bg-white sm:w-96 sm:h-[600px]">
-          {!showInitialView && (
+          {!showInitialView && currentView === 'initial' && (
             <CardHeader className="bg-brand-red text-white p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -721,7 +922,31 @@ const ChatBot = () => {
             </CardHeader>
           )}
 
-          {showInitialView ? (
+          {currentView === 'service-faq' ? (
+            <div className="h-full flex flex-col relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsOpen(false)}
+                className="absolute top-2 right-2 z-10 text-gray-600 hover:text-gray-900"
+              >
+                <X size={18} />
+              </Button>
+              {renderServiceFAQView()}
+            </div>
+          ) : currentView === 'faq-detail' ? (
+            <div className="h-full flex flex-col relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsOpen(false)}
+                className="absolute top-2 right-2 z-10 text-gray-600 hover:text-gray-900"
+              >
+                <X size={18} />
+              </Button>
+              {renderFAQDetailView()}
+            </div>
+          ) : showInitialView ? (
             <div className="h-full flex flex-col relative">
               <Button
                 variant="ghost"
