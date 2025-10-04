@@ -339,6 +339,20 @@ const ChatBot = () => {
       action: 'Want to buy a property'
     },
     {
+      id: 'agent',
+      icon: UserCircle,
+      label: 'Agent',
+      description: 'Manage listings',
+      action: 'Agent'
+    },
+    {
+      id: 'builder',
+      icon: Building2,
+      label: 'Builder',
+      description: 'Showcase projects',
+      action: 'Builder'
+    },
+    {
       id: 'carpentry',
       icon: Hammer,
       label: 'Carpentry',
