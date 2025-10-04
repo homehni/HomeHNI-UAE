@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -74,6 +74,7 @@ const sampleProperties: PropertyData[] = [
 
 const ChatBot = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -90,7 +91,7 @@ const ChatBot = () => {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
-  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail'>('initial');
+  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support'>('initial');
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
 
@@ -1002,7 +1003,10 @@ const ChatBot = () => {
             <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
             <span className="text-[10px] sm:text-xs font-semibold">Help Center</span>
           </button>
-          <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors">
+          <button 
+            onClick={handleHistoryClick}
+            className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors"
+          >
             <History className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
             <span className="text-[10px] sm:text-xs font-semibold">History</span>
           </button>
@@ -1071,7 +1075,10 @@ const ChatBot = () => {
             <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
             <span className="text-[10px] sm:text-xs font-semibold">Help Center</span>
           </button>
-          <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors">
+          <button 
+            onClick={handleHistoryClick}
+            className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors"
+          >
             <History className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
             <span className="text-[10px] sm:text-xs font-semibold">History</span>
           </button>
@@ -1079,6 +1086,184 @@ const ChatBot = () => {
       </div>
     );
   };
+
+  const handleHistoryClick = () => {
+    if (location.pathname === '/plans') {
+      setCurrentView('plan-support');
+    }
+  };
+
+  const renderPlanSupportView = () => (
+    <div className="flex flex-col h-full bg-white">
+      {/* Header */}
+      <div className="px-4 py-3 bg-white border-b border-gray-200 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
+            <Home size={16} className="text-white" />
+          </div>
+          <span className="font-semibold text-gray-900">NoBroker Support</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} className="text-gray-600" />
+          </button>
+        </div>
+      </div>
+
+      {/* Chat Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        {/* Today Label */}
+        <div className="flex justify-center">
+          <span className="text-xs text-gray-400 uppercase tracking-wider">TODAY</span>
+        </div>
+
+        {/* Warning Message */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+          <p className="text-xs text-gray-700">
+            Call only NoBroker-registered numbers for better connectivity and avoid unnecessary risks.
+          </p>
+        </div>
+
+        {/* Support Joined Message */}
+        <div className="flex justify-center">
+          <span className="text-xs text-gray-400">NoBroker Support joined the chat</span>
+        </div>
+
+        {/* Message 1 */}
+        <div className="flex items-start space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+            <Home size={14} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-baseline space-x-2 mb-1">
+              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+            </div>
+            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+              <p className="text-sm text-gray-800">
+                Hi , I can help you with selection of right plan. What is your rent budget ?
+              </p>
+            </div>
+            <span className="text-xs text-gray-400 mt-1 block">2:26 PM</span>
+          </div>
+        </div>
+
+        {/* Message 2 */}
+        <div className="flex items-start space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+            <Home size={14} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-baseline space-x-2 mb-1">
+              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+            </div>
+            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+              <p className="text-sm text-gray-800">
+                Hi , I can help you with selection of right plan. What is your rent budget ?
+              </p>
+            </div>
+            <span className="text-xs text-gray-400 mt-1 block">3:03 PM</span>
+          </div>
+        </div>
+
+        {/* Message 3 */}
+        <div className="flex items-start space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+            <Home size={14} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-baseline space-x-2 mb-1">
+              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+            </div>
+            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+              <p className="text-sm text-gray-800">
+                Hi , I can help you with selection of right plan. What is your rent budget ?
+              </p>
+            </div>
+            <span className="text-xs text-gray-400 mt-1 block">3:19 PM</span>
+          </div>
+        </div>
+
+        {/* Message 4 - Fill Details */}
+        <div className="flex items-start space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+            <Home size={14} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-baseline space-x-2 mb-1">
+              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+            </div>
+            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+              <p className="text-sm text-gray-800 mb-2">
+                Before moving forward, kindly provide your details below
+              </p>
+              <button className="w-full bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors">
+                Fill details
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Message 5 - Thank You */}
+        <div className="flex items-start space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+            <Home size={14} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-baseline space-x-2 mb-1">
+              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+            </div>
+            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+              <p className="text-sm text-gray-800">
+                Thank you for providing your details!
+              </p>
+            </div>
+            <span className="text-xs text-gray-400 mt-1 block">3:20 PM</span>
+          </div>
+        </div>
+
+        {/* Message 6 - Budget Question */}
+        <div className="flex items-start space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+            <Home size={14} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-baseline space-x-2 mb-1">
+              <span className="text-sm font-semibold text-brand-red">NoBroker</span>
+            </div>
+            <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+              <p className="text-sm text-gray-800">
+                Got it, your budget is 50k. Could you also let me know your preferred location and the BHK type you're looking for?
+              </p>
+            </div>
+            <span className="text-xs text-gray-400 mt-1 block">3:20 PM</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Input Area */}
+      <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="flex items-center space-x-2">
+          <Input
+            placeholder="Type your message here"
+            className="flex-1 text-sm"
+          />
+          <button className="p-2 text-gray-400">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderInitialView = () => (
     <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
@@ -1136,7 +1321,10 @@ const ChatBot = () => {
           <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
           <span className="text-[10px] sm:text-xs font-semibold">Help Center</span>
         </button>
-        <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors">
+        <button 
+          onClick={handleHistoryClick}
+          className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors"
+        >
           <History className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
           <span className="text-[10px] sm:text-xs font-semibold">History</span>
         </button>
@@ -1277,7 +1465,11 @@ const ChatBot = () => {
             </CardHeader>
           )}
 
-          {currentView === 'service-faq' ? (
+          {currentView === 'plan-support' ? (
+            <div className="h-full flex flex-col">
+              {renderPlanSupportView()}
+            </div>
+          ) : currentView === 'service-faq' ? (
             <div className="h-full flex flex-col">
               {renderServiceFAQView()}
             </div>
