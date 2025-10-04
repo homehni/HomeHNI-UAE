@@ -1099,19 +1099,19 @@ const ChatBot = () => {
         
         {/* Scrollable Services Grid - Hidden Scrollbar */}
         <div className="flex-1 overflow-y-auto px-5 py-4 scrollbar-hide">
-          <div className="grid grid-cols-3 gap-3 pb-4">
+          <div className="grid grid-cols-3 gap-2 pb-4">
             {services.map((service) => {
               const IconComponent = service.icon;
               return (
                 <button
                   key={service.id}
                   onClick={() => handleOptionClick(service.action)}
-                  className="flex flex-col items-center p-3 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-white rounded-xl transition-all duration-300 border border-gray-100 hover:border-brand-red hover:shadow-lg group"
+                  className="flex flex-col items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 hover:border-brand-red group"
                 >
-                  <div className="w-14 h-14 bg-gradient-to-br from-red-50 to-white rounded-xl flex items-center justify-center mb-2 group-hover:shadow-md group-hover:scale-105 transition-all duration-300 border border-red-100/50">
-                    <IconComponent className="w-7 h-7 text-brand-red" />
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-1.5 group-hover:shadow-md transition-shadow">
+                    <IconComponent className="w-6 h-6 text-brand-red" />
                   </div>
-                  <span className="text-[10px] font-semibold text-gray-800 text-center leading-tight">
+                  <span className="text-[10px] font-medium text-gray-800 text-center leading-tight">
                     {service.label}
                   </span>
                 </button>
