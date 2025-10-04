@@ -334,9 +334,16 @@ const ChatBot = () => {
     {
       id: 'buyer',
       icon: Search,
-      label: 'Buyer Plans',
-      description: 'Find your property',
+      label: 'Want to Buy',
+      description: 'Find property',
       action: 'Want to buy a property'
+    },
+    {
+      id: 'buyer-plans',
+      icon: ShoppingBag,
+      label: 'Buyer Plans',
+      description: 'Buyer packages',
+      action: 'buyer_plans'
     },
     {
       id: 'agent',
@@ -448,7 +455,7 @@ const ChatBot = () => {
       icon: Home,
       label: 'Post / Remove Property',
       description: 'Manage listings',
-      action: 'Seller'
+      action: 'post_property'
     },
     {
       id: 'rental',
@@ -473,10 +480,17 @@ const ChatBot = () => {
     },
     {
       id: 'seller',
-      icon: ShoppingBag,
-      label: 'Seller Plans',
+      icon: User,
+      label: 'Seller',
       description: 'Sell property',
       action: 'Seller'
+    },
+    {
+      id: 'seller-plans',
+      icon: Shield,
+      label: 'Seller Plans',
+      description: 'Seller packages',
+      action: 'seller_plans'
     },
     {
       id: 'tenant',
