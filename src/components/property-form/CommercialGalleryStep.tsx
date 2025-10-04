@@ -117,7 +117,7 @@ export const CommercialGalleryStep: React.FC<CommercialGalleryStepProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-8 lg:p-12">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-8 lg:p-12 pb-16 md:pb-24 lg:pb-32">
       <Form {...form}>
         <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
           <FormField 
