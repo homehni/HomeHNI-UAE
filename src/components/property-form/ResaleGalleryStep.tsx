@@ -41,7 +41,21 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
       images: (() => {
-        const defaults = {
+        // If categorizedImages exists, use it as the source of truth
+        if (initialData.categorizedImages) {
+          return {
+            bathroom: initialData.categorizedImages.bathroom || [],
+            bedroom: initialData.categorizedImages.bedroom || [],
+            hall: initialData.categorizedImages.hall || [],
+            kitchen: initialData.categorizedImages.kitchen || [],
+            frontView: initialData.categorizedImages.frontView || [],
+            balcony: initialData.categorizedImages.balcony || [],
+            others: initialData.categorizedImages.others || []
+          };
+        }
+        
+        // Otherwise, fall back to empty categories (with legacy images in 'others')
+        return {
           bathroom: [] as any[],
           bedroom: [] as any[],
           hall: [] as any[],
@@ -50,9 +64,6 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
           balcony: [] as any[],
           others: Array.isArray(initialData.images) ? (initialData.images as any[]) : []
         };
-        return initialData.categorizedImages
-          ? { ...defaults, ...(initialData.categorizedImages as any) }
-          : defaults;
       })(),
       video: initialData.video
     }
