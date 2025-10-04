@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MapPin, X } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
@@ -14,8 +13,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [activeTab, setActiveTab] = useState('buy');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
-  const [selectedCity, setSelectedCity] = useState('');
-  const [showMobileCitySelector, setShowMobileCitySelector] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
@@ -48,11 +45,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       type: activeTab,
       locations: locations.join(',')
     });
-    
-    // Add city parameter if selected
-    if (selectedCity) {
-      params.set('city', selectedCity);
-    }
     
     // For commercial search, show all property types regardless of sale/rent
     if (activeTab === 'commercial') {
@@ -149,37 +141,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             }
           }
           
-            // Validate location is within selected city (only if city is selected)
-          if (selectedCity && place?.address_components) {
-            console.log('🔍 Google Places - Address components:', place.address_components);
-            
-            const isValidLocation = place.address_components.some((comp: any) => {
-              const isRelevantType = comp.types.includes('administrative_area_level_2') || 
-                                   comp.types.includes('locality') || 
-                                   comp.types.includes('administrative_area_level_3') ||
-                                   comp.types.includes('sublocality_level_1');
-              
-              const matchesCity = comp.long_name.toLowerCase().includes(selectedCity.toLowerCase()) ||
-                                 selectedCity.toLowerCase().includes(comp.long_name.toLowerCase());
-              
-              console.log('🔍 Component:', comp.long_name, 'Types:', comp.types, 'Relevant:', isRelevantType, 'Matches:', matchesCity);
-              
-              return isRelevantType && matchesCity;
-            });
-            
-            console.log('🔍 Google Places - Is valid location:', isValidLocation, 'for city:', selectedCity);
-            
-            if (!isValidLocation) {
-              // Clear invalid location
-              console.log('🔍 Google Places - Clearing invalid location');
-              if (el) {
-                el.value = '';
-                setSearchQuery('');
-              }
-              return;
-            }
-          }
-          
           if (el && value) {
             console.log('🔍 Google Places - Current selectedLocations:', selectedLocations.length);
             // Auto-add location if under limit
@@ -202,24 +163,22 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       });
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, [selectedCity]); // Removed selectedLocations to prevent reinitializing autocomplete
+  }, []); // Removed selectedLocations to prevent reinitializing autocomplete
 
   // Handle click outside to hide mobile city selector
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (mobileSearchContainerRef.current && !mobileSearchContainerRef.current.contains(event.target as Node)) {
-        setShowMobileCitySelector(false);
+        // Mobile search container click handling
       }
     };
 
-    if (showMobileCitySelector) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showMobileCitySelector]);
+  }, []);
 
   useImperativeHandle(ref, () => ({
     focusSearchInput: () => {
@@ -264,28 +223,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
             {/* Search Content */}
             <div className="p-3">
-              {/* City Selector - Mobile (shown after input focus) */}
-              {showMobileCitySelector && (
-                <div className="mb-3">
-                  <Select value={selectedCity} onValueChange={setSelectedCity}>
-                    <SelectTrigger className="h-10 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm">
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                      <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                      <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                      <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                      <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                      <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                      <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                      <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                      <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                      <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-
               {/* Selected Location Tags */}
               {selectedLocations.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -316,9 +253,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    onFocus={() => setShowMobileCitySelector(true)}
                     disabled={selectedLocations.length >= 3}
-                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-sm disabled:opacity-50 disabled:bg-gray-50" 
+                    className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-sm disabled:opacity-50 disabled:bg-gray-50"
                   />
                 </div>
                 
@@ -370,28 +306,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
                     )}
 
-                    {/* Search Bar with City Selector */}
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                      {/* City Selector */}
-                      <div className="w-full sm:w-48">
-                        <Select value={selectedCity} onValueChange={setSelectedCity}>
-                          <SelectTrigger className="h-10 sm:h-12 border border-brand-red rounded-lg focus:ring-2 focus:ring-brand-red/20 bg-white text-sm font-medium">
-                            <SelectValue placeholder="Select City" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                            <SelectItem value="bangalore" className="text-sm">Bangalore</SelectItem>
-                            <SelectItem value="mumbai" className="text-sm">Mumbai</SelectItem>
-                            <SelectItem value="delhi" className="text-sm">Delhi</SelectItem>
-                            <SelectItem value="pune" className="text-sm">Pune</SelectItem>
-                            <SelectItem value="hyderabad" className="text-sm">Hyderabad</SelectItem>
-                            <SelectItem value="chennai" className="text-sm">Chennai</SelectItem>
-                            <SelectItem value="kolkata" className="text-sm">Kolkata</SelectItem>
-                            <SelectItem value="ahmedabad" className="text-sm">Ahmedabad</SelectItem>
-                            <SelectItem value="jaipur" className="text-sm">Jaipur</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
+                    {/* Search Bar */}
+                    <div className="flex gap-3 sm:gap-4">
                       {/* Search Input */}
                       <div className="flex-1 relative">
                          <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
