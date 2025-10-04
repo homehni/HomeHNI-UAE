@@ -957,36 +957,36 @@ const ChatBot = () => {
     const faqs = getCurrentFAQs();
     
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
         {/* Header */}
-        <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-red-50 to-white border-b">
-          <div className="flex items-center mb-3">
+        <div className="px-5 pt-5 pb-4 bg-gradient-to-br from-red-50 to-white border-b border-red-100/50 shadow-sm">
+          <div className="flex items-center">
             <button
               onClick={handleBackToServices}
-              className="text-gray-700 hover:text-brand-red p-1 -ml-1 mr-2"
+              className="text-gray-700 hover:text-brand-red hover:bg-red-50 p-2 -ml-2 mr-2 rounded-lg transition-all duration-200"
             >
               <ArrowLeft size={20} />
             </button>
-            <span className="text-sm font-semibold uppercase tracking-wider text-gray-700">
+            <span className="text-sm font-bold uppercase tracking-wider text-gray-800">
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
           </div>
         </div>
 
         {/* FAQ List */}
-        <div className="flex-1 overflow-y-auto px-4 py-4">
-          <div className="space-y-2">
+        <div className="flex-1 overflow-y-auto px-5 py-4 scrollbar-hide">
+          <div className="space-y-3">
             {faqs.map((faq, index) => (
               <button
                 key={index}
                 onClick={() => handleFAQClick(faq)}
-                className="w-full p-4 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 hover:border-brand-red transition-colors text-left group"
+                className="w-full p-4 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-white rounded-xl border border-gray-200 hover:border-brand-red transition-all duration-300 text-left group hover:shadow-md"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-800 flex-1 pr-2">
+                  <span className="text-sm text-gray-800 flex-1 pr-3 font-medium">
                     {faq.question}
                   </span>
-                  <span className="text-gray-400 group-hover:text-brand-red">›</span>
+                  <span className="text-gray-400 group-hover:text-brand-red text-xl transition-colors">›</span>
                 </div>
               </button>
             ))}
@@ -994,17 +994,17 @@ const ChatBot = () => {
         </div>
 
         {/* Bottom Navigation */}
-        <div className="flex border-t bg-white">
+        <div className="flex border-t border-gray-200 bg-white shadow-lg">
           <button 
             onClick={handleBackToServices}
-            className="flex-1 flex flex-col items-center py-3 text-brand-red border-r"
+            className="flex-1 flex flex-col items-center py-3.5 text-brand-red border-r border-gray-200 hover:bg-red-50/50 transition-colors"
           >
-            <HelpCircle className="w-5 h-5 mb-1" />
-            <span className="text-xs font-medium">Help Center</span>
+            <HelpCircle className="w-5 h-5 mb-1.5" />
+            <span className="text-xs font-semibold">Help Center</span>
           </button>
-          <button className="flex-1 flex flex-col items-center py-3 text-gray-500 hover:text-brand-red transition-colors">
-            <History className="w-5 h-5 mb-1" />
-            <span className="text-xs font-medium">History</span>
+          <button className="flex-1 flex flex-col items-center py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors">
+            <History className="w-5 h-5 mb-1.5" />
+            <span className="text-xs font-semibold">History</span>
           </button>
         </div>
       </div>
@@ -1015,26 +1015,26 @@ const ChatBot = () => {
     const service = services.find(s => s.action === selectedService);
     
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
         {/* Header */}
-        <div className="px-4 pt-4 pb-3 bg-gradient-to-br from-red-50 to-white border-b">
-          <div className="flex items-center mb-3">
+        <div className="px-5 pt-5 pb-4 bg-gradient-to-br from-red-50 to-white border-b border-red-100/50 shadow-sm">
+          <div className="flex items-center">
             <button
               onClick={handleBackToFAQs}
-              className="text-gray-700 hover:text-brand-red p-1 -ml-1 mr-2"
+              className="text-gray-700 hover:text-brand-red hover:bg-red-50 p-2 -ml-2 mr-2 rounded-lg transition-all duration-200"
             >
               <ArrowLeft size={20} />
             </button>
-            <span className="text-sm font-semibold uppercase tracking-wider text-gray-700">
+            <span className="text-sm font-bold uppercase tracking-wider text-gray-800">
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
           </div>
         </div>
 
         {/* FAQ Detail */}
-        <div className="flex-1 overflow-y-auto px-4 py-6">
-          <div className="bg-white rounded-lg p-4 mb-6">
-            <h3 className="text-base font-semibold text-gray-900 mb-3">
+        <div className="flex-1 overflow-y-auto px-5 py-6 scrollbar-hide">
+          <div className="bg-white rounded-2xl p-5 mb-6 border border-gray-200 shadow-sm">
+            <h3 className="text-base font-bold text-gray-900 mb-3 leading-snug">
               {selectedFAQ?.question}
             </h3>
             <p className="text-sm text-gray-600 leading-relaxed">
@@ -1042,35 +1042,35 @@ const ChatBot = () => {
             </p>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4">
-            <p className="text-sm text-gray-600 mb-3">Still have an issue? Chat with us</p>
-            <button className="w-full p-4 bg-white hover:bg-gray-50 rounded-lg border border-gray-200 hover:border-brand-red transition-colors flex items-center justify-between group">
+          <div className="bg-gradient-to-br from-red-50 to-white rounded-2xl p-5 border border-red-100/50">
+            <p className="text-sm text-gray-700 font-semibold mb-4">Still have an issue? Chat with us</p>
+            <button className="w-full p-4 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-white rounded-xl border border-gray-200 hover:border-brand-red transition-all duration-300 flex items-center justify-between group hover:shadow-md">
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-red-50 to-white rounded-xl flex items-center justify-center mr-3 group-hover:shadow-sm transition-shadow border border-red-100/50">
                   <MessageSquare className="w-5 h-5 text-brand-red" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900">Message us</p>
+                  <p className="text-sm font-semibold text-gray-900">Message us</p>
                   <p className="text-xs text-gray-500">Let us know about your query</p>
                 </div>
               </div>
-              <span className="text-gray-400 group-hover:text-brand-red">›</span>
+              <span className="text-gray-400 group-hover:text-brand-red text-xl transition-colors">›</span>
             </button>
           </div>
         </div>
 
         {/* Bottom Navigation */}
-        <div className="flex border-t bg-white">
+        <div className="flex border-t border-gray-200 bg-white shadow-lg">
           <button 
             onClick={handleBackToServices}
-            className="flex-1 flex flex-col items-center py-3 text-brand-red border-r"
+            className="flex-1 flex flex-col items-center py-3.5 text-brand-red border-r border-gray-200 hover:bg-red-50/50 transition-colors"
           >
-            <HelpCircle className="w-5 h-5 mb-1" />
-            <span className="text-xs font-medium">Help Center</span>
+            <HelpCircle className="w-5 h-5 mb-1.5" />
+            <span className="text-xs font-semibold">Help Center</span>
           </button>
-          <button className="flex-1 flex flex-col items-center py-3 text-gray-500 hover:text-brand-red transition-colors">
-            <History className="w-5 h-5 mb-1" />
-            <span className="text-xs font-medium">History</span>
+          <button className="flex-1 flex flex-col items-center py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors">
+            <History className="w-5 h-5 mb-1.5" />
+            <span className="text-xs font-semibold">History</span>
           </button>
         </div>
       </div>
@@ -1078,51 +1078,58 @@ const ChatBot = () => {
   };
 
   const renderInitialView = () => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
       {/* Header */}
-      <div className="px-4 pt-6 pb-4 bg-gradient-to-br from-red-50 to-white">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Help Center</h1>
-        <p className="text-sm text-muted-foreground flex items-center">
-          <span className="mr-1">✓</span>
+      <div className="px-5 pt-7 pb-5 bg-gradient-to-br from-red-50 to-white border-b border-red-100/50">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Help Center</h1>
+        <p className="text-sm text-gray-600 flex items-center">
+          <span className="text-brand-red mr-2">✓</span>
           One-Stop Solution for all Real Estate Services
         </p>
       </div>
 
-      {/* Services Grid */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        <h2 className="text-xs font-semibold text-brand-red uppercase tracking-wider mb-3">
-          CHOOSE A SERVICE
-        </h2>
-        <div className="grid grid-cols-3 gap-2 pb-4">
-          {services.map((service) => {
-            const IconComponent = service.icon;
-            return (
-              <button
-                key={service.id}
-                onClick={() => handleOptionClick(service.action)}
-                className="flex flex-col items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 hover:border-brand-red group"
-              >
-                <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-1.5 group-hover:shadow-md transition-shadow">
-                  <IconComponent className="w-6 h-6 text-brand-red" />
-                </div>
-                <span className="text-[10px] font-medium text-gray-800 text-center leading-tight">
-                  {service.label}
-                </span>
-              </button>
-            );
-          })}
+      {/* Services Section */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Fixed Section Header */}
+        <div className="px-5 py-3 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+          <h2 className="text-xs font-bold text-brand-red uppercase tracking-widest">
+            CHOOSE A SERVICE
+          </h2>
+        </div>
+        
+        {/* Scrollable Services Grid - Hidden Scrollbar */}
+        <div className="flex-1 overflow-y-auto px-5 py-4 scrollbar-hide">
+          <div className="grid grid-cols-3 gap-3 pb-4">
+            {services.map((service) => {
+              const IconComponent = service.icon;
+              return (
+                <button
+                  key={service.id}
+                  onClick={() => handleOptionClick(service.action)}
+                  className="flex flex-col items-center p-3 bg-white hover:bg-gradient-to-br hover:from-red-50 hover:to-white rounded-xl transition-all duration-300 border border-gray-100 hover:border-brand-red hover:shadow-lg group"
+                >
+                  <div className="w-14 h-14 bg-gradient-to-br from-red-50 to-white rounded-xl flex items-center justify-center mb-2 group-hover:shadow-md group-hover:scale-105 transition-all duration-300 border border-red-100/50">
+                    <IconComponent className="w-7 h-7 text-brand-red" />
+                  </div>
+                  <span className="text-[10px] font-semibold text-gray-800 text-center leading-tight">
+                    {service.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="flex border-t bg-white">
-        <button className="flex-1 flex flex-col items-center py-3 text-brand-red border-r">
-          <HelpCircle className="w-5 h-5 mb-1" />
-          <span className="text-xs font-medium">Help Center</span>
+      <div className="flex border-t border-gray-200 bg-white shadow-lg">
+        <button className="flex-1 flex flex-col items-center py-3.5 text-brand-red border-r border-gray-200 hover:bg-red-50/50 transition-colors">
+          <HelpCircle className="w-5 h-5 mb-1.5" />
+          <span className="text-xs font-semibold">Help Center</span>
         </button>
-        <button className="flex-1 flex flex-col items-center py-3 text-gray-500 hover:text-brand-red transition-colors">
-          <History className="w-5 h-5 mb-1" />
-          <span className="text-xs font-medium">History</span>
+        <button className="flex-1 flex flex-col items-center py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors">
+          <History className="w-5 h-5 mb-1.5" />
+          <span className="text-xs font-semibold">History</span>
         </button>
       </div>
     </div>
