@@ -1254,62 +1254,46 @@ const ChatBot = () => {
       )}
 
       {isOpen && (
-        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl bg-white sm:w-96 sm:h-[600px] rounded-3xl border-0 overflow-hidden">
-          {!showInitialView && currentView === 'initial' && (
-            <CardHeader className="bg-brand-red text-white p-3 sm:p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center">
-                    <Home size={12} className="text-brand-red sm:w-4 sm:h-4" />
+        <div className="relative">
+          <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl bg-white sm:w-96 sm:h-[600px] rounded-3xl border-0 overflow-hidden">
+            {!showInitialView && currentView === 'initial' && (
+              <CardHeader className="bg-brand-red text-white p-3 sm:p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center">
+                      <Home size={12} className="text-brand-red sm:w-4 sm:h-4" />
+                    </div>
+                    <CardTitle className="text-base sm:text-lg font-semibold">Real Estate Assistant</CardTitle>
                   </div>
-                  <CardTitle className="text-base sm:text-lg font-semibold">Real Estate Assistant</CardTitle>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsOpen(false)}
-                  className="text-white hover:bg-white/20 p-1"
-                >
-                  <X size={18} />
-                </Button>
-              </div>
-            </CardHeader>
-          )}
+              </CardHeader>
+            )}
 
-          {currentView === 'service-faq' ? (
-            <div className="h-full flex flex-col relative">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute -bottom-16 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
-              >
-                <X size={24} />
-              </button>
-              {renderServiceFAQView()}
-            </div>
-          ) : currentView === 'faq-detail' ? (
-            <div className="h-full flex flex-col relative">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute -bottom-16 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
-              >
-                <X size={24} />
-              </button>
-              {renderFAQDetailView()}
-            </div>
-          ) : showInitialView ? (
-            <div className="h-full flex flex-col relative">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute -bottom-16 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
-              >
-                <X size={24} />
-              </button>
-              {renderInitialView()}
-            </div>
-          ) : (
-            renderChatView()
-          )}
-        </Card>
+            {currentView === 'service-faq' ? (
+              <div className="h-full flex flex-col">
+                {renderServiceFAQView()}
+              </div>
+            ) : currentView === 'faq-detail' ? (
+              <div className="h-full flex flex-col">
+                {renderFAQDetailView()}
+              </div>
+            ) : showInitialView ? (
+              <div className="h-full flex flex-col">
+                {renderInitialView()}
+              </div>
+            ) : (
+              renderChatView()
+            )}
+          </Card>
+
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute -bottom-12 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
+            aria-label="Close chatbot"
+          >
+            <X size={24} />
+          </button>
+        </div>
       )}
     </div>
   );
