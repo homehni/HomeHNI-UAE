@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
+import ChatBot from '@/components/ChatBot';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import BuyerPlans from './BuyerPlans';
@@ -208,6 +209,7 @@ const Plans = () => {
       </main>
 
       <Footer />
+      <ChatBot />
     </div>
   );
 };
