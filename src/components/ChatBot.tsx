@@ -1278,38 +1278,32 @@ const ChatBot = () => {
 
           {currentView === 'service-faq' ? (
             <div className="h-full flex flex-col relative">
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setIsOpen(false)}
-                className="absolute top-2 right-2 z-10 text-gray-600 hover:text-gray-900"
+                className="absolute -bottom-16 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
               >
-                <X size={18} />
-              </Button>
+                <X size={24} />
+              </button>
               {renderServiceFAQView()}
             </div>
           ) : currentView === 'faq-detail' ? (
             <div className="h-full flex flex-col relative">
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setIsOpen(false)}
-                className="absolute top-2 right-2 z-10 text-gray-600 hover:text-gray-900"
+                className="absolute -bottom-16 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
               >
-                <X size={18} />
-              </Button>
+                <X size={24} />
+              </button>
               {renderFAQDetailView()}
             </div>
           ) : showInitialView ? (
             <div className="h-full flex flex-col relative">
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setIsOpen(false)}
-                className="absolute top-2 right-2 z-10 text-gray-600 hover:text-gray-900"
+                className="absolute -bottom-16 right-0 z-20 bg-brand-red hover:bg-brand-maroon-dark text-white p-4 rounded-2xl shadow-lg transition-all duration-200"
               >
-                <X size={18} />
-              </Button>
+                <X size={24} />
+              </button>
               {renderInitialView()}
             </div>
           ) : (
