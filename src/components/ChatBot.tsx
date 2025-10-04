@@ -1254,7 +1254,7 @@ const ChatBot = () => {
       )}
 
       {isOpen && (
-        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl bg-white sm:w-96 sm:h-[600px]">
+        <Card className="w-[calc(100vw-2rem)] max-w-96 h-[calc(100vh-8rem)] max-h-[600px] shadow-2xl bg-white sm:w-96 sm:h-[600px] rounded-3xl border-0 overflow-hidden">
           {!showInitialView && currentView === 'initial' && (
             <CardHeader className="bg-brand-red text-white p-3 sm:p-4">
               <div className="flex items-center justify-between">
