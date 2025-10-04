@@ -1126,19 +1126,6 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Layout */}
       <div className="lg:hidden">
-        <div className="bg-white border-b border-gray-200 px-4 pt-8 pb-4 md:pt-12 lg:pt-4">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-semibold text-gray-900">Property Details</h1>
-            <span className="hidden lg:inline-block text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{currentStep}/7</span>
-          </div>
-          <div className="hidden lg:block w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-brand-red h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 7) * 100}%` }}
-            ></div>
-          </div>
-        </div>
-
         <div className="p-4 pb-28 sm:pb-32">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {currentStep === 1 && (
