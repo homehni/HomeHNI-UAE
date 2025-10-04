@@ -3,6 +3,8 @@
  * Solutions that don't require exposed Google Maps API keys
  */
 
+import { supabase } from "@/integrations/supabase/client";
+
 // ============================================================================
 // OPTION 1: Use Google Maps Platform with HTTP Referrer Restrictions
 // ============================================================================
@@ -158,6 +160,9 @@ interface Location {
 }
 
 async function customLocationSearch(query: string) {
+  // Example code - requires 'locations' table in database
+  // Uncomment and create the table if you want to use this approach
+  /*
   const { data } = await supabase
     .from('locations')
     .select('*')
@@ -165,6 +170,8 @@ async function customLocationSearch(query: string) {
     .limit(10);
   
   return data;
+  */
+  return [];
 }
 
 // Seed data from public sources:
@@ -205,6 +212,9 @@ export async function hybridLocationSearch(query: string) {
 }
 
 async function cacheLocationResults(osmResults: any[]) {
+  // Example code - requires 'locations' table in database
+  // Uncomment and create the table if you want to use this approach
+  /*
   const locations = osmResults.map(result => ({
     name: result.display_name.split(',')[0],
     city: result.address?.city || result.address?.town,
@@ -215,6 +225,7 @@ async function cacheLocationResults(osmResults: any[]) {
   }));
   
   await supabase.from('locations').insert(locations);
+  */
 }
 
 // ============================================================================
