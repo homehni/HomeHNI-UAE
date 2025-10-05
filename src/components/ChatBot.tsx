@@ -1312,7 +1312,7 @@ const ChatBot = () => {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-20">
         {/* Today Label */}
         <div className="flex justify-center">
           <span className="text-xs text-gray-400 uppercase tracking-wider">TODAY</span>
@@ -1422,7 +1422,7 @@ const ChatBot = () => {
 
       {/* Input Area */}
       {planChatStep !== 'complete' && (
-        <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="p-4 border-t border-gray-200 bg-white shadow-lg z-10">
           <div className="flex items-center space-x-2">
             <Input
               placeholder="Type your message here"
@@ -1469,7 +1469,7 @@ const ChatBot = () => {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-20">
         {/* Today Label */}
         <div className="flex justify-center">
           <span className="text-xs text-gray-400 uppercase tracking-wider">TODAY</span>
@@ -1578,7 +1578,7 @@ const ChatBot = () => {
 
       {/* Input Section */}
       {propertyChatStep !== 'details-form' && propertyChatStep !== 'complete' && (
-        <div className="p-4 border-t border-gray-200 bg-white">
+        <div className="p-4 border-t border-gray-200 bg-white shadow-lg z-10">
           <div className="flex space-x-2">
             <Input
               placeholder="Type your message..."
