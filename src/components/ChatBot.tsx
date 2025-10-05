@@ -92,7 +92,7 @@ const ChatBot = () => {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
-  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support'>('initial');
+  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support'>('initial');
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
   const [planChatMessages, setPlanChatMessages] = useState<Message[]>([]);
@@ -100,6 +100,13 @@ const ChatBot = () => {
   const [planChatInput, setPlanChatInput] = useState('');
   const [showDetailsForm, setShowDetailsForm] = useState(false);
   const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
+  
+  // Property-specific chat states
+  const [propertyChatMessages, setPropertyChatMessages] = useState<Message[]>([]);
+  const [propertyChatStep, setPropertyChatStep] = useState<'budget' | 'details-form' | 'requirements' | 'complete'>('budget');
+  const [propertyChatInput, setPropertyChatInput] = useState('');
+  const [showPropertyDetailsForm, setShowPropertyDetailsForm] = useState(false);
+  const [propertyUserDetails, setPropertyUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -1095,10 +1102,10 @@ const ChatBot = () => {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    if (currentView === 'plan-support') {
+    if (currentView === 'plan-support' || currentView === 'property-support') {
       chatMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [planChatMessages, showDetailsForm, currentView]);
+  }, [planChatMessages, showDetailsForm, propertyChatMessages, showPropertyDetailsForm, currentView]);
 
   const handleHistoryClick = () => {
     if (location.pathname === '/plans') {
@@ -1109,6 +1116,18 @@ const ChatBot = () => {
         {
           id: '1',
           text: 'Hi, I can help you with selection of right plan. What is your rent budget?',
+          isBot: true,
+          timestamp: new Date()
+        }
+      ]);
+    } else if (location.pathname.startsWith('/property/')) {
+      setCurrentView('property-support');
+      setPropertyChatStep('budget');
+      setShowPropertyDetailsForm(false);
+      setPropertyChatMessages([
+        {
+          id: '1',
+          text: 'Hi, I can help you with this property. What is your rent budget?',
           isBot: true,
           timestamp: new Date()
         }
@@ -1188,6 +1207,82 @@ const ChatBot = () => {
         };
         setPlanChatMessages(prev => [...prev, followUpMessage]);
         setPlanChatStep('follow-up');
+      }, 1000);
+    }, 500);
+  };
+
+  // Property chat handlers
+  const handlePropertyChatSend = () => {
+    if (propertyChatInput.trim() === '') return;
+
+    const userMessage: Message = {
+      id: String(Date.now()),
+      text: propertyChatInput,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setPropertyChatMessages(prev => [...prev, userMessage]);
+    const inputValue = propertyChatInput;
+    setPropertyChatInput('');
+
+    setTimeout(() => {
+      let botResponse: Message;
+      
+      if (propertyChatStep === 'budget') {
+        botResponse = {
+          id: String(Date.now() + 1),
+          text: 'Before moving forward, kindly provide your details below',
+          isBot: true,
+          timestamp: new Date()
+        };
+        setPropertyChatMessages(prev => [...prev, botResponse]);
+        setPropertyChatStep('details-form');
+        setPropertyUserDetails(prev => ({ ...prev, budget: inputValue }));
+      } else if (propertyChatStep === 'requirements') {
+        botResponse = {
+          id: String(Date.now() + 1),
+          text: 'Thanks for sharing! Our executive will get in touch with you soon to assist further. Typically within the next 15 to 20 minutes. If you have any urgent requirements, please call us on +918690003500.',
+          isBot: true,
+          timestamp: new Date()
+        };
+        setPropertyChatMessages(prev => [...prev, botResponse]);
+        setPropertyChatStep('complete');
+      }
+    }, 1000);
+  };
+
+  const handlePropertyFillDetailsClick = () => {
+    setShowPropertyDetailsForm(true);
+  };
+
+  const handlePropertyDetailsSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!propertyUserDetails.name || !propertyUserDetails.email || !propertyUserDetails.phone) {
+      return;
+    }
+
+    setShowPropertyDetailsForm(false);
+
+    setTimeout(() => {
+      const thankYouMessage: Message = {
+        id: String(Date.now()),
+        text: 'Thank you for providing your details!',
+        isBot: true,
+        timestamp: new Date()
+      };
+      setPropertyChatMessages(prev => [...prev, thankYouMessage]);
+
+      setTimeout(() => {
+        const followUpMessage: Message = {
+          id: String(Date.now() + 1),
+          text: 'Got it! Can you tell me your preferred location(s) and any specific requirements you may have, like pet-friendly or furnished?',
+          isBot: true,
+          timestamp: new Date()
+        };
+        setPropertyChatMessages(prev => [...prev, followUpMessage]);
+        setPropertyChatStep('requirements');
       }, 1000);
     }, 500);
   };
@@ -1340,6 +1435,162 @@ const ChatBot = () => {
               onClick={handlePlanChatSend}
               className="bg-brand-red hover:bg-brand-maroon-dark px-4"
               disabled={planChatInput.trim() === ''}
+            >
+              <Send size={16} />
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderPropertySupportView = () => (
+    <div className="flex flex-col h-full bg-white">
+      {/* Header */}
+      <div className="px-4 py-3 bg-white border-b border-gray-200 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
+            <Home size={16} className="text-white" />
+          </div>
+          <span className="font-semibold text-gray-900">Home HNI Support</span>
+        </div>
+        <button 
+          onClick={() => {
+            setIsOpen(false);
+            setCurrentView('initial');
+            setPropertyChatMessages([]);
+            setShowPropertyDetailsForm(false);
+            setPropertyUserDetails({ name: '', email: '', phone: '', budget: '' });
+          }}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        >
+          <X size={20} className="text-gray-600" />
+        </button>
+      </div>
+
+      {/* Chat Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        {/* Today Label */}
+        <div className="flex justify-center">
+          <span className="text-xs text-gray-400 uppercase tracking-wider">TODAY</span>
+        </div>
+
+        {/* Warning Message */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+          <p className="text-xs text-gray-700">
+            Call only Home HNI-registered numbers for better connectivity and avoid unnecessary risks.
+          </p>
+        </div>
+
+        {/* Support Joined Message */}
+        <div className="flex justify-center">
+          <span className="text-xs text-gray-400">Home HNI Support joined the chat</span>
+        </div>
+
+        {/* Dynamic Messages */}
+        {propertyChatMessages.map((msg, index) => (
+          <div key={msg.id} className="flex items-start space-x-2">
+            {msg.isBot && (
+              <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                <Home size={14} className="text-white" />
+              </div>
+            )}
+            <div className={`flex-1 ${!msg.isBot ? 'flex justify-end' : ''}`}>
+              {msg.isBot && (
+                <div className="flex items-baseline space-x-2 mb-1">
+                  <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                </div>
+              )}
+              <div className={`rounded-lg p-3 shadow-sm ${
+                msg.isBot 
+                  ? 'bg-white rounded-tl-none' 
+                  : 'bg-brand-red text-white rounded-tr-none max-w-[80%]'
+              }`}>
+                <p className="text-sm">{msg.text}</p>
+                
+                {/* Show Fill Details button in the same message */}
+                {msg.isBot && propertyChatStep === 'details-form' && 
+                 index === propertyChatMessages.length - 1 && !showPropertyDetailsForm && (
+                  <button 
+                    onClick={handlePropertyFillDetailsClick}
+                    className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                  >
+                    Fill details
+                  </button>
+                )}
+              </div>
+              {msg.isBot && (
+                <span className="text-xs text-gray-400 mt-1 block">
+                  {new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+
+        {/* Details Form */}
+        {showPropertyDetailsForm && (
+          <div className="flex items-start space-x-2">
+            <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+              <Home size={14} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="bg-white rounded-lg rounded-tl-none p-4 shadow-sm">
+                <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
+                <form onSubmit={handlePropertyDetailsSubmit} className="space-y-3">
+                  <Input
+                    placeholder="Name"
+                    value={propertyUserDetails.name}
+                    onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, name: e.target.value }))}
+                    required
+                    className="text-sm"
+                  />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={propertyUserDetails.email}
+                    onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, email: e.target.value }))}
+                    required
+                    className="text-sm"
+                  />
+                  <Input
+                    type="tel"
+                    placeholder="Phone"
+                    value={propertyUserDetails.phone}
+                    onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, phone: e.target.value }))}
+                    required
+                    className="text-sm"
+                  />
+                  <Button
+                    type="submit"
+                    className="w-full bg-brand-red hover:bg-brand-maroon-dark text-sm"
+                  >
+                    Submit
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div ref={chatMessagesEndRef} />
+      </div>
+
+      {/* Input Section */}
+      {propertyChatStep !== 'details-form' && propertyChatStep !== 'complete' && (
+        <div className="p-4 border-t border-gray-200 bg-white">
+          <div className="flex space-x-2">
+            <Input
+              placeholder="Type your message..."
+              value={propertyChatInput}
+              onChange={(e) => setPropertyChatInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handlePropertyChatSend()}
+              className="flex-1 text-sm"
+            />
+            <Button
+              onClick={handlePropertyChatSend}
+              className="bg-brand-red hover:bg-brand-maroon-dark px-4"
+              disabled={propertyChatInput.trim() === ''}
             >
               <Send size={16} />
             </Button>
@@ -1542,6 +1793,20 @@ const ChatBot = () => {
                   timestamp: new Date()
                 }
               ]);
+            } 
+            // If on property details page, open directly to property support chat
+            else if (location.pathname.startsWith('/property/')) {
+              setCurrentView('property-support');
+              setPropertyChatStep('budget');
+              setShowPropertyDetailsForm(false);
+              setPropertyChatMessages([
+                {
+                  id: '1',
+                  text: 'Hi, I can help you with this property. What is your rent budget?',
+                  isBot: true,
+                  timestamp: new Date()
+                }
+              ]);
             }
           }}
           className="h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300"
@@ -1568,6 +1833,10 @@ const ChatBot = () => {
           {currentView === 'plan-support' ? (
             <div className="h-full flex flex-col">
               {renderPlanSupportView()}
+            </div>
+          ) : currentView === 'property-support' ? (
+            <div className="h-full flex flex-col">
+              {renderPropertySupportView()}
             </div>
           ) : currentView === 'service-faq' ? (
             <div className="h-full flex flex-col">
