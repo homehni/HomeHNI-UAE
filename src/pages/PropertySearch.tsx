@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,9 +7,11 @@ import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Bookmark, Share2, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerTrigger } from '@/components/ui/drawer';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -33,18 +34,12 @@ type GoogleMaps = { places?: PlacesNamespace };
 type GoogleNS = { maps?: GoogleMaps };
 type WindowWithGoogle = Window & { google?: GoogleNS };
 const PropertySearch = () => {
-  const navigate = useNavigate();
+  // Results view mode
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12); // 12 properties per page
+  // Remove client-side pagination; rely on Load More for dataset growth
   const locationInputRef = useRef<HTMLInputElement>(null);
   
-  // State for dropdown filters
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
-  const [selectedBedrooms, setSelectedBedrooms] = useState<string[]>([]);
-  const [selectedConstructionStatus, setSelectedConstructionStatus] = useState<string[]>([]);
-  const [selectedPostedBy, setSelectedPostedBy] = useState<string[]>([]);
+  // Header dropdowns removed; rely on left sidebar filters only
 
   const {
     filters,
@@ -62,6 +57,7 @@ const PropertySearch = () => {
 
   // Debounce the location input for better performance
   const debouncedLocation = useDebounce(filters.location, 300);
+  const [showMobileChips, setShowMobileChips] = useState(false);
 
   // Get max value for budget slider based on active tab
   const getBudgetSliderMax = (tab: string): number => {
@@ -81,13 +77,13 @@ const PropertySearch = () => {
   const getBudgetSliderStep = (tab: string): number => {
     switch (tab) {
       case 'rent':
-        return 10000; // 10K steps for rent (more granular)
+        return 1000; // 1K steps for rent for smoother feel
       case 'buy':
-        return 500000; // 5L steps for buy
+        return 100000; // 1L steps for buy for smoother adjustments
       case 'commercial':
-        return 500000; // 5L steps for commercial
+        return 100000; // 1L steps for commercial
       default:
-        return 500000; // Default to buy range
+        return 100000; // Default to buy range
     }
   };
 
@@ -124,15 +120,8 @@ const PropertySearch = () => {
 
   // Calculate pagination
   const totalProperties = filteredProperties.length;
-  const totalPages = Math.ceil(totalProperties / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentProperties = filteredProperties.slice(startIndex, endIndex);
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filteredProperties]);
+  // No client-side page reset needed
 
   // Keep input focused after adding locations
   useEffect(() => {
@@ -165,6 +154,352 @@ const PropertySearch = () => {
   const furnishedOptions = ['Furnished', 'Semi-Furnished', 'Unfurnished'];
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
   const constructionOptions = ['New Project', '1-5 Years Old', '5-10 Years Old', '10+ Years Old'];
+
+  // Reusable filters panel used in desktop sidebar and mobile drawer
+  const FiltersPanel = () => {
+  const [uiBudget, setUiBudget] = useState<[number, number]>(filters.budget);
+  const [uiArea, setUiArea] = useState<[number, number]>(filters.area);
+  const budgetKey = `${filters.budget[0]}-${filters.budget[1]}`;
+  const areaKey = `${filters.area[0]}-${filters.area[1]}`;
+  useEffect(() => { setUiBudget(filters.budget); }, [budgetKey]);
+  useEffect(() => { setUiArea(filters.area); }, [areaKey]);
+    
+    const commitBudget = (value: [number, number]) => {
+      updateFilter('budget', snapBudget(activeTab, value));
+    };
+    const commitArea = (value: [number, number]) => {
+      updateFilter('area', value);
+    };
+
+    return (<>
+      {/* Budget Filter */}
+      <div>
+        <h4 className="font-semibold mb-3" id="budget-label">Budget Range</h4>
+        <div className="space-y-3">
+          <div className="relative">
+            <Slider 
+              value={uiBudget}
+              onValueChange={(value) => setUiBudget(value as [number, number])}
+              onValueCommit={(value) => commitBudget(value as [number, number])}
+              max={getBudgetSliderMax(activeTab)} 
+              min={0} 
+              step={getBudgetSliderStep(activeTab)} 
+              className="w-full"
+              aria-labelledby="budget-label"
+              aria-valuemin={0}
+              aria-valuemax={getBudgetSliderMax(activeTab)}
+              aria-valuenow={uiBudget[1]}
+            />
+          </div>
+          <div className="flex justify-between text-sm font-medium text-foreground">
+            <span>₹{(() => {
+              const validBudget = getValidBudgetValue(uiBudget, activeTab);
+              return validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L';
+            })()}</span>
+            <span>₹{(() => {
+              const validBudget = getValidBudgetValue(uiBudget, activeTab);
+              return validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '5Cr +') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L';
+            })()}</span>
+          </div>
+          {/* Manual Budget Input Fields */}
+          <div className="space-y-2 mb-3">
+            <div className="text-sm font-medium text-gray-700">Enter Budget Range</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label htmlFor="min-budget" className="text-xs text-gray-500 mb-1 block">Min Budget</label>
+                <Input 
+                  id="min-budget"
+                  type="number" 
+                  placeholder="Enter min budget" 
+                  value={uiBudget[0].toString()} 
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value <= uiBudget[1]) setUiBudget([value, uiBudget[1]]);
+                  }} 
+                  onBlur={() => commitBudget(uiBudget)}
+                  onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
+                  className="h-8 text-sm"
+                  aria-label="Minimum budget amount"
+                />
+              </div>
+              <div>
+                <label htmlFor="max-budget" className="text-xs text-gray-500 mb-1 block">Max Budget</label>
+                <Input 
+                  id="max-budget"
+                  type="number" 
+                  placeholder="Enter max budget" 
+                  value={uiBudget[1].toString()} 
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value >= uiBudget[0]) setUiBudget([uiBudget[0], Math.min(value, 50000000)]);
+                  }} 
+                  onBlur={() => commitBudget(uiBudget)}
+                  onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
+                  className="h-8 text-sm"
+                  aria-label="Maximum budget amount"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 mt-3">
+            <Button variant={uiBudget[0] === 0 && uiBudget[1] === 50000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([0, 50000]); commitBudget([0, 50000]); }} className="text-xs h-8">
+              Under 50K
+            </Button>
+            <Button variant={uiBudget[0] === 0 && uiBudget[1] === 100000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([0, 100000]); commitBudget([0, 100000]); }} className="text-xs h-8">
+              Under 1L
+            </Button>
+            <Button variant={uiBudget[0] === 0 && uiBudget[1] === 5000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([0, 5000000]); commitBudget([0, 5000000]); }} className="text-xs h-8">
+              Under 50L
+            </Button>
+            <Button variant={uiBudget[0] === 5000000 && uiBudget[1] === 10000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([5000000, 10000000]); commitBudget([5000000, 10000000]); }} className="text-xs h-8">
+              50L-1Cr
+            </Button>
+            <Button variant={uiBudget[0] === 10000000 && uiBudget[1] === 20000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([10000000, 20000000]); commitBudget([10000000, 20000000]); }} className="text-xs h-8">
+              1-2Cr
+            </Button>
+            <Button variant={uiBudget[0] === 20000000 && uiBudget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([20000000, 50000000]); commitBudget([20000000, 50000000]); }} className="text-xs h-8">
+              2-5Cr
+            </Button>
+            <Button variant={uiBudget[0] === 50000000 && uiBudget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([50000000, 50000000]); commitBudget([50000000, 50000000]); }} className="text-xs h-8">
+              5Cr+
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Area (Sq. Ft.) Filter */}
+      <div>
+        <h4 className="font-semibold mb-3" id="area-label">Area (Sq. Ft.)</h4>
+        <div className="space-y-3">
+          <div className="relative">
+            <Slider 
+              value={uiArea}
+              onValueChange={(value) => setUiArea(value as [number, number])}
+              onValueCommit={(value) => commitArea(value as [number, number])}
+              max={10000} 
+              min={0} 
+              step={100} 
+              className="w-full"
+              aria-labelledby="area-label"
+              aria-valuemin={0}
+              aria-valuemax={10000}
+              aria-valuenow={uiArea[1]}
+            />
+          </div>
+          <div className="flex justify-between text-sm font-medium text-foreground">
+            <span>{uiArea[0] === 0 ? '0' : uiArea[0].toLocaleString()} sq ft</span>
+            <span>{uiArea[1] >= 10000 ? '10,000+ sq ft' : uiArea[1].toLocaleString() + ' sq ft'}</span>
+          </div>
+          {/* Manual Area Input Fields */}
+          <div className="space-y-2 mb-3">
+            <div className="text-sm font-medium text-gray-700">Enter Area Range</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label htmlFor="min-area" className="text-xs text-gray-500 mb-1 block">Min Area (sq ft)</label>
+                <Input 
+                  id="min-area"
+                  type="number" 
+                  placeholder="Min area" 
+                  value={uiArea[0].toString()} 
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value <= uiArea[1]) setUiArea([value, uiArea[1]]);
+                  }} 
+                  onBlur={() => commitArea(uiArea)}
+                  onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
+                  className="h-8 text-sm"
+                  aria-label="Minimum area in square feet"
+                />
+              </div>
+              <div>
+                <label htmlFor="max-area" className="text-xs text-gray-500 mb-1 block">Max Area (sq ft)</label>
+                <Input 
+                  id="max-area"
+                  type="number" 
+                  placeholder="Max area" 
+                  value={uiArea[1].toString()} 
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value >= uiArea[0]) setUiArea([uiArea[0], Math.min(value, 20000)]);
+                  }} 
+                  onBlur={() => commitArea(uiArea)}
+                  onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
+                  className="h-8 text-sm"
+                  aria-label="Maximum area in square feet"
+                />
+              </div>
+            </div>
+          </div>
+          {/* Quick Area Range Buttons */}
+          <div className="grid grid-cols-3 gap-2 mt-3">
+            <Button variant={uiArea[0] === 0 && uiArea[1] === 500 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 500]); commitArea([0, 500]); }} className="text-xs h-8">
+              Under 500
+            </Button>
+            <Button variant={uiArea[0] === 0 && uiArea[1] === 1000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 1000]); commitArea([0, 1000]); }} className="text-xs h-8">
+              Under 1K
+            </Button>
+            <Button variant={uiArea[0] === 0 && uiArea[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 2000]); commitArea([0, 2000]); }} className="text-xs h-8">
+              Under 2K
+            </Button>
+            <Button variant={uiArea[0] === 1000 && uiArea[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([1000, 2000]); commitArea([1000, 2000]); }} className="text-xs h-8">
+              1K-2K
+            </Button>
+            <Button variant={uiArea[0] === 2000 && uiArea[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([2000, 3000]); commitArea([2000, 3000]); }} className="text-xs h-8">
+              2K-3K
+            </Button>
+            <Button variant={uiArea[0] === 3000 && uiArea[1] === 5000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([3000, 5000]); commitArea([3000, 5000]); }} className="text-xs h-8">
+              3K-5K
+            </Button>
+            <Button variant={uiArea[0] === 5000 && uiArea[1] === 10000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([5000, 10000]); commitArea([5000, 10000]); }} className="text-xs h-8">
+              5K-10K
+            </Button>
+            <Button variant={uiArea[0] === 10000 && uiArea[1] === 20000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([10000, 20000]); commitArea([10000, 20000]); }} className="text-xs h-8">
+              10K+
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Property Type Filter */}
+      <div>
+        <h4 className="font-semibold mb-3">Property Type</h4>
+        <div className="space-y-2">
+          {propertyTypes.map(type => (
+            <div key={type} className="flex items-center space-x-2">
+              <button
+                onClick={() => {
+                  if (type === 'ALL') {
+                    updateFilter('propertyType', []);
+                  } else {
+                    updateFilter('propertyType', [type]);
+                  }
+                }}
+                className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
+                  (filters.propertyType.length === 0 && type === 'ALL') ||
+                  (filters.propertyType.length > 0 && filters.propertyType[0] === type)
+                    ? 'bg-primary text-primary-foreground shadow'
+                    : 'bg-muted/60 hover:bg-muted/80 text-foreground'
+                }`}
+              >
+                {type}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* BHK Filter */}
+      <div>
+        <h4 className="font-semibold mb-3">BHK Type</h4>
+        <div className="grid grid-cols-3 gap-2">
+          {bhkTypes.map(bhk => (
+            <Button
+              key={bhk}
+              variant={filters.bhkType.includes(bhk) ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                if (filters.bhkType.includes(bhk)) {
+                  updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
+                } else {
+                  updateFilter('bhkType', [...filters.bhkType, bhk]);
+                }
+              }}
+              className="text-xs"
+            >
+              {bhk}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Property Status (was Construction Status) */}
+      <div>
+        <h4 className="font-semibold mb-3">Property Status</h4>
+        <div className="space-y-2">
+          {availabilityOptions.map(option => (
+            <div key={option} className="flex items-center space-x-2">
+              <Checkbox
+                id={`availability-${option}`}
+                checked={filters.availability.includes(option)}
+                onCheckedChange={checked => {
+                  if (checked) {
+                    updateFilter('availability', [...filters.availability, option]);
+                  } else {
+                    updateFilter('availability', filters.availability.filter(a => a !== option));
+                  }
+                }}
+              />
+              <label htmlFor={`availability-${option}`} className="text-sm text-gray-700 cursor-pointer">
+                {option}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Furnishing */}
+      <div>
+        <h4 className="font-semibold mb-3">Furnishing</h4>
+        <div className="space-y-2">
+          {furnishedOptions.map(option => (
+            <div key={option} className="flex items-center space-x-2">
+              <Checkbox
+                id={`furnished-${option}`}
+                checked={filters.furnished.includes(option)}
+                onCheckedChange={checked => {
+                  if (checked) {
+                    updateFilter('furnished', [...filters.furnished, option]);
+                  } else {
+                    updateFilter('furnished', filters.furnished.filter(a => a !== option));
+                  }
+                }}
+              />
+              <label htmlFor={`furnished-${option}`} className="text-sm text-gray-700 cursor-pointer">
+                {option}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Age of Property */}
+      <div>
+        <h4 className="font-semibold mb-3">Age of Property</h4>
+        <div className="space-y-2">
+          {constructionOptions.map(option => (
+            <div key={option} className="flex items-center space-x-2">
+              <Checkbox
+                id={`construction-${option}`}
+                checked={filters.construction.includes(option)}
+                onCheckedChange={checked => {
+                  if (checked) {
+                    updateFilter('construction', [...filters.construction, option]);
+                  } else {
+                    updateFilter('construction', filters.construction.filter(c => c !== option));
+                  }
+                }}
+              />
+              <label htmlFor={`construction-${option}`} className="text-sm text-gray-700 cursor-pointer">
+                {option}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>);
+  };
 
   // Function to normalize location for better search matching
   const normalizeLocation = (location: string) => {
@@ -379,11 +714,11 @@ const PropertySearch = () => {
             {/* Main Search Bar with Multi-Location Support */}
             <div className="flex-1 w-full">
               <div className="relative">
-                <MapPin className="absolute left-3 top-3 text-brand-red z-10" size={20} />
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none" size={18} />
                 
                 {/* Multi-Location Search Bar */}
                 <div 
-                  className="flex flex-wrap items-center gap-2 p-3 pl-10 pr-4 min-h-12 border border-brand-red rounded-lg focus-within:ring-2 focus-within:ring-brand-red/20 bg-white cursor-text"
+                  className="relative flex flex-wrap items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-12 border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
                   onClick={() => {
                     if (locationInputRef.current && filters.locations.length < 3) {
                       locationInputRef.current.focus();
@@ -435,9 +770,27 @@ const PropertySearch = () => {
                     }}
                     onFocus={e => e.target.select()}
                     placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
-                    className="flex-1 min-w-32 outline-none bg-transparent text-sm"
+                    className="flex-1 min-w-32 outline-none bg-transparent text-sm placeholder:text-gray-400"
                     disabled={filters.locations.length >= 3}
                   />
+                  {/* Search Icon Button inside field (all breakpoints) */}
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 absolute right-2 top-1/2 -translate-y-1/2"
+                    aria-label="Add location"
+                    onClick={() => {
+                      const typed = (filters.location || '').trim();
+                      if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
+                        updateFilter('locations', [...filters.locations, typed]);
+                        updateFilter('location', '');
+                        setTimeout(() => {
+                          locationInputRef.current?.focus();
+                        }, 0);
+                      }
+                    }}
+                  >
+                    <SearchIcon className="h-4 w-4" />
+                  </button>
                   
                   {/* Location Counter */}
                   {filters.locations.length >= 3 && (
@@ -445,14 +798,13 @@ const PropertySearch = () => {
                   )}
                 </div>
                 
-                {/* Clear All Locations Button */}
+                {/* Clear All Locations Button (placed below the field to avoid overlap) */}
                 {filters.locations.length > 0 && (
-                  <div className="absolute right-3 top-3 z-10">
+                  <div className="mt-2 flex justify-end">
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
                         updateFilter('locations', []);
                         updateFilter('location', '');
                         updateFilter('selectedCity', '');
@@ -466,273 +818,56 @@ const PropertySearch = () => {
               </div>
             </div>
 
-            {/* Search Button - Mobile */}
-            <Button className="w-full lg:hidden bg-blue-600 hover:bg-blue-700">
-              Search
-            </Button>
-          </div>
-
-          {/* Second Row: Collapsible Filter Dropdowns */}
-          <div className="mt-4 pb-2">
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Residential Dropdown (Property Type) - Only for Buy/Rent */}
-              {activeTab !== 'commercial' && (
-                <div className="relative">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
-                    className={`flex items-center gap-1 ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400' : ''}`}
-                  >
-                    <span className="text-sm">Residential</span>
-                    <ChevronRight size={14} className={`transition-transform ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
+            {/* Mobile Actions: Filters + Search (sticky) */}
+            <div className="w-full lg:hidden flex gap-2 sticky top-[64px] z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 py-2">
+              {/* Filters Drawer Trigger */}
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="outline" className="flex-1">
+                    <Filter className="mr-2 h-4 w-4" /> Filters
                   </Button>
-                  
-                  {/* Property Type Dropdown */}
-                  {openDropdown === 'propertyType' && (
-                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[400px]">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {propertyTypes.filter(type => type !== 'ALL').map(type => (
-                          <div key={type} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`pt-${type}`}
-                              checked={selectedPropertyTypes.includes(type)}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  setSelectedPropertyTypes([...selectedPropertyTypes, type]);
-                                  updateFilter('propertyType', [...selectedPropertyTypes, type]);
-                                } else {
-                                  const updated = selectedPropertyTypes.filter(t => t !== type);
-                                  setSelectedPropertyTypes(updated);
-                                  updateFilter('propertyType', updated);
-                                }
-                              }}
-                            />
-                            <label htmlFor={`pt-${type}`} className="text-sm cursor-pointer capitalize">
-                              {type.toLowerCase().replace(/_/g, ' ').replace(/-/g, ' ')}
-                            </label>
-                          </div>
-                        ))}
+                </DrawerTrigger>
+                <DrawerContent className="h-[85vh]">
+                  <DrawerHeader className="flex items-center justify-between">
+                    <DrawerTitle>Filters</DrawerTitle>
+                    <DrawerClose asChild>
+                      <Button variant="ghost" size="icon" aria-label="Close filters">
+                        <X className="h-5 w-5" />
+                      </Button>
+                    </DrawerClose>
+                  </DrawerHeader>
+                  <div className="px-4 pb-2">
+                    <ScrollArea className="h-[60vh] pr-2">
+                      <div className="space-y-6">
+                        <FiltersPanel />
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Bedroom Dropdown */}
-              <div className="relative">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
-                  className={`flex items-center gap-1 ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400' : ''}`}
-                >
-                  <span className="text-sm">Bedroom</span>
-                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
-                </Button>
-                
-                {/* Bedroom Dropdown */}
-                {openDropdown === 'bedroom' && (
-                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
-                    <h4 className="text-sm font-semibold mb-3">Number of Bedrooms</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
-                        <Button
-                          key={bhk}
-                          variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => {
-                            if (selectedBedrooms.includes(bhk)) {
-                              const updated = selectedBedrooms.filter(b => b !== bhk);
-                              setSelectedBedrooms(updated);
-                              const filterValues = updated.flatMap(b => {
-                                if (b === '1 RK/1 BHK') return ['1 RK', '1 BHK'];
-                                if (b === '4+ BHK') return ['5+ BHK'];
-                                return [b];
-                              });
-                              updateFilter('bhkType', filterValues);
-                            } else {
-                              const updated = [...selectedBedrooms, bhk];
-                              setSelectedBedrooms(updated);
-                              const filterValues = updated.flatMap(b => {
-                                if (b === '1 RK/1 BHK') return ['1 RK', '1 BHK'];
-                                if (b === '4+ BHK') return ['5+ BHK'];
-                                return [b];
-                              });
-                              updateFilter('bhkType', filterValues);
-                            }
-                          }}
-                          className="text-xs px-3"
-                        >
-                          + {bhk}
-                        </Button>
-                      ))}
-                    </div>
+                    </ScrollArea>
                   </div>
-                )}
-              </div>
-
-              {/* Construction Status Dropdown */}
-              <div className="relative">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                  className={`flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
-                >
-                  <span className="text-sm">Construction Status</span>
-                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                </Button>
-                
-                {/* Construction Status Dropdown */}
-                {openDropdown === 'construction' && (
-                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
-                    <h4 className="text-sm font-semibold mb-3">Construction Status</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {['New Launch', 'Under Construction', 'Ready to move'].map(status => (
-                        <Button
-                          key={status}
-                          variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => {
-                            if (selectedConstructionStatus.includes(status)) {
-                              const updated = selectedConstructionStatus.filter(s => s !== status);
-                              setSelectedConstructionStatus(updated);
-                              const filterValues = updated.map(s => s === 'Ready to move' ? 'Ready to Move' : s);
-                              updateFilter('availability', filterValues);
-                            } else {
-                              const updated = [...selectedConstructionStatus, status];
-                              setSelectedConstructionStatus(updated);
-                              const filterValues = updated.map(s => s === 'Ready to move' ? 'Ready to Move' : s);
-                              updateFilter('availability', filterValues);
-                            }
-                          }}
-                          className="text-xs px-3"
-                        >
-                          + {status}
-                        </Button>
-                      ))}
+                  <DrawerFooter className="pb-[max(env(safe-area-inset-bottom),16px)]">
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1" onClick={clearAllFilters}>Clear All</Button>
+                      <DrawerClose asChild>
+                        <Button className="flex-1 bg-brand-red hover:bg-brand-red-dark">Apply</Button>
+                      </DrawerClose>
                     </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Posted By Dropdown */}
-              <div className="relative">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setOpenDropdown(openDropdown === 'postedBy' ? null : 'postedBy')}
-                  className={`flex items-center gap-1 ${openDropdown === 'postedBy' ? 'bg-blue-50 border-blue-400' : ''}`}
-                >
-                  <span className="text-sm">Posted By</span>
-                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'postedBy' ? 'rotate-90' : ''}`} />
-                </Button>
-                
-                {/* Posted By Dropdown */}
-                {openDropdown === 'postedBy' && (
-                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[240px]">
-                    <h4 className="text-sm font-semibold mb-3">Posted By</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {['Owner', 'Builder', 'Dealer'].map(poster => (
-                        <Button
-                          key={poster}
-                          variant={selectedPostedBy.includes(poster) ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => {
-                            if (selectedPostedBy.includes(poster)) {
-                              const updated = selectedPostedBy.filter(p => p !== poster);
-                              setSelectedPostedBy(updated);
-                            } else {
-                              setSelectedPostedBy([...selectedPostedBy, poster]);
-                            }
-                          }}
-                          className="text-xs px-3"
-                        >
-                          + {poster}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Budget Dropdown */}
-              <div className="relative">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setOpenDropdown(openDropdown === 'budget' ? null : 'budget')}
-                  className={`flex items-center gap-1 ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400' : ''}`}
-                >
-                  <span className="text-sm">Budget</span>
-                  <ChevronRight size={14} className={`transition-transform ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
-                </Button>
-                
-                {/* Budget Dropdown */}
-                {openDropdown === 'budget' && (
-                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[320px] md:min-w-[400px]">
-                    <h4 className="text-sm font-semibold mb-3">Select Price Range</h4>
-                    <div className="mb-3">
-                      <div className="text-xs text-gray-500 mb-2">
-                        {(() => {
-                          const validBudget = getValidBudgetValue(filters.budget, activeTab);
-                          return `₹${validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L'} - ₹${validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '100+ Crore') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L'}`;
-                        })()}
-                      </div>
-                      <Slider 
-                        value={filters.budget} 
-                        onValueChange={(value) => updateFilter('budget', value as [number, number])} 
-                        max={getBudgetSliderMax(activeTab)} 
-                        min={0} 
-                        step={getBudgetSliderStep(activeTab)} 
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Clear Filters */}
-              {(selectedPropertyTypes.length > 0 || selectedBedrooms.length > 0 || selectedConstructionStatus.length > 0 || selectedPostedBy.length > 0) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedPropertyTypes([]);
-                    setSelectedBedrooms([]);
-                    setSelectedConstructionStatus([]);
-                    setSelectedPostedBy([]);
-                    clearAllFilters();
-                  }}
-                  className="text-blue-600 hover:text-blue-700 text-sm"
-                >
-                  Clear
-                </Button>
-              )}
-
-              {/* Search Button - Desktop */}
-              <Button className="hidden lg:block ml-auto bg-blue-600 hover:bg-blue-700">
-                Search
-              </Button>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
             </div>
+            {/* Desktop Search Button removed; icon is inside the field */}
           </div>
+          
         </div>
       </div>
 
-      {/* Click outside to close dropdowns */}
-      {openDropdown && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={() => setOpenDropdown(null)}
-        />
-      )}
+      {/* Header dropdowns removed: relying on left sidebar filters */}
 
       <main id="main-content" className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Filters Sidebar */}
-          <div className="hidden lg:block w-80 space-y-6">
-            <Card>
+          {/* Filters Sidebar (sticky on desktop) */}
+          <div className="hidden lg:block w-80">
+            <div className="sticky top-[96px] pb-4">
+            <Card className="max-h-[calc(100vh-120px)] overflow-hidden">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg" id="filters-heading">Filters</CardTitle>
@@ -746,281 +881,11 @@ const PropertySearch = () => {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-6">
-                 {/* Budget Filter */}
-                <div>
-                  <h4 className="font-semibold mb-3" id="budget-label">Budget Range</h4>
-                  <div className="space-y-3">
-                    <div className="relative">
-                      <Slider 
-                        value={filters.budget} 
-                        onValueChange={(value) => updateFilter('budget', snapBudget(activeTab, value as [number, number]))} 
-                        max={getBudgetSliderMax(activeTab)} 
-                        min={0} 
-                        step={getBudgetSliderStep(activeTab)} 
-                        className="w-full"
-                        aria-labelledby="budget-label"
-                        aria-valuemin={0}
-                        aria-valuemax={getBudgetSliderMax(activeTab)}
-                        aria-valuenow={filters.budget[1]}
-                      />
-                    </div>
-                    <div className="flex justify-between text-sm font-medium text-foreground">
-                      <span>₹{(() => {
-                        const validBudget = getValidBudgetValue(filters.budget, activeTab);
-                        return validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L';
-                      })()}</span>
-                      <span>₹{(() => {
-                        const validBudget = getValidBudgetValue(filters.budget, activeTab);
-                        return validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '5Cr +') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L';
-                      })()}</span>
-                    </div>
-                    
-                    {/* Manual Budget Input Fields */}
-                    <div className="space-y-2 mb-3">
-                      <div className="text-sm font-medium text-gray-700">Enter Budget Range</div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <label htmlFor="min-budget" className="text-xs text-gray-500 mb-1 block">Min Budget</label>
-                          <Input 
-                            id="min-budget"
-                            type="number" 
-                            placeholder="Enter min budget" 
-                            value={filters.budget[0].toString()} 
-                            onChange={e => {
-              const value = parseInt(e.target.value) || 0;
-                              if (value <= filters.budget[1]) {
-                updateFilter('budget', snapBudget(activeTab, [value, filters.budget[1]]));
-                              }
-                            }} 
-                            className="h-8 text-sm"
-                            aria-label="Minimum budget amount"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="max-budget" className="text-xs text-gray-500 mb-1 block">Max Budget</label>
-                          <Input 
-                            id="max-budget"
-                            type="number" 
-                            placeholder="Enter max budget" 
-                            value={filters.budget[1].toString()} 
-                            onChange={e => {
-                              const value = parseInt(e.target.value) || 0;
-                              if (value >= filters.budget[0]) {
-                                updateFilter('budget', snapBudget(activeTab, [filters.budget[0], Math.min(value, 50000000)]));
-                              }
-                            }} 
-                            className="h-8 text-sm"
-                            aria-label="Maximum budget amount"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-2 mt-3">
-                      <Button variant={filters.budget[0] === 0 && filters.budget[1] === 50000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [0, 50000])} className="text-xs h-8">
-                        Under 50K
-                      </Button>
-                      <Button variant={filters.budget[0] === 0 && filters.budget[1] === 100000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [0, 100000])} className="text-xs h-8">
-                        Under 1L
-                      </Button>
-                      <Button variant={filters.budget[0] === 0 && filters.budget[1] === 5000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [0, 5000000])} className="text-xs h-8">
-                        Under 50L
-                      </Button>
-                      <Button variant={filters.budget[0] === 5000000 && filters.budget[1] === 10000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [5000000, 10000000])} className="text-xs h-8">
-                        50L-1Cr
-                      </Button>
-                      <Button variant={filters.budget[0] === 10000000 && filters.budget[1] === 20000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', [10000000, 20000000])} className="text-xs h-8">
-                        1-2Cr
-                      </Button>
-                      <Button variant={filters.budget[0] === 20000000 && filters.budget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', snapBudget(activeTab, [20000000, 50000000]))} className="text-xs h-8">
-                        2-5Cr
-                      </Button>
-                      <Button variant={filters.budget[0] === 50000000 && filters.budget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('budget', snapBudget(activeTab, [50000000, 50000000]))} className="text-xs h-8">
-                        5Cr+
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Area (Sq. Ft.) Filter */}
-                <div>
-                  <h4 className="font-semibold mb-3" id="area-label">Area (Sq. Ft.)</h4>
-                  <div className="space-y-3">
-                    <div className="relative">
-                      <Slider 
-                        value={filters.area} 
-                        onValueChange={(value) => updateFilter('area', value as [number, number])} 
-                        max={10000} 
-                        min={0} 
-                        step={100} 
-                        className="w-full"
-                        aria-labelledby="area-label"
-                        aria-valuemin={0}
-                        aria-valuemax={10000}
-                        aria-valuenow={filters.area[1]}
-                      />
-                    </div>
-                    <div className="flex justify-between text-sm font-medium text-foreground">
-                      <span>{filters.area[0] === 0 ? '0' : filters.area[0].toLocaleString()} sq ft</span>
-                      <span>{filters.area[1] >= 10000 ? '10,000+ sq ft' : filters.area[1].toLocaleString() + ' sq ft'}</span>
-                    </div>
-                    
-                    {/* Manual Area Input Fields */}
-                    <div className="space-y-2 mb-3">
-                      <div className="text-sm font-medium text-gray-700">Enter Area Range</div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <label htmlFor="min-area" className="text-xs text-gray-500 mb-1 block">Min Area (sq ft)</label>
-                          <Input 
-                            id="min-area"
-                            type="number" 
-                            placeholder="Min area" 
-                            value={filters.area[0].toString()} 
-                            onChange={e => {
-                              const value = parseInt(e.target.value) || 0;
-                              if (value <= filters.area[1]) {
-                                updateFilter('area', [value, filters.area[1]]);
-                              }
-                            }} 
-                            className="h-8 text-sm"
-                            aria-label="Minimum area in square feet"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="max-area" className="text-xs text-gray-500 mb-1 block">Max Area (sq ft)</label>
-                          <Input 
-                            id="max-area"
-                            type="number" 
-                            placeholder="Max area" 
-                            value={filters.area[1].toString()} 
-                            onChange={e => {
-                              const value = parseInt(e.target.value) || 0;
-                              if (value >= filters.area[0]) {
-                                updateFilter('area', [filters.area[0], Math.min(value, 20000)]);
-                              }
-                            }} 
-                            className="h-8 text-sm"
-                            aria-label="Maximum area in square feet"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Quick Area Range Buttons */}
-                    <div className="grid grid-cols-3 gap-2 mt-3">
-                      <Button variant={filters.area[0] === 0 && filters.area[1] === 500 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [0, 500])} className="text-xs h-8">
-                        Under 500
-                      </Button>
-                      <Button variant={filters.area[0] === 0 && filters.area[1] === 1000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [0, 1000])} className="text-xs h-8">
-                        Under 1K
-                      </Button>
-                      <Button variant={filters.area[0] === 0 && filters.area[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [0, 2000])} className="text-xs h-8">
-                        Under 2K
-                      </Button>
-                      <Button variant={filters.area[0] === 1000 && filters.area[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [1000, 2000])} className="text-xs h-8">
-                        1K-2K
-                      </Button>
-                      <Button variant={filters.area[0] === 2000 && filters.area[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [2000, 3000])} className="text-xs h-8">
-                        2K-3K
-                      </Button>
-                      <Button variant={filters.area[0] === 3000 && filters.area[1] === 5000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [3000, 5000])} className="text-xs h-8">
-                        3K-5K
-                      </Button>
-                      <Button variant={filters.area[0] === 5000 && filters.area[1] === 10000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [5000, 10000])} className="text-xs h-8">
-                        5K-10K
-                      </Button>
-                      <Button variant={filters.area[0] === 10000 && filters.area[1] === 20000 ? "default" : "outline"} size="sm" onClick={() => updateFilter('area', [10000, 20000])} className="text-xs h-8">
-                        10K+
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Property Type Filter - List layout with tab styling */}
-                <div>
-                  <h4 className="font-semibold mb-3">Property Type</h4>
-                  <div className="space-y-2">
-                    {propertyTypes.map(type => <div key={type} className="flex items-center space-x-2">
-                        <button onClick={() => {
-                      if (type === 'ALL') {
-                        updateFilter('propertyType', []);
-                      } else {
-                        updateFilter('propertyType', [type]);
-                      }
-                    }} className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${filters.propertyType.length === 0 && type === 'ALL' || filters.propertyType.length > 0 && filters.propertyType[0] === type ? 'bg-primary text-primary-foreground shadow' : 'bg-muted/60 hover:bg-muted/80 text-foreground'}`}>
-                          {type}
-                        </button>
-                      </div>)}
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* BHK Filter */}
-                <div>
-                  <h4 className="font-semibold mb-3">BHK Type</h4>
-                  <div className="grid grid-cols-3 gap-2">
-                    {bhkTypes.map(bhk => <Button key={bhk} variant={filters.bhkType.includes(bhk) ? 'default' : 'outline'} size="sm" onClick={() => {
-                    if (filters.bhkType.includes(bhk)) {
-                      updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
-                    } else {
-                      updateFilter('bhkType', [...filters.bhkType, bhk]);
-                    }
-                  }} className="text-xs">
-                        {bhk}
-                      </Button>)}
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Construction Status */}
-                <div>
-                  <h4 className="font-semibold mb-3">Construction Status</h4>
-                  <div className="space-y-2">
-                    {availabilityOptions.map(option => <div key={option} className="flex items-center space-x-2">
-                        <Checkbox id={option} checked={filters.availability.includes(option)} onCheckedChange={checked => {
-                      if (checked) {
-                        updateFilter('availability', [...filters.availability, option]);
-                      } else {
-                        updateFilter('availability', filters.availability.filter(a => a !== option));
-                      }
-                    }} />
-                        <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
-                          {option}
-                        </label>
-                      </div>)}
-                  </div>
-                </div>
-
-
-                <Separator />
-
-                {/* Age of Property Filter */}
-                <div>
-                  <h4 className="font-semibold mb-3">Age of Property</h4>
-                  <div className="space-y-2">
-                    {constructionOptions.map(option => <div key={option} className="flex items-center space-x-2">
-                        <Checkbox id={option} checked={filters.construction.includes(option)} onCheckedChange={checked => {
-                      if (checked) {
-                        updateFilter('construction', [...filters.construction, option]);
-                      } else {
-                        updateFilter('construction', filters.construction.filter(c => c !== option));
-                      }
-                    }} />
-                        <label htmlFor={option} className="text-sm text-gray-700 cursor-pointer">
-                          {option}
-                        </label>
-                      </div>)}
-                  </div>
-                </div>
+              <CardContent className="space-y-6 overflow-y-auto pr-2 max-h-[calc(100vh-180px)]">
+                <FiltersPanel />
               </CardContent>
             </Card>
+            </div>
           </div>
 
           {/* Main Content */}
@@ -1101,15 +966,54 @@ const PropertySearch = () => {
                   </SelectContent>
                 </Select>
                 
-                <Button variant="ghost" size="sm" aria-label="Save current search criteria">
+                <Button variant="ghost" size="sm" aria-label="Save current search criteria" className="hidden sm:inline-flex">
                   <Bookmark size={16} className="mr-1" aria-hidden="true" />
                   Save Search
                 </Button>
+
+                {/* View mode toggles */}
+                <div className="hidden sm:flex items-center gap-1" role="group" aria-label="View mode">
+                  <Button
+                    variant={viewMode === 'grid' ? 'default' : 'outline'}
+                    size="icon"
+                    aria-pressed={viewMode === 'grid'}
+                    aria-label="Grid view"
+                    onClick={() => setViewMode('grid')}
+                  >
+                    <Grid3X3 className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === 'list' ? 'default' : 'outline'}
+                    size="icon"
+                    aria-pressed={viewMode === 'list'}
+                    aria-label="List view"
+                    onClick={() => setViewMode('list')}
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* Active Filters - Show all active filters */}
-            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || filters.bhkType.length > 0 || filters.furnished.length > 0 || filters.availability.length > 0 || filters.locality.length > 0 || filters.construction.length > 0 || filters.budget[0] > 0 || filters.budget[1] < 50000000 || filters.locations.length > 0) && <div className="flex flex-wrap gap-2 mb-6">
+            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || filters.bhkType.length > 0 || filters.furnished.length > 0 || filters.availability.length > 0 || filters.locality.length > 0 || filters.construction.length > 0 || filters.budget[0] > 0 || filters.budget[1] < 50000000 || filters.locations.length > 0 || filters.area[0] > 0 || filters.area[1] < 10000) && <>
+              {/* Mobile summary pill */}
+              <div className="sm:hidden mb-2">
+                <Button variant="outline" size="sm" onClick={() => setShowMobileChips(v => !v)} className="w-full justify-between">
+                  <span className="flex items-center"><Filter size={14} className="mr-1" /> Active filters</span>
+                  <Badge variant="secondary">{[
+                    ...filters.propertyType.filter(t => t !== 'ALL'),
+                    ...filters.bhkType,
+                    ...filters.furnished,
+                    ...filters.availability,
+                    ...filters.construction,
+                    ...filters.locality,
+                  ].length + (filters.budget[0] > 0 || filters.budget[1] < 50000000 ? 1 : 0) + (filters.area[0] > 0 || filters.area[1] < 10000 ? 1 : 0) + (filters.locations.length > 0 ? filters.locations.length : 0)}</Badge>
+                </Button>
+              </div>
+
+              <div className={`mb-6 ${showMobileChips ? 'block' : 'hidden'} sm:block`}>
+                <div className="flex flex-wrap sm:flex-wrap gap-2 overflow-x-auto sm:overflow-visible pb-1">
                 <div className="flex items-center text-sm text-gray-600 mr-2">
                   <Filter size={14} className="mr-1" />
                   Active filters:
@@ -1123,6 +1027,16 @@ const PropertySearch = () => {
                       <X size={12} />
                     </button>
                   </Badge>}
+
+                {/* Area filter badge */}
+                {(filters.area[0] > 0 || filters.area[1] < 10000) && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    {filters.area[0]} - {filters.area[1] >= 10000 ? '10000+' : filters.area[1]} sq ft
+                    <button onClick={() => updateFilter('area', [0, 10000])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                )}
                 
                 {/* Location badges */}
                 {filters.locations.map(location => <Badge key={location} variant="secondary" className="flex items-center gap-1">
@@ -1153,24 +1067,58 @@ const PropertySearch = () => {
                       <X size={12} />
                     </button>
                   </Badge>)}
+                {filters.availability.map(option => (
+                  <Badge key={`avail-${option}`} variant="secondary" className="flex items-center gap-1">
+                    {option}
+                    <button onClick={() => updateFilter('availability', filters.availability.filter(a => a !== option))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                ))}
+                {filters.construction.map(option => (
+                  <Badge key={`cons-${option}`} variant="secondary" className="flex items-center gap-1">
+                    {option}
+                    <button onClick={() => updateFilter('construction', filters.construction.filter(c => c !== option))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                ))}
                 {filters.locality.map(locality => <Badge key={locality} variant="secondary" className="flex items-center gap-1">
                     {locality}
                     <button onClick={() => updateFilter('locality', filters.locality.filter(l => l !== locality))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
                   </Badge>)}
-                
-                <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-brand-red hover:bg-brand-red/10">
-                  Clear All
-                </Button>
-              </div>}
+                  
+                  <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-brand-red hover:bg-brand-red/10">
+                    Clear All
+                  </Button>
+                </div>
+              </div>
+            </>}
 
             {/* Properties Grid/List - Real-time results */}
             {isLoading && filteredProperties.length === 0 ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
               </div> : filteredProperties.length > 0 ? <>
-                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
-                  {currentProperties.map(property => <PropertyCard key={property.id} id={property.id} title={property.title} location={property.location} price={property.price} area={property.area} bedrooms={property.bedrooms} bathrooms={property.bathrooms} image={property.image} propertyType={property.propertyType} listingType={property.listingType} size={viewMode === 'list' ? 'large' : 'default'} rental_status="available" />)}
+                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                  {filteredProperties.map(property => (
+                    <PropertyCard
+                      key={property.id}
+                      id={property.id}
+                      title={property.title}
+                      location={property.location}
+                      price={property.price}
+                      area={property.area}
+                      bedrooms={property.bedrooms}
+                      bathrooms={property.bathrooms}
+                      image={property.image}
+                      propertyType={property.propertyType}
+                      listingType={property.listingType}
+                      size={viewMode === 'list' ? 'large' : 'default'}
+                      rental_status="available"
+                    />
+                  ))}
                 </div>
                 
                 {/* Load More Button - Better performance than pagination for large datasets */}
@@ -1188,7 +1136,7 @@ const PropertySearch = () => {
                           Loading...
                         </>
                       ) : (
-                        <>Load More Properties ({propertyCount - filteredProperties.length} remaining)</>
+                        <>Load More Properties ({Math.max(propertyCount - filteredProperties.length, 0)} remaining)</>
                       )}
                     </Button>
                   </div>
@@ -1204,53 +1152,7 @@ const PropertySearch = () => {
                 </Button>
               </div>}
 
-            {/* Pagination - Only show if there are multiple pages */}
-            {totalPages > 1 && (
-              <div className="flex justify-center mt-12">
-                <div className="flex gap-2">
-                  {/* Previous button - only show if not on first page */}
-                  {currentPage > 1 && (
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setCurrentPage(currentPage - 1)}
-                    >
-                      <ChevronLeft size={16} />
-                    </Button>
-                  )}
-                  
-                  {/* Page numbers - show up to 5 pages around current page */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter(pageNum => {
-                      // Show current page and 2 pages on each side
-                      return pageNum >= Math.max(1, currentPage - 2) && 
-                             pageNum <= Math.min(totalPages, currentPage + 2);
-                    })
-                    .map(pageNum => (
-                      <Button 
-                        key={pageNum}
-                        variant={pageNum === currentPage ? "default" : "outline"} 
-                        size="sm" 
-                        className={pageNum === currentPage ? "bg-red-800 hover:bg-red-900 text-white" : ""}
-                        onClick={() => setCurrentPage(pageNum)}
-                      >
-                        {pageNum}
-                      </Button>
-                    ))}
-                  
-                  {/* Next button - only show if there are more pages */}
-                  {currentPage < totalPages && (
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setCurrentPage(currentPage + 1)}
-                    >
-                      <ChevronRight size={16} />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            )}
+            {/* Removed client-side pagination */}
           </div>
         </div>
       </main>

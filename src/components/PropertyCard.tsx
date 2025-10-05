@@ -221,16 +221,6 @@ const PropertyCard = ({
 
   // Handle different image formats - prioritize direct URLs from database
   const getImageUrl = () => {
-    // Debug logging
-    console.log('PropertyCard image data:', {
-      id,
-      title,
-      image,
-      imageType: typeof image,
-      isArray: Array.isArray(image),
-      imageLength: Array.isArray(image) ? image.length : 'N/A'
-    });
-
     const sanitize = (url?: string) => {
       const u = (url || '').trim();
       if (!u) return propertyPlaceholder;
@@ -270,62 +260,124 @@ const PropertyCard = ({
       sessionStorage.setItem(`property-${id}`, JSON.stringify(propertyForPage));
       window.open(`/property/${id}`, '_blank');
     }}>
-      <div className="relative">
-        <PropertyWatermark status={rental_status}>
-          <div className="h-24 overflow-hidden">
-            <img
-              src={getImageUrl()}
-              alt={getDisplayTitle()}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => {
-                e.currentTarget.src = propertyPlaceholder;
-                e.currentTarget.alt = 'Image not available';
-              }}
-            />
-          </div>
-        </PropertyWatermark>
-        <FavoriteButton 
-          propertyId={id}
-          size="sm"
-          className="absolute top-2 right-2 bg-white/90 hover:bg-white"
-        />
-        {isNew && (
-          <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-medium">
-            New
-          </div>
-        )}
-      </div>
-      
-      <CardContent className="p-3 font-poppins">
-        <h3 className="font-semibold text-xs mb-1 h-4 truncate text-gray-900">{getDisplayTitle()}</h3>
-        
-        <div className="flex items-center text-gray-500 mb-2">
-          <MapPin size={10} className="mr-1 flex-shrink-0" />
-          <span className="text-xs line-clamp-1 text-uniform">{location}</span>
-        </div>
-        
-        <div className="flex justify-between items-end mt-auto">
-          <Button
-            variant="outline"
+      {/* Wrapper switches to horizontal layout on md+ when size is large */}
+      <div className={cn(size === 'large' ? 'md:flex md:flex-row md:items-stretch' : '')}>
+        {/* Image section */}
+        <div className={cn('relative', size === 'large' ? 'md:w-96 lg:w-[28rem] md:flex-shrink-0' : '')}>
+          <PropertyWatermark status={rental_status}>
+            <div className={cn(
+              'overflow-hidden',
+              size === 'large' ? 'h-52 md:h-52 lg:h-56 w-full' : 'h-24'
+            )}>
+              <img
+                src={getImageUrl()}
+                alt={getDisplayTitle()}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  e.currentTarget.src = propertyPlaceholder;
+                  e.currentTarget.alt = 'Image not available';
+                }}
+              />
+            </div>
+          </PropertyWatermark>
+          <FavoriteButton 
+            propertyId={id}
             size="sm"
-            className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-3 py-1 card-border"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowContactModal(true);
-            }}
-          >
-            <Phone size={7} className="mr-0.5 sm:mr-0.5 mr-0" />
-            <span className="hidden sm:inline">Contact</span>
-          </Button>
-          
-          {/* Price Display - Bottom Right */}
-          <div className="text-xs font-bold text-black">
-            {formatPrice(price)}
-          </div>
+            className="absolute top-2 right-2 bg-white/90 hover:bg-white"
+          />
+          {isNew && (
+            <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded-md text-xs font-medium">
+              New
+            </div>
+          )}
         </div>
-      </CardContent>
+
+        {/* Content section */}
+        <CardContent className={cn('p-3 font-poppins', size === 'large' ? 'md:flex-1 md:p-4' : '')}>
+          {size === 'large' ? (
+            <>
+              {/* Title and price header */}
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-semibold text-lg leading-snug truncate text-gray-900">{getDisplayTitle()}</h3>
+                <div className="text-xl font-bold text-black whitespace-nowrap">{formatPrice(price)}</div>
+              </div>
+              {/* Subtitle: BHK + Type + listing type */}
+              {(
+                (bedrooms && bedrooms > 0) || (propertyType && propertyType.trim()) || listingType
+              ) && (
+                <div className="mt-1 text-sm text-gray-700 line-clamp-1">
+                  {bedrooms && bedrooms > 0 && <span className="font-medium">{bedrooms} BHK</span>}
+                  {bedrooms && bedrooms > 0 && propertyType ? ' ' : ''}
+                  {propertyType && <span>{propertyType}</span>}
+                  {listingType && (
+                    <span className="text-gray-500"> {listingType === 'rent' ? '· for Rent' : listingType === 'sale' ? '· for Sale' : ''}</span>
+                  )}
+                </div>
+              )}
+              {/* Location */}
+              <div className="flex items-center text-gray-500 mt-1">
+                <MapPin size={14} className="mr-1 flex-shrink-0" />
+                <span className="text-sm line-clamp-1 text-uniform">{location}</span>
+              </div>
+              {/* Meta details row */}
+              {(!!bedrooms || !!bathrooms || (!!area && area.trim())) && (
+                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-gray-700">
+                  {bedrooms ? (
+                    <span className="inline-flex items-center text-sm"><Bed size={14} className="mr-1" />{bedrooms} Beds</span>
+                  ) : null}
+                  {bathrooms ? (
+                    <span className="inline-flex items-center text-sm"><Bath size={14} className="mr-1" />{bathrooms} Baths</span>
+                  ) : null}
+                  {area && area.trim() ? (
+                    <span className="inline-flex items-center text-sm"><Square size={14} className="mr-1" />{area}</span>
+                  ) : null}
+                </div>
+              )}
+              {/* Footer actions */}
+              <div className="mt-3 flex justify-between items-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs px-3 border-gray-200 hover:bg-gray-50 card-border"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowContactModal(true);
+                  }}
+                >
+                  <Phone size={12} className="mr-1" />
+                  <span>Contact</span>
+                </Button>
+                {/* keep price repeated for mobile stacking? already shown above */}
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="font-semibold mb-1 truncate text-gray-900 text-xs h-4">{getDisplayTitle()}</h3>
+              <div className="flex items-center text-gray-500 mb-2">
+                <MapPin size={10} className="mr-1 flex-shrink-0" />
+                <span className="text-xs line-clamp-1 text-uniform">{location}</span>
+              </div>
+              <div className="flex justify-between items-end mt-auto">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-3 py-1 card-border"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowContactModal(true);
+                  }}
+                >
+                  <Phone size={7} className="mr-0.5 sm:mr-0.5 mr-0" />
+                  <span className="hidden sm:inline">Contact</span>
+                </Button>
+                <div className="text-xs font-bold text-black">{formatPrice(price)}</div>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </div>
 
       <ContactOwnerModal
         isOpen={showContactModal}

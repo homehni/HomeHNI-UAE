@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
-import { MapPin, X, ChevronRight } from 'lucide-react';
+import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 export interface SearchSectionRef {
@@ -561,8 +560,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   ))}
                 </div>
               )}
-              {/* Input */}
+              {/* Input (with in-field search icon for parity) */}
               <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-red" size={16} />
                 <input
                   ref={mobileInputRef}
                   type="text"
@@ -570,8 +570,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   defaultValue={searchQuery}
                   onKeyPress={handleKeyPress}
                   disabled={selectedLocations.length >= 3}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base disabled:opacity-50 disabled:bg-gray-50"
+                  className="w-full pl-9 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base disabled:opacity-50 disabled:bg-gray-50"
                 />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                  aria-label="Search"
+                  onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
+                >
+                  <SearchIcon className="h-4 w-4" />
+                </button>
               </div>
 
               {/* Filters row inside overlay (mobile) */}
@@ -873,49 +881,78 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   </TabsList>
 
                   <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
-                    {/* Selected Location Tags */}
-                    {selectedLocations.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {selectedLocations.map((location, index) => (
-                          <div
-                            key={index}
-                            className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium"
-                          >
-                            {location}
+                    {/* Search Bar - pill style with in-field search icon (parity with results page) */}
+                    <div className="relative">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none" size={18} />
+                      <div
+                        className="relative flex flex-wrap items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-12 border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
+                        onClick={() => {
+                          if (inputRef.current && selectedLocations.length < 3) {
+                            inputRef.current.focus();
+                          }
+                        }}
+                      >
+                        {/* Location Chips inside field */}
+                        {selectedLocations.map((location, index) => (    
+                          <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                            <span className="truncate max-w-32">{location}</span>
                             <button
-                              onClick={() => removeLocation(location)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeLocation(location);
+                              }}
                               className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
                             >
-                              <X size={14} />
+                              <X size={12} />
                             </button>
                           </div>
                         ))}
-                      </div>
-                    )}
 
-                    {/* Search Bar */}
-                    <div className="flex gap-3 sm:gap-4 items-stretch">
-                      {/* Search Input */}
-                      <div className="flex-1 relative">
-                         <MapPin className="absolute left-3 top-3 text-brand-red" size={16} />
-                         <Input 
-                           ref={inputRef} 
-                           placeholder={selectedLocations.length >= 3 ? "Max 3 locations selected" : selectedCity ? `Add locality in ${selectedCity}` : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : "Search locality..."} 
-                           value={searchQuery}
-                           onChange={(e) => setSearchQuery(e.target.value)}
-                           onKeyPress={handleKeyPress}
-                           disabled={selectedLocations.length >= 3}
-                           className="pl-9 h-10 sm:h-12 border-brand-red text-brand-red placeholder-brand-red/60 text-sm disabled:opacity-50" 
-                         />
+                        {/* Text input */}
+                        <input
+                          ref={inputRef}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          placeholder={selectedLocations.length >= 3 ? 'Max 3 locations' : selectedCity ? `Add locality in ${selectedCity}` : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : 'Search locality...'}
+                          className="flex-1 min-w-32 outline-none bg-transparent text-sm placeholder:text-gray-400"
+                          disabled={selectedLocations.length >= 3}
+                        />
+
+                        {/* In-field Search icon triggers navigation */}
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 absolute right-2 top-1/2 -translate-y-1/2"
+                          aria-label="Search"
+                          onClick={handleSearch}
+                        >
+                          <SearchIcon className="h-4 w-4" />
+                        </button>
+
+                        {/* Location limit hint */}
+                        {selectedLocations.length >= 3 && (
+                          <span className="text-gray-500 text-sm whitespace-nowrap">Max 3</span>
+                        )}
                       </div>
-                      
-                      {/* Search Button */}
-                      <Button 
-                        onClick={handleSearch}
-                        className="h-10 sm:h-12 px-4 sm:px-8 bg-brand-red hover:bg-brand-red-dark text-white font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        Search
-                      </Button>
+
+                      {/* Clear All below field to avoid overlap */}
+                      {selectedLocations.length > 0 && (
+                        <div className="mt-2 flex justify-end">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedLocations([]);
+                              setSelectedCity('');
+                              setSearchQuery('');
+                            }}
+                            className="h-6 w-6 p-0 hover:bg-brand-red/10"
+                            aria-label="Clear all locations"
+                          >
+                            <X size={14} />
+                          </Button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Desktop: Collapsible Filter Dropdowns */}
