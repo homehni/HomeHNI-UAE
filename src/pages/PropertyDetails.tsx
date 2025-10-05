@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
+import ChatBot from '@/components/ChatBot';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
@@ -590,6 +591,7 @@ const PropertyDetails: React.FC = () => {
       />
       
       <Footer />
+      <ChatBot />
     </div>;
 };
 export default PropertyDetails;
