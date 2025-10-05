@@ -1577,7 +1577,7 @@ const ChatBot = () => {
       </div>
 
       {/* Input Section */}
-      {propertyChatStep !== 'details-form' && propertyChatStep !== 'complete' && (
+      {!showPropertyDetailsForm && propertyChatStep !== 'complete' && (
         <div className="p-4 border-t border-gray-200 bg-white shadow-lg z-10">
           <div className="flex space-x-2">
             <Input
