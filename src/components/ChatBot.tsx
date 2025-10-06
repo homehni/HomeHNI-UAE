@@ -1841,8 +1841,8 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   );
 
   const renderChatView = () => (
-    <CardContent className="p-0 h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3" style={{ maxHeight: searchContext ? 'calc(100% - 80px)' : '320px' }}>
+    <CardContent className="p-0 h-full flex flex-col relative">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-20">
         {messages.map((message, index) => (
           <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
             <div
@@ -1990,7 +1990,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
         )}
       </div>
 
-      <div className="p-3 sm:p-4 border-t border-gray-200 bg-white">
+      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t border-gray-200 bg-white">
         <div className="flex space-x-2">
           <Input
             value={inputValue}
@@ -2057,7 +2057,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl">
           {/* Show header for search context chat */}
           {searchContext && (
-            <CardHeader className="bg-brand-red text-white p-4 sm:p-5">
+            <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
@@ -2080,7 +2080,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
           )}
           
           {!showInitialView && currentView === 'initial' && !searchContext && (
-            <CardHeader className="bg-brand-red text-white p-4 sm:p-5">
+            <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
@@ -2092,27 +2092,29 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
             </CardHeader>
           )}
 
-          {currentView === 'plan-support' ? (
-            <div className="h-full flex flex-col">
-              {renderPlanSupportView()}
-            </div>
-          ) : currentView === 'property-support' ? (
-            <div className="h-full flex flex-col">
-              {renderPropertySupportView()}
-            </div>
-          ) : currentView === 'service-faq' ? (
-            <div className="h-full flex flex-col">
-              {renderServiceFAQView()}
-            </div>
-          ) : currentView === 'faq-detail' ? (
-            <div className="h-full flex flex-col">
-              {renderFAQDetailView()}
-            </div>
-          ) : showInitialView ? (
-            renderInitialView()
-          ) : (
-            renderChatView()
-          )}
+          <div className="relative h-full">
+            {currentView === 'plan-support' ? (
+              <div className="h-full flex flex-col">
+                {renderPlanSupportView()}
+              </div>
+            ) : currentView === 'property-support' ? (
+              <div className="h-full flex flex-col">
+                {renderPropertySupportView()}
+              </div>
+            ) : currentView === 'service-faq' ? (
+              <div className="h-full flex flex-col">
+                {renderServiceFAQView()}
+              </div>
+            ) : currentView === 'faq-detail' ? (
+              <div className="h-full flex flex-col">
+                {renderFAQDetailView()}
+              </div>
+            ) : showInitialView ? (
+              renderInitialView()
+            ) : (
+              renderChatView()
+            )}
+          </div>
         </Card>
       )}
     </div>
