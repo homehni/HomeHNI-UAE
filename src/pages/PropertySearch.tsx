@@ -148,7 +148,7 @@ const PropertySearch = () => {
         // Restrict Rent -> Property Type to only these
         return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
       case 'buy':
-        // Restrict Buy -> Property Type to only these three
+        // Restrict Buy -> Property Type to only these three (label change handled in homepage UI)
         return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
       case 'commercial':
         return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL'];

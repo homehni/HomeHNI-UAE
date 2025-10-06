@@ -1214,8 +1214,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         // Restrict Rent -> Property Type to these three
         return ['Flat/Apartment', 'Independent House', 'Villa'];
       case 'buy':
-        // Limit Buy -> Property Type to only these three options
-        return ['Apartment', 'Independent House', 'Villa'];
+        // Limit Buy -> Property Type to only these three options (label: Flat/Apartment)
+        return ['Flat/Apartment', 'Independent House', 'Villa'];
       case 'commercial':
         return ['Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial'];
       case 'land':
