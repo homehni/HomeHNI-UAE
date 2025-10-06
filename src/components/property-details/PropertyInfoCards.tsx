@@ -23,6 +23,11 @@ interface PropertyInfoCardsProps {
     age_of_building?: string;
     balconies?: number;
     created_at?: string;
+    // Common/Commercial extras
+    floor_no?: number;
+    total_floors?: number;
+    furnishing?: string;
+    furnishing_status?: string;
     // Plot specific
     plot_length?: number;
     plot_width?: number;
@@ -74,6 +79,27 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     return property.age_of_building;
   };
 
+  const getFurnishing = () => {
+    const f = property.furnishing || property.furnishing_status;
+    return f ? f : 'Not specified';
+  };
+
+  const getFloorText = () => {
+    const floor = property.floor_no;
+    const total = property.total_floors;
+    const floorText = (floor === undefined || floor === null)
+      ? 'Ground Floor'
+      : (floor === 0 ? 'Ground Floor' : `${floor}${floor === 1 ? 'st' : floor === 2 ? 'nd' : floor === 3 ? 'rd' : 'th'} Floor`);
+    const subtitle = (typeof total === 'number' && total > 0) ? `Of Total ${total} Floors` : undefined;
+    return { title: floorText, subtitle };
+  };
+
+  const getAvailableFrom = () => {
+    if (!property.available_from) return 'Immediately';
+    const date = new Date(property.available_from);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
   const getPreferredTenant = () => {
     if (!property.preferred_tenant) return 'Any';
     return property.preferred_tenant.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -101,8 +127,8 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     const L = property.plot_length;
     const W = property.plot_width;
     if (!L || !W) return 'Not specified';
-    const unit = unitMap[property.plot_area_unit || 'sq-ft'] || 'sq.ft.';
-    return `${L} x ${W} ${unit}`;
+    // Always show linear dimensions in feet regardless of area unit
+    return `${L} x ${W} ft.`;
   };
 
   const formatOwnership = () => {
@@ -199,8 +225,53 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
   ];
 
+  const isCommercial = !!property.property_type && (
+    property.property_type.toLowerCase().includes('commercial') ||
+    ['office', 'shop', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'coworking']
+      .some(t => property.property_type?.toLowerCase().includes(t))
+  );
+
+  const floorInfo = getFloorText();
+  const commercialInfoCards = [
+    {
+      icon: Building,
+      title: getPropertyType(),
+      subtitle: 'Property Type',
+    },
+    {
+      icon: Car,
+      title: getParking(),
+      subtitle: 'Parking',
+    },
+    {
+      icon: MapPin,
+      title: floorInfo.title,
+      subtitle: floorInfo.subtitle,
+    },
+    {
+      icon: Home,
+      title: getFurnishing(),
+      subtitle: 'Furnishing',
+    },
+    {
+      icon: Calendar,
+      title: getAgeOfBuilding(),
+      subtitle: 'Age of Property',
+    },
+    {
+      icon: Calendar,
+      title: formatDate(property.created_at),
+      subtitle: 'Posted On',
+    },
+    {
+      icon: Calendar,
+      title: getAvailableFrom(),
+      subtitle: 'Available From',
+    },
+  ];
+
   // Hide irrelevant cards for Land/Plot
-  const infoCards = isPlot ? plotInfoCards : defaultInfoCards;
+  const infoCards = isPlot ? plotInfoCards : (isCommercial ? commercialInfoCards : defaultInfoCards);
   const filteredCards = infoCards;
 
   return (
@@ -221,17 +292,20 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
             <div
               key={index}
               className={`p-3 sm:p-4 ${cellBorders} flex items-center gap-3 sm:gap-4 min-w-0 overflow-hidden`}
+              title={`${card.title} ${card.subtitle ? ' - ' + card.subtitle : ''}`}
             >
               <div className="bg-gray-50 p-2 sm:p-3 rounded-lg flex-shrink-0">
                 <card.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
               </div>
-              <div className="flex-1 min-w-0 overflow-hidden">
-                <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">
+              <div className="flex-1 min-w-0">
+                <div className={`font-semibold text-gray-900 text-sm sm:text-base whitespace-normal break-words`}>
                   {card.title}
                 </div>
-                <div className="text-xs sm:text-sm text-gray-500 truncate">
-                  {card.subtitle}
-                </div>
+                {card.subtitle ? (
+                  <div className={`text-xs sm:text-sm text-gray-500 whitespace-normal break-words`}>
+                    {card.subtitle}
+                  </div>
+                ) : null}
               </div>
             </div>
           );

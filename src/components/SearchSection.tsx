@@ -86,8 +86,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       params.set('propertyTypes', tokens.join(','));
     }
 
-    // Bedrooms (not for land)
-    if (activeTab !== 'land' && selectedBedrooms.length > 0) {
+    // Bedrooms only for Buy/Rent (not for land or commercial)
+    if ((activeTab === 'buy' || activeTab === 'rent') && selectedBedrooms.length > 0) {
       const bhkValues = mapBhkSelectionsToFilters(selectedBedrooms);
       params.set('bhk', bhkValues.join(','));
     }
@@ -452,8 +452,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     </div>
                   )}
 
-                  {/* Bedroom (not for land) */}
-                  {activeTab !== 'land' && (
+                  {/* Bedroom (only for Buy/Rent) */}
+                  {(activeTab === 'buy' || activeTab === 'rent') && (
                   <div className="relative">
                     <Button
                       variant="outline"
@@ -586,8 +586,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               <div className="mt-4">
                 <div className="overflow-x-auto -mx-1 px-1">
                   <div className="flex gap-2 min-w-max">
-                    {/* Property Type - only for non-commercial */}
-                    {activeTab !== 'commercial' && (
+                    {/* Property Type / Space Type - show for all tabs (Commercial uses space types) */}
+                    {(
                       <div className="relative">
                         <Button
                           variant="outline"
@@ -595,22 +595,24 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
                           className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400' : ''}`}
                         >
-                          {activeTab === 'land' ? 'Land Type' : 'Property Type'} <ChevronRight size={14} className={`transition-transform ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
+                          {activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'} <ChevronRight size={14} className={`transition-transform ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
                         </Button>
                       </div>
                     )}
 
-                    {/* Bedroom */}
-                    <div className="relative">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
-                        className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400' : ''}`}
-                      >
-                        Bedroom <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
-                      </Button>
-                    </div>
+                    {/* Bedroom (only for Buy/Rent) */}
+                    {(activeTab === 'buy' || activeTab === 'rent') && (
+                      <div className="relative">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
+                          className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400' : ''}`}
+                        >
+                          Bedroom <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
+                        </Button>
+                      </div>
+                    )}
 
                     {/* Availability for RENT; Property Status for others */}
                     {activeTab === 'rent' ? (
@@ -696,7 +698,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       ))}
                     </div>
                   )}
-                  {openDropdown === 'bedroom' && activeTab !== 'land' && (
+                  {openDropdown === 'bedroom' && (activeTab === 'buy' || activeTab === 'rent') && (
                     <div className="flex flex-wrap gap-2">
                       {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
                         <Button
@@ -957,8 +959,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                     {/* Desktop: Collapsible Filter Dropdowns */}
                     <div className="mt-3 flex flex-wrap items-center gap-2">
-                      {/* Property type: Property Type or Land Type */}
-                      {activeTab !== 'commercial' && (
+                      {/* Property type: Property Type or Land/Space Type */}
+                      {(
                         <div className="relative">
                           <Button
                             variant="outline"
@@ -966,7 +968,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
                             className={`flex items-center gap-1 ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400' : ''}`}
                           >
-                            <span className="text-sm">{activeTab === 'land' ? 'Land Type' : 'Property Type'}</span>
+                            <span className="text-sm">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
                             <ChevronRight size={14} className={`transition-transform ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
                           </Button>
                           {openDropdown === 'propertyType' && (
@@ -990,8 +992,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         </div>
                       )}
 
-                      {/* Bedroom (not for land) */}
-                      {activeTab !== 'land' && (
+                      {/* Bedroom (only for Buy/Rent) */}
+                      {(activeTab === 'buy' || activeTab === 'rent') && (
                       <div className="relative">
                         <Button
                           variant="outline"
@@ -1002,7 +1004,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <span className="text-sm">Bedroom</span>
                           <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
                         </Button>
-                        {openDropdown === 'bedroom' && (
+                        {openDropdown === 'bedroom' && (activeTab === 'buy' || activeTab === 'rent') && (
                           <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
                             <h4 className="text-sm font-semibold mb-3">Number of Bedrooms</h4>
                             <div className="flex flex-wrap gap-2">
@@ -1209,13 +1211,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   function getPropertyTypesForHomepage(tab: string): string[] {
     switch (tab) {
       case 'rent':
-        return ['Flat/Apartment', 'Independent House', 'Villa', 'Penthouse', 'Duplex'];
+        // Restrict Rent -> Property Type to these three
+        return ['Flat/Apartment', 'Independent House', 'Villa'];
       case 'buy':
-        return ['Apartment', 'Villa', 'Independent House', 'Penthouse', 'Duplex', 'Gated Community Villa'];
+        // Limit Buy -> Property Type to only these three options
+        return ['Apartment', 'Independent House', 'Villa'];
       case 'commercial':
         return ['Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial'];
       case 'land':
-        return ['Residential Plot', 'Commercial Land', 'Industrial Land', 'Agricultural Land'];
+        // Remove 'Residential Plot' from Land/Plot
+        return ['Commercial Land', 'Industrial Land', 'Agricultural Land'];
       default:
         return ['Flat/Apartment', 'Villa', 'Independent House'];
     }
@@ -1275,7 +1280,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       'Studio Apartment': 'STUDIO APARTMENT',
       'Co-Living': 'CO-LIVING',
       'Co-Working': 'CO-WORKING',
-      'Residential Plot': 'RESIDENTIAL PLOT',
       'Commercial Land': 'COMMERCIAL LAND',
       'Industrial Land': 'INDUSTRIAL LAND',
       'Agricultural Land': 'AGRICULTURAL LAND',

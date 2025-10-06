@@ -10,26 +10,14 @@ const PROPERTY_TYPES_CONFIG: Record<ListingTab, PropertyTypeFilter[]> = {
   rent: [
     'ALL',
     'APARTMENT',
-    'VILLA',
     'INDEPENDENT HOUSE',
-    'PENTHOUSE',
-    'DUPLEX',
-    'GATED COMMUNITY VILLA',
+    'VILLA',
   ],
   buy: [
     'ALL',
     'APARTMENT',
-    'CO-LIVING',
-    'VILLA',
     'INDEPENDENT HOUSE',
-    'BUILDER FLOOR',
-    'STUDIO APARTMENT',
-    'CO-WORKING',
-    'PENTHOUSE',
-    'DUPLEX',
-    'AGRICULTURAL LAND',
-    'COMMERCIAL LAND',
-    'INDUSTRIAL LAND',
+    'VILLA',
   ],
   commercial: [
     'ALL',
@@ -40,6 +28,12 @@ const PROPERTY_TYPES_CONFIG: Record<ListingTab, PropertyTypeFilter[]> = {
     'RESTAURANT',
     'CO-WORKING',
     'INDUSTRIAL',
+  ],
+  land: [
+    'ALL',
+    'AGRICULTURAL LAND',
+    'COMMERCIAL LAND',
+    'INDUSTRIAL LAND',
   ],
 };
 

@@ -145,13 +145,15 @@ const PropertySearch = () => {
   const getPropertyTypes = (tab: string): string[] => {
     switch (tab) {
       case 'rent':
-        return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX', 'GATED COMMUNITY VILLA'];
+        // Restrict Rent -> Property Type to only these
+        return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
       case 'buy':
-        return ['ALL', 'APARTMENT', 'CO-LIVING', 'VILLA', 'INDEPENDENT HOUSE', 'BUILDER FLOOR', 'STUDIO APARTMENT', 'CO-WORKING', 'PENTHOUSE', 'DUPLEX', 'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'];
+        // Restrict Buy -> Property Type to only these three
+        return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
       case 'commercial':
         return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL'];
       case 'land':
-        // Removed RESIDENTIAL PLOT as per requirement
+        // Land/Plot: no Residential Plot
         return ['ALL', 'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'];
       default:
         return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX'];
