@@ -6,10 +6,11 @@ export interface PropertyNameData {
   propertyType: string;
   listingType: string;
   commercialType?: string; // For commercial properties
+  landType?: string; // For land/plot properties (industrial, agricultural, commercial, residential, institutional)
 }
 
 export const generatePropertyName = (data: PropertyNameData): string => {
-  const { bhkType, propertyType, listingType, commercialType } = data;
+  const { bhkType, propertyType, listingType, commercialType, landType } = data;
   
   // Handle special land types from listing type (Industrial land, Agricultural Land, Commercial land)
   if (listingType === 'Industrial land') {
@@ -20,6 +21,21 @@ export const generatePropertyName = (data: PropertyNameData): string => {
   }
   if (listingType === 'Commercial land') {
     return 'Commercial Land For SALE';
+  }
+  
+  // Handle land type for Land/Plot properties
+  if (landType && (propertyType === 'Land/Plot' || propertyType.toLowerCase() === 'land' || propertyType.toLowerCase() === 'plot')) {
+    const landTypeMap: { [key: string]: string } = {
+      'industrial': 'Industrial Land For SALE',
+      'agricultural': 'Agricultural Land For SALE',
+      'commercial': 'Commercial Land For SALE',
+      'residential': 'Residential Land For SALE',
+      'institutional': 'Institutional Land For SALE'
+    };
+    const generatedTitle = landTypeMap[landType.toLowerCase()];
+    if (generatedTitle) {
+      return generatedTitle;
+    }
   }
   
   // Map listing types to display format

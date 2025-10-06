@@ -385,7 +385,25 @@ const AdminProperties = () => {
         .from('properties')
         .insert({
           user_id: userIdToAssign,
-          title: submission.title || payload.title || 'Untitled Property',
+          title: (() => {
+            // Generate proper title for land properties based on land type
+            const plotDetails = originalFormData.propertyInfo?.plotDetails;
+            if (plotDetails && plotDetails.landType) {
+              const landTypeMap: { [key: string]: string } = {
+                'industrial': 'Industrial Land For SALE',
+                'agricultural': 'Agricultural Land For SALE',
+                'commercial': 'Commercial Land For SALE',
+                'residential': 'Residential Land For SALE',
+                'institutional': 'Institutional Land For SALE'
+              };
+              const generatedTitle = landTypeMap[plotDetails.landType.toLowerCase()];
+              if (generatedTitle) {
+                return generatedTitle;
+              }
+            }
+            // Fallback to existing title logic
+            return submission.title || payload.title || 'Untitled Property';
+          })(),
           property_type: mappedPropertyType,
           listing_type: mappedListingType,
           bhk_type: bhkValue,

@@ -560,7 +560,10 @@ export const PostProperty: React.FC = () => {
           listingType: listingType,
           commercialType: ('propertyDetails' in data.propertyInfo && 'spaceType' in data.propertyInfo.propertyDetails) 
                          ? (data.propertyInfo.propertyDetails as any).spaceType 
-                         : undefined
+                         : undefined,
+          landType: ('plotDetails' in data.propertyInfo) 
+                   ? data.propertyInfo.plotDetails.landType 
+                   : undefined
         };
         propertyTitle = generatePropertyName(nameData);
       }
