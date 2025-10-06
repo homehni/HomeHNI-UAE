@@ -2251,6 +2251,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   value={searchDetailsForm.name}
                   onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, name: e.target.value }))}
                   required
+                  autoComplete="name"
                   className="text-sm"
                 />
                 <Input
@@ -2259,6 +2260,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   value={searchDetailsForm.email}
                   onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, email: e.target.value }))}
                   required
+                  autoComplete="email"
                   className="text-sm"
                 />
                 <Input
@@ -2268,6 +2270,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, phone: e.target.value }))}
                   required
                   pattern="[0-9]{10}"
+                  autoComplete="tel"
                   className="text-sm"
                 />
                 <Button 
