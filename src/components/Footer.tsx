@@ -480,7 +480,7 @@ const Footer = ({
   </div>
 
   {/* Product credit with orange heart */}
-  <div className="text-[11px] sm:text-xs text-gray-500">
+  <div className="text-[11px] sm:text-xs text-gray-500 font-poppins">
     Designed by{" "}
     <a
       href="https://ranazonai.com/"
