@@ -2245,7 +2245,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         {/* Search Details Form */}
         {showSearchDetailsForm && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] sm:max-w-[80%] bg-gray-100 rounded-lg p-3 sm:p-4 mb-24 relative">
+            <div className="max-w-[85%] sm:max-w-[80%] bg-gray-100 rounded-lg p-3 sm:p-4 mb-4 relative">
               <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
               <form onSubmit={(e) => {
                 e.preventDefault();
@@ -2426,7 +2426,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl">
+        <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
           {/* Show header for search context chat */}
           {searchContext && (
             <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
@@ -2464,7 +2464,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
             </CardHeader>
           )}
 
-          <div className="relative h-full">
+          <div className="relative flex-1 min-h-0">
             {currentView === 'plan-support' ? (
               <div className="h-full flex flex-col">
                 {renderPlanSupportView()}
