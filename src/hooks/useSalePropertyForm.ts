@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   OwnerInfo, 
   PropertyDetails, 
@@ -11,6 +11,7 @@ import {
 import { SaleDetails } from '@/types/saleProperty';
 
 export const useSalePropertyForm = () => {
+  const [isInitialized, setIsInitialized] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
   const [propertyDetails, setPropertyDetails] = useState<Partial<PropertyDetails>>({
@@ -32,6 +33,34 @@ export const useSalePropertyForm = () => {
     availability: 'everyday',
     availableAllDay: true
   });
+
+  // Load saved draft from localStorage on mount
+  useEffect(() => {
+    if (isInitialized) return;
+    
+    try {
+      const savedData = localStorage.getItem('resale-form-data');
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        console.log('Loading resale draft from localStorage:', parsed);
+        
+        if (parsed.propertyDetails) setPropertyDetails(parsed.propertyDetails);
+        if (parsed.locationDetails) setLocationDetails(parsed.locationDetails);
+        if (parsed.saleDetails) setSaleDetails(parsed.saleDetails);
+        if (parsed.amenities) setAmenities(parsed.amenities);
+        if (parsed.gallery) setGallery(parsed.gallery);
+        if (parsed.additionalInfo) setAdditionalInfo(parsed.additionalInfo);
+        if (parsed.scheduleInfo) setScheduleInfo(parsed.scheduleInfo);
+        if (parsed.currentStep) setCurrentStep(parsed.currentStep);
+        
+        console.log('Resale draft loaded successfully');
+      }
+    } catch (error) {
+      console.error('Error loading resale draft:', error);
+    } finally {
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
 
   const nextStep = () => {
     if (currentStep < 7) {
