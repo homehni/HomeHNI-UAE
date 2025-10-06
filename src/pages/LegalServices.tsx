@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import LegalServicesForm from '@/components/LegalServicesForm';
+import ChatBot from '@/components/ChatBot';
 const LegalServices = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const scrollToContact = () => {
@@ -279,6 +280,7 @@ const LegalServices = () => {
       <LegalServicesForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
 
       <Footer />
+      <ChatBot serviceContext={{ service: 'legal-services' }} />
     </div>;
 };
 export default LegalServices;

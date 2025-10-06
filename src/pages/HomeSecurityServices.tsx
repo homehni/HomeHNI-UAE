@@ -9,6 +9,7 @@ import { Shield, Camera, Lock, Bell, Smartphone, Home, Clock, CheckCircle, Star,
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ChatBot from "@/components/ChatBot";
 
 const HomeSecurityServices = () => {
   const [statesData, setStatesData] = useState<any>(null);
@@ -896,7 +897,7 @@ const HomeSecurityServices = () => {
         </div>
       </section>
 
-      
+      <ChatBot serviceContext={{ service: 'home-security' }} />
     </div>
   );
 };

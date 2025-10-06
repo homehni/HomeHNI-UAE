@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, UserCheck, Settings, BarChart3, Wrench } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import ChatBot from "@/components/ChatBot";
 
 const PropertyManagement = () => {
   // Form state for proper reset functionality
@@ -726,6 +727,7 @@ const PropertyManagement = () => {
 
       {/* CTA Banner */}
       
+      <ChatBot serviceContext={{ service: 'property-management' }} />
     </div>;
 };
 export default PropertyManagement;

@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, FileCheck, Search, Database, Headphones, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, ShieldCheck, Home, Key, Users2, Building } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import ChatBot from "@/components/ChatBot";
 
 const HandoverServices = () => {
   // Major cities in India
@@ -717,6 +718,7 @@ const HandoverServices = () => {
 
       {/* Final CTA */}
       
+      <ChatBot serviceContext={{ service: 'handover-services' }} />
     </div>;
 };
 export default HandoverServices;

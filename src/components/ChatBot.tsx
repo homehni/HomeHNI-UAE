@@ -2354,6 +2354,35 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 }
               ]);
             }
+            // If on individual service page, detect which service
+            else if (['/loans', '/home-security', '/packers-movers', '/legal-services', '/handover-services', 
+                      '/property-management', '/architects', '/painting-cleaning', '/interior-design'].some(path => location.pathname === path)) {
+              const serviceMap: Record<string, string> = {
+                '/loans': 'loans',
+                '/home-security': 'home-security',
+                '/packers-movers': 'packers-movers',
+                '/legal-services': 'legal-services',
+                '/handover-services': 'handover-services',
+                '/property-management': 'property-management',
+                '/architects': 'architects',
+                '/painting-cleaning': 'painting-cleaning',
+                '/interior-design': 'interior-design'
+              };
+              const service = serviceMap[location.pathname];
+              setSelectedService(service);
+              setCurrentView('service-support');
+              setServiceChatStep('intro');
+              setShowServiceDetailsForm(false);
+              const introText = serviceQuestions[service]?.intro || 'Hi, I can help you with this service. How can I assist you?';
+              setServiceChatMessages([
+                {
+                  id: '1',
+                  text: introText,
+                  isBot: true,
+                  timestamp: new Date()
+                }
+              ]);
+            }
             // If on property details page, open directly to property support chat
             else if (location.pathname.startsWith('/property/')) {
               setCurrentView('property-support');
