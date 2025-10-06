@@ -71,6 +71,8 @@ export const useSimplifiedSearch = () => {
         return [0, 50000000]; // 0 to 5 Crore for buy
       case 'commercial':
         return [0, 50000000]; // 0 to 5 Crore for commercial
+      case 'land':
+        return [0, 50000000]; // Land aligned with buy
       default:
         return [0, 50000000]; // Default to buy range
     }
@@ -436,6 +438,13 @@ export const useSimplifiedSearch = () => {
         if (!isMatch) {
           console.log('❌ Filtered out for commercial:', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
         }
+        return isMatch;
+      });
+    } else if (activeTab === 'land') {
+      // For land tab, show only land/plot properties
+      filtered = filtered.filter(property => {
+        const ptype = property.propertyType.toLowerCase();
+        const isMatch = ptype.includes('plot') || ptype.includes('land');
         return isMatch;
       });
     }

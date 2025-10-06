@@ -14,25 +14,28 @@ export const generatePropertyName = (data: PropertyNameData): string => {
   
   // Handle special land types from listing type (Industrial land, Agricultural Land, Commercial land)
   if (listingType === 'Industrial land') {
-    return 'Industrial Land For SALE';
+    return 'Industrial Land For Sale';
   }
   if (listingType === 'Agricultural Land') {
-    return 'Agricultural Land For SALE';
+    return 'Agricultural Land For Sale';
   }
   if (listingType === 'Commercial land') {
-    return 'Commercial Land For SALE';
+    return 'Commercial Land For Sale';
   }
   
   // Handle land type for Land/Plot properties
   if (landType && (propertyType === 'Land/Plot' || propertyType.toLowerCase() === 'land' || propertyType.toLowerCase() === 'plot')) {
+    const key = landType.toLowerCase().trim()
+      .replace(/\s*land$/i, '') // normalize 'agricultural land' -> 'agricultural'
+      .replace(/\s*plot$/i, '');
     const landTypeMap: { [key: string]: string } = {
-      'industrial': 'Industrial Land For SALE',
-      'agricultural': 'Agricultural Land For SALE',
-      'commercial': 'Commercial Land For SALE',
-      'residential': 'Residential Land For SALE',
-      'institutional': 'Institutional Land For SALE'
+      'industrial': 'Industrial Land For Sale',
+      'agricultural': 'Agricultural Land For Sale',
+      'commercial': 'Commercial Land For Sale',
+      'residential': 'Residential Land For Sale',
+      'institutional': 'Institutional Land For Sale'
     };
-    const generatedTitle = landTypeMap[landType.toLowerCase()];
+    const generatedTitle = landTypeMap[key];
     if (generatedTitle) {
       return generatedTitle;
     }

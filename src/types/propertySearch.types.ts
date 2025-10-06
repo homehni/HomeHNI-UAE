@@ -48,7 +48,7 @@ export interface Property {
 }
 
 // Search filter types
-export type ListingTab = 'buy' | 'rent' | 'commercial';
+export type ListingTab = 'buy' | 'rent' | 'commercial' | 'land';
 
 export type PropertyTypeFilter = 
   | 'ALL'

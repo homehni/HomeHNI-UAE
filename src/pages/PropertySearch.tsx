@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import LandPlotSection from '@/components/LandPlotSection';
 import PropertyCard from '@/components/PropertyCard';
 import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerTrigger } from '@/components/ui/drawer';
@@ -68,6 +69,8 @@ const PropertySearch = () => {
         return 50000000; // 5 Crore for buy
       case 'commercial':
         return 50000000; // 5 Crore for commercial
+      case 'land':
+        return 50000000; // Align land with buy range
       default:
         return 50000000; // Default to buy range
     }
@@ -82,6 +85,8 @@ const PropertySearch = () => {
         return 100000; // 1L steps for buy for smoother adjustments
       case 'commercial':
         return 100000; // 1L steps for commercial
+      case 'land':
+        return 100000; // 1L steps for land
       default:
         return 100000; // Default to buy range
     }
@@ -144,6 +149,9 @@ const PropertySearch = () => {
         return ['ALL', 'APARTMENT', 'CO-LIVING', 'VILLA', 'INDEPENDENT HOUSE', 'BUILDER FLOOR', 'STUDIO APARTMENT', 'CO-WORKING', 'PENTHOUSE', 'DUPLEX', 'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'];
       case 'commercial':
         return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL'];
+      case 'land':
+        // Removed RESIDENTIAL PLOT as per requirement
+        return ['ALL', 'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'];
       default:
         return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX'];
     }
@@ -157,6 +165,16 @@ const PropertySearch = () => {
 
   // Reusable filters panel used in desktop sidebar and mobile drawer
   const FiltersPanel = () => {
+  // Preserve sidebar scroll to avoid jump-to-top when clicking options
+  const preserveScroll = (fn: () => void) => {
+    const el = (typeof document !== 'undefined' && (document.getElementById('filters-scroll-desktop') || document.getElementById('filters-scroll-mobile'))) as HTMLElement | null;
+    const y = el?.scrollTop ?? 0;
+    fn();
+    // Restore on next tick so DOM has applied changes
+    setTimeout(() => {
+      if (el) el.scrollTop = y;
+    }, 0);
+  };
   const [uiBudget, setUiBudget] = useState<[number, number]>(filters.budget);
   const [uiArea, setUiArea] = useState<[number, number]>(filters.area);
   const budgetKey = `${filters.budget[0]}-${filters.budget[1]}`;
@@ -165,10 +183,10 @@ const PropertySearch = () => {
   useEffect(() => { setUiArea(filters.area); }, [areaKey]);
     
     const commitBudget = (value: [number, number]) => {
-      updateFilter('budget', snapBudget(activeTab, value));
+      preserveScroll(() => updateFilter('budget', snapBudget(activeTab, value)));
     };
     const commitArea = (value: [number, number]) => {
-      updateFilter('area', value);
+      preserveScroll(() => updateFilter('area', value));
     };
 
     return (<>
@@ -372,11 +390,13 @@ const PropertySearch = () => {
             <div key={type} className="flex items-center space-x-2">
               <button
                 onClick={() => {
-                  if (type === 'ALL') {
-                    updateFilter('propertyType', []);
-                  } else {
-                    updateFilter('propertyType', [type]);
-                  }
+                  preserveScroll(() => {
+                    if (type === 'ALL') {
+                      updateFilter('propertyType', []);
+                    } else {
+                      updateFilter('propertyType', [type]);
+                    }
+                  });
                 }}
                 className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
                   (filters.propertyType.length === 0 && type === 'ALL') ||
@@ -394,8 +414,8 @@ const PropertySearch = () => {
 
       <Separator />
 
-      {/* BHK Filter */}
-      <div>
+      {/* BHK Filter (not relevant for land) */}
+      {activeTab !== 'land' && (<div>
         <h4 className="font-semibold mb-3">BHK Type</h4>
         <div className="grid grid-cols-3 gap-2">
           {bhkTypes.map(bhk => (
@@ -416,12 +436,12 @@ const PropertySearch = () => {
             </Button>
           ))}
         </div>
-      </div>
+      </div>)}
 
       <Separator />
 
-      {/* Property Status (was Construction Status) */}
-      <div>
+      {/* Property Status (not critical for land but kept; hide for land) */}
+      {activeTab !== 'land' && (<div>
         <h4 className="font-semibold mb-3">Property Status</h4>
         <div className="space-y-2">
           {availabilityOptions.map(option => (
@@ -430,11 +450,13 @@ const PropertySearch = () => {
                 id={`availability-${option}`}
                 checked={filters.availability.includes(option)}
                 onCheckedChange={checked => {
-                  if (checked) {
-                    updateFilter('availability', [...filters.availability, option]);
-                  } else {
-                    updateFilter('availability', filters.availability.filter(a => a !== option));
-                  }
+                  preserveScroll(() => {
+                    if (checked) {
+                      updateFilter('availability', [...filters.availability, option]);
+                    } else {
+                      updateFilter('availability', filters.availability.filter(a => a !== option));
+                    }
+                  });
                 }}
               />
               <label htmlFor={`availability-${option}`} className="text-sm text-gray-700 cursor-pointer">
@@ -443,12 +465,12 @@ const PropertySearch = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div>)}
 
       <Separator />
 
-      {/* Furnishing */}
-      <div>
+      {/* Furnishing (not relevant for land) */}
+      {activeTab !== 'land' && (<div>
         <h4 className="font-semibold mb-3">Furnishing</h4>
         <div className="space-y-2">
           {furnishedOptions.map(option => (
@@ -457,11 +479,13 @@ const PropertySearch = () => {
                 id={`furnished-${option}`}
                 checked={filters.furnished.includes(option)}
                 onCheckedChange={checked => {
-                  if (checked) {
-                    updateFilter('furnished', [...filters.furnished, option]);
-                  } else {
-                    updateFilter('furnished', filters.furnished.filter(a => a !== option));
-                  }
+                  preserveScroll(() => {
+                    if (checked) {
+                      updateFilter('furnished', [...filters.furnished, option]);
+                    } else {
+                      updateFilter('furnished', filters.furnished.filter(a => a !== option));
+                    }
+                  });
                 }}
               />
               <label htmlFor={`furnished-${option}`} className="text-sm text-gray-700 cursor-pointer">
@@ -470,12 +494,12 @@ const PropertySearch = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div>)}
 
       <Separator />
 
-      {/* Age of Property */}
-      <div>
+      {/* Age of Property (not relevant for land) */}
+      {activeTab !== 'land' && (<div>
         <h4 className="font-semibold mb-3">Age of Property</h4>
         <div className="space-y-2">
           {constructionOptions.map(option => (
@@ -484,11 +508,13 @@ const PropertySearch = () => {
                 id={`construction-${option}`}
                 checked={filters.construction.includes(option)}
                 onCheckedChange={checked => {
-                  if (checked) {
-                    updateFilter('construction', [...filters.construction, option]);
-                  } else {
-                    updateFilter('construction', filters.construction.filter(c => c !== option));
-                  }
+                  preserveScroll(() => {
+                    if (checked) {
+                      updateFilter('construction', [...filters.construction, option]);
+                    } else {
+                      updateFilter('construction', filters.construction.filter(c => c !== option));
+                    }
+                  });
                 }}
               />
               <label htmlFor={`construction-${option}`} className="text-sm text-gray-700 cursor-pointer">
@@ -497,7 +523,7 @@ const PropertySearch = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div>)}
     </>);
   };
 
@@ -704,10 +730,11 @@ const PropertySearch = () => {
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center pt-4">
             {/* Search Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
-              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100" role="tablist" aria-label="Property listing type">
+              <TabsList className="grid w-full lg:w-auto grid-cols-4 bg-gray-100" role="tablist" aria-label="Property listing type">
                 <TabsTrigger value="buy" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'buy'}>Buy</TabsTrigger>
                 <TabsTrigger value="rent" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'rent'}>Rent</TabsTrigger>
                 <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
+                <TabsTrigger value="land" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'land'}>Land/Plot</TabsTrigger>
               </TabsList>
             </Tabs>
 
@@ -837,11 +864,11 @@ const PropertySearch = () => {
                     </DrawerClose>
                   </DrawerHeader>
                   <div className="px-4 pb-2">
-                    <ScrollArea className="h-[60vh] pr-2">
+                    <div id="filters-scroll-mobile" className="h-[60vh] pr-2 overflow-y-auto">
                       <div className="space-y-6">
                         <FiltersPanel />
                       </div>
-                    </ScrollArea>
+                    </div>
                   </div>
                   <DrawerFooter className="pb-[max(env(safe-area-inset-bottom),16px)]">
                     <div className="flex gap-2">
@@ -881,8 +908,10 @@ const PropertySearch = () => {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-6 overflow-y-auto pr-2 max-h-[calc(100vh-180px)]">
-                <FiltersPanel />
+              <CardContent className="pr-2">
+                <div id="filters-scroll-desktop" className="space-y-6 overflow-y-auto max-h-[calc(100vh-180px)]">
+                  <FiltersPanel />
+                </div>
               </CardContent>
             </Card>
             </div>
@@ -939,6 +968,8 @@ const PropertySearch = () => {
                       return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} for Rent${locationText}` : `Properties for Rent${locationText || ' in All Locations'}`;
                     case 'commercial':
                       return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)} Commercial${locationText}` : `Commercial Properties${locationText || ' in All Locations'}`;
+                    case 'land':
+                      return hasPropertyTypeFilter ? `${propertyTypeText.charAt(0).toUpperCase() + propertyTypeText.slice(1)}${locationText}` : `Land & Plots${locationText || ' in All Locations'}`;
                     default:
                       return `Properties for Sale${locationText || ' in All Locations'}`;
                   }
@@ -1101,25 +1132,36 @@ const PropertySearch = () => {
             {isLoading && filteredProperties.length === 0 ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
               </div> : filteredProperties.length > 0 ? <>
-                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
-                  {filteredProperties.map(property => (
-                    <PropertyCard
-                      key={property.id}
-                      id={property.id}
-                      title={property.title}
-                      location={property.location}
-                      price={property.price}
-                      area={property.area}
-                      bedrooms={property.bedrooms}
-                      bathrooms={property.bathrooms}
-                      image={property.image}
-                      propertyType={property.propertyType}
-                      listingType={property.listingType}
-                      size={viewMode === 'list' ? 'large' : 'default'}
-                      rental_status="available"
-                    />
-                  ))}
-                </div>
+                {activeTab === 'land' ? (
+                  <LandPlotSection properties={filteredProperties.map(p => ({
+                    id: p.id,
+                    title: p.title,
+                    location: p.location,
+                    price: p.price,
+                    area: p.area,
+                    propertyType: p.propertyType
+                  }))} />
+                ) : (
+                  <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                    {filteredProperties.map(property => (
+                      <PropertyCard
+                        key={property.id}
+                        id={property.id}
+                        title={property.title}
+                        location={property.location}
+                        price={property.price}
+                        area={property.area}
+                        bedrooms={property.bedrooms}
+                        bathrooms={property.bathrooms}
+                        image={property.image}
+                        propertyType={property.propertyType}
+                        listingType={property.listingType}
+                        size={viewMode === 'list' ? 'large' : 'default'}
+                        rental_status="available"
+                      />
+                    ))}
+                  </div>
+                )}
                 
                 {/* Load More Button - Better performance than pagination for large datasets */}
                 {hasMore && (

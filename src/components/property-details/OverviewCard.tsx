@@ -130,7 +130,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
                             property.property_type?.toLowerCase().includes('coliving');
 
   const getIconForItem = (label: string) => {
-    const iconMap: Record<string, React.ComponentType<any>> = {
+    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
       'Furnishing Status': Sofa,
       'Facing': Compass,
       'Water Supply': Droplets,
@@ -201,9 +201,13 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     },
   ];
 
-  const filteredOverviewItems = overviewItems.filter(item => 
-    item.value !== 'Not specified' && item.value !== undefined
-  );
+  const filteredOverviewItems = overviewItems.filter(item => {
+    // Hide irrelevant items for Land/Plot
+    if (isPlotProperty && ['Bathroom','Furnishing Status','Floor','Non-Veg Allowed','Pet Allowed'].includes(item.label)) {
+      return false;
+    }
+    return item.value !== 'Not specified' && item.value !== undefined;
+  });
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm">

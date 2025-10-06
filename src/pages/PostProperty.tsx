@@ -605,6 +605,17 @@ export const PostProperty: React.FC = () => {
         // Plot area unit for Land/Plot properties
         plot_area_unit: ('plotDetails' in data.propertyInfo) ? 
           (data.propertyInfo.plotDetails.plotAreaUnit || 'sq-ft') : 'sq-ft',
+  // Plot-specific fields for Land/Plot properties
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  plot_length: ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails?.plotLength) || null : null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  plot_width: ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails?.plotWidth) || null : null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  road_width: ('plotDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).plotDetails?.roadWidth) || null : null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  boundary_wall: ('plotDetails' in data.propertyInfo) ? ((data.propertyInfo as any).plotDetails?.boundaryWall || null) : null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ownership_type: ('saleDetails' in (data.propertyInfo as any)) ? ((data.propertyInfo as any).saleDetails?.ownershipType || null) : null,
         // Extra fields for better details rendering
         security_deposit: Number(((data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? (data.propertyInfo as any)?.rentalDetails?.securityDeposit ?? (data.propertyInfo as any)?.pgDetails?.securityDeposit) ?? 0) || null,
         // PG/Hostel specific fields for better display compatibility
@@ -673,6 +684,12 @@ export const PostProperty: React.FC = () => {
             owner_phone: data.ownerInfo.phoneNumber || '',
             amenities: (window as any).editingPropertyData?.amenities || (data.propertyInfo as any).amenities || null,
             plot_area_unit: propertyData.plot_area_unit,
+            // Persist plot-specific fields on update
+            plot_length: propertyData.plot_length,
+            plot_width: propertyData.plot_width,
+            road_width: propertyData.road_width,
+            boundary_wall: propertyData.boundary_wall,
+            ownership_type: propertyData.ownership_type,
             status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
             // Additional fields - access from the original property data

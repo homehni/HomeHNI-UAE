@@ -7,7 +7,9 @@ import {
   Car, 
   Calendar,
   Home,
-  MapPin 
+  MapPin,
+  Layers,
+  Shield
 } from 'lucide-react';
 
 interface PropertyInfoCardsProps {
@@ -21,6 +23,13 @@ interface PropertyInfoCardsProps {
     age_of_building?: string;
     balconies?: number;
     created_at?: string;
+    // Plot specific
+    plot_length?: number;
+    plot_width?: number;
+    road_width?: number;
+    boundary_wall?: 'yes' | 'no' | 'partial';
+    ownership_type?: string;
+    plot_area_unit?: string;
   };
 }
 
@@ -70,7 +79,51 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     return property.preferred_tenant.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const infoCards = [
+  const isPlot = property.property_type?.toLowerCase().includes('plot') || 
+                 property.property_type?.toLowerCase().includes('land');
+
+  const unitMap: Record<string, string> = {
+    'sq-ft': 'sq.ft.',
+    'sq-yard': 'sq.yard',
+    'sq-m': 'sq.m.',
+    'acre': 'acre',
+    'hectare': 'hectare',
+    'bigha': 'bigha',
+    'biswa': 'biswa',
+    'gunta': 'gunta',
+    'cents': 'cents',
+    'marla': 'marla',
+    'kanal': 'kanal',
+    'kottah': 'kottah'
+  };
+
+  const formatDimensions = () => {
+    const L = property.plot_length;
+    const W = property.plot_width;
+    if (!L || !W) return 'Not specified';
+    const unit = unitMap[property.plot_area_unit || 'sq-ft'] || 'sq.ft.';
+    return `${L} x ${W} ${unit}`;
+  };
+
+  const formatOwnership = () => {
+    if (!property.ownership_type) return 'Not specified';
+    return property.ownership_type.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+  };
+
+  const formatRoadWidth = () => {
+    if (!property.road_width) return 'Not specified';
+    return `${property.road_width} ft.`;
+  };
+
+  const formatBoundaryWall = () => {
+    const v = property.boundary_wall;
+    if (!v) return 'Not specified';
+    if (v === 'yes') return 'Yes';
+    if (v === 'no') return 'No';
+    return 'Partial';
+  };
+
+  const defaultInfoCards = [
     {
       icon: Bed,
       title: property.bhk_type?.replace('bhk', ' Bedroom') || 'Not specified',
@@ -113,12 +166,49 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
   ];
 
+  const plotInfoCards = [
+    {
+      icon: Calendar,
+      title: formatDate(property.created_at),
+      subtitle: 'Posted On',
+    },
+    {
+      icon: Clock,
+      title: getPossession(),
+      subtitle: 'Possession',
+    },
+    {
+      icon: Layers,
+      title: formatDimensions(),
+      subtitle: 'Dimension (L x B)',
+    },
+    {
+      icon: Shield,
+      title: formatOwnership(),
+      subtitle: 'Ownership',
+    },
+    {
+      icon: MapPin,
+      title: formatRoadWidth(),
+      subtitle: 'Width of facing road',
+    },
+    {
+      icon: Home,
+      title: formatBoundaryWall(),
+      subtitle: 'Boundary wall',
+    },
+  ];
+
+  // Hide irrelevant cards for Land/Plot
+  const infoCards = isPlot ? plotInfoCards : defaultInfoCards;
+  const filteredCards = infoCards;
+
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-w-0">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 min-w-0">
-        {infoCards.map((card, index) => {
+        {filteredCards.map((card, index) => {
           const isRightCol = index % 2 === 1;
-          const rows = Math.ceil(infoCards.length / 2);
+          const rows = Math.ceil(filteredCards.length / 2);
           const isLastRow = Math.floor(index / 2) === rows - 1;
           const cellBorders = [
             !isRightCol ? 'sm:border-r' : '',

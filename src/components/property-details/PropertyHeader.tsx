@@ -95,7 +95,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             </div>
             
             {/* Price Info Grid - Mobile */}
-            <div className={`grid gap-0 ${isPG ? 'grid-cols-2' : 'grid-cols-3'}`}>
+            <div className={`grid gap-0 ${isPG ? 'grid-cols-2' : (isPlot ? 'grid-cols-2' : 'grid-cols-3')}`}>
               {/* Rent Section */}
               <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
                 <div className="text-base sm:text-lg font-bold text-gray-900">
@@ -114,13 +114,15 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 </div>
               )}
               
-              {/* Deposit Section */}
-              <div className="text-center px-2 sm:px-3 py-3">
-                <div className="text-base sm:text-lg font-bold text-gray-900">
-                  {deposit ? `₹${deposit.toLocaleString()}` : (price ? `₹${(price * 2).toLocaleString()}` : 'Not specified')}
+              {/* Deposit Section - hidden for Plot/Land */}
+              {!isPlot && (
+                <div className="text-center px-2 sm:px-3 py-3">
+                  <div className="text-base sm:text-lg font-bold text-gray-900">
+                    {deposit ? `₹${deposit.toLocaleString()}` : (price ? `₹${(price * 2).toLocaleString()}` : 'Not specified')}
+                  </div>
+                  <div className="text-xs text-gray-600">Deposit</div>
                 </div>
-                <div className="text-xs text-gray-600">Deposit</div>
-              </div>
+              )}
             </div>
 
             {/* Apply Loan Button - Mobile */}
@@ -176,13 +178,15 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               </div>
             )}
             
-            {/* Deposit Section */}
-            <div className="text-center px-6 py-4 border-r border-gray-200">
-              <div className="text-xl font-bold text-gray-900">
-                {deposit ? `₹${deposit.toLocaleString()}` : (price ? `₹${(price * 2).toLocaleString()}` : 'Not specified')}
+            {/* Deposit Section - hidden for Plot/Land */}
+            {!isPlot && (
+              <div className="text-center px-6 py-4 border-r border-gray-200">
+                <div className="text-xl font-bold text-gray-900">
+                  {deposit ? `₹${deposit.toLocaleString()}` : (price ? `₹${(price * 2).toLocaleString()}` : 'Not specified')}
+                </div>
+                <div className="text-sm text-gray-600">Deposit</div>
               </div>
-              <div className="text-sm text-gray-600">Deposit</div>
-            </div>
+            )}
 
             {/* Apply Loan Button Section */}
             <div className="px-6 py-4">

@@ -16,8 +16,8 @@ import { IndustrialLandSuccessStep } from './IndustrialLandSuccessStep';
 import { AgriculturalLandSuccessStep } from './AgriculturalLandSuccessStep';
 import { CommercialLandSuccessStep } from './CommercialLandSuccessStep';
 import { Badge } from '@/components/ui/badge';
-import { OwnerInfo, ScheduleInfo } from '@/types/property';
-import { LandPlotFormData } from '@/types/landPlotProperty';
+import { OwnerInfo, ScheduleInfo, PropertyGallery } from '@/types/property';
+import { LandPlotFormData, LandPlotDetails, LandPlotLocationDetails, LandPlotSaleDetails, LandPlotAmenities } from '@/types/landPlotProperty';
 
 interface LandPlotMultiStepFormProps {
   onSubmit: (data: LandPlotFormData) => void;
@@ -72,6 +72,21 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   console.log('LandPlotMultiStepForm currentStep:', currentStep);
 
+  // Ensure plotDetails.landType reflects the selected listingType category
+  React.useEffect(() => {
+    if (!listingType) return;
+    const map: Record<string, 'industrial' | 'agricultural' | 'commercial'> = {
+      'Industrial land': 'industrial',
+      'Agricultural Land': 'agricultural',
+      'Commercial land': 'commercial',
+    };
+    const mapped = map[listingType];
+    if (mapped) {
+      const patch: Partial<LandPlotDetails> = { landType: mapped, propertyType: 'Land/Plot' };
+      updatePlotDetails(patch);
+    }
+  }, [listingType, updatePlotDetails]);
+
   // Initialize with owner info if provided
   React.useEffect(() => {
     if (initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0) {
@@ -99,7 +114,9 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     try {
       const el = document.scrollingElement || document.documentElement || document.body;
       el?.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch {}
+    } catch (e) {
+      // no-op: best-effort scroll in non-browser environments
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -107,32 +124,32 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     scrollToTop();
   }, [currentStep]);
 
-  const handlePlotDetailsNext = (data: any) => {
-    updatePlotDetails(data);
+  const handlePlotDetailsNext = (data: unknown) => {
+    updatePlotDetails(data as Partial<LandPlotDetails>);
     nextStep();
     scrollToTop();
   };
 
-  const handleLocationDetailsNext = (data: any) => {
-    updateLocationDetails(data);
+  const handleLocationDetailsNext = (data: unknown) => {
+    updateLocationDetails(data as Partial<LandPlotLocationDetails>);
     nextStep();
     scrollToTop();
   };
 
-  const handleSaleDetailsNext = (data: any) => {
-    updateSaleDetails(data);
+  const handleSaleDetailsNext = (data: unknown) => {
+    updateSaleDetails(data as Partial<LandPlotSaleDetails>);
     nextStep();
     scrollToTop();
   };
 
-  const handleAmenitiesNext = (data: any) => {
-    updateAmenities(data);
+  const handleAmenitiesNext = (data: unknown) => {
+    updateAmenities(data as Partial<LandPlotAmenities>);
     nextStep();
     scrollToTop();
   };
 
-  const handleGalleryNext = (data: any) => {
-    updateGallery(data);
+  const handleGalleryNext = (data: unknown) => {
+    updateGallery(data as Partial<PropertyGallery>);
     nextStep();
     scrollToTop();
   };

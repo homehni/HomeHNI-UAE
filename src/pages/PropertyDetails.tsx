@@ -211,6 +211,18 @@ const PropertyDetails: React.FC = () => {
         // Extract property data from the payload
         const payload = submissionData.payload;
         if (payload && payload.images) {
+          // Extract plot-specific info from original form data when available
+          const originalForm = payload.originalFormData || {};
+          const origPropertyInfo = originalForm.propertyInfo || {};
+          const plotDetails = origPropertyInfo.plotDetails || {};
+          const saleDetails = origPropertyInfo.saleDetails || {};
+          const plotLength = plotDetails.plotLength;
+          const plotWidth = plotDetails.plotWidth;
+          const roadWidth = plotDetails.roadWidth || plotDetails.road_width; // support either
+          const boundaryWall = plotDetails.boundaryWall;
+          const ownershipType = saleDetails.ownershipType || saleDetails.ownership_type;
+          const plotAreaUnit = payload.plot_area_unit || plotDetails.plotAreaUnit;
+          
           const propertyFromSubmission = {
             id: submissionData.id,
             user_id: submissionData.user_id, // Add the missing user_id field
@@ -221,7 +233,14 @@ const PropertyDetails: React.FC = () => {
             expected_price: payload.expected_price || 0,
             super_area: payload.super_area,
             carpet_area: payload.carpet_area,
-            plot_area_unit: payload.plot_area_unit, // Ensure correct area unit for plots
+            plot_area_unit: plotAreaUnit, // Ensure correct area unit for plots
+            // Plot specific fields for display
+            plot_length: typeof plotLength === 'number' ? plotLength : undefined,
+            plot_width: typeof plotWidth === 'number' ? plotWidth : undefined,
+            road_width: typeof roadWidth === 'number' ? roadWidth : undefined,
+            boundary_wall: boundaryWall, // 'yes' | 'no' | 'partial'
+            ownership_type: ownershipType, // 'freehold' | 'leasehold' | etc.
+            owner_role: ownershipType, // also map to owner_role for existing components
             bathrooms: payload.bathrooms,
             balconies: payload.balconies,
             city: submissionData.city || payload.city || 'Unknown',
