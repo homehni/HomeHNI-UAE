@@ -80,32 +80,17 @@ const CountrySwitcher: React.FC = () => {
 
   useEffect(() => {
     // Detect current country based on hostname or saved preference
-    const hostname = window.location.hostname.replace('www.', '');
+    const hostname = window.location.hostname;
     const savedCountry = localStorage.getItem(PREF_KEY);
     
-    // Find country by matching domain
-    const countryByDomain = allCountries.find(c => {
-      // Direct match or check if hostname ends with the domain pattern
-      return hostname === c.domain || 
-             hostname.endsWith('.ae') && c.code === 'AE' ||
-             hostname.endsWith('.in') && c.code === 'IN' ||
-             hostname.endsWith('.us') && c.code === 'US' ||
-             hostname.endsWith('.de') && c.code === 'DE' ||
-             hostname.endsWith('.co.uk') && c.code === 'GB' ||
-             hostname.endsWith('.co.za') && c.code === 'ZA';
-    });
-    
-    if (countryByDomain) {
-      // Country detected from domain
-      setCurrentCountry(countryByDomain.code);
-    } else if (hostname === 'homehni.com' || hostname === 'localhost' || hostname.includes('lovable')) {
-      // Main domain or local/preview - use saved preference or default
-      setCurrentCountry(savedCountry || 'IN');
+    if (hostname === 'homehni.com') {
+      setCurrentCountry(savedCountry || 'IN'); // Default to India
     } else {
-      // Fallback
-      setCurrentCountry(savedCountry || 'IN');
+      // Find country by domain
+      const country = allCountries.find(c => c.domain === hostname);
+      setCurrentCountry(country?.code || 'IN');
     }
-  }, [allCountries]);
+  }, []);
 
   const handleCountryChange = (selectedCode: string) => {
     const selectedCountry = allCountries.find(c => c.code === selectedCode);
