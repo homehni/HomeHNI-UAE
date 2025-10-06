@@ -386,17 +386,15 @@ const AdminProperties = () => {
         .insert({
           user_id: userIdToAssign,
           title: (() => {
-            // Generate proper title for land properties based on land type
-            const plotDetails = originalFormData.propertyInfo?.plotDetails;
-            if (plotDetails && plotDetails.landType) {
-              const landTypeMap: { [key: string]: string } = {
-                'industrial': 'Industrial Land For SALE',
-                'agricultural': 'Agricultural Land For SALE',
-                'commercial': 'Commercial Land For SALE',
-                'residential': 'Residential Land For SALE',
-                'institutional': 'Institutional Land For SALE'
+            // Generate proper title for land properties based on listing type from ownerInfo
+            const ownerInfo = originalFormData.ownerInfo;
+            if (ownerInfo && ownerInfo.listingType) {
+              const listingTypeMap: { [key: string]: string } = {
+                'Industrial land': 'Industrial Land For SALE',
+                'Agricultural Land': 'Agricultural Land For SALE',
+                'Commercial land': 'Commercial Land For SALE'
               };
-              const generatedTitle = landTypeMap[plotDetails.landType.toLowerCase()];
+              const generatedTitle = listingTypeMap[ownerInfo.listingType];
               if (generatedTitle) {
                 return generatedTitle;
               }
