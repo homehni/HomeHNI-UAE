@@ -51,6 +51,18 @@ export const BUDGET_CONFIG: Record<ListingTab, BudgetConfig> = {
       { label: '5Cr+', range: [50000000, 100000000] },
     ],
   },
+  land: {
+    min: 0,
+    max: 50000000, // 5 Crore
+    step: 500000, // 5L steps
+    presets: [
+      { label: 'Under 50L', range: [0, 5000000] },
+      { label: '50L-1Cr', range: [5000000, 10000000] },
+      { label: '1-2Cr', range: [10000000, 20000000] },
+      { label: '2-5Cr', range: [20000000, 50000000] },
+      { label: '5Cr+', range: [50000000, 100000000] },
+    ],
+  },
 };
 
 // Pagination Configuration

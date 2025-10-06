@@ -125,7 +125,7 @@ const CountrySwitcher: React.FC = () => {
             : 'bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30'
         }`}
       >
-        <span>Global</span>
+        <span>{currentCountryData?.displayCode || 'Global'}</span>
         <ChevronDown 
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
             isScrolled ? 'text-gray-600' : 'text-white'

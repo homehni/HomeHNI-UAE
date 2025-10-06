@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import ChatBot from "@/components/ChatBot";
 
 const Architects = () => {
   // Form state for proper reset functionality
@@ -698,7 +699,7 @@ const Architects = () => {
       {/* CTA Section */}
       
 
-      
+      <ChatBot serviceContext={{ service: 'architects' }} />
     </div>;
 };
 export default Architects;

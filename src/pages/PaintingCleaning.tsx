@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { PaintBucket, Sparkles, Home, Building2, Clock, CheckCircle, Shield, Star, Users, Crown, Globe, Headphones, Paintbrush, Droplets } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import ChatBot from "@/components/ChatBot";
 
 const PaintingCleaning = () => {
   // Form state for controlled components
@@ -776,6 +777,8 @@ const PaintingCleaning = () => {
           </div>
         </div>
       </section>
+
+      <ChatBot serviceContext={{ service: 'painting-cleaning' }} />
     </div>
   );
 };

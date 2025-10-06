@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Truck, Package, Shield, Clock, CheckCircle, Star, Users, Building2, Home, Car, Award, Headphones, Globe, TrendingUp, FileText, X, Plus, Minus } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import ChatBot from "@/components/ChatBot";
 
 const PackersMovers = () => {
   // Major cities in India
@@ -723,6 +724,8 @@ const PackersMovers = () => {
           </div>
         </div>
       </section>
+
+      <ChatBot serviceContext={{ service: 'packers-movers' }} />
     </div>
   );
 };
