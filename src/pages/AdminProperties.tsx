@@ -422,7 +422,8 @@ const AdminProperties = () => {
           expected_price: Math.max(payload.expected_price || saleDetails.expectedPrice || rentalDetails.expectedPrice || 1, 1),
           price_negotiable: payload.price_negotiable !== false,
           maintenance_charges: Math.max(Number(payload.maintenance_charges || saleDetails.maintenanceCharges || rentalDetails.maintenanceCharges) || 0, 0),
-          security_deposit: Math.max(Number(payload.security_deposit || saleDetails.bookingAmount || rentalDetails.securityDeposit) || 0, 0),
+          // Security deposit only for rental properties, not for sale/land properties
+          security_deposit: mappedListingType === 'Rent' ? Math.max(Number(payload.security_deposit || rentalDetails.securityDeposit) || 0, 0) : 0,
           
           // NEW: Additional financial and service details
           booking_amount: Math.max(Number(saleDetails.bookingAmount) || 0, 0),
