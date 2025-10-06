@@ -483,6 +483,19 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   };
 
   const handleOptionClick = (option: string) => {
+    // If in search context, handle all options as messages through bot response
+    if (searchContext) {
+      const newMessage: Message = {
+        id: String(Date.now()),
+        text: option,
+        isBot: false,
+        timestamp: new Date()
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      simulateBotResponse(option);
+      return;
+    }
+    
     // Check if it's one of the 4 original functionalities
     const originalActions = ['Want to buy a property', 'Seller', 'Agent', 'Builder'];
     
@@ -894,7 +907,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   };
 
   const getCurrentFAQs = () => {
-    return serviceFAQs[selectedService] || serviceFAQs['default'];
+    return serviceFAQs[selectedService] || serviceFAQs['default'] || [];
   };
 
   const handleFAQClick = (faq: {question: string, answer: string}) => {
