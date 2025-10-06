@@ -2311,7 +2311,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 <Button 
                   type="submit"
                   aria-label="Submit details"
-                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white sticky bottom-1 z-10"
+                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
                 >
                   Submit Details
                 </Button>
