@@ -2230,7 +2230,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         {/* Search Details Form */}
         {showSearchDetailsForm && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] sm:max-w-[80%] bg-gray-100 rounded-lg p-3 sm:p-4">
+            <div className="max-w-[85%] sm:max-w-[80%] bg-gray-100 rounded-lg p-3 sm:p-4 mb-24 relative">
               <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
               <form onSubmit={(e) => {
                 e.preventDefault();
@@ -2275,9 +2275,10 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 />
                 <Button 
                   type="submit"
-                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                  aria-label="Submit details"
+                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white sticky bottom-1 z-10"
                 >
-                  Submit
+                  Submit Details
                 </Button>
               </form>
             </div>
