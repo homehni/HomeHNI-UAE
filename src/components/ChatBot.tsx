@@ -36,6 +36,12 @@ interface UserPreferences {
   role?: string;
 }
 
+interface ChatBotProps {
+  searchContext?: {
+    activeTab: 'buy' | 'rent' | 'commercial';
+  };
+}
+
 const sampleProperties: PropertyData[] = [
   {
     id: '101',
@@ -72,23 +78,50 @@ const sampleProperties: PropertyData[] = [
   }
 ];
 
-const ChatBot = () => {
+const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const chatMessagesEndRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  
+  // Get context-aware initial message
+  const getInitialMessage = () => {
+    if (searchContext) {
+      const { activeTab } = searchContext;
+      const tabMessages = {
+        buy: 'Hello! I can help you find the perfect property to buy. What\'s your budget range?',
+        rent: 'Hello! I can help you find the perfect property to rent. What\'s your monthly budget?',
+        commercial: 'Hello! I can help you find the perfect commercial space. What\'s your budget range?'
+      };
+      
+      const budgetOptions = {
+        buy: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
+        rent: ['Under 10K', '10K-25K', '25K-50K', '50K-1L', '1L+'],
+        commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
+      };
+      
+      return {
+        id: '1',
+        text: tabMessages[activeTab],
+        isBot: true,
+        timestamp: new Date(),
+        options: budgetOptions[activeTab]
+      };
+    }
+    
+    return {
       id: '1',
       text: 'Hello! I\'m your AI real estate assistant. I can help you with all your property needs. Let me know your role to get started:',
       isBot: true,
       timestamp: new Date(),
       options: ['Seller', 'Agent', 'Builder', 'Want to buy a property']
-    }
-  ]);
+    };
+  };
+  
+  const [messages, setMessages] = useState<Message[]>([getInitialMessage()]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [conversationStep, setConversationStep] = useState('role_selection');
+  const [conversationStep, setConversationStep] = useState(searchContext ? 'budget_selection' : 'role_selection');
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
@@ -210,7 +243,30 @@ const ChatBot = () => {
               return resolve(undefined);
             }
           } else if (conversationStep === 'property_type_selection') {
-            if (propertyTypes.includes(userMessage)) {
+            if (searchContext) {
+              // In search context, ask for BHK/size after property type
+              setUserPreferences(prev => ({ ...prev, propertyType: userMessage }));
+              
+              if (['Flat/Apartment', 'Independent House', 'Villa'].includes(userMessage)) {
+                setConversationStep('bhk_selection');
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Perfect! How many bedrooms are you looking for in your ${userMessage.toLowerCase()}?`,
+                  options: ['1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK', 'Any']
+                };
+              } else {
+                // For other property types, ask for location
+                setConversationStep('location_preference');
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Great choice! Which areas are you interested in? (Type a city or locality)`,
+                };
+              }
+            } else if (propertyTypes.includes(userMessage)) {
               setUserPreferences(prev => ({ ...prev, propertyType: userMessage }));
               setConversationStep('budget_selection');
               finalResponse = {
@@ -230,38 +286,103 @@ const ChatBot = () => {
               };
             }
           } else if (conversationStep === 'budget_selection') {
-            const selectedBudget = budgetRanges.find(range => range.label === userMessage);
-            if (selectedBudget) {
+            // Handle budget selection in search context
+            if (searchContext) {
               setUserPreferences(prev => ({ ...prev, budget: userMessage }));
-              setConversationStep('location_selection');
               
-              const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
+              // Determine property types based on active tab
+              const propertyTypesByTab = {
+                buy: ['Flat/Apartment', 'Independent House', 'Villa', 'Builder Floor', 'Penthouse', 'Plot/Land'],
+                rent: ['Flat/Apartment', 'Independent House', 'Villa', 'Penthouse', 'PG/Hostel', 'Flatmates'],
+                commercial: ['Office Space', 'Retail Shop', 'Warehouse', 'Showroom', 'Co-working Space']
+              };
               
-              if (availableLocations.length === 0) {
-                finalResponse = {
-                  id: String(Date.now() + 2),
-                  isBot: true,
-                  timestamp: new Date(),
-                  text: `Sorry, we don't have any ${userPreferences.propertyType?.toLowerCase()} properties available in our current locations. Please try selecting a different property type.`,
-                  options: ['Go Back to Property Types']
-                };
+              setConversationStep('property_type_selection');
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Great! With a budget of ${userMessage}, what type of property are you looking for?`,
+                options: propertyTypesByTab[searchContext.activeTab]
+              };
+            } else {
+              const selectedBudget = budgetRanges.find(range => range.label === userMessage);
+              if (selectedBudget) {
+                setUserPreferences(prev => ({ ...prev, budget: userMessage }));
+                setConversationStep('location_selection');
+                
+                const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
+                
+                if (availableLocations.length === 0) {
+                  finalResponse = {
+                    id: String(Date.now() + 2),
+                    isBot: true,
+                    timestamp: new Date(),
+                    text: `Sorry, we don't have any ${userPreferences.propertyType?.toLowerCase()} properties available in our current locations. Please try selecting a different property type.`,
+                    options: ['Go Back to Property Types']
+                  };
+                } else {
+                  finalResponse = {
+                    id: String(Date.now() + 2),
+                    isBot: true,
+                    timestamp: new Date(),
+                    text: `Great! With a budget of ${userMessage}, which location are you interested in? Here are the available locations for ${userPreferences.propertyType?.toLowerCase()}:`,
+                    options: availableLocations
+                  };
+                }
               } else {
                 finalResponse = {
                   id: String(Date.now() + 2),
                   isBot: true,
                   timestamp: new Date(),
-                  text: `Great! With a budget of ${userMessage}, which location are you interested in? Here are the available locations for ${userPreferences.propertyType?.toLowerCase()}:`,
-                  options: availableLocations
+                  text: 'Please select a valid budget range:',
+                  options: budgetRanges.map(range => range.label)
                 };
               }
-            } else {
+            }
+          } else if (conversationStep === 'bhk_selection') {
+            setUserPreferences(prev => ({ ...prev, bedrooms: userMessage }));
+            setConversationStep('location_preference');
+            finalResponse = {
+              id: String(Date.now() + 2),
+              isBot: true,
+              timestamp: new Date(),
+              text: `Perfect! Which areas are you interested in? (Type a city or locality)`,
+            };
+          } else if (conversationStep === 'location_preference') {
+            setUserPreferences(prev => ({ ...prev, location: userMessage }));
+            setConversationStep('complete');
+            finalResponse = {
+              id: String(Date.now() + 2),
+              isBot: true,
+              timestamp: new Date(),
+              text: `Excellent! I'm searching for ${userPreferences.propertyType} properties${userPreferences.bedrooms && userPreferences.bedrooms !== 'Any' ? ` with ${userPreferences.bedrooms}` : ''} in ${userMessage} within your budget. Would you like me to show you the results?`,
+              options: ['Show Properties', 'Refine Search', 'Contact Support']
+            };
+          } else if (conversationStep === 'complete') {
+            if (userMessage === 'Show Properties') {
+              // Apply filters and close chatbot
+              setIsOpen(false);
+              return resolve(undefined);
+            } else if (userMessage === 'Refine Search') {
+              // Reset to budget selection
+              setConversationStep('budget_selection');
+              const budgetOptions = {
+                buy: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
+                rent: ['Under 10K', '10K-25K', '25K-50K', '50K-1L', '1L+'],
+                commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
+              };
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
                 timestamp: new Date(),
-                text: 'Please select a valid budget range:',
-                options: budgetRanges.map(range => range.label)
+                text: 'No problem! Let\'s refine your search. What\'s your budget range?',
+                options: searchContext ? budgetOptions[searchContext.activeTab] : budgetRanges.map(range => range.label)
               };
+            } else if (userMessage === 'Contact Support') {
+              navigate('/contact');
+              setIsOpen(false);
+              return resolve(undefined);
             }
           } else if (conversationStep === 'location_selection') {
             if (userMessage === 'Go Back to Property Types') {

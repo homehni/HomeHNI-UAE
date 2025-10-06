@@ -16,6 +16,7 @@ import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import PropertyTools from '@/components/PropertyTools';
+import ChatBot from '@/components/ChatBot';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 import { useDebounce } from '@/hooks/useDebounce';
 // Minimal Google Places typings to avoid 'any'
@@ -696,6 +697,9 @@ const PropertySearch = () => {
       {/* Marquee at the very top */}
       <Marquee />
       <Header />
+      
+      {/* Chat Bot - Context-aware for search page */}
+      <ChatBot searchContext={{ activeTab: activeTab as 'buy' | 'rent' | 'commercial' }} />
       
       {/* Enhanced Search Header */}
       <div className="bg-white border-b border-gray-200 pt-20">
