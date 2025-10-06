@@ -144,6 +144,19 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   // Search context specific states
   const [searchDetailsForm, setSearchDetailsForm] = useState({ name: '', email: '', phone: '' });
   const [showSearchDetailsForm, setShowSearchDetailsForm] = useState(false);
+  
+  // Reset chat when activeTab changes in search context
+  useEffect(() => {
+    if (searchContext) {
+      const initialMsg = getInitialMessage();
+      setMessages([initialMsg]);
+      setConversationStep('budget_selection');
+      setUserPreferences({});
+      setSearchDetailsForm({ name: '', email: '', phone: '' });
+      setShowSearchDetailsForm(false);
+      setInputValue('');
+    }
+  }, [searchContext?.activeTab]);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -1984,7 +1997,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
     </CardContent>
   );
 
-  const showInitialView = messages.length === 1 && conversationStep === 'role_selection' && currentView === 'initial';
+  const showInitialView = !searchContext && messages.length === 1 && conversationStep === 'role_selection' && currentView === 'initial';
 
   return (
     <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
@@ -2029,7 +2042,31 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
 
       {isOpen && (
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl">
-          {!showInitialView && currentView === 'initial' && (
+          {/* Show header for search context chat */}
+          {searchContext && (
+            <CardHeader className="bg-brand-red text-white p-4 sm:p-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
+                    <Home size={16} className="text-brand-red sm:w-5 sm:h-5" />
+                  </div>
+                  <CardTitle className="text-lg sm:text-xl font-semibold">
+                    {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
+                     searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
+                     'Commercial Property Assistant'}
+                  </CardTitle>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </CardHeader>
+          )}
+          
+          {!showInitialView && currentView === 'initial' && !searchContext && (
             <CardHeader className="bg-brand-red text-white p-4 sm:p-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -2059,9 +2096,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
               {renderFAQDetailView()}
             </div>
           ) : showInitialView ? (
-            <div className="h-full flex flex-col">
-              {renderInitialView()}
-            </div>
+            renderInitialView()
           ) : (
             renderChatView()
           )}
