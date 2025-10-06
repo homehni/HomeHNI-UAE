@@ -2260,8 +2260,9 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   setMessages((prev) => [...prev, submitMessage]);
                   simulateBotResponse('Details submitted');
                 }
-              }} className="space-y-3">
+              }} className="space-y-3" name="search-details-form">
                 <Input
+                  name="name"
                   placeholder="Name"
                   value={searchDetailsForm.name}
                   onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, name: e.target.value }))}
@@ -2270,6 +2271,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   className="text-sm"
                 />
                 <Input
+                  name="email"
                   type="email"
                   placeholder="Email"
                   value={searchDetailsForm.email}
@@ -2279,6 +2281,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   className="text-sm"
                 />
                 <Input
+                  name="phone"
                   type="tel"
                   placeholder="Phone Number"
                   value={searchDetailsForm.phone}
