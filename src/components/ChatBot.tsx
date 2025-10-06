@@ -156,11 +156,18 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   const [showSearchDetailsForm, setShowSearchDetailsForm] = useState(false);
   
   // Ref for auto-scrolling chat
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isInitialMount = useRef(true);
   
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to bottom when messages change (skip first render)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
   }, [messages]);
   
   // Reset chat when activeTab changes in search context
@@ -2154,7 +2161,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
 
   const renderChatView = () => (
     <CardContent className="p-0 h-full flex flex-col relative">
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-20 scroll-smooth">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-20">
         {messages.map((message, index) => (
           <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
             <div
@@ -2304,7 +2311,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
             </div>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t border-gray-200 bg-white">
