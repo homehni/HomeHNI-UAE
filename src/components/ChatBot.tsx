@@ -38,7 +38,7 @@ interface UserPreferences {
 
 interface ChatBotProps {
   searchContext?: {
-    activeTab: 'buy' | 'rent' | 'commercial';
+    activeTab: 'buy' | 'rent' | 'commercial' | 'land';
   };
   serviceContext?: {
     service: 'loans' | 'home-security' | 'packers-movers' | 'legal-services' | 'handover-services' | 'property-management' | 'architects' | 'painting-cleaning' | 'interior-design';
@@ -94,13 +94,15 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       const tabMessages = {
         buy: 'Hi! I can help you with selection of the right property. What is your budget for buying?',
         rent: 'Hi! I can help you with selection of the right property. What is your rent budget?',
-        commercial: 'Hi! I can help you with selection of the right commercial space. What is your budget?'
+        commercial: 'Hi! I can help you with selection of the right commercial space. What is your budget?',
+        land: 'Hi! I can help you with selection of the right land/plot. What is your budget?'
       };
       
       const budgetOptions = {
         buy: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
         rent: ['Under 10K', '10K-25K', '25K-50K', '50K-1L', '1L+'],
-        commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
+        commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
+        land: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
       };
       
       return {
@@ -434,7 +436,8 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               const budgetOptions = {
                 buy: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
                 rent: ['Under 10K', '10K-25K', '25K-50K', '50K-1L', '1L+'],
-                commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
+                commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
+                land: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
               };
               finalResponse = {
                 id: String(Date.now() + 2),
@@ -2458,6 +2461,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                   <CardTitle className="text-lg sm:text-xl font-semibold">
                     {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
                      searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
+                     searchContext.activeTab === 'land' ? 'Land/Plot Assistant' :
                      'Commercial Property Assistant'}
                   </CardTitle>
                 </div>

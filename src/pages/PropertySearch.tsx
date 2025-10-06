@@ -727,7 +727,7 @@ const PropertySearch = () => {
       <Header />
       
       {/* Chat Bot - Context-aware for search page */}
-      <ChatBot searchContext={{ activeTab: activeTab as 'buy' | 'rent' | 'commercial' }} />
+      <ChatBot searchContext={{ activeTab: activeTab as 'buy' | 'rent' | 'commercial' | 'land' }} />
       
       {/* Enhanced Search Header */}
       <div className="bg-white border-b border-gray-200 pt-20">
