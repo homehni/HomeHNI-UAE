@@ -80,17 +80,26 @@ const CountrySwitcher: React.FC = () => {
 
   useEffect(() => {
     // Detect current country based on hostname or saved preference
-    const hostname = window.location.hostname;
+    const hostname = window.location.hostname.replace('www.', '');
     const savedCountry = localStorage.getItem(PREF_KEY);
     
-    if (hostname === 'homehni.com') {
-      setCurrentCountry(savedCountry || 'IN'); // Default to India
+    console.log('Hostname:', hostname);
+    
+    if (hostname === 'homehni.com' || hostname === 'localhost') {
+      const preferredCountry = savedCountry || 'IN';
+      console.log('Using saved/default country:', preferredCountry);
+      setCurrentCountry(preferredCountry);
     } else {
       // Find country by domain
       const country = allCountries.find(c => c.domain === hostname);
-      setCurrentCountry(country?.code || 'IN');
+      console.log('Found country by domain:', country);
+      if (country) {
+        setCurrentCountry(country.code);
+      } else {
+        setCurrentCountry(savedCountry || 'IN');
+      }
     }
-  }, []);
+  }, [allCountries]);
 
   const handleCountryChange = (selectedCode: string) => {
     const selectedCountry = allCountries.find(c => c.code === selectedCode);
