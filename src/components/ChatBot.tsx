@@ -1842,7 +1842,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
 
   const renderChatView = () => (
     <CardContent className="p-0 h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 max-h-80">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3" style={{ maxHeight: searchContext ? 'calc(100% - 80px)' : '320px' }}>
         {messages.map((message, index) => (
           <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
             <div
@@ -1990,7 +1990,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
         )}
       </div>
 
-      <div className="p-3 sm:p-4 border-t">
+      <div className="p-3 sm:p-4 border-t border-gray-200 bg-white">
         <div className="flex space-x-2">
           <Input
             value={inputValue}
