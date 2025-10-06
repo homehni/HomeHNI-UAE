@@ -2178,7 +2178,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               <div
                 className={`${message.isBot ? 'inline-block' : ''} max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg ${
                   message.isBot
-                    ? 'bg-white rounded-tl-none shadow-sm'
+                    ? 'bg-white rounded-tl-none shadow-sm text-gray-800'
                     : 'bg-brand-red text-white'
                 }`}
               >
