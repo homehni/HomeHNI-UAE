@@ -40,6 +40,9 @@ interface ChatBotProps {
   searchContext?: {
     activeTab: 'buy' | 'rent' | 'commercial';
   };
+  serviceContext?: {
+    service: 'loans' | 'home-security' | 'packers-movers' | 'legal-services' | 'handover-services' | 'property-management' | 'architects' | 'painting-cleaning' | 'interior-design';
+  };
 }
 
 const sampleProperties: PropertyData[] = [
@@ -78,7 +81,7 @@ const sampleProperties: PropertyData[] = [
   }
 ];
 
-const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
+const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -125,7 +128,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
-  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support'>('initial');
+  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support' | 'service-support'>('initial');
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
   const [planChatMessages, setPlanChatMessages] = useState<Message[]>([]);
@@ -133,6 +136,13 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   const [planChatInput, setPlanChatInput] = useState('');
   const [showDetailsForm, setShowDetailsForm] = useState(false);
   const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
+  
+  // Service-specific chat states
+  const [serviceChatMessages, setServiceChatMessages] = useState<Message[]>([]);
+  const [serviceChatStep, setServiceChatStep] = useState<'intro' | 'details-form' | 'follow-up' | 'complete'>('intro');
+  const [serviceChatInput, setServiceChatInput] = useState('');
+  const [showServiceDetailsForm, setShowServiceDetailsForm] = useState(false);
+  const [serviceUserDetails, setServiceUserDetails] = useState({ name: '', email: '', phone: '', service: '' });
   
   // Property-specific chat states
   const [propertyChatMessages, setPropertyChatMessages] = useState<Message[]>([]);
@@ -1275,10 +1285,10 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    if (currentView === 'plan-support' || currentView === 'property-support') {
+    if (currentView === 'plan-support' || currentView === 'property-support' || currentView === 'service-support') {
       chatMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [planChatMessages, showDetailsForm, propertyChatMessages, showPropertyDetailsForm, currentView]);
+  }, [planChatMessages, showDetailsForm, propertyChatMessages, showPropertyDetailsForm, serviceChatMessages, showServiceDetailsForm, currentView]);
 
   const handleHistoryClick = () => {
     if (location.pathname === '/plans') {
@@ -1773,6 +1783,309 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
     </div>
   );
 
+  // Service-specific questions configuration
+  const serviceQuestions: Record<string, {intro: string, followUp: string}> = {
+    'loans': {
+      intro: 'Hi, I can help you with home loans. What type of loan are you looking for?',
+      followUp: 'Great! Our loan experts will contact you within 15-20 minutes. What property value are you considering?'
+    },
+    'home-security': {
+      intro: 'Hi, I can help you with home security services. What type of security system are you interested in?',
+      followUp: 'Perfect! Our security experts will reach out to you soon. Do you need CCTV, smart locks, or a complete security system?'
+    },
+    'packers-movers': {
+      intro: 'Hi, I can help you with packers & movers services. When are you planning to move?',
+      followUp: 'Thank you! Our moving team will contact you shortly. How many rooms need to be packed?'
+    },
+    'legal-services': {
+      intro: 'Hi, I can help you with legal services. What type of legal assistance do you need?',
+      followUp: 'Got it! Our legal team will get in touch with you soon. Is this for property documentation or registration?'
+    },
+    'handover-services': {
+      intro: 'Hi, I can help you with property handover services. Are you buying or selling a property?',
+      followUp: 'Understood! Our handover specialists will contact you within 15-20 minutes. When is your handover scheduled?'
+    },
+    'property-management': {
+      intro: 'Hi, I can help you with property management services. Do you own residential or commercial property?',
+      followUp: 'Perfect! Our property managers will reach out soon. How many properties do you need managed?'
+    },
+    'architects': {
+      intro: 'Hi, I can help you find architects. What type of project are you planning?',
+      followUp: 'Excellent! Our architects will contact you shortly. What is your estimated budget for the project?'
+    },
+    'painting-cleaning': {
+      intro: 'Hi, I can help you with painting & cleaning services. Do you need painting, cleaning, or both?',
+      followUp: 'Great! Our service team will reach out soon. How large is the area that needs service?'
+    },
+    'interior-design': {
+      intro: 'Hi, I can help you with interior design services. What type of space are you designing?',
+      followUp: 'Wonderful! Our interior designers will contact you within 15-20 minutes. What is your preferred design style?'
+    }
+  };
+
+  const getServiceIcon = (service: string) => {
+    const iconMap: Record<string, any> = {
+      'loans': BadgeDollarSign,
+      'home-security': Shield,
+      'packers-movers': TruckIcon,
+      'legal-services': Scale,
+      'handover-services': FileCheck,
+      'property-management': Building2,
+      'architects': Hammer,
+      'painting-cleaning': PaintBucket,
+      'interior-design': Sofa
+    };
+    return iconMap[service] || Home;
+  };
+
+  const getServiceName = (service: string) => {
+    const nameMap: Record<string, string> = {
+      'loans': 'Loans',
+      'home-security': 'Home Security',
+      'packers-movers': 'Packers & Movers',
+      'legal-services': 'Legal Services',
+      'handover-services': 'Handover Services',
+      'property-management': 'Property Management',
+      'architects': 'Architects',
+      'painting-cleaning': 'Painting & Cleaning',
+      'interior-design': 'Interior Design'
+    };
+    return nameMap[service] || 'Service';
+  };
+
+  const handleServiceChatSend = () => {
+    if (serviceChatInput.trim() === '') return;
+
+    const userMessage: Message = {
+      id: String(Date.now()),
+      text: serviceChatInput,
+      isBot: false,
+      timestamp: new Date()
+    };
+
+    setServiceChatMessages(prev => [...prev, userMessage]);
+    setServiceChatInput('');
+
+    // Simulate bot response
+    setTimeout(() => {
+      if (serviceChatStep === 'intro') {
+        const botMessage: Message = {
+          id: String(Date.now() + 1),
+          text: 'Thank you for your interest! To help you better, please fill in your details:',
+          isBot: true,
+          timestamp: new Date()
+        };
+        setServiceChatMessages(prev => [...prev, botMessage]);
+        setServiceChatStep('details-form');
+      } else if (serviceChatStep === 'follow-up') {
+        const botMessage: Message = {
+          id: String(Date.now() + 1),
+          text: 'Perfect! Our team will contact you shortly with personalized recommendations. For urgent inquiries, please call us at +918690003500.',
+          isBot: true,
+          timestamp: new Date()
+        };
+        setServiceChatMessages(prev => [...prev, botMessage]);
+        setServiceChatStep('complete');
+      }
+    }, 500);
+  };
+
+  const handleServiceFillDetailsClick = () => {
+    setShowServiceDetailsForm(true);
+  };
+
+  const handleServiceDetailsSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    setShowServiceDetailsForm(false);
+    
+    const userMessage: Message = {
+      id: String(Date.now()),
+      text: `Name: ${serviceUserDetails.name}\nEmail: ${serviceUserDetails.email}\nPhone: ${serviceUserDetails.phone}`,
+      isBot: false,
+      timestamp: new Date()
+    };
+    
+    setServiceChatMessages(prev => [...prev, userMessage]);
+    
+    setTimeout(() => {
+      const currentService = serviceContext?.service || selectedService;
+      const followUpText = serviceQuestions[currentService]?.followUp || 
+        'Thank you! Our team will contact you within 15-20 minutes.';
+      
+      const followUpMessage: Message = {
+        id: String(Date.now() + 1),
+        text: followUpText,
+        isBot: true,
+        timestamp: new Date()
+      };
+      setServiceChatMessages(prev => [...prev, followUpMessage]);
+      setServiceChatStep('follow-up');
+    }, 1000);
+  };
+
+  const renderServiceSupportView = () => {
+    const currentService = serviceContext?.service || selectedService;
+    const ServiceIcon = getServiceIcon(currentService);
+    const serviceName = getServiceName(currentService);
+
+    return (
+      <div className="flex flex-col h-full bg-white">
+        {/* Header */}
+        <div className="px-4 py-3 bg-white border-b border-gray-200 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
+              <ServiceIcon size={16} className="text-white" />
+            </div>
+            <span className="font-semibold text-gray-900">{serviceName} Support</span>
+          </div>
+          <button 
+            onClick={() => {
+              setIsOpen(false);
+              setCurrentView('initial');
+              setServiceChatMessages([]);
+              setShowServiceDetailsForm(false);
+              setServiceUserDetails({ name: '', email: '', phone: '', service: '' });
+            }}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} className="text-gray-600" />
+          </button>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-20">
+          {/* Today Label */}
+          <div className="flex justify-center">
+            <span className="text-xs text-gray-400 uppercase tracking-wider">TODAY</span>
+          </div>
+
+          {/* Warning Message */}
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <p className="text-xs text-gray-700">
+              Call only Home HNI-registered numbers for better connectivity and avoid unnecessary risks.
+            </p>
+          </div>
+
+          {/* Support Joined Message */}
+          <div className="flex justify-center">
+            <span className="text-xs text-gray-400">Home HNI Support joined the chat</span>
+          </div>
+
+          {/* Dynamic Messages */}
+          {serviceChatMessages.map((msg, index) => (
+            <div key={msg.id} className="flex items-start space-x-2">
+              {msg.isBot && (
+                <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                  <ServiceIcon size={14} className="text-white" />
+                </div>
+              )}
+              <div className={`flex-1 ${!msg.isBot ? 'flex justify-end' : ''}`}>
+                {msg.isBot && (
+                  <div className="flex items-baseline space-x-2 mb-1">
+                    <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                  </div>
+                )}
+                <div className={`rounded-lg p-3 shadow-sm ${
+                  msg.isBot 
+                    ? 'bg-white rounded-tl-none' 
+                    : 'bg-brand-red text-white rounded-tr-none max-w-[80%]'
+                }`}>
+                  <p className="text-sm whitespace-pre-line">{msg.text}</p>
+                  
+                  {/* Show Fill Details button */}
+                  {msg.isBot && serviceChatStep === 'details-form' && 
+                   index === serviceChatMessages.length - 1 && !showServiceDetailsForm && (
+                    <button 
+                      onClick={handleServiceFillDetailsClick}
+                      className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                    >
+                      Fill details
+                    </button>
+                  )}
+                </div>
+                {msg.isBot && (
+                  <span className="text-xs text-gray-400 mt-1 block">
+                    {new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {/* Details Form */}
+          {showServiceDetailsForm && (
+            <div className="flex items-start space-x-2">
+              <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                <ServiceIcon size={14} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="bg-white rounded-lg rounded-tl-none p-4 shadow-sm">
+                  <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
+                  <form onSubmit={handleServiceDetailsSubmit} className="space-y-3">
+                    <Input
+                      placeholder="Name"
+                      value={serviceUserDetails.name}
+                      onChange={(e) => setServiceUserDetails(prev => ({ ...prev, name: e.target.value }))}
+                      required
+                      className="text-sm"
+                    />
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      value={serviceUserDetails.email}
+                      onChange={(e) => setServiceUserDetails(prev => ({ ...prev, email: e.target.value }))}
+                      required
+                      className="text-sm"
+                    />
+                    <Input
+                      type="tel"
+                      placeholder="Phone Number"
+                      value={serviceUserDetails.phone}
+                      onChange={(e) => setServiceUserDetails(prev => ({ ...prev, phone: e.target.value }))}
+                      required
+                      className="text-sm"
+                    />
+                    <Button 
+                      type="submit"
+                      className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                    >
+                      Submit
+                    </Button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div ref={chatMessagesEndRef} />
+        </div>
+
+        {/* Input Area */}
+        {serviceChatStep !== 'complete' && (
+          <div className="p-4 border-t border-gray-200 bg-white shadow-lg z-10">
+            <div className="flex items-center space-x-2">
+              <Input
+                placeholder="Type your message here"
+                value={serviceChatInput}
+                onChange={(e) => setServiceChatInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleServiceChatSend()}
+                className="flex-1 text-sm"
+              />
+              <Button
+                onClick={handleServiceChatSend}
+                className="bg-brand-red hover:bg-brand-maroon-dark px-4"
+                disabled={serviceChatInput.trim() === ''}
+              >
+                <Send size={16} />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderInitialView = () => (
     <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
       {/* Header */}
@@ -2031,7 +2344,25 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
                   timestamp: new Date()
                 }
               ]);
-            } 
+            }
+            // If on services page, open directly to service support chat
+            else if (location.pathname === '/services') {
+              const params = new URLSearchParams(window.location.search);
+              const serviceTab = params.get('tab') || 'loans';
+              setSelectedService(serviceTab);
+              setCurrentView('service-support');
+              setServiceChatStep('intro');
+              setShowServiceDetailsForm(false);
+              const introText = serviceQuestions[serviceTab]?.intro || 'Hi, I can help you with this service. How can I assist you?';
+              setServiceChatMessages([
+                {
+                  id: '1',
+                  text: introText,
+                  isBot: true,
+                  timestamp: new Date()
+                }
+              ]);
+            }
             // If on property details page, open directly to property support chat
             else if (location.pathname.startsWith('/property/')) {
               setCurrentView('property-support');
@@ -2100,6 +2431,10 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
             ) : currentView === 'property-support' ? (
               <div className="h-full flex flex-col">
                 {renderPropertySupportView()}
+              </div>
+            ) : currentView === 'service-support' ? (
+              <div className="h-full flex flex-col">
+                {renderServiceSupportView()}
               </div>
             ) : currentView === 'service-faq' ? (
               <div className="h-full flex flex-col">
