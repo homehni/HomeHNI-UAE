@@ -36,6 +36,12 @@ interface UserPreferences {
   role?: string;
 }
 
+interface ChatBotProps {
+  searchContext?: {
+    activeTab: 'buy' | 'rent' | 'commercial';
+  };
+}
+
 const sampleProperties: PropertyData[] = [
   {
     id: '101',
@@ -72,23 +78,50 @@ const sampleProperties: PropertyData[] = [
   }
 ];
 
-const ChatBot = () => {
+const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const chatMessagesEndRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  
+  // Get context-aware initial message
+  const getInitialMessage = () => {
+    if (searchContext) {
+      const { activeTab } = searchContext;
+      const tabMessages = {
+        buy: 'Hi! I can help you with selection of the right property. What is your budget for buying?',
+        rent: 'Hi! I can help you with selection of the right property. What is your rent budget?',
+        commercial: 'Hi! I can help you with selection of the right commercial space. What is your budget?'
+      };
+      
+      const budgetOptions = {
+        buy: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
+        rent: ['Under 10K', '10K-25K', '25K-50K', '50K-1L', '1L+'],
+        commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
+      };
+      
+      return {
+        id: '1',
+        text: tabMessages[activeTab],
+        isBot: true,
+        timestamp: new Date(),
+        options: budgetOptions[activeTab]
+      };
+    }
+    
+    return {
       id: '1',
       text: 'Hello! I\'m your AI real estate assistant. I can help you with all your property needs. Let me know your role to get started:',
       isBot: true,
       timestamp: new Date(),
       options: ['Seller', 'Agent', 'Builder', 'Want to buy a property']
-    }
-  ]);
+    };
+  };
+  
+  const [messages, setMessages] = useState<Message[]>([getInitialMessage()]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [conversationStep, setConversationStep] = useState('role_selection');
+  const [conversationStep, setConversationStep] = useState(searchContext ? 'budget_selection' : 'role_selection');
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
@@ -107,6 +140,23 @@ const ChatBot = () => {
   const [propertyChatInput, setPropertyChatInput] = useState('');
   const [showPropertyDetailsForm, setShowPropertyDetailsForm] = useState(false);
   const [propertyUserDetails, setPropertyUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
+  
+  // Search context specific states
+  const [searchDetailsForm, setSearchDetailsForm] = useState({ name: '', email: '', phone: '' });
+  const [showSearchDetailsForm, setShowSearchDetailsForm] = useState(false);
+  
+  // Reset chat when activeTab changes in search context
+  useEffect(() => {
+    if (searchContext) {
+      const initialMsg = getInitialMessage();
+      setMessages([initialMsg]);
+      setConversationStep('budget_selection');
+      setUserPreferences({});
+      setSearchDetailsForm({ name: '', email: '', phone: '' });
+      setShowSearchDetailsForm(false);
+      setInputValue('');
+    }
+  }, [searchContext?.activeTab]);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -209,8 +259,59 @@ const ChatBot = () => {
               setIsOpen(false);
               return resolve(undefined);
             }
+          } else if (conversationStep === 'user_details_collection') {
+            if (userMessage === 'Fill details') {
+              // User clicked the button, show form inline
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please fill in your details:',
+              };
+            } else if (userMessage === 'Details submitted') {
+              // After form submission
+              setConversationStep('location_requirements');
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Thank you for providing your details! Can you tell me your preferred location(s) and any specific requirements you may have, like pet-friendly, furnished, or parking?`,
+              };
+            }
+          } else if (conversationStep === 'location_requirements') {
+            setUserPreferences(prev => ({ ...prev, location: userMessage }));
+            setConversationStep('complete');
+            finalResponse = {
+              id: String(Date.now() + 2),
+              isBot: true,
+              timestamp: new Date(),
+              text: `Thanks for sharing! Our executive will get in touch with you soon to assist further. Typically within the next 15 to 20 minutes. If you have any urgent requirements, please call us on +918690003500.`,
+            };
           } else if (conversationStep === 'property_type_selection') {
-            if (propertyTypes.includes(userMessage)) {
+            if (searchContext) {
+              // In search context, ask for BHK/size after property type
+              setUserPreferences(prev => ({ ...prev, propertyType: userMessage }));
+              
+              if (['Flat/Apartment', 'Independent House', 'Villa'].includes(userMessage)) {
+                setConversationStep('bhk_selection');
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Perfect! How many bedrooms are you looking for in your ${userMessage.toLowerCase()}?`,
+                  options: ['1 BHK', '2 BHK', '3 BHK', '4 BHK', '5+ BHK', 'Any']
+                };
+              } else {
+                // For other property types, ask for location
+                setConversationStep('location_preference');
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Great choice! Which areas are you interested in? (Type a city or locality)`,
+                };
+              }
+            } else if (propertyTypes.includes(userMessage)) {
               setUserPreferences(prev => ({ ...prev, propertyType: userMessage }));
               setConversationStep('budget_selection');
               finalResponse = {
@@ -230,38 +331,97 @@ const ChatBot = () => {
               };
             }
           } else if (conversationStep === 'budget_selection') {
-            const selectedBudget = budgetRanges.find(range => range.label === userMessage);
-            if (selectedBudget) {
+            // Handle budget selection in search context
+            if (searchContext) {
               setUserPreferences(prev => ({ ...prev, budget: userMessage }));
-              setConversationStep('location_selection');
+              setConversationStep('user_details_collection');
+              setShowSearchDetailsForm(true);
               
-              const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
-              
-              if (availableLocations.length === 0) {
-                finalResponse = {
-                  id: String(Date.now() + 2),
-                  isBot: true,
-                  timestamp: new Date(),
-                  text: `Sorry, we don't have any ${userPreferences.propertyType?.toLowerCase()} properties available in our current locations. Please try selecting a different property type.`,
-                  options: ['Go Back to Property Types']
-                };
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Got it! Before moving forward, kindly provide your details below:`,
+                options: ['Fill details']
+              };
+            } else {
+              const selectedBudget = budgetRanges.find(range => range.label === userMessage);
+              if (selectedBudget) {
+                setUserPreferences(prev => ({ ...prev, budget: userMessage }));
+                setConversationStep('location_selection');
+                
+                const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
+                
+                if (availableLocations.length === 0) {
+                  finalResponse = {
+                    id: String(Date.now() + 2),
+                    isBot: true,
+                    timestamp: new Date(),
+                    text: `Sorry, we don't have any ${userPreferences.propertyType?.toLowerCase()} properties available in our current locations. Please try selecting a different property type.`,
+                    options: ['Go Back to Property Types']
+                  };
+                } else {
+                  finalResponse = {
+                    id: String(Date.now() + 2),
+                    isBot: true,
+                    timestamp: new Date(),
+                    text: `Great! With a budget of ${userMessage}, which location are you interested in? Here are the available locations for ${userPreferences.propertyType?.toLowerCase()}:`,
+                    options: availableLocations
+                  };
+                }
               } else {
                 finalResponse = {
                   id: String(Date.now() + 2),
                   isBot: true,
                   timestamp: new Date(),
-                  text: `Great! With a budget of ${userMessage}, which location are you interested in? Here are the available locations for ${userPreferences.propertyType?.toLowerCase()}:`,
-                  options: availableLocations
+                  text: 'Please select a valid budget range:',
+                  options: budgetRanges.map(range => range.label)
                 };
               }
-            } else {
+            }
+          } else if (conversationStep === 'bhk_selection') {
+            setUserPreferences(prev => ({ ...prev, bedrooms: userMessage }));
+            setConversationStep('location_preference');
+            finalResponse = {
+              id: String(Date.now() + 2),
+              isBot: true,
+              timestamp: new Date(),
+              text: `Perfect! Which areas are you interested in? (Type a city or locality)`,
+            };
+          } else if (conversationStep === 'location_preference') {
+            setUserPreferences(prev => ({ ...prev, location: userMessage }));
+            setConversationStep('complete');
+            finalResponse = {
+              id: String(Date.now() + 2),
+              isBot: true,
+              timestamp: new Date(),
+              text: `Excellent! I'm searching for ${userPreferences.propertyType} properties${userPreferences.bedrooms && userPreferences.bedrooms !== 'Any' ? ` with ${userPreferences.bedrooms}` : ''} in ${userMessage} within your budget. Would you like me to show you the results?`,
+              options: ['Show Properties', 'Refine Search', 'Contact Support']
+            };
+          } else if (conversationStep === 'complete') {
+            if (userMessage === 'Show Properties') {
+              // Apply filters and close chatbot
+              setIsOpen(false);
+              return resolve(undefined);
+            } else if (userMessage === 'Refine Search') {
+              // Reset to budget selection
+              setConversationStep('budget_selection');
+              const budgetOptions = {
+                buy: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+'],
+                rent: ['Under 10K', '10K-25K', '25K-50K', '50K-1L', '1L+'],
+                commercial: ['Under 50L', '50L-1Cr', '1-2Cr', '2-5Cr', '5Cr+']
+              };
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
                 timestamp: new Date(),
-                text: 'Please select a valid budget range:',
-                options: budgetRanges.map(range => range.label)
+                text: 'No problem! Let\'s refine your search. What\'s your budget range?',
+                options: searchContext ? budgetOptions[searchContext.activeTab] : budgetRanges.map(range => range.label)
               };
+            } else if (userMessage === 'Contact Support') {
+              navigate('/contact');
+              setIsOpen(false);
+              return resolve(undefined);
             }
           } else if (conversationStep === 'location_selection') {
             if (userMessage === 'Go Back to Property Types') {
@@ -323,6 +483,19 @@ const ChatBot = () => {
   };
 
   const handleOptionClick = (option: string) => {
+    // If in search context, handle all options as messages through bot response
+    if (searchContext) {
+      const newMessage: Message = {
+        id: String(Date.now()),
+        text: option,
+        isBot: false,
+        timestamp: new Date()
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      simulateBotResponse(option);
+      return;
+    }
+    
     // Check if it's one of the 4 original functionalities
     const originalActions = ['Want to buy a property', 'Seller', 'Agent', 'Builder'];
     
@@ -734,7 +907,7 @@ const ChatBot = () => {
   };
 
   const getCurrentFAQs = () => {
-    return serviceFAQs[selectedService] || serviceFAQs['default'];
+    return serviceFAQs[selectedService] || serviceFAQs['default'] || [];
   };
 
   const handleFAQClick = (faq: {question: string, answer: string}) => {
@@ -1668,9 +1841,9 @@ const ChatBot = () => {
   );
 
   const renderChatView = () => (
-    <CardContent className="p-0 h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 max-h-80">
-        {messages.map((message) => (
+    <CardContent className="p-0 h-full flex flex-col relative">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-20">
+        {messages.map((message, index) => (
           <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
             <div
               className={`max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg text-sm break-words ${
@@ -1735,9 +1908,74 @@ const ChatBot = () => {
                   ))}
                 </div>
               )}
+              
+              {/* Show Fill Details button for search context */}
+              {searchContext && message.isBot && conversationStep === 'user_details_collection' && 
+               index === messages.length - 1 && !showSearchDetailsForm && (
+                <button 
+                  onClick={() => setShowSearchDetailsForm(true)}
+                  className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                >
+                  Fill details
+                </button>
+              )}
             </div>
           </div>
         ))}
+        
+        {/* Search Details Form */}
+        {showSearchDetailsForm && (
+          <div className="flex justify-start">
+            <div className="max-w-[85%] sm:max-w-[80%] bg-gray-100 rounded-lg p-3 sm:p-4">
+              <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                if (searchDetailsForm.name && searchDetailsForm.email && searchDetailsForm.phone) {
+                  setShowSearchDetailsForm(false);
+                  const submitMessage: Message = {
+                    id: String(Date.now()),
+                    text: 'Details submitted',
+                    isBot: false,
+                    timestamp: new Date()
+                  };
+                  setMessages((prev) => [...prev, submitMessage]);
+                  simulateBotResponse('Details submitted');
+                }
+              }} className="space-y-3">
+                <Input
+                  placeholder="Name"
+                  value={searchDetailsForm.name}
+                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  className="text-sm"
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={searchDetailsForm.email}
+                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                  className="text-sm"
+                />
+                <Input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={searchDetailsForm.phone}
+                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, phone: e.target.value }))}
+                  required
+                  pattern="[0-9]{10}"
+                  className="text-sm"
+                />
+                <Button 
+                  type="submit"
+                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                >
+                  Submit
+                </Button>
+              </form>
+            </div>
+          </div>
+        )}
         
         {isTyping && (
           <div className="flex justify-start">
@@ -1752,7 +1990,7 @@ const ChatBot = () => {
         )}
       </div>
 
-      <div className="p-3 sm:p-4 border-t">
+      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 border-t border-gray-200 bg-white">
         <div className="flex space-x-2">
           <Input
             value={inputValue}
@@ -1772,7 +2010,7 @@ const ChatBot = () => {
     </CardContent>
   );
 
-  const showInitialView = messages.length === 1 && conversationStep === 'role_selection' && currentView === 'initial';
+  const showInitialView = !searchContext && messages.length === 1 && conversationStep === 'role_selection' && currentView === 'initial';
 
   return (
     <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
@@ -1817,8 +2055,32 @@ const ChatBot = () => {
 
       {isOpen && (
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl">
-          {!showInitialView && currentView === 'initial' && (
-            <CardHeader className="bg-brand-red text-white p-4 sm:p-5">
+          {/* Show header for search context chat */}
+          {searchContext && (
+            <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
+                    <Home size={16} className="text-brand-red sm:w-5 sm:h-5" />
+                  </div>
+                  <CardTitle className="text-lg sm:text-xl font-semibold">
+                    {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
+                     searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
+                     'Commercial Property Assistant'}
+                  </CardTitle>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </CardHeader>
+          )}
+          
+          {!showInitialView && currentView === 'initial' && !searchContext && (
+            <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
@@ -1830,29 +2092,29 @@ const ChatBot = () => {
             </CardHeader>
           )}
 
-          {currentView === 'plan-support' ? (
-            <div className="h-full flex flex-col">
-              {renderPlanSupportView()}
-            </div>
-          ) : currentView === 'property-support' ? (
-            <div className="h-full flex flex-col">
-              {renderPropertySupportView()}
-            </div>
-          ) : currentView === 'service-faq' ? (
-            <div className="h-full flex flex-col">
-              {renderServiceFAQView()}
-            </div>
-          ) : currentView === 'faq-detail' ? (
-            <div className="h-full flex flex-col">
-              {renderFAQDetailView()}
-            </div>
-          ) : showInitialView ? (
-            <div className="h-full flex flex-col">
-              {renderInitialView()}
-            </div>
-          ) : (
-            renderChatView()
-          )}
+          <div className="relative h-full">
+            {currentView === 'plan-support' ? (
+              <div className="h-full flex flex-col">
+                {renderPlanSupportView()}
+              </div>
+            ) : currentView === 'property-support' ? (
+              <div className="h-full flex flex-col">
+                {renderPropertySupportView()}
+              </div>
+            ) : currentView === 'service-faq' ? (
+              <div className="h-full flex flex-col">
+                {renderServiceFAQView()}
+              </div>
+            ) : currentView === 'faq-detail' ? (
+              <div className="h-full flex flex-col">
+                {renderFAQDetailView()}
+              </div>
+            ) : showInitialView ? (
+              renderInitialView()
+            ) : (
+              renderChatView()
+            )}
+          </div>
         </Card>
       )}
     </div>
