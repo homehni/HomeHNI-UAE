@@ -2161,17 +2161,28 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
 
   const renderChatView = () => (
     <CardContent className="p-0 h-full flex flex-col">
-      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-4">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 pb-4 bg-gray-50">
         {messages.map((message, index) => (
-          <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-            <div
-              className={`max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg text-sm break-words ${
-                message.isBot
-                  ? 'bg-gray-100 text-gray-800'
-                  : 'bg-brand-red text-white'
-              }`}
-            >
-              <p className="text-xs sm:text-sm leading-relaxed">{message.text}</p>
+          <div key={message.id} className={`flex items-start ${message.isBot ? 'space-x-2' : 'justify-end'}`}>
+            {message.isBot && (
+              <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                <Home size={14} className="text-white" />
+              </div>
+            )}
+            <div className={`flex-1 ${!message.isBot ? 'flex justify-end' : ''}`}>
+              {message.isBot && (
+                <div className="flex items-baseline space-x-2 mb-1">
+                  <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                </div>
+              )}
+              <div
+                className={`${message.isBot ? 'inline-block' : ''} max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg ${
+                  message.isBot
+                    ? 'bg-white rounded-tl-none shadow-sm'
+                    : 'bg-brand-red text-white'
+                }`}
+              >
+                <p className="text-sm text-gray-800">{message.text}</p>
               
               {message.propertyCard && (
                 <div className="mt-2 sm:mt-3 bg-white rounded-lg p-2 sm:p-3 border">
@@ -2228,15 +2239,21 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 </div>
               )}
               
-              {/* Show Fill Details button for search context */}
-              {searchContext && message.isBot && conversationStep === 'user_details_collection' && 
-               index === messages.length - 1 && !showSearchDetailsForm && (
-                <button 
-                  onClick={() => setShowSearchDetailsForm(true)}
-                  className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
-                >
-                  Fill details
-                </button>
+                {/* Show Fill Details button for search context */}
+                {searchContext && message.isBot && conversationStep === 'user_details_collection' && 
+                 index === messages.length - 1 && !showSearchDetailsForm && (
+                  <button 
+                    onClick={() => setShowSearchDetailsForm(true)}
+                    className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                  >
+                    Fill details
+                  </button>
+                )}
+              </div>
+              {message.isBot && (
+                <span className="text-xs text-gray-400 mt-1 block">
+                  {new Date(message.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                </span>
               )}
             </div>
           </div>
