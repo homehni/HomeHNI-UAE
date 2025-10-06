@@ -2314,18 +2314,19 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       </div>
 
       {/* Input Area */}
-      <div className="p-3 sm:p-4 border-t border-gray-200 bg-white shadow-lg z-10">
-        <div className="flex space-x-2">
+      <div className="p-4 border-t border-gray-200 bg-white shadow-lg z-10">
+        <div className="flex items-center space-x-2">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder="Type your message..."
-            className="flex-1 text-xs sm:text-sm"
+            placeholder="Type your message here"
+            className="flex-1 text-sm"
           />
           <Button
             onClick={handleSendMessage}
-            className="bg-brand-red hover:bg-brand-maroon-dark px-3 sm:px-4"
+            className="bg-brand-red hover:bg-brand-maroon-dark px-4"
+            disabled={inputValue.trim() === ''}
           >
             <Send size={16} />
           </Button>
