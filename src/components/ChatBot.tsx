@@ -89,9 +89,9 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
     if (searchContext) {
       const { activeTab } = searchContext;
       const tabMessages = {
-        buy: 'Hello! I can help you find the perfect property to buy. What\'s your budget range?',
-        rent: 'Hello! I can help you find the perfect property to rent. What\'s your monthly budget?',
-        commercial: 'Hello! I can help you find the perfect commercial space. What\'s your budget range?'
+        buy: 'Hi! I can help you with selection of the right property. What is your budget for buying?',
+        rent: 'Hi! I can help you with selection of the right property. What is your rent budget?',
+        commercial: 'Hi! I can help you with selection of the right commercial space. What is your budget?'
       };
       
       const budgetOptions = {
@@ -140,6 +140,10 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   const [propertyChatInput, setPropertyChatInput] = useState('');
   const [showPropertyDetailsForm, setShowPropertyDetailsForm] = useState(false);
   const [propertyUserDetails, setPropertyUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
+  
+  // Search context specific states
+  const [searchDetailsForm, setSearchDetailsForm] = useState({ name: '', email: '', phone: '' });
+  const [showSearchDetailsForm, setShowSearchDetailsForm] = useState(false);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -242,6 +246,34 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
               setIsOpen(false);
               return resolve(undefined);
             }
+          } else if (conversationStep === 'user_details_collection') {
+            if (userMessage === 'Fill details') {
+              // User clicked the button, show form inline
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please fill in your details:',
+              };
+            } else if (userMessage === 'Details submitted') {
+              // After form submission
+              setConversationStep('location_requirements');
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Thank you for providing your details! Can you tell me your preferred location(s) and any specific requirements you may have, like pet-friendly, furnished, or parking?`,
+              };
+            }
+          } else if (conversationStep === 'location_requirements') {
+            setUserPreferences(prev => ({ ...prev, location: userMessage }));
+            setConversationStep('complete');
+            finalResponse = {
+              id: String(Date.now() + 2),
+              isBot: true,
+              timestamp: new Date(),
+              text: `Thanks for sharing! Our executive will get in touch with you soon to assist further. Typically within the next 15 to 20 minutes. If you have any urgent requirements, please call us on +918690003500.`,
+            };
           } else if (conversationStep === 'property_type_selection') {
             if (searchContext) {
               // In search context, ask for BHK/size after property type
@@ -289,21 +321,15 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
             // Handle budget selection in search context
             if (searchContext) {
               setUserPreferences(prev => ({ ...prev, budget: userMessage }));
+              setConversationStep('user_details_collection');
+              setShowSearchDetailsForm(true);
               
-              // Determine property types based on active tab
-              const propertyTypesByTab = {
-                buy: ['Flat/Apartment', 'Independent House', 'Villa', 'Builder Floor', 'Penthouse', 'Plot/Land'],
-                rent: ['Flat/Apartment', 'Independent House', 'Villa', 'Penthouse', 'PG/Hostel', 'Flatmates'],
-                commercial: ['Office Space', 'Retail Shop', 'Warehouse', 'Showroom', 'Co-working Space']
-              };
-              
-              setConversationStep('property_type_selection');
               finalResponse = {
                 id: String(Date.now() + 2),
                 isBot: true,
                 timestamp: new Date(),
-                text: `Great! With a budget of ${userMessage}, what type of property are you looking for?`,
-                options: propertyTypesByTab[searchContext.activeTab]
+                text: `Got it! Before moving forward, kindly provide your details below:`,
+                options: ['Fill details']
               };
             } else {
               const selectedBudget = budgetRanges.find(range => range.label === userMessage);
@@ -1791,7 +1817,7 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
   const renderChatView = () => (
     <CardContent className="p-0 h-full flex flex-col">
       <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 max-h-80">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
             <div
               className={`max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg text-sm break-words ${
@@ -1856,9 +1882,74 @@ const ChatBot = ({ searchContext }: ChatBotProps = {}) => {
                   ))}
                 </div>
               )}
+              
+              {/* Show Fill Details button for search context */}
+              {searchContext && message.isBot && conversationStep === 'user_details_collection' && 
+               index === messages.length - 1 && !showSearchDetailsForm && (
+                <button 
+                  onClick={() => setShowSearchDetailsForm(true)}
+                  className="w-full mt-3 bg-brand-red text-white py-2 px-4 rounded-lg text-sm font-semibold hover:bg-brand-maroon-dark transition-colors"
+                >
+                  Fill details
+                </button>
+              )}
             </div>
           </div>
         ))}
+        
+        {/* Search Details Form */}
+        {showSearchDetailsForm && (
+          <div className="flex justify-start">
+            <div className="max-w-[85%] sm:max-w-[80%] bg-gray-100 rounded-lg p-3 sm:p-4">
+              <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                if (searchDetailsForm.name && searchDetailsForm.email && searchDetailsForm.phone) {
+                  setShowSearchDetailsForm(false);
+                  const submitMessage: Message = {
+                    id: String(Date.now()),
+                    text: 'Details submitted',
+                    isBot: false,
+                    timestamp: new Date()
+                  };
+                  setMessages((prev) => [...prev, submitMessage]);
+                  simulateBotResponse('Details submitted');
+                }
+              }} className="space-y-3">
+                <Input
+                  placeholder="Name"
+                  value={searchDetailsForm.name}
+                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  className="text-sm"
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={searchDetailsForm.email}
+                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                  className="text-sm"
+                />
+                <Input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={searchDetailsForm.phone}
+                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, phone: e.target.value }))}
+                  required
+                  pattern="[0-9]{10}"
+                  className="text-sm"
+                />
+                <Button 
+                  type="submit"
+                  className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                >
+                  Submit
+                </Button>
+              </form>
+            </div>
+          </div>
+        )}
         
         {isTyping && (
           <div className="flex justify-start">
