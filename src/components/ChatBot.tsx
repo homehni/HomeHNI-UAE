@@ -1899,15 +1899,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     
     setShowServiceDetailsForm(false);
     
-    const userMessage: Message = {
-      id: String(Date.now()),
-      text: `Name: ${serviceUserDetails.name}\nEmail: ${serviceUserDetails.email}\nPhone: ${serviceUserDetails.phone}`,
-      isBot: false,
-      timestamp: new Date()
-    };
-    
-    setServiceChatMessages(prev => [...prev, userMessage]);
-    
     setTimeout(() => {
       const currentService = serviceContext?.service || selectedService;
       const followUpText = serviceQuestions[currentService]?.followUp || 
