@@ -2182,7 +2182,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                     : 'bg-brand-red text-white'
                 }`}
               >
-                <p className="text-sm text-gray-800">{message.text}</p>
+                <p className={`text-sm ${message.isBot ? 'text-gray-800' : 'text-white'}`}>{message.text}</p>
               
               {message.propertyCard && (
                 <div className="mt-2 sm:mt-3 bg-white rounded-lg p-2 sm:p-3 border">
