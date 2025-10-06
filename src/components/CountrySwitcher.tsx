@@ -121,11 +121,11 @@ const CountrySwitcher: React.FC = () => {
         type="button"
         className={`flex items-center gap-2 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-500 cursor-pointer min-w-[100px] ${
           isScrolled 
-            ? 'bg-gray-100 hover:bg-gray-200 border border-gray-300' 
-            : 'bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30'
+            ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300' 
+            : 'bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30'
         }`}
       >
-        <span className="text-brand-red font-medium">{currentCountryData?.displayCode || 'Global'}</span>
+        <span>{currentCountryData?.displayCode || 'Global'}</span>
         <ChevronDown 
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
             isScrolled ? 'text-gray-600' : 'text-white'
