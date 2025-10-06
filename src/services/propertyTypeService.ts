@@ -41,6 +41,12 @@ const PROPERTY_TYPES_CONFIG: Record<ListingTab, PropertyTypeFilter[]> = {
     'CO-WORKING',
     'INDUSTRIAL',
   ],
+  land: [
+    'ALL',
+    'AGRICULTURAL LAND',
+    'COMMERCIAL LAND',
+    'INDUSTRIAL LAND',
+  ],
 };
 
 // Property type matching rules
