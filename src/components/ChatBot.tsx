@@ -2161,7 +2161,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
 
   const renderChatView = () => (
     <CardContent className="p-0 h-full flex flex-col relative">
-      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-20">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 pb-28">
         {messages.map((message, index) => (
           <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
             <div
