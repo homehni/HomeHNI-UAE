@@ -2296,13 +2296,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
           {/* Show header for search context chat */}
           {searchContext && (
-            <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
+            <CardHeader className="bg-brand-maroon-dark text-white p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
-                    <Home size={16} className="text-brand-red sm:w-5 sm:h-5" />
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={20} className="text-brand-maroon-dark sm:w-6 sm:h-6" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl font-semibold">
+                  <CardTitle className="text-lg sm:text-xl font-bold">
                     {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
                      searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
                      searchContext.activeTab === 'land' ? 'Land/Plot Assistant' :
@@ -2320,9 +2320,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           )}
           
           {!showInitialView && currentView === 'initial' && !searchContext && (
-            <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
+            <CardHeader className="bg-brand-maroon-dark text-white p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <button
                     onClick={() => {
                       setMessages([getInitialMessage()]);
@@ -2332,10 +2332,10 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   >
                     <ArrowLeft size={20} />
                   </button>
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
-                    <Home size={16} className="text-brand-red sm:w-5 sm:h-5" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={20} className="text-brand-maroon-dark sm:w-6 sm:h-6" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl font-semibold">Real Estate Assistant</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl font-bold">Real Estate Assistant</CardTitle>
                 </div>
               </div>
             </CardHeader>
