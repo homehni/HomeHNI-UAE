@@ -364,10 +364,10 @@ export const useRealTimeSearch = () => {
       }
 
       // Transform search results to match PropertyCard interface
-      // Show all approved properties (not just featured ones)
+      // Show all visible properties (not just featured ones)
       const filteredSearchResults = (data.items || []).filter((property: any) => {
-        // Show all approved properties regardless of featured status
-        return property.status === 'approved';
+        // Show all visible properties regardless of featured status
+        return property.is_visible === true;
       });
 
       const transformedSearchResults = filteredSearchResults.map((property: any) => ({

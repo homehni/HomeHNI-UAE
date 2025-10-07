@@ -111,7 +111,7 @@ serve(async (req) => {
         super_area, carpet_area, created_at, property_age,
         current_property_condition, is_featured
       `)
-      .eq('status', 'approved');
+      .eq('is_visible', true);
 
     // Filter by intent - handle different tab types
     if (intent) {
