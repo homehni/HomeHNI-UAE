@@ -285,6 +285,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               navigate('/post-property');
               setIsOpen(false);
               return resolve(undefined);
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please select "Post Your Property" to continue.',
+                options: ['Post Your Property']
+              };
             }
           } else if (conversationStep === 'user_details_collection') {
             if (userMessage === 'Fill details') {
@@ -303,6 +311,13 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 isBot: true,
                 timestamp: new Date(),
                 text: `Thank you for providing your details! Can you tell me your preferred location(s) and any specific requirements you may have, like pet-friendly, furnished, or parking?`,
+              };
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please fill in your details to continue.',
               };
             }
           } else if (conversationStep === 'location_requirements') {
@@ -450,6 +465,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               navigate('/contact');
               setIsOpen(false);
               return resolve(undefined);
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Would you like to see the properties or refine your search?`,
+                options: ['Show Properties', 'Refine Search', 'Contact Support']
+              };
             }
           } else if (conversationStep === 'location_selection') {
             if (userMessage === 'Go Back to Property Types') {
