@@ -151,8 +151,26 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   };
 
   const handleGalleryNext = (data: any) => {
+    console.log('Gallery step next - data received:', data);
     updateGallery(data);
-    saveIntermediateData(data, 5);
+    
+    // Save complete form data including gallery to localStorage
+    const completeFormData = {
+      ownerInfo,
+      propertyDetails,
+      locationDetails,
+      saleDetails,
+      amenities,
+      gallery: data, // Use the new gallery data
+      additionalInfo,
+      scheduleInfo,
+      currentStep: 6, // Moving to next step
+      completedSteps: [...completedSteps, 5],
+      formType: 'resale'
+    };
+    localStorage.setItem('resale-form-data', JSON.stringify(completeFormData));
+    console.log('Saved complete resale form data with gallery to localStorage:', completeFormData);
+    
     nextStep();
     scrollToTop();
   };

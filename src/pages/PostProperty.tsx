@@ -233,6 +233,21 @@ export const PostProperty: React.FC = () => {
     console.log('Property selection data received:', data);
     setPropertySelectionData(data);
     
+    // Clear any existing form drafts when starting fresh from property selection
+    if (data.listingType === 'Resale') {
+      localStorage.removeItem('resale-form-data');
+      console.log('Cleared resale form draft - starting fresh');
+    } else if (data.listingType === 'Rent') {
+      localStorage.removeItem('rental-form-data');
+      console.log('Cleared rental form draft - starting fresh');
+    } else if (data.listingType === 'PG/Hostel') {
+      localStorage.removeItem('pg-hostel-form-data');
+      console.log('Cleared PG/Hostel form draft - starting fresh');
+    } else if (data.listingType === 'Flatmates') {
+      localStorage.removeItem('flatmates-form-data');
+      console.log('Cleared flatmates form draft - starting fresh');
+    }
+    
     // Create owner info from the selection data
     const ownerInfoData: OwnerInfo = {
       fullName: data.name,

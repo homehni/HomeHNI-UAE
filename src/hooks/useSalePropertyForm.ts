@@ -106,7 +106,12 @@ export const useSalePropertyForm = () => {
   };
 
   const updateGallery = (data: Partial<PropertyGallery>) => {
-    setGallery(prev => ({ ...prev, ...data }));
+    console.log('Updating gallery with data:', data);
+    setGallery(prev => {
+      const updated = { ...prev, ...data };
+      console.log('Updated gallery state:', updated);
+      return updated;
+    });
   };
 
   const updateAdditionalInfo = (data: Partial<AdditionalInfo>) => {
