@@ -112,42 +112,40 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
 
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
-  const handleFormSubmit = (data: ResaleGalleryFormData) => {
-    // Convert categorized images to flat array for backward compatibility
+  const handleFormSubmit = (_data: ResaleGalleryFormData) => {
+    // Build from local state to avoid RHF sync timing issues
     const allImages = [
-      ...data.images.bathroom,
-      ...data.images.bedroom,
-      ...data.images.hall,
-      ...data.images.kitchen,
-      ...data.images.frontView,
-      ...data.images.balcony,
-      ...data.images.others
+      ...imagesState.bathroom,
+      ...imagesState.bedroom,
+      ...imagesState.hall,
+      ...imagesState.kitchen,
+      ...imagesState.frontView,
+      ...imagesState.balcony,
+      ...imagesState.others
     ];
-    
     const galleryData: PropertyGallery = {
       images: allImages,
-      categorizedImages: data.images,
-      video: data.video
+      categorizedImages: imagesState as any,
+      video: form.getValues('video')
     };
     onNext(galleryData);
   };
   const handleSubmitProperty = () => {
-    // First, capture the current form data and update the parent form state
-    const currentFormData = form.getValues();
+    // Build from local state to avoid RHF sync timing issues
     const allImages = [
-      ...currentFormData.images.bathroom,
-      ...currentFormData.images.bedroom,
-      ...currentFormData.images.hall,
-      ...currentFormData.images.kitchen,
-      ...currentFormData.images.frontView,
-      ...currentFormData.images.balcony,
-      ...currentFormData.images.others
+      ...imagesState.bathroom,
+      ...imagesState.bedroom,
+      ...imagesState.hall,
+      ...imagesState.kitchen,
+      ...imagesState.frontView,
+      ...imagesState.balcony,
+      ...imagesState.others
     ];
-    
+
     const galleryData: PropertyGallery = {
       images: allImages,
-      categorizedImages: currentFormData.images as any,
-      video: currentFormData.video
+      categorizedImages: imagesState as any,
+      video: form.getValues('video')
     };
 
     // Update the parent form state with current gallery data
