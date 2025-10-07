@@ -1068,107 +1068,105 @@ const PropertySearch = () => {
 
             {/* Main Search Bar with Multi-Location Support */}
             <div className="flex-1 w-full">
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none" size={18} />
+              {/* Multi-Location Search Bar */}
+              <div 
+                className="flex items-center gap-2 px-4 py-2.5 min-h-[52px] border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
+                onClick={() => {
+                  if (locationInputRef.current && filters.locations.length < 3) {
+                    locationInputRef.current.focus();
+                  }
+                }}
+              >
+                {/* Map Pin Icon */}
+                <MapPin className="text-brand-red shrink-0" size={18} />
                 
-                {/* Multi-Location Search Bar */}
-                <div 
-                  className="relative flex items-center gap-2 px-4 py-2.5 pl-12 pr-12 min-h-[52px] border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
-                  onClick={() => {
-                    if (locationInputRef.current && filters.locations.length < 3) {
-                      locationInputRef.current.focus();
+                {/* Location Chips */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {filters.locations.map((location: string, index: number) => (
+                    <div key={index} className="flex items-center gap-1.5 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
+                      <span className="truncate max-w-32">{location}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
+                          updateFilter('locations', newLocations);
+                        }}
+                        className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                        aria-label={`Remove ${location}`}
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Input Field */}
+                <input
+                  ref={locationInputRef}
+                  value={filters.location}
+                  onChange={e => {
+                    const normalizedLocation = normalizeLocation(e.target.value);
+                    updateFilter('location', normalizedLocation);
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && filters.location.trim()) {
+                      e.preventDefault();
+                      if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
+                        updateFilter('locations', [...filters.locations, filters.location.trim()]);
+                        updateFilter('location', '');
+                        setTimeout(() => {
+                          if (locationInputRef.current) {
+                            locationInputRef.current.focus();
+                          }
+                        }, 0);
+                      }
+                    }
+                    if (e.key === 'Backspace' && filters.location === '' && filters.locations.length > 0) {
+                      const newLocations = filters.locations.slice(0, -1);
+                      updateFilter('locations', newLocations);
+                    }
+                  }}
+                  onFocus={e => e.target.select()}
+                  placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
+                  className="flex-1 min-w-[120px] outline-none bg-transparent text-sm placeholder:text-muted-foreground"
+                  disabled={filters.locations.length >= 3}
+                />
+                
+                {/* Search Icon Button */}
+                <button
+                  type="button"
+                  className="flex items-center justify-center h-8 w-8 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 transition-colors shrink-0"
+                  aria-label="Add location"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const typed = (filters.location || '').trim();
+                    if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
+                      updateFilter('locations', [...filters.locations, typed]);
+                      updateFilter('location', '');
+                      setTimeout(() => {
+                        locationInputRef.current?.focus();
+                      }, 0);
                     }
                   }}
                 >
-                  {/* Location Chips */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {filters.locations.map((location: string, index: number) => (
-                      <div key={index} className="flex items-center gap-1.5 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
-                        <span className="truncate max-w-32">{location}</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
-                            updateFilter('locations', newLocations);
-                          }}
-                          className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
-                          aria-label={`Remove ${location}`}
-                        >
-                          <X size={12} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Input Field */}
-                  <input
-                    ref={locationInputRef}
-                    value={filters.location}
-                    onChange={e => {
-                      const normalizedLocation = normalizeLocation(e.target.value);
-                      updateFilter('location', normalizedLocation);
-                    }}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' && filters.location.trim()) {
-                        e.preventDefault();
-                        if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
-                          updateFilter('locations', [...filters.locations, filters.location.trim()]);
-                          updateFilter('location', '');
-                          setTimeout(() => {
-                            if (locationInputRef.current) {
-                              locationInputRef.current.focus();
-                            }
-                          }, 0);
-                        }
-                      }
-                      if (e.key === 'Backspace' && filters.location === '' && filters.locations.length > 0) {
-                        const newLocations = filters.locations.slice(0, -1);
-                        updateFilter('locations', newLocations);
-                      }
-                    }}
-                    onFocus={e => e.target.select()}
-                    placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
-                    className="flex-1 min-w-[120px] outline-none bg-transparent text-sm placeholder:text-muted-foreground"
-                    disabled={filters.locations.length >= 3}
-                  />
-                  
-                  {/* Search Icon Button */}
+                  <SearchIcon className="h-4 w-4" />
+                </button>
+                
+                {/* Clear All Locations Button */}
+                {filters.locations.length > 0 && (
                   <button
                     type="button"
-                    className="flex items-center justify-center h-8 w-8 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 transition-colors shrink-0"
-                    aria-label="Add location"
                     onClick={(e) => {
                       e.stopPropagation();
-                      const typed = (filters.location || '').trim();
-                      if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
-                        updateFilter('locations', [...filters.locations, typed]);
-                        updateFilter('location', '');
-                        setTimeout(() => {
-                          locationInputRef.current?.focus();
-                        }, 0);
-                      }
+                      updateFilter('locations', []);
+                      updateFilter('location', '');
+                      updateFilter('selectedCity', '');
                     }}
+                    className="flex items-center justify-center h-8 w-8 rounded-full hover:bg-gray-100 transition-colors shrink-0"
+                    aria-label="Clear all locations"
                   >
-                    <SearchIcon className="h-4 w-4" />
+                    <X size={16} className="text-gray-600" />
                   </button>
-                </div>
-                
-                {/* Clear All Locations Button (placed below the field to avoid overlap) */}
-                {filters.locations.length > 0 && (
-                  <div className="mt-2 flex justify-end">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => {
-                        updateFilter('locations', []);
-                        updateFilter('location', '');
-                        updateFilter('selectedCity', '');
-                      }} 
-                      className="h-6 w-6 p-0 hover:bg-brand-red/10"
-                    >
-                      <X size={14} />
-                    </Button>
-                  </div>
                 )}
               </div>
             </div>
