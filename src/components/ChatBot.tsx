@@ -2055,22 +2055,17 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
       message.options.length === mainOptions.length;
     if (isMain) {
       return (
-        <div className="mt-2 sm:mt-3">
-          <div className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold text-brand-red uppercase tracking-widest">
-            Choose an option
-          </div>
-          <div className="flex flex-col gap-2">
-            {mainOptions.map((option) => (
-              <Badge
-                key={option}
-                variant="outline"
-                className="w-full justify-start cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
-                onClick={() => handleOptionClick(option)}
-              >
-                {option}
-              </Badge>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-1 sm:gap-2 mt-2 sm:mt-3">
+          {mainOptions.map((option) => (
+            <Badge
+              key={option}
+              variant="outline"
+              className="cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
+              onClick={() => handleOptionClick(option)}
+            >
+              {option}
+            </Badge>
+          ))}
         </div>
       );
     }
