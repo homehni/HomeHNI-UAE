@@ -1,0 +1,33 @@
+.hide-clear-button {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+.hide-clear-button::-webkit-search-cancel-button,
+.hide-clear-button::-webkit-search-decoration,
+.hide-clear-button::-webkit-search-results-button,
+.hide-clear-button::-webkit-search-results-decoration,
+.hide-clear-button::-webkit-inner-spin-button,
+.hide-clear-button::-webkit-outer-spin-button,
+.hide-clear-button::-webkit-clear-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+}
+
+.hide-clear-button::-ms-clear,
+.hide-clear-button::-ms-reveal {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Override browser-specific styles */
+input[type="search"].hide-clear-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}

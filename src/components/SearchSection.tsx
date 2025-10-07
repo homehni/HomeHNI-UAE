@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/slider';
 import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
+import './search-input.css';
 export interface SearchSectionRef {
   focusSearchInput: () => void;
 }
@@ -93,10 +94,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       alert(`Please choose a locality from suggestions within ${selectedCity}. Typing free text is disabled to avoid other cities.`);
       return;
     }
-    if (selectedLocations.length < 3 && !selectedLocations.includes(trimmed)) {
-      setSelectedLocations([...selectedLocations, trimmed]);
-      setSearchQuery('');
-    }
+    // Only allow one location - replace any existing one
+    setSelectedLocations([trimmed]);
+    setSearchQuery('');
   };
 
   const removeLocation = (location: string) => {
@@ -119,9 +119,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       alert(`Please select a suggestion within ${selectedCity}.`);
       return;
     }
-    if (searchQuery.trim() && selectedLocations.length < 3 && !selectedLocations.includes(searchQuery.trim())) {
-      const locationsToSearch = [...selectedLocations, searchQuery.trim()];
-      navigateToSearch(locationsToSearch);
+    if (searchQuery.trim()) {
+      // Only one location allowed - use the text input directly
+      navigateToSearch([searchQuery.trim()]);
       return;
     }
     navigateToSearch(selectedLocations);
@@ -191,7 +191,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         alert(`Please select a suggestion within ${selectedCity}.`);
         return;
       }
-      if (searchQuery.trim() && selectedLocations.length < 3) {
+      if (searchQuery.trim() && selectedLocations.length === 0) {
         addLocation(searchQuery);
       } else {
         handleSearch();
@@ -345,14 +345,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               return matches;
             };
 
-            // Auto-add location if under limit and city matches (if selectedCity set)
-            if (selectedLocations.length < 3 && !selectedLocations.includes(value) && canAddInCity()) {
-              console.log('✅ Google Places - Adding location:', value);
-              setSelectedLocations(prev => {
-                const newList = [...prev, value];
-                console.log('✅ Google Places - New locations list:', newList);
-                return newList;
-              });
+            // Replace existing location with new one if city matches
+            if (canAddInCity()) {
+              console.log('✅ Google Places - Setting location:', value);
+              setSelectedLocations([value]);
               // Set selected city and bounds from first selection
               if (!selectedCity && cityName) {
                 setSelectedCity(cityName);
@@ -464,8 +460,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           return cityName.toLowerCase() === selectedCity.toLowerCase();
         };
         
-        if (selectedLocations.length < 3 && !selectedLocations.includes(value) && canAddInCity()) {
-          setSelectedLocations(prev => [...prev, value]);
+        if (canAddInCity()) {
+          setSelectedLocations([value]);
           if (inputRef.current) inputRef.current.value = '';
           setSearchQuery('');
         } else if (!canAddInCity()) {
@@ -553,8 +549,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           if (!cityName) return false; // Block if no city detected after first selection
           return cityName.toLowerCase() === selectedCity.toLowerCase();
         };
-        if (selectedLocations.length < 3 && !selectedLocations.includes(value) && canAddInCity()) {
-          setSelectedLocations(prev => [...prev, value]);
+        if (canAddInCity()) {
+          setSelectedLocations([value]);
           if (!selectedCity && cityName) {
             setSelectedCity(cityName);
             // Geocode the city to get proper city-level bounds
@@ -584,14 +580,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               }
             );
           }
-          if (mobileInputRef.current) mobileInputRef.current.value = '';
           setSearchQuery('');
         } else if (!canAddInCity()) {
           alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
-          if (mobileInputRef.current) mobileInputRef.current.value = '';
           setSearchQuery('');
         } else {
-          if (mobileInputRef.current) mobileInputRef.current.value = value;
           setSearchQuery(value);
         }
       }
@@ -624,6 +617,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       if (targetInput) {
         setTimeout(() => {
           targetInput.focus();
+          // If there's already a selected location, position cursor at the end
+          if (selectedLocations.length > 0) {
+            targetInput.setSelectionRange(selectedLocations[0].length, selectedLocations[0].length);
+          }
         }, 300); // Small delay to ensure scroll completes
       }
     }
@@ -693,7 +690,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 className="w-full flex items-center justify-between gap-2 px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-500"
               >
                 <span className="text-sm truncate">
-                  {selectedLocations.length >= 3 ? 'Max 3 locations' : selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
+                  {selectedLocations.length > 0 ? 'Location already selected' : selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
                 </span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-brand-red">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -812,39 +809,50 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             </div>
             {/* Body */}
             <div className="px-4 pt-3 pb-24 overflow-y-auto">
-              {/* Chips */}
-              {selectedLocations.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {selectedLocations.map((location, index) => (
-                    <div key={index} className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                      {location}
-                      <button onClick={() => removeLocation(location)} className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5">
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
               {/* Input (with in-field search icon for parity) */}
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-red" size={16} />
                 <input
                   ref={mobileInputRef}
-                  type="text"
-                  placeholder={selectedLocations.length >= 3 ? 'Max 3 locations' : selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
-                  defaultValue={searchQuery}
+                  type="search"
+                  role="combobox"
+                  placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
+                  value={selectedLocations.length > 0 ? selectedLocations[0] : searchQuery}
+                  onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  disabled={selectedLocations.length >= 3}
-                  className="w-full pl-9 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base disabled:opacity-50 disabled:bg-gray-50"
+                  className="w-full pl-9 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base hide-clear-button"
+                  autoComplete="off"
+                  aria-autocomplete="both"
                 />
-                <button
-                  type="button"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
-                  aria-label="Search"
-                  onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
-                >
-                  <SearchIcon className="h-4 w-4" />
-                </button>
+                {selectedLocations.length > 0 ? (
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-full text-gray-500 hover:bg-gray-100"
+                      aria-label="Clear location"
+                      onClick={() => removeLocation(selectedLocations[0])}
+                    >
+                      <X size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                      aria-label="Search"
+                      onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
+                    >
+                      <SearchIcon className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                    aria-label="Search"
+                    onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
+                  >
+                    <SearchIcon className="h-4 w-4" />
+                  </button>
+                )}
               </div>
 
               {/* Filters row inside overlay (mobile) */}
@@ -1116,7 +1124,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   setSelectedCity('');
                   setSearchQuery('');
                   setSelectedAvailability([]);
-                  if (mobileInputRef.current) mobileInputRef.current.value = '';
                 }}
               >
                 Clear All
@@ -1154,38 +1161,33 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       <div
                         className="relative flex items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-[3rem] w-full border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
                         onClick={() => {
-                          if (inputRef.current && selectedLocations.length < 3) {
+                          if (inputRef.current) {
                             inputRef.current.focus();
                           }
                         }}
                       >
-                        {/* Location Chips inside field */}
-                        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0">
-                          {selectedLocations.map((location, index) => (    
-                            <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                              <span className="truncate max-w-32">{location}</span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  removeLocation(location);
-                                }}
-                                className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
-                              >
-                                <X size={12} />
-                              </button>
-                            </div>
-                          ))}
-
-                          {/* Text input */}
+                        {/* Location text input - shows selected location if exists */}
+                        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0 relative">
                           <input
                             ref={inputRef}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            value={selectedLocations.length > 0 ? selectedLocations[0] : searchQuery}
+                            onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder={selectedLocations.length >= 3 ? 'Max 3 locations' : selectedCity ? `Add locality in ${selectedCity}` : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : 'Search locality...'}
+                            placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Search locality...'}
                             className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-400"
-                            disabled={selectedLocations.length >= 3}
+                            style={{ appearance: "none" }}
                           />
+                          {selectedLocations.length > 0 && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeLocation(selectedLocations[0]);
+                              }}
+                              className="absolute right-0 hover:bg-gray-100 rounded-full p-1"
+                            >
+                              <X size={14} className="text-gray-500" />
+                            </button>
+                          )}
                         </div>
 
                         {/* In-field Search icon triggers navigation */}
@@ -1199,10 +1201,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <SearchIcon className="h-4 w-4" />
                         </button>
 
-                        {/* Location limit hint */}
-                        {selectedLocations.length >= 3 && (
-                          <span className="text-gray-500 text-sm whitespace-nowrap">Max 3</span>
-                        )}
+
                       </div>
 
                       {/* Clear All below field to avoid overlap */}
