@@ -440,7 +440,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       if (value) {
         const canAddInCity = () => {
           if (!selectedCity) return true;
-          if (!cityName) return true;
+          if (!cityName) return false; // Block if no city detected after first selection
           return cityName.toLowerCase() === selectedCity.toLowerCase();
         };
         
