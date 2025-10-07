@@ -47,9 +47,10 @@ export const fetchPublicProperties = async () => {
   return data || [];
 };
 
-// Service to fetch featured properties for the home page - uses secure database function
+// Service to fetch featured properties for the home page - ONLY from properties table with is_featured=true
 export const fetchFeaturedProperties = async () => {
-  // Fetch all approved public properties via secure RPC
+  // Fetch ONLY approved properties from properties table where is_featured is explicitly true
+  // This ensures property_submissions are excluded and only show in dashboard/search
   const { data, error } = await supabase
     .rpc('get_public_properties');
     
@@ -63,10 +64,11 @@ export const fetchFeaturedProperties = async () => {
     .from('featured_properties')
     .select(`
       property_id, is_active, featured_until, sort_order,
-      properties!inner(is_visible)
+      properties!inner(is_visible, status)
     `)
     .eq('is_active', true)
     .eq('properties.is_visible', true)
+    .eq('properties.status', 'approved')
     .order('sort_order', { ascending: true });
 
   if (curatedErr) {
@@ -80,9 +82,13 @@ export const fetchFeaturedProperties = async () => {
       .map(r => r.property_id)
   );
   
-  // Include properties marked is_featured OR curated in featured_properties
+  // ONLY include approved properties from properties table with is_featured=true OR curated
+  // New submissions (property_submissions) are excluded - they only appear in dashboard and search
   const featuredData = (data || [])
-    .filter((p: any) => Boolean(p.is_featured) || curatedIds.has(p.id));
+    .filter((p: any) => 
+      (Boolean(p.is_featured) || curatedIds.has(p.id)) && 
+      p.status === 'approved'
+    );
   
   return featuredData;
 };
