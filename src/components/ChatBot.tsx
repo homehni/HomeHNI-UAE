@@ -2321,7 +2321,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           
 
           {/* Header for regular chat view */}
-          {!showInitialView && currentView === 'initial' && !searchContext && (
+          {!showInitialView && currentView === 'chat' && !searchContext && (
             <CardHeader className="bg-brand-maroon-dark text-white p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
