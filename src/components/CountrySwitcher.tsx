@@ -135,7 +135,7 @@ const CountrySwitcher: React.FC = () => {
 
       {isOpen && (
         <div 
-          className="absolute top-full left-0 mt-1 min-w-[1200px] rounded-lg shadow-2xl z-50 border bg-white border-gray-200 transition-all duration-200"
+          className="absolute top-full left-0 mt-1 min-w-[950px] rounded-lg shadow-2xl z-50 border bg-white border-gray-200 transition-all duration-200"
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
@@ -143,7 +143,7 @@ const CountrySwitcher: React.FC = () => {
             {regions.map((region) => (
               <div key={region.name} className="space-y-4">
                 <div className="border-b border-gray-200 pb-2">
-                  <h3 className="text-sm font-bold tracking-wide uppercase text-brand-red whitespace-nowrap">
+                  <h3 className="text-sm font-bold tracking-wide uppercase text-brand-red">
                     {region.name}
                   </h3>
                 </div>
