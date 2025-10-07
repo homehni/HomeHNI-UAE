@@ -2327,6 +2327,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => {
+                      setCurrentView('initial');
                       setMessages([getInitialMessage()]);
                       setConversationStep('role_selection');
                     }}
