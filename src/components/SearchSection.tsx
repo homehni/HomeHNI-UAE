@@ -88,12 +88,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const addLocation = (location: string) => {
     const trimmed = location.trim();
     if (!trimmed) return;
-    // Enforce same-city rule for manual inputs: once a city is chosen, block free-typed additions
-    if (selectedCity) {
-      console.warn('⛔ Manual add blocked. Selected city requires choosing from suggestions within:', selectedCity);
-      alert(`Please choose a locality from suggestions within ${selectedCity}. Typing free text is disabled to avoid other cities.`);
-      return;
-    }
+    // Allow any location to be added
     // Only allow one location - replace any existing one
     setSelectedLocations([trimmed]);
     setSearchQuery('');
@@ -113,12 +108,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     if (!hasLocality) {
       return; // Block search until a city/locality is provided
     }
-    // Do NOT auto-add free-typed text when a city is already selected. Must use suggestions within bounds.
-    if (selectedCity && searchQuery.trim()) {
-      console.warn('⛔ Search button add blocked. Must select suggestion within:', selectedCity);
-      alert(`Please select a suggestion within ${selectedCity}.`);
-      return;
-    }
+    // Allow search with any location
     if (searchQuery.trim()) {
       // Only one location allowed - use the text input directly
       navigateToSearch([searchQuery.trim()]);
@@ -185,12 +175,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      // After a city is selected, force users to pick from autocomplete (prevents cross-city free-typing)
-      if (selectedCity) {
-        console.warn('⛔ Enter key add blocked. Must select a suggestion within:', selectedCity);
-        alert(`Please select a suggestion within ${selectedCity}.`);
-        return;
-      }
+      // Allow any location to be added with Enter key
       if (searchQuery.trim() && selectedLocations.length === 0) {
         addLocation(searchQuery);
       } else {
@@ -331,19 +316,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             console.log('🔍 Google Places - Full formatted_address:', place?.formatted_address);
             
             // Enforce same-city rule: once first city is selected, next selections must be from same city
-            const canAddInCity = () => {
-              if (!selectedCity) {
-                console.log('✅ No city selected yet, allowing');
-                return true;
-              }
-              if (!cityName) {
-                console.warn('⚠️ No city detected in selection');
-                return false; // Changed: if we can't detect city after first selection, block it
-              }
-              const matches = cityName.toLowerCase() === selectedCity.toLowerCase();
-              console.log(`🔍 City match check: "${cityName}" === "${selectedCity}" = ${matches}`);
-              return matches;
-            };
+            // Always allow any city
+            const canAddInCity = () => true;
 
             // Replace existing location with new one if city matches
             if (canAddInCity()) {
@@ -381,11 +355,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               }
               el.value = '';
               setSearchQuery('');
-            } else if (!canAddInCity()) {
-              console.warn('⚠️ Location must be within selected city:', selectedCity);
-              alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
-              el.value = '';
-              setSearchQuery('');
+            // All locations are now allowed
             } else {
               console.log('⚠️ Google Places - Location exists or limit reached');
               el.value = value;
@@ -454,20 +424,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       }
       
       if (value) {
-        const canAddInCity = () => {
-          if (!selectedCity) return true;
-          if (!cityName) return false; // Block if no city detected after first selection
-          return cityName.toLowerCase() === selectedCity.toLowerCase();
-        };
+        // Always allow any city
+        const canAddInCity = () => true;
         
         if (canAddInCity()) {
           setSelectedLocations([value]);
           if (inputRef.current) inputRef.current.value = '';
           setSearchQuery('');
-        } else if (!canAddInCity()) {
-          alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
-          if (inputRef.current) inputRef.current.value = '';
-          setSearchQuery('');
+        // All locations are now allowed
         } else {
           if (inputRef.current) inputRef.current.value = value;
           setSearchQuery(value);
@@ -544,11 +508,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       }
 
       if (value) {
-        const canAddInCity = () => {
-          if (!selectedCity) return true;
-          if (!cityName) return false; // Block if no city detected after first selection
-          return cityName.toLowerCase() === selectedCity.toLowerCase();
-        };
+        // Always allow any city
+        const canAddInCity = () => true;
         if (canAddInCity()) {
           setSelectedLocations([value]);
           if (!selectedCity && cityName) {
@@ -580,9 +541,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               }
             );
           }
-          setSearchQuery('');
-        } else if (!canAddInCity()) {
-          alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
           setSearchQuery('');
         } else {
           setSearchQuery(value);

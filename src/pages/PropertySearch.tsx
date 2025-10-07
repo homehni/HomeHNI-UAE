@@ -679,7 +679,7 @@ const PropertySearch = () => {
   };
 
   // Function to normalize location for better search matching
-  const normalizeLocation = (location: string) => {
+  const normalizeLocation = useCallback((location: string) => {
     if (!location) return '';
 
     // Common location name mappings for better matching
@@ -756,7 +756,7 @@ const PropertySearch = () => {
     };
     const normalized = location.toLowerCase().trim();
     return locationMappings[normalized] || location;
-  };
+  }, []);
 
   // Initialize Google Maps Places Autocomplete
   useEffect(() => {
@@ -786,11 +786,7 @@ const PropertySearch = () => {
         types: ['geocode'],
         componentRestrictions: {
           country: 'in' as const
-        },
-        ...(cityBounds && filters.selectedCity && { 
-          bounds: cityBounds, 
-          strictBounds: true
-        })
+        }
       });
       
       const autocomplete = new w.google!.maps!.places!.Autocomplete(locationInputRef.current, getOptions());
@@ -867,79 +863,15 @@ const PropertySearch = () => {
           console.log('🔍 Google Places - Detected city:', cityName);
           console.log('🔍 Google Places - Full formatted_address:', place?.formatted_address);
           
-          // Enforce same-city rule: once first city is selected, next selections must be from same city
-          const canAddInCity = () => {
-            if (!filters.selectedCity) {
-              console.log('✅ No city selected yet, allowing');
-              return true;
-            }
-            if (!cityName) {
-              console.warn('⚠️ No city detected in selection');
-              return false; // Block if we can't detect city after first selection
-            }
-            const matches = cityName.toLowerCase() === filters.selectedCity.toLowerCase();
-            console.log(`🔍 City match check: "${cityName}" === "${filters.selectedCity}" = ${matches}`);
-            return matches;
-          };
-
           // Normalize the location for better search matching
           const normalizedLocation = normalizeLocation(locationValue);
           
-          // Auto-add location if under limit and city matches (if selectedCity set)
-          if (filters.locations.length < 3 && !filters.locations.includes(normalizedLocation) && canAddInCity()) {
-            console.log('✅ Google Places - Adding location:', normalizedLocation);
-            updateFilter('locations', [...filters.locations, normalizedLocation]);
-            
-            // Set selected city and bounds from first selection
-            if (!filters.selectedCity && cityName) {
-              updateFilter('selectedCity', cityName);
-              // Geocode the city to get proper city-level bounds
-              const geocoder = new w.google!.maps!.Geocoder();
-              geocoder.geocode(
-                { 
-                  address: `${cityName}, India`,
-                  componentRestrictions: { country: 'IN' }
-                },
-                (results, status) => {
-                  if (status === 'OK' && results && results[0]?.geometry?.viewport) {
-                    console.log('🗺️ Geocoded city bounds for:', cityName, results[0].geometry.viewport);
-                    setCityBounds(results[0].geometry.viewport);
-                  } else {
-                    // Fallback to place geometry if geocoding fails
-                    if (place?.geometry?.viewport) {
-                      setCityBounds(place.geometry.viewport);
-                    } else if (place?.geometry?.location) {
-                      const loc = place.geometry.location;
-                      const bounds = new w.google!.maps!.LatLngBounds();
-                      const offset = 0.2; // ~22km for city-level coverage
-                      bounds.extend(new w.google!.maps!.LatLng(loc.lat() - offset, loc.lng() - offset));
-                      bounds.extend(new w.google!.maps!.LatLng(loc.lat() + offset, loc.lng() + offset));
-                      setCityBounds(bounds);
-                    }
-                  }
-                }
-              );
-            }
-            
-            updateFilter('location', '');
-            // Clear the input field after Google Maps updates it
-            setTimeout(() => {
-              if (locationInputRef.current) {
-                locationInputRef.current.value = '';
-                updateFilter('location', '');
-              }
-            }, 100);
-          } else if (!canAddInCity()) {
-            console.warn('⚠️ Location must be within selected city:', filters.selectedCity);
-            alert(`Please select a locality within ${filters.selectedCity} only. Other cities are not allowed.`);
-            updateFilter('location', '');
-            if (locationInputRef.current) {
-              locationInputRef.current.value = '';
-            }
-          } else {
-            console.log('⚠️ Google Places - Location exists or limit reached');
-            updateFilter('location', normalizedLocation);
-          }
+          // Update the location directly
+          console.log('✅ Google Places - Setting location:', normalizedLocation);
+          updateFilter('location', normalizedLocation);
+          
+          // Trigger search with the new location
+          setTimeout(() => updateFilter('trigger', 'search'), 0);
         }
       });
     };
@@ -948,93 +880,7 @@ const PropertySearch = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Intentionally empty dependency array for initial load only
 
-  // Reinitialize autocomplete when city bounds change to apply strict bounds
-  useEffect(() => {
-    if (!cityBounds || !filters.selectedCity) return;
-    
-    const w = window as WindowWithGoogle;
-    if (!w.google?.maps?.places || !locationInputRef.current) return;
-    
-    console.log('🔄 Reinitializing autocomplete with city bounds for:', filters.selectedCity);
-    
-    // Recreate autocomplete with strict bounds
-    const options = {
-      fields: ['formatted_address', 'geometry', 'name', 'address_components'],
-      types: ['geocode'],
-      componentRestrictions: {
-        country: 'in' as const
-      },
-      bounds: cityBounds,
-      strictBounds: true
-    };
-    
-    const ac = new w.google!.maps!.places!.Autocomplete(locationInputRef.current, options);
-    ac.addListener('place_changed', () => {
-      const place = ac.getPlace();
-      console.log('🔍 Google Places (Bounded) - Place selected:', place);
-      
-      let locationValue = place?.formatted_address || place?.name || '';
-      let cityName = '';
-      
-      if (locationValue && place?.address_components) {
-        const addressComponents = place.address_components;
-        const localityComponent = addressComponents.find((comp: GPlaceComponent) =>
-          comp.types.includes('sublocality_level_1') ||
-          comp.types.includes('sublocality') ||
-          comp.types.includes('locality') ||
-          comp.types.includes('neighborhood')
-        );
-        
-        const cityComponent = addressComponents.find((comp: GPlaceComponent) =>
-          comp.types.includes('locality')
-        ) || addressComponents.find((comp: GPlaceComponent) =>
-          comp.types.includes('administrative_area_level_2')
-        );
-        
-        if (cityComponent) {
-          cityName = cityComponent.long_name;
-        }
-        
-        if (localityComponent) {
-          locationValue = localityComponent.long_name;
-        } else {
-          const firstPart = locationValue.split(',')[0].trim();
-          if (firstPart) {
-            locationValue = firstPart;
-          }
-        }
-      }
-      
-      if (locationValue) {
-        const canAddInCity = () => {
-          if (!filters.selectedCity) return true;
-          if (!cityName) return false;
-          return cityName.toLowerCase() === filters.selectedCity.toLowerCase();
-        };
-
-        const normalizedLocation = normalizeLocation(locationValue);
-        
-        if (filters.locations.length < 3 && !filters.locations.includes(normalizedLocation) && canAddInCity()) {
-          updateFilter('locations', [...filters.locations, normalizedLocation]);
-          updateFilter('location', '');
-          setTimeout(() => {
-            if (locationInputRef.current) {
-              locationInputRef.current.value = '';
-              updateFilter('location', '');
-            }
-          }, 100);
-        } else if (!canAddInCity()) {
-          alert(`Please select a locality within ${filters.selectedCity} only. Other cities are not allowed.`);
-          updateFilter('location', '');
-          if (locationInputRef.current) {
-            locationInputRef.current.value = '';
-          }
-        } else {
-          updateFilter('location', normalizedLocation);
-        }
-      }
-    });
-  }, [cityBounds, filters.selectedCity, filters.locations, normalizeLocation, updateFilter]);
+  // City restriction logic removed - allowing search across all cities
   return <div className="min-h-screen bg-background">
       {/* Skip to main content link for keyboard users */}
       <a
@@ -1111,25 +957,12 @@ const PropertySearch = () => {
                   onKeyDown={e => {
                     if (e.key === 'Enter' && filters.location.trim()) {
                       e.preventDefault();
-                      if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
-                        updateFilter('locations', [...filters.locations, filters.location.trim()]);
-                        updateFilter('location', '');
-                        setTimeout(() => {
-                          if (locationInputRef.current) {
-                            locationInputRef.current.focus();
-                          }
-                        }, 0);
-                      }
-                    }
-                    if (e.key === 'Backspace' && filters.location === '' && filters.locations.length > 0) {
-                      const newLocations = filters.locations.slice(0, -1);
-                      updateFilter('locations', newLocations);
+                      updateFilter('trigger', 'search');
                     }
                   }}
                   onFocus={e => e.target.select()}
-                  placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
+                  placeholder="Search locality..."
                   className="flex-1 min-w-[120px] outline-none bg-transparent text-sm placeholder:text-muted-foreground"
-                  disabled={filters.locations.length >= 3}
                 />
                 
                 {/* Search Icon Button */}

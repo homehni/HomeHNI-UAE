@@ -52,6 +52,7 @@ interface SearchFilters {
   locations: string[]; // New: array of selected locations (max 3)
   selectedCity: string; // New: selected city for location restriction
   sortBy: string;
+  trigger?: string; // Special action trigger ('search', etc)
 }
 
 let hasInitialBudgetInUrlFlag = false;
@@ -102,11 +103,16 @@ export const useSimplifiedSearch = () => {
     const initialTab = searchParams.get('type') || 'buy';
     const defaultBudget = getBudgetRange(initialTab);
 
-    // Parse locations from URL parameter (comma-separated)
+    // Parse location from URL parameter (take only the first one if there are multiple)
     const locationsParam = searchParams.get('locations');
-    const parsedLocations = locationsParam
-      ? locationsParam.split(',').map((loc) => decodeURIComponent(loc.trim())).filter(Boolean)
-      : [];
+    let parsedLocation = '';
+    if (locationsParam) {
+      // Take only the first location
+      const parts = locationsParam.split(',');
+      if (parts.length > 0) {
+        parsedLocation = decodeURIComponent(parts[0].trim());
+      }
+    }
 
     // Property types: support both 'propertyTypes' (comma-separated) and legacy 'propertyType'
     const propertyTypesParam = searchParams.get('propertyTypes') || '';
@@ -189,8 +195,8 @@ export const useSimplifiedSearch = () => {
       construction,
       floor: [],
       parking: [],
-      location: searchParams.get('location') || '',
-      locations: parsedLocations, // Initialize from URL parameter
+      location: parsedLocation || searchParams.get('location') || '',
+      locations: [], // Always empty - we only support a single location
       selectedCity: searchParams.get('city') || '', // Initialize from URL parameter
       sortBy: 'relevance',
     };
@@ -1028,6 +1034,19 @@ export const useSimplifiedSearch = () => {
         const dirty = range[0] > 0 || range[1] < 10000;
         return { ...prev, area: range, areaDirty: dirty };
       }
+      // Handle location updates - always treat as single location
+      if (key === 'locations') {
+        // If it's an array and has values, use the first one only
+        if (Array.isArray(value) && value.length > 0) {
+          return { ...prev, location: value[0], locations: [] } as SearchFilters;
+        }
+        // If empty array, clear both location and locations
+        return { ...prev, location: '', locations: [] } as SearchFilters;
+      }
+      // When updating location directly, always clear the locations array
+      if (key === 'location') {
+        return { ...prev, location: value as string, locations: [] } as SearchFilters;
+      }
       return { ...prev, [key]: value } as SearchFilters;
     });
   };
@@ -1044,7 +1063,7 @@ export const useSimplifiedSearch = () => {
       furnished: [],
       availability: [],
       construction: [],
-      location: '',
+      location: '', // Clear the single location field
       locations: [], // Clear multiple locations
       selectedCity: '', // Reset to empty (no city selected)
       sortBy: 'relevance'

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MapPin, X } from 'lucide-react';
+import { MapPin, X, Search as SearchIcon } from 'lucide-react';
+import '@/components/search-input.css';
 
 interface EnhancedSearchHeaderProps {
   activeTab: string;
@@ -34,8 +35,7 @@ export const EnhancedSearchHeader = ({
   getBudgetSliderStep,
   getValidBudgetValue,
 }: EnhancedSearchHeaderProps) => {
-  const canSearch = (filters.locations && filters.locations.length > 0) ||
-    (typeof filters.location === 'string' && filters.location.trim().length > 0);
+  const canSearch = typeof filters.location === 'string' && filters.location.trim().length > 0;
   return (
     <>
       <div className="bg-white border-b border-gray-200 pt-20">
@@ -44,121 +44,98 @@ export const EnhancedSearchHeader = ({
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center pt-4">
             {/* Search Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
-              <TabsList className="grid w-full lg:w-auto grid-cols-3 bg-gray-100" role="tablist" aria-label="Property listing type">
-                <TabsTrigger value="buy" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'buy'}>Buy</TabsTrigger>
-                <TabsTrigger value="rent" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'rent'}>Rent</TabsTrigger>
-                <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
+              <TabsList className="grid w-full lg:w-auto grid-cols-4 bg-gray-100" role="tablist" aria-label="Property listing type">
+                <TabsTrigger value="buy" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'buy'}>BUY</TabsTrigger>
+                <TabsTrigger value="rent" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'rent'}>RENT</TabsTrigger>
+                <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>COMMERCIAL</TabsTrigger>
+                <TabsTrigger value="land" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'land'}>LAND/PLOT</TabsTrigger>
               </TabsList>
             </Tabs>
 
-            {/* Main Search Bar with Multi-Location Support */}
+            {/* Main Search Bar - Single Location Style */}
             <div className="flex-1 w-full">
               <div className="relative">
-                <MapPin className="absolute left-3 top-3 text-brand-red z-10" size={20} />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-red z-10" size={16} />
                 
-                {/* Multi-Location Search Bar */}
-                <div 
-                  className="flex flex-wrap items-center gap-2 p-3 pl-10 pr-4 min-h-12 border border-brand-red rounded-lg focus-within:ring-2 focus-within:ring-brand-red/20 bg-white cursor-text"
-                  onClick={() => {
-                    if (locationInputRef.current && filters.locations.length < 3) {
-                      locationInputRef.current.focus();
+                {/* Search Input */}
+                <input
+                  ref={locationInputRef}
+                  type="search"
+                  role="combobox"
+                  value={filters.location}
+                  onChange={e => {
+                    const normalizedLocation = normalizeLocation(e.target.value);
+                    // Always update with direct text input value
+                    updateFilter('location', normalizedLocation);
+                    // If input is cleared, trigger search immediately
+                    if (normalizedLocation === '') {
+                      setTimeout(() => updateFilter('trigger', 'search'), 0);
                     }
                   }}
-                >
-                  {/* Location Chips */}
-                  {filters.locations.map((location: string, index: number) => (
-                    <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                      <span className="truncate max-w-32">{location}</span>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const newLocations = filters.locations.filter((_, i: number) => i !== index);
-                          updateFilter('locations', newLocations);
-                        }}
-                        className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
-                      >
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
-                  
-                  {/* Input Field */}
-                  <input
-                    ref={locationInputRef}
-                    value={filters.location}
-                    onChange={e => {
-                      const normalizedLocation = normalizeLocation(e.target.value);
-                      updateFilter('location', normalizedLocation);
-                    }}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' && filters.location.trim()) {
-                        e.preventDefault();
-                        if (filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(filters.location.trim())) {
-                          updateFilter('locations', [...filters.locations, filters.location.trim()]);
-                          updateFilter('location', '');
-                          setTimeout(() => {
-                            if (locationInputRef.current) {
-                              locationInputRef.current.focus();
-                            }
-                          }, 0);
-                        }
-                      }
-                      if (e.key === 'Backspace' && filters.location === '' && filters.locations.length > 0) {
-                        const newLocations = filters.locations.slice(0, -1);
-                        updateFilter('locations', newLocations);
-                      }
-                    }}
-                    onFocus={e => e.target.select()}
-                    placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
-                    className="flex-1 min-w-32 outline-none bg-transparent text-sm"
-                    disabled={filters.locations.length >= 3}
-                  />
-                  
-                  {/* Location Counter */}
-                  {filters.locations.length >= 3 && (
-                    <span className="text-gray-500 text-sm whitespace-nowrap">Max 3</span>
-                  )}
-                </div>
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && filters.location.trim()) {
+                      e.preventDefault();
+                      updateFilter('trigger', 'search');
+                    }
+                  }}
+                  placeholder='Add Locality/Project/Landmark'
+                  className="w-full pl-9 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base hide-clear-button"
+                  autoComplete="off"
+                  aria-autocomplete="both"
+                />
                 
-                {/* Clear All Locations Button */}
-                {filters.locations.length > 0 && (
-                  <div className="absolute right-3 top-3 z-10">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={(e) => {
-                        e.stopPropagation();
+                {/* Clear and Search Buttons */}
+                {filters.location ? (
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-full text-gray-500 hover:bg-gray-100"
+                      aria-label="Clear location"
+                      onClick={() => {
                         updateFilter('locations', []);
                         updateFilter('location', '');
-                        updateFilter('selectedCity', '');
-                      }} 
-                      className="h-6 w-6 p-0 hover:bg-brand-red/10"
+                        if (locationInputRef.current) {
+                          locationInputRef.current.focus();
+                        }
+                        // Trigger search immediately on clear to update results
+                        setTimeout(() => updateFilter('trigger', 'search'), 0);
+                      }}
                     >
-                      <X size={14} />
-                    </Button>
+                      <X size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                      aria-label="Search"
+                      onClick={() => { 
+                        if (canSearch) {
+                          // Trigger search with current location value
+                          updateFilter('trigger', 'search');
+                        }
+                      }}
+                    >
+                      <SearchIcon className="h-4 w-4" />
+                    </button>
                   </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                    aria-label="Search"
+                    onClick={() => { 
+                      if (canSearch) {
+                        // Trigger search with current location value
+                        updateFilter('trigger', 'search');
+                      }
+                    }}
+                  >
+                    <SearchIcon className="h-4 w-4" />
+                  </button>
                 )}
               </div>
             </div>
 
-            {/* Search Button - Mobile */}
-            <Button
-              className="w-full lg:hidden bg-brand-red hover:bg-brand-red-dark disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!canSearch}
-              onClick={() => { if (!canSearch) return; updateFilter('trigger', 'search'); }}
-              title={!canSearch ? 'Enter a city or locality to search' : undefined}
-            >
-              Search
-            </Button>
-                    {/* Search Button - Desktop (inline with locality field) */}
-                    <Button
-                      className="hidden lg:inline-flex bg-brand-red hover:bg-brand-red-dark ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={!canSearch}
-                      onClick={() => { if (!canSearch) return; updateFilter('trigger', 'search'); }}
-                      title={!canSearch ? 'Enter a city or locality to search' : undefined}
-                    >
-                      Search
-                    </Button>
+            {/* No separate mobile or desktop search button needed */}
           </div>
         </div>
       </div>
