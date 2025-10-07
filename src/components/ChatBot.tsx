@@ -589,15 +589,11 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       // Others follow the simulated response flow
       simulateBotResponse(option);
     } else {
-      // Default: treat as a regular user selection (e.g., budget, property type, etc.)
-      const newMessage: Message = {
-        id: String(Date.now()),
-        text: option,
-        isBot: false,
-        timestamp: new Date()
-      };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      simulateBotResponse(option);
+      // For all other services, open the FAQ view
+      setSelectedService(option);
+      setSelectedFAQ(null);
+      console.log('ChatBot: service option clicked', option);
+      setCurrentView('service-faq');
     }
   };
 const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
