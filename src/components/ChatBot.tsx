@@ -544,7 +544,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       setIsOpen(false);
       return;
     }
-    
+
     // If in search context, handle all options as messages through bot response
     if (searchContext) {
       const newMessage: Message = {
@@ -557,10 +557,10 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       simulateBotResponse(option);
       return;
     }
-    
+
     // Check if it's one of the 4 original functionalities
     const originalActions = ['Want to buy a property', 'Seller', 'Agent', 'Builder'];
-    
+
     if (originalActions.includes(option)) {
       const newMessage: Message = {
         id: String(Date.now()),
@@ -574,12 +574,12 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       if (option === 'Want to buy a property') {
         setUserPreferences(prev => ({ ...prev, role: option }));
         setConversationStep('budget_selection');
-        
+
         const botMsg: Message = {
           id: String(Date.now() + 1),
           isBot: true,
           timestamp: new Date(),
-          text: 'Perfect! Let me help you find the right property. What\'s your budget range?',
+          text: 'Perfect! Let\'s get started. What\'s your budget range?',
           options: budgetRanges.map(range => range.label)
         };
         setMessages((prev) => [...prev, botMsg]);
@@ -588,7 +588,18 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
 
       // Others follow the simulated response flow
       simulateBotResponse(option);
+    } else {
+      // Default: treat as a regular user selection (e.g., budget, property type, etc.)
+      const newMessage: Message = {
+        id: String(Date.now()),
+        text: option,
+        isBot: false,
+        timestamp: new Date()
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      simulateBotResponse(option);
     }
+  };
   };
 const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   default: [
