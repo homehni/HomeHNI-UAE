@@ -233,6 +233,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   };
 
   const simulateBotResponse = async (userMessage: string) => {
+    console.log('simulateBotResponse called with:', userMessage, 'conversationStep:', conversationStep);
     return new Promise((resolve) => {
       setTimeout(() => {
         let botResponse: Message = {
@@ -250,6 +251,8 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
           setIsTyping(false);
           let finalResponse: Message;
 
+          console.log('Processing in simulateBotResponse, step:', conversationStep, 'message:', userMessage);
+          
           if (conversationStep === 'role_selection') {
             setUserPreferences(prev => ({ ...prev, role: userMessage }));
             
@@ -537,6 +540,8 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   };
 
   const handleOptionClick = (option: string) => {
+    console.log('Option clicked:', option);
+    
     // Handle "Post Your Property" button directly
     if (option === 'Post Your Property') {
       navigate('/post-property');
@@ -559,6 +564,8 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     
     // Check if it's one of the 4 original functionalities
     const originalActions = ['Want to buy a property', 'Seller', 'Agent', 'Builder'];
+    console.log('Is original action?', originalActions.includes(option));
+    console.log('Current conversation step:', conversationStep);
     
     if (originalActions.includes(option)) {
       const newMessage: Message = {
