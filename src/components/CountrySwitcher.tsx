@@ -67,7 +67,7 @@ const CountrySwitcher: React.FC = () => {
     {
       name: 'MIDDLE EAST & AFRICA',
       countries: [
-        { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae', flag: '🇦🇪', displayCode: 'United Arab Emirates' },
+        { code: 'AE', name: 'United Arab Emirates', domain: 'homehni.ae', flag: '🇦🇪', displayCode: 'UAE' },
         { code: 'ZA', name: 'South Africa', domain: 'homehni.co.za', flag: '🇿🇦', displayCode: 'South Africa' },
       ]
     }
