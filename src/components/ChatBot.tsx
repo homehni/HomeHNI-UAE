@@ -2482,6 +2482,15 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
             <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => {
+                      setMessages([getInitialMessage()]);
+                      setConversationStep('role_selection');
+                    }}
+                    className="hover:bg-white/10 p-1 rounded-full transition-colors"
+                  >
+                    <ArrowLeft size={20} />
+                  </button>
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
                     <Home size={16} className="text-brand-red sm:w-5 sm:h-5" />
                   </div>
