@@ -1827,17 +1827,10 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="flex border-t border-gray-200 bg-white shadow-lg">
-        <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-brand-red border-r border-gray-200 hover:bg-red-50/50 transition-colors">
+      <div className="flex justify-center border-t border-gray-200 bg-white shadow-lg">
+        <button className="flex flex-col items-center py-3 sm:py-3.5 text-brand-red hover:bg-red-50/50 transition-colors px-8">
           <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
           <span className="text-[10px] sm:text-xs font-semibold">Help Center</span>
-        </button>
-        <button 
-          onClick={handleHistoryClick}
-          className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:text-brand-red hover:bg-red-50/50 transition-colors"
-        >
-          <History className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
-          <span className="text-[10px] sm:text-xs font-semibold">History</span>
         </button>
       </div>
     </div>
