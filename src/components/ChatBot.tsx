@@ -503,7 +503,10 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
             };
           }
 
-          setMessages(prevMessages => [...prevMessages, finalResponse]);
+          // Only add finalResponse if it was set
+          if (finalResponse) {
+            setMessages(prevMessages => [...prevMessages, finalResponse]);
+          }
           resolve(undefined);
         }, 1500);
       });
