@@ -600,7 +600,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       simulateBotResponse(option);
     }
   };
-  };
 const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   default: [
     {
