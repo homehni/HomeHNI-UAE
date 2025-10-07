@@ -603,6 +603,20 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       return;
     }
 
+    // If we're in a conversation flow (budget selection, location, etc.), handle as message
+    const conversationSteps = ['budget_selection', 'location_input', 'bhk_selection', 'location_preference', 'complete', 'location_selection', 'property_type_selection'];
+    if (conversationSteps.includes(conversationStep)) {
+      const newMessage: Message = {
+        id: String(Date.now()),
+        text: option,
+        isBot: false,
+        timestamp: new Date()
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      simulateBotResponse(option);
+      return;
+    }
+
     // For all other services, open the FAQ view
     setSelectedService(option);
     setSelectedFAQ(null);
