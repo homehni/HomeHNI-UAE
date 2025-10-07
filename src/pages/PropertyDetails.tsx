@@ -163,11 +163,26 @@ const PropertyDetails: React.FC = () => {
           if (!subErr && subData?.payload) {
             const orig = subData.payload?.originalFormData?.propertyInfo || {};
             const pd = orig?.propertyDetails || {};
+            const rd = orig?.rentalDetails || {};
+            const amenities = orig?.amenities || {};
             const sale = orig?.saleDetails || {};
             const cs = orig?.commercialSaleDetails || {};
-            const furnishingStatus = pd?.furnishingStatus || subData.payload?.furnishing_status;
+            
+            // Extract various fields from form data
+            const furnishingStatus = amenities?.furnishing || pd?.furnishingStatus || subData.payload?.furnishing_status || subData.payload?.furnishing;
             const propertyAge = pd?.propertyAge || subData.payload?.age_of_building || subData.payload?.property_age;
-            const possessionDate = sale?.possessionDate || cs?.availableFrom || cs?.possessionDate || subData.payload?.available_from;
+            const possessionDate = sale?.possessionDate || cs?.availableFrom || cs?.possessionDate || rd?.availableFrom || subData.payload?.available_from;
+            const parking = amenities?.parking || subData.payload?.parking;
+            const waterSupply = amenities?.waterSupply || subData.payload?.water_supply;
+            const powerBackup = amenities?.powerBackup || subData.payload?.power_backup;
+            const preferredTenant = rd?.idealFor || subData.payload?.preferred_tenant;
+            const bathrooms = amenities?.bathrooms || pd?.bathrooms || subData.payload?.bathrooms;
+            const balconies = amenities?.balconies || pd?.balconies || subData.payload?.balconies;
+            const floorNo = pd?.floorNo || subData.payload?.floor_no;
+            const totalFloors = pd?.totalFloors || subData.payload?.total_floors;
+            const facing = pd?.facing || subData.payload?.facing_direction;
+            const floorType = pd?.floorType || subData.payload?.floor_type;
+            
             // Amenities may be captured under propertyInfo.amenities or at root payload. Prefer propertyInfo
             const amenitiesFromForm = orig?.amenities || subData.payload?.amenities;
 
@@ -175,6 +190,21 @@ const PropertyDetails: React.FC = () => {
             if (!merged.furnishing_status && furnishingStatus) Object.assign(merged, { furnishing_status: String(furnishingStatus) });
             if (!merged.age_of_building && propertyAge) Object.assign(merged, { age_of_building: String(propertyAge) });
             if (!merged.available_from && possessionDate) Object.assign(merged, { available_from: String(possessionDate) });
+            if (!merged.parking && parking) Object.assign(merged, { parking: String(parking) });
+            if (!merged.water_supply && waterSupply) Object.assign(merged, { water_supply: String(waterSupply) });
+            if (!merged.power_backup && powerBackup) Object.assign(merged, { power_backup: String(powerBackup) });
+            if (!merged.preferred_tenant && preferredTenant) {
+              // Handle array format from idealFor field
+              const tenantValue = Array.isArray(preferredTenant) ? preferredTenant.join(', ') : String(preferredTenant);
+              Object.assign(merged, { preferred_tenant: tenantValue });
+            }
+            if ((!merged.bathrooms || merged.bathrooms === 0) && bathrooms) Object.assign(merged, { bathrooms: Number(bathrooms) });
+            if ((!merged.balconies || merged.balconies === 0) && balconies) Object.assign(merged, { balconies: Number(balconies) });
+            if (!merged.floor_no && floorNo !== undefined) Object.assign(merged, { floor_no: Number(floorNo) });
+            if (!merged.total_floors && totalFloors) Object.assign(merged, { total_floors: Number(totalFloors) });
+            if (!merged.facing_direction && facing) Object.assign(merged, { facing_direction: String(facing) });
+            if (!merged.floor_type && floorType) Object.assign(merged, { floor_type: String(floorType) });
+            
             type WithAmenities = Partial<Property> & { amenities?: unknown };
             const mergedWithAmenities = merged as WithAmenities;
             if (!mergedWithAmenities.amenities && amenitiesFromForm) {

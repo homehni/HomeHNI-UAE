@@ -594,10 +594,12 @@ export const PostProperty: React.FC = () => {
         listing_type: mapListingType(listingType),
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
                  mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
-        bathrooms: ('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? 
-                  Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0,
-        balconies: ('propertyDetails' in data.propertyInfo && 'balconies' in data.propertyInfo.propertyDetails) ? 
-                  Number(data.propertyInfo.propertyDetails.balconies) || 0 : 0,
+        bathrooms: ((data.propertyInfo as any)?.amenities?.bathrooms) || 
+                  (('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? 
+                  Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0),
+        balconies: ((data.propertyInfo as any)?.amenities?.balconies) || 
+                  (('propertyDetails' in data.propertyInfo && 'balconies' in data.propertyInfo.propertyDetails) ? 
+                  Number(data.propertyInfo.propertyDetails.balconies) || 0 : 0),
         super_area: (() => {
           const area = ('propertyDetails' in data.propertyInfo) ? 
                       (Number(data.propertyInfo.propertyDetails.superBuiltUpArea) || 0) :
@@ -639,7 +641,22 @@ export const PostProperty: React.FC = () => {
   available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
         parking: ((data.propertyInfo as any)?.amenities?.parking) || null,
         age_of_building: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,
-        preferred_tenant: ((data.propertyInfo as any)?.flattmatesDetails?.genderPreference) || ((data.propertyInfo as any)?.rentalDetails?.preferredTenants) || null,
+        preferred_tenant: ((data.propertyInfo as any)?.flattmatesDetails?.genderPreference) || 
+                         ((data.propertyInfo as any)?.rentalDetails?.idealFor ? 
+                          (Array.isArray((data.propertyInfo as any).rentalDetails.idealFor) ? 
+                           (data.propertyInfo as any).rentalDetails.idealFor.join(', ') : 
+                           (data.propertyInfo as any).rentalDetails.idealFor) : null),
+        furnishing: ((data.propertyInfo as any)?.amenities?.furnishing) || null,
+        water_supply: ((data.propertyInfo as any)?.amenities?.waterSupply) || null,
+        power_backup: ((data.propertyInfo as any)?.amenities?.powerBackup) || null,
+        floor_no: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.floorNo !== undefined) ? 
+                 Number((data.propertyInfo as any).propertyDetails.floorNo) : null,
+        total_floors: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.totalFloors !== undefined) ? 
+                     Number((data.propertyInfo as any).propertyDetails.totalFloors) : null,
+        facing_direction: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.facing) ? 
+                         (data.propertyInfo as any).propertyDetails.facing : null,
+        floor_type: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.floorType) ? 
+                   (data.propertyInfo as any).propertyDetails.floorType : null,
         // Add owner information directly to properties table
         owner_name: data.ownerInfo.fullName || 'Anonymous',
         owner_email: data.ownerInfo.email || '',
