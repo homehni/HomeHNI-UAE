@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare, Check } from 'lucide-react';
 
@@ -2045,20 +2046,54 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                 </div>
               )}
 
-              {message.options && (
-                <div className="flex flex-wrap gap-1 sm:gap-2 mt-2 sm:mt-3">
-                  {message.options.map((option) => (
-                    <Badge
-                      key={option}
-                      variant="outline"
-                      className="cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
-                      onClick={() => handleOptionClick(option)}
-                    >
-                      {option}
-                    </Badge>
-                  ))}
-                </div>
-              )}
+{message.options && (
+  (() => {
+    const mainOptions = ['Seller', 'Agent', 'Builder', 'Want to buy a property'];
+    const isMain =
+      mainOptions.every(o => message.options?.includes(o)) &&
+      message.options.length === mainOptions.length;
+    if (isMain) {
+      return (
+        <div className="mt-2 sm:mt-3">
+          <div className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold text-brand-red uppercase tracking-widest">
+            Choose an option
+          </div>
+          <ScrollArea className="w-full h-20">
+            <div className="pr-2">
+              <div className="flex flex-col gap-2">
+                {mainOptions.map((option) => (
+                  <Badge
+                    key={option}
+                    variant="outline"
+                    className="w-full justify-start cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
+                    onClick={() => handleOptionClick(option)}
+                  >
+                    {option}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <ScrollBar orientation="vertical" />
+          </ScrollArea>
+        </div>
+      );
+    }
+    return (
+      <div className="flex flex-wrap gap-1 sm:gap-2 mt-2 sm:mt-3">
+        {message.options.map((option) => (
+          <Badge
+            key={option}
+            variant="outline"
+            className="cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
+            onClick={() => handleOptionClick(option)}
+          >
+            {option}
+          </Badge>
+        ))}
+      </div>
+    );
+  })()
+)}
               
                 {/* Show Fill Details button for search context */}
                 {searchContext && message.isBot && conversationStep === 'user_details_collection' && 
