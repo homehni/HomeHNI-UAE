@@ -11,17 +11,52 @@ export interface SearchSectionRef {
 }
 // Minimal Google Places typings to avoid 'any'
 type GPlaceComponent = { long_name: string; short_name: string; types: string[] };
+type LatLng = {
+  lat: () => number;
+  lng: () => number;
+};
+type LatLngBounds = {
+  extend: (latLng: LatLng) => void;
+};
+type Geometry = {
+  location?: LatLng;
+  viewport?: LatLngBounds;
+};
 type PlaceResultMinimal = {
   formatted_address?: string;
   name?: string;
   address_components?: GPlaceComponent[];
+  geometry?: Geometry;
 };
+type GeocoderResult = {
+  geometry?: Geometry;
+  formatted_address?: string;
+  address_components?: GPlaceComponent[];
+};
+type GeocoderRequest = {
+  address?: string;
+  componentRestrictions?: { country: string };
+};
+type Geocoder = {
+  geocode: (
+    request: GeocoderRequest, 
+    callback: (results: GeocoderResult[] | null, status: string) => void
+  ) => void;
+};
+type GeocoderConstructor = new () => Geocoder;
 type GAutocomplete = {
   getPlace: () => PlaceResultMinimal | undefined;
   addListener: (eventName: string, handler: () => void) => void;
 };
+type LatLngBoundsConstructor = new () => LatLngBounds;
+type LatLngConstructor = new (lat: number, lng: number) => LatLng;
 type PlacesNamespace = { Autocomplete: new (input: HTMLInputElement, opts: unknown) => GAutocomplete };
-type GoogleMaps = { places?: PlacesNamespace };
+type GoogleMaps = { 
+  places?: PlacesNamespace;
+  LatLngBounds?: LatLngBoundsConstructor;
+  LatLng?: LatLngConstructor;
+  Geocoder?: GeocoderConstructor;
+};
 type GoogleNS = { maps?: GoogleMaps };
 type WindowWithGoogle = Window & { google?: GoogleNS };
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
@@ -30,6 +65,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState<string>('');
+  const [cityBounds, setCityBounds] = useState<LatLngBounds | null>(null);
   // Dropdown filter UI state (UI-only for homepage)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
@@ -60,6 +96,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     setSelectedLocations(updated);
     if (updated.length === 0) {
       setSelectedCity('');
+      setCityBounds(null);
     }
   };
 
@@ -184,16 +221,25 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     const initAutocomplete = () => {
       const w = window as WindowWithGoogle;
       if (!w.google?.maps?.places) return;
-      const options = {
+      
+      let autocompleteInstance: GAutocomplete | null = null;
+      
+      const getOptions = () => ({
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: {
           country: 'in' as const
-        }
-      };
+        },
+        ...(cityBounds && selectedCity && { 
+          bounds: cityBounds, 
+          strictBounds: true,
+          // Add city restriction hint
+        })
+      });
       const inputs = [inputRef.current].filter(Boolean) as HTMLInputElement[];
       inputs.forEach(el => {
-        const ac = new w.google!.maps!.places!.Autocomplete(el, options);
+        const ac = new w.google!.maps!.places!.Autocomplete(el, getOptions());
+        autocompleteInstance = ac;
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
           console.log('🔍 Google Places - Place selected:', place);
@@ -214,13 +260,34 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               comp.types.includes('locality') ||
               comp.types.includes('neighborhood')
             );
+            // Extract city - prioritize locality over administrative areas
             const cityComponent = addressComponents.find((comp: GPlaceComponent) =>
-              comp.types.includes('locality') ||
-              comp.types.includes('administrative_area_level_2') ||
-              comp.types.includes('administrative_area_level_1')
+              comp.types.includes('locality')
+            ) || addressComponents.find((comp: GPlaceComponent) =>
+              comp.types.includes('administrative_area_level_2')
             );
+            
             if (cityComponent) {
               cityName = cityComponent.long_name;
+              console.log('🏙️ Detected city from selection:', cityName);
+            }
+            
+            // Additional validation: check if any address component matches selected city
+            if (selectedCity && addressComponents) {
+              const hasMatchingCity = addressComponents.some((comp: GPlaceComponent) =>
+                comp.long_name.toLowerCase() === selectedCity.toLowerCase() ||
+                comp.short_name.toLowerCase() === selectedCity.toLowerCase()
+              );
+              
+              if (!hasMatchingCity) {
+                console.warn('⛔ City mismatch detected in address components');
+                console.log('Selected city:', selectedCity);
+                console.log('Address components:', addressComponents.map((c: GPlaceComponent) => c.long_name));
+                // Override cityName to force rejection
+                cityName = addressComponents.find((comp: GPlaceComponent) =>
+                  comp.types.includes('locality')
+                )?.long_name || 'Unknown';
+              }
             }
             
             // Use the most specific locality name available
@@ -239,11 +306,23 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           
           if (el && value) {
             console.log('🔍 Google Places - Current selectedLocations:', selectedLocations.length);
+            console.log('🔍 Google Places - Selected city:', selectedCity);
+            console.log('🔍 Google Places - Detected city:', cityName);
+            console.log('🔍 Google Places - Full formatted_address:', place?.formatted_address);
+            
             // Enforce same-city rule: once first city is selected, next selections must be from same city
             const canAddInCity = () => {
-              if (!selectedCity) return true;
-              if (!cityName) return true; // if API didn't provide city, don't block
-              return cityName.toLowerCase() === selectedCity.toLowerCase();
+              if (!selectedCity) {
+                console.log('✅ No city selected yet, allowing');
+                return true;
+              }
+              if (!cityName) {
+                console.warn('⚠️ No city detected in selection');
+                return false; // Changed: if we can't detect city after first selection, block it
+              }
+              const matches = cityName.toLowerCase() === selectedCity.toLowerCase();
+              console.log(`🔍 City match check: "${cityName}" === "${selectedCity}" = ${matches}`);
+              return matches;
             };
 
             // Auto-add location if under limit and city matches (if selectedCity set)
@@ -254,15 +333,41 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 console.log('✅ Google Places - New locations list:', newList);
                 return newList;
               });
-              // Set selected city from first selection
+              // Set selected city and bounds from first selection
               if (!selectedCity && cityName) {
                 setSelectedCity(cityName);
+                // Geocode the city to get proper city-level bounds
+                const geocoder = new w.google!.maps!.Geocoder();
+                geocoder.geocode(
+                  { 
+                    address: `${cityName}, India`,
+                    componentRestrictions: { country: 'IN' }
+                  },
+                  (results, status) => {
+                    if (status === 'OK' && results && results[0]?.geometry?.viewport) {
+                      console.log('🗺️ Geocoded city bounds for:', cityName, results[0].geometry.viewport);
+                      setCityBounds(results[0].geometry.viewport);
+                    } else {
+                      // Fallback to place geometry if geocoding fails
+                      if (place?.geometry?.viewport) {
+                        setCityBounds(place.geometry.viewport);
+                      } else if (place?.geometry?.location) {
+                        const loc = place.geometry.location;
+                        const bounds = new w.google!.maps!.LatLngBounds();
+                        const offset = 0.2; // ~22km for city-level coverage
+                        bounds.extend(new w.google!.maps!.LatLng(loc.lat() - offset, loc.lng() - offset));
+                        bounds.extend(new w.google!.maps!.LatLng(loc.lat() + offset, loc.lng() + offset));
+                        setCityBounds(bounds);
+                      }
+                    }
+                  }
+                );
               }
               el.value = '';
               setSearchQuery('');
             } else if (!canAddInCity()) {
               console.warn('⚠️ Location must be within selected city:', selectedCity);
-              // Provide subtle UX hint by clearing and setting placeholder
+              alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
               el.value = '';
               setSearchQuery('');
             } else {
@@ -276,7 +381,86 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     };
     loadGoogleMaps().then(initAutocomplete).catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Intentionally empty dependency array to avoid reinitializing autocomplete
+  }, []); // Intentionally empty dependency array for initial load only
+
+  // Reinitialize autocomplete when city bounds change to apply strict bounds
+  useEffect(() => {
+    if (!cityBounds || !selectedCity) return;
+    
+    const w = window as WindowWithGoogle;
+    if (!w.google?.maps?.places || !inputRef.current) return;
+    
+    // Recreate autocomplete with strict bounds
+    const options = {
+      fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+      types: ['geocode'],
+      componentRestrictions: {
+        country: 'in' as const
+      },
+      bounds: cityBounds,
+      strictBounds: true
+    };
+    
+    const ac = new w.google!.maps!.places!.Autocomplete(inputRef.current, options);
+    ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      console.log('🔍 Google Places (Bounded) - Place selected:', place);
+      
+      let value = place?.formatted_address || place?.name || '';
+      let cityName = '';
+      
+      if (value && place?.address_components) {
+        const addressComponents = place.address_components;
+        const localityComponent = addressComponents.find((comp: GPlaceComponent) =>
+          comp.types.includes('sublocality_level_1') ||
+          comp.types.includes('sublocality') ||
+          comp.types.includes('locality') ||
+          comp.types.includes('neighborhood')
+        );
+        
+        // Extract city - prioritize locality over administrative areas
+        const cityComponent = addressComponents.find((comp: GPlaceComponent) =>
+          comp.types.includes('locality')
+        ) || addressComponents.find((comp: GPlaceComponent) =>
+          comp.types.includes('administrative_area_level_2')
+        );
+        
+        if (cityComponent) {
+          cityName = cityComponent.long_name;
+        }
+        
+        if (localityComponent) {
+          value = localityComponent.long_name;
+        } else {
+          const firstPart = value.split(',')[0].trim();
+          if (firstPart) value = firstPart;
+        }
+      }
+      
+      if (value) {
+        const canAddInCity = () => {
+          if (!selectedCity) return true;
+          if (!cityName) return true;
+          return cityName.toLowerCase() === selectedCity.toLowerCase();
+        };
+        
+        if (selectedLocations.length < 3 && !selectedLocations.includes(value) && canAddInCity()) {
+          setSelectedLocations(prev => [...prev, value]);
+          if (inputRef.current) inputRef.current.value = '';
+          setSearchQuery('');
+        } else if (!canAddInCity()) {
+          alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
+          if (inputRef.current) inputRef.current.value = '';
+          setSearchQuery('');
+        } else {
+          if (inputRef.current) inputRef.current.value = value;
+          setSearchQuery(value);
+        }
+      }
+    });
+    
+    console.log('🔄 Autocomplete reinitialized with strict bounds for:', selectedCity);
+  }, [cityBounds, selectedCity, selectedLocations]);
 
   // Initialize Google Places for mobile overlay input when overlay opens
   useEffect(() => {
@@ -284,13 +468,23 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     const w = window as WindowWithGoogle;
     if (!mobileInputRef.current) return;
     if (!w.google?.maps?.places) return;
-    if (mobileAcInitRef.current) return;
+
+    // Allow reinit only if cityBounds changed (not on first init)
+    const shouldReinit = cityBounds && selectedCity;
+    if (mobileAcInitRef.current && !shouldReinit) return;
 
     const options = {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
       componentRestrictions: { country: 'in' as const },
+      ...(cityBounds && selectedCity && { 
+        bounds: cityBounds, 
+        strictBounds: true 
+      })
     };
+    
+    console.log('🔄 Mobile autocomplete initializing with options:', shouldReinit ? 'STRICT BOUNDS' : 'INITIAL');
+    
     const ac = new w.google!.maps!.places!.Autocomplete(mobileInputRef.current, options);
     ac.addListener('place_changed', () => {
       const place = ac.getPlace();
@@ -305,11 +499,26 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           comp.types.includes('neighborhood')
         );
         const cityComponent = addressComponents.find((comp: GPlaceComponent) =>
-          comp.types.includes('locality') ||
-          comp.types.includes('administrative_area_level_2') ||
-          comp.types.includes('administrative_area_level_1')
+          comp.types.includes('locality')
+        ) || addressComponents.find((comp: GPlaceComponent) =>
+          comp.types.includes('administrative_area_level_2')
         );
         if (cityComponent) cityName = cityComponent.long_name;
+        
+        // Additional validation: check if any address component matches selected city
+        if (selectedCity && addressComponents) {
+          const hasMatchingCity = addressComponents.some((comp: GPlaceComponent) =>
+            comp.long_name.toLowerCase() === selectedCity.toLowerCase() ||
+            comp.short_name.toLowerCase() === selectedCity.toLowerCase()
+          );
+          
+          if (!hasMatchingCity) {
+            cityName = addressComponents.find((comp: GPlaceComponent) =>
+              comp.types.includes('locality')
+            )?.long_name || 'Unknown';
+          }
+        }
+        
         if (localityComponent) {
           value = localityComponent.long_name;
         } else {
@@ -321,15 +530,44 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       if (value) {
         const canAddInCity = () => {
           if (!selectedCity) return true;
-          if (!cityName) return true;
+          if (!cityName) return false; // Block if no city detected after first selection
           return cityName.toLowerCase() === selectedCity.toLowerCase();
         };
         if (selectedLocations.length < 3 && !selectedLocations.includes(value) && canAddInCity()) {
           setSelectedLocations(prev => [...prev, value]);
-          if (!selectedCity && cityName) setSelectedCity(cityName);
+          if (!selectedCity && cityName) {
+            setSelectedCity(cityName);
+            // Geocode the city to get proper city-level bounds
+            const geocoder = new (window as WindowWithGoogle).google!.maps!.Geocoder();
+            geocoder.geocode(
+              { 
+                address: `${cityName}, India`,
+                componentRestrictions: { country: 'IN' }
+              },
+              (results, status) => {
+                if (status === 'OK' && results && results[0]?.geometry?.viewport) {
+                  console.log('🗺️ Mobile - Geocoded city bounds for:', cityName, results[0].geometry.viewport);
+                  setCityBounds(results[0].geometry.viewport);
+                } else {
+                  // Fallback to place geometry if geocoding fails
+                  if (place?.geometry?.viewport) {
+                    setCityBounds(place.geometry.viewport);
+                  } else if (place?.geometry?.location) {
+                    const loc = place.geometry.location;
+                    const bounds = new (window as WindowWithGoogle).google!.maps!.LatLngBounds();
+                    const offset = 0.2; // ~22km for city-level coverage
+                    bounds.extend(new (window as WindowWithGoogle).google!.maps!.LatLng(loc.lat() - offset, loc.lng() - offset));
+                    bounds.extend(new (window as WindowWithGoogle).google!.maps!.LatLng(loc.lat() + offset, loc.lng() + offset));
+                    setCityBounds(bounds);
+                  }
+                }
+              }
+            );
+          }
           if (mobileInputRef.current) mobileInputRef.current.value = '';
           setSearchQuery('');
         } else if (!canAddInCity()) {
+          alert(`Please select a locality within ${selectedCity} only. Other cities are not allowed.`);
           if (mobileInputRef.current) mobileInputRef.current.value = '';
           setSearchQuery('');
         } else {
@@ -341,7 +579,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     mobileAcInitRef.current = true;
     // Focus after a tick to ensure keyboard opens
     setTimeout(() => mobileInputRef.current?.focus(), 50);
-  }, [isMobileOverlayOpen, selectedCity, selectedLocations]);
+  }, [isMobileOverlayOpen, selectedCity, selectedLocations, cityBounds]);
 
   // Handle click outside to hide mobile city selector
   useEffect(() => {
@@ -891,10 +1129,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                   <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
                     {/* Search Bar - pill style with in-field search icon (parity with results page) */}
-                    <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none" size={18} />
+                    <div className="relative flex items-center">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
                       <div
-                        className="relative flex flex-wrap items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-12 border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
+                        className="relative flex items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-[3rem] w-full border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
                         onClick={() => {
                           if (inputRef.current && selectedLocations.length < 3) {
                             inputRef.current.focus();
@@ -902,31 +1140,33 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         }}
                       >
                         {/* Location Chips inside field */}
-                        {selectedLocations.map((location, index) => (    
-                          <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                            <span className="truncate max-w-32">{location}</span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeLocation(location);
-                              }}
-                              className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
-                            >
-                              <X size={12} />
-                            </button>
-                          </div>
-                        ))}
+                        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0">
+                          {selectedLocations.map((location, index) => (    
+                            <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                              <span className="truncate max-w-32">{location}</span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeLocation(location);
+                                }}
+                                className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
+                              >
+                                <X size={12} />
+                              </button>
+                            </div>
+                          ))}
 
-                        {/* Text input */}
-                        <input
-                          ref={inputRef}
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          onKeyPress={handleKeyPress}
-                          placeholder={selectedLocations.length >= 3 ? 'Max 3 locations' : selectedCity ? `Add locality in ${selectedCity}` : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : 'Search locality...'}
-                          className="flex-1 min-w-32 outline-none bg-transparent text-sm placeholder:text-gray-400"
-                          disabled={selectedLocations.length >= 3}
-                        />
+                          {/* Text input */}
+                          <input
+                            ref={inputRef}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder={selectedLocations.length >= 3 ? 'Max 3 locations' : selectedCity ? `Add locality in ${selectedCity}` : selectedLocations.length > 0 ? `Add location ${selectedLocations.length + 1}/3` : 'Search locality...'}
+                            className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-400"
+                            disabled={selectedLocations.length >= 3}
+                          />
+                        </div>
 
                         {/* In-field Search icon triggers navigation */}
                         <button
