@@ -85,8 +85,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const { content: cmsContent } = useCMSContent('hero-search');
 
   const addLocation = (location: string) => {
-    if (location.trim() && selectedLocations.length < 3 && !selectedLocations.includes(location.trim())) {
-      setSelectedLocations([...selectedLocations, location.trim()]);
+    const trimmed = location.trim();
+    if (!trimmed) return;
+    // Enforce same-city rule for manual inputs: once a city is chosen, block free-typed additions
+    if (selectedCity) {
+      console.warn('⛔ Manual add blocked. Selected city requires choosing from suggestions within:', selectedCity);
+      alert(`Please choose a locality from suggestions within ${selectedCity}. Typing free text is disabled to avoid other cities.`);
+      return;
+    }
+    if (selectedLocations.length < 3 && !selectedLocations.includes(trimmed)) {
+      setSelectedLocations([...selectedLocations, trimmed]);
       setSearchQuery('');
     }
   };
@@ -104,6 +112,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     const hasLocality = searchQuery.trim().length > 0 || selectedLocations.length > 0;
     if (!hasLocality) {
       return; // Block search until a city/locality is provided
+    }
+    // Do NOT auto-add free-typed text when a city is already selected. Must use suggestions within bounds.
+    if (selectedCity && searchQuery.trim()) {
+      console.warn('⛔ Search button add blocked. Must select suggestion within:', selectedCity);
+      alert(`Please select a suggestion within ${selectedCity}.`);
+      return;
     }
     if (searchQuery.trim() && selectedLocations.length < 3 && !selectedLocations.includes(searchQuery.trim())) {
       const locationsToSearch = [...selectedLocations, searchQuery.trim()];
@@ -171,6 +185,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      // After a city is selected, force users to pick from autocomplete (prevents cross-city free-typing)
+      if (selectedCity) {
+        console.warn('⛔ Enter key add blocked. Must select a suggestion within:', selectedCity);
+        alert(`Please select a suggestion within ${selectedCity}.`);
+        return;
+      }
       if (searchQuery.trim() && selectedLocations.length < 3) {
         addLocation(searchQuery);
       } else {
