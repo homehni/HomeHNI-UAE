@@ -412,14 +412,13 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               }
             }
           } else if (conversationStep === 'location_input') {
-            // User entered location, now show properties
+            // User entered location, now show properties based on their role
             setUserPreferences(prev => ({ ...prev, location: userMessage }));
             
-            // Navigate to search page with filters
+            // Navigate to search page with the location filter
             const params = new URLSearchParams({
               type: 'buy',
-              location: userMessage,
-              budget: userPreferences.budget || ''
+              location: userMessage
             });
             
             navigate(`/search?${params.toString()}`);
@@ -574,41 +573,25 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setCurrentView('chat');
 
-      // For "Want to buy a property", skip simulation and go straight to asking budget
-      if (option === 'Want to buy a property') {
-        setUserPreferences(prev => ({ ...prev, role: option }));
-        setConversationStep('budget_selection');
-
-        const botMsg: Message = {
-          id: String(Date.now() + 1),
-          isBot: true,
-          timestamp: new Date(),
-          text: 'Perfect! Let\'s get started. What\'s your budget range?',
-          options: budgetRanges.map(range => range.label)
-        };
-        setMessages((prev) => [...prev, botMsg]);
-        return;
-      }
-
-      // Handle Seller/Agent/Builder directly without relying on current conversationStep
+      // For all main role options, ask for location first
       setUserPreferences(prev => ({ ...prev, role: option }));
-      setConversationStep('post_property');
-      const botMsgDirect: Message = {
+      setConversationStep('location_input');
+
+      const botMsg: Message = {
         id: String(Date.now() + 1),
         isBot: true,
         timestamp: new Date(),
-        text: `Great! As a ${option.toLowerCase()}, you can easily list your property with us. Click the button below to get started:`,
-        options: ['Post Your Property']
+        text: `Great! Which location are you interested in? (Type a city or locality)`,
       };
-      setMessages((prev) => [...prev, botMsgDirect]);
+      setMessages((prev) => [...prev, botMsg]);
       return;
-    } else {
-      // For all other services, open the FAQ view
-      setSelectedService(option);
-      setSelectedFAQ(null);
-      console.log('ChatBot: service option clicked', option);
-      setCurrentView('service-faq');
     }
+
+    // For all other services, open the FAQ view
+    setSelectedService(option);
+    setSelectedFAQ(null);
+    console.log('ChatBot: service option clicked', option);
+    setCurrentView('service-faq');
   };
 const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   default: [
