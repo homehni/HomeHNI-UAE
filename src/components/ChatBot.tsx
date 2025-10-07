@@ -2319,6 +2319,8 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             </CardHeader>
           )}
           
+
+          {/* Header for regular chat view */}
           {!showInitialView && currentView === 'initial' && !searchContext && (
             <CardHeader className="bg-brand-maroon-dark text-white p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
@@ -2337,6 +2339,12 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   </div>
                   <CardTitle className="text-lg sm:text-xl font-bold">Real Estate Assistant</CardTitle>
                 </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
               </div>
             </CardHeader>
           )}
