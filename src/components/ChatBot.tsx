@@ -573,17 +573,33 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setCurrentView('chat');
 
-      // For all main role options, ask for location first
-      setUserPreferences(prev => ({ ...prev, role: option }));
-      setConversationStep('location_input');
+      // For "Want to buy a property", ask for budget first
+      if (option === 'Want to buy a property') {
+        setUserPreferences(prev => ({ ...prev, role: option }));
+        setConversationStep('budget_selection');
 
-      const botMsg: Message = {
+        const botMsg: Message = {
+          id: String(Date.now() + 1),
+          isBot: true,
+          timestamp: new Date(),
+          text: 'Perfect! Let\'s get started. What\'s your budget range?',
+          options: budgetRanges.map(range => range.label)
+        };
+        setMessages((prev) => [...prev, botMsg]);
+        return;
+      }
+
+      // Handle Seller/Agent/Builder - show Post Property button
+      setUserPreferences(prev => ({ ...prev, role: option }));
+      setConversationStep('post_property');
+      const botMsgDirect: Message = {
         id: String(Date.now() + 1),
         isBot: true,
         timestamp: new Date(),
-        text: `Great! Which location are you interested in? (Type a city or locality)`,
+        text: `Great! As a ${option.toLowerCase()}, you can easily list your property with us. Click the button below to get started:`,
+        options: ['Post Your Property']
       };
-      setMessages((prev) => [...prev, botMsg]);
+      setMessages((prev) => [...prev, botMsgDirect]);
       return;
     }
 
