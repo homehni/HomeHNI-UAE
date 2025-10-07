@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -69,9 +69,49 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
     }
   });
 
+  // Local image state to ensure persistence independent of RHF
+  type CategorizedImagesState = {
+    bathroom: File[];
+    bedroom: File[];
+    hall: File[];
+    kitchen: File[];
+    frontView: File[];
+    balcony: File[];
+    others: File[];
+  };
+
+  const initialImagesState: CategorizedImagesState = (() => {
+    if (initialData.categorizedImages) {
+      return {
+        bathroom: initialData.categorizedImages.bathroom || [],
+        bedroom: initialData.categorizedImages.bedroom || [],
+        hall: initialData.categorizedImages.hall || [],
+        kitchen: initialData.categorizedImages.kitchen || [],
+        frontView: initialData.categorizedImages.frontView || [],
+        balcony: initialData.categorizedImages.balcony || [],
+        others: initialData.categorizedImages.others || []
+      };
+    }
+    return {
+      bathroom: [],
+      bedroom: [],
+      hall: [],
+      kitchen: [],
+      frontView: [],
+      balcony: [],
+      others: Array.isArray(initialData.images) ? (initialData.images as any) : []
+    };
+  })();
+
+  const [imagesState, setImagesState] = useState<CategorizedImagesState>(initialImagesState);
+
+  // Keep RHF in sync when local state changes
+  useEffect(() => {
+    form.setValue('images', imagesState as any, { shouldDirty: true });
+  }, [imagesState, form]);
+
   // Check if we're in edit mode by looking for existing property data
   const isEditMode = (window as any).editingPropertyData !== undefined;
-  
   const handleFormSubmit = (data: ResaleGalleryFormData) => {
     // Convert categorized images to flat array for backward compatibility
     const allImages = [
@@ -132,7 +172,11 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
                   <FormControl>
                     <div className="space-y-6">
                       {/* Categorized Image Upload Component */}
-                      <CategorizedImageUpload images={field.value as any} onImagesChange={field.onChange} maxImagesPerCategory={5} />
+                      <CategorizedImageUpload
+                        images={imagesState as any}
+                        onImagesChange={(imgs) => setImagesState(imgs as any)}
+                        maxImagesPerCategory={5}
+                      />
                     </div>
                   </FormControl>
                   <FormMessage />
