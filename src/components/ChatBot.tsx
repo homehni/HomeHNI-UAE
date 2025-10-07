@@ -130,7 +130,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
-  const [currentView, setCurrentView] = useState<'initial' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support' | 'service-support'>('initial');
+  const [currentView, setCurrentView] = useState<'initial' | 'chat' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support' | 'service-support'>('initial');
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
   const [planChatMessages, setPlanChatMessages] = useState<Message[]>([]);
@@ -569,6 +569,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         timestamp: new Date()
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setCurrentView('chat');
 
       // For "Want to buy a property", skip simulation and go straight to asking budget
       if (option === 'Want to buy a property') {
