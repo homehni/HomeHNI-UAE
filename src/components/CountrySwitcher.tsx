@@ -135,7 +135,7 @@ const CountrySwitcher: React.FC = () => {
 
       {isOpen && (
         <div 
-          className="absolute top-full left-0 mt-1 min-w-[800px] rounded-lg shadow-2xl z-50 border bg-white border-gray-200 transition-all duration-200"
+          className="absolute top-full left-0 mt-1 min-w-[950px] rounded-lg shadow-2xl z-50 border bg-white border-gray-200 transition-all duration-200"
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
         >
