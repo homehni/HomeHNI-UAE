@@ -233,7 +233,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   };
 
   const simulateBotResponse = async (userMessage: string) => {
-    console.log('simulateBotResponse called with:', userMessage, 'conversationStep:', conversationStep);
     return new Promise((resolve) => {
       setTimeout(() => {
         let botResponse: Message = {
@@ -250,8 +249,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         setTimeout(() => {
           setIsTyping(false);
           let finalResponse: Message;
-
-          console.log('Processing in simulateBotResponse, step:', conversationStep, 'message:', userMessage);
           
           if (conversationStep === 'role_selection') {
             setUserPreferences(prev => ({ ...prev, role: userMessage }));
@@ -393,27 +390,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               const selectedBudget = budgetRanges.find(range => range.label === userMessage);
               if (selectedBudget) {
                 setUserPreferences(prev => ({ ...prev, budget: userMessage }));
-                setConversationStep('location_selection');
+                setConversationStep('location_input');
                 
-                const availableLocations = getAvailableLocations(userPreferences.propertyType || '');
-                
-                if (availableLocations.length === 0) {
-                  finalResponse = {
-                    id: String(Date.now() + 2),
-                    isBot: true,
-                    timestamp: new Date(),
-                    text: `Sorry, we don't have any ${userPreferences.propertyType?.toLowerCase()} properties available in our current locations. Please try selecting a different property type.`,
-                    options: ['Go Back to Property Types']
-                  };
-                } else {
-                  finalResponse = {
-                    id: String(Date.now() + 2),
-                    isBot: true,
-                    timestamp: new Date(),
-                    text: `Great! With a budget of ${userMessage}, which location are you interested in? Here are the available locations for ${userPreferences.propertyType?.toLowerCase()}:`,
-                    options: availableLocations
-                  };
-                }
+                finalResponse = {
+                  id: String(Date.now() + 2),
+                  isBot: true,
+                  timestamp: new Date(),
+                  text: `Great! Now, which location are you interested in? (Type a city or locality)`,
+                };
               } else {
                 finalResponse = {
                   id: String(Date.now() + 2),
@@ -424,6 +408,20 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 };
               }
             }
+          } else if (conversationStep === 'location_input') {
+            // User entered location, now show properties
+            setUserPreferences(prev => ({ ...prev, location: userMessage }));
+            
+            // Navigate to search page with filters
+            const params = new URLSearchParams({
+              type: 'buy',
+              location: userMessage,
+              budget: userPreferences.budget || ''
+            });
+            
+            navigate(`/search?${params.toString()}`);
+            setIsOpen(false);
+            return resolve(undefined);
           } else if (conversationStep === 'bhk_selection') {
             setUserPreferences(prev => ({ ...prev, bedrooms: userMessage }));
             setConversationStep('location_preference');
@@ -540,8 +538,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   };
 
   const handleOptionClick = (option: string) => {
-    console.log('Option clicked:', option);
-    
     // Handle "Post Your Property" button directly
     if (option === 'Post Your Property') {
       navigate('/post-property');
@@ -564,8 +560,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     
     // Check if it's one of the 4 original functionalities
     const originalActions = ['Want to buy a property', 'Seller', 'Agent', 'Builder'];
-    console.log('Is original action?', originalActions.includes(option));
-    console.log('Current conversation step:', conversationStep);
     
     if (originalActions.includes(option)) {
       const newMessage: Message = {
@@ -576,15 +570,17 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-      // Fast-path: immediately guide buyers to property type selection like before
+      // For "Want to buy a property", skip simulation and go straight to asking budget
       if (option === 'Want to buy a property') {
-        setConversationStep('property_type_selection');
+        setUserPreferences(prev => ({ ...prev, role: option }));
+        setConversationStep('budget_selection');
+        
         const botMsg: Message = {
           id: String(Date.now() + 1),
           isBot: true,
           timestamp: new Date(),
-          text: 'Perfect! Let me help you find the right property. What type of property are you looking for?',
-          options: propertyTypes
+          text: 'Perfect! Let me help you find the right property. What\'s your budget range?',
+          options: budgetRanges.map(range => range.label)
         };
         setMessages((prev) => [...prev, botMsg]);
         return;
