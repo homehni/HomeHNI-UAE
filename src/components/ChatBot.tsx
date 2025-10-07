@@ -586,8 +586,18 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         return;
       }
 
-      // Others follow the simulated response flow
-      simulateBotResponse(option);
+      // Handle Seller/Agent/Builder directly without relying on current conversationStep
+      setUserPreferences(prev => ({ ...prev, role: option }));
+      setConversationStep('post_property');
+      const botMsgDirect: Message = {
+        id: String(Date.now() + 1),
+        isBot: true,
+        timestamp: new Date(),
+        text: `Great! As a ${option.toLowerCase()}, you can easily list your property with us. Click the button below to get started:`,
+        options: ['Post Your Property']
+      };
+      setMessages((prev) => [...prev, botMsgDirect]);
+      return;
     } else {
       // For all other services, open the FAQ view
       setSelectedService(option);
