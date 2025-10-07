@@ -735,7 +735,9 @@ export const PostProperty: React.FC = () => {
           }
         }
       } else {
-        // Insert new property submission
+        // Insert into BOTH property_submissions (for admin review) AND properties (for immediate public visibility)
+        
+        // 1. Insert into property_submissions for admin review
         const { data: inserted, error: insertError } = await supabase
           .from('property_submissions')
           .insert({
@@ -762,6 +764,25 @@ export const PostProperty: React.FC = () => {
         }
         
         error = insertError;
+
+        // 2. Also insert directly into properties table for immediate public visibility
+        if (!insertError) {
+          const { error: propertiesError } = await supabase
+            .from('properties')
+            .insert({
+              ...propertyData,
+              status: 'pending', // Still marked as pending for admin to review
+              is_visible: true,  // But visible to public immediately
+              is_featured: true  // Mark as featured
+            });
+
+          if (propertiesError) {
+            console.error('Error inserting into properties table:', propertiesError);
+            // Don't fail the entire submission if this fails
+          } else {
+            console.log('Property successfully inserted into both tables for immediate visibility');
+          }
+        }
       }
 
       if (error) {
