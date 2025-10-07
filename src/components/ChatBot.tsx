@@ -2057,14 +2057,14 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                         <div className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold text-brand-red uppercase tracking-widest">
                           Choose an option
                         </div>
-                        <ScrollArea className="w-full">
-                          <div className="pb-2">
-                            <div className="flex gap-2 sm:gap-3 min-w-max">
+                        <ScrollArea className="w-full h-20">
+                          <div className="pr-2">
+                            <div className="flex flex-col gap-2">
                               {mainOptions.map((option) => (
                                 <Badge
                                   key={option}
                                   variant="outline"
-                                  className="cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
+                                  className="w-full justify-start cursor-pointer hover:bg-brand-red hover:text-white transition-colors text-xs px-2 py-1"
                                   onClick={() => handleOptionClick(option)}
                                 >
                                   {option}
@@ -2072,7 +2072,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                               ))}
                             </div>
                           </div>
-                          <ScrollBar orientation="horizontal" />
+                          <ScrollBar orientation="vertical" />
                         </ScrollArea>
                       </div>
                     );
