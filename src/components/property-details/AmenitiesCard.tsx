@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 
 interface AmenitiesCardProps {
-  amenities?: any; // Can be string[] or JSONB object from database
+  amenities?: unknown; // Can be string[] or JSONB object from database
 }
 
 export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
@@ -81,7 +81,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
   };
 
   const getIconForAmenity = (amenity: string) => {
-    const iconMap: Record<string, React.ComponentType<any>> = {
+    const iconMap: Record<string, React.ComponentType<unknown>> = {
       'Lift': Building,
       'Servant room': Users,
       'Security': Shield,
@@ -109,12 +109,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
 
   const getDisplayAmenities = () => {
     if (!amenities) {
-      return [
-        { name: 'Lift', icon: Building },
-        { name: 'Servant room', icon: Users },
-        { name: 'Security', icon: Shield },
-        { name: 'Rain water harvesting', icon: Cloud }
-      ];
+      return [];
     }
 
     // If amenities is already an array of strings
@@ -127,18 +122,20 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
 
     // If amenities is a JSONB object from database
     if (typeof amenities === 'object') {
-      const availableAmenities: Array<{name: string, icon: React.ComponentType<any>}> = [];
+      const availableAmenities: Array<{name: string, icon: React.ComponentType<unknown>}> = [];
       Object.entries(amenities).forEach(([rawKey, value]) => {
         const key = String(rawKey);
+        const strVal = typeof value === 'string' ? value.toLowerCase().trim() : '';
         const truthy = (
           value === true ||
           value === 1 ||
           value === '1' ||
           (typeof value === 'string' && [
             'yes','true','y','included','available','daily','bike','car','both',
-            'full','partial','dg-backup','available','bike','car','both',
-            'overhead-tank','underground-tank','borewell','excellent','good','average'
-          ].includes(value.toLowerCase()))
+            'full','partial','dg-backup','overhead-tank','underground-tank','borewell','excellent','good','average'
+          ].includes(strVal)) ||
+          // Show non-empty descriptive strings that aren't explicit negatives
+          (typeof value === 'string' && strVal.length > 0 && !['no','none','n/a','na','not available','false'].includes(strVal))
         );
         if (truthy) {
           const mapped = amenityKeyMap[key];
@@ -163,20 +160,10 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
           });
         }
       });
-      return availableAmenities.length > 0 ? availableAmenities : [
-        { name: 'Lift', icon: Building },
-        { name: 'Servant room', icon: Users },
-        { name: 'Security', icon: Shield },
-        { name: 'Rain water harvesting', icon: Cloud }
-      ];
+      return availableAmenities;
     }
 
-    return [
-      { name: 'Lift', icon: Building },
-      { name: 'Servant room', icon: Users },
-      { name: 'Security', icon: Shield },
-      { name: 'Rain water harvesting', icon: Cloud }
-    ];
+    return [];
   };
 
   const displayAmenities = getDisplayAmenities();
@@ -188,22 +175,26 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
           Amenities
         </h2>
         <div className="w-12 h-0.5 bg-red-600 mb-6"></div>
-        
-        <div className="grid grid-cols-5 gap-6">
-          {displayAmenities.map((amenity, index) => {
-            const IconComponent = amenity.icon;
-            return (
-              <div key={index} className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center mb-3 border border-gray-100">
-                  <IconComponent className="w-6 h-6 text-red-600" />
+
+        {displayAmenities.length === 0 ? (
+          <div className="text-gray-500 text-sm">No amenities provided.</div>
+        ) : (
+          <div className="grid grid-cols-5 gap-6">
+            {displayAmenities.map((amenity, index) => {
+              const IconComponent = amenity.icon;
+              return (
+                <div key={index} className="flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-gray-50 rounded-lg flex items-center justify-center mb-3 border border-gray-100">
+                    <IconComponent className="w-6 h-6 text-red-600" />
+                  </div>
+                  <span className="text-sm text-gray-700 font-medium">
+                    {amenity.name}
+                  </span>
                 </div>
-                <span className="text-sm text-gray-700 font-medium">
-                  {amenity.name}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

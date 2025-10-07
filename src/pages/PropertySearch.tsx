@@ -150,7 +150,8 @@ const PropertySearch = () => {
         // Restrict Buy -> Property Type to only these three (label change handled in homepage UI)
         return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
       case 'commercial':
-        return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING', 'INDUSTRIAL'];
+        // Removed 'INDUSTRIAL' from filter options as requested
+        return ['ALL', 'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING'];
       case 'land':
         // Land/Plot: no Residential Plot
         return ['ALL', 'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'];
@@ -1034,6 +1035,17 @@ const PropertySearch = () => {
                     <SelectItem value="price-high">Price: High to Low</SelectItem>
                     <SelectItem value="newest">Newest First</SelectItem>
                     <SelectItem value="area">Area: Large to Small</SelectItem>
+                    {activeTab === 'commercial' && (
+                      <>
+                        <div className="px-2 pt-2 pb-1 text-xs text-muted-foreground">Commercial types</div>
+                        <SelectItem value="type-office">Office first</SelectItem>
+                        <SelectItem value="type-retail">Retail/Shop first</SelectItem>
+                        <SelectItem value="type-warehouse">Warehouse first</SelectItem>
+                        <SelectItem value="type-showroom">Showroom first</SelectItem>
+                        <SelectItem value="type-restaurant">Restaurant first</SelectItem>
+                        <SelectItem value="type-coworking">Co-working first</SelectItem>
+                      </>
+                    )}
                   </SelectContent>
                 </Select>
                 

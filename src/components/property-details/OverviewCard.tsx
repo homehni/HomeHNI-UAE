@@ -52,6 +52,7 @@ interface OverviewCardProps {
     price_negotiable?: boolean;
     security_deposit?: number;
     plot_area_unit?: string;
+    amenities?: Record<string, unknown>;
   };
 }
 
@@ -135,10 +136,10 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
       'Facing': Compass,
       'Water Supply': Droplets,
       'Floor': Layers,
-      'Bathroom': Bath,
+  'Washrooms': Bath,
       'Non-Veg Allowed': Utensils,
       'Pet Allowed': Users,
-      'Gated Security': Shield,
+  'Security': Shield,
       'Property Type': Building,
       'Balconies': Home,
       'Expected Price': DollarSign,
@@ -157,12 +158,50 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     return iconMap[label] || Home;
   };
 
+  const getAmenityString = (key: string): string | undefined => {
+    const a = property.amenities && typeof property.amenities === 'object' ? property.amenities as Record<string, unknown> : undefined;
+    const v = a ? a[key] : undefined;
+    return typeof v === 'string' && v.trim().length > 0 ? v : undefined;
+  };
+
+  const getSecurity = (): string => {
+    // Prefer detailed selection from amenities (e.g., 'Guard & CCTV')
+    const detailed = getAmenityString('security');
+    if (detailed) return detailed;
+    // Fallback to boolean gated_security
+    return property.gated_security ? 'Yes' : 'No';
+  };
+
+  const getWashrooms = (): string => {
+    const wash = getAmenityString('washrooms') || getAmenityString('washroom');
+    if (wash) return wash;
+    if (typeof property.bathrooms === 'number' && property.bathrooms > 0) {
+      return `${property.bathrooms} Bathroom${property.bathrooms > 1 ? 's' : ''}`;
+    }
+    return 'Not specified';
+  };
+
   const overviewItems = [
     { 
       icon: Sofa, 
       label: 'Furnishing Status', 
       value: property.furnishing || 'Not specified',
       hasAction: property.furnishing === 'Semi'
+    },
+    { 
+      icon: Zap, 
+      label: 'Power Backup', 
+      value: getAmenityString('powerBackup') || property.power_backup || 'Not specified' 
+    },
+    { 
+      icon: MapPin, 
+      label: 'Parking', 
+      value: getAmenityString('parking') || 'Not specified' 
+    },
+    { 
+      icon: Droplets, 
+      label: 'Water Storage Facility', 
+      value: getAmenityString('waterStorageFacility') || 'Not specified' 
     },
     { 
       icon: Compass, 
@@ -181,8 +220,8 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     },
     { 
       icon: Bath, 
-      label: 'Bathroom', 
-      value: property.bathrooms?.toString() || 'Not specified' 
+      label: 'Washrooms', 
+      value: getWashrooms() 
     },
     { 
       icon: Users, 
@@ -196,8 +235,13 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     },
     { 
       icon: Shield, 
-      label: 'Gated Security', 
-      value: property.gated_security ? 'Yes' : 'No' 
+      label: 'Security', 
+      value: getSecurity() 
+    },
+    { 
+      icon: Home, 
+      label: 'Property Condition', 
+      value: getAmenityString('currentPropertyCondition') || property.current_property_condition || 'Not specified' 
     },
   ];
 

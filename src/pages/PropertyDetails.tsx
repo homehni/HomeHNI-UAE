@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
@@ -132,7 +133,7 @@ const PropertyDetails: React.FC = () => {
           const rawStr = String(s).trim();
           if (/^https?:\/\//i.test(rawStr) || /^data:/i.test(rawStr) || rawStr.startsWith('/')) return rawStr;
           // Strip common prefixes
-          let cleaned = rawStr
+          const cleaned = rawStr
             .replace(/^\/?storage\/v1\/object\/public\/property-media\//i, '')
             .replace(/^property-media\//i, '')
             .replace(/^public\//i, '');
@@ -146,11 +147,44 @@ const PropertyDetails: React.FC = () => {
         const normalizedImages = Array.isArray(raw.images)
           ? (raw.images.map((i: any) => typeof i === 'string' ? normalize(i) : normalize(i?.url)).filter(Boolean))
           : [];
-        const propertyWithUserId = { 
+        let propertyWithUserId = { 
           ...(raw as Property), 
           images: normalizedImages as string[],
           user_id: raw.user_id // Explicitly ensure user_id is included
         } as Property;
+
+        // Hydrate furnishing/possession/amenities from original submission when missing (commercial/sale cases)
+        try {
+          const { data: subData, error: subErr } = await supabase
+            .from('property_submissions')
+            .select('payload')
+            .eq('id', id)
+            .maybeSingle();
+          if (!subErr && subData?.payload) {
+            const orig = subData.payload?.originalFormData?.propertyInfo || {};
+            const pd = orig?.propertyDetails || {};
+            const sale = orig?.saleDetails || {};
+            const cs = orig?.commercialSaleDetails || {};
+            const furnishingStatus = pd?.furnishingStatus || subData.payload?.furnishing_status;
+            const propertyAge = pd?.propertyAge || subData.payload?.age_of_building || subData.payload?.property_age;
+            const possessionDate = sale?.possessionDate || cs?.availableFrom || cs?.possessionDate || subData.payload?.available_from;
+            // Amenities may be captured under propertyInfo.amenities or at root payload. Prefer propertyInfo
+            const amenitiesFromForm = orig?.amenities || subData.payload?.amenities;
+
+            const merged: Partial<Property> = { ...propertyWithUserId };
+            if (!merged.furnishing_status && furnishingStatus) Object.assign(merged, { furnishing_status: String(furnishingStatus) });
+            if (!merged.age_of_building && propertyAge) Object.assign(merged, { age_of_building: String(propertyAge) });
+            if (!merged.available_from && possessionDate) Object.assign(merged, { available_from: String(possessionDate) });
+            type WithAmenities = Partial<Property> & { amenities?: unknown };
+            const mergedWithAmenities = merged as WithAmenities;
+            if (!mergedWithAmenities.amenities && amenitiesFromForm) {
+              mergedWithAmenities.amenities = amenitiesFromForm as unknown;
+            }
+            propertyWithUserId = mergedWithAmenities as Property;
+          }
+        } catch (e) {
+          console.warn('Hydration from submission payload failed (non-fatal):', e);
+        }
         console.log('Setting property from RPC with user_id:', propertyWithUserId.user_id);
         
         // Fetch rental status for this property
@@ -314,6 +348,7 @@ const PropertyDetails: React.FC = () => {
   // Fetch latest property data on component mount
   React.useEffect(() => {
     fetchLatestPropertyData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Check for refresh parameter in URL and refetch data
@@ -330,6 +365,7 @@ const PropertyDetails: React.FC = () => {
       newUrl.searchParams.delete('refresh');
       window.history.replaceState({}, '', newUrl.toString());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
   // Refetch data when user returns to the page (e.g., after editing)
@@ -353,6 +389,7 @@ const PropertyDetails: React.FC = () => {
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   
   // Fetch full amenities and PG/Hostel data from DB if they weren't passed via navigation state

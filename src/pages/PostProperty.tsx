@@ -614,7 +614,7 @@ export const PostProperty: React.FC = () => {
         description: data.propertyInfo.additionalInfo.description || null,
         images: imageUrls.map(img => img.url),
         videos: videoUrls,
-        availability_type: 'immediate',
+  availability_type: 'immediate',
         status: 'pending',
         is_featured: true, // Mark all submitted properties as featured candidates
         // Plot area unit for Land/Plot properties
@@ -636,7 +636,7 @@ export const PostProperty: React.FC = () => {
         // PG/Hostel specific fields for better display compatibility
         expected_rent: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.expectedPrice) || null : null,
         expected_deposit: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.securityDeposit) || null : null,
-        available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
+  available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
         parking: ((data.propertyInfo as any)?.amenities?.parking) || null,
         age_of_building: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,
         preferred_tenant: ((data.propertyInfo as any)?.flattmatesDetails?.genderPreference) || ((data.propertyInfo as any)?.rentalDetails?.preferredTenants) || null,

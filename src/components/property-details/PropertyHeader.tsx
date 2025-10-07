@@ -27,6 +27,10 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
   
   const isPlot = property.property_type?.toLowerCase().includes('plot') || 
                  property.property_type?.toLowerCase().includes('land');
+  const listingType = property.listing_type?.toLowerCase();
+  const isRent = listingType === 'rent' || listingType === 'lease';
+  // Show deposit only for Rentals/Lease and PG properties; hide for Sale and Plots
+  const showDeposit = !isPlot && (isPG || isRent);
   
   const price = isPG ? (property.expected_rent || property.expected_price) : property.expected_price;
   const deposit = isPG
@@ -98,7 +102,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             </div>
             
             {/* Price Info Grid - Mobile */}
-            <div className={`grid gap-0 ${isPG ? 'grid-cols-2' : (isPlot ? 'grid-cols-2' : 'grid-cols-3')}`}>
+            <div className={`grid gap-0 ${isPG ? 'grid-cols-2' : (isPlot ? 'grid-cols-2' : (showDeposit ? 'grid-cols-3' : 'grid-cols-2'))}`}>
               {/* Rent Section */}
               <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
                 <div className="text-base sm:text-lg font-bold text-gray-900">
@@ -117,11 +121,11 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 </div>
               )}
               
-              {/* Deposit Section - hidden for Plot/Land */}
-              {!isPlot && (
+              {/* Deposit Section - only for Rent/PG; hidden for Plot/Land and Sale */}
+              {showDeposit && (
                 <div className="text-center px-2 sm:px-3 py-3">
                   <div className="text-base sm:text-lg font-bold text-gray-900">
-                    {deposit ? `₹${deposit.toLocaleString('en-IN')}` : (price ? `₹${(price * 2).toLocaleString('en-IN')}` : 'Not specified')}
+                    {typeof deposit === 'number' ? `₹${deposit.toLocaleString('en-IN')}` : 'Not specified'}
                   </div>
                   <div className="text-xs text-gray-600">Deposit</div>
                 </div>
@@ -163,7 +167,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               <div className="text-xl font-bold text-gray-900 whitespace-nowrap">
                 {price ? `₹${price.toLocaleString('en-IN')}` : 'Not specified'}
               </div>
-              {!isPlot && deposit && deposit > 0 && (
+              {showDeposit && typeof deposit === 'number' && deposit > 0 && (
                 <div className="text-sm font-normal text-gray-500 mt-1">
                   Deposit: ₹{deposit.toLocaleString('en-IN')}
                 </div>
@@ -180,11 +184,11 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               </div>
             )}
             
-            {/* Deposit Section - hidden for Plot/Land */}
-            {!isPlot && (
+            {/* Deposit Section - only for Rent/PG; hidden for Plot/Land and Sale */}
+            {showDeposit && (
               <div className="text-center px-6 py-4 border-r border-gray-200">
                 <div className="text-xl font-bold text-gray-900">
-                  {deposit ? `₹${deposit.toLocaleString('en-IN')}` : (price ? `₹${(price * 2).toLocaleString('en-IN')}` : 'Not specified')}
+                  {typeof deposit === 'number' ? `₹${deposit.toLocaleString('en-IN')}` : 'Not specified'}
                 </div>
                 <div className="text-sm text-gray-600">Deposit</div>
               </div>

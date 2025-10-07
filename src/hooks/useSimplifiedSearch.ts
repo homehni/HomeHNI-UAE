@@ -209,7 +209,48 @@ export const useSimplifiedSearch = () => {
 
   // Transform property data helper - Memoized with useCallback for performance
   const transformProperty = useCallback((property: PropertyRow) => {
-    const displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
+    let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
+
+    // Normalize land/plot subtypes so filters can match precisely
+    try {
+      const ptLower = (property.property_type || '').toLowerCase();
+      const titleLower = (property.title || '').toLowerCase();
+      const looksLikeLand = ptLower.includes('plot') || ptLower.includes('land') || titleLower.includes(' land');
+      if (looksLikeLand) {
+        if (ptLower.includes('agriculture') || titleLower.includes('agricultural land')) {
+          displayPropertyType = 'Agricultural Land';
+        } else if (titleLower.includes('industrial land')) {
+          displayPropertyType = 'Industrial Land';
+        } else if (titleLower.includes('commercial land')) {
+          displayPropertyType = 'Commercial Land';
+        } else if (!displayPropertyType.toLowerCase().includes('land') && !displayPropertyType.toLowerCase().includes('plot')) {
+          // Generic land fallback
+          displayPropertyType = 'Land';
+        }
+      } else {
+        // Infer commercial space subtype from title/property_type for realtime categorization
+        const isCommercialContext = ptLower.includes('commercial') || titleLower.includes('commercial');
+        const office = /\boffice\b|\bbusiness center\b|\bworkspace\b/.test(titleLower) || ptLower.includes('office');
+        const retail = /\bretail\b|\bshop\b|\bstore\b|\boutlet\b/.test(titleLower) || ptLower.includes('retail') || ptLower.includes('shop') || ptLower.includes('store');
+        const warehouse = /\bwarehouse\b|\bgodown\b/.test(titleLower) || ptLower.includes('warehouse');
+        const showroom = /\bshowroom\b/.test(titleLower) || ptLower.includes('showroom');
+        const restaurant = /\brestaurant\b|\bcafe\b|\bfood court\b/.test(titleLower) || ptLower.includes('restaurant') || ptLower.includes('cafe');
+        const coworking = /\bcoworking\b|\bco-working\b/.test(titleLower) || ptLower.includes('coworking') || ptLower.includes('co-working');
+        const industrialSpace = (titleLower.includes('industrial') || ptLower.includes('industrial')) && !titleLower.includes('industrial land') && !ptLower.includes('land');
+
+        if (isCommercialContext || office || retail || warehouse || showroom || restaurant || coworking || industrialSpace) {
+          if (office) displayPropertyType = 'Office';
+          else if (retail) displayPropertyType = 'Retail';
+          else if (warehouse) displayPropertyType = 'Warehouse';
+          else if (showroom) displayPropertyType = 'Showroom';
+          else if (restaurant) displayPropertyType = 'Restaurant';
+          else if (coworking) displayPropertyType = 'Co-Working';
+          else if (industrialSpace) displayPropertyType = 'Industrial';
+        }
+      }
+    } catch (e) {
+      // no-op: fallback to original displayPropertyType
+    }
     
     return {
       id: property.id,
@@ -533,6 +574,11 @@ export const useSimplifiedSearch = () => {
                propertyType.includes('coworking') ||
                propertyType.includes('co-working') ||
                propertyType.includes('industrial');
+        // Exclude land/plot types from commercial tab (they belong in Land/Plot)
+        const isLandType = propertyType.includes('land') || propertyType.includes('plot') || propertyType.includes('agricultural');
+        if (isLandType) {
+          return false;
+        }
         if (!isMatch) {
           console.log('❌ Filtered out for commercial:', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
         }
@@ -555,7 +601,9 @@ export const useSimplifiedSearch = () => {
         return filters.propertyType.some(filterType => {
           const normalizedFilter = filterType.toLowerCase().replace(/\s+/g, '');
           const normalizedProperty = property.propertyType.toLowerCase().replace(/\s+/g, '');
-          
+          const listingLower = (property.listingType || '').toLowerCase();
+          const titleLower = (property.title || '').toLowerCase();
+
           // Exact match priority - check for exact property type matches first
           if (normalizedFilter === 'penthouse') {
             return normalizedProperty === 'penthouse';
@@ -565,15 +613,36 @@ export const useSimplifiedSearch = () => {
           }
           if (normalizedFilter === 'independenthouse') {
             // Only match if it's specifically "independent house", not just any house
-            return normalizedProperty === 'independenthouse' || 
+            return normalizedProperty === 'independenthouse' ||
                    normalizedProperty === 'independent' ||
                    (normalizedProperty.includes('independent') && normalizedProperty.includes('house') && !normalizedProperty.includes('penthouse'));
           }
           if (normalizedFilter === 'gatedcommunityvilla') {
-            return normalizedProperty === 'gatedcommunityvilla' || 
+            return normalizedProperty === 'gatedcommunityvilla' ||
                    (normalizedProperty.includes('gated') && normalizedProperty.includes('community') && normalizedProperty.includes('villa'));
           }
-          
+
+          // Specific Land/Plot categories MUST be matched before the generic land/plot branch
+          if (normalizedFilter === 'agriculturalland') {
+            // Match both property_type variations (agriculture_lands) and listing_type (Agricultural Land)
+            const isAgri = normalizedProperty.includes('agricultural') ||
+                           normalizedProperty.includes('agriculture') ||
+                           listingLower.includes('agricultural') ||
+                           titleLower.includes('agricultural land');
+            const isLand = normalizedProperty.includes('land') || normalizedProperty.includes('plot') || listingLower.includes('land') || titleLower.includes('land');
+            return isAgri && isLand;
+          }
+          if (normalizedFilter === 'commercialland') {
+            const isCommercial = normalizedProperty.includes('commercial') || listingLower.includes('commercial') || titleLower.includes('commercial land');
+            const isLand = normalizedProperty.includes('land') || normalizedProperty.includes('plot') || listingLower.includes('land') || titleLower.includes('land');
+            return isCommercial && isLand;
+          }
+          if (normalizedFilter === 'industrialland') {
+            const isIndustrial = normalizedProperty.includes('industrial') || listingLower.includes('industrial') || titleLower.includes('industrial land');
+            const isLand = normalizedProperty.includes('land') || normalizedProperty.includes('plot') || listingLower.includes('land') || titleLower.includes('land');
+            return isIndustrial && isLand;
+          }
+
           // Broader category matches
           if (normalizedFilter.includes('apartment') || normalizedFilter.includes('flat')) {
             return normalizedProperty.includes('apartment') || normalizedProperty.includes('flat');
@@ -583,16 +652,8 @@ export const useSimplifiedSearch = () => {
             return normalizedProperty === 'villa' && !normalizedProperty.includes('community');
           }
           if (normalizedFilter.includes('plot') || normalizedFilter.includes('land')) {
+            // Generic land/plot match (only after specific categories are handled above)
             return normalizedProperty.includes('plot') || normalizedProperty.includes('land');
-          }
-          if (normalizedFilter === 'agriculturalland') {
-            return normalizedProperty.includes('agricultural') && normalizedProperty.includes('land');
-          }
-          if (normalizedFilter === 'commercialland') {
-            return normalizedProperty.includes('commercial') && normalizedProperty.includes('land');
-          }
-          if (normalizedFilter === 'industrialland') {
-            return normalizedProperty.includes('industrial') && normalizedProperty.includes('land');
           }
           if (normalizedFilter.includes('pghosted') || normalizedFilter.includes('pg')) {
             return normalizedProperty.includes('pg') || normalizedProperty.includes('hostel');
@@ -601,33 +662,36 @@ export const useSimplifiedSearch = () => {
             return normalizedProperty.includes('coliving') || normalizedProperty.includes('co-living');
           }
           if (normalizedFilter.includes('builderfloor')) {
-            return normalizedProperty.includes('builderfloor') || normalizedProperty.includes('builder') && normalizedProperty.includes('floor');
+            return normalizedProperty.includes('builderfloor') || (normalizedProperty.includes('builder') && normalizedProperty.includes('floor'));
           }
           if (normalizedFilter.includes('studioapartment')) {
             return normalizedProperty.includes('studioapartment') || normalizedProperty.includes('studio');
           }
           if (normalizedFilter.includes('coworking')) {
-            return normalizedProperty.includes('coworking') || normalizedProperty.includes('co-working');
+            return normalizedProperty.includes('coworking') || normalizedProperty.includes('co-working') || titleLower.includes('coworking') || titleLower.includes('co-working');
           }
           if (normalizedFilter.includes('office')) {
-            return normalizedProperty.includes('office');
+            return normalizedProperty.includes('office') || /\boffice\b/.test(titleLower);
           }
           if (normalizedFilter.includes('retail')) {
-            return normalizedProperty.includes('retail');
+            // Treat 'retail' as retail/shop/store
+            return normalizedProperty.includes('retail') || normalizedProperty.includes('shop') || normalizedProperty.includes('store') || /\b(retail|shop|store|outlet)\b/.test(titleLower);
           }
           if (normalizedFilter.includes('warehouse')) {
-            return normalizedProperty.includes('warehouse');
+            return normalizedProperty.includes('warehouse') || /\b(warehouse|godown)\b/.test(titleLower);
           }
           if (normalizedFilter.includes('showroom')) {
-            return normalizedProperty.includes('showroom');
+            return normalizedProperty.includes('showroom') || /\bshowroom\b/.test(titleLower);
           }
           if (normalizedFilter.includes('restaurant')) {
-            return normalizedProperty.includes('restaurant');
+            return normalizedProperty.includes('restaurant') || /\b(restaurant|cafe|food court)\b/.test(titleLower);
           }
           if (normalizedFilter === 'industrial') {
-            return normalizedProperty === 'industrial';
+            // Match industrial spaces but avoid 'industrial land'
+            const titleOk = titleLower.includes('industrial') && !titleLower.includes('industrial land');
+            return (normalizedProperty.includes('industrial') && !normalizedProperty.includes('land')) || titleOk;
           }
-          
+
           // Fallback to partial match
           return normalizedProperty.includes(normalizedFilter);
         });
@@ -784,6 +848,35 @@ export const useSimplifiedSearch = () => {
           return b.areaNumber - a.areaNumber;
         case 'newest':
           return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
+        // Commercial type-first sorts: bring matching type to the top
+        case 'type-office': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('office') ? 1 : 0);
+          return score(b) - score(a);
+        }
+        case 'type-retail': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('retail') || p.propertyType.toLowerCase().includes('shop') || p.propertyType.toLowerCase().includes('store') ? 1 : 0);
+          return score(b) - score(a);
+        }
+        case 'type-warehouse': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('warehouse') ? 1 : 0);
+          return score(b) - score(a);
+        }
+        case 'type-showroom': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('showroom') ? 1 : 0);
+          return score(b) - score(a);
+        }
+        case 'type-restaurant': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('restaurant') ? 1 : 0);
+          return score(b) - score(a);
+        }
+        case 'type-coworking': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('coworking') || p.propertyType.toLowerCase().includes('co-working') ? 1 : 0);
+          return score(b) - score(a);
+        }
+        case 'type-industrial': {
+          const score = (p: typeof a) => (p.propertyType.toLowerCase().includes('industrial') && !p.propertyType.toLowerCase().includes('land') ? 1 : 0);
+          return score(b) - score(a);
+        }
         default:
           return 0; // relevance - maintain original order
       }

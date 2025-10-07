@@ -21,8 +21,10 @@ interface PropertyInfoCardsProps {
     property_type?: string;
     preferred_tenant?: string;
     available_from?: string;
+    availability_type?: string; // immediate | date | custom
     parking?: string;
     age_of_building?: string;
+    property_age?: string; // fallback key used in DB for age
     balconies?: number;
     created_at?: string;
   // PG-specific fields
@@ -35,6 +37,7 @@ interface PropertyInfoCardsProps {
     total_floors?: number;
     furnishing?: string;
     furnishing_status?: string;
+  amenities?: { furnishing?: string } | Record<string, unknown>;
     // Plot specific
     plot_length?: number;
     plot_width?: number;
@@ -72,7 +75,14 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recently';
-    const date = new Date(dateString);
+    let date: Date;
+    const ddmmyyyy = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+    if (ddmmyyyy.test(String(dateString))) {
+      const [dd, mm, yyyy] = String(dateString).split('/').map(Number);
+      date = new Date(yyyy, (mm || 1) - 1, dd || 1);
+    } else {
+      date = new Date(String(dateString));
+    }
     return date.toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric', 
@@ -86,15 +96,21 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getPossession = () => {
+    const at = property.availability_type?.toLowerCase();
+    if (at === 'immediate' || at === 'immediately') return 'Immediately';
     if (!property.available_from) return 'Immediately';
-    const date = new Date(property.available_from);
+    const s = String(property.available_from);
+    const ddmmyyyy = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+    const date = ddmmyyyy.test(s)
+      ? (() => { const [dd, mm, yyyy] = s.split('/').map(Number); return new Date(yyyy, (mm || 1) - 1, dd || 1); })()
+      : new Date(s);
     const now = new Date();
     const diffTime = date.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
     if (diffDays <= 0) return 'Immediately';
     if (diffDays <= 30) return 'Within a month';
-    return formatDate(property.available_from);
+    return formatDate(s);
   };
 
   const getParking = () => {
@@ -106,13 +122,15 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getAgeOfBuilding = () => {
-    if (!property.age_of_building) return 'Not specified';
-    return property.age_of_building;
+    const raw = property.age_of_building || property.property_age;
+    if (!raw) return 'Not specified';
+    return String(raw).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
   const getFurnishing = () => {
-    const f = property.furnishing || property.furnishing_status;
-    return f ? f : 'Not specified';
+    const amen = (property.amenities && typeof property.amenities === 'object') ? property.amenities as Record<string, unknown> : undefined;
+    const f = property.furnishing || property.furnishing_status || (typeof amen?.furnishing === 'string' ? amen.furnishing : undefined);
+    return f ? String(f).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()) : 'Not specified';
   };
 
   const getFloorText = () => {
@@ -126,9 +144,14 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getAvailableFrom = () => {
-    if (!property.available_from) return 'Immediately';
-    const date = new Date(property.available_from);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    // Respect explicit date if present (supports dd/mm/yyyy)
+    if (property.available_from) {
+      return formatDate(String(property.available_from));
+    }
+    // Fall back to availability_type semantics
+    const at = property.availability_type?.toLowerCase();
+    if (at === 'immediate' || at === 'immediately') return 'Immediately';
+    return 'Immediately';
   };
 
   const getPreferredTenant = () => {
@@ -303,11 +326,6 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       icon: Home,
       title: getFurnishing(),
       subtitle: 'Furnishing',
-    },
-    {
-      icon: Calendar,
-      title: getAgeOfBuilding(),
-      subtitle: 'Age of Property',
     },
     {
       icon: Calendar,
