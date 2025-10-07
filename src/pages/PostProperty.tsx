@@ -733,6 +733,35 @@ export const PostProperty: React.FC = () => {
               .eq('id', editingPropertyId)
               .eq('user_id', user.id);
           }
+
+          // Keep property_submissions in sync (title/city/state/payload)
+          try {
+            const submissionPayload = {
+              ...propertyData,
+              images: imageUrls.map(img => img.url),
+              videos: videoUrls,
+              originalFormData: {
+                ownerInfo: JSON.parse(JSON.stringify((data as any).ownerInfo)),
+                propertyInfo: JSON.parse(JSON.stringify((data as any).propertyInfo))
+              }
+            };
+            const { error: subUpdateErr } = await supabase
+              .from('property_submissions')
+              .update({
+                title: propertyData.title || 'Updated Property',
+                city: propertyData.city || 'Unknown',
+                state: propertyData.state || 'Unknown',
+                updated_at: new Date().toISOString(),
+                payload: submissionPayload
+              })
+              .eq('id', editingPropertyId)
+              .eq('user_id', user.id);
+            if (subUpdateErr) {
+              console.warn('Failed to sync property_submissions, continuing:', subUpdateErr);
+            }
+          } catch (syncErr) {
+            console.warn('Error syncing submission record:', syncErr);
+          }
         }
       } else {
         // Insert into BOTH property_submissions (for admin review) AND properties (for immediate public visibility)
@@ -770,10 +799,12 @@ export const PostProperty: React.FC = () => {
           const { error: propertiesError } = await supabase
             .from('properties')
             .insert({
+              id: inserted.id, // keep the same id as property_submissions for 1:1 mapping
               ...propertyData,
-              status: 'pending', // Still marked as pending for admin to review
-              is_visible: true,  // But visible to public immediately
-              is_featured: true  // Mark as featured
+              user_id: user.id, // satisfy RLS: owner must be current user
+              status: 'pending', // still pending for admin to review
+              is_visible: true,  // immediately visible to public
+              is_featured: true  // mark as featured for homepage
             });
 
           if (propertiesError) {
