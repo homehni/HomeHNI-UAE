@@ -575,6 +575,22 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         timestamp: new Date()
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      // Fast-path: immediately guide buyers to property type selection like before
+      if (option === 'Want to buy a property') {
+        setConversationStep('property_type_selection');
+        const botMsg: Message = {
+          id: String(Date.now() + 1),
+          isBot: true,
+          timestamp: new Date(),
+          text: 'Perfect! Let me help you find the right property. What type of property are you looking for?',
+          options: propertyTypes
+        };
+        setMessages((prev) => [...prev, botMsg]);
+        return;
+      }
+
+      // Others follow the simulated response flow
       simulateBotResponse(option);
     } else {
       // For other services, show FAQ view
