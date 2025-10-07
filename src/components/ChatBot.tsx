@@ -285,6 +285,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               navigate('/post-property');
               setIsOpen(false);
               return resolve(undefined);
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please select "Post Your Property" to continue.',
+                options: ['Post Your Property']
+              };
             }
           } else if (conversationStep === 'user_details_collection') {
             if (userMessage === 'Fill details') {
@@ -303,6 +311,13 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 isBot: true,
                 timestamp: new Date(),
                 text: `Thank you for providing your details! Can you tell me your preferred location(s) and any specific requirements you may have, like pet-friendly, furnished, or parking?`,
+              };
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: 'Please fill in your details to continue.',
               };
             }
           } else if (conversationStep === 'location_requirements') {
@@ -450,6 +465,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
               navigate('/contact');
               setIsOpen(false);
               return resolve(undefined);
+            } else {
+              finalResponse = {
+                id: String(Date.now() + 2),
+                isBot: true,
+                timestamp: new Date(),
+                text: `Would you like to see the properties or refine your search?`,
+                options: ['Show Properties', 'Refine Search', 'Contact Support']
+              };
             }
           } else if (conversationStep === 'location_selection') {
             if (userMessage === 'Go Back to Property Types') {
@@ -503,7 +526,10 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
             };
           }
 
-          setMessages(prevMessages => [...prevMessages, finalResponse]);
+          // Only add finalResponse if it was set
+          if (finalResponse) {
+            setMessages(prevMessages => [...prevMessages, finalResponse]);
+          }
           resolve(undefined);
         }, 1500);
       });
@@ -2479,6 +2505,15 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
             <CardHeader className="bg-brand-red text-white p-4 sm:p-5 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => {
+                      setMessages([getInitialMessage()]);
+                      setConversationStep('role_selection');
+                    }}
+                    className="hover:bg-white/10 p-1 rounded-full transition-colors"
+                  >
+                    <ArrowLeft size={20} />
+                  </button>
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
                     <Home size={16} className="text-brand-red sm:w-5 sm:h-5" />
                   </div>
