@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   PropertyFormData, 
   OwnerInfo, 
@@ -13,6 +13,7 @@ import {
 } from '@/types/property';
 
 export const usePropertyForm = () => {
+  const [isInitialized, setIsInitialized] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
   const [propertyDetails, setPropertyDetails] = useState<Partial<PropertyDetails>>({
@@ -29,6 +30,34 @@ export const usePropertyForm = () => {
     availability: 'everyday',
     availableAllDay: true
   });
+
+  // Load saved draft from localStorage on mount
+  useEffect(() => {
+    if (isInitialized) return;
+    
+    try {
+      const savedData = localStorage.getItem('rental-form-data');
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        console.log('Loading rental draft from localStorage:', parsed);
+        
+        if (parsed.propertyDetails) setPropertyDetails(parsed.propertyDetails);
+        if (parsed.locationDetails) setLocationDetails(parsed.locationDetails);
+        if (parsed.rentalDetails) setRentalDetails(parsed.rentalDetails);
+        if (parsed.amenities) setAmenities(parsed.amenities);
+        if (parsed.gallery) setGallery(parsed.gallery);
+        if (parsed.additionalInfo) setAdditionalInfo(parsed.additionalInfo);
+        if (parsed.scheduleInfo) setScheduleInfo(parsed.scheduleInfo);
+        if (parsed.currentStep) setCurrentStep(parsed.currentStep);
+        
+        console.log('Rental draft loaded successfully');
+      }
+    } catch (error) {
+      console.error('Error loading rental draft:', error);
+    } finally {
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
 
   const nextStep = () => {
     if (currentStep < 7) {
@@ -84,7 +113,12 @@ export const usePropertyForm = () => {
   };
 
   const updateGallery = (data: Partial<PropertyGallery>) => {
-    setGallery(prev => ({ ...prev, ...data }));
+    console.log('Updating gallery with data:', data);
+    setGallery(prev => {
+      const updated = { ...prev, ...data };
+      console.log('Updated gallery state:', updated);
+      return updated;
+    });
   };
 
   const updateAdditionalInfo = (data: Partial<AdditionalInfo>) => {

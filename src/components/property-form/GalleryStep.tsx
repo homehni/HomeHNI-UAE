@@ -44,6 +44,7 @@ interface GalleryStepProps {
   totalSteps?: number;
   onSubmit?: () => void;
   isSubmitting?: boolean;
+  formId?: string;
 }
 export const GalleryStep: React.FC<GalleryStepProps> = ({
   initialData = {},
@@ -52,20 +53,37 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   currentStep = 6,
   totalSteps = 8,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  formId = 'gallery-form'
 }) => {
   const form = useForm({
     resolver: zodResolver(gallerySchema),
     defaultValues: {
-      images: initialData.categorizedImages || {
-        bathroom: [],
-        bedroom: [],
-        hall: [],
-        kitchen: [],
-        frontView: [],
-        balcony: [],
-        others: Array.isArray(initialData.images) ? initialData.images : []
-      },
+      images: (() => {
+        // If categorizedImages exists, use it as the source of truth
+        if (initialData.categorizedImages) {
+          return {
+            bathroom: initialData.categorizedImages.bathroom || [],
+            bedroom: initialData.categorizedImages.bedroom || [],
+            hall: initialData.categorizedImages.hall || [],
+            kitchen: initialData.categorizedImages.kitchen || [],
+            frontView: initialData.categorizedImages.frontView || [],
+            balcony: initialData.categorizedImages.balcony || [],
+            others: initialData.categorizedImages.others || []
+          };
+        }
+        
+        // Otherwise, fall back to empty categories (with legacy images in 'others')
+        return {
+          bathroom: [] as any[],
+          bedroom: [] as any[],
+          hall: [] as any[],
+          kitchen: [] as any[],
+          frontView: [] as any[],
+          balcony: [] as any[],
+          others: Array.isArray(initialData.images) ? (initialData.images as any[]) : []
+        };
+      })(),
       video: initialData.video
     }
   });
@@ -107,7 +125,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-8 lg:p-12">
       <Form {...form}>
-        <form id="gallery-form" onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+        <form id={formId} onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
           <FormField control={form.control} name="images" render={({
       field
     }) => <FormItem>
@@ -135,11 +153,11 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
                       <FormMessage />
                     </FormItem>} />
 
-              </form>
-            </Form>
-            
-            {/* Hidden submit button for sticky bar */}
-            <button type="submit" form="gallery-form" className="hidden" />
-          </div>
+            </form>
+          </Form>
+          
+          {/* Hidden submit button for sticky bar */}
+          <button type="submit" form={formId} className="hidden" />
+        </div>
   );
 };

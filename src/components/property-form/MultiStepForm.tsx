@@ -144,7 +144,26 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
   };
 
   const handleGalleryNext = (data: any) => {
+    console.log('Gallery step next - data received:', data);
     updateGallery(data);
+    
+    // Save complete form data including gallery to localStorage
+    const completeFormData = {
+      ownerInfo,
+      propertyDetails,
+      locationDetails,
+      rentalDetails,
+      amenities,
+      gallery: data, // Use the new gallery data
+      additionalInfo,
+      scheduleInfo,
+      currentStep: 6, // Moving to next step
+      completedSteps: [...completedSteps, 5],
+      formType: 'rental'
+    };
+    localStorage.setItem('rental-form-data', JSON.stringify(completeFormData));
+    console.log('Saved complete rental form data with gallery to localStorage:', completeFormData);
+    
     nextStep();
     scrollToTop();
   };
@@ -242,15 +261,16 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 />
               )}
 
-              {currentStep === 5 && (
-                <GalleryStep
-                  initialData={gallery}
-                  onNext={handleGalleryNext}
-                  onBack={prevStep}
-                  currentStep={5}
-                  totalSteps={7}
-                />
-              )}
+            {currentStep === 5 && (
+              <GalleryStep
+                initialData={gallery}
+                onNext={handleGalleryNext}
+                onBack={prevStep}
+                currentStep={5}
+                totalSteps={7}
+                formId="rental-gallery-form"
+              />
+            )}
 
               {currentStep === 6 && (
                 <ScheduleStep
@@ -293,20 +313,33 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   console.log('MultiStepForm sticky Save & Continue button clicked');
                   console.log('Current step:', currentStep);
                   
-                  // Trigger the current step's form submission
-                  const currentStepElement = document.querySelector('form');
-                  console.log('Found form element:', currentStepElement);
+                  // Determine which form ID to look for based on current step
+                  let formId = 'rental-gallery-form';
+                  if (currentStep === 1) formId = 'property-details-form';
+                  else if (currentStep === 2) formId = 'location-details-form';
+                  else if (currentStep === 3) formId = 'rental-details-form';
+                  else if (currentStep === 4) formId = 'amenities-form';
+                  else if (currentStep === 5) formId = 'rental-gallery-form';
+                  else if (currentStep === 6) formId = 'schedule-form';
                   
-                  if (currentStepElement) {
-                    console.log('Dispatching submit event to form');
-                    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-                    currentStepElement.dispatchEvent(submitEvent);
+                  console.log('Looking for form with ID:', formId);
+                  
+                  const formEl = document.getElementById(formId) as HTMLFormElement | null;
+                  console.log('Form element found:', formEl);
+                  
+                  if (formEl) {
+                    console.log('✅ Calling requestSubmit on form element');
+                    formEl.requestSubmit();
                   } else {
-                    console.log('No form element found!');
+                    console.warn('❌ Form element not found, trying to find any form');
+                    const anyForm = document.querySelector('form') as HTMLFormElement | null;
+                    if (anyForm) {
+                      console.log('Found fallback form, calling requestSubmit');
+                      anyForm.requestSubmit();
+                    }
                   }
                   
-                  // Always scroll to top when Save & Continue is clicked
-                  setTimeout(scrollToTop, 100);
+                  scrollToTop();
                 }}
                 className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
               >
