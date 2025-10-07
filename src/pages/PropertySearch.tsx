@@ -1073,7 +1073,7 @@ const PropertySearch = () => {
                 
                 {/* Multi-Location Search Bar */}
                 <div 
-                  className="relative flex flex-wrap items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-12 border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
+                  className="relative flex items-center gap-2 px-4 py-2.5 pl-12 pr-12 min-h-[52px] border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
                   onClick={() => {
                     if (locationInputRef.current && filters.locations.length < 3) {
                       locationInputRef.current.focus();
@@ -1081,21 +1081,24 @@ const PropertySearch = () => {
                   }}
                 >
                   {/* Location Chips */}
-                  {filters.locations.map((location: string, index: number) => (
-                    <div key={index} className="flex items-center gap-1 bg-brand-red text-white px-3 py-1.5 rounded-full text-sm font-medium">
-                      <span className="truncate max-w-32">{location}</span>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
-                          updateFilter('locations', newLocations);
-                        }}
-                        className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
-                      >
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {filters.locations.map((location: string, index: number) => (
+                      <div key={index} className="flex items-center gap-1.5 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
+                        <span className="truncate max-w-32">{location}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
+                            updateFilter('locations', newLocations);
+                          }}
+                          className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                          aria-label={`Remove ${location}`}
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                   
                   {/* Input Field */}
                   <input
@@ -1125,15 +1128,17 @@ const PropertySearch = () => {
                     }}
                     onFocus={e => e.target.select()}
                     placeholder={filters.locations.length === 0 ? "Search locality..." : filters.locations.length >= 3 ? "Max 3 locations" : "Add more..."}
-                    className="flex-1 min-w-32 outline-none bg-transparent text-sm placeholder:text-gray-400"
+                    className="flex-1 min-w-[120px] outline-none bg-transparent text-sm placeholder:text-muted-foreground"
                     disabled={filters.locations.length >= 3}
                   />
-                  {/* Search Icon Button inside field (all breakpoints) */}
+                  
+                  {/* Search Icon Button */}
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 absolute right-2 top-1/2 -translate-y-1/2"
+                    className="flex items-center justify-center h-8 w-8 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 transition-colors shrink-0"
                     aria-label="Add location"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       const typed = (filters.location || '').trim();
                       if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
                         updateFilter('locations', [...filters.locations, typed]);
@@ -1146,11 +1151,6 @@ const PropertySearch = () => {
                   >
                     <SearchIcon className="h-4 w-4" />
                   </button>
-                  
-                  {/* Location Counter */}
-                  {filters.locations.length >= 3 && (
-                    <span className="text-gray-500 text-sm whitespace-nowrap">Max 3</span>
-                  )}
                 </div>
                 
                 {/* Clear All Locations Button (placed below the field to avoid overlap) */}
