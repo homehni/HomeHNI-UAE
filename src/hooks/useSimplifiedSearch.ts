@@ -300,7 +300,6 @@ export const useSimplifiedSearch = () => {
         const { count } = await supabase
           .from('properties')
           .select('*', { count: 'exact', head: true })
-          .eq('status', 'approved')
           .eq('is_visible', true);
 
         setPropertyCount(count || 0);
@@ -310,7 +309,6 @@ export const useSimplifiedSearch = () => {
         const { data: properties, error } = await supabase
           .from('properties')
           .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit')
-          .eq('status', 'approved')
           .eq('is_visible', true)
           .order('created_at', { ascending: false })
           .limit(BATCH_SIZE); // Load first batch only
@@ -339,8 +337,7 @@ export const useSimplifiedSearch = () => {
         {
           event: '*',
           schema: 'public',
-          table: 'properties',
-          filter: 'status=eq.approved'
+          table: 'properties'
         },
         (payload) => {
           console.log('🔄 Real-time property change:', payload);
@@ -380,7 +377,6 @@ export const useSimplifiedSearch = () => {
       const { data: properties, error } = await supabase
         .from('properties')
         .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit')
-        .eq('status', 'approved')
         .eq('is_visible', true)
         .order('created_at', { ascending: false })
         .range(allProperties.length, allProperties.length + BATCH_SIZE - 1);
