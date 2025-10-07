@@ -176,6 +176,7 @@ const PropertyDetails: React.FC = () => {
             const waterSupply = amenities?.waterSupply || subData.payload?.water_supply;
             const powerBackup = amenities?.powerBackup || subData.payload?.power_backup;
             const preferredTenant = rd?.idealFor || subData.payload?.preferred_tenant;
+            const securityDeposit = rd?.securityDeposit || subData.payload?.security_deposit;
             const bathrooms = amenities?.bathrooms || pd?.bathrooms || subData.payload?.bathrooms;
             const balconies = amenities?.balconies || pd?.balconies || subData.payload?.balconies;
             const floorNo = pd?.floorNo || subData.payload?.floor_no;
@@ -200,6 +201,9 @@ const PropertyDetails: React.FC = () => {
             }
             if ((!merged.bathrooms || merged.bathrooms === 0) && bathrooms) Object.assign(merged, { bathrooms: Number(bathrooms) });
             if ((!merged.balconies || merged.balconies === 0) && balconies) Object.assign(merged, { balconies: Number(balconies) });
+            if ((!merged.security_deposit || merged.security_deposit === 0) && securityDeposit !== undefined && securityDeposit !== null) {
+              Object.assign(merged, { security_deposit: Number(securityDeposit) });
+            }
             if (!merged.floor_no && floorNo !== undefined) Object.assign(merged, { floor_no: Number(floorNo) });
             if (!merged.total_floors && totalFloors) Object.assign(merged, { total_floors: Number(totalFloors) });
             if (!merged.facing_direction && facing) Object.assign(merged, { facing_direction: String(facing) });

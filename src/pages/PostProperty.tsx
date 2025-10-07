@@ -634,7 +634,12 @@ export const PostProperty: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ownership_type: ('saleDetails' in (data.propertyInfo as any)) ? ((data.propertyInfo as any).saleDetails?.ownershipType || null) : null,
         // Extra fields for better details rendering
-        security_deposit: Number(((data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? (data.propertyInfo as any)?.rentalDetails?.securityDeposit ?? (data.propertyInfo as any)?.pgDetails?.securityDeposit) ?? 0) || null,
+        security_deposit: (() => {
+          const depositValue = (data.propertyInfo as any)?.flattmatesDetails?.securityDeposit ?? 
+                              (data.propertyInfo as any)?.rentalDetails?.securityDeposit ?? 
+                              (data.propertyInfo as any)?.pgDetails?.securityDeposit;
+          return depositValue !== undefined && depositValue !== null ? Number(depositValue) : 0;
+        })(),
         // PG/Hostel specific fields for better display compatibility
         expected_rent: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.expectedPrice) || null : null,
         expected_deposit: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.securityDeposit) || null : null,
