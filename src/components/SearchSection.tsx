@@ -38,7 +38,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   // Rent-specific availability selections
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
   const [selectedFurnishing, setSelectedFurnishing] = useState<string[]>([]);
-  const [budget, setBudget] = useState<[number, number]>([0, 500000]);
+  // Budget defaults to full range based on the active tab (5Cr for buy/commercial/land, 5L for rent)
+  const [budget, setBudget] = useState<[number, number]>([0, getBudgetSliderMaxHome('buy')]);
   const [area, setArea] = useState<[number, number]>([0, 10000]);
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
@@ -63,15 +64,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   };
 
   const handleSearch = () => {
-    // If there's text in the input and we haven't reached the limit, add it as a location
+    const hasLocality = searchQuery.trim().length > 0 || selectedLocations.length > 0;
+    if (!hasLocality) {
+      return; // Block search until a city/locality is provided
+    }
     if (searchQuery.trim() && selectedLocations.length < 3 && !selectedLocations.includes(searchQuery.trim())) {
       const locationsToSearch = [...selectedLocations, searchQuery.trim()];
       navigateToSearch(locationsToSearch);
-    } else {
-      // Navigate even if there are no locations; filters still apply on results page
-      navigateToSearch(selectedLocations);
+      return;
     }
-    // Do nothing if no locations - button will be disabled
+    navigateToSearch(selectedLocations);
   };
 
   const navigateToSearch = (locations: string[]) => {
@@ -152,6 +154,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     id: 'land',
     label: 'LAND/PLOT'
   }];
+
+  // When switching tabs, reset budget to the full default range for that tab
+  useEffect(() => {
+    setBudget([0, getBudgetSliderMaxHome(activeTab)]);
+  }, [activeTab]);
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
     const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
@@ -927,6 +934,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 absolute right-2 top-1/2 -translate-y-1/2"
                           aria-label="Search"
                           onClick={handleSearch}
+                          disabled={!(searchQuery.trim().length > 0 || selectedLocations.length > 0)}
                         >
                           <SearchIcon className="h-4 w-4" />
                         </button>

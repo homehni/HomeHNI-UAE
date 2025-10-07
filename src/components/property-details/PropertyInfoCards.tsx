@@ -9,7 +9,9 @@ import {
   Home,
   MapPin,
   Layers,
-  Shield
+  Shield,
+  Utensils,
+  Key,
 } from 'lucide-react';
 
 interface PropertyInfoCardsProps {
@@ -23,6 +25,11 @@ interface PropertyInfoCardsProps {
     age_of_building?: string;
     balconies?: number;
     created_at?: string;
+  // PG-specific fields
+  preferred_guests?: string;
+  food_included?: boolean | string;
+  gate_closing_time?: string;
+  place_available_for?: 'male' | 'female' | 'anyone';
     // Common/Commercial extras
     floor_no?: number;
     total_floors?: number;
@@ -31,14 +38,38 @@ interface PropertyInfoCardsProps {
     // Plot specific
     plot_length?: number;
     plot_width?: number;
+    // Legacy/alternate keys support for submissions and table rows
+    length?: number;
+    width?: number;
     road_width?: number;
+    roadWidth?: number;
     boundary_wall?: 'yes' | 'no' | 'partial';
+    boundaryWall?: string;
     ownership_type?: string;
+    owner_role?: string;
     plot_area_unit?: string;
   };
 }
 
 export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }) => {
+  // Debug: Log property data for Land/Plot properties
+  const isLandPlot = property.property_type?.toLowerCase().includes('land') || 
+                     property.property_type?.toLowerCase().includes('plot');
+  
+  if (isLandPlot) {
+    console.log('🔍 PropertyInfoCards - Land/Plot property data:', {
+      property_type: property.property_type,
+      plot_length: property.plot_length,
+      plot_width: property.plot_width,
+      road_width: property.road_width,
+      boundary_wall: property.boundary_wall,
+      ownership_type: property.ownership_type,
+      plot_area_unit: property.plot_area_unit,
+      allKeys: Object.keys(property),
+      fullProperty: property
+    });
+  }
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recently';
     const date = new Date(dateString);
@@ -101,12 +132,25 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getPreferredTenant = () => {
-    if (!property.preferred_tenant) return 'Any';
-    return property.preferred_tenant.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const isPGLocal = property.property_type?.toLowerCase().includes('pg') || 
+                      property.property_type?.toLowerCase().includes('hostel') ||
+                      property.property_type?.toLowerCase().includes('coliving');
+    if (isPGLocal) {
+      const g = property.place_available_for;
+      if (g === 'male') return 'Male';
+      if (g === 'female') return 'Female';
+      if (g === 'anyone') return 'Any';
+    }
+    const raw = property.preferred_tenant || property.preferred_guests;
+    if (!raw) return 'Any';
+    return raw.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
   const isPlot = property.property_type?.toLowerCase().includes('plot') || 
                  property.property_type?.toLowerCase().includes('land');
+  const isPG = property.property_type?.toLowerCase().includes('pg') || 
+               property.property_type?.toLowerCase().includes('hostel') ||
+               property.property_type?.toLowerCase().includes('coliving');
 
   const unitMap: Record<string, string> = {
     'sq-ft': 'sq.ft.',
@@ -124,37 +168,44 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const formatDimensions = () => {
-    const L = property.plot_length;
-    const W = property.plot_width;
+    // Support multiple possible keys from different data sources
+    const L = property.plot_length ?? property.length;
+    const W = property.plot_width ?? property.width;
     if (!L || !W) return 'Not specified';
     // Always show linear dimensions in feet regardless of area unit
     return `${L} x ${W} ft.`;
   };
 
   const formatOwnership = () => {
-    if (!property.ownership_type) return 'Not specified';
-    return property.ownership_type.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+    const raw = property.ownership_type || property.owner_role;
+    if (!raw) return 'Not specified';
+    return String(raw).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
   const formatRoadWidth = () => {
-    if (!property.road_width) return 'Not specified';
-    return `${property.road_width} ft.`;
+    const rw = property.road_width ?? property.roadWidth;
+    if (!rw && rw !== 0) return 'Not specified';
+    return `${rw} ft.`;
   };
 
   const formatBoundaryWall = () => {
-    const v = property.boundary_wall;
-    if (!v) return 'Not specified';
-    if (v === 'yes') return 'Yes';
-    if (v === 'no') return 'No';
-    return 'Partial';
+    const v = property.boundary_wall ?? property.boundaryWall;
+    if (v === undefined || v === null || v === '') return 'Not specified';
+    const s = String(v).toLowerCase().trim();
+    if (['yes', 'y', 'present', 'available', 'have'].includes(s)) return 'Yes';
+    if (['no', 'n', 'absent', 'not available', 'none'].includes(s)) return 'No';
+    if (s.includes('partial')) return 'Partial';
+    // Fallback to title case value
+    return String(v).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
   const defaultInfoCards = [
-    {
+    // For PG/Hostel, hide the bedroom card entirely
+    ...(!isPG ? [{
       icon: Bed,
       title: property.bhk_type?.replace('bhk', ' Bedroom') || 'Not specified',
       subtitle: 'No. of Bedroom',
-    },
+    }] : []),
     {
       icon: Building,
       title: getPropertyType(),
@@ -270,8 +321,48 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
   ];
 
-  // Hide irrelevant cards for Land/Plot
-  const infoCards = isPlot ? plotInfoCards : (isCommercial ? commercialInfoCards : defaultInfoCards);
+  // PG/Hostel specific info cards
+  const pgInfoCards = [
+    {
+      icon: Users,
+      title: getPreferredTenant(),
+      subtitle: 'Preferred Tenant',
+    },
+    {
+      icon: Calendar,
+      title: formatDate(property.created_at),
+      subtitle: 'Posted On',
+    },
+    {
+      icon: Car,
+      title: getParking(),
+      subtitle: 'Parking',
+    },
+    {
+      icon: Clock,
+      title: getPossession(),
+      subtitle: 'Possession',
+    },
+    {
+      icon: Utensils,
+      title: property.food_included ? 'Available' : 'Not Available',
+      subtitle: 'Food Facility',
+    },
+    {
+      icon: Key,
+      title: property.gate_closing_time || 'Not Provided',
+      subtitle: 'Gate Closing Time',
+    },
+  ];
+
+  // Use tailored cards per property type
+  const infoCards = isPlot
+    ? plotInfoCards
+    : isPG
+      ? pgInfoCards
+      : isCommercial
+        ? commercialInfoCards
+        : defaultInfoCards;
   const filteredCards = infoCards;
 
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import LandPlotSection from '@/components/LandPlotSection';
 import PropertyCard from '@/components/PropertyCard';
 import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerTrigger } from '@/components/ui/drawer';
@@ -387,7 +386,14 @@ const PropertySearch = () => {
 
       {/* Property Type Filter */}
       <div>
-        <h4 className="font-semibold mb-3">Property Type</h4>
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-semibold">Property Type</h4>
+          {filters.propertyType.length > 0 && filters.propertyType[0] !== 'ALL' && (
+            <Button variant="ghost" size="sm" onClick={() => updateFilter('propertyType', [])} className="h-6 text-xs">
+              Clear
+            </Button>
+          )}
+        </div>
         <div className="space-y-2">
           {propertyTypes.map(type => (
             <div key={type} className="flex items-center space-x-2">
@@ -419,7 +425,14 @@ const PropertySearch = () => {
 
       {/* BHK Filter (not relevant for land) */}
       {activeTab !== 'land' && (<div>
-        <h4 className="font-semibold mb-3">BHK Type</h4>
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-semibold">BHK Type</h4>
+          {filters.bhkType.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => updateFilter('bhkType', [])} className="h-6 text-xs">
+              Clear
+            </Button>
+          )}
+        </div>
         <div className="grid grid-cols-3 gap-2">
           {bhkTypes.map(bhk => (
             <Button
@@ -445,7 +458,14 @@ const PropertySearch = () => {
 
       {/* Property Status (not critical for land but kept; hide for land) */}
       {activeTab !== 'land' && (<div>
-        <h4 className="font-semibold mb-3">Property Status</h4>
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-semibold">Property Status</h4>
+          {filters.availability.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => updateFilter('availability', [])} className="h-6 text-xs">
+              Clear
+            </Button>
+          )}
+        </div>
         <div className="space-y-2">
           {availabilityOptions.map(option => (
             <div key={option} className="flex items-center space-x-2">
@@ -474,7 +494,14 @@ const PropertySearch = () => {
 
       {/* Furnishing (not relevant for land) */}
       {activeTab !== 'land' && (<div>
-        <h4 className="font-semibold mb-3">Furnishing</h4>
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-semibold">Furnishing</h4>
+          {filters.furnished.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => updateFilter('furnished', [])} className="h-6 text-xs">
+              Clear
+            </Button>
+          )}
+        </div>
         <div className="space-y-2">
           {furnishedOptions.map(option => (
             <div key={option} className="flex items-center space-x-2">
@@ -503,7 +530,14 @@ const PropertySearch = () => {
 
       {/* Age of Property (not relevant for land) */}
       {activeTab !== 'land' && (<div>
-        <h4 className="font-semibold mb-3">Age of Property</h4>
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-semibold">Age of Property</h4>
+          {filters.construction.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => updateFilter('construction', [])} className="h-6 text-xs">
+              Clear
+            </Button>
+          )}
+        </div>
         <div className="space-y-2">
           {constructionOptions.map(option => (
             <div key={option} className="flex items-center space-x-2">
@@ -1033,7 +1067,15 @@ const PropertySearch = () => {
             </div>
 
             {/* Active Filters - Show all active filters */}
-            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL') || filters.bhkType.length > 0 || filters.furnished.length > 0 || filters.availability.length > 0 || filters.locality.length > 0 || filters.construction.length > 0 || filters.budget[0] > 0 || filters.budget[1] < 50000000 || filters.locations.length > 0 || filters.area[0] > 0 || filters.area[1] < 10000) && <>
+            {(filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')
+              || filters.bhkType.length > 0
+              || filters.furnished.length > 0
+              || filters.availability.length > 0
+              || filters.locality.length > 0
+              || filters.construction.length > 0
+              || filters.budgetDirty
+              || filters.areaDirty
+              || filters.locations.length > 0) && <>
               {/* Mobile summary pill */}
               <div className="sm:hidden mb-2">
                 <Button variant="outline" size="sm" onClick={() => setShowMobileChips(v => !v)} className="w-full justify-between">
@@ -1045,7 +1087,10 @@ const PropertySearch = () => {
                     ...filters.availability,
                     ...filters.construction,
                     ...filters.locality,
-                  ].length + (filters.budget[0] > 0 || filters.budget[1] < 50000000 ? 1 : 0) + (filters.area[0] > 0 || filters.area[1] < 10000 ? 1 : 0) + (filters.locations.length > 0 ? filters.locations.length : 0)}</Badge>
+                  ].length
+                    + (filters.budgetDirty ? 1 : 0)
+                    + (filters.areaDirty ? 1 : 0)
+                    + (filters.locations.length > 0 ? filters.locations.length : 0)}</Badge>
                 </Button>
               </div>
 
@@ -1057,16 +1102,16 @@ const PropertySearch = () => {
                 </div>
                 
                 {/* Budget filter badge */}
-                {(filters.budget[0] > 0 || filters.budget[1] < 50000000) && <Badge variant="secondary" className="flex items-center gap-1">
+                {filters.budgetDirty && <Badge variant="secondary" className="flex items-center gap-1">
                     ₹{filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(0) + 'L'} - 
                     ₹{filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(0) + 'L'}
-                    <button onClick={() => updateFilter('budget', [0, 50000000])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                    <button onClick={() => updateFilter('budget', [0, getBudgetSliderMax(activeTab)])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
                   </Badge>}
 
                 {/* Area filter badge */}
-                {(filters.area[0] > 0 || filters.area[1] < 10000) && (
+                {filters.areaDirty && (
                   <Badge variant="secondary" className="flex items-center gap-1">
                     {filters.area[0]} - {filters.area[1] >= 10000 ? '10000+' : filters.area[1]} sq ft
                     <button onClick={() => updateFilter('area', [0, 10000])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
@@ -1138,20 +1183,10 @@ const PropertySearch = () => {
             {isLoading && filteredProperties.length === 0 ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
               </div> : filteredProperties.length > 0 ? <>
-                {activeTab === 'land' ? (
-                  <LandPlotSection properties={filteredProperties.map(p => ({
-                    id: p.id,
-                    title: p.title,
-                    location: p.location,
-                    price: p.price,
-                    area: p.area,
-                    propertyType: p.propertyType
-                  }))} />
-                ) : (
-                  <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
-                    {filteredProperties.map(property => (
-                      <PropertyCard
-                        key={property.id}
+                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                  {filteredProperties.map(property => (
+                    <PropertyCard
+                      key={property.id}
                         id={property.id}
                         title={property.title}
                         location={property.location}
@@ -1167,7 +1202,6 @@ const PropertySearch = () => {
                       />
                     ))}
                   </div>
-                )}
                 
                 {/* Load More Button - Better performance than pagination for large datasets */}
                 {hasMore && (

@@ -10,6 +10,7 @@ interface PropertyHeaderProps {
     locality: string;
     expected_price?: number;
     expected_rent?: number;
+    expected_deposit?: number;
     super_area?: number;
     carpet_area?: number;
     property_type?: string;
@@ -28,7 +29,9 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                  property.property_type?.toLowerCase().includes('land');
   
   const price = isPG ? (property.expected_rent || property.expected_price) : property.expected_price;
-  const deposit = property.security_deposit;
+  const deposit = isPG
+    ? (property.expected_deposit ?? property.security_deposit)
+    : property.security_deposit;
   const area = property.super_area || property.carpet_area;
   
   const getAreaUnit = () => {
@@ -99,7 +102,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               {/* Rent Section */}
               <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
                 <div className="text-base sm:text-lg font-bold text-gray-900">
-                  {price ? `₹${price.toLocaleString()}` : 'Not specified'}
+                  {price ? `₹${price.toLocaleString('en-IN')}` : 'Not specified'}
                 </div>
                 <div className="text-xs text-gray-600">{property.listing_type === 'sale' ? 'Price' : 'Rent'}</div>
               </div>
@@ -108,7 +111,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               {!isPG && (
                 <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
                   <div className="text-base sm:text-lg font-bold text-gray-900">
-                    {area ? area.toLocaleString() : 'Not specified'}
+                    {area ? area.toLocaleString('en-IN') : 'Not specified'}
                   </div>
                   <div className="text-xs text-gray-600">{getAreaUnit()}</div>
                 </div>
@@ -118,7 +121,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
               {!isPlot && (
                 <div className="text-center px-2 sm:px-3 py-3">
                   <div className="text-base sm:text-lg font-bold text-gray-900">
-                    {deposit ? `₹${deposit.toLocaleString()}` : (price ? `₹${(price * 2).toLocaleString()}` : 'Not specified')}
+                    {deposit ? `₹${deposit.toLocaleString('en-IN')}` : (price ? `₹${(price * 2).toLocaleString('en-IN')}` : 'Not specified')}
                   </div>
                   <div className="text-xs text-gray-600">Deposit</div>
                 </div>
@@ -157,22 +160,21 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
 
             {/* Price Section */}
             <div className="text-center px-6 py-4 border-r border-gray-200">
-              <div className="text-xl font-bold text-gray-900">
-                {price ? `₹${price.toLocaleString()}` : 'Not specified'}
-                {deposit && (
-                  <span className="text-sm font-normal text-gray-500 ml-1">
-                    + {deposit.toLocaleString()} ₹
-                  </span>
-                )}
+              <div className="text-xl font-bold text-gray-900 whitespace-nowrap">
+                {price ? `₹${price.toLocaleString('en-IN')}` : 'Not specified'}
               </div>
-              <div className="text-sm text-gray-600">{property.listing_type === 'sale' ? 'Price' : 'Rent'}</div>
+              {!isPlot && deposit && deposit > 0 && (
+                <div className="text-sm font-normal text-gray-500 mt-1">
+                  Deposit: ₹{deposit.toLocaleString('en-IN')}
+                </div>
+              )}
             </div>
             
             {/* Area Section - Hidden for PG/Hostel */}
             {!isPG && (
               <div className="text-center px-6 py-4 border-r border-gray-200">
                 <div className="text-xl font-bold text-gray-900">
-                  {area ? area.toLocaleString() : 'Not specified'}
+                  {area ? area.toLocaleString('en-IN') : 'Not specified'}
                 </div>
                 <div className="text-sm text-gray-600">{getAreaUnit()}</div>
               </div>
@@ -182,7 +184,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             {!isPlot && (
               <div className="text-center px-6 py-4 border-r border-gray-200">
                 <div className="text-xl font-bold text-gray-900">
-                  {deposit ? `₹${deposit.toLocaleString()}` : (price ? `₹${(price * 2).toLocaleString()}` : 'Not specified')}
+                  {deposit ? `₹${deposit.toLocaleString('en-IN')}` : (price ? `₹${(price * 2).toLocaleString('en-IN')}` : 'Not specified')}
                 </div>
                 <div className="text-sm text-gray-600">Deposit</div>
               </div>

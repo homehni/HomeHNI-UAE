@@ -29,13 +29,14 @@ const LandPlotSection = ({ properties }: Props) => {
       'Agricultural Land': [],
       'Industrial Land': [],
       'Commercial Land': [],
+      'Residential Plot/Land': [],
     };
     for (const p of properties) {
       const type = (p.propertyType || '').toLowerCase();
       if (type.includes('agricultural') && type.includes('land')) g['Agricultural Land'].push(p);
       else if (type.includes('industrial') && type.includes('land')) g['Industrial Land'].push(p);
       else if (type.includes('commercial') && type.includes('land')) g['Commercial Land'].push(p);
-      // Any other land/plot types will be shown under "Commercial Land" as fallback for now
+      else g['Residential Plot/Land'].push(p); // Any other land/plot types (residential plots, generic land/plots, etc.)
     }
     return g;
   }, [properties]);
@@ -56,7 +57,7 @@ const LandPlotSection = ({ properties }: Props) => {
     );
   };
 
-  const sectionOrder = ['Agricultural Land', 'Industrial Land', 'Commercial Land'] as const;
+  const sectionOrder = ['Agricultural Land', 'Industrial Land', 'Commercial Land', 'Residential Plot/Land'] as const;
 
   return (
     <div className="space-y-10">

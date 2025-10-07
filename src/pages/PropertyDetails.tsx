@@ -27,6 +27,7 @@ import { PropertyWatermark } from '@/components/property-details/PropertyWaterma
 import { ReportSection } from '@/components/property-details/ReportSection';
 import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
+import { PGRoomsCard } from '@/components/property-details/PGRoomsCard';
 import { RentalStatusService } from '@/services/rentalStatusService';
 import { supabase } from '@/integrations/supabase/client';
 interface Property {
@@ -223,6 +224,17 @@ const PropertyDetails: React.FC = () => {
           const ownershipType = saleDetails.ownershipType || saleDetails.ownership_type;
           const plotAreaUnit = payload.plot_area_unit || plotDetails.plotAreaUnit;
           
+          // Extract PG/Hostel multi-room data if present
+          const roomTypes = origPropertyInfo.roomTypes?.selectedTypes;
+          const roomTypeDetails = origPropertyInfo.roomDetails?.roomTypeDetails;
+          const roomAmenities = origPropertyInfo.roomDetails?.roomAmenities;
+          const pgPreferredGuests = origPropertyInfo.pgDetails?.preferredGuests;
+          const pgGenderPreference = origPropertyInfo.pgDetails?.genderPreference; // 'male' | 'female' | 'anyone'
+          const pgFoodIncluded = origPropertyInfo.pgDetails?.foodIncluded; // 'yes' | 'no'
+          const pgGateClosingTime = origPropertyInfo.pgDetails?.gateClosingTime;
+          const pgAvailableFrom = origPropertyInfo.pgDetails?.availableFrom;
+          const pgParkingType = origPropertyInfo.amenities?.parkingType || origPropertyInfo.amenities?.parking || payload.parking;
+
           const propertyFromSubmission = {
             id: submissionData.id,
             user_id: submissionData.user_id, // Add the missing user_id field
@@ -253,12 +265,23 @@ const PropertyDetails: React.FC = () => {
             amenities: payload.amenities || null, // Add amenities from payload
             // Extra fields from payload to enrich preview
             security_deposit: payload.security_deposit ?? null,
-            available_from: payload.available_from ?? null,
-            parking: payload.parking ?? null,
+            available_from: pgAvailableFrom || payload.available_from || null,
+            // PG-specific fields from original form
+            food_included: typeof pgFoodIncluded !== 'undefined' ? (pgFoodIncluded === 'yes' ? true : false) : undefined,
+            gate_closing_time: pgGateClosingTime || undefined,
+            place_available_for: pgGenderPreference || undefined,
+            // Use raw parking selection from form when available (none|bike|car|both)
+            parking: pgParkingType ?? payload.parking ?? null,
             age_of_building: payload.age_of_building ?? null,
             preferred_tenant: payload.preferred_tenant ?? null,
+            // PG preferred guests mapped for compatibility
+            ...(pgPreferredGuests ? { preferred_tenant: pgPreferredGuests } : {}),
             status: submissionData.status || 'pending',
-            created_at: submissionData.created_at
+            created_at: submissionData.created_at,
+            // PG/Hostel specific multi-room details (from original form)
+            pg_room_types: Array.isArray(roomTypes) ? roomTypes : undefined,
+            pg_room_pricing: roomTypeDetails || undefined,
+            pg_room_amenities: roomAmenities || undefined
           };
           
           console.log('Converted submission to property format:', propertyFromSubmission);
@@ -369,6 +392,56 @@ const PropertyDetails: React.FC = () => {
               locality: pgRow.locality,
               property_type: pgRow.property_type || property?.property_type,
             };
+
+            // Also try to hydrate per-room data from original submission payload
+            try {
+              const { data: subData } = await supabase
+                .from('property_submissions')
+                .select('payload')
+                .eq('id', id)
+                .maybeSingle();
+
+              const orig = subData?.payload?.originalFormData?.propertyInfo || {};
+              const roomTypes = orig?.roomTypes?.selectedTypes;
+              const roomDetails = orig?.roomDetails?.roomTypeDetails;
+              const roomAmenities = orig?.roomDetails?.roomAmenities;
+              const pgPreferredGuests = orig?.pgDetails?.preferredGuests;
+              const pgAvailableFrom = orig?.pgDetails?.availableFrom;
+              const pgFoodIncluded = orig?.pgDetails?.foodIncluded; // 'yes' | 'no'
+              const pgGateClosingTime = orig?.pgDetails?.gateClosingTime;
+              const pgParkingType = orig?.amenities?.parking;
+
+              if (Array.isArray(roomTypes) && roomTypes.length > 0) {
+                Object.assign(transformedData, {
+                  pg_room_types: roomTypes,
+                  pg_room_pricing: roomDetails || {},
+                  pg_room_amenities: roomAmenities || {}
+                });
+              }
+
+              // Fallbacks for header/info chips when RPC row is missing values
+              if (!transformedData.preferred_guests && pgPreferredGuests) {
+                Object.assign(transformedData, { preferred_guests: pgPreferredGuests });
+              }
+              if (!transformedData.available_from && pgAvailableFrom) {
+                Object.assign(transformedData, { available_from: pgAvailableFrom });
+              }
+              if (typeof transformedData.food_included === 'undefined' && typeof pgFoodIncluded !== 'undefined') {
+                Object.assign(transformedData, { food_included: pgFoodIncluded === 'yes' });
+              }
+              if (!transformedData.gate_closing_time && pgGateClosingTime) {
+                Object.assign(transformedData, { gate_closing_time: pgGateClosingTime });
+              }
+              const rawPark = (transformedData as { parking?: string } | undefined)?.parking;
+              const precisePark = pgParkingType;
+              const isGeneric = rawPark === 'Available' || rawPark === 'Not Available' || !rawPark;
+              if (precisePark && isGeneric) {
+                Object.assign(transformedData, { parking: precisePark });
+              }
+            } catch (e) {
+              // Non-fatal; room-specific data is optional
+              console.warn('PG room options not found in submission payload');
+            }
             setDbAmenities(pgRow.amenities ?? null);
             setPgHostelData(transformedData);
           }
@@ -521,6 +594,11 @@ const PropertyDetails: React.FC = () => {
               
               {/* Amenities */}
               <AmenitiesCard amenities={mergedAmenities} />
+
+              {/* PG Room Types & Pricing */}
+              {isPGHostel && (
+                <PGRoomsCard property={mergedProperty as any} />
+              )}
               
               
               {/* Neighborhood */}

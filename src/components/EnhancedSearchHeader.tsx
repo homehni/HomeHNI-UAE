@@ -34,6 +34,8 @@ export const EnhancedSearchHeader = ({
   getBudgetSliderStep,
   getValidBudgetValue,
 }: EnhancedSearchHeaderProps) => {
+  const canSearch = (filters.locations && filters.locations.length > 0) ||
+    (typeof filters.location === 'string' && filters.location.trim().length > 0);
   return (
     <>
       <div className="bg-white border-b border-gray-200 pt-20">
@@ -140,11 +142,21 @@ export const EnhancedSearchHeader = ({
             </div>
 
             {/* Search Button - Mobile */}
-            <Button className="w-full lg:hidden bg-brand-red hover:bg-brand-red-dark">
+            <Button
+              className="w-full lg:hidden bg-brand-red hover:bg-brand-red-dark disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!canSearch}
+              onClick={() => { if (!canSearch) return; updateFilter('trigger', 'search'); }}
+              title={!canSearch ? 'Enter a city or locality to search' : undefined}
+            >
               Search
             </Button>
                     {/* Search Button - Desktop (inline with locality field) */}
-                    <Button className="hidden lg:inline-flex bg-brand-red hover:bg-brand-red-dark ml-auto">
+                    <Button
+                      className="hidden lg:inline-flex bg-brand-red hover:bg-brand-red-dark ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={!canSearch}
+                      onClick={() => { if (!canSearch) return; updateFilter('trigger', 'search'); }}
+                      title={!canSearch ? 'Enter a city or locality to search' : undefined}
+                    >
                       Search
                     </Button>
           </div>

@@ -392,10 +392,20 @@ const [propertyInfo, setPropertyInfo] = useState({
         preferredTenants: pgDetails.preferredGuests,
         idealFor: []
       },
+      // Persist room selections and per-room pricing in payload for details page rendering
+      roomTypes: {
+        selectedTypes: roomTypes.selectedTypes
+      },
+      roomDetails: {
+        roomTypeDetails: roomDetails.roomTypeDetails,
+        roomAmenities: roomDetails.roomAmenities
+      },
       amenities: {
         powerBackup: amenities.powerBackup ? 'Available' : 'Not Available',
         lift: amenities.lift ? 'Available' : 'Not Available',
         parking: amenities.parking !== 'none' ? 'Available' : 'Not Available',
+        // Keep precise selection too
+        parkingType: amenities.parking,
         waterStorageFacility: 'Available',
         security: 'Available',
         wifi: amenities.wifi ? 'Available' : 'Not Available',

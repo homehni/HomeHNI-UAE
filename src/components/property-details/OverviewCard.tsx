@@ -206,6 +206,10 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     if (isPlotProperty && ['Bathroom','Furnishing Status','Floor','Non-Veg Allowed','Pet Allowed'].includes(item.label)) {
       return false;
     }
+    // Hide placeholders for PG/Hostel
+    if (isPGHostelProperty && ['Bathroom','Floor'].includes(item.label)) {
+      return false;
+    }
     return item.value !== 'Not specified' && item.value !== undefined;
   });
 

@@ -156,6 +156,8 @@ export interface PGHostelAmenities extends PropertyAmenities {
   laundry?: 'included' | 'paid' | 'not-available';
   commonArea?: 'tv-room' | 'study-room' | 'recreation' | 'all';
   cleaning?: 'daily' | 'weekly' | 'self';
+  // Raw parking selection for PG/Hostel (used to display Bike/Car/Both/None accurately)
+  parkingType?: 'none' | 'bike' | 'car' | 'both';
   roomAmenities?: {
     cupboard?: boolean;
     geyser?: boolean;
@@ -174,6 +176,21 @@ export interface PGHostelInfo {
   gallery: PropertyGallery;
   additionalInfo: AdditionalInfo;
   scheduleInfo: ScheduleInfo;
+  // Optional PG room configuration for multiple room types with per-room pricing
+  roomTypes?: {
+    selectedTypes: Array<'single' | 'double' | 'three' | 'four'>;
+  };
+  roomDetails?: {
+    roomTypeDetails: Record<string, { expectedRent: number; expectedDeposit: number }>;
+    roomAmenities: {
+      cupboard?: boolean;
+      geyser?: boolean;
+      tv?: boolean;
+      ac?: boolean;
+      bedding?: boolean;
+      attachedBathroom?: boolean;
+    };
+  };
 }
 
 // Flatmates specific interfaces

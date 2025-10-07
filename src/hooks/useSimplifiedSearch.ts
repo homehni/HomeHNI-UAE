@@ -28,7 +28,9 @@ interface SearchFilters {
   propertyType: string[];
   bhkType: string[];
   budget: [number, number];
+  budgetDirty: boolean;
   area: [number, number]; // Area range in square feet
+  areaDirty: boolean; // Track if area was manually changed
   locality: string[];
   furnished: string[];
   availability: string[];
@@ -39,6 +41,7 @@ interface SearchFilters {
   sortBy: string;
 }
 
+let hasInitialBudgetInUrlFlag = false;
 export const useSimplifiedSearch = () => {
   const [searchParams] = useSearchParams();
   // Minimal DB row type to replace 'any' in realtime handlers
@@ -60,6 +63,7 @@ export const useSimplifiedSearch = () => {
     created_at?: string;
     is_visible?: boolean;
     status?: string;
+    plot_area_unit?: string;
   };
   
   // Dynamic budget range based on active tab
@@ -120,29 +124,52 @@ export const useSimplifiedSearch = () => {
       ? furnishedParam.split(',').map((v) => decodeURIComponent(v.trim())).filter(Boolean)
       : [];
 
-    // Budget bounds
-    const budgetMin = Number(searchParams.get('budgetMin'));
-    const budgetMax = Number(searchParams.get('budgetMax'));
+    // Budget bounds (parse only if params are present to avoid Number(null) => 0)
+    const budgetMinParam = searchParams.get('budgetMin');
+    const budgetMaxParam = searchParams.get('budgetMax');
+    const hasBudgetMin = budgetMinParam !== null;
+    const hasBudgetMax = budgetMaxParam !== null;
+    const parsedBudgetMin = hasBudgetMin ? Number(budgetMinParam) : undefined;
+    const parsedBudgetMax = hasBudgetMax ? Number(budgetMaxParam) : undefined;
     const budget: [number, number] = [
-      Number.isFinite(budgetMin) ? Math.max(0, budgetMin) : defaultBudget[0],
-      Number.isFinite(budgetMax) ? Math.min(defaultBudget[1], budgetMax) : defaultBudget[1],
+      hasBudgetMin && Number.isFinite(parsedBudgetMin as number)
+        ? Math.max(0, parsedBudgetMin as number)
+        : defaultBudget[0],
+      hasBudgetMax && Number.isFinite(parsedBudgetMax as number)
+        ? Math.min(defaultBudget[1], parsedBudgetMax as number)
+        : defaultBudget[1],
     ];
+    // Track if URL explicitly set any budget so we don't override on tab switches
+    const hasBudgetParams = hasBudgetMin || hasBudgetMax;
+    hasInitialBudgetInUrlFlag = hasBudgetParams;
 
-    // Area bounds
-    const areaMin = Number(searchParams.get('areaMin'));
-    const areaMax = Number(searchParams.get('areaMax'));
+    // Area bounds (parse only if params are present)
+    const areaMinParam = searchParams.get('areaMin');
+    const areaMaxParam = searchParams.get('areaMax');
+    const hasAreaMin = areaMinParam !== null;
+    const hasAreaMax = areaMaxParam !== null;
+    const parsedAreaMin = hasAreaMin ? Number(areaMinParam) : undefined;
+    const parsedAreaMax = hasAreaMax ? Number(areaMaxParam) : undefined;
     const area: [number, number] = [
-      Number.isFinite(areaMin) ? Math.max(0, areaMin) : 0,
-      Number.isFinite(areaMax) ? Math.min(10000, areaMax) : 10000,
+      hasAreaMin && Number.isFinite(parsedAreaMin as number)
+        ? Math.max(0, parsedAreaMin as number)
+        : 0,
+      hasAreaMax && Number.isFinite(parsedAreaMax as number)
+        ? Math.min(10000, parsedAreaMax as number)
+        : 10000,
     ];
+    // Track if URL explicitly set any area params
+    const hasAreaParams = hasAreaMin || hasAreaMax;
 
     return {
       propertyType,
       bhkType,
       budget,
+      budgetDirty: hasBudgetParams,
       area,
+      areaDirty: hasAreaParams,
       locality: [],
-  furnished,
+      furnished,
       availability,
       construction,
       location: searchParams.get('location') || '',
@@ -164,18 +191,19 @@ export const useSimplifiedSearch = () => {
   // Update budget range when active tab changes
   useEffect(() => {
     const newBudgetRange = getBudgetRange(activeTab);
+  const hasInitialBudgetInUrl: boolean = hasInitialBudgetInUrlFlag;
     setFilters(prev => {
-      // Only reset budget if current budget is outside the valid range for new tab
-      const currentBudget = prev.budget;
-      const maxValue = newBudgetRange[1];
-      
-      // If current budget is within valid range, keep it; otherwise reset to full range
-      const shouldResetBudget = currentBudget[0] > maxValue || currentBudget[1] > maxValue;
-      
-      return {
-        ...prev,
-        budget: shouldResetBudget ? newBudgetRange : currentBudget
-      };
+      if (!hasInitialBudgetInUrl) {
+        // No explicit budget from URL; reset to full range for the selected tab
+        return { ...prev, budget: newBudgetRange, budgetDirty: false };
+      }
+      // Clamp existing budget into the new tab's range
+      const current = prev.budget;
+      const clampedMin = Math.max(0, Math.min(current[0], newBudgetRange[1]));
+      const clampedMax = Math.max(0, Math.min(current[1], newBudgetRange[1]));
+      const adjusted: [number, number] = clampedMin > clampedMax ? [clampedMax, clampedMax] : [clampedMin, clampedMax];
+      const dirty = adjusted[0] > 0 || adjusted[1] < newBudgetRange[1];
+      return { ...prev, budget: adjusted, budgetDirty: dirty };
     });
   }, [activeTab]);
 
@@ -202,7 +230,49 @@ export const useSimplifiedSearch = () => {
         }
       })(),
       priceNumber: property.expected_price || 0,
-      area: `${property.super_area || 0} sq ft`,
+      area: (() => {
+        const isLandProperty = property.property_type?.toLowerCase().includes('land') || 
+                              property.property_type?.toLowerCase().includes('plot');
+        const areaValue = property.super_area || 0;
+        
+        // Debug logging for land properties
+        if (isLandProperty) {
+          console.log('Land/Plot property area unit:', {
+            propertyType: property.property_type,
+            plotAreaUnit: property.plot_area_unit,
+            areaValue
+          });
+        }
+        
+        // For land/plot properties, use the stored area unit with proper mapping
+        if (isLandProperty && property.plot_area_unit) {
+          const unitMap: Record<string, string> = {
+            'sq-ft': 'sq.ft',
+            'sq_ft': 'sq.ft',
+            'sq.ft': 'sq.ft',
+            'sqft': 'sq.ft',
+            'sq-yard': 'sq.yard',
+            'sq_yard': 'sq.yard',
+            'sq-m': 'sq.m',
+            'sq_m': 'sq.m',
+            'acre': 'acres',
+            'acres': 'acres',
+            'hectare': 'hectare',
+            'bigha': 'bigha',
+            'biswa': 'biswa',
+            'gunta': 'gunta',
+            'cents': 'cents',
+            'marla': 'marla',
+            'kanal': 'kanal',
+            'kottah': 'kottah',
+            'grounds': 'grounds',
+            'ares': 'ares'
+          };
+          const displayUnit = unitMap[property.plot_area_unit.toLowerCase()] || property.plot_area_unit;
+          return `${areaValue} ${displayUnit}`;
+        }
+        return `${areaValue} sq ft`;
+      })(),
       areaNumber: property.super_area || 0,
       bedrooms: parseInt(property.bhk_type?.replace(/[^\d]/g, '') || '0'),
       bathrooms: property.bathrooms || 0,
@@ -239,7 +309,7 @@ export const useSimplifiedSearch = () => {
         // Load in batches to avoid overwhelming the browser
         const { data: properties, error } = await supabase
           .from('properties')
-          .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at')
+          .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit')
           .eq('status', 'approved')
           .eq('is_visible', true)
           .order('created_at', { ascending: false })
@@ -309,7 +379,7 @@ export const useSimplifiedSearch = () => {
     try {
       const { data: properties, error } = await supabase
         .from('properties')
-        .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at')
+        .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit')
         .eq('status', 'approved')
         .eq('is_visible', true)
         .order('created_at', { ascending: false })
@@ -396,9 +466,23 @@ export const useSimplifiedSearch = () => {
     console.log('📊 Total properties before filter:', filtered.length);
     
     if (activeTab === 'buy') {
-      // For buy tab, show only sale properties
+      // For buy tab, show only sale properties but exclude land/plot properties
       filtered = filtered.filter(property => {
         const listingType = property.listingType?.toLowerCase();
+        const propertyType = property.propertyType.toLowerCase();
+        
+        // Exclude land/plot properties from Buy tab - they should only be in Land/Plot tab
+        const isLandProperty = propertyType.includes('plot') || 
+               propertyType.includes('land') ||
+               propertyType.includes('agricultural') ||
+               propertyType.includes('industrial land') ||
+               propertyType.includes('commercial land');
+        
+        if (isLandProperty) {
+          console.log('❌ Filtered out land property from buy:', property.title, 'property_type:', propertyType);
+          return false;
+        }
+        
         const isMatch = listingType === 'sale' || listingType === 'resale';
         if (!isMatch) {
           console.log('❌ Filtered out for buy:', property.title, 'listing_type:', listingType);
@@ -406,10 +490,28 @@ export const useSimplifiedSearch = () => {
         return isMatch;
       });
     } else if (activeTab === 'rent') {
-      // For rent tab, show rental properties and PG/Hostels
+      // For rent tab, show rental properties and PG/Hostels, but exclude commercial property types
       filtered = filtered.filter(property => {
         const listingType = property.listingType?.toLowerCase();
         const propertyType = property.propertyType.toLowerCase();
+        
+        // Exclude commercial property types from Rent tab
+        const isCommercialType = propertyType.includes('commercial') ||
+               propertyType.includes('office') ||
+               propertyType.includes('shop') ||
+               propertyType.includes('retail') ||
+               propertyType.includes('warehouse') ||
+               propertyType.includes('showroom') ||
+               propertyType.includes('restaurant') ||
+               propertyType.includes('coworking') ||
+               propertyType.includes('co-working') ||
+               propertyType.includes('industrial');
+        
+        if (isCommercialType) {
+          console.log('❌ Filtered out commercial property from rent:', property.title, 'property_type:', propertyType);
+          return false;
+        }
+        
         const isMatch = listingType === 'rent' || 
                listingType === 'pg/hostel' || 
                propertyType.includes('pg') || 
@@ -536,16 +638,16 @@ export const useSimplifiedSearch = () => {
       });
     }
 
-    // Apply budget filter
-    if (filters.budget[0] > 0 || filters.budget[1] < 50000000) {
+    // Apply budget filter only if user/URL changed it
+    if (filters.budgetDirty) {
       filtered = filtered.filter(property => {
         const price = property.priceNumber || 0;
         return price >= filters.budget[0] && price <= filters.budget[1];
       });
     }
 
-    // Apply area filter
-    if (filters.area[0] > 0 || filters.area[1] < 10000) {
+    // Apply area filter only if user/URL changed it
+    if (filters.areaDirty) {
       filtered = filtered.filter(property => {
         const area = property.areaNumber || 0;
         return area >= filters.area[0] && area <= filters.area[1];
@@ -710,10 +812,20 @@ export const useSimplifiedSearch = () => {
   }, [allProperties, filters, activeTab, normalizeLocationName]);
 
   const updateFilter = (key: keyof SearchFilters, value: SearchFilters[typeof key]) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: value
-    }));
+    setFilters(prev => {
+      if (key === 'budget') {
+        const range = value as [number, number];
+        const full = getBudgetRange(activeTab);
+        const dirty = range[0] > 0 || range[1] < full[1];
+        return { ...prev, budget: range, budgetDirty: dirty };
+      }
+      if (key === 'area') {
+        const range = value as [number, number];
+        const dirty = range[0] > 0 || range[1] < 10000;
+        return { ...prev, area: range, areaDirty: dirty };
+      }
+      return { ...prev, [key]: value } as SearchFilters;
+    });
   };
 
   const clearAllFilters = () => {
@@ -721,7 +833,9 @@ export const useSimplifiedSearch = () => {
       propertyType: [],
       bhkType: [],
       budget: getBudgetRange(activeTab),
+      budgetDirty: false,
       area: [0, 10000], // Reset area range to default
+      areaDirty: false,
       locality: [],
       furnished: [],
       availability: [],
