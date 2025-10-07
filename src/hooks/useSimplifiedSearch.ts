@@ -2,6 +2,12 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
+// Build select columns at module scope to avoid hook dependency warnings
+const BASE_COLUMNS = 'id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit';
+// Keep extra fields conservative to avoid schema mismatches: floor_no and parking are commonly present.
+const EXTRA_COMMERCIAL_COLUMNS = ', floor_no, floor_type';
+const SELECT_COLUMNS = `${BASE_COLUMNS}${EXTRA_COMMERCIAL_COLUMNS}`;
+
 interface Property {
   id: string;
   title: string;
@@ -22,6 +28,10 @@ interface Property {
   bhkType: string;
   listingType: string;
   isNew?: boolean;
+  // Commercial-specific attributes used for filtering
+  floorNo?: number | 'basement' | 'ground';
+  parkingType?: string; // e.g., none | bike | car | both | open | covered
+  parkingAvailable?: boolean;
 }
 
 interface SearchFilters {
@@ -35,6 +45,9 @@ interface SearchFilters {
   furnished: string[];
   availability: string[];
   construction: string[];
+  // Commercial-specific filters
+  floor?: string[]; // ['Basement', 'Ground', '1', '2', '3+']
+  parking?: string[]; // ['Parking Available', 'No Parking']
   location: string; // Keep for backward compatibility
   locations: string[]; // New: array of selected locations (max 3)
   selectedCity: string; // New: selected city for location restriction
@@ -64,6 +77,8 @@ export const useSimplifiedSearch = () => {
     is_visible?: boolean;
     status?: string;
     plot_area_unit?: string;
+  floor_no?: number | 'basement' | null;
+    floor_type?: string | null;
   };
   
   // Dynamic budget range based on active tab
@@ -172,6 +187,8 @@ export const useSimplifiedSearch = () => {
       furnished,
       availability,
       construction,
+      floor: [],
+      parking: [],
       location: searchParams.get('location') || '',
       locations: parsedLocations, // Initialize from URL parameter
       selectedCity: searchParams.get('city') || '', // Initialize from URL parameter
@@ -210,6 +227,7 @@ export const useSimplifiedSearch = () => {
   // Transform property data helper - Memoized with useCallback for performance
   const transformProperty = useCallback((property: PropertyRow) => {
     let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
+    const titleLowerForInference = (property.title || '').toLowerCase();
 
     // Normalize land/plot subtypes so filters can match precisely
     try {
@@ -328,7 +346,43 @@ export const useSimplifiedSearch = () => {
       city: property.city || '',
       bhkType: property.bhk_type || '1bhk',
       listingType: property.listing_type || 'sale',
-      isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      // Commercial specifics (best-effort mapping; values may be absent on residential/land)
+      floorNo: ((): number | 'basement' | 'ground' | undefined => {
+        const f = property.floor_no as number | 'basement' | null | undefined;
+        if (typeof f === 'number' || f === 'basement') return f;
+        // Try to infer from title when explicit field missing
+        const t = titleLowerForInference;
+        // First try structured floor_type if available
+        const ft = (property.floor_type || '').toLowerCase();
+        if (ft) {
+          if (ft.includes('basement')) return 'basement';
+          if (ft.includes('lower ground') || /\blg\b/.test(ft) || /\blgf\b/.test(ft)) return 'ground';
+          if (ft.includes('ground')) return 'ground';
+          if (ft.includes('1')) return 1;
+          if (ft.includes('2')) return 2;
+          if (ft.includes('3')) return 3;
+        }
+        if (t.includes('basement')) return 'basement';
+        if (t.includes('lower ground') || /\blg\b/.test(t) || /\blgf\b/.test(t)) return 'ground';
+        if (t.includes('ground floor') || /\bgf\b/.test(t) || t === 'ground' || t.includes('on ground')) return 'ground';
+        if (t.includes('first floor') || /\b1st\b/.test(t) || t.includes('on 1st') || /\bf1\b/.test(t)) return 1;
+        if (t.includes('second floor') || /\b2nd\b/.test(t) || t.includes('on 2nd') || /\bf2\b/.test(t)) return 2;
+        if (t.includes('third floor') || /\b3rd\b/.test(t) || t.includes('on 3rd') || /\bf3\b/.test(t)) return 3;
+        // As a last resort, assume ground for commercial-like properties to match UX expectations
+        const dt = (displayPropertyType || '').toLowerCase();
+        const commercialish = dt.includes('commercial') || dt.includes('office') || dt.includes('retail') || dt.includes('shop') || dt.includes('store') || dt.includes('warehouse') || dt.includes('showroom') || dt.includes('restaurant') || dt.includes('coworking') || dt.includes('co-working') || (dt.includes('industrial') && !dt.includes('land'));
+        if (commercialish) return 'ground';
+        return undefined;
+      })(),
+      parkingAvailable: ((): boolean | undefined => {
+        const t = titleLowerForInference;
+        if (!t) return undefined;
+        if (t.includes('no parking') || t.includes('without parking')) return false;
+        if (t.includes('with parking') || t.includes('parking available') || t.includes('car parking') || t.includes('covered parking') || t.includes('open parking') || t.includes('2 wheeler') || t.includes('four wheeler') || t.includes('4 wheeler')) return true;
+        if (t.includes('parking')) return true; // generic mention
+        return undefined;
+      })()
     };
   }, []);
 
@@ -349,7 +403,7 @@ export const useSimplifiedSearch = () => {
         // Load in batches to avoid overwhelming the browser
         const { data: properties, error } = await supabase
           .from('properties')
-          .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit')
+          .select(SELECT_COLUMNS)
           .eq('is_visible', true)
           .order('created_at', { ascending: false })
           .limit(BATCH_SIZE); // Load first batch only
@@ -417,7 +471,7 @@ export const useSimplifiedSearch = () => {
     try {
       const { data: properties, error } = await supabase
         .from('properties')
-        .select('id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit')
+        .select(SELECT_COLUMNS)
         .eq('is_visible', true)
         .order('created_at', { ascending: false })
         .range(allProperties.length, allProperties.length + BATCH_SIZE - 1);
@@ -517,6 +571,23 @@ export const useSimplifiedSearch = () => {
         
         if (isLandProperty) {
           console.log('❌ Filtered out land property from buy:', property.title, 'property_type:', propertyType);
+          return false;
+        }
+
+        // Exclude commercial property types from Buy tab - they should only appear in Commercial tab
+        const isCommercialType = propertyType.includes('commercial') ||
+               propertyType.includes('office') ||
+               propertyType.includes('shop') ||
+               propertyType.includes('retail') ||
+               propertyType.includes('warehouse') ||
+               propertyType.includes('showroom') ||
+               propertyType.includes('restaurant') ||
+               propertyType.includes('coworking') ||
+               propertyType.includes('co-working') ||
+               propertyType.includes('industrial');
+
+        if (isCommercialType) {
+          console.log('❌ Filtered out commercial property from buy:', property.title, 'property_type:', propertyType);
           return false;
         }
         
@@ -767,6 +838,50 @@ export const useSimplifiedSearch = () => {
           return propertyAge.includes(normalizedConstr);
         });
       });
+    }
+
+    // Apply commercial-specific filters (only when on commercial tab)
+    if (activeTab === 'commercial') {
+      // Floor filter
+      if (filters.floor && filters.floor.length > 0) {
+        const normalized = filters.floor.map(s => s.toLowerCase());
+        const allOptions = ['basement', 'ground', '1', '2', '3+'];
+        const includesAll = allOptions.every(o => normalized.includes(o));
+        if (!includesAll) {
+          // If there are no explicit 0/'ground' entries in the currently filtered set,
+          // treat '1' as ground (common in some legacy datasets).
+          const hasExplicitGround = filtered.some(p => p.floorNo === 0 || p.floorNo === 'ground');
+          const treatOneAsGround = !hasExplicitGround;
+
+          filtered = filtered.filter(property => {
+            const f = property.floorNo;
+            return normalized.some(sel => {
+              const s = sel;
+              if (s === 'basement') return f === 'basement';
+              if (s === 'ground') return f === 'ground' || f === 0 || (treatOneAsGround && f === 1) || typeof f === 'undefined';
+              if (s.endsWith('+')) {
+                const n = parseInt(s.replace('+',''));
+                return typeof f === 'number' && f >= n;
+              }
+              const n = parseInt(s);
+              return typeof f === 'number' && f === n;
+            });
+          });
+        }
+      }
+      // Parking filter
+      if (filters.parking && filters.parking.length > 0) {
+        filtered = filtered.filter(property => {
+          const hasParking = property.parkingAvailable;
+          return filters.parking!.some(p => {
+            const v = p.toLowerCase();
+            // If parking availability is unknown, don't match either option
+            if (typeof hasParking === 'undefined') return false;
+            if (v.includes('no')) return hasParking === false;
+            return hasParking === true; // 'Parking Available'
+          });
+        });
+      }
     }
 
     // Apply location filter (both single location and multiple locations)

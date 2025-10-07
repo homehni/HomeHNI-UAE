@@ -165,6 +165,9 @@ const PropertySearch = () => {
   const furnishedOptions = ['Furnished', 'Semi-Furnished', 'Unfurnished'];
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
   const constructionOptions = ['New Project', '1-5 Years Old', '5-10 Years Old', '10+ Years Old'];
+  // Commercial specific options
+  const floorOptions = ['Basement', 'Ground', '1', '2', '3+'];
+  const parkingOptions = ['Parking Available', 'No Parking'];
 
   // Reusable filters panel used in desktop sidebar and mobile drawer
   const FiltersPanel = () => {
@@ -424,8 +427,74 @@ const PropertySearch = () => {
 
       <Separator />
 
-      {/* BHK Filter (not relevant for land) */}
-      {activeTab !== 'land' && (<div>
+      {/* Commercial-only: Floor filter (moved up for visibility) */}
+      {activeTab === 'commercial' && (
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-semibold">Floor</h4>
+            {filters.floor && filters.floor.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => updateFilter('floor', [])} className="h-6 text-xs">Clear</Button>
+            )}
+          </div>
+          <div className="space-y-2">
+            {floorOptions.map(option => (
+              <div key={option} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`floor-${option}`}
+                  checked={(filters.floor || []).includes(option)}
+                  onCheckedChange={checked => {
+                    preserveScroll(() => {
+                      const current = filters.floor || [];
+                      if (checked) {
+                        updateFilter('floor', [...current, option]);
+                      } else {
+                        updateFilter('floor', current.filter((f: string) => f !== option));
+                      }
+                    });
+                  }}
+                />
+                <label htmlFor={`floor-${option}`} className="text-sm text-gray-700 cursor-pointer">{option}</label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Commercial-only: Parking filter (moved up for visibility) */}
+      {activeTab === 'commercial' && (
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-semibold">Parking</h4>
+            {filters.parking && filters.parking.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => updateFilter('parking', [])} className="h-6 text-xs">Clear</Button>
+            )}
+          </div>
+          <div className="space-y-2">
+            {parkingOptions.map(option => (
+              <div key={option} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`parking-${option}`}
+                  checked={(filters.parking || []).includes(option)}
+                  onCheckedChange={checked => {
+                    preserveScroll(() => {
+                      const current = filters.parking || [];
+                      if (checked) {
+                        updateFilter('parking', [...current, option]);
+                      } else {
+                        updateFilter('parking', current.filter((p: string) => p !== option));
+                      }
+                    });
+                  }}
+                />
+                <label htmlFor={`parking-${option}`} className="text-sm text-gray-700 cursor-pointer">{option}</label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+  {/* BHK Filter (hide for land and commercial) */}
+  {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">BHK Type</h4>
           {filters.bhkType.length > 0 && (
@@ -457,8 +526,8 @@ const PropertySearch = () => {
 
       <Separator />
 
-      {/* Property Status (not critical for land but kept; hide for land) */}
-      {activeTab !== 'land' && (<div>
+  {/* Property Status (hide for land and commercial) */}
+  {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">Property Status</h4>
           {filters.availability.length > 0 && (
@@ -493,8 +562,8 @@ const PropertySearch = () => {
 
       <Separator />
 
-      {/* Furnishing (not relevant for land) */}
-      {activeTab !== 'land' && (<div>
+  {/* Furnishing (not relevant for land; also show for commercial) */}
+  {activeTab !== 'land' && (<div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">Furnishing</h4>
           {filters.furnished.length > 0 && (
@@ -529,8 +598,9 @@ const PropertySearch = () => {
 
       <Separator />
 
-      {/* Age of Property (not relevant for land) */}
-      {activeTab !== 'land' && (<div>
+  {/* Age of Property (hide for land and commercial) */}
+  {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
+      {/* end commercial-only filters (moved earlier) */}
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">Age of Property</h4>
           {filters.construction.length > 0 && (
@@ -1183,6 +1253,23 @@ const PropertySearch = () => {
                       <X size={12} />
                     </button>
                   </Badge>)}
+                {/* Commercial chips */}
+                {(filters.floor || []).map(f => (
+                  <Badge key={`floor-${f}`} variant="secondary" className="flex items-center gap-1">
+                    Floor: {f}
+                    <button onClick={() => updateFilter('floor', (filters.floor || []).filter((x: string) => x !== f))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                ))}
+                {(filters.parking || []).map(p => (
+                  <Badge key={`parking-${p}`} variant="secondary" className="flex items-center gap-1">
+                    {p}
+                    <button onClick={() => updateFilter('parking', (filters.parking || []).filter((x: string) => x !== p))} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                ))}
                   
                   <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-brand-red hover:bg-brand-red/10">
                     Clear All
