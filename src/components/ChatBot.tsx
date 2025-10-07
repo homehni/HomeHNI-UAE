@@ -537,6 +537,13 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   };
 
   const handleOptionClick = (option: string) => {
+    // Handle "Post Your Property" button directly
+    if (option === 'Post Your Property') {
+      navigate('/post-property');
+      setIsOpen(false);
+      return;
+    }
+    
     // If in search context, handle all options as messages through bot response
     if (searchContext) {
       const newMessage: Message = {
