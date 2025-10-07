@@ -1204,24 +1204,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                       </div>
 
-                      {/* Clear All below field to avoid overlap */}
-                      {selectedLocations.length > 0 && (
-                        <div className="mt-2 flex justify-end">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedLocations([]);
-                              setSelectedCity('');
-                              setSearchQuery('');
-                            }}
-                            className="h-6 w-6 p-0 hover:bg-brand-red/10"
-                            aria-label="Clear all locations"
-                          >
-                            <X size={14} />
-                          </Button>
-                        </div>
-                      )}
                     </div>
 
                     {/* Desktop: Collapsible Filter Dropdowns */}
