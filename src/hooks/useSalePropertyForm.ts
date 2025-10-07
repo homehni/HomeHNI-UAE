@@ -106,10 +106,27 @@ export const useSalePropertyForm = () => {
   };
 
   const updateGallery = (data: Partial<PropertyGallery>) => {
-    console.log('Updating gallery with data:', data);
+    console.log('🖼️ [useSalePropertyForm] Updating gallery with data:', data);
+    console.log('🖼️ [useSalePropertyForm] Categorized images:', data.categorizedImages);
+    console.log('🖼️ [useSalePropertyForm] All images:', data.images);
     setGallery(prev => {
       const updated = { ...prev, ...data };
-      console.log('Updated gallery state:', updated);
+      console.log('🖼️ [useSalePropertyForm] Updated gallery state:', updated);
+      
+      // Immediately save to localStorage for persistence
+      try {
+        const savedData = localStorage.getItem('resale-form-data');
+        const existingData = savedData ? JSON.parse(savedData) : {};
+        const updatedFormData = {
+          ...existingData,
+          gallery: updated
+        };
+        localStorage.setItem('resale-form-data', JSON.stringify(updatedFormData));
+        console.log('✅ [useSalePropertyForm] Gallery saved to localStorage:', updated);
+      } catch (error) {
+        console.error('❌ [useSalePropertyForm] Error saving gallery to localStorage:', error);
+      }
+      
       return updated;
     });
   };
