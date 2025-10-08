@@ -2074,7 +2074,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
 {message.options && (
   (() => {
-    const mainOptions = ['Seller', 'Agent', 'Builder', 'Want to buy a property'];
+    const mainOptions = ['Seller', 'Agent', 'Builder'];
     const isMain =
       mainOptions.every(o => message.options?.includes(o)) &&
       message.options.length === mainOptions.length;
