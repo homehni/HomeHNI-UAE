@@ -663,8 +663,8 @@ const PropertyDetails: React.FC = () => {
               {/* Description Section */}
               <DescriptionCard property={mergedProperty as any} />
               
-              {/* Amenities */}
-              <AmenitiesCard amenities={mergedAmenities} />
+              {/* Amenities - Hidden as it's now part of PropertyDetailsCard */}
+              {/* <AmenitiesCard amenities={mergedAmenities} /> */}
 
               {/* PG Room Types & Pricing */}
               {isPGHostel && (
