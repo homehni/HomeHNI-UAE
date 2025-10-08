@@ -53,6 +53,7 @@ export async function sendListingLiveEmail(
     locality: string;
     phone: string;
     id: string;
+    propertyType: string;
   }
 ) {
   return sendEmail('/send-listing-live-email', {
@@ -62,6 +63,7 @@ export async function sendListingLiveEmail(
     bhkDetails: propertyData.bhkDetails,
     locality: propertyData.locality,
     phone: propertyData.phone,
+    propertyType: propertyData.propertyType,
     propertyUrl: `https://homehni.com/property/${propertyData.id}`
   });
 }

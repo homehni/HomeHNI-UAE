@@ -55,6 +55,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
           bhkDetails: propertyInfo?.propertyDetails?.bhkType || 'Property',
           locality: propertyInfo?.locationDetails?.locality || 'Your location',
           phone: ownerInfo.phoneNumber || 'Contact number',
+          propertyType: propertyInfo?.propertyDetails?.propertyType || 'N/A',
           id: previewPropertyId || 'property-id'
         };
         console.log('Property data for email:', propertyData);

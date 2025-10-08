@@ -904,6 +904,10 @@ export const PostProperty: React.FC = () => {
           ? data.propertyInfo.propertyDetails.bhkType 
           : 'Property';
         
+        const propertyType = ('propertyDetails' in data.propertyInfo && 'propertyType' in data.propertyInfo.propertyDetails) 
+          ? data.propertyInfo.propertyDetails.propertyType 
+          : 'N/A';
+        
         const locality = data.propertyInfo.locationDetails.locality || 'Location';
         const phone = data.ownerInfo.phoneNumber || 'Not provided';
         
@@ -912,6 +916,7 @@ export const PostProperty: React.FC = () => {
           bhkDetails: bhkDetails,
           locality: locality,
           phone: phone,
+          propertyType: propertyType,
           id: lastSubmissionId || 'new-property'
         });
         
