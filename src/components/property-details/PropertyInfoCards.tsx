@@ -114,7 +114,7 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       propertyStr: JSON.stringify(property).substring(0, 500) + '...',
       
       // Check if data might be in subData
-      subData: (property as any).subData,
+      subData: property.subData,
       
       // Check all top-level values for specific fields
       hasPlotData: Object.entries(property)

@@ -73,7 +73,7 @@ const MyChats = () => {
                 Your conversations with our AI assistants
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 overflow-hidden p-0 lg:pt-0 pt-24">
+            <CardContent className="flex-1 overflow-hidden p-0">
               <div className="p-4 border-b bg-white">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -133,7 +133,7 @@ const MyChats = () => {
         ) : (
           /* Messages View - Mobile */
           <Card className="h-full flex flex-col border-0 rounded-none">
-            <CardHeader className="border-b bg-white fixed top-0 left-0 right-0 z-50 p-4 lg:static">
+            <CardHeader className="border-b bg-white sticky top-0 z-10 p-4">
               <div className="flex items-center gap-3">
                 <Button
                   variant="ghost"
