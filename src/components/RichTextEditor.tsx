@@ -1,7 +1,4 @@
-import React, { useMemo } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import './RichTextEditor.css';
+import React from 'react';
 
 interface RichTextEditorProps {
   value: string;
@@ -14,44 +11,16 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   value,
   onChange,
   placeholder = "Enter content...",
-  height = "200px"
+  height = "200px",
 }) => {
-  const modules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'font': [] }],
-      [{ 'size': [] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }, 
-       { 'indent': '-1' }, { 'indent': '+1' }],
-      ['link', 'image', 'video'],
-      [{ 'align': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      ['code-block'],
-      ['clean']
-    ],
-  }), []);
-
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video',
-    'align', 'color', 'background',
-    'code-block'
-  ];
-
   return (
     <div className="bg-background">
-      <ReactQuill
-        theme="snow"
+      <textarea
         value={value}
-        onChange={onChange}
-        modules={modules}
-        formats={formats}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         style={{ height }}
-        className="bg-background text-foreground"
+        className="w-full rounded-md border bg-background text-foreground p-3 text-sm outline-none focus:ring-2 focus:ring-primary"
       />
     </div>
   );
