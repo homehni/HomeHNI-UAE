@@ -214,6 +214,8 @@ const PropertySearch = () => {
   // Commercial specific options
   const floorOptions = ['Basement', 'Ground', '1', '2', '3+'];
   const parkingOptions = ['Parking Available', 'No Parking'];
+  // Land specific options
+  const landConditionOptions = ['Ready to Use', 'Under Development', 'Raw Land'];
 
   // Reusable filters panel used in desktop sidebar and mobile drawer
   const FiltersPanel = () => {
@@ -650,6 +652,47 @@ const PropertySearch = () => {
                 }}
               />
               <label htmlFor={`furnished-${option}`} className="text-sm text-gray-700 cursor-pointer">
+                {option}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+      </>
+  )}
+
+  {/* Land Property Condition (only for land) */}
+  {activeTab === 'land' && (
+    <>
+    <div>
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-semibold">Property Condition</h4>
+          {filters.landCondition && filters.landCondition.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => updateFilter('landCondition', [])} className="h-6 text-xs">
+              Clear
+            </Button>
+          )}
+        </div>
+        <div className="space-y-2">
+          {landConditionOptions.map(option => (
+            <div key={option} className="flex items-center space-x-2">
+              <Checkbox
+                id={`land-condition-${option}`}
+                checked={(filters.landCondition || []).includes(option)}
+                onCheckedChange={checked => {
+                  preserveScroll(() => {
+                    const current = filters.landCondition || [];
+                    if (checked) {
+                      updateFilter('landCondition', [...current, option]);
+                    } else {
+                      updateFilter('landCondition', current.filter((c: string) => c !== option));
+                    }
+                  });
+                }}
+              />
+              <label htmlFor={`land-condition-${option}`} className="text-sm text-gray-700 cursor-pointer">
                 {option}
               </label>
             </div>
