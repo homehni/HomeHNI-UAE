@@ -296,15 +296,18 @@ const PropertySearch = () => {
                   id="min-budget"
                   type="number" 
                   placeholder="Enter min budget" 
-                  value={uiBudget[0].toString()} 
+                  value={uiBudget[0] === 0 ? '' : uiBudget[0].toString()} 
                   onChange={e => {
-                    const value = parseInt(e.target.value) || 0;
-                    if (value <= uiBudget[1]) setUiBudget([value, uiBudget[1]]);
+                    const value = e.target.value === '' ? 0 : parseInt(e.target.value);
+                    if (!isNaN(value) && value <= uiBudget[1]) {
+                      setUiBudget([value, uiBudget[1]]);
+                    }
                   }} 
                   onBlur={() => commitBudget(uiBudget)}
                   onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
-                  className="h-8 text-sm"
+                  className="h-8 text-sm pointer-events-auto"
                   aria-label="Minimum budget amount"
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -313,15 +316,18 @@ const PropertySearch = () => {
                   id="max-budget"
                   type="number" 
                   placeholder="Enter max budget" 
-                  value={uiBudget[1].toString()} 
+                  value={uiBudget[1] === 0 ? '' : uiBudget[1].toString()} 
                   onChange={e => {
-                    const value = parseInt(e.target.value) || 0;
-                    if (value >= uiBudget[0]) setUiBudget([uiBudget[0], Math.min(value, 50000000)]);
+                    const value = e.target.value === '' ? 0 : parseInt(e.target.value);
+                    if (!isNaN(value) && value >= uiBudget[0]) {
+                      setUiBudget([uiBudget[0], Math.min(value, getBudgetSliderMax(activeTab))]);
+                    }
                   }} 
                   onBlur={() => commitBudget(uiBudget)}
                   onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
-                  className="h-8 text-sm"
+                  className="h-8 text-sm pointer-events-auto"
                   aria-label="Maximum budget amount"
+                  autoComplete="off"
                 />
               </div>
             </div>
