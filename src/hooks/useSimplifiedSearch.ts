@@ -1127,6 +1127,14 @@ export const useSimplifiedSearch = () => {
         const dirty = range[0] > 0 || range[1] < 10000;
         return { ...prev, area: range, areaDirty: dirty };
       }
+      if (key === 'landArea') {
+        const range = value as [number, number];
+        const dirty = range[0] > 0 || range[1] < 6;
+        return { ...prev, landArea: range, landAreaDirty: dirty };
+      }
+      if (key === 'landAreaUnit') {
+        return { ...prev, landAreaUnit: value as string, landAreaDirty: true };
+      }
       // Handle location updates - always treat as single location
       if (key === 'locations') {
         // If it's an array and has values, use the first one only
