@@ -34,6 +34,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   currentStep,
   totalSteps
 }) => {
+  const cityInputRef = useRef<HTMLInputElement | null>(null);
   const localityInputRef = useRef<HTMLInputElement | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -219,6 +220,31 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
         'vadodara': ['Vadodara', 'Baroda'],
       };
 
+      // Attach autocomplete to city field
+      if (cityInputRef.current) {
+        const cityOptions = {
+          fields: ['address_components', 'name'],
+          types: ['(cities)'],
+          componentRestrictions: { country: 'in' as const }
+        };
+        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
+        cityAc.addListener('place_changed', () => {
+          const place = cityAc.getPlace();
+          if (place?.address_components) {
+            let cityName = '';
+            place.address_components.forEach((component: any) => {
+              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+                cityName = component.long_name;
+              }
+            });
+            if (cityName && cityInputRef.current) {
+              cityInputRef.current.value = cityName.toLowerCase();
+              form.setValue('city', cityName.toLowerCase(), { shouldValidate: true });
+            }
+          }
+        });
+      }
+
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
         
@@ -304,35 +330,23 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">City</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    City *
+                  </FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Choose city" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white border shadow-lg z-50">
-                        <SelectItem value="mumbai">Mumbai</SelectItem>
-                        <SelectItem value="delhi">Delhi</SelectItem>
-                        <SelectItem value="bangalore">Bangalore</SelectItem>
-                        <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                        <SelectItem value="chennai">Chennai</SelectItem>
-                        <SelectItem value="kolkata">Kolkata</SelectItem>
-                        <SelectItem value="pune">Pune</SelectItem>
-                        <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
-                        <SelectItem value="jaipur">Jaipur</SelectItem>
-                        <SelectItem value="surat">Surat</SelectItem>
-                        <SelectItem value="lucknow">Lucknow</SelectItem>
-                        <SelectItem value="kanpur">Kanpur</SelectItem>
-                        <SelectItem value="nagpur">Nagpur</SelectItem>
-                        <SelectItem value="indore">Indore</SelectItem>
-                        <SelectItem value="thane">Thane</SelectItem>
-                        <SelectItem value="bhopal">Bhopal</SelectItem>
-                        <SelectItem value="visakhapatnam">Visakhapatnam</SelectItem>
-                        <SelectItem value="pimpri-chinchwad">Pimpri-Chinchwad</SelectItem>
-                        <SelectItem value="patna">Patna</SelectItem>
-                        <SelectItem value="vadodara">Vadodara</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="relative">
+                      <Input 
+                        placeholder="Search 'Mumbai', 'Bangalore', etc..." 
+                        className="h-12 pl-10" 
+                        {...field} 
+                        ref={el => {
+                          field.ref(el);
+                          cityInputRef.current = el;
+                        }} 
+                      />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

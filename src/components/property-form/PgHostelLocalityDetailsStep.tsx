@@ -34,6 +34,7 @@ export function PgHostelLocalityDetailsStep({
   currentStep,
   totalSteps
 }: PgHostelLocalityDetailsStepProps) {
+  const cityInputRef = useRef<HTMLInputElement | null>(null);
   const localityInputRef = useRef<HTMLInputElement | null>(null);
   const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
   const [selectedCity, setSelectedCity] = useState(initialData.city || '');
@@ -172,6 +173,31 @@ export function PgHostelLocalityDetailsStep({
         'Kolkata': ['Kolkata', 'Calcutta'],
       };
 
+      // Attach autocomplete to city field
+      if (cityInputRef.current) {
+        const cityOptions = {
+          fields: ['address_components', 'name'],
+          types: ['(cities)'],
+          componentRestrictions: { country: 'in' as const }
+        };
+        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
+        cityAc.addListener('place_changed', () => {
+          const place = cityAc.getPlace();
+          if (place?.address_components) {
+            let cityName = '';
+            place.address_components.forEach((component: any) => {
+              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+                cityName = component.long_name;
+              }
+            });
+            if (cityName && cityInputRef.current) {
+              cityInputRef.current.value = cityName;
+              form.setValue('city', cityName, { shouldValidate: true });
+            }
+          }
+        });
+      }
+
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
         
@@ -255,22 +281,23 @@ export function PgHostelLocalityDetailsStep({
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">City</FormLabel>
+                    <FormLabel className="text-sm font-medium flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      City *
+                    </FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select city" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Bangalore">Bangalore</SelectItem>
-                          <SelectItem value="Mumbai">Mumbai</SelectItem>
-                          <SelectItem value="Delhi">Delhi</SelectItem>
-                          <SelectItem value="Chennai">Chennai</SelectItem>
-                          <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                          <SelectItem value="Pune">Pune</SelectItem>
-                          <SelectItem value="Kolkata">Kolkata</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="relative">
+                        <Input 
+                          placeholder="Search 'Bangalore', 'Mumbai', etc..." 
+                          className="h-12 pl-10" 
+                          {...field} 
+                          ref={el => {
+                            field.ref(el);
+                            cityInputRef.current = el;
+                          }} 
+                        />
+                        <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
