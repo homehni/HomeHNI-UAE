@@ -191,8 +191,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       setSearchDetailsForm({ name: '', email: '', phone: '' });
       setShowSearchDetailsForm(false);
       setInputValue('');
+      
+      // Initialize conversation for Search
+      if (user) {
+        const searchType = searchContext.activeTab || 'buy';
+        initializeConversation('search', `Search - ${searchType}`, initialMsg.text);
+      }
     }
-  }, [searchContext?.activeTab]);
+  }, [searchContext?.activeTab, user]);
 
   // Helper function to create a new conversation
   const initializeConversation = async (type: string, title: string, firstMessage: string) => {
@@ -1201,35 +1207,47 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     }
   }, [planChatMessages, showDetailsForm, propertyChatMessages, showPropertyDetailsForm, serviceChatMessages, showServiceDetailsForm, currentView]);
 
-  const handleHistoryClick = () => {
+  const handleHistoryClick = async () => {
     if (location.pathname === '/plans') {
       setCurrentView('plan-support');
       setPlanChatStep('budget');
       setShowDetailsForm(false);
+      const initialMessage = 'Hi, I can help you with selection of right plan. What is your rent budget?';
       setPlanChatMessages([
         {
           id: '1',
-          text: 'Hi, I can help you with selection of right plan. What is your rent budget?',
+          text: initialMessage,
           isBot: true,
           timestamp: new Date()
         }
       ]);
+      
+      // Initialize conversation for Plans
+      if (user) {
+        await initializeConversation('plan', 'Plans Conversation', initialMessage);
+      }
     } else if (location.pathname.startsWith('/property/')) {
       setCurrentView('property-support');
       setPropertyChatStep('budget');
       setShowPropertyDetailsForm(false);
+      const initialMessage = 'Hi, I can help you with this property. What is your rent budget?';
       setPropertyChatMessages([
         {
           id: '1',
-          text: 'Hi, I can help you with this property. What is your rent budget?',
+          text: initialMessage,
           isBot: true,
           timestamp: new Date()
         }
       ]);
+      
+      // Initialize conversation for Property
+      if (user) {
+        await initializeConversation('property', 'Property Inquiry', initialMessage);
+      }
     }
   };
 
-  const handlePlanChatSend = () => {
+  const handlePlanChatSend = async () => {
     if (planChatInput.trim() === '') return;
 
     const userMessage: Message = {
@@ -1241,10 +1259,14 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
     setPlanChatMessages(prev => [...prev, userMessage]);
     const budgetValue = planChatInput;
+    
+    // Save user message to history
+    await saveMessageToHistory(planChatInput, false);
+    
     setPlanChatInput('');
 
     // Bot response based on step
-    setTimeout(() => {
+    setTimeout(async () => {
       let botResponse: Message;
       
       if (planChatStep === 'budget') {
@@ -1257,6 +1279,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         setPlanChatMessages(prev => [...prev, botResponse]);
         setPlanChatStep('details-form');
         setUserDetails(prev => ({ ...prev, budget: budgetValue }));
+        
+        // Save bot message to history
+        await saveMessageToHistory(botResponse.text, true);
       } else if (planChatStep === 'follow-up') {
         botResponse = {
           id: String(Date.now() + 1),
@@ -1266,6 +1291,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         };
         setPlanChatMessages(prev => [...prev, botResponse]);
         setPlanChatStep('complete');
+        
+        // Save bot message to history
+        await saveMessageToHistory(botResponse.text, true);
       }
     }, 1000);
   };
@@ -1306,7 +1334,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   };
 
   // Property chat handlers
-  const handlePropertyChatSend = () => {
+  const handlePropertyChatSend = async () => {
     if (propertyChatInput.trim() === '') return;
 
     const userMessage: Message = {
@@ -1318,9 +1346,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
     setPropertyChatMessages(prev => [...prev, userMessage]);
     const inputValue = propertyChatInput;
+    
+    // Save user message to history
+    await saveMessageToHistory(propertyChatInput, false);
+    
     setPropertyChatInput('');
 
-    setTimeout(() => {
+    setTimeout(async () => {
       let botResponse: Message;
       
       if (propertyChatStep === 'budget') {
@@ -1333,6 +1365,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         setPropertyChatMessages(prev => [...prev, botResponse]);
         setPropertyChatStep('details-form');
         setPropertyUserDetails(prev => ({ ...prev, budget: inputValue }));
+        
+        // Save bot message to history
+        await saveMessageToHistory(botResponse.text, true);
       } else if (propertyChatStep === 'requirements') {
         botResponse = {
           id: String(Date.now() + 1),
@@ -1342,6 +1377,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         };
         setPropertyChatMessages(prev => [...prev, botResponse]);
         setPropertyChatStep('complete');
+        
+        // Save bot message to history
+        await saveMessageToHistory(botResponse.text, true);
       }
     }, 1000);
   };
@@ -1764,7 +1802,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     return nameMap[service] || 'Service';
   };
 
-  const handleServiceChatSend = () => {
+  const handleServiceChatSend = async () => {
     if (serviceChatInput.trim() === '') return;
 
     const userMessage: Message = {
@@ -1775,10 +1813,14 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     };
 
     setServiceChatMessages(prev => [...prev, userMessage]);
+    
+    // Save user message to history
+    await saveMessageToHistory(serviceChatInput, false);
+    
     setServiceChatInput('');
 
     // Simulate bot response
-    setTimeout(() => {
+    setTimeout(async () => {
       if (serviceChatStep === 'intro') {
         const botMessage: Message = {
           id: String(Date.now() + 1),
@@ -1788,6 +1830,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         };
         setServiceChatMessages(prev => [...prev, botMessage]);
         setServiceChatStep('details-form');
+        
+        // Save bot message to history
+        await saveMessageToHistory(botMessage.text, true);
       } else if (serviceChatStep === 'follow-up') {
         const botMessage: Message = {
           id: String(Date.now() + 1),
@@ -1797,6 +1842,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         };
         setServiceChatMessages(prev => [...prev, botMessage]);
         setServiceChatStep('complete');
+        
+        // Save bot message to history
+        await saveMessageToHistory(botMessage.text, true);
       }
     }, 500);
   };
@@ -2286,21 +2334,27 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
       {!isOpen && (
         <Button
-          onClick={() => {
+          onClick={async () => {
             setIsOpen(true);
             // If on plans page, open directly to plan support chat
             if (location.pathname === '/plans') {
               setCurrentView('plan-support');
               setPlanChatStep('budget');
               setShowDetailsForm(false);
+              const introText = 'Hi, I can help you with selection of right plan. What is your rent budget?';
               setPlanChatMessages([
                 {
                   id: '1',
-                  text: 'Hi, I can help you with selection of right plan. What is your rent budget?',
+                  text: introText,
                   isBot: true,
                   timestamp: new Date()
                 }
               ]);
+              
+              // Initialize conversation for Plans
+              if (user) {
+                await initializeConversation('plan', 'Plans Conversation', introText);
+              }
             }
             // If on services page, open directly to service support chat
             else if (location.pathname === '/services') {
@@ -2319,6 +2373,11 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   timestamp: new Date()
                 }
               ]);
+              
+              // Initialize conversation for Service
+              if (user) {
+                await initializeConversation('service', `${serviceTab} Service`, introText);
+              }
             }
             // If on individual service page, detect which service
             else if (['/loans', '/home-security', '/packers-movers', '/legal-services', '/handover-services', 
@@ -2348,20 +2407,31 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   timestamp: new Date()
                 }
               ]);
+              
+              // Initialize conversation for Service
+              if (user) {
+                await initializeConversation('service', `${service} Service`, introText);
+              }
             }
             // If on property details page, open directly to property support chat
             else if (location.pathname.startsWith('/property/')) {
               setCurrentView('property-support');
               setPropertyChatStep('budget');
               setShowPropertyDetailsForm(false);
+              const introText = 'Hi, I can help you with this property. What is your rent budget?';
               setPropertyChatMessages([
                 {
                   id: '1',
-                  text: 'Hi, I can help you with this property. What is your rent budget?',
+                  text: introText,
                   isBot: true,
                   timestamp: new Date()
                 }
               ]);
+              
+              // Initialize conversation for Property
+              if (user) {
+                await initializeConversation('property', 'Property Inquiry', introText);
+              }
             }
           }}
           className="h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300"
