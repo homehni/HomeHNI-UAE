@@ -2321,11 +2321,11 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
           {/* Show header for search context chat */}
           {searchContext && (
-            <CardHeader className="bg-white border-b border-gray-200 p-4 sm:p-5 relative z-10 rounded-t-3xl">
+            <CardHeader className="bg-white border-b border-gray-200 p-2.5 sm:p-3 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-                    <Home size={20} className="text-white sm:w-6 sm:h-6" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={16} className="text-white sm:w-4 sm:h-4" />
                   </div>
                   <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">
                     {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
@@ -2347,7 +2347,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
           {/* Header for regular chat view */}
           {!showInitialView && currentView === 'chat' && !searchContext && (
-            <CardHeader className="bg-white border-b border-gray-200 p-4 sm:p-5 relative z-10 rounded-t-3xl">
+            <CardHeader className="bg-white border-b border-gray-200 p-2.5 sm:p-3 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <button
@@ -2358,10 +2358,10 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                     }}
                     className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-1 rounded-full transition-colors"
                   >
-                    <ArrowLeft size={20} />
+                    <ArrowLeft size={18} />
                   </button>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
-                    <Home size={20} className="text-white sm:w-6 sm:h-6" />
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={16} className="text-white sm:w-4 sm:h-4" />
                   </div>
                   <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">Real Estate Assistant</CardTitle>
                 </div>
