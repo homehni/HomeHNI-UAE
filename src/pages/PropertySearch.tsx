@@ -540,38 +540,6 @@ const PropertySearch = () => {
         </div>
       )}
 
-      {/* Commercial-only: Parking filter (moved up for visibility) */}
-      {activeTab === 'commercial' && (
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="font-semibold">Parking</h4>
-            {filters.parking && filters.parking.length > 0 && (
-              <Button variant="ghost" size="sm" onClick={() => updateFilter('parking', [])} className="h-6 text-xs">Clear</Button>
-            )}
-          </div>
-          <div className="space-y-2">
-            {parkingOptions.map(option => (
-              <div key={option} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`parking-${option}`}
-                  checked={(filters.parking || []).includes(option)}
-                  onCheckedChange={checked => {
-                    preserveScroll(() => {
-                      const current = filters.parking || [];
-                      if (checked) {
-                        updateFilter('parking', [...current, option]);
-                      } else {
-                        updateFilter('parking', current.filter((p: string) => p !== option));
-                      }
-                    });
-                  }}
-                />
-                <label htmlFor={`parking-${option}`} className="text-sm text-gray-700 cursor-pointer">{option}</label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
   {/* BHK Filter (hide for land and commercial) */}
   {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
