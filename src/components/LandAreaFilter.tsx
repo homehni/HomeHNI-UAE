@@ -20,9 +20,9 @@ export const LandAreaFilter: FC<LandAreaFilterProps> = ({
   onCommit, 
   onUnitChange 
 }) => {
-  // Maximum values for different area units - keeping max value higher than what's shown in quick buttons
+  // Maximum values for different area units
   const maxValues: Record<string, number> = {
-    'sq.ft': 261360,    // 6 acres = 261,360 sq.ft, but UI will focus on 0-10000+ range
+    'sq.ft': 10000,     // 10,000 sq.ft max for UI
     'sq.yards': 29040,  // 6 acres = 29,040 sq.yards
     'sq.m': 24280,      // 6 acres = 24,280 sq.m
     'acres': 6,         // 6 acres
