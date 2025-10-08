@@ -897,11 +897,25 @@ export const useSimplifiedSearch = () => {
 
     // Apply furnished filter
     if (filters.furnished.length > 0) {
+      console.log('🔍 Applying furnished filter:', filters.furnished);
       filtered = filtered.filter(property => {
-        return filters.furnished.some(furnishedFilter => {
-          return property.furnished?.toLowerCase().includes(furnishedFilter.toLowerCase());
+        const hasMatch = filters.furnished.some(furnishedFilter => {
+          const match = property.furnished?.toLowerCase().includes(furnishedFilter.toLowerCase());
+          if (!match && property.furnished) {
+            console.log('❌ Furnished mismatch:', {
+              property: property.title,
+              propertyFurnished: property.furnished,
+              filterValue: furnishedFilter
+            });
+          }
+          return match;
         });
+        if (!hasMatch) {
+          console.log('❌ Property filtered out by furnished:', property.title, 'furnished:', property.furnished);
+        }
+        return hasMatch;
       });
+      console.log('📊 After furnished filter:', filtered.length, 'properties');
     }
 
     // Apply availability filter
@@ -925,8 +939,9 @@ export const useSimplifiedSearch = () => {
 
     // Apply construction/age filter
     if (filters.construction.length > 0) {
+      console.log('🔍 Applying age/construction filter:', filters.construction);
       filtered = filtered.filter(property => {
-        return filters.construction.some(constrFilter => {
+        const hasMatch = filters.construction.some(constrFilter => {
           const normalizedConstr = constrFilter.toLowerCase().replace(/\s+/g, '');
           const propertyAge = property.ageOfProperty?.toLowerCase().replace(/\s+/g, '') || '';
           
@@ -934,9 +949,23 @@ export const useSimplifiedSearch = () => {
             return propertyAge.includes('new') || property.isNew;
           }
           
-          return propertyAge.includes(normalizedConstr);
+          const match = propertyAge.includes(normalizedConstr);
+          if (!match && property.ageOfProperty) {
+            console.log('❌ Age mismatch:', {
+              property: property.title,
+              propertyAge: property.ageOfProperty,
+              filterValue: constrFilter,
+              normalizedConstr
+            });
+          }
+          return match;
         });
+        if (!hasMatch) {
+          console.log('❌ Property filtered out by age:', property.title, 'age:', property.ageOfProperty);
+        }
+        return hasMatch;
       });
+      console.log('📊 After age/construction filter:', filtered.length, 'properties');
     }
 
     // Apply commercial-specific filters (only when on commercial tab)
