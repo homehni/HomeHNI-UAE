@@ -24,6 +24,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import MyChats from '@/components/dashboard/MyChats';
 
 interface Property {
   id: string;
@@ -121,6 +122,7 @@ export const Dashboard: React.FC = () => {
       case 'profile': return 'profile';
       case 'payments': return 'payments';
       case 'interested': return 'interested';
+      case 'chats': return 'chats';
       default: return 'properties';
     }
   };
@@ -1130,6 +1132,19 @@ export const Dashboard: React.FC = () => {
               </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'chats' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('chats');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                My Chats
+              </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
                   activeSidebarItem === 'properties' 
                     ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
                     : 'text-gray-600 hover:text-gray-900'
@@ -1763,6 +1778,11 @@ export const Dashboard: React.FC = () => {
                 <p className="text-gray-500">People interested in your properties will appear here</p>
               </div>
             </div>
+          )}
+
+          {/* My Chats Content */}
+          {activeSidebarItem === 'chats' && (
+            <MyChats />
           )}
         </div>
       </div>

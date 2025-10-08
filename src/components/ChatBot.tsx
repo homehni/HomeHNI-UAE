@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { createConversation, saveMessage } from '@/lib/chatHistory';
 
 
 
@@ -142,6 +144,10 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   const [showDetailsForm, setShowDetailsForm] = useState(false);
   const [userDetails, setUserDetails] = useState({ name: '', email: '', phone: '', budget: '' });
   
+  // Chat history state
+  const { user } = useAuth();
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  
   // Service-specific chat states
   const [serviceChatMessages, setServiceChatMessages] = useState<Message[]>([]);
   const [serviceChatStep, setServiceChatStep] = useState<'intro' | 'details-form' | 'follow-up' | 'complete'>('intro');
@@ -188,6 +194,24 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     }
   }, [searchContext?.activeTab]);
 
+  // Helper function to create a new conversation
+  const initializeConversation = async (type: string, title: string, firstMessage: string) => {
+    if (!user) return null;
+    
+    const conversation = await createConversation(type, title, firstMessage);
+    if (conversation) {
+      setConversationId(conversation.id);
+    }
+    return conversation;
+  };
+
+  // Helper function to save a message
+  const saveMessageToHistory = async (message: string, isBot: boolean) => {
+    if (!user || !conversationId) return;
+    
+    await saveMessage(conversationId, message, isBot);
+  };
+
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
 
@@ -199,6 +223,10 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
+    
+    // Save user message to history
+    await saveMessageToHistory(inputValue, false);
+    
     setInputValue('');
     setIsTyping(true);
 
@@ -532,6 +560,12 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
           // Only add finalResponse if it was set
           if (finalResponse) {
             setMessages(prevMessages => [...prevMessages, finalResponse]);
+            // Save bot message to history
+            if (finalResponse.text) {
+              saveMessageToHistory(finalResponse.text, true).catch(err => 
+                console.error('Error saving bot message:', err)
+              );
+            }
           }
           resolve(undefined);
         }, 1500);
@@ -571,6 +605,20 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         timestamp: new Date()
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+      
+      // Initialize conversation for Agent/Builder/Seller
+      if (['Seller', 'Agent', 'Builder'].includes(option) && user) {
+        const conversationType = option.toLowerCase() as 'agent' | 'builder' | 'seller';
+        initializeConversation(
+          conversationType,
+          `${option} Conversation`,
+          option
+        ).then(() => {
+          // Save user message
+          saveMessageToHistory(option, false);
+        });
+      }
+      
       setCurrentView('chat');
 
       // For "Want to buy a property", ask for budget first
@@ -600,6 +648,11 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         options: ['Post Your Property']
       };
       setMessages((prev) => [...prev, botMsgDirect]);
+      
+      // Save bot message
+      if (user) {
+        saveMessageToHistory(botMsgDirect.text, true);
+      }
       return;
     }
 
