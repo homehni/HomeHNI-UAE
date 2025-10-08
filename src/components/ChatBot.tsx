@@ -5,11 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { createConversation, saveMessage } from '@/lib/chatHistory';
+import { createConversation, saveMessage, getUserConversations, getConversationMessages, type ChatConversation, type ChatMessage } from '@/lib/chatHistory';
 
 
 
-import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare, Check } from 'lucide-react';
+import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare, Check, Clock } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -135,7 +135,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>({});
   const [currentLanguage, setCurrentLanguage] = useState('english');
   const [userName, setUserName] = useState('');
-  const [currentView, setCurrentView] = useState<'initial' | 'chat' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support' | 'service-support'>('initial');
+  const [currentView, setCurrentView] = useState<'initial' | 'chat' | 'service-faq' | 'faq-detail' | 'plan-support' | 'property-support' | 'service-support' | 'history' | 'history-detail'>('initial');
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedFAQ, setSelectedFAQ] = useState<{question: string, answer: string} | null>(null);
   const [planChatMessages, setPlanChatMessages] = useState<Message[]>([]);
@@ -165,6 +165,12 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   // Search context specific states
   const [searchDetailsForm, setSearchDetailsForm] = useState({ name: '', email: '', phone: '' });
   const [showSearchDetailsForm, setShowSearchDetailsForm] = useState(false);
+  
+  // History view states
+  const [historyConversations, setHistoryConversations] = useState<ChatConversation[]>([]);
+  const [selectedHistoryConversation, setSelectedHistoryConversation] = useState<ChatConversation | null>(null);
+  const [historyMessages, setHistoryMessages] = useState<ChatMessage[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
   
   // Ref for auto-scrolling chat
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -216,6 +222,36 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     if (!user || !conversationId) return;
     
     await saveMessage(conversationId, message, isBot);
+  };
+
+  // Load chat history conversations
+  const loadHistoryConversations = async () => {
+    if (!user) return;
+    setHistoryLoading(true);
+    const conversations = await getUserConversations();
+    setHistoryConversations(conversations);
+    setHistoryLoading(false);
+  };
+
+  // Load messages for a specific conversation
+  const loadHistoryMessages = async (conversation: ChatConversation) => {
+    setSelectedHistoryConversation(conversation);
+    const messages = await getConversationMessages(conversation.id);
+    setHistoryMessages(messages);
+    setCurrentView('history-detail');
+  };
+
+  // Handle showing history
+  const handleShowHistory = () => {
+    setCurrentView('history');
+    loadHistoryConversations();
+  };
+
+  // Handle back from history detail
+  const handleBackFromHistoryDetail = () => {
+    setCurrentView('history');
+    setSelectedHistoryConversation(null);
+    setHistoryMessages([]);
   };
 
   const handleSendMessage = async () => {
@@ -2139,7 +2175,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         </button>
         <div className="h-12 w-px bg-gray-300" />
         <button 
-          onClick={() => navigate('/dashboard?tab=my-chats')}
+          onClick={handleShowHistory}
           className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:bg-gray-50/50 transition-colors"
         >
           <History className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-1.5" />
@@ -2148,6 +2184,166 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
       </div>
     </div>
   );
+
+  const renderHistoryView = () => {
+    const getConversationTypeColor = (type: string) => {
+      const colors: Record<string, string> = {
+        service: 'bg-blue-500',
+        plan: 'bg-green-500',
+        search: 'bg-purple-500',
+        property: 'bg-orange-500',
+        agent: 'bg-pink-500',
+        builder: 'bg-indigo-500',
+        seller: 'bg-yellow-500'
+      };
+      return colors[type] || 'bg-gray-500';
+    };
+
+    return (
+      <div className="flex flex-col h-full bg-white">
+        {/* Header */}
+        <div className="px-4 py-3 bg-white border-b border-gray-200 flex items-center">
+          <button
+            onClick={() => setCurrentView('initial')}
+            className="mr-3 text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900 flex-1">Chat History</h1>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Conversations List */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {historyLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-red mx-auto mb-2"></div>
+                <p className="text-sm text-gray-500">Loading...</p>
+              </div>
+            </div>
+          ) : historyConversations.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 text-center p-6">
+              <MessageSquare className="h-16 w-16 text-gray-300 mb-3" />
+              <p className="text-gray-600 font-medium mb-1">No conversations yet</p>
+              <p className="text-sm text-gray-400">Start chatting with our AI assistants!</p>
+            </div>
+          ) : (
+            historyConversations.map((conversation) => (
+              <div
+                key={conversation.id}
+                className="p-4 rounded-xl border bg-white hover:shadow-md transition-all cursor-pointer active:scale-[0.98] animate-fade-in"
+                onClick={() => loadHistoryMessages(conversation)}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-10 h-10 ${getConversationTypeColor(conversation.conversation_type)} rounded-full flex items-center justify-center flex-shrink-0`}>
+                    <MessageSquare className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-semibold text-sm truncate capitalize">{conversation.title}</h3>
+                      <Badge className={`${getConversationTypeColor(conversation.conversation_type)} text-white text-xs ml-2`}>
+                        {conversation.conversation_type}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                      {conversation.last_message || 'No messages'}
+                    </p>
+                    <div className="flex items-center text-xs text-gray-400">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {conversation.last_message_at && new Date(conversation.last_message_at).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit'
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderHistoryDetailView = () => {
+    if (!selectedHistoryConversation) return null;
+
+    return (
+      <div className="flex flex-col h-full bg-white">
+        {/* Header */}
+        <div className="px-4 py-3 bg-white border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleBackFromHistoryDetail}
+              className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <div className={`w-10 h-10 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0`}>
+              <MessageSquare className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h2 className="font-semibold text-base truncate capitalize">{selectedHistoryConversation.title}</h2>
+              <p className="text-xs text-gray-500">
+                {new Date(selectedHistoryConversation.created_at).toLocaleDateString('en-US', { 
+                  month: 'short', 
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </p>
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+          <div className="space-y-4 pb-4">
+            {historyMessages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.is_bot ? 'justify-start' : 'justify-end'} animate-fade-in`}
+              >
+                {message.is_bot && (
+                  <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0 mr-2">
+                    <Home size={14} className="text-white" />
+                  </div>
+                )}
+                <div
+                  className={`max-w-[85%] p-3 rounded-2xl shadow-sm ${
+                    message.is_bot
+                      ? 'bg-white text-gray-800 rounded-tl-none'
+                      : 'bg-brand-red text-white rounded-tr-none'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.message}</p>
+                  <p className={`text-xs mt-1 ${message.is_bot ? 'text-gray-400' : 'text-white/70'}`}>
+                    {new Date(message.created_at).toLocaleTimeString('en-US', { 
+                      hour: 'numeric',
+                      minute: '2-digit'
+                    })}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderChatView = () => (
     <CardContent className="p-0 h-full flex flex-col">
@@ -2540,7 +2736,15 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           )}
 
           <div className="relative flex-1 min-h-0">
-            {currentView === 'plan-support' ? (
+            {currentView === 'history' ? (
+              <div className="h-full flex flex-col">
+                {renderHistoryView()}
+              </div>
+            ) : currentView === 'history-detail' ? (
+              <div className="h-full flex flex-col">
+                {renderHistoryDetailView()}
+              </div>
+            ) : currentView === 'plan-support' ? (
               <div className="h-full flex flex-col">
                 {renderPlanSupportView()}
               </div>
