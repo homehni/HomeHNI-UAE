@@ -1986,15 +1986,15 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="flex justify-center items-center border-t border-gray-200 bg-white shadow-lg">
-        <button className="flex flex-col items-center py-3 sm:py-3.5 text-brand-red hover:bg-red-50/50 transition-colors px-8">
-          <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
-          <span className="text-[10px] sm:text-xs font-semibold">Help Center</span>
+      <div className="flex items-center border-t border-gray-200 bg-white shadow-lg">
+        <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-brand-red hover:bg-red-50/50 transition-colors">
+          <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-1.5" />
+          <span className="text-xs sm:text-sm font-semibold">Help Center</span>
         </button>
-        <div className="h-10 w-px bg-gray-300" />
-        <button className="flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:bg-gray-50/50 transition-colors px-8">
-          <History className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
-          <span className="text-[10px] sm:text-xs font-semibold">History</span>
+        <div className="h-12 w-px bg-gray-300" />
+        <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:bg-gray-50/50 transition-colors">
+          <History className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-1.5" />
+          <span className="text-xs sm:text-sm font-semibold">History</span>
         </button>
       </div>
     </div>
