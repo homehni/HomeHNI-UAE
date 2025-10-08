@@ -252,18 +252,10 @@ const PropertySearch = () => {
     };
     const commitBudgetFromInputs = () => {
       const maxAllowed = getBudgetSliderMax(activeTab);
-      const parsedMin = parseInt(minBudgetInput || '0', 10);
-      const parsedMax = parseInt(maxBudgetInput || '0', 10);
-      const isMinValid = !isNaN(parsedMin);
-      const isMaxValid = !isNaN(parsedMax);
-      if (!isMinValid && !isMaxValid) {
-        setMinBudgetInput(uiBudget[0] ? String(uiBudget[0]) : '');
-        setMaxBudgetInput(uiBudget[1] ? String(uiBudget[1]) : '');
-        return;
-      }
-      const safeMin = Math.max(0, Math.min(isMinValid ? parsedMin : 0, maxAllowed));
-      const baseMax = isMaxValid ? parsedMax : safeMin;
-      const safeMax = Math.max(safeMin, Math.min(baseMax, maxAllowed));
+      const parsedMin = Number(minBudgetInput) || 0;
+      const parsedMax = Number(maxBudgetInput) || 0;
+      const safeMin = Math.max(0, Math.min(parsedMin, maxAllowed));
+      const safeMax = Math.max(safeMin, Math.min(parsedMax || maxAllowed, maxAllowed));
       setUiBudget([safeMin, safeMax]);
       commitBudget([safeMin, safeMax]);
     };
