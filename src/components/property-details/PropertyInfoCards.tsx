@@ -222,11 +222,18 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     return String(v).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
+  const getBedroomCount = () => {
+    if (!property.bhk_type) return 'Not specified';
+    // Extract number from BHK type (e.g., "2BHK" -> "2", "3bhk" -> "3")
+    const match = property.bhk_type.match(/(\d+)/);
+    return match ? match[1] : 'Not specified';
+  };
+
   const defaultInfoCards = [
     // For PG/Hostel, hide the bedroom card entirely
     ...(!isPG ? [{
       icon: Bed,
-      title: property.bhk_type?.replace('bhk', ' Bedroom') || 'Not specified',
+      title: getBedroomCount(),
       subtitle: 'No. of Bedroom',
     }] : []),
     {
