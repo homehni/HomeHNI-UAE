@@ -10,9 +10,9 @@ import { LocationDetails } from '@/types/property';
 import { MapPin, X } from 'lucide-react';
 
 const pgHostelLocationSchema = z.object({
-  locality: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
-  city: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
 });

@@ -12,7 +12,7 @@ import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 
 const locationDetailsSchema = z.object({
   city: z.string().min(1, "City is required"),
-  locality: z.string().optional(),
+  locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
@@ -44,6 +44,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const [locationMismatchWarning, setLocationMismatchWarning] = useState<string>('');
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',

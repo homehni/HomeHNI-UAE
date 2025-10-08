@@ -10,8 +10,8 @@ import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 const resaleLocationSchema = z.object({
-  city: z.string().optional(),
-  locality: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional()
@@ -43,6 +43,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   const [locationMismatchWarning, setLocationMismatchWarning] = useState<string>('');
   const form = useForm<ResaleLocationData>({
     resolver: zodResolver(resaleLocationSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',

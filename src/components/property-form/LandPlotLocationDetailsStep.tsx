@@ -45,6 +45,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
 
   const form = useForm<LandPlotLocationData>({
     resolver: zodResolver(landPlotLocationSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',
@@ -160,7 +161,30 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
         });
       };
 
-      // City aliases for validation
+      // Attach autocomplete to city field
+      if (cityInputRef.current) {
+        const cityOptions = {
+          fields: ['address_components', 'name'],
+          types: ['(cities)'],
+          componentRestrictions: { country: 'in' as const }
+        };
+        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
+        cityAc.addListener('place_changed', () => {
+          const place = cityAc.getPlace();
+          if (place?.address_components) {
+            let cityName = '';
+            place.address_components.forEach((component: any) => {
+              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+                cityName = component.long_name;
+              }
+            });
+            if (cityName && cityInputRef.current) {
+              cityInputRef.current.value = cityName;
+              form.setValue('city', cityName, { shouldValidate: true });
+            }
+          }
+        });
+      }
 
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
@@ -276,7 +300,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             name="locality"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">Locality/Area</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-900">Locality/Area *</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input

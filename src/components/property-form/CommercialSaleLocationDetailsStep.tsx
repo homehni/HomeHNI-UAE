@@ -11,7 +11,7 @@ import { ArrowLeft, ArrowRight, MapPin, X } from 'lucide-react';
 
 const commercialSaleLocationDetailsSchema = z.object({
   city: z.string().min(1, "City is required"),
-  locality: z.string().optional(),
+  locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
   state: z.string().optional(),
   pincode: z.string().optional(),
@@ -45,6 +45,7 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
 
   const form = useForm<CommercialSaleLocationDetailsForm>({
     resolver: zodResolver(commercialSaleLocationDetailsSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',
