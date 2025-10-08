@@ -1028,7 +1028,7 @@ const PropertySearch = () => {
                     </DrawerClose>
                   </DrawerHeader>
                   <div className="px-4 pb-2">
-                    <div id="filters-scroll-mobile" className="h-[60vh] pr-2 overflow-y-auto">
+                    <div id="filters-scroll-mobile" className="h-[70vh] pr-2 overflow-y-auto">
                       <div className="space-y-6">
                         <FiltersPanel />
                       </div>
@@ -1072,8 +1072,8 @@ const PropertySearch = () => {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="pr-2">
-                <div id="filters-scroll-desktop" className="space-y-6 overflow-y-auto max-h-[calc(100vh-180px)]">
+              <CardContent className="pr-2 pb-0">
+                <div id="filters-scroll-desktop" className="space-y-6 overflow-y-auto max-h-[calc(100vh-220px)] pb-4">
                   <FiltersPanel />
                 </div>
               </CardContent>
