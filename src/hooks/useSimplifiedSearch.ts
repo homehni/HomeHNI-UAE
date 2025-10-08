@@ -49,7 +49,6 @@ interface SearchFilters {
   landArea: [number, number]; // Area range for land properties
   landAreaUnit: string; // Unit for land area (acres, sq.ft, etc.)
   landAreaDirty: boolean; // Track if land area was manually changed
-  landCondition?: string[]; // Property condition for land (Ready to Use, Under Development, Raw Land)
   locality: string[];
   furnished: string[];
   availability: string[];
@@ -220,7 +219,6 @@ export const useSimplifiedSearch = () => {
       landArea,
       landAreaUnit: landAreaUnitParam,
       landAreaDirty: hasLandAreaParams,
-      landCondition: [],
       locality: [],
       furnished,
       availability,
@@ -1014,28 +1012,6 @@ export const useSimplifiedSearch = () => {
       }
     }
 
-    // Apply land-specific filters (only when on land tab)
-    if (activeTab === 'land') {
-      // Land condition filter
-      if (filters.landCondition && filters.landCondition.length > 0) {
-        console.log('🔍 Applying land condition filter:', filters.landCondition);
-        filtered = filtered.filter(property => {
-          // For now, since current_property_condition might not be in all properties,
-          // we'll do a basic check. You can enhance this based on your data
-          const condition = (property as any).currentPropertyCondition?.toLowerCase() || '';
-          const hasMatch = filters.landCondition!.some(filterCondition => {
-            const normalized = filterCondition.toLowerCase().replace(/\s+/g, '');
-            if (normalized === 'readytouse') return condition.includes('ready');
-            if (normalized === 'underdevelopment') return condition.includes('development') || condition.includes('under');
-            if (normalized === 'rawland') return condition.includes('raw') || condition === '' || !condition;
-            return condition.includes(normalized);
-          });
-          return hasMatch;
-        });
-        console.log('📊 After land condition filter:', filtered.length, 'properties');
-      }
-    }
-
     // Apply location filter (both single location and multiple locations)
     const hasLocationFilter = filters.location.trim() || filters.locations.length > 0;
     if (hasLocationFilter) {
@@ -1216,13 +1192,10 @@ export const useSimplifiedSearch = () => {
       landArea: [0, 10], // Reset land area range to default
       landAreaUnit: 'acres', // Default land area unit 
       landAreaDirty: false,
-      landCondition: [],
       locality: [],
       furnished: [],
       availability: [],
       construction: [],
-      floor: [],
-      parking: [],
       location: '', // Clear the single location field
       locations: [], // Clear multiple locations
       selectedCity: '', // Reset to empty (no city selected)
