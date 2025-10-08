@@ -245,7 +245,7 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
-      // 1) Fetch approved/pending properties belonging to user
+      // Show ONLY properties table entries belonging to the user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
         .select('*')
@@ -254,64 +254,7 @@ export const Dashboard: React.FC = () => {
 
       if (propertiesError) throw propertiesError;
 
-      // 2) Fetch user's submissions that are still under review
-      const { data: submissionsData, error: submissionsError } = await supabase
-        .from('property_submissions')
-        .select('*')
-        .eq('user_id', user?.id)
-        .in('status', ['new', 'review', 'pending'])
-        .order('created_at', { ascending: false });
-
-      if (submissionsError) throw submissionsError;
-
-      // Map submissions to CombinedProperty shape for dashboard display
-      const mappedSubmissions: CombinedProperty[] = (submissionsData || []).map((sub: any) => {
-        let payload: any = {};
-        try {
-          payload = typeof sub.payload === 'string' ? JSON.parse(sub.payload) : (sub.payload || {});
-        } catch {
-          payload = {};
-        }
-        return {
-          id: sub.id, // use submission id; flagged by isSubmission
-          submissionId: sub.id,
-          isSubmission: true,
-          user_id: user!.id,
-          title: payload.title || sub.title || 'Untitled',
-          property_type: payload.property_type || payload.propertyType || 'residential',
-          listing_type: payload.listing_type || payload.listingType || 'sale',
-          bhk_type: payload.bhk_type || null as any,
-          expected_price: Number(payload.expected_price) || 0,
-          super_area: Number(payload.super_area) || undefined,
-          carpet_area: Number(payload.carpet_area) || undefined,
-          bathrooms: payload.bathrooms || undefined,
-          balconies: payload.balconies || undefined,
-          city: payload.city || 'Unknown',
-          locality: payload.locality || '',
-          state: payload.state || 'Unknown',
-          pincode: payload.pincode || '000000',
-          description: payload.description || '',
-          images: Array.isArray(payload.images) ? payload.images : [],
-          videos: Array.isArray(payload.videos) ? payload.videos : [],
-          status: 'pending',
-          rental_status: sub.rental_status || 'available',
-          created_at: sub.created_at,
-          updated_at: sub.updated_at,
-          owner_name: undefined,
-          owner_email: undefined,
-          owner_phone: undefined,
-          owner_role: undefined,
-        } as CombinedProperty;
-      });
-
-      const combined: CombinedProperty[] = [
-        ...(propertiesData || []),
-        ...mappedSubmissions,
-      ]
-      // Sort newest first consistently
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-      setProperties(combined);
+      setProperties((propertiesData || []) as CombinedProperty[]);
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {

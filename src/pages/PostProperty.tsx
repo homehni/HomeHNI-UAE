@@ -831,26 +831,8 @@ export const PostProperty: React.FC = () => {
         
         error = insertError;
 
-        // 2. Also insert directly into properties table for immediate public visibility
-        if (!insertError) {
-          const { error: propertiesError } = await supabase
-            .from('properties')
-            .insert({
-              id: inserted.id, // keep the same id as property_submissions for 1:1 mapping
-              ...propertyData,
-              user_id: user.id, // satisfy RLS: owner must be current user
-              status: 'pending', // still pending for admin to review
-              is_visible: true,  // immediately visible to public
-              is_featured: true  // mark as featured for homepage
-            });
-
-          if (propertiesError) {
-            console.error('Error inserting into properties table:', propertiesError);
-            // Don't fail the entire submission if this fails
-          } else {
-            console.log('Property successfully inserted into both tables for immediate visibility');
-          }
-        }
+        // Mirroring to properties is handled by DB trigger (sync_properties_with_submissions)
+        // Ensures a single source of truth and prevents duplicates in dashboards.
       }
 
       if (error) {
