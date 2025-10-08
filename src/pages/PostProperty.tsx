@@ -19,7 +19,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { uploadSingleFile, uploadPropertyImagesByType } from '@/services/fileUploadService';
 import { validatePropertySubmission } from '@/utils/propertyValidation';
-import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues } from '@/utils/propertyMappings';
+import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapFurnishing } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
 import Header from '@/components/Header';
@@ -651,7 +651,7 @@ export const PostProperty: React.FC = () => {
                           (Array.isArray((data.propertyInfo as any).rentalDetails.idealFor) ? 
                            (data.propertyInfo as any).rentalDetails.idealFor.join(', ') : 
                            (data.propertyInfo as any).rentalDetails.idealFor) : null),
-        furnishing: ((data.propertyInfo as any)?.amenities?.furnishing) || null,
+        furnishing: mapFurnishing(((data.propertyInfo as any)?.amenities?.furnishing) || null),
         water_supply: ((data.propertyInfo as any)?.amenities?.waterSupply) || null,
         power_backup: ((data.propertyInfo as any)?.amenities?.powerBackup) || null,
         floor_no: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.floorNo !== undefined) ? 

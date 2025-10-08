@@ -88,6 +88,30 @@ export const mapListingType = (listingType: string): string => {
   return listingType.toLowerCase();
 };
 
+export const mapFurnishing = (furnishing: string | null | undefined): string | null => {
+  if (!furnishing) return null;
+  
+  const furnishingMappings: { [key: string]: string } = {
+    'Fully Furnished': 'fully',
+    'fully-furnished': 'fully',
+    'Fully furnished': 'fully',
+    'fully furnished': 'fully',
+    'furnished': 'fully',
+    'Furnished': 'fully',
+    'Semi Furnished': 'semi',
+    'semi-furnished': 'semi',
+    'Semi furnished': 'semi',
+    'semi furnished': 'semi',
+    'Semi-Furnished': 'semi',
+    'Unfurnished': 'unfurnished',
+    'unfurnished': 'unfurnished',
+    'Un-furnished': 'unfurnished',
+    'un-furnished': 'unfurnished',
+  };
+  
+  return furnishingMappings[furnishing] || null;
+};
+
 export const validateMappedValues = (data: {
   bhkType?: string;
   propertyType: string;

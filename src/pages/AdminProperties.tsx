@@ -4,7 +4,7 @@ import { PropertyTable } from '@/components/admin/PropertyTable';
 import { PropertyReviewModal } from '@/components/admin/PropertyReviewModal';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { useToast } from '@/hooks/use-toast';
-import { mapBhkType, mapPropertyType, mapListingType } from '@/utils/propertyMappings';
+import { mapBhkType, mapPropertyType, mapListingType, mapFurnishing } from '@/utils/propertyMappings';
  
 // Property submission interface for new table
 interface PropertySubmission {
@@ -368,7 +368,7 @@ const AdminProperties = () => {
           bhk_type: bhkValue,
           
           // Enhanced property details mapping
-          furnishing: payload.furnishing ? (['unfurnished','semi-furnished','semi furnished','furnished'].includes(String(payload.furnishing).toLowerCase()) ? String(payload.furnishing).toLowerCase().replace(' ','-') : null) : null,
+          furnishing: mapFurnishing(payload.furnishing || amenities.furnishing || null),
           availability_type: payload.availability_type || 'immediate',
           
           // NEW: Additional property characteristics
