@@ -2138,7 +2138,10 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           <span className="text-xs sm:text-sm font-semibold">Help Center</span>
         </button>
         <div className="h-12 w-px bg-gray-300" />
-        <button className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:bg-gray-50/50 transition-colors">
+        <button 
+          onClick={() => navigate('/dashboard?tab=my-chats')}
+          className="flex-1 flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:bg-gray-50/50 transition-colors"
+        >
           <History className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-1.5" />
           <span className="text-xs sm:text-sm font-semibold">History</span>
         </button>
