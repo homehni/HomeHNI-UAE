@@ -96,7 +96,16 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     scrollToTop();
   }, [currentStep]);
 
-  const currentFormId = 'resale-step-form';
+  const [isMobile, setIsMobile] = React.useState(false);
+  
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const currentFormId = isMobile ? 'resale-step-form-m' : 'resale-step-form-d';
 
   // Save intermediate data after each successful step (backup like other forms)
   const saveIntermediateData = (stepData: any, stepNumber: number) => {
@@ -314,6 +323,7 @@ const handleScheduleSubmit = (data: any) => {
               <div className="max-w-4xl mx-auto w-full">
                 {currentStep === 1 && (
                   <ResalePropertyDetailsStep
+                    key="desktop-step-1"
                     initialData={propertyDetails}
                     onNext={handlePropertyDetailsNext}
                     onBack={() => {}} // No back on first step
@@ -323,6 +333,7 @@ const handleScheduleSubmit = (data: any) => {
 
                 {currentStep === 2 && (
                   <ResaleLocationDetailsStep
+                    key="desktop-step-2"
                     initialData={locationDetails}
                     onNext={handleLocationDetailsNext}
                     onBack={prevStep}
@@ -334,6 +345,7 @@ const handleScheduleSubmit = (data: any) => {
 
                 {currentStep === 3 && (
                   <SaleDetailsStep
+                    key="desktop-step-3"
                     initialData={saleDetails}
                     propertyDetails={propertyDetails}
                     onNext={handleSaleDetailsNext}
@@ -344,6 +356,7 @@ const handleScheduleSubmit = (data: any) => {
 
                 {currentStep === 4 && (
                   <ResaleAmenitiesStep
+                    key="desktop-step-4"
                     initialData={amenities as any}
                     onNext={handleAmenitiesNext}
                     onBack={prevStep}
@@ -353,6 +366,7 @@ const handleScheduleSubmit = (data: any) => {
 
                 {currentStep === 5 && (
                   <ResaleGalleryStep
+                    key="desktop-step-5"
                     initialData={gallery}
                     onNext={handleGalleryNext}
                     onBack={prevStep}
@@ -364,6 +378,7 @@ const handleScheduleSubmit = (data: any) => {
 
                 {currentStep === 6 && (
                   <ResaleScheduleStep
+                    key="desktop-step-6"
                     initialData={scheduleInfo}
                     onNext={handleScheduleNext}
                     onBack={prevStep}
@@ -374,6 +389,7 @@ const handleScheduleSubmit = (data: any) => {
 
                 {currentStep === 7 && (
                   <ResalePreviewStep
+                    key="desktop-step-7"
                     formData={getFormData() as SalePropertyFormData}
                     onBack={prevStep}
                     onEdit={goToStep}
@@ -410,33 +426,15 @@ const handleScheduleSubmit = (data: any) => {
             <Button 
               type="button" 
               onClick={() => {
-                console.log('🔵 ResaleMultiStepForm sticky Save & Continue button clicked');
-                console.log('Current step:', currentStep);
-                console.log('Form ID we are looking for:', currentFormId);
-                
-                    let formEl = document.getElementById(`${currentFormId}-m`) as HTMLFormElement | null;
-                    if (!formEl) {
-                      formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
-                    }
-                    console.log('Form element found:', formEl);
-                    console.log('Form ID attribute:', formEl?.id);
-                    console.log('Form name:', formEl?.name);
-                    
-                    if (formEl) {
-                      console.log('✅ Calling requestSubmit on form element');
-                      formEl.requestSubmit();
-                    } else {
-                  console.warn('❌ Form element not found for current step');
-                  // Try to find any form on the page as fallback
+                const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
+                if (formEl) {
+                  formEl.requestSubmit();
+                } else {
                   const anyForm = document.querySelector('form');
-                  console.log('Any form found on page:', anyForm);
-                  console.log('Any form ID:', (anyForm as HTMLFormElement)?.id);
                   if (anyForm) {
-                    console.log('Trying to submit any form found');
-                    anyForm.requestSubmit();
+                    (anyForm as HTMLFormElement).requestSubmit();
                   }
                 }
-                
                 scrollToTop();
               }}
               className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
