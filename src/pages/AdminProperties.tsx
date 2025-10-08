@@ -118,25 +118,13 @@ const AdminProperties = () => {
 
   const fetchProperties = async () => {
     try {
-      // Fetch both property submissions AND edited properties that need re-approval
-      const [submissionsResult, editedPropertiesResult] = await Promise.all([
-        // Fetch new property submissions
-        supabase
-          .from('property_submissions')
-          .select('*')
-          .order('created_at', { ascending: false }),
-        
-        // Fetch edited properties that are pending re-approval
-        supabase
-          .from('properties')
-          .select('*')
-          .eq('status', 'pending')
-          .not('updated_at', 'is', null)
-          .order('updated_at', { ascending: false })
-      ]);
+      // Fetch only property submissions (properties table is auto-synced via trigger)
+      const submissionsResult = await supabase
+        .from('property_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
 
       if (submissionsResult.error) throw submissionsResult.error;
-      if (editedPropertiesResult.error) throw editedPropertiesResult.error;
 
       // Transform submissions to match PropertyTable interface
       const transformedSubmissions = submissionsResult.data?.map(submission => {
@@ -171,42 +159,15 @@ const AdminProperties = () => {
         };
       }) || [];
 
-      // Transform edited properties to match PropertyTable interface
-      const transformedEditedProperties = editedPropertiesResult.data?.map(property => {
-        // Check if this property was edited (updated_at > created_at)
-        const wasEdited = property.updated_at && property.created_at && 
-                         new Date(property.updated_at) > new Date(property.created_at);
-        
-        return {
-          ...property,
-          // Mark as edited for identification
-          is_edited: wasEdited,
-          // Ensure status is 'new' for admin review workflow
-          status: 'new',
-          // Include visibility status
-          is_visible: property.is_visible !== false // Default to true unless explicitly false
-        };
-      }) || [];
-
-      // Combine both submissions and edited properties
-      const allProperties = [...transformedSubmissions, ...transformedEditedProperties];
+      setProperties(transformedSubmissions as PropertySubmission[]);
       
-      // Sort by date (newest first)
-      allProperties.sort((a, b) => {
-        const dateA = new Date(a.created_at || a.updated_at || 0);
-        const dateB = new Date(b.created_at || b.updated_at || 0);
-        return dateB.getTime() - dateA.getTime();
-      });
-
-      setProperties(allProperties as PropertySubmission[]);
-      
-      // Calculate stats based on combined data
-      const total = allProperties?.length || 0;
-      const pending = allProperties?.filter(p => p.status === 'new').length || 0;
-      const approved = allProperties?.filter(p => p.status === 'approved').length || 0;
-      const rejected = allProperties?.filter(p => p.status === 'rejected').length || 0;
-      const deleted = allProperties?.filter(p => p.status === 'deleted').length || 0;
-      const featuredPending = 0; // Not applicable for submissions
+      // Calculate stats based on submissions data
+      const total = transformedSubmissions?.length || 0;
+      const pending = transformedSubmissions?.filter(p => p.status === 'new').length || 0;
+      const approved = transformedSubmissions?.filter(p => p.status === 'approved').length || 0;
+      const rejected = transformedSubmissions?.filter(p => p.status === 'rejected').length || 0;
+      const deleted = transformedSubmissions?.filter(p => p.status === 'deleted').length || 0;
+      const featuredPending = 0;
 
       setStats({ total, pending, approved, rejected, deleted, featuredPending });
     } catch (error) {
