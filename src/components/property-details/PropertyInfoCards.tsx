@@ -55,23 +55,13 @@ interface PropertyInfoCardsProps {
 }
 
 export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }) => {
-  // Debug: Log property data for Land/Plot properties
-  const isLandPlot = property.property_type?.toLowerCase().includes('land') || 
-                     property.property_type?.toLowerCase().includes('plot');
-  
-  if (isLandPlot) {
-    console.log('🔍 PropertyInfoCards - Land/Plot property data:', {
-      property_type: property.property_type,
-      plot_length: property.plot_length,
-      plot_width: property.plot_width,
-      road_width: property.road_width,
-      boundary_wall: property.boundary_wall,
-      ownership_type: property.ownership_type,
-      plot_area_unit: property.plot_area_unit,
-      allKeys: Object.keys(property),
-      fullProperty: property
-    });
-  }
+  // Debug: Log property data to check bhk_type
+  console.log('🔍 PropertyInfoCards - Property data:', {
+    property_type: property.property_type,
+    bhk_type: property.bhk_type,
+    allKeys: Object.keys(property),
+    fullProperty: property
+  });
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recently';
