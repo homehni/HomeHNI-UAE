@@ -252,8 +252,8 @@ const PropertySearch = () => {
     };
     const commitBudgetFromInputs = () => {
       const maxAllowed = getBudgetSliderMax(activeTab);
-      const parsedMin = parseInt(minBudgetInput || '0');
-      const parsedMax = parseInt(maxBudgetInput || '0');
+      const parsedMin = parseInt(minBudgetInput || '0', 10);
+      const parsedMax = parseInt(maxBudgetInput || '0', 10);
       const isMinValid = !isNaN(parsedMin);
       const isMaxValid = !isNaN(parsedMax);
       if (!isMinValid && !isMaxValid) {
