@@ -151,62 +151,10 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
       const google = (window as any).google;
       if (!google?.maps?.places) return;
 
-      const currentCity = form.getValues('city');
-      
-      // City bounds for restricting search
-      const cityBounds: { [key: string]: any } = {
-        'Bangalore': new google.maps.LatLngBounds(
-          new google.maps.LatLng(12.7342, 77.3795),
-          new google.maps.LatLng(13.1737, 77.8565)
-        ),
-        'Mumbai': new google.maps.LatLngBounds(
-          new google.maps.LatLng(18.8920, 72.7767),
-          new google.maps.LatLng(19.2695, 72.9810)
-        ),
-        'Delhi': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.4041, 76.8388),
-          new google.maps.LatLng(28.8833, 77.3465)
-        ),
-        'Chennai': new google.maps.LatLngBounds(
-          new google.maps.LatLng(12.8345, 80.0532),
-          new google.maps.LatLng(13.2345, 80.2955)
-        ),
-        'Hyderabad': new google.maps.LatLngBounds(
-          new google.maps.LatLng(17.2145, 78.2578),
-          new google.maps.LatLng(17.5645, 78.6378)
-        ),
-        'Pune': new google.maps.LatLngBounds(
-          new google.maps.LatLng(18.4088, 73.7389),
-          new google.maps.LatLng(18.6298, 73.9897)
-        ),
-        'Gurgaon': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.3645, 76.9345),
-          new google.maps.LatLng(28.5345, 77.1145)
-        ),
-        'Faridabad': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.3045, 77.2345),
-          new google.maps.LatLng(28.4845, 77.3645)
-        ),
-        'Ghaziabad': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.5845, 77.3345),
-          new google.maps.LatLng(28.7245, 77.5145)
-        ),
-        'Noida': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.4645, 77.2945),
-          new google.maps.LatLng(28.6245, 77.4345)
-        ),
-        'Greater Noida': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.4045, 77.4045),
-          new google.maps.LatLng(28.5445, 77.5945)
-        ),
-      };
-
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
-        componentRestrictions: { country: 'in' as const },
-        bounds: currentCity ? cityBounds[currentCity] : undefined,
-        strictBounds: currentCity ? true : false,
+        componentRestrictions: { country: 'in' as const }
       };
 
       const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
@@ -261,38 +209,19 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
         
-        // Parse address components first
-        let detectedCity = '';
+        // Parse address components
         let state = '';
         let pincode = '';
         
         if (place?.address_components) {
           place.address_components.forEach((component: any) => {
             const types = component.types;
-            if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-              detectedCity = component.long_name;
-            } else if (types.includes('administrative_area_level_1')) {
+            if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
             }
           });
-        }
-
-        // Validate city match
-        const selectedCityValue = form.getValues('city');
-        const aliases = selectedCityValue ? cityAliases[selectedCityValue] || [selectedCityValue] : [];
-        const isCityMatch = aliases.some(alias => 
-          detectedCity.toLowerCase().includes(alias.toLowerCase()) ||
-          alias.toLowerCase().includes(detectedCity.toLowerCase())
-        );
-
-        if (selectedCityValue && detectedCity && !isCityMatch) {
-          setLocationMismatchWarning(selectedCityValue.toLowerCase());
-          el.value = '';
-          form.setValue('locality', '', { shouldValidate: true });
-          setShowMap(false);
-          return;
         }
 
         setLocationMismatchWarning('');

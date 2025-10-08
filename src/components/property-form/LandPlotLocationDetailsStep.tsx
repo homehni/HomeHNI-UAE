@@ -145,46 +145,10 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
       const google = (window as any).google;
       if (!google?.maps?.places) return;
 
-      const currentCity = form.getValues('city');
-      
-      // City bounds for restricting search
-      const cityBounds: { [key: string]: any } = {
-        'bangalore': new google.maps.LatLngBounds(
-          new google.maps.LatLng(12.7342, 77.3795),
-          new google.maps.LatLng(13.1737, 77.8565)
-        ),
-        'mumbai': new google.maps.LatLngBounds(
-          new google.maps.LatLng(18.8920, 72.7767),
-          new google.maps.LatLng(19.2695, 72.9810)
-        ),
-        'delhi': new google.maps.LatLngBounds(
-          new google.maps.LatLng(28.4041, 76.8388),
-          new google.maps.LatLng(28.8833, 77.3465)
-        ),
-        'chennai': new google.maps.LatLngBounds(
-          new google.maps.LatLng(12.8345, 80.0532),
-          new google.maps.LatLng(13.2345, 80.2955)
-        ),
-        'hyderabad': new google.maps.LatLngBounds(
-          new google.maps.LatLng(17.2145, 78.2578),
-          new google.maps.LatLng(17.5645, 78.6378)
-        ),
-        'pune': new google.maps.LatLngBounds(
-          new google.maps.LatLng(18.4088, 73.7389),
-          new google.maps.LatLng(18.6298, 73.9897)
-        ),
-        'kolkata': new google.maps.LatLngBounds(
-          new google.maps.LatLng(22.3882, 88.2244),
-          new google.maps.LatLng(22.6882, 88.4644)
-        ),
-      };
-
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
-        componentRestrictions: { country: 'in' as const },
-        bounds: currentCity ? cityBounds[currentCity] : undefined,
-        strictBounds: currentCity ? true : false,
+        componentRestrictions: { country: 'in' as const }
       };
 
       const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
@@ -196,90 +160,24 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
         });
       };
 
-      // City aliases for validation (lowercase keys to match dropdown values)
-      const cityAliases: { [key: string]: string[] } = {
-        'bangalore': ['Bangalore', 'Bengaluru', 'Bangalore Urban', 'Bengaluru Urban'],
-        'mumbai': ['Mumbai', 'Mumbai City', 'Mumbai Suburban', 'Bombay', 'Thane', 'Navi Mumbai'],
-        'delhi': ['Delhi', 'New Delhi', 'South Delhi', 'North Delhi', 'East Delhi', 'West Delhi', 'Central Delhi'],
-        'chennai': ['Chennai', 'Madras'],
-        'hyderabad': ['Hyderabad', 'Secunderabad'],
-        'pune': ['Pune', 'Pimpri-Chinchwad', 'Pimpri Chinchwad'],
-        'kolkata': ['Kolkata', 'Calcutta', 'Howrah'],
-        'ahmedabad': ['Ahmedabad'],
-        'jaipur': ['Jaipur'],
-        'surat': ['Surat'],
-        'lucknow': ['Lucknow'],
-        'kanpur': ['Kanpur'],
-        'nagpur': ['Nagpur'],
-        'indore': ['Indore'],
-        'thane': ['Thane', 'Mumbai'],
-        'bhopal': ['Bhopal'],
-        'visakhapatnam': ['Visakhapatnam', 'Vizag'],
-        'pimpri-chinchwad': ['Pimpri-Chinchwad', 'Pimpri Chinchwad', 'Pune'],
-        'patna': ['Patna'],
-        'vadodara': ['Vadodara', 'Baroda'],
-      };
-
-      // Attach autocomplete to city field
-      if (cityInputRef.current) {
-        const cityOptions = {
-          fields: ['address_components', 'name'],
-          types: ['(cities)'],
-          componentRestrictions: { country: 'in' as const }
-        };
-        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
-        cityAc.addListener('place_changed', () => {
-          const place = cityAc.getPlace();
-          if (place?.address_components) {
-            let cityName = '';
-            place.address_components.forEach((component: any) => {
-              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
-                cityName = component.long_name;
-              }
-            });
-            if (cityName && cityInputRef.current) {
-              cityInputRef.current.value = cityName.toLowerCase();
-              form.setValue('city', cityName.toLowerCase(), { shouldValidate: true });
-            }
-          }
-        });
-      }
+      // City aliases for validation
 
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
         
-        // Parse address components first
-        let detectedCity = '';
+        // Parse address components
         let state = '';
         let pincode = '';
         
         if (place?.address_components) {
           place.address_components.forEach((component: any) => {
             const types = component.types;
-            if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-              detectedCity = component.long_name;
-            } else if (types.includes('administrative_area_level_1')) {
+            if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
             }
           });
-        }
-
-        // Validate city match
-        const selectedCityValue = form.getValues('city');
-        const aliases = selectedCityValue ? cityAliases[selectedCityValue] || [selectedCityValue] : [];
-        const isCityMatch = aliases.some(alias => 
-          detectedCity.toLowerCase().includes(alias.toLowerCase()) ||
-          alias.toLowerCase().includes(detectedCity.toLowerCase())
-        );
-
-        if (selectedCityValue && detectedCity && !isCityMatch) {
-          setLocationMismatchWarning(selectedCityValue);
-          el.value = '';
-          form.setValue('locality', '', { shouldValidate: true });
-          setShowMap(false);
-          return;
         }
 
         setLocationMismatchWarning('');
