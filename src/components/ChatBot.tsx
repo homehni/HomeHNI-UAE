@@ -1991,10 +1991,6 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
           <span className="text-[10px] sm:text-xs font-semibold">Help Center</span>
         </button>
-        <button className="flex flex-col items-center py-3 sm:py-3.5 text-gray-500 hover:bg-gray-50/50 transition-colors px-8">
-          <History className="w-4 h-4 sm:w-5 sm:h-5 mb-1 sm:mb-1.5" />
-          <span className="text-[10px] sm:text-xs font-semibold">History</span>
-        </button>
       </div>
     </div>
   );
