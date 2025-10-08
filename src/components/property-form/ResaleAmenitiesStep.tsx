@@ -14,6 +14,7 @@ const resaleAmenitiesSchema = z.object({
   bathrooms: z.number().optional(),
   balconies: z.number().optional(),
   waterSupply: z.string().optional(),
+  parking: z.string().optional(),
   petAllowed: z.boolean().optional(),
   gym: z.boolean().optional(),
   nonVegAllowed: z.boolean().optional(),
@@ -64,6 +65,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
       bathrooms: initialData.bathrooms ?? 0,
       balconies: initialData.balconies ?? 0,
       waterSupply: initialData.waterSupply ?? 'corporation',
+      parking: initialData.parking ?? 'none',
       petAllowed: initialData.petAllowed ?? false,
       gym: initialData.gym ?? false,
       nonVegAllowed: initialData.nonVegAllowed ?? false,
@@ -102,8 +104,8 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
-          {/* Bathrooms, Balcony, Water Supply Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Bathrooms, Balcony, Water Supply, Parking Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Bathrooms */}
             <FormField control={form.control} name="bathrooms" render={({
             field
@@ -153,6 +155,27 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
                       <SelectItem value="corporation">Corporation</SelectItem>
                       <SelectItem value="borewell">Borewell</SelectItem>
                       <SelectItem value="both">Both</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>} />
+
+            {/* Parking */}
+            <FormField control={form.control} name="parking" render={({
+            field
+          }) => <FormItem>
+                  <FormLabel>Parking</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">No Parking</SelectItem>
+                      <SelectItem value="bike">Bike</SelectItem>
+                      <SelectItem value="car">Car</SelectItem>
+                      <SelectItem value="both">Bike and Car</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

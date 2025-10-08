@@ -19,6 +19,7 @@ interface PropertyInfoCardsProps {
     id: string;
     bhk_type?: string;
     property_type?: string;
+    listing_type?: string;
     preferred_tenant?: string;
     available_from?: string;
     availability_type?: string; // immediate | date | custom
@@ -58,6 +59,8 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   // Debug: Log property data for Land/Plot properties
   const isLandPlot = property.property_type?.toLowerCase().includes('land') || 
                      property.property_type?.toLowerCase().includes('plot');
+  
+  const isSale = property.listing_type?.toLowerCase() === 'sale';
   
   if (isLandPlot) {
     console.log('🔍 PropertyInfoCards - Land/Plot property data:', {
@@ -234,11 +237,12 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       title: getPropertyType(),
       subtitle: 'Property Type',
     },
-    {
+    // Hide Preferred Tenant for Sale listings
+    ...(!isSale ? [{
       icon: Users,
       title: getPreferredTenant(),
       subtitle: 'Preferred Tenant',
-    },
+    }] : []),
     {
       icon: Clock,
       title: getPossession(),

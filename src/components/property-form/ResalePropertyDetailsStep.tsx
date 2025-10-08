@@ -84,7 +84,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
       superBuiltUpArea: data.builtUpArea || 0,
       builtUpArea: data.builtUpArea || 0,
       carpetArea: data.carpetArea || 0,
-      // propertyAge removed from data transformation
+      propertyAge: data.propertyAge || '',
       facing: data.facing || '',
       floorNo: data.floorNo || 0,
       totalFloors: data.totalFloors || 1,
