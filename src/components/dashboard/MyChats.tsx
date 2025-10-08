@@ -110,7 +110,7 @@ const MyChats = () => {
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-sm mb-1 truncate">{conversation.title}</h3>
+                            <h3 className="font-semibold text-sm mb-1 truncate capitalize">{conversation.title}</h3>
                             <Badge className={`${getConversationTypeColor(conversation.conversation_type)} text-white text-xs`}>
                               {conversation.conversation_type}
                             </Badge>
@@ -144,7 +144,7 @@ const MyChats = () => {
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div className="flex-1 min-w-0">
-                  <h2 className="font-semibold text-base truncate">{selectedConversation?.title}</h2>
+                  <h2 className="font-semibold text-base truncate capitalize">{selectedConversation?.title}</h2>
                   <p className="text-xs text-gray-500">
                     {selectedConversation && format(new Date(selectedConversation.created_at), 'MMM d, yyyy')}
                   </p>
@@ -232,7 +232,7 @@ const MyChats = () => {
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-sm truncate mb-1">{conversation.title}</h3>
+                              <h3 className="font-semibold text-sm truncate mb-1 capitalize">{conversation.title}</h3>
                               <Badge className={`${getConversationTypeColor(conversation.conversation_type)} text-white text-xs`}>
                                 {conversation.conversation_type}
                               </Badge>
@@ -257,7 +257,7 @@ const MyChats = () => {
                 {selectedConversation ? (
                   <>
                     <div className="p-4 border-b bg-gray-50">
-                      <h2 className="text-lg font-semibold">{selectedConversation.title}</h2>
+                      <h2 className="text-lg font-semibold capitalize">{selectedConversation.title}</h2>
                       <p className="text-sm text-gray-500">
                         {format(new Date(selectedConversation.created_at), 'PPpp')}
                       </p>
