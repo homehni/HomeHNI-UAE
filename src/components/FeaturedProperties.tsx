@@ -512,14 +512,14 @@ const FeaturedProperties = ({
       'land/plot': 'Plot',
       'apartment': 'Apartment',
       'flat': 'Apartment',
+      'penthouse': 'Apartment', // Map Penthouse to Apartment
       'villa': 'Villa',
+      'duplex': 'Villa', // Map Duplex to Villa
       'independent_house': 'Independent House',
       'house': 'Independent House',
       'builder_floor': 'Builder Floor',
       'studio_apartment': 'Studio Apartment',
       'studio': 'Studio Apartment',
-      'penthouse': 'Penthouse',
-      'duplex': 'Duplex',
       'pg/hostel': 'PG/Hostel',
       'pg_hostel': 'PG/Hostel'
     };
