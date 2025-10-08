@@ -145,7 +145,7 @@ export function FlattmatesPropertyDetailsStep({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Apartment">Apartment</SelectItem>
-                        <SelectItem value="Independent House/Villa">Independent House/Villa</SelectItem>
+                        <SelectItem value="Independent House">Independent House</SelectItem>
                         <SelectItem value="Gated Community Villa">Gated Community Villa</SelectItem>
                       </SelectContent>
                     </Select>

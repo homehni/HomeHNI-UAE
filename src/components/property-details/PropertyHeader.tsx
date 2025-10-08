@@ -13,10 +13,25 @@ interface PropertyHeaderProps {
     expected_deposit?: number;
     super_area?: number;
     carpet_area?: number;
+    plot_area?: number;
     property_type?: string;
     listing_type?: string;
     security_deposit?: number;
     plot_area_unit?: string;
+    payload?: {
+      plot_area?: number;
+      super_area?: number;
+      carpet_area?: number;
+      plot_area_unit?: string;
+      originalFormData?: {
+        propertyInfo?: {
+          plotArea?: number;
+          superArea?: number;
+          carpetArea?: number;
+          plotAreaUnit?: string;
+        };
+      };
+    };
   };
 }
 
@@ -36,19 +51,59 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
   const deposit = isPG
     ? (property.expected_deposit ?? property.security_deposit)
     : property.security_deposit;
-  const area = property.super_area || property.carpet_area;
+  // Enhanced area extraction with additional path checks
+  const extractArea = () => {
+    console.log('PropertyHeader extractArea debug:', {
+      superArea: property.super_area,
+      carpetArea: property.carpet_area,
+      plotArea: property.plot_area,
+      payloadPlotArea: property.payload?.plot_area,
+      nestedPlotArea: property.payload?.originalFormData?.propertyInfo?.plotArea,
+      isPlot: isPlot,
+      propertyType: property.property_type
+    });
+    
+    // For plots and land, try plot area first
+    if (isPlot) {
+      return property.plot_area || 
+             property.payload?.plot_area || 
+             property.payload?.originalFormData?.propertyInfo?.plotArea || 
+             property.super_area || 
+             property.carpet_area;
+    }
+    
+    // For other property types
+    return property.super_area || 
+           property.carpet_area || 
+           property.payload?.super_area || 
+           property.payload?.carpet_area || 
+           property.payload?.originalFormData?.propertyInfo?.superArea || 
+           property.payload?.originalFormData?.propertyInfo?.carpetArea;
+  };
+  
+  const area = extractArea();
   
   const getAreaUnit = () => {
-    if (isPlot && property.plot_area_unit) {
+    // Get plot area unit from multiple possible locations
+    const plotAreaUnit = property.plot_area_unit || 
+                         property.payload?.plot_area_unit ||
+                         property.payload?.originalFormData?.propertyInfo?.plotAreaUnit;
+                         
+    if (isPlot && plotAreaUnit) {
       console.log('PropertyHeader: Plot area unit detected:', {
         propertyType: property.property_type,
-        plotAreaUnit: property.plot_area_unit,
+        plotAreaUnit: plotAreaUnit,
+        originalUnit: property.plot_area_unit,
+        payloadUnit: property.payload?.plot_area_unit,
+        nestedUnit: property.payload?.originalFormData?.propertyInfo?.plotAreaUnit,
         isPlot,
         area
       });
+      
       const unitMap: Record<string, string> = {
         'sq-ft': 'Sq.Ft',
         'sq-yard': 'Sq.Yard',
+        'sq-m': 'Sq.M',
         'acre': 'Acre',
         'hectare': 'Hectare',
         'bigha': 'Bigha',
@@ -59,14 +114,17 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
         'kanal': 'Kanal',
         'kottah': 'Kottah'
       };
-      return unitMap[property.plot_area_unit] || property.plot_area_unit;
+      
+      return unitMap[plotAreaUnit] || plotAreaUnit;
     }
+    
     console.log('PropertyHeader: Using default Sq.Ft unit:', {
       propertyType: property.property_type,
-      plotAreaUnit: property.plot_area_unit,
+      plotAreaUnit: plotAreaUnit,
       isPlot,
       area
     });
+    
     return 'Sq.Ft';
   };
 

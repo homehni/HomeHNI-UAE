@@ -342,27 +342,41 @@ const AdminProperties = () => {
         'amenities.bathrooms': amenities.bathrooms
       });
 
+      // Generate proper title with consistent casing
+      const propertyTitle = (() => {
+        // Generate proper title for land properties based on listing type from ownerInfo
+        const ownerInfo = originalFormData.ownerInfo;
+        
+        // First check if there's an existing title we can use (prevents duplication)
+        if (submission.title) {
+          console.log('Using existing submission title:', submission.title);
+          return submission.title;
+        }
+        
+        if (ownerInfo && ownerInfo.listingType) {
+          // Use consistent casing for sale/Sale to prevent duplicates
+          const saleText = mappedListingType.toLowerCase() === 'sale' ? 'Sale' : 'Rent';
+          
+          const listingTypeMap: { [key: string]: string } = {
+            'Industrial land': `Industrial Land For ${saleText}`,
+            'Agricultural Land': `Agricultural Land For ${saleText}`,
+            'Commercial land': `Commercial Land For ${saleText}`
+          };
+          const generatedTitle = listingTypeMap[ownerInfo.listingType];
+          if (generatedTitle) {
+            console.log('Generated title for property:', generatedTitle);
+            return generatedTitle;
+          }
+        }
+        // Fallback to existing title logic
+        return submission.title || payload.title || 'Untitled Property';
+      })();
+
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
         .insert({
           user_id: userIdToAssign,
-          title: (() => {
-            // Generate proper title for land properties based on listing type from ownerInfo
-            const ownerInfo = originalFormData.ownerInfo;
-            if (ownerInfo && ownerInfo.listingType) {
-              const listingTypeMap: { [key: string]: string } = {
-                'Industrial land': 'Industrial Land For SALE',
-                'Agricultural Land': 'Agricultural Land For SALE',
-                'Commercial land': 'Commercial Land For SALE'
-              };
-              const generatedTitle = listingTypeMap[ownerInfo.listingType];
-              if (generatedTitle) {
-                return generatedTitle;
-              }
-            }
-            // Fallback to existing title logic
-            return submission.title || payload.title || 'Untitled Property';
-          })(),
+          title: propertyTitle,
           property_type: mappedPropertyType,
           listing_type: mappedListingType,
           bhk_type: bhkValue,

@@ -32,6 +32,12 @@ interface PropertyDetailsCardProps {
     who_will_show?: string;
     current_property_condition?: string;
     secondary_phone?: string;
+    // Plot specific fields
+    plot_length?: number;
+    plot_width?: number;
+    boundary_wall?: string;
+    road_width?: number;
+    plot_area_unit?: string;
     amenities?: {
       gym?: boolean;
       clubHouse?: boolean;
@@ -71,7 +77,6 @@ interface PropertyDetailsCardProps {
       warden_facility?: boolean;
     };
     parking?: string;
-    plot_area_unit?: string;
   };
 }
 
@@ -96,11 +101,11 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     console.log('PropertyDetailsCard formatArea:', {
       area,
       propertyType: property.property_type,
-      plotAreaUnit: (property as any).plot_area_unit,
+      plotAreaUnit: property.plot_area_unit,
       isPlot
     });
     
-    if (isPlot && (property as any).plot_area_unit) {
+    if (isPlot && property.plot_area_unit) {
       const unitMap: Record<string, string> = {
         'sq-ft': 'Sq.Ft',
         'sq-yard': 'Sq.Yard',
@@ -114,7 +119,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
         'kanal': 'Kanal',
         'kottah': 'Kottah'
       };
-      const displayUnit = unitMap[(property as any).plot_area_unit] || (property as any).plot_area_unit;
+      const displayUnit = unitMap[property.plot_area_unit] || property.plot_area_unit;
       console.log('PropertyDetailsCard: Using plot unit:', displayUnit);
       return `${area.toLocaleString()} ${displayUnit}`;
     }
@@ -159,10 +164,37 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     return location;
   };
 
+  // Format dimensions
+  const formatDimensions = (length?: number, width?: number) => {
+    if (!length && !width) return 'Not specified';
+    if (length && width) return `${length} × ${width} ft`;
+    return `${length || width} ft`;
+  };
+  
+  // Format boundary wall
+  const formatBoundaryWall = (boundaryWall?: string) => {
+    if (!boundaryWall) return 'Not specified';
+    
+    if (boundaryWall === 'yes') return 'Yes - Complete';
+    if (boundaryWall === 'no') return 'No';
+    if (boundaryWall === 'partial') return 'Partial';
+    
+    return boundaryWall;
+  };
+  
+  // Format road width
+  const formatRoadWidth = (roadWidth?: number) => {
+    if (!roadWidth) return 'Not specified';
+    return `${roadWidth} ft`;
+  };
+
   // Different details for different property types
   const details = isPlotProperty ? [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
     { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Dimensions (L × W)', value: formatDimensions(property.plot_length, property.plot_width) },
+    { label: 'Boundary Wall', value: formatBoundaryWall(property.boundary_wall) },
+    { label: 'Road Width', value: formatRoadWidth(property.road_width) },
     { label: 'Ownership', value: formatOwnership(property.owner_role) },
     { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
     { label: 'Water Connection', value: property.water_supply || 'Not specified' },

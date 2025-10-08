@@ -28,17 +28,17 @@ interface PropertyInfoCardsProps {
     property_age?: string; // fallback key used in DB for age
     balconies?: number;
     created_at?: string;
-  // PG-specific fields
-  preferred_guests?: string;
-  food_included?: boolean | string;
-  gate_closing_time?: string;
-  place_available_for?: 'male' | 'female' | 'anyone';
+    // PG-specific fields
+    preferred_guests?: string;
+    food_included?: boolean | string;
+    gate_closing_time?: string;
+    place_available_for?: 'male' | 'female' | 'anyone';
     // Common/Commercial extras
     floor_no?: number;
     total_floors?: number;
     furnishing?: string;
     furnishing_status?: string;
-  amenities?: { furnishing?: string } | Record<string, unknown>;
+    amenities?: { furnishing?: string } | Record<string, unknown>;
     // Plot specific
     plot_length?: number;
     plot_width?: number;
@@ -52,6 +52,20 @@ interface PropertyInfoCardsProps {
     ownership_type?: string;
     owner_role?: string;
     plot_area_unit?: string;
+    // Property submission data
+    payload?: {
+      plot_length?: number;
+      plotLength?: number;
+      plot_width?: number;
+      plotWidth?: number;
+      boundary_wall?: string;
+      boundaryWall?: string;
+      road_width?: number;
+      roadWidth?: number;
+      ownership_type?: string;
+      ownershipType?: string;
+      [key: string]: any;
+    };
   };
 }
 
@@ -63,6 +77,7 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   const isSale = property.listing_type?.toLowerCase() === 'sale';
   
   if (isLandPlot) {
+    // Enhanced debugging to find plot dimensions and boundary wall data
     console.log('🔍 PropertyInfoCards - Land/Plot property data:', {
       property_type: property.property_type,
       plot_length: property.plot_length,
@@ -71,8 +86,45 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       boundary_wall: property.boundary_wall,
       ownership_type: property.ownership_type,
       plot_area_unit: property.plot_area_unit,
+      // Check if data is in the property.payload
+      payload_plot_length: property.payload?.plot_length,
+      payload_plot_width: property.payload?.plot_width,
+      payload_boundary_wall: property.payload?.boundary_wall,
+      // Check if data is in originalFormData if it exists
+      originalFormData: property.payload?.originalFormData,
+      plotDetails: property.payload?.originalFormData?.propertyInfo?.plotDetails,
+      
+      // Check specifically for plotLength and plotWidth in the nested structure
+      plotLength: property.payload?.originalFormData?.propertyInfo?.plotDetails?.plotLength,
+      plotWidth: property.payload?.originalFormData?.propertyInfo?.plotDetails?.plotWidth,
+      roadWidth: property.payload?.originalFormData?.propertyInfo?.plotDetails?.roadWidth,
+      
+      // Check in amenities 
+      amenitiesRoadWidth: property.payload?.originalFormData?.propertyInfo?.amenities?.roadWidth,
+      
+      // Check if the data exists directly in propertyInfo
+      propInfoPlotLength: property.payload?.originalFormData?.propertyInfo?.plotLength,
+      propInfoPlotWidth: property.payload?.originalFormData?.propertyInfo?.plotWidth,
+      propInfoRoadWidth: property.payload?.originalFormData?.propertyInfo?.roadWidth,
+      
+      // Check all top-level keys
       allKeys: Object.keys(property),
-      fullProperty: property
+      
+      // For better debugging, check entire property object as string
+      propertyStr: JSON.stringify(property).substring(0, 500) + '...',
+      
+      // Check if data might be in subData
+      subData: property.subData,
+      
+      // Check all top-level values for specific fields
+      hasPlotData: Object.entries(property)
+        .filter(([key, value]) => 
+          key.includes('plot') || 
+          key.includes('boundary') || 
+          key.includes('dimension') ||
+          key.includes('length') || 
+          key.includes('width'))
+        .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
     });
   }
 
@@ -94,8 +146,39 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getPropertyType = () => {
-    if (!property.property_type) return 'Apartment';
-    return property.property_type.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    // Access property type from all possible paths
+    const propertyTypeDebug = {
+      direct: property.property_type,
+      payload: property.payload?.property_type,
+      originalFormData: property.payload?.originalFormData,
+      propertyInfo: property.payload?.originalFormData?.propertyInfo
+    };
+    
+    console.log('Property debug data:', propertyTypeDebug);
+    
+    // Try to get the property type from various locations
+    let type = property.property_type;
+    
+    // If not found in direct property, check payload
+    if (!type && property.payload) {
+      type = property.payload.property_type;
+      
+      // Check nested in originalFormData if exists
+      if (!type && property.payload.originalFormData?.propertyInfo) {
+        const propInfo = property.payload.originalFormData.propertyInfo;
+        
+        // Check both propertyType and commercialType which might be used
+        if (typeof propInfo === 'object' && propInfo !== null) {
+          type = (propInfo as Record<string, any>).propertyType || 
+                 (propInfo as Record<string, any>).commercialType;
+        }
+      }
+    }
+    
+    console.log('Final property type value:', {type});
+    
+    if (!type) return 'Apartment';
+    return type.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
   const getPossession = () => {
@@ -195,31 +278,137 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
 
   const formatDimensions = () => {
     // Support multiple possible keys from different data sources
-    const L = property.plot_length ?? property.length;
-    const W = property.plot_width ?? property.width;
+    // Extract from any path where it might exist
+    const possiblePaths = {
+      // Direct property fields
+      directL: property.plot_length,
+      directW: property.plot_width,
+      
+      // Alternative direct fields
+      altL: property.length,
+      altW: property.width,
+      
+      // Fields in payload
+      payloadL: property.payload?.plot_length,
+      payloadW: property.payload?.plot_width,
+      
+      // Alternative fields in payload
+      altPayloadL: property.payload?.plotLength,
+      altPayloadW: property.payload?.plotWidth,
+      
+      // Deeply nested in originalFormData
+      nestedL: property.payload?.originalFormData?.propertyInfo?.plotDetails?.plotLength,
+      nestedW: property.payload?.originalFormData?.propertyInfo?.plotDetails?.plotWidth,
+      
+      // Direct in propertyInfo
+      propInfoL: property.payload?.originalFormData?.propertyInfo?.plotLength,
+      propInfoW: property.payload?.originalFormData?.propertyInfo?.plotWidth,
+    };
+    
+    console.log('Dimensions debug paths:', possiblePaths);
+    
+    // Try all possible locations
+    const L = possiblePaths.directL ?? 
+              possiblePaths.altL ?? 
+              possiblePaths.payloadL ?? 
+              possiblePaths.altPayloadL ?? 
+              possiblePaths.nestedL ?? 
+              possiblePaths.propInfoL;
+              
+    const W = possiblePaths.directW ?? 
+              possiblePaths.altW ?? 
+              possiblePaths.payloadW ?? 
+              possiblePaths.altPayloadW ?? 
+              possiblePaths.nestedW ?? 
+              possiblePaths.propInfoW;
+    
+    console.log('Final dimensions:', {L, W});
+    
     if (!L || !W) return 'Not specified';
     // Always show linear dimensions in feet regardless of area unit
     return `${L} x ${W} ft.`;
   };
 
   const formatOwnership = () => {
-    const raw = property.ownership_type || property.owner_role;
+    const raw = property.ownership_type || property.owner_role || 
+               (property.payload?.ownership_type) || 
+               (property.payload?.ownershipType);
     if (!raw) return 'Not specified';
     return String(raw).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
   const formatRoadWidth = () => {
-    const rw = property.road_width ?? property.roadWidth;
+    // Create a structured object of all possible paths
+    const possiblePaths = {
+      // Direct properties
+      directRW: property.road_width,
+      directAltRW: property.roadWidth,
+      
+      // In payload
+      payloadRW: property.payload?.road_width,
+      payloadAltRW: property.payload?.roadWidth,
+      
+      // Nested in originalFormData.propertyInfo
+      plotDetailsRW: property.payload?.originalFormData?.propertyInfo?.plotDetails?.roadWidth,
+      amenitiesRW: property.payload?.originalFormData?.propertyInfo?.amenities?.roadWidth,
+      
+      // Direct in propertyInfo
+      propInfoRW: property.payload?.originalFormData?.propertyInfo?.roadWidth,
+    };
+    
+    console.log('Road width debug paths:', possiblePaths);
+    
+    // Try all possible locations
+    const rw = possiblePaths.directRW ?? 
+               possiblePaths.directAltRW ?? 
+               possiblePaths.payloadRW ?? 
+               possiblePaths.payloadAltRW ?? 
+               possiblePaths.plotDetailsRW ?? 
+               possiblePaths.amenitiesRW ?? 
+               possiblePaths.propInfoRW;
+    
+    console.log('Final road width:', {rw});
+    
     if (!rw && rw !== 0) return 'Not specified';
     return `${rw} ft.`;
   };
 
   const formatBoundaryWall = () => {
-    const v = property.boundary_wall ?? property.boundaryWall;
+    // Create a structured object of all possible paths
+    const possiblePaths = {
+      // Direct properties
+      directBW: property.boundary_wall,
+      directAltBW: property.boundaryWall,
+      
+      // In payload
+      payloadBW: property.payload?.boundary_wall,
+      payloadAltBW: property.payload?.boundaryWall,
+      
+      // Nested in originalFormData.propertyInfo
+      plotDetailsBW: property.payload?.originalFormData?.propertyInfo?.plotDetails?.boundaryWall,
+      amenitiesBW: property.payload?.originalFormData?.propertyInfo?.amenities?.boundaryWall,
+      
+      // Direct in propertyInfo
+      propInfoBW: property.payload?.originalFormData?.propertyInfo?.boundaryWall,
+    };
+    
+    console.log('Boundary wall debug paths:', possiblePaths);
+    
+    // Try all possible locations
+    const v = possiblePaths.directBW ?? 
+              possiblePaths.directAltBW ?? 
+              possiblePaths.payloadBW ?? 
+              possiblePaths.payloadAltBW ?? 
+              possiblePaths.plotDetailsBW ?? 
+              possiblePaths.amenitiesBW ?? 
+              possiblePaths.propInfoBW;
+    
+    console.log('Final boundary wall value:', {v});
+    
     if (v === undefined || v === null || v === '') return 'Not specified';
     const s = String(v).toLowerCase().trim();
-    if (['yes', 'y', 'present', 'available', 'have'].includes(s)) return 'Yes';
-    if (['no', 'n', 'absent', 'not available', 'none'].includes(s)) return 'No';
+    if (['yes', 'y', 'present', 'available', 'have', 'true', '1'].includes(s)) return 'Yes';
+    if (['no', 'n', 'absent', 'not available', 'none', 'false', '0'].includes(s)) return 'No';
     if (s.includes('partial')) return 'Partial';
     // Fallback to title case value
     return String(v).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
@@ -270,6 +459,22 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
   ];
 
+  // Get formatted values with logging
+  const dimensionsValue = formatDimensions();
+  const ownershipValue = formatOwnership();
+  const roadWidthValue = formatRoadWidth();
+  const boundaryWallValue = formatBoundaryWall();
+  
+  // Log the final values for debugging
+  if (isLandPlot) {
+    console.log('PropertyInfoCards - Final formatted values:', {
+      dimensions: dimensionsValue,
+      ownership: ownershipValue, 
+      roadWidth: roadWidthValue,
+      boundaryWall: boundaryWallValue
+    });
+  }
+  
   const plotInfoCards = [
     {
       icon: Calendar,
@@ -283,22 +488,22 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
     {
       icon: Layers,
-      title: formatDimensions(),
+      title: dimensionsValue,
       subtitle: 'Dimension (L x B)',
     },
     {
       icon: Shield,
-      title: formatOwnership(),
+      title: ownershipValue,
       subtitle: 'Ownership',
     },
     {
       icon: MapPin,
-      title: formatRoadWidth(),
+      title: roadWidthValue,
       subtitle: 'Width of facing road',
     },
     {
       icon: Home,
-      title: formatBoundaryWall(),
+      title: boundaryWallValue,
       subtitle: 'Boundary wall',
     },
   ];

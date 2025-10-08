@@ -17,7 +17,7 @@ export const mapBhkType = (bhkType: string): string => {
     '10 BHK': '10bhk',
     'Multiple': 'multiple',
     'Multiple room types': 'multiple',
-    'PG/Hostel': 'pg_hostel'
+    'PG/Hostel': 'multiple' // Changed from 'pg_hostel' to 'multiple' as per the latest database schema
   };
   
   if (!bhkType) return '';
@@ -43,7 +43,7 @@ export const mapPropertyType = (propertyType: string): string => {
     'Agricultural Land': 'agriculture_lands', // Map Agricultural Land to agriculture_lands
     'Farmhouse': 'farm_house', // Map Farmhouse to farm_house
     'Studio': 'studio',
-    'PG/Hostel': 'pg_hostel', // Map form value to DB value
+    'PG/Hostel': 'pg_hostel', // This is fine for property_type, which still accepts pg_hostel
     'Flatmates': 'apartment', // Map form value to DB value - Flatmates are apartments
     'Commercial': 'commercial',
     'Office': 'office',
@@ -121,7 +121,7 @@ export const validateMappedValues = (data: {
   
   // Validate BHK type if provided
   if (data.bhkType) {
-    const validBhkTypes = ['studio', '1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', '6bhk', '7bhk', '8bhk', '9bhk', '10bhk', 'multiple', 'pg_hostel'];
+    const validBhkTypes = ['studio', '1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', '6bhk', '7bhk', '8bhk', '9bhk', '10bhk', 'multiple'];
     const mappedBhk = mapBhkType(data.bhkType);
     if (!validBhkTypes.includes(mappedBhk)) {
       errors.push(`Invalid BHK type: ${data.bhkType}`);
