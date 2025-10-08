@@ -41,6 +41,7 @@ export function PgHostelLocalityDetailsStep({
 
   const form = useForm<PgHostelLocationData>({
     resolver: zodResolver(pgHostelLocationSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',
@@ -126,8 +127,18 @@ export function PgHostelLocalityDetailsStep({
         });
       };
 
-      // City aliases for validation
+      // Attach autocomplete to city field
+      attach(cityInputRef.current, (place, el) => {
+        const value = place?.formatted_address || place?.name || '';
+        
+        if (value) {
+          el.value = value;
+          form.setValue('city', value, { shouldValidate: true });
+          setSelectedCity(value);
+        }
+      });
 
+      // Attach autocomplete to locality field
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
         
