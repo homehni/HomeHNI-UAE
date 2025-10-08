@@ -372,9 +372,10 @@ const AdminProperties = () => {
         return submission.title || payload.title || 'Untitled Property';
       })();
 
+      // Update existing property instead of inserting (prevents duplicates)
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
-        .insert({
+        .update({
           user_id: userIdToAssign,
           title: propertyTitle,
           property_type: mappedPropertyType,
@@ -470,8 +471,11 @@ const AdminProperties = () => {
           owner_role: payload.owner_role || originalFormData.ownerInfo?.role || 'Owner',
           
           status: 'approved',
-          is_featured: payload.is_featured || false
+          is_featured: payload.is_featured || false,
+          admin_reviewed_at: new Date().toISOString(),
+          admin_reviewed_by: currentUser.user.id
         })
+        .eq('id', propertyId)
         .select()
         .single();
 
