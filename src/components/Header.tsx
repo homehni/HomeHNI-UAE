@@ -397,6 +397,10 @@ const Header = () => {
                       <span>Profile</span>
                     </DropdownMenuItem>
                     
+                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=chats')}>
+                      <span>My Chats</span>
+                    </DropdownMenuItem>
+                    
                     {/* Residential Plan with custom dropdown */}
                     <DropdownMenuItem 
                       onClick={(e) => {
