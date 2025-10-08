@@ -504,10 +504,12 @@ const PropertySearch = () => {
         </div>
       </div>
 
-      <Separator />
+      {/* Show separator only if there's content after Property Type */}
+      {(activeTab === 'commercial' || activeTab === 'buy' || activeTab === 'rent') && <Separator />}
 
       {/* Commercial-only: Floor filter (moved up for visibility) */}
       {activeTab === 'commercial' && (
+        <>
         <div>
           <div className="flex items-center justify-between mb-3">
             <h4 className="font-semibold">Floor</h4>
@@ -537,11 +539,15 @@ const PropertySearch = () => {
             ))}
           </div>
         </div>
+        <Separator />
+        </>
       )}
 
 
   {/* BHK Filter (hide for land and commercial) */}
-  {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
+  {activeTab !== 'land' && activeTab !== 'commercial' && (
+    <>
+    <div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">BHK Type</h4>
           {filters.bhkType.length > 0 && (
@@ -569,12 +575,16 @@ const PropertySearch = () => {
             </Button>
           ))}
         </div>
-      </div>)}
+      </div>
 
       <Separator />
+      </>
+  )}
 
   {/* Property Status (hide for land and commercial) */}
-  {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
+  {activeTab !== 'land' && activeTab !== 'commercial' && (
+    <>
+    <div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">Property Status</h4>
           {filters.availability.length > 0 && (
@@ -605,12 +615,16 @@ const PropertySearch = () => {
             </div>
           ))}
         </div>
-      </div>)}
+      </div>
 
       <Separator />
+      </>
+  )}
 
   {/* Furnishing (not relevant for land; also show for commercial) */}
-  {activeTab !== 'land' && (<div>
+  {activeTab !== 'land' && (
+    <>
+    <div>
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">Furnishing</h4>
           {filters.furnished.length > 0 && (
@@ -641,9 +655,11 @@ const PropertySearch = () => {
             </div>
           ))}
         </div>
-      </div>)}
+      </div>
 
       <Separator />
+      </>
+  )}
 
   {/* Age of Property (hide for land and commercial) */}
   {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
