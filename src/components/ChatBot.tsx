@@ -823,13 +823,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
       description: 'AC maintenance',
       action: 'ac_service'
     },
-    {
-      id: 'buyer',
-      icon: Search,
-      label: 'Want to Buy',
-      description: 'Find property',
-      action: 'Want to buy a property'
-    },
+    // {
+    //   id: 'buyer',
+    //   icon: Search,
+    //   label: 'Want to Buy',
+    //   description: 'Find property',
+    //   action: 'Want to buy a property'
+    // },
     {
       id: 'buyer-plans',
       icon: ShoppingBag,
