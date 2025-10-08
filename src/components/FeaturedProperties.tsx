@@ -543,8 +543,19 @@ const FeaturedProperties = ({
   }, [availableTypes, activeType]);
   const filtered = useMemo(() => {
     if (activeType === 'All') return properties;
-    // Use the same matching logic as search results to handle Penthouse -> Apartment mapping, etc.
-    return properties.filter(p => matchesPropertyType(p.propertyType, activeType.toUpperCase() as PropertyTypeFilter));
+    
+    // Convert normalized display type back to filter format and use matching logic
+    const filterType = activeType.toUpperCase().replace(/\s+/g, ' ') as PropertyTypeFilter;
+    
+    return properties.filter(p => {
+      // Direct match with normalized type
+      if (normalizePropertyType(p.propertyType) === activeType) {
+        return true;
+      }
+      // Also check if the property type matches according to the matching rules
+      // (e.g., Penthouse matches APARTMENT filter)
+      return matchesPropertyType(p.propertyType, filterType);
+    });
   }, [activeType, properties]);
   
   // Show only first 20 properties initially, all when showAll is true
