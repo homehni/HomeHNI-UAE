@@ -122,7 +122,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       text: 'Hello! I\'m your AI real estate assistant. I can help you with all your property needs. Let me know your role to get started:',
       isBot: true,
       timestamp: new Date(),
-      options: ['Seller', 'Agent', 'Builder', 'Want to buy a property']
+      options: ['Seller', 'Agent', 'Builder']
     };
   };
   
@@ -280,7 +280,7 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
                 isBot: true,
                 timestamp: new Date(),
                 text: 'Please select one of the available options to proceed.',
-                options: ['Seller', 'Agent', 'Builder', 'Want to buy a property']
+                options: ['Seller', 'Agent', 'Builder']
               };
             }
           } else if (conversationStep === 'post_property') {
