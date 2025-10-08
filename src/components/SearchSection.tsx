@@ -1418,8 +1418,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   function getPropertyTypesForHomepage(tab: string): string[] {
     switch (tab) {
       case 'rent':
-        // Restrict Rent -> Property Type to these three
-        return ['Flat/Apartment', 'Independent House', 'Villa'];
+        // Restrict Rent -> Property Type to these four options
+        return ['Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel'];
       case 'buy':
         // Limit Buy -> Property Type to only these three options (label: Flat/Apartment)
         return ['Flat/Apartment', 'Independent House', 'Villa'];
@@ -1496,6 +1496,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       'Showroom': 'SHOWROOM',
       'Restaurant': 'RESTAURANT',
       'Industrial': 'INDUSTRIAL',
+      'PG/Hostel': 'PG/HOSTEL',
     };
     return map[label] || label.toUpperCase();
   }

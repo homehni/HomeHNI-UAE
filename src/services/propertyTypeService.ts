@@ -12,6 +12,7 @@ const PROPERTY_TYPES_CONFIG: Record<ListingTab, PropertyTypeFilter[]> = {
     'APARTMENT',
     'INDEPENDENT HOUSE',
     'VILLA',
+    'PG/HOSTEL',
   ],
   buy: [
     'ALL',
@@ -45,12 +46,8 @@ interface PropertyTypeMatch {
 }
 
 const PROPERTY_TYPE_RULES: Record<string, PropertyTypeMatch> = {
-  'PENTHOUSE': {
-    exact: ['penthouse'],
-  },
-  'DUPLEX': {
-    exact: ['duplex'],
-  },
+  // Note: We've now explicitly mapped Penthouse to APARTMENT and Duplex to VILLA
+  // in the matchesPropertyType function, so we can remove these empty entries
   'INDEPENDENT HOUSE': {
     exact: ['independenthouse', 'independent'],
     contains: ['independent', 'house'],
@@ -60,11 +57,16 @@ const PROPERTY_TYPE_RULES: Record<string, PropertyTypeMatch> = {
     exact: ['gatedcommunityvilla'],
     contains: ['gated', 'community', 'villa'],
   },
+  'PG/HOSTEL': {
+    exact: ['pg_hostel', 'pghostel', 'pg/hostel'],
+    contains: ['hostel', 'pg'],
+  },
   'APARTMENT': {
     contains: ['apartment', 'flat'],
+    exact: ['penthouse'], // Map Penthouse to Apartment filter
   },
   'VILLA': {
-    exact: ['villa'],
+    exact: ['villa', 'duplex'], // Map Duplex to Villa filter
     excludes: ['community'],
   },
   'AGRICULTURAL LAND': {
@@ -130,6 +132,14 @@ export function matchesPropertyType(
   filterType: PropertyTypeFilter
 ): boolean {
   if (filterType === 'ALL') {
+    return true;
+  }
+  
+  // Special mapping rules for Penthouse and Duplex
+  if (normalizePropertyType(propertyType) === 'penthouse' && filterType === 'APARTMENT') {
+    return true;
+  }
+  if (normalizePropertyType(propertyType) === 'duplex' && filterType === 'VILLA') {
     return true;
   }
 
@@ -209,6 +219,7 @@ export function pluralizePropertyType(type: PropertyTypeFilter): string {
     'warehouse': 'warehouses',
     'showroom': 'showrooms',
     'restaurant': 'restaurants',
+    'pg/hostel': 'pg/hostels',
   };
 
   return pluralRules[displayName] || displayName + 's';

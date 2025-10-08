@@ -70,7 +70,8 @@ export type PropertyTypeFilter =
   | 'WAREHOUSE'
   | 'SHOWROOM'
   | 'RESTAURANT'
-  | 'INDUSTRIAL';
+  | 'INDUSTRIAL'
+  | 'PG/HOSTEL';
 
 export type BhkType = '1 RK' | '1 BHK' | '2 BHK' | '3 BHK' | '4 BHK' | '5+ BHK';
 

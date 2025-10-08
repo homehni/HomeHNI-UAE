@@ -35,8 +35,8 @@ export const mapPropertyType = (propertyType: string): string => {
     'Gated Community Villa': 'villa', // Map Gated Community Villa to villa
     'Builder Floor': 'builder_floor',
     'Studio Apartment': 'studio_apartment', // Map Studio Apartment to studio_apartment
-    'Penthouse': 'penthouse', // Map Penthouse to penthouse
-    'Duplex': 'duplex', // Map Duplex to duplex
+    'Penthouse': 'apartment', // Map Penthouse to apartment for filtering
+    'Duplex': 'villa', // Map Duplex to villa for filtering
     'Plot': 'plot',
     'Plot/Land': 'plot', // Map form value to DB value
     'Land/Plot': 'plot', // Map form value to DB value (alternate label)
@@ -129,6 +129,8 @@ export const validateMappedValues = (data: {
   }
   
   // Validate property type
+  // Note: 'penthouse' and 'duplex' are now mapped to 'apartment' and 'villa' respectively,
+  // but we still include them in validPropertyTypes for backward compatibility with existing data
   const validPropertyTypes = ['apartment', 'villa', 'independent_house', 'builder_floor', 'studio_apartment', 'penthouse', 'duplex', 'plot', 'studio', 'pg_hostel', 'flatmates', 'commercial', 'office', 'shop', 'warehouse', 'showroom', 'coworking', 'coliving', 'hotel'];
   const mappedPropertyType = mapPropertyType(data.propertyType);
   if (!validPropertyTypes.includes(mappedPropertyType)) {

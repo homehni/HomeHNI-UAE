@@ -19,6 +19,8 @@ import PropertyTools from '@/components/PropertyTools';
 import ChatBot from '@/components/ChatBot';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 import { useDebounce } from '@/hooks/useDebounce';
+import { AreaUnit } from '@/utils/areaConverter';
+import { LandAreaFilter } from '@/components/LandAreaFilter';
 // Minimal Google Places typings to avoid 'any'
 type GPlaceComponent = { long_name: string; short_name: string; types: string[] };
 type LatLng = {
@@ -187,8 +189,8 @@ const PropertySearch = () => {
   const getPropertyTypes = (tab: string): string[] => {
     switch (tab) {
       case 'rent':
-        // Restrict Rent -> Property Type to only these
-        return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
+        // Restrict Rent -> Property Type to these options
+        return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA', 'PG/HOSTEL'];
       case 'buy':
         // Restrict Buy -> Property Type to only these three (label change handled in homepage UI)
         return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
@@ -208,6 +210,7 @@ const PropertySearch = () => {
   const furnishedOptions = ['Furnished', 'Semi-Furnished', 'Unfurnished'];
   const availabilityOptions = ['Ready to Move', 'Under Construction'];
   const constructionOptions = ['New Project', '1-5 Years Old', '5-10 Years Old', '10+ Years Old'];
+  const areaUnits = ['sq.ft', 'sq.yards', 'sq.m', 'acres', 'bigha', 'marla', 'cents', 'guntha'];
   // Commercial specific options
   const floorOptions = ['Basement', 'Ground', '1', '2', '3+'];
   const parkingOptions = ['Parking Available', 'No Parking'];
@@ -226,16 +229,31 @@ const PropertySearch = () => {
   };
   const [uiBudget, setUiBudget] = useState<[number, number]>(filters.budget);
   const [uiArea, setUiArea] = useState<[number, number]>(filters.area);
+  const [uiLandArea, setUiLandArea] = useState<[number, number]>(filters.landArea);
+  const [landAreaUnit, setLandAreaUnit] = useState<string>(filters.landAreaUnit);
   const budgetKey = `${filters.budget[0]}-${filters.budget[1]}`;
   const areaKey = `${filters.area[0]}-${filters.area[1]}`;
+  const landAreaKey = `${filters.landArea[0]}-${filters.landArea[1]}-${filters.landAreaUnit}`;
   useEffect(() => { setUiBudget(filters.budget); }, [budgetKey]);
   useEffect(() => { setUiArea(filters.area); }, [areaKey]);
+  useEffect(() => { 
+    setUiLandArea(filters.landArea); 
+    setLandAreaUnit(filters.landAreaUnit);
+  }, [landAreaKey]);
     
     const commitBudget = (value: [number, number]) => {
       preserveScroll(() => updateFilter('budget', snapBudget(activeTab, value)));
     };
     const commitArea = (value: [number, number]) => {
       preserveScroll(() => updateFilter('area', value));
+    };
+    
+    const commitLandArea = (value: [number, number]) => {
+      preserveScroll(() => updateFilter('landArea', value));
+    };
+    
+    const commitLandAreaUnit = (unit: string) => {
+      preserveScroll(() => updateFilter('landAreaUnit', unit));
     };
 
     return (<>
@@ -336,100 +354,119 @@ const PropertySearch = () => {
 
       <Separator />
 
-      {/* Area (Sq. Ft.) Filter */}
-      <div>
-        <h4 className="font-semibold mb-3" id="area-label">Area (Sq. Ft.)</h4>
-        <div className="space-y-3">
-          <div className="relative">
-            <Slider 
-              value={uiArea}
-              onValueChange={(value) => setUiArea(value as [number, number])}
-              onValueCommit={(value) => commitArea(value as [number, number])}
-              max={10000} 
-              min={0} 
-              step={100} 
-              className="w-full"
-              aria-labelledby="area-label"
-              aria-valuemin={0}
-              aria-valuemax={10000}
-              aria-valuenow={uiArea[1]}
-            />
-          </div>
-          <div className="flex justify-between text-sm font-medium text-foreground">
-            <span>{uiArea[0] === 0 ? '0' : uiArea[0].toLocaleString()} sq ft</span>
-            <span>{uiArea[1] >= 10000 ? '10,000+ sq ft' : uiArea[1].toLocaleString() + ' sq ft'}</span>
-          </div>
-          {/* Manual Area Input Fields */}
-          <div className="space-y-2 mb-3">
-            <div className="text-sm font-medium text-gray-700">Enter Area Range</div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label htmlFor="min-area" className="text-xs text-gray-500 mb-1 block">Min Area (sq ft)</label>
-                <Input 
-                  id="min-area"
-                  type="number" 
-                  placeholder="Min area" 
-                  value={uiArea[0].toString()} 
-                  onChange={e => {
-                    const value = parseInt(e.target.value) || 0;
-                    if (value <= uiArea[1]) setUiArea([value, uiArea[1]]);
-                  }} 
-                  onBlur={() => commitArea(uiArea)}
-                  onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
-                  className="h-8 text-sm"
-                  aria-label="Minimum area in square feet"
+      {/* Area (Sq. Ft.) Filter - Only show for non-land tabs */}
+      {activeTab !== 'land' && (
+        <>
+          <div>
+            <h4 className="font-semibold mb-3" id="area-label">Area (Sq. Ft.)</h4>
+            <div className="space-y-3">
+              <div className="relative">
+                <Slider 
+                  value={uiArea}
+                  onValueChange={(value) => setUiArea(value as [number, number])}
+                  onValueCommit={(value) => commitArea(value as [number, number])}
+                  max={6000} 
+                  min={0} 
+                  step={50} 
+                  className="w-full"
+                  aria-labelledby="area-label"
+                  aria-valuemin={0}
+                  aria-valuemax={6000}
+                  aria-valuenow={uiArea[1]}
                 />
               </div>
-              <div>
-                <label htmlFor="max-area" className="text-xs text-gray-500 mb-1 block">Max Area (sq ft)</label>
-                <Input 
-                  id="max-area"
-                  type="number" 
-                  placeholder="Max area" 
-                  value={uiArea[1].toString()} 
-                  onChange={e => {
-                    const value = parseInt(e.target.value) || 0;
-                    if (value >= uiArea[0]) setUiArea([uiArea[0], Math.min(value, 20000)]);
-                  }} 
-                  onBlur={() => commitArea(uiArea)}
-                  onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
-                  className="h-8 text-sm"
-                  aria-label="Maximum area in square feet"
-                />
+              <div className="flex justify-between text-sm font-medium text-foreground">
+                <span>{uiArea[0] === 0 ? '0' : uiArea[0].toLocaleString()} sq ft</span>
+                <span>{uiArea[1] >= 6000 ? '6,000+ sq ft' : uiArea[1].toLocaleString() + ' sq ft'}</span>
+              </div>
+              {/* Manual Area Input Fields */}
+              <div className="space-y-2 mb-3">
+                <div className="text-sm font-medium text-gray-700">Enter Area Range</div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label htmlFor="min-area" className="text-xs text-gray-500 mb-1 block">Min Area (sq ft)</label>
+                    <Input 
+                      id="min-area"
+                      type="number" 
+                      placeholder="Min area" 
+                      value={uiArea[0].toString()} 
+                      onChange={e => {
+                        const value = parseInt(e.target.value) || 0;
+                        if (value <= uiArea[1]) setUiArea([value, uiArea[1]]);
+                      }} 
+                      onBlur={() => commitArea(uiArea)}
+                      onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
+                      className="h-8 text-sm"
+                      aria-label="Minimum area in square feet"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="max-area" className="text-xs text-gray-500 mb-1 block">Max Area (sq ft)</label>
+                    <Input 
+                      id="max-area"
+                      type="number" 
+                      placeholder="Max area" 
+                      value={uiArea[1].toString()} 
+                      onChange={e => {
+                        const value = parseInt(e.target.value) || 0;
+                        if (value >= uiArea[0]) setUiArea([uiArea[0], Math.min(value, 10000)]);
+                      }} 
+                      onBlur={() => commitArea(uiArea)}
+                      onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
+                      className="h-8 text-sm"
+                      aria-label="Maximum area in square feet"
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Quick Area Range Buttons */}
+              <div className="grid grid-cols-3 gap-2 mt-3">
+                <Button variant={uiArea[0] === 0 && uiArea[1] === 1000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 1000]); commitArea([0, 1000]); }} className="text-xs h-8">
+                  Under 1000
+                </Button>
+                <Button variant={uiArea[0] === 1000 && uiArea[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([1000, 2000]); commitArea([1000, 2000]); }} className="text-xs h-8">
+                  1000-2000
+                </Button>
+                <Button variant={uiArea[0] === 2000 && uiArea[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([2000, 3000]); commitArea([2000, 3000]); }} className="text-xs h-8">
+                  2000-3000
+                </Button>
+                <Button variant={uiArea[0] === 3000 && uiArea[1] === 4000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([3000, 4000]); commitArea([3000, 4000]); }} className="text-xs h-8">
+                  3000-4000
+                </Button>
+                <Button variant={uiArea[0] === 4000 && uiArea[1] === 5000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([4000, 5000]); commitArea([4000, 5000]); }} className="text-xs h-8">
+                  4000-5000
+                </Button>
+                <Button variant={uiArea[0] === 5000 && uiArea[1] === 6000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([5000, 6000]); commitArea([5000, 6000]); }} className="text-xs h-8">
+                  5000-6000
+                </Button>
+                <Button variant={uiArea[0] === 0 && uiArea[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 3000]); commitArea([0, 3000]); }} className="text-xs h-8">
+                  Under 3000
+                </Button>
+                <Button variant={uiArea[0] === 6000 && uiArea[1] === 6000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([6000, 6000]); commitArea([6000, 6000]); }} className="text-xs h-8">
+                  6000+
+                </Button>
               </div>
             </div>
           </div>
-          {/* Quick Area Range Buttons */}
-          <div className="grid grid-cols-3 gap-2 mt-3">
-            <Button variant={uiArea[0] === 0 && uiArea[1] === 500 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 500]); commitArea([0, 500]); }} className="text-xs h-8">
-              Under 500
-            </Button>
-            <Button variant={uiArea[0] === 0 && uiArea[1] === 1000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 1000]); commitArea([0, 1000]); }} className="text-xs h-8">
-              Under 1K
-            </Button>
-            <Button variant={uiArea[0] === 0 && uiArea[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 2000]); commitArea([0, 2000]); }} className="text-xs h-8">
-              Under 2K
-            </Button>
-            <Button variant={uiArea[0] === 1000 && uiArea[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([1000, 2000]); commitArea([1000, 2000]); }} className="text-xs h-8">
-              1K-2K
-            </Button>
-            <Button variant={uiArea[0] === 2000 && uiArea[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([2000, 3000]); commitArea([2000, 3000]); }} className="text-xs h-8">
-              2K-3K
-            </Button>
-            <Button variant={uiArea[0] === 3000 && uiArea[1] === 5000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([3000, 5000]); commitArea([3000, 5000]); }} className="text-xs h-8">
-              3K-5K
-            </Button>
-            <Button variant={uiArea[0] === 5000 && uiArea[1] === 10000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([5000, 10000]); commitArea([5000, 10000]); }} className="text-xs h-8">
-              5K-10K
-            </Button>
-            <Button variant={uiArea[0] === 10000 && uiArea[1] === 20000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([10000, 20000]); commitArea([10000, 20000]); }} className="text-xs h-8">
-              10K+
-            </Button>
+          <Separator />
+        </>
+      )}
+      
+      {/* Land Area Filter (only show for land tab) */}
+      {activeTab === 'land' && (
+        <>
+          <div>
+            <LandAreaFilter
+              value={uiLandArea}
+              unit={landAreaUnit}
+              onChange={setUiLandArea}
+              onCommit={commitLandArea}
+              onUnitChange={commitLandAreaUnit}
+            />
           </div>
-        </div>
-      </div>
-
-      <Separator />
+          <Separator />
+        </>
+      )}
 
       {/* Property Type Filter */}
       <div>
@@ -1240,11 +1277,27 @@ const PropertySearch = () => {
                     </button>
                   </Badge>}
 
-                {/* Area filter badge */}
-                {filters.areaDirty && (
+                {/* Area filter badge - only for non-land tabs */}
+                {filters.areaDirty && activeTab !== 'land' && (
                   <Badge variant="secondary" className="flex items-center gap-1">
-                    {filters.area[0]} - {filters.area[1] >= 10000 ? '10000+' : filters.area[1]} sq ft
-                    <button onClick={() => updateFilter('area', [0, 10000])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                    {filters.area[0]} - {filters.area[1] >= 6000 ? '6000+' : filters.area[1]} sq ft
+                    <button onClick={() => {
+                      updateFilter('area', [0, 6000]);
+                      updateFilter('areaDirty', false);
+                    }} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
+                      <X size={12} />
+                    </button>
+                  </Badge>
+                )}
+                
+                {/* Land Area filter badge - only for land tab */}
+                {filters.landAreaDirty && activeTab === 'land' && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    {filters.landArea[0]} - {filters.landArea[1]} {filters.landAreaUnit}
+                    <button onClick={() => {
+                      updateFilter('landArea', [0, 10]);
+                      updateFilter('landAreaDirty', false);
+                    }} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>
                   </Badge>

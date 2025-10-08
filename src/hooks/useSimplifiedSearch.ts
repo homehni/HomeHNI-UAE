@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { convertArea, getStandardizedAreaUnit, AreaUnit } from '@/utils/areaConverter';
 
 // Build select columns at module scope to avoid hook dependency warnings
 const BASE_COLUMNS = 'id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit';
@@ -20,6 +21,7 @@ interface Property {
   bathrooms: number;
   image: string | string[];
   propertyType: string;
+  filterPropertyType?: string; // Used for filtering while keeping original display name (maps Penthouse->Apartment, Duplex->Villa)
   furnished?: string;
   availability?: string;
   ageOfProperty?: string;
@@ -28,6 +30,8 @@ interface Property {
   bhkType: string;
   listingType: string;
   isNew?: boolean;
+  // Plot/Land specific attributes
+  plotAreaUnit?: string; // The unit of measurement for land area
   // Commercial-specific attributes used for filtering
   floorNo?: number | 'basement' | 'ground';
   parkingType?: string; // e.g., none | bike | car | both | open | covered
@@ -41,6 +45,10 @@ interface SearchFilters {
   budgetDirty: boolean;
   area: [number, number]; // Area range in square feet
   areaDirty: boolean; // Track if area was manually changed
+  // Land-specific area filters
+  landArea: [number, number]; // Area range for land properties
+  landAreaUnit: string; // Unit for land area (acres, sq.ft, etc.)
+  landAreaDirty: boolean; // Track if land area was manually changed
   locality: string[];
   furnished: string[];
   availability: string[];
@@ -181,6 +189,25 @@ export const useSimplifiedSearch = () => {
     ];
     // Track if URL explicitly set any area params
     const hasAreaParams = hasAreaMin || hasAreaMax;
+    
+    // Land area bounds specifically for Land/Plot properties
+    const landAreaMinParam = searchParams.get('landAreaMin');
+    const landAreaMaxParam = searchParams.get('landAreaMax');
+    const landAreaUnitParam = searchParams.get('landAreaUnit') || 'acres';
+    const hasLandAreaMin = landAreaMinParam !== null;
+    const hasLandAreaMax = landAreaMaxParam !== null;
+    const parsedLandAreaMin = hasLandAreaMin ? Number(landAreaMinParam) : undefined;
+    const parsedLandAreaMax = hasLandAreaMax ? Number(landAreaMaxParam) : undefined;
+    const landArea: [number, number] = [
+      hasLandAreaMin && Number.isFinite(parsedLandAreaMin as number)
+        ? Math.max(0, parsedLandAreaMin as number)
+        : 0,
+      hasLandAreaMax && Number.isFinite(parsedLandAreaMax as number)
+        ? Math.min(6, parsedLandAreaMax as number)
+        : 6,
+    ];
+    // Track if URL explicitly set any land area params
+    const hasLandAreaParams = hasLandAreaMin || hasLandAreaMax;
 
     return {
       propertyType,
@@ -189,6 +216,9 @@ export const useSimplifiedSearch = () => {
       budgetDirty: hasBudgetParams,
       area,
       areaDirty: hasAreaParams,
+      landArea,
+      landAreaUnit: landAreaUnitParam,
+      landAreaDirty: hasLandAreaParams,
       locality: [],
       furnished,
       availability,
@@ -211,29 +241,59 @@ export const useSimplifiedSearch = () => {
   // Batch size for loading properties - load in chunks for better performance
   const BATCH_SIZE = 50;
 
-  // Update budget range when active tab changes
+  // Update budget range when active tab changes and clear irrelevant filters
   useEffect(() => {
     const newBudgetRange = getBudgetRange(activeTab);
-  const hasInitialBudgetInUrl: boolean = hasInitialBudgetInUrlFlag;
+    const hasInitialBudgetInUrl: boolean = hasInitialBudgetInUrlFlag;
     setFilters(prev => {
+      const updates = {} as Partial<SearchFilters>;
+      
+      // Budget handling
       if (!hasInitialBudgetInUrl) {
         // No explicit budget from URL; reset to full range for the selected tab
-        return { ...prev, budget: newBudgetRange, budgetDirty: false };
+        updates.budget = newBudgetRange;
+        updates.budgetDirty = false;
+      } else {
+        // Clamp existing budget into the new tab's range
+        const current = prev.budget;
+        const clampedMin = Math.max(0, Math.min(current[0], newBudgetRange[1]));
+        const clampedMax = Math.max(0, Math.min(current[1], newBudgetRange[1]));
+        const adjusted: [number, number] = clampedMin > clampedMax ? [clampedMax, clampedMax] : [clampedMin, clampedMax];
+        const dirty = adjusted[0] > 0 || adjusted[1] < newBudgetRange[1];
+        updates.budget = adjusted;
+        updates.budgetDirty = dirty;
       }
-      // Clamp existing budget into the new tab's range
-      const current = prev.budget;
-      const clampedMin = Math.max(0, Math.min(current[0], newBudgetRange[1]));
-      const clampedMax = Math.max(0, Math.min(current[1], newBudgetRange[1]));
-      const adjusted: [number, number] = clampedMin > clampedMax ? [clampedMax, clampedMax] : [clampedMin, clampedMax];
-      const dirty = adjusted[0] > 0 || adjusted[1] < newBudgetRange[1];
-      return { ...prev, budget: adjusted, budgetDirty: dirty };
+      
+      // Area handling - clear the irrelevant filter when switching tabs
+      if (activeTab === 'land') {
+        // Reset the standard area filter when switching to land tab
+        updates.area = [0, 6000];
+        updates.areaDirty = false;
+      } else {
+        // Reset the land area filter when switching to non-land tabs
+        updates.landArea = [0, 6];
+        updates.landAreaDirty = false;
+      }
+      
+      return { ...prev, ...updates };
     });
   }, [activeTab]);
 
   // Transform property data helper - Memoized with useCallback for performance
   const transformProperty = useCallback((property: PropertyRow) => {
     let displayPropertyType = property.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property';
+    // Initialize filterPropertyType as the same as displayPropertyType by default
+    let filterPropertyType = displayPropertyType;
     const titleLowerForInference = (property.title || '').toLowerCase();
+
+    // Map special property types for filtering
+    if (displayPropertyType.toLowerCase() === 'penthouse') {
+      // For display purposes, keep it as "Penthouse", but map to "Apartment" for filtering
+      filterPropertyType = 'Apartment';
+    } else if (displayPropertyType.toLowerCase() === 'duplex') {
+      // For display purposes, keep it as "Duplex", but map to "Villa" for filtering  
+      filterPropertyType = 'Villa';
+    }
 
     // Normalize land/plot subtypes so filters can match precisely
     try {
@@ -311,30 +371,18 @@ export const useSimplifiedSearch = () => {
         
         // For land/plot properties, use the stored area unit with proper mapping
         if (isLandProperty && property.plot_area_unit) {
-          const unitMap: Record<string, string> = {
-            'sq-ft': 'sq.ft',
-            'sq_ft': 'sq.ft',
-            'sq.ft': 'sq.ft',
-            'sqft': 'sq.ft',
-            'sq-yard': 'sq.yard',
-            'sq_yard': 'sq.yard',
-            'sq-m': 'sq.m',
-            'sq_m': 'sq.m',
-            'acre': 'acres',
-            'acres': 'acres',
-            'hectare': 'hectare',
-            'bigha': 'bigha',
-            'biswa': 'biswa',
-            'gunta': 'gunta',
-            'cents': 'cents',
-            'marla': 'marla',
-            'kanal': 'kanal',
-            'kottah': 'kottah',
-            'grounds': 'grounds',
-            'ares': 'ares'
-          };
-          const displayUnit = unitMap[property.plot_area_unit.toLowerCase()] || property.plot_area_unit;
-          return `${areaValue} ${displayUnit}`;
+          // Use the standardized area unit function from our utility
+          const standardizedUnit = getStandardizedAreaUnit(property.plot_area_unit);
+          
+          console.log('Land property area mapping:', {
+            id: property.id,
+            property_type: property.property_type,
+            original_unit: property.plot_area_unit,
+            standardized_unit: standardizedUnit,
+            area_value: areaValue
+          });
+          
+          return `${areaValue} ${standardizedUnit}`;
         }
         return `${areaValue} sq ft`;
       })(),
@@ -345,6 +393,7 @@ export const useSimplifiedSearch = () => {
         ? property.images[0] 
         : '/placeholder.svg',
       propertyType: displayPropertyType,
+      filterPropertyType: filterPropertyType, // Used for filtering while keeping original display name
       furnished: property.furnishing?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
       availability: property.availability_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
       ageOfProperty: property.property_age?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
@@ -353,6 +402,7 @@ export const useSimplifiedSearch = () => {
       bhkType: property.bhk_type || '1bhk',
       listingType: property.listing_type || 'sale',
       isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      plotAreaUnit: property.plot_area_unit ? getStandardizedAreaUnit(property.plot_area_unit) : 'sq.ft',
       // Commercial specifics (best-effort mapping; values may be absent on residential/land)
       floorNo: ((): number | 'basement' | 'ground' | undefined => {
         const f = property.floor_no as number | 'basement' | null | undefined;
@@ -677,16 +727,15 @@ export const useSimplifiedSearch = () => {
       filtered = filtered.filter(property => {
         return filters.propertyType.some(filterType => {
           const normalizedFilter = filterType.toLowerCase().replace(/\s+/g, '');
-          const normalizedProperty = property.propertyType.toLowerCase().replace(/\s+/g, '');
+          // Use filterPropertyType for matching categories (which maps Penthouse->Apartment, Duplex->Villa)
+          // but use propertyType for display purposes
+          const normalizedProperty = (property.filterPropertyType || property.propertyType).toLowerCase().replace(/\s+/g, '');
           const listingLower = (property.listingType || '').toLowerCase();
           const titleLower = (property.title || '').toLowerCase();
-
-          // Exact match priority - check for exact property type matches first
-          if (normalizedFilter === 'penthouse') {
-            return normalizedProperty === 'penthouse';
-          }
-          if (normalizedFilter === 'duplex') {
-            return normalizedProperty === 'duplex';
+          
+          // Debug mapping for special property types
+          if (property.propertyType !== property.filterPropertyType) {
+            console.log(`📊 Mapping: ${property.propertyType} -> ${property.filterPropertyType}, matches ${filterType}? ${normalizedProperty.includes(normalizedFilter)}`);
           }
           if (normalizedFilter === 'independenthouse') {
             // Only match if it's specifically "independent house", not just any house
@@ -783,13 +832,57 @@ export const useSimplifiedSearch = () => {
       });
     }
 
-    // Apply area filter only if user/URL changed it
-    if (filters.areaDirty) {
-      filtered = filtered.filter(property => {
-        const area = property.areaNumber || 0;
-        return area >= filters.area[0] && area <= filters.area[1];
-      });
-    }
+    // Apply area filter based on property type
+    // For land properties, always use landArea filter
+    // For non-land properties, always use the regular area filter
+    filtered = filtered.filter(property => {
+      const isLandProperty = property.propertyType?.toLowerCase().includes('land') || 
+                           property.propertyType?.toLowerCase().includes('plot');
+      
+      const area = property.areaNumber || 0;
+      
+      // For land/plot properties, use the land area filter if dirty
+      if (isLandProperty) {
+        if (filters.landAreaDirty) {
+          const propertyAreaUnit = property.plotAreaUnit || 'sq.ft';
+          
+          // No need to standardize again - it's already standardized during transformation
+          
+          console.log('Land property filtering:', {
+            property: property.title,
+            originalArea: area,
+            propertyUnit: propertyAreaUnit,
+            targetUnit: filters.landAreaUnit,
+            filterRange: filters.landArea
+          });
+          
+          const propertyAreaInFilterUnit = convertArea(
+            area,
+            propertyAreaUnit as AreaUnit,
+            filters.landAreaUnit as AreaUnit
+          );
+          
+          console.log('After conversion:', {
+            convertedArea: propertyAreaInFilterUnit,
+            unit: filters.landAreaUnit,
+            inRange: propertyAreaInFilterUnit >= filters.landArea[0] && propertyAreaInFilterUnit <= filters.landArea[1]
+          });
+          
+          // Now compare using the converted value
+          return propertyAreaInFilterUnit >= filters.landArea[0] && 
+                propertyAreaInFilterUnit <= filters.landArea[1];
+        }
+        // No filtering if land area filter is not dirty
+        return true;
+      } else {
+        // For non-land properties, use regular area filter if dirty
+        if (filters.areaDirty) {
+          return area >= filters.area[0] && area <= filters.area[1];
+        }
+        // No filtering if area filter is not dirty
+        return true;
+      }
+    });
 
     // Apply BHK filter
     if (filters.bhkType.length > 0) {
@@ -1059,6 +1152,9 @@ export const useSimplifiedSearch = () => {
       budgetDirty: false,
       area: [0, 10000], // Reset area range to default
       areaDirty: false,
+      landArea: [0, 10], // Reset land area range to default
+      landAreaUnit: 'acres', // Default land area unit 
+      landAreaDirty: false,
       locality: [],
       furnished: [],
       availability: [],
