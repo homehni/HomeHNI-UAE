@@ -135,6 +135,9 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
       });
     };
 
+
+    
+
       // Attach autocomplete to city field
       if (cityInputRef.current) {
         const cityOptions = {
