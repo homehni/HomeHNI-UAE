@@ -55,6 +55,13 @@ interface PropertyInfoCardsProps {
 }
 
 export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }) => {
+  // Debug: Log property data to check bhk_type
+  console.log('🔍 PropertyInfoCards - Property data:', {
+    property_type: property.property_type,
+    bhk_type: property.bhk_type,
+    allKeys: Object.keys(property),
+    fullProperty: property
+  });
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Recently';
