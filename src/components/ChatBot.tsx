@@ -1938,7 +1938,10 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   const renderInitialView = () => (
     <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
       {/* Header */}
-      <div className="px-4 sm:px-6 py-2.5 bg-white border-b border-gray-200 relative flex items-center">
+      <div className="px-4 sm:px-6 py-4 bg-white border-b border-gray-200 relative flex items-center">
+        <div className="w-10 h-10 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0 mr-3">
+          <Home size={20} className="text-white" />
+        </div>
         <h1 className="text-lg sm:text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
         <button
           onClick={() => setIsOpen(false)}
@@ -2318,14 +2321,19 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
           {/* Show header for search context chat */}
           {searchContext && (
-            <CardHeader className="bg-white border-b border-gray-200 p-3 sm:p-4 relative z-10 rounded-t-3xl">
+            <CardHeader className="bg-white border-b border-gray-200 p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">
-                  {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
-                   searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
-                   searchContext.activeTab === 'land' ? 'Land/Plot Assistant' :
-                   'Commercial Property Assistant'}
-                </CardTitle>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={20} className="text-white sm:w-6 sm:h-6" />
+                  </div>
+                  <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">
+                    {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
+                     searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
+                     searchContext.activeTab === 'land' ? 'Land/Plot Assistant' :
+                     'Commercial Property Assistant'}
+                  </CardTitle>
+                </div>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
@@ -2339,7 +2347,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
           {/* Header for regular chat view */}
           {!showInitialView && currentView === 'chat' && !searchContext && (
-            <CardHeader className="bg-white border-b border-gray-200 p-3 sm:p-4 relative z-10 rounded-t-3xl">
+            <CardHeader className="bg-white border-b border-gray-200 p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <button
@@ -2352,6 +2360,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   >
                     <ArrowLeft size={20} />
                   </button>
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={20} className="text-white sm:w-6 sm:h-6" />
+                  </div>
                   <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">Real Estate Assistant</CardTitle>
                 </div>
                 <button
