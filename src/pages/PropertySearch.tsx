@@ -480,27 +480,26 @@ const PropertySearch = () => {
         </div>
         <div className="space-y-2">
           {propertyTypes.map(type => (
-            <div key={type} className="flex items-center space-x-2">
-              <button
-                onClick={() => {
-                  preserveScroll(() => {
-                    if (type === 'ALL') {
-                      updateFilter('propertyType', []);
-                    } else {
-                      updateFilter('propertyType', [type]);
-                    }
-                  });
-                }}
-                className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                  (filters.propertyType.length === 0 && type === 'ALL') ||
-                  (filters.propertyType.length > 0 && filters.propertyType[0] === type)
-                    ? 'bg-primary text-primary-foreground shadow'
-                    : 'bg-muted/60 hover:bg-muted/80 text-foreground'
-                }`}
-              >
-                {type}
-              </button>
-            </div>
+            <button
+              key={type}
+              onClick={() => {
+                preserveScroll(() => {
+                  if (type === 'ALL') {
+                    updateFilter('propertyType', []);
+                  } else {
+                    updateFilter('propertyType', [type]);
+                  }
+                });
+              }}
+              className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
+                (filters.propertyType.length === 0 && type === 'ALL') ||
+                (filters.propertyType.length > 0 && filters.propertyType[0] === type)
+                  ? 'bg-primary text-primary-foreground shadow'
+                  : 'bg-muted/60 hover:bg-muted/80 text-foreground'
+              }`}
+            >
+              {type}
+            </button>
           ))}
         </div>
       </div>
