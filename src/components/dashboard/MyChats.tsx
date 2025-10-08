@@ -133,7 +133,7 @@ const MyChats = () => {
         ) : (
           /* Messages View - Mobile */
           <Card className="h-full flex flex-col border-0 rounded-none">
-            <CardHeader className="border-b bg-white sticky top-0 z-10 p-4 lg:static">
+            <CardHeader className="border-b bg-white fixed top-0 left-0 right-0 z-10 p-4 lg:static">
               <div className="flex items-center gap-3">
                 <Button
                   variant="ghost"
