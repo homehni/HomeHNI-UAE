@@ -36,6 +36,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   totalSteps,
   formId
 }) => {
+  const cityInputRef = useRef<HTMLInputElement | null>(null);
   const localityInputRef = useRef<HTMLInputElement | null>(null);
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
@@ -213,6 +214,31 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
         });
       };
 
+      // Attach autocomplete to city field
+      if (cityInputRef.current) {
+        const cityOptions = {
+          fields: ['address_components', 'name'],
+          types: ['(cities)'],
+          componentRestrictions: { country: 'in' as const }
+        };
+        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
+        cityAc.addListener('place_changed', () => {
+          const place = cityAc.getPlace();
+          if (place?.address_components) {
+            let cityName = '';
+            place.address_components.forEach((component: any) => {
+              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+                cityName = component.long_name;
+              }
+            });
+            if (cityName && cityInputRef.current) {
+              cityInputRef.current.value = cityName;
+              form.setValue('city', cityName, { shouldValidate: true });
+            }
+          }
+        });
+      }
+
       // City aliases for validation
       const cityAliases: { [key: string]: string[] } = {
         'Bangalore': ['Bangalore', 'Bengaluru', 'Bangalore Urban', 'Bengaluru Urban'],
@@ -332,33 +358,24 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
+                  <FormLabel className="text-sm font-medium flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
                     City *
                   </FormLabel>
-                  <Select onValueChange={(value) => {
-                    console.log('City dropdown changed to:', value);
-                    field.onChange(value);
-                    console.log('Form state after city change:', form.getValues());
-                  }} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="h-12 bg-white z-50">
-                        <SelectValue placeholder="Choose city" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-white border border-gray-200 shadow-lg z-[9999]">
-                      <SelectItem value="Bangalore">Bangalore</SelectItem>
-                      <SelectItem value="Mumbai">Mumbai</SelectItem>
-                      <SelectItem value="Pune">Pune</SelectItem>
-                      <SelectItem value="Chennai">Chennai</SelectItem>
-                      <SelectItem value="Gurgaon">Gurgaon</SelectItem>
-                      <SelectItem value="Hyderabad">Hyderabad</SelectItem>
-                      <SelectItem value="Delhi">Delhi</SelectItem>
-                      <SelectItem value="Faridabad">Faridabad</SelectItem>
-                      <SelectItem value="Ghaziabad">Ghaziabad</SelectItem>
-                      <SelectItem value="Noida">Noida</SelectItem>
-                      <SelectItem value="Greater Noida">Greater Noida</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <div className="relative">
+                      <Input 
+                        placeholder="Search 'Bangalore', 'Mumbai', etc..." 
+                        className="h-12 pl-10" 
+                        {...field} 
+                        ref={el => {
+                          field.ref(el);
+                          cityInputRef.current = el;
+                        }} 
+                      />
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
