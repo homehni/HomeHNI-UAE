@@ -204,6 +204,14 @@ const FeaturedProperties = ({
             displayPropertyType = 'PG/Hostel';
           }
           
+          // Override property type based on title keywords (fixes misclassified properties)
+          const titleLower = property.title?.toLowerCase() || '';
+          if (titleLower.includes('independent house') && !titleLower.includes('pg') && !titleLower.includes('hostel')) {
+            displayPropertyType = 'Independent House';
+          } else if (titleLower.includes('villa') && displayPropertyType === 'Apartment') {
+            displayPropertyType = 'Villa';
+          }
+          
           return {
             id: property.id,
             title: property.title,
