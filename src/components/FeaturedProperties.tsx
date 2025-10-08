@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { contentElementsService, ContentElement } from '@/services/contentElementsService';
 import { fetchFeaturedProperties } from '@/services/propertyService';
 import { supabase } from '@/integrations/supabase/client';
+import { matchesPropertyType } from '@/services/propertyTypeService';
+import { PropertyTypeFilter } from '@/types/propertySearch.types';
 
 // Helper function to extract image URL from various formats
 const extractImageUrl = (imageData: any): string => {
@@ -541,8 +543,9 @@ const FeaturedProperties = ({
   }, [availableTypes, activeType]);
   const filtered = useMemo(() => {
     if (activeType === 'All') return properties;
-    return properties.filter(p => normalizePropertyType(p.propertyType) === activeType);
-  }, [activeType, properties, normalizePropertyType]);
+    // Use the same matching logic as search results to handle Penthouse -> Apartment mapping, etc.
+    return properties.filter(p => matchesPropertyType(p.propertyType, activeType.toUpperCase() as PropertyTypeFilter));
+  }, [activeType, properties]);
   
   // Show only first 20 properties initially, all when showAll is true
   const displayedProperties = useMemo(() => {
