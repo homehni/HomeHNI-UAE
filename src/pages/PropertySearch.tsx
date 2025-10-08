@@ -228,8 +228,6 @@ const PropertySearch = () => {
     }, 0);
   };
   const [uiBudget, setUiBudget] = useState<[number, number]>(filters.budget);
-  const [minBudgetInput, setMinBudgetInput] = useState<string>(filters.budget[0] ? String(filters.budget[0]) : "");
-  const [maxBudgetInput, setMaxBudgetInput] = useState<string>(filters.budget[1] ? String(filters.budget[1]) : "");
   const [uiArea, setUiArea] = useState<[number, number]>(filters.area);
   const [uiLandArea, setUiLandArea] = useState<[number, number]>(filters.landArea);
   const [landAreaUnit, setLandAreaUnit] = useState<string>(filters.landAreaUnit);
@@ -242,22 +240,9 @@ const PropertySearch = () => {
     setUiLandArea(filters.landArea); 
     setLandAreaUnit(filters.landAreaUnit);
   }, [landAreaKey]);
-  // Keep text inputs in sync when slider/quick buttons change
-  useEffect(() => {
-    setMinBudgetInput(uiBudget[0] ? String(uiBudget[0]) : "");
-    setMaxBudgetInput(uiBudget[1] ? String(uiBudget[1]) : "");
-  }, [uiBudget]);
+    
     const commitBudget = (value: [number, number]) => {
       preserveScroll(() => updateFilter('budget', snapBudget(activeTab, value)));
-    };
-    const commitBudgetFromInputs = () => {
-      const maxAllowed = getBudgetSliderMax(activeTab);
-      const parsedMin = Number(minBudgetInput) || 0;
-      const parsedMax = Number(maxBudgetInput) || 0;
-      const safeMin = Math.max(0, Math.min(parsedMin, maxAllowed));
-      const safeMax = Math.max(safeMin, Math.min(parsedMax || maxAllowed, maxAllowed));
-      setUiBudget([safeMin, safeMax]);
-      commitBudget([safeMin, safeMax]);
     };
     const commitArea = (value: [number, number]) => {
       preserveScroll(() => updateFilter('area', value));
@@ -311,13 +296,15 @@ const PropertySearch = () => {
                   id="min-budget"
                   type="number" 
                   placeholder="Enter min budget" 
-                  value={minBudgetInput}
-                  onChange={(e) => setMinBudgetInput(e.target.value)}
-                  onBlur={commitBudgetFromInputs}
-                  onKeyDown={(e) => { if (e.key === 'Enter') commitBudgetFromInputs(); }}
-                  className="h-8 text-sm pointer-events-auto"
+                  value={uiBudget[0].toString()} 
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value <= uiBudget[1]) setUiBudget([value, uiBudget[1]]);
+                  }} 
+                  onBlur={() => commitBudget(uiBudget)}
+                  onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
+                  className="h-8 text-sm"
                   aria-label="Minimum budget amount"
-                  autoComplete="off"
                 />
               </div>
               <div>
@@ -326,13 +313,15 @@ const PropertySearch = () => {
                   id="max-budget"
                   type="number" 
                   placeholder="Enter max budget" 
-                  value={maxBudgetInput}
-                  onChange={(e) => setMaxBudgetInput(e.target.value)}
-                  onBlur={commitBudgetFromInputs}
-                  onKeyDown={(e) => { if (e.key === 'Enter') commitBudgetFromInputs(); }}
-                  className="h-8 text-sm pointer-events-auto"
+                  value={uiBudget[1].toString()} 
+                  onChange={e => {
+                    const value = parseInt(e.target.value) || 0;
+                    if (value >= uiBudget[0]) setUiBudget([uiBudget[0], Math.min(value, 50000000)]);
+                  }} 
+                  onBlur={() => commitBudget(uiBudget)}
+                  onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
+                  className="h-8 text-sm"
                   aria-label="Maximum budget amount"
-                  autoComplete="off"
                 />
               </div>
             </div>
