@@ -288,6 +288,83 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
           </div>
         )}
 
+        {/* Amenities Section for Regular Properties (non-PG) */}
+        {!isPGHostelProperty && property.amenities && typeof property.amenities === 'object' && (
+          <div className="mt-6">
+            <h3 className="text-md font-semibold text-gray-900 mb-3">Amenities</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {/* Map amenities object to display names */}
+              {Object.entries(property.amenities).map(([key, value]) => {
+                // Skip if not truthy or if it's a system field
+                if (!value) return null;
+                if (typeof value === 'string' && (value === 'Not Available' || value === 'Not specified')) return null;
+                if (['directionsTip', 'secondaryNumber', 'whoWillShow', 'currentPropertyCondition'].includes(key)) return null;
+
+                // Map keys to display names
+                const amenityDisplayNames: Record<string, string> = {
+                  gym: 'Gym',
+                  lift: 'Lift',
+                  parking: 'Parking',
+                  intercom: 'Intercom',
+                  internetServices: 'Internet Services',
+                  petAllowed: 'Pet Allowed',
+                  nonVegAllowed: 'Non Veg Allowed',
+                  gatedSecurity: 'Gated Security',
+                  clubHouse: 'Club House',
+                  swimmingPool: 'Swimming Pool',
+                  childrenPlayArea: 'Children Play Area',
+                  fireSafety: 'Fire Safety',
+                  servantRoom: 'Servant Room',
+                  shoppingCenter: 'Shopping Center',
+                  gasPipeline: 'Gas Pipeline',
+                  park: 'Park',
+                  rainWaterHarvesting: 'Rain Water Harvesting',
+                  sewageTreatmentPlant: 'Sewage Treatment Plant',
+                  houseKeeping: 'House Keeping',
+                  powerBackup: 'Power Backup',
+                  visitorParking: 'Visitor Parking',
+                  waterSupply: '24x7 Water Supply',
+                  waterStorageFacility: 'Water Storage Facility',
+                  airConditioner: 'Air Conditioner',
+                  security: 'Security',
+                  wifi: 'WiFi',
+                  bathrooms: 'Bathrooms',
+                  balconies: 'Balconies'
+                };
+                
+                const displayName = amenityDisplayNames[key] || key.replace(/([A-Z])/g, ' $1').trim();
+                let displayValue = '';
+                
+                if (typeof value === 'boolean') {
+                  displayValue = value ? 'Yes' : 'No';
+                } else if (typeof value === 'string') {
+                  if (key === 'parking') {
+                    if (value === 'none') return null;
+                    if (value === 'bike') displayValue = 'Bike';
+                    else if (value === 'car') displayValue = 'Car';
+                    else if (value === 'both') displayValue = 'Bike and Car';
+                    else displayValue = value;
+                  } else if (value === 'Available') {
+                    displayValue = '';
+                  } else {
+                    displayValue = value;
+                  }
+                } else if (typeof value === 'number') {
+                  displayValue = String(value);
+                }
+
+                return (
+                  <div key={key} className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50/70 p-3 rounded-lg ring-1 ring-gray-100">
+                    <div className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0"></div>
+                    <span className="font-medium">{displayName}</span>
+                    {displayValue && <span className="text-gray-500">: {displayValue}</span>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Amenities & Services Section for PG/Hostel */}
         {isPGHostelProperty && (property.available_services || property.amenities) && (
           <div className="mt-6">

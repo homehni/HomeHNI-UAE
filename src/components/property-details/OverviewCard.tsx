@@ -161,13 +161,18 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   const getAmenityString = (key: string): string | undefined => {
     const a = property.amenities && typeof property.amenities === 'object' ? property.amenities as Record<string, unknown> : undefined;
     const v = a ? a[key] : undefined;
-    return typeof v === 'string' && v.trim().length > 0 ? v : undefined;
+    if (typeof v === 'string' && v.trim().length > 0) return v;
+    if (typeof v === 'boolean') return v ? 'Yes' : 'No';
+    return undefined;
   };
 
   const getSecurity = (): string => {
     // Prefer detailed selection from amenities (e.g., 'Guard & CCTV')
     const detailed = getAmenityString('security');
     if (detailed) return detailed;
+    // Check gatedSecurity in amenities
+    const gatedFromAmenities = getAmenityString('gatedSecurity');
+    if (gatedFromAmenities) return gatedFromAmenities;
     // Fallback to boolean gated_security
     return property.gated_security ? 'Yes' : 'No';
   };
@@ -175,8 +180,29 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   const getWashrooms = (): string => {
     const wash = getAmenityString('washrooms') || getAmenityString('washroom');
     if (wash) return wash;
+    // Check bathrooms in amenities
+    const bathroomsFromAmenities = getAmenityString('bathrooms');
+    if (bathroomsFromAmenities && bathroomsFromAmenities !== 'No' && bathroomsFromAmenities !== '0') {
+      const num = parseInt(bathroomsFromAmenities);
+      if (!isNaN(num) && num > 0) {
+        return `${num} Bathroom${num > 1 ? 's' : ''}`;
+      }
+    }
     if (typeof property.bathrooms === 'number' && property.bathrooms > 0) {
       return `${property.bathrooms} Bathroom${property.bathrooms > 1 ? 's' : ''}`;
+    }
+    return 'Not specified';
+  };
+
+  const getParking = (): string => {
+    const parkingFromAmenities = getAmenityString('parking');
+    if (parkingFromAmenities && parkingFromAmenities !== 'Not specified') {
+      // Map values to display text
+      if (parkingFromAmenities === 'none') return 'No Parking';
+      if (parkingFromAmenities === 'bike') return 'Bike';
+      if (parkingFromAmenities === 'car') return 'Car';
+      if (parkingFromAmenities === 'both') return 'Bike and Car';
+      return parkingFromAmenities;
     }
     return 'Not specified';
   };
@@ -196,7 +222,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { 
       icon: MapPin, 
       label: 'Parking', 
-      value: getAmenityString('parking') || 'Not specified' 
+      value: getParking()
     },
     { 
       icon: Droplets, 
@@ -226,12 +252,12 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { 
       icon: Users, 
       label: 'Pet Allowed', 
-      value: 'Not specified' 
+      value: getAmenityString('petAllowed') || 'Not specified'
     },
     { 
       icon: Utensils, 
       label: 'Non-Veg Allowed', 
-      value: 'Not specified' 
+      value: getAmenityString('nonVegAllowed') || 'Not specified'
     },
     { 
       icon: Shield, 
