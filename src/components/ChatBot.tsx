@@ -1938,16 +1938,23 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   const renderInitialView = () => (
     <div className="flex flex-col h-full bg-gradient-to-br from-white via-red-50/30 to-white">
       {/* Header */}
-      <div className="px-4 sm:px-6 pt-6 sm:pt-8 pb-4 sm:pb-6 bg-gradient-to-br from-red-50 to-white border-b border-red-100/50 relative">
+      <div className="px-4 sm:px-6 py-4 bg-white border-b border-gray-200 relative flex items-center">
+        <div className="w-10 h-10 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0 mr-3">
+          <Home size={20} className="text-white" />
+        </div>
+        <h1 className="text-lg sm:text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-600 hover:text-brand-red p-2 hover:bg-red-50 rounded-lg transition-all duration-200"
+          className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
         >
           <X size={20} className="sm:w-5 sm:h-5" />
         </button>
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 pr-8">Help Center</h1>
+      </div>
+
+      {/* Subtitle */}
+      <div className="px-4 sm:px-6 py-3 bg-white border-b border-gray-100">
         <p className="text-xs sm:text-sm text-gray-600 flex items-center">
-          <Check className="text-brand-red mr-1 w-4 h-4 sm:w-5 sm:h-5" />
+          <Check className="text-brand-red mr-1.5 w-4 h-4 sm:w-5 sm:h-5" />
           One-Stop Solution for all Real Estate Services
         </p>
       </div>
@@ -2314,13 +2321,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
           {/* Show header for search context chat */}
           {searchContext && (
-            <CardHeader className="bg-brand-maroon-dark text-white p-4 sm:p-5 relative z-10 rounded-t-3xl">
+            <CardHeader className="bg-white border-b border-gray-200 p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0">
-                    <Home size={20} className="text-brand-maroon-dark sm:w-6 sm:h-6" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={20} className="text-white sm:w-6 sm:h-6" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl font-bold">
+                  <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">
                     {searchContext.activeTab === 'buy' ? 'Buy Property Assistant' : 
                      searchContext.activeTab === 'rent' ? 'Rent Property Assistant' : 
                      searchContext.activeTab === 'land' ? 'Land/Plot Assistant' :
@@ -2329,7 +2336,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                  className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -2340,7 +2347,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
           {/* Header for regular chat view */}
           {!showInitialView && currentView === 'chat' && !searchContext && (
-            <CardHeader className="bg-brand-maroon-dark text-white p-4 sm:p-5 relative z-10 rounded-t-3xl">
+            <CardHeader className="bg-white border-b border-gray-200 p-4 sm:p-5 relative z-10 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <button
@@ -2349,18 +2356,18 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                       setMessages([getInitialMessage()]);
                       setConversationStep('role_selection');
                     }}
-                    className="hover:bg-white/10 p-1 rounded-full transition-colors"
+                    className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-1 rounded-full transition-colors"
                   >
                     <ArrowLeft size={20} />
                   </button>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0">
-                    <Home size={20} className="text-brand-maroon-dark sm:w-6 sm:h-6" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0">
+                    <Home size={20} className="text-white sm:w-6 sm:h-6" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl font-bold">Real Estate Assistant</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">Real Estate Assistant</CardTitle>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-white hover:bg-white/20 p-1.5 rounded-full transition-colors"
+                  className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <X size={20} />
                 </button>
