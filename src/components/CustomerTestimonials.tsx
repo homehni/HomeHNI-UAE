@@ -148,8 +148,8 @@ export function VideoTile({
             className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] rounded-2xl"
             aria-label="Play video"
           >
-            <div className="w-16 h-16 bg-white rounded-full shadow-lg ring-4 ring-white/20 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Play className="w-6 h-6 text-[#d21404] fill-current ml-1" />
+            <div className="w-20 h-20 bg-gradient-to-br from-[#d21404] to-[#b91c1c] rounded-full shadow-xl ring-4 ring-[#d21404]/30 flex items-center justify-center group-hover:scale-110 group-hover:ring-[#d21404]/50 transition-all duration-300">
+              <Play className="w-8 h-8 text-white fill-current ml-1" />
             </div>
           </button>
         )}
