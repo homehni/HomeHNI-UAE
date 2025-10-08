@@ -44,6 +44,7 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
   const [locationMismatchWarning, setLocationMismatchWarning] = useState<string>('');
   const form = useForm<LocationDetailsFormData>({
     resolver: zodResolver(locationDetailsSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',

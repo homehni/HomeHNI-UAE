@@ -47,6 +47,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
 
   const form = useForm<FlattmatesLocationData>({
     resolver: zodResolver(flattmatesLocationSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',

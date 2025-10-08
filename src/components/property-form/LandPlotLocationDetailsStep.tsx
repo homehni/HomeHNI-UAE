@@ -45,6 +45,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
 
   const form = useForm<LandPlotLocationData>({
     resolver: zodResolver(landPlotLocationSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',
@@ -276,7 +277,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             name="locality"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">Locality/Area</FormLabel>
+                <FormLabel className="text-sm font-medium text-gray-900">Locality/Area *</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input

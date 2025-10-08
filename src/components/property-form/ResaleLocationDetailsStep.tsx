@@ -43,6 +43,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   const [locationMismatchWarning, setLocationMismatchWarning] = useState<string>('');
   const form = useForm<ResaleLocationData>({
     resolver: zodResolver(resaleLocationSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',

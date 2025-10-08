@@ -45,6 +45,7 @@ export const CommercialLocationDetailsStep: React.FC<CommercialLocationDetailsSt
 
   const form = useForm<CommercialLocationDetailsForm>({
     resolver: zodResolver(commercialLocationDetailsSchema),
+    mode: 'onBlur',
     defaultValues: {
       city: initialData.city || '',
       locality: initialData.locality || '',
