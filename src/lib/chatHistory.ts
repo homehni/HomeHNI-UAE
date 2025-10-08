@@ -50,6 +50,23 @@ export const createConversation = async (
     return null;
   }
 
+  // Save the initial bot message to chat_messages
+  if (data) {
+    const { error: messageError } = await supabase
+      .from('chat_messages')
+      .insert({
+        conversation_id: data.id,
+        user_id: user.id,
+        message: firstMessage,
+        is_bot: true,
+        metadata: {}
+      });
+
+    if (messageError) {
+      console.error('Error saving initial message:', messageError);
+    }
+  }
+
   return data as ChatConversation;
 };
 
