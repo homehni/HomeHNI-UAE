@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Trash2, Search } from 'lucide-react';
-import { getUserConversations, getConversationMessages, deleteConversation, type ChatConversation, type ChatMessage } from '@/lib/chatHistory';
+import { MessageSquare, Search } from 'lucide-react';
+import { getUserConversations, getConversationMessages, type ChatConversation, type ChatMessage } from '@/lib/chatHistory';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
@@ -32,27 +32,6 @@ const MyChats = () => {
     setSelectedConversation(conversation);
     const data = await getConversationMessages(conversation.id);
     setMessages(data);
-  };
-
-  const handleDeleteConversation = async (conversationId: string) => {
-    const success = await deleteConversation(conversationId);
-    if (success) {
-      toast({
-        title: 'Conversation deleted',
-        description: 'The conversation has been removed successfully.',
-      });
-      setConversations(conversations.filter(c => c.id !== conversationId));
-      if (selectedConversation?.id === conversationId) {
-        setSelectedConversation(null);
-        setMessages([]);
-      }
-    } else {
-      toast({
-        title: 'Error',
-        description: 'Failed to delete conversation.',
-        variant: 'destructive',
-      });
-    }
   };
 
   const getConversationTypeColor = (type: string) => {
@@ -126,17 +105,6 @@ const MyChats = () => {
                               {conversation.conversation_type}
                             </Badge>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteConversation(conversation.id);
-                            }}
-                            className="h-8 w-8 p-0"
-                          >
-                            <Trash2 className="h-4 w-4 text-red-500" />
-                          </Button>
                         </div>
                         <p className="text-xs text-gray-500 truncate mb-1">
                           {conversation.last_message || 'No messages'}
@@ -176,7 +144,7 @@ const MyChats = () => {
                                 : 'bg-brand-red text-white'
                             }`}
                           >
-                            <p className="text-sm">{message.message}</p>
+                            <p className="text-sm whitespace-pre-wrap">{message.message}</p>
                             <p className={`text-xs mt-1 ${message.is_bot ? 'text-gray-500' : 'text-white/70'}`}>
                               {format(new Date(message.created_at), 'h:mm a')}
                             </p>

@@ -1302,7 +1302,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     setShowDetailsForm(true);
   };
 
-  const handleDetailsSubmit = (e: React.FormEvent) => {
+  const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!userDetails.name || !userDetails.email || !userDetails.phone) {
@@ -1311,7 +1311,18 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
     setShowDetailsForm(false);
 
-    setTimeout(() => {
+    // Save user's form details as a message
+    const detailsMessage = `Name: ${userDetails.name}\nEmail: ${userDetails.email}\nPhone: ${userDetails.phone}`;
+    const userDetailsMsg: Message = {
+      id: String(Date.now()),
+      text: detailsMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+    setPlanChatMessages(prev => [...prev, userDetailsMsg]);
+    await saveMessageToHistory(detailsMessage, false);
+
+    setTimeout(async () => {
       const thankYouMessage: Message = {
         id: String(Date.now()),
         text: 'Thank you for providing your details!',
@@ -1319,8 +1330,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         timestamp: new Date()
       };
       setPlanChatMessages(prev => [...prev, thankYouMessage]);
+      await saveMessageToHistory(thankYouMessage.text, true);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         const followUpMessage: Message = {
           id: String(Date.now() + 1),
           text: `Got it, your budget is ${userDetails.budget || 'your specified amount'}. Could you also let me know your preferred location and the BHK type you are looking for?`,
@@ -1328,6 +1340,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           timestamp: new Date()
         };
         setPlanChatMessages(prev => [...prev, followUpMessage]);
+        await saveMessageToHistory(followUpMessage.text, true);
         setPlanChatStep('follow-up');
       }, 1000);
     }, 500);
@@ -1388,7 +1401,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     setShowPropertyDetailsForm(true);
   };
 
-  const handlePropertyDetailsSubmit = (e: React.FormEvent) => {
+  const handlePropertyDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!propertyUserDetails.name || !propertyUserDetails.email || !propertyUserDetails.phone) {
@@ -1397,7 +1410,18 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
     setShowPropertyDetailsForm(false);
 
-    setTimeout(() => {
+    // Save user's form details as a message
+    const detailsMessage = `Name: ${propertyUserDetails.name}\nEmail: ${propertyUserDetails.email}\nPhone: ${propertyUserDetails.phone}`;
+    const userDetailsMsg: Message = {
+      id: String(Date.now()),
+      text: detailsMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+    setPropertyChatMessages(prev => [...prev, userDetailsMsg]);
+    await saveMessageToHistory(detailsMessage, false);
+
+    setTimeout(async () => {
       const thankYouMessage: Message = {
         id: String(Date.now()),
         text: 'Thank you for providing your details!',
@@ -1405,8 +1429,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         timestamp: new Date()
       };
       setPropertyChatMessages(prev => [...prev, thankYouMessage]);
+      await saveMessageToHistory(thankYouMessage.text, true);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         const followUpMessage: Message = {
           id: String(Date.now() + 1),
           text: 'Got it! Can you tell me your preferred location(s) and any specific requirements you may have, like pet-friendly or furnished?',
@@ -1414,6 +1439,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           timestamp: new Date()
         };
         setPropertyChatMessages(prev => [...prev, followUpMessage]);
+        await saveMessageToHistory(followUpMessage.text, true);
         setPropertyChatStep('requirements');
       }, 1000);
     }, 500);
@@ -1853,12 +1879,23 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     setShowServiceDetailsForm(true);
   };
 
-  const handleServiceDetailsSubmit = (e: React.FormEvent) => {
+  const handleServiceDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     setShowServiceDetailsForm(false);
     
-    setTimeout(() => {
+    // Save user's form details as a message
+    const detailsMessage = `Name: ${serviceUserDetails.name}\nEmail: ${serviceUserDetails.email}\nPhone: ${serviceUserDetails.phone}`;
+    const userDetailsMsg: Message = {
+      id: String(Date.now()),
+      text: detailsMessage,
+      isBot: false,
+      timestamp: new Date()
+    };
+    setServiceChatMessages(prev => [...prev, userDetailsMsg]);
+    await saveMessageToHistory(detailsMessage, false);
+    
+    setTimeout(async () => {
       const currentService = serviceContext?.service || selectedService;
       const followUpText = serviceQuestions[currentService]?.followUp || 
         'Thank you! Our team will contact you within 15-20 minutes.';
@@ -1870,6 +1907,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         timestamp: new Date()
       };
       setServiceChatMessages(prev => [...prev, followUpMessage]);
+      await saveMessageToHistory(followUpMessage.text, true);
       setServiceChatStep('follow-up');
     }, 1000);
   };
