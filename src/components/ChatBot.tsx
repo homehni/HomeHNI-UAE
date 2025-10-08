@@ -1518,7 +1518,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
             <Home size={16} className="text-white" />
           </div>
-          <span className="font-semibold text-gray-900">Home HNI Support</span>
+          <span className="font-poppins text-xl font-semibold text-gray-900">Home HNI Support</span>
         </div>
         <button 
           onClick={() => {
@@ -1564,7 +1564,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             <div className={`flex-1 ${!msg.isBot ? 'flex justify-end' : ''}`}>
               {msg.isBot && (
                 <div className="flex items-baseline space-x-2 mb-1">
-                  <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                  <span className="font-poppins text-sm font-semibold text-brand-red">Home HNI</span>
                 </div>
               )}
               <div className={`rounded-lg p-3 shadow-sm ${
@@ -1679,7 +1679,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
             <Home size={16} className="text-white" />
           </div>
-          <span className="font-semibold text-gray-900">Home HNI Support</span>
+          <span className="font-poppins text-xl font-semibold text-gray-900">Home HNI Support</span>
         </div>
         <button 
           onClick={() => {
@@ -1725,7 +1725,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             <div className={`flex-1 ${!msg.isBot ? 'flex justify-end' : ''}`}>
               {msg.isBot && (
                 <div className="flex items-baseline space-x-2 mb-1">
-                  <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                  <span className="font-poppins text-sm font-semibold text-brand-red">Home HNI</span>
                 </div>
               )}
               <div className={`rounded-lg p-3 shadow-sm ${
@@ -2007,7 +2007,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             <div className="w-8 h-8 bg-brand-red rounded-full flex items-center justify-center">
               <ServiceIcon size={16} className="text-white" />
             </div>
-            <span className="font-semibold text-gray-900">{serviceName} Support</span>
+            <span className="font-poppins text-xl font-semibold text-gray-900">{serviceName} Support</span>
           </div>
           <button 
             onClick={() => {
@@ -2053,7 +2053,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               <div className={`flex-1 ${!msg.isBot ? 'flex justify-end' : ''}`}>
                 {msg.isBot && (
                   <div className="flex items-baseline space-x-2 mb-1">
-                    <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                    <span className="font-poppins text-sm font-semibold text-brand-red">Home HNI</span>
                   </div>
                 )}
                 <div className={`rounded-lg p-3 shadow-sm ${
@@ -2167,7 +2167,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         <div className="w-10 h-10 bg-brand-red rounded-full flex items-center justify-center flex-shrink-0 mr-3">
           <Home size={20} className="text-white" />
         </div>
-        <h1 className="text-lg sm:text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
+        <h1 className="font-poppins text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
         <button
           onClick={() => setIsOpen(false)}
           className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
@@ -2408,7 +2408,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             <div className={`flex-1 ${!message.isBot ? 'flex justify-end' : ''}`}>
               {message.isBot && (
                 <div className="flex items-baseline space-x-2 mb-1">
-                  <span className="text-sm font-semibold text-brand-red">Home HNI</span>
+                  <span className="font-poppins text-sm font-semibold text-brand-red">Home HNI</span>
                 </div>
               )}
               <div
