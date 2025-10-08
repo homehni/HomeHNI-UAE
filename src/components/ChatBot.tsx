@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { createConversation, saveMessage, getUserConversations, getConversationMessages, type ChatConversation, type ChatMessage } from '@/lib/chatHistory';
 
 
@@ -146,7 +147,11 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   
   // Chat history state
   const { user } = useAuth();
+  const { profile } = useProfile();
   const [conversationId, setConversationId] = useState<string | null>(null);
+  
+  // Check if user is logged in
+  const isLoggedIn = !!user;
   
   // Service-specific chat states
   const [serviceChatMessages, setServiceChatMessages] = useState<Message[]>([]);
@@ -205,6 +210,20 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
       }
     }
   }, [searchContext?.activeTab, user]);
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (isLoggedIn && profile) {
+      const name = profile.full_name || '';
+      const email = user?.email || '';
+      
+      // Auto-fill all forms with user data
+      setUserDetails(prev => ({ ...prev, name, email }));
+      setPropertyUserDetails(prev => ({ ...prev, name, email }));
+      setServiceUserDetails(prev => ({ ...prev, name, email }));
+      setSearchDetailsForm(prev => ({ ...prev, name, email }));
+    }
+  }, [isLoggedIn, profile, user]);
 
   // Helper function to create a new conversation
   const initializeConversation = async (type: string, title: string, firstMessage: string) => {
@@ -1341,14 +1360,19 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!userDetails.name || !userDetails.email || !userDetails.phone) {
+    // Get data from form or profile
+    const name = isLoggedIn ? (profile?.full_name || '') : userDetails.name;
+    const email = isLoggedIn ? (user?.email || '') : userDetails.email;
+    const phone = userDetails.phone;
+    
+    if (!phone || (!isLoggedIn && (!name || !email))) {
       return;
     }
 
     setShowDetailsForm(false);
 
     // Save user's form details as a message
-    const detailsMessage = `Name: ${userDetails.name}\nEmail: ${userDetails.email}\nPhone: ${userDetails.phone}`;
+    const detailsMessage = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}`;
     const userDetailsMsg: Message = {
       id: String(Date.now()),
       text: detailsMessage,
@@ -1440,14 +1464,19 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   const handlePropertyDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!propertyUserDetails.name || !propertyUserDetails.email || !propertyUserDetails.phone) {
+    // Get data from form or profile
+    const name = isLoggedIn ? (profile?.full_name || '') : propertyUserDetails.name;
+    const email = isLoggedIn ? (user?.email || '') : propertyUserDetails.email;
+    const phone = propertyUserDetails.phone;
+    
+    if (!phone || (!isLoggedIn && (!name || !email))) {
       return;
     }
 
     setShowPropertyDetailsForm(false);
 
     // Save user's form details as a message
-    const detailsMessage = `Name: ${propertyUserDetails.name}\nEmail: ${propertyUserDetails.email}\nPhone: ${propertyUserDetails.phone}`;
+    const detailsMessage = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}`;
     const userDetailsMsg: Message = {
       id: String(Date.now()),
       text: detailsMessage,
@@ -1575,21 +1604,25 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               <div className="bg-white rounded-lg rounded-tl-none p-4 shadow-sm">
                 <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
                 <form onSubmit={handleDetailsSubmit} className="space-y-3">
-                  <Input
-                    placeholder="Name"
-                    value={userDetails.name}
-                    onChange={(e) => setUserDetails(prev => ({ ...prev, name: e.target.value }))}
-                    required
-                    className="text-sm"
-                  />
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={userDetails.email}
-                    onChange={(e) => setUserDetails(prev => ({ ...prev, email: e.target.value }))}
-                    required
-                    className="text-sm"
-                  />
+                  {!isLoggedIn && (
+                    <>
+                      <Input
+                        placeholder="Name"
+                        value={userDetails.name}
+                        onChange={(e) => setUserDetails(prev => ({ ...prev, name: e.target.value }))}
+                        required
+                        className="text-sm"
+                      />
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={userDetails.email}
+                        onChange={(e) => setUserDetails(prev => ({ ...prev, email: e.target.value }))}
+                        required
+                        className="text-sm"
+                      />
+                    </>
+                  )}
                   <Input
                     type="tel"
                     placeholder="Phone Number"
@@ -1732,21 +1765,25 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               <div className="bg-white rounded-lg rounded-tl-none p-4 shadow-sm">
                 <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
                 <form onSubmit={handlePropertyDetailsSubmit} className="space-y-3">
-                  <Input
-                    placeholder="Name"
-                    value={propertyUserDetails.name}
-                    onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, name: e.target.value }))}
-                    required
-                    className="text-sm"
-                  />
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={propertyUserDetails.email}
-                    onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, email: e.target.value }))}
-                    required
-                    className="text-sm"
-                  />
+                  {!isLoggedIn && (
+                    <>
+                      <Input
+                        placeholder="Name"
+                        value={propertyUserDetails.name}
+                        onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, name: e.target.value }))}
+                        required
+                        className="text-sm"
+                      />
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={propertyUserDetails.email}
+                        onChange={(e) => setPropertyUserDetails(prev => ({ ...prev, email: e.target.value }))}
+                        required
+                        className="text-sm"
+                      />
+                    </>
+                  )}
                   <Input
                     type="tel"
                     placeholder="Phone"
@@ -1918,10 +1955,19 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
   const handleServiceDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Get data from form or profile
+    const name = isLoggedIn ? (profile?.full_name || '') : serviceUserDetails.name;
+    const email = isLoggedIn ? (user?.email || '') : serviceUserDetails.email;
+    const phone = serviceUserDetails.phone;
+    
+    if (!phone || (!isLoggedIn && (!name || !email))) {
+      return;
+    }
+    
     setShowServiceDetailsForm(false);
     
     // Save user's form details as a message
-    const detailsMessage = `Name: ${serviceUserDetails.name}\nEmail: ${serviceUserDetails.email}\nPhone: ${serviceUserDetails.phone}`;
+    const detailsMessage = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}`;
     const userDetailsMsg: Message = {
       id: String(Date.now()),
       text: detailsMessage,
@@ -2047,21 +2093,25 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                 <div className="bg-white rounded-lg rounded-tl-none p-4 shadow-sm">
                   <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
                   <form onSubmit={handleServiceDetailsSubmit} className="space-y-3">
-                    <Input
-                      placeholder="Name"
-                      value={serviceUserDetails.name}
-                      onChange={(e) => setServiceUserDetails(prev => ({ ...prev, name: e.target.value }))}
-                      required
-                      className="text-sm"
-                    />
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      value={serviceUserDetails.email}
-                      onChange={(e) => setServiceUserDetails(prev => ({ ...prev, email: e.target.value }))}
-                      required
-                      className="text-sm"
-                    />
+                    {!isLoggedIn && (
+                      <>
+                        <Input
+                          placeholder="Name"
+                          value={serviceUserDetails.name}
+                          onChange={(e) => setServiceUserDetails(prev => ({ ...prev, name: e.target.value }))}
+                          required
+                          className="text-sm"
+                        />
+                        <Input
+                          type="email"
+                          placeholder="Email"
+                          value={serviceUserDetails.email}
+                          onChange={(e) => setServiceUserDetails(prev => ({ ...prev, email: e.target.value }))}
+                          required
+                          className="text-sm"
+                        />
+                      </>
+                    )}
                     <Input
                       type="tel"
                       placeholder="Phone Number"
@@ -2476,7 +2526,9 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               <p className="text-sm text-gray-800 mb-3 font-medium">Fill Details</p>
               <form onSubmit={(e) => {
                 e.preventDefault();
-                if (searchDetailsForm.name && searchDetailsForm.email && searchDetailsForm.phone) {
+                const name = isLoggedIn ? (profile?.full_name || '') : searchDetailsForm.name;
+                const email = isLoggedIn ? (user?.email || '') : searchDetailsForm.email;
+                if ((isLoggedIn || (searchDetailsForm.name && searchDetailsForm.email)) && searchDetailsForm.phone) {
                   setShowSearchDetailsForm(false);
                   const submitMessage: Message = {
                     id: String(Date.now()),
@@ -2488,25 +2540,29 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   simulateBotResponse('Details submitted');
                 }
               }} className="space-y-3" name="search-details-form">
-                <Input
-                  name="name"
-                  placeholder="Name"
-                  value={searchDetailsForm.name}
-                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, name: e.target.value }))}
-                  required
-                  autoComplete="name"
-                  className="text-sm"
-                />
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  value={searchDetailsForm.email}
-                  onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, email: e.target.value }))}
-                  required
-                  autoComplete="email"
-                  className="text-sm"
-                />
+                {!isLoggedIn && (
+                  <>
+                    <Input
+                      name="name"
+                      placeholder="Name"
+                      value={searchDetailsForm.name}
+                      onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, name: e.target.value }))}
+                      required
+                      autoComplete="name"
+                      className="text-sm"
+                    />
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Email"
+                      value={searchDetailsForm.email}
+                      onChange={(e) => setSearchDetailsForm(prev => ({ ...prev, email: e.target.value }))}
+                      required
+                      autoComplete="email"
+                      className="text-sm"
+                    />
+                  </>
+                )}
                 <Input
                   name="phone"
                   type="tel"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { Phone, Mail, MessageSquare } from 'lucide-react';
 
 interface DeveloperContactFormProps {
@@ -20,6 +22,10 @@ export const DeveloperContactForm: React.FC<DeveloperContactFormProps> = ({
   developerName
 }) => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  const isLoggedIn = !!user;
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,6 +34,17 @@ export const DeveloperContactForm: React.FC<DeveloperContactFormProps> = ({
     message: ''
   });
 
+  // Auto-fill name and email when user is logged in
+  useEffect(() => {
+    if (isLoggedIn && profile) {
+      setFormData(prev => ({
+        ...prev,
+        name: profile.full_name || '',
+        email: user?.email || ''
+      }));
+    }
+  }, [isLoggedIn, profile, user]);
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -35,8 +52,12 @@ export const DeveloperContactForm: React.FC<DeveloperContactFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Get data from form or profile
+    const name = isLoggedIn ? (profile?.full_name || '') : formData.name;
+    const email = isLoggedIn ? (user?.email || '') : formData.email;
+    
     // Basic validation
-    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+    if (!formData.phone || !formData.message || (!isLoggedIn && (!name || !email))) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields.",
@@ -75,32 +96,36 @@ export const DeveloperContactForm: React.FC<DeveloperContactFormProps> = ({
         
         <form onSubmit={handleSubmit} className="space-y-6 mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-sm font-medium">
-                Full Name *
-              </Label>
-              <Input
-                id="name"
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email Address *
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                className="w-full"
-              />
-            </div>
+            {!isLoggedIn && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-sm font-medium">
+                    Full Name *
+                  </Label>
+                  <Input
+                    id="name"
+                    placeholder="Enter your full name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium">
+                    Email Address *
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
