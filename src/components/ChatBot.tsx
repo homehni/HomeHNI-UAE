@@ -1150,9 +1150,21 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             >
               <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
             </button>
-            <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">
+            <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800 flex-1">
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2"
+            >
+              <Minus size={20} className="sm:w-5 sm:h-5" />
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={20} className="sm:w-5 sm:h-5" />
+            </button>
           </div>
         </div>
 
