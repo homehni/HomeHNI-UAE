@@ -2686,8 +2686,8 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         <Button
           onClick={async () => {
             setIsOpen(true);
-            // If on plans page, open directly to plan support chat
-            if (location.pathname === '/plans') {
+            // If on plans page, open directly to plan support chat (only initialize if empty)
+            if (location.pathname === '/plans' && planChatMessages.length === 0) {
               setCurrentView('plan-support');
               setPlanChatStep('budget');
               setShowDetailsForm(false);
@@ -2705,31 +2705,40 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               if (user) {
                 await initializeConversation('plan', 'Plans Conversation', introText);
               }
+            } else if (location.pathname === '/plans') {
+              // Just open to existing chat
+              setCurrentView('plan-support');
             }
-            // If on services page, open directly to service support chat
+            // If on services page, open directly to service support chat (only initialize if empty)
             else if (location.pathname === '/services') {
               const params = new URLSearchParams(window.location.search);
               const serviceTab = params.get('tab') || 'loans';
-              setSelectedService(serviceTab);
-              setCurrentView('service-support');
-              setServiceChatStep('intro');
-              setShowServiceDetailsForm(false);
-              const introText = serviceQuestions[serviceTab]?.intro || 'Hi, I can help you with this service. How can I assist you?';
-              setServiceChatMessages([
-                {
-                  id: '1',
-                  text: introText,
-                  isBot: true,
-                  timestamp: new Date()
-                }
-              ]);
               
-              // Initialize conversation for Service
-              if (user) {
-                await initializeConversation('service', `${serviceTab} Service`, introText);
+              if (serviceChatMessages.length === 0 || selectedService !== serviceTab) {
+                setSelectedService(serviceTab);
+                setCurrentView('service-support');
+                setServiceChatStep('intro');
+                setShowServiceDetailsForm(false);
+                const introText = serviceQuestions[serviceTab]?.intro || 'Hi, I can help you with this service. How can I assist you?';
+                setServiceChatMessages([
+                  {
+                    id: '1',
+                    text: introText,
+                    isBot: true,
+                    timestamp: new Date()
+                  }
+                ]);
+                
+                // Initialize conversation for Service
+                if (user) {
+                  await initializeConversation('service', `${serviceTab} Service`, introText);
+                }
+              } else {
+                // Just open to existing chat
+                setCurrentView('service-support');
               }
             }
-            // If on individual service page, detect which service
+            // If on individual service page, detect which service (only initialize if empty)
             else if (['/loans', '/home-security', '/packers-movers', '/legal-services', '/handover-services', 
                       '/property-management', '/architects', '/painting-cleaning', '/interior-design'].some(path => location.pathname === path)) {
               const serviceMap: Record<string, string> = {
@@ -2744,43 +2753,54 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                 '/interior-design': 'interior-design'
               };
               const service = serviceMap[location.pathname];
-              setSelectedService(service);
-              setCurrentView('service-support');
-              setServiceChatStep('intro');
-              setShowServiceDetailsForm(false);
-              const introText = serviceQuestions[service]?.intro || 'Hi, I can help you with this service. How can I assist you?';
-              setServiceChatMessages([
-                {
-                  id: '1',
-                  text: introText,
-                  isBot: true,
-                  timestamp: new Date()
-                }
-              ]);
               
-              // Initialize conversation for Service
-              if (user) {
-                await initializeConversation('service', `${service} Service`, introText);
+              if (serviceChatMessages.length === 0 || selectedService !== service) {
+                setSelectedService(service);
+                setCurrentView('service-support');
+                setServiceChatStep('intro');
+                setShowServiceDetailsForm(false);
+                const introText = serviceQuestions[service]?.intro || 'Hi, I can help you with this service. How can I assist you?';
+                setServiceChatMessages([
+                  {
+                    id: '1',
+                    text: introText,
+                    isBot: true,
+                    timestamp: new Date()
+                  }
+                ]);
+                
+                // Initialize conversation for Service
+                if (user) {
+                  await initializeConversation('service', `${service} Service`, introText);
+                }
+              } else {
+                // Just open to existing chat
+                setCurrentView('service-support');
               }
             }
-            // If on property details page, open directly to property support chat
+            // If on property details page, open directly to property support chat (only initialize if empty)
             else if (location.pathname.startsWith('/property/')) {
-              setCurrentView('property-support');
-              setPropertyChatStep('budget');
-              setShowPropertyDetailsForm(false);
-              const introText = 'Hi, I can help you with this property. What is your rent budget?';
-              setPropertyChatMessages([
-                {
-                  id: '1',
-                  text: introText,
-                  isBot: true,
-                  timestamp: new Date()
+              if (propertyChatMessages.length === 0) {
+                setCurrentView('property-support');
+                setPropertyChatStep('budget');
+                setShowPropertyDetailsForm(false);
+                const introText = 'Hi, I can help you with this property. What is your rent budget?';
+                setPropertyChatMessages([
+                  {
+                    id: '1',
+                    text: introText,
+                    isBot: true,
+                    timestamp: new Date()
+                  }
+                ]);
+                
+                // Initialize conversation for Property
+                if (user) {
+                  await initializeConversation('property', 'Property Inquiry', introText);
                 }
-              ]);
-              
-              // Initialize conversation for Property
-              if (user) {
-                await initializeConversation('property', 'Property Inquiry', introText);
+              } else {
+                // Just open to existing chat
+                setCurrentView('property-support');
               }
             }
           }}
