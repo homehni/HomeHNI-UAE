@@ -2760,7 +2760,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-0 overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
+        <Card className="fixed bottom-0 right-0 left-0 h-[85vh] w-full shadow-2xl bg-white rounded-t-3xl border-2 border-black overflow-hidden sm:relative sm:w-96 sm:h-[600px] sm:rounded-3xl flex flex-col">
           {/* Show header for search context chat */}
           {searchContext && (
             <CardHeader className="bg-white border-b border-gray-200 p-2.5 sm:p-3 relative z-10 rounded-t-3xl">
