@@ -41,9 +41,10 @@ const MegaMenu = ({ isScrolled }: MegaMenuProps) => {
           {/* <DropdownMenuSeparator /> */}
           {[
             { label: 'Residential', href: '/search?type=buy' },
-            { label: 'Commercial', href: '/search?type=buy&propertyType=Commercial+Space%2FBuilding' },
-            { label: 'Industrial', href: '/search?type=buy&propertyType=Industrial+Space%2FBuilding' },
-            { label: 'Agricultural lands', href: '/search?type=buy&propertyType=Plots' },
+            // Route commercial and land searches under BUY using propertyTypes tokens
+            { label: 'Commercial', href: '/search?type=buy&propertyTypes=OFFICE,RETAIL,WAREHOUSE,SHOWROOM,RESTAURANT,CO-WORKING,INDUSTRIAL' },
+            { label: 'Industrial', href: '/search?type=buy&propertyTypes=INDUSTRIAL' },
+            { label: 'Agricultural lands', href: '/search?type=buy&propertyTypes=AGRICULTURAL%20LAND' },
           ].map((item) => (
             <DropdownMenuItem key={item.label} asChild>
               <a href={item.href} className="w-full">

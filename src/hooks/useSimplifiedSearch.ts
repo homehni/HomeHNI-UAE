@@ -65,6 +65,8 @@ interface SearchFilters {
 
 let hasInitialBudgetInUrlFlag = false;
 export const useSimplifiedSearch = () => {
+  // Feature flag: merge Commercial & Land into Buy/Rent results
+  const MERGE_COMM_LAND_IN_BUY_RENT = true;
   const [searchParams] = useSearchParams();
   // Minimal DB row type to replace 'any' in realtime handlers
   type PropertyRow = {
@@ -86,10 +88,10 @@ export const useSimplifiedSearch = () => {
     is_visible?: boolean;
     status?: string;
     plot_area_unit?: string;
-  floor_no?: number | 'basement' | null;
+    floor_no?: number | 'basement' | null;
     floor_type?: string | null;
   };
-  
+
   // Dynamic budget range based on active tab
   const getBudgetRange = (tab: string): [number, number] => {
     switch (tab) {
@@ -613,78 +615,78 @@ export const useSimplifiedSearch = () => {
     console.log('📊 Total properties before filter:', filtered.length);
     
     if (activeTab === 'buy') {
-      // For buy tab, show only sale properties but exclude land/plot properties
-      filtered = filtered.filter(property => {
-        const listingType = property.listingType?.toLowerCase();
-        const propertyType = property.propertyType.toLowerCase();
-        
-        // Exclude land/plot properties from Buy tab - they should only be in Land/Plot tab
-        const isLandProperty = propertyType.includes('plot') || 
-               propertyType.includes('land') ||
-               propertyType.includes('agricultural') ||
-               propertyType.includes('industrial land') ||
-               propertyType.includes('commercial land');
-        
-        if (isLandProperty) {
-          console.log('❌ Filtered out land property from buy:', property.title, 'property_type:', propertyType);
-          return false;
-        }
-
-        // Exclude commercial property types from Buy tab - they should only appear in Commercial tab
-        const isCommercialType = propertyType.includes('commercial') ||
-               propertyType.includes('office') ||
-               propertyType.includes('shop') ||
-               propertyType.includes('retail') ||
-               propertyType.includes('warehouse') ||
-               propertyType.includes('showroom') ||
-               propertyType.includes('restaurant') ||
-               propertyType.includes('coworking') ||
-               propertyType.includes('co-working') ||
-               propertyType.includes('industrial');
-
-        if (isCommercialType) {
-          console.log('❌ Filtered out commercial property from buy:', property.title, 'property_type:', propertyType);
-          return false;
-        }
-        
-        const isMatch = listingType === 'sale' || listingType === 'resale';
-        if (!isMatch) {
-          console.log('❌ Filtered out for buy:', property.title, 'listing_type:', listingType);
-        }
-        return isMatch;
-      });
+      // Buy tab behaviour
+      if (MERGE_COMM_LAND_IN_BUY_RENT) {
+        // Include ALL sale/resale properties (residential + commercial + land)
+        filtered = filtered.filter(property => {
+          const listingType = property.listingType?.toLowerCase();
+          // Include sale/resale AND commercial properties for the merged tab
+          const isMatch = listingType === 'sale' || listingType === 'resale' || listingType === 'commercial';
+          return isMatch;
+        });
+      } else {
+        // Legacy: Exclude commercial and land from Buy tab
+        filtered = filtered.filter(property => {
+          const listingType = property.listingType?.toLowerCase();
+          const propertyType = property.propertyType.toLowerCase();
+          const isLandProperty = propertyType.includes('plot') || 
+                 propertyType.includes('land') ||
+                 propertyType.includes('agricultural') ||
+                 propertyType.includes('industrial land') ||
+                 propertyType.includes('commercial land');
+          if (isLandProperty) return false;
+          const isCommercialType = propertyType.includes('commercial') ||
+                 propertyType.includes('office') ||
+                 propertyType.includes('shop') ||
+                 propertyType.includes('retail') ||
+                 propertyType.includes('warehouse') ||
+                 propertyType.includes('showroom') ||
+                 propertyType.includes('restaurant') ||
+                 propertyType.includes('coworking') ||
+                 propertyType.includes('co-working') ||
+                 propertyType.includes('industrial');
+          if (isCommercialType) return false;
+          return listingType === 'sale' || listingType === 'resale';
+        });
+      }
     } else if (activeTab === 'rent') {
-      // For rent tab, show rental properties and PG/Hostels, but exclude commercial property types
-      filtered = filtered.filter(property => {
-        const listingType = property.listingType?.toLowerCase();
-        const propertyType = property.propertyType.toLowerCase();
-        
-        // Exclude commercial property types from Rent tab
-        const isCommercialType = propertyType.includes('commercial') ||
-               propertyType.includes('office') ||
-               propertyType.includes('shop') ||
-               propertyType.includes('retail') ||
-               propertyType.includes('warehouse') ||
-               propertyType.includes('showroom') ||
-               propertyType.includes('restaurant') ||
-               propertyType.includes('coworking') ||
-               propertyType.includes('co-working') ||
-               propertyType.includes('industrial');
-        
-        if (isCommercialType) {
-          console.log('❌ Filtered out commercial property from rent:', property.title, 'property_type:', propertyType);
-          return false;
-        }
-        
-        const isMatch = listingType === 'rent' || 
-               listingType === 'pg/hostel' || 
-               propertyType.includes('pg') || 
-               propertyType.includes('hostel');
-        if (!isMatch) {
-          console.log('❌ Filtered out for rent:', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
-        }
-        return isMatch;
-      });
+      // Rent tab behaviour
+      if (MERGE_COMM_LAND_IN_BUY_RENT) {
+        // Include residential rentals, PG/Hostel, and commercial rentals
+        filtered = filtered.filter(property => {
+          const listingType = property.listingType?.toLowerCase();
+          const propertyType = property.propertyType.toLowerCase();
+          const isPgHostel = listingType === 'pg/hostel' || propertyType.includes('pg') || propertyType.includes('hostel');
+          const isRent = listingType === 'rent';
+          const isMatch = isRent || isPgHostel;
+          if (!isMatch) {
+            console.log('❌ Filtered out for rent (merged):', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
+          }
+          return isMatch;
+        });
+      } else {
+        // Legacy: Exclude commercial rentals from Rent tab
+        filtered = filtered.filter(property => {
+          const listingType = property.listingType?.toLowerCase();
+          const propertyType = property.propertyType.toLowerCase();
+          const isCommercialType = propertyType.includes('commercial') ||
+                 propertyType.includes('office') ||
+                 propertyType.includes('shop') ||
+                 propertyType.includes('retail') ||
+                 propertyType.includes('warehouse') ||
+                 propertyType.includes('showroom') ||
+                 propertyType.includes('restaurant') ||
+                 propertyType.includes('coworking') ||
+                 propertyType.includes('co-working') ||
+                 propertyType.includes('industrial');
+          if (isCommercialType) return false;
+          const isMatch = listingType === 'rent' || 
+                 listingType === 'pg/hostel' || 
+                 propertyType.includes('pg') || 
+                 propertyType.includes('hostel');
+          return isMatch;
+        });
+      }
     } else if (activeTab === 'commercial') {
       // For commercial tab, show commercial properties
       filtered = filtered.filter(property => {
@@ -793,7 +795,7 @@ export const useSimplifiedSearch = () => {
           if (normalizedFilter.includes('studioapartment')) {
             return normalizedProperty.includes('studioapartment') || normalizedProperty.includes('studio');
           }
-          if (normalizedFilter.includes('coworking')) {
+          if (normalizedFilter.includes('coworking') || normalizedFilter === 'co-working') {
             return normalizedProperty.includes('coworking') || normalizedProperty.includes('co-working') || titleLower.includes('coworking') || titleLower.includes('co-working');
           }
           if (normalizedFilter.includes('office')) {
@@ -884,9 +886,16 @@ export const useSimplifiedSearch = () => {
       }
     });
 
-    // Apply BHK filter
+    // Apply BHK filter (residential only)
     if (filters.bhkType.length > 0) {
       filtered = filtered.filter(property => {
+        const pt = property.propertyType.toLowerCase();
+        const isLand = pt.includes('land') || pt.includes('plot');
+        const isCommercial = pt.includes('commercial') || pt.includes('office') || pt.includes('shop') || pt.includes('retail') || pt.includes('warehouse') || pt.includes('showroom') || pt.includes('restaurant') || pt.includes('coworking') || pt.includes('co-working') || (pt.includes('industrial') && !pt.includes('land'));
+        const isResidential = !isLand && !isCommercial;
+        // If not residential, do not filter out by BHK
+        if (!isResidential) return true;
+        // Residential: apply BHK matching
         return filters.bhkType.some(bhkFilter => {
           const propertyBhk = property.bhkType?.toLowerCase();
           const filterBhk = bhkFilter.toLowerCase().replace(/\s+/g, '');
@@ -1141,7 +1150,7 @@ export const useSimplifiedSearch = () => {
     });
 
     return filtered;
-  }, [allProperties, filters, activeTab, normalizeLocationName]);
+  }, [allProperties, filters, activeTab, normalizeLocationName, MERGE_COMM_LAND_IN_BUY_RENT]);
 
   const updateFilter = (key: keyof SearchFilters, value: SearchFilters[typeof key]) => {
     setFilters(prev => {

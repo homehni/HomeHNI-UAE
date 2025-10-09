@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -21,6 +22,10 @@ import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 import { useDebounce } from '@/hooks/useDebounce';
 import { AreaUnit } from '@/utils/areaConverter';
 import { LandAreaFilter } from '@/components/LandAreaFilter';
+
+// Import feature flags with the same values as in SearchSection
+const MERGE_COMM_LAND_IN_BUY_RENT = true; // Keep true for new behavior
+const SHOW_LEGACY_COMMERCIAL_LAND_TABS = false; // Set to false to hide old tabs
 // Minimal Google Places typings to avoid 'any'
 type GPlaceComponent = { long_name: string; short_name: string; types: string[] };
 type LatLng = {
@@ -72,6 +77,7 @@ type GoogleMaps = {
 type GoogleNS = { maps?: GoogleMaps };
 type WindowWithGoogle = Window & { google?: GoogleNS };
 const PropertySearch = () => {
+  const navigate = useNavigate();
   // Results view mode
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   // Remove client-side pagination; rely on Load More for dataset growth
@@ -167,6 +173,21 @@ const PropertySearch = () => {
   // No client-side page reset needed
 
   // Keep input focused after adding locations
+  // Redirect from legacy tabs when they're hidden
+  useEffect(() => {
+    // Redirect legacy tabs to the proper merged tab when feature flag is on
+    if (MERGE_COMM_LAND_IN_BUY_RENT && !SHOW_LEGACY_COMMERCIAL_LAND_TABS) {
+      if (activeTab === 'commercial' || activeTab === 'land') {
+        // Redirect to BUY tab but preserve all other search parameters
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set('type', 'buy');
+        navigate(`/search?${currentParams.toString()}`, { replace: true });
+        setActiveTab('buy');
+      }
+    }
+  }, [activeTab, navigate, setActiveTab]);
+  
+  // Focus location input when appropriate
   useEffect(() => {
     if (filters.locations.length < 3 && locationInputRef.current) {
       // Small delay to ensure state has updated
@@ -189,10 +210,30 @@ const PropertySearch = () => {
   const getPropertyTypes = (tab: string): string[] => {
     switch (tab) {
       case 'rent':
-        // Restrict Rent -> Property Type to these options
+        // For Rent tab, include commercial property types when the merge flag is on
+        if (MERGE_COMM_LAND_IN_BUY_RENT) {
+          return [
+            'ALL', 
+            // Residential types
+            'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA', 'PG/HOSTEL',
+            // Commercial types
+            'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING'
+          ];
+        }
         return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA', 'PG/HOSTEL'];
       case 'buy':
-        // Restrict Buy -> Property Type to only these three (label change handled in homepage UI)
+        // For Buy tab, include commercial and land property types when the merge flag is on
+        if (MERGE_COMM_LAND_IN_BUY_RENT) {
+          return [
+            'ALL', 
+            // Residential types
+            'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA',
+            // Commercial types
+            'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING',
+            // Land types
+            'AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'
+          ];
+        }
         return ['ALL', 'APARTMENT', 'INDEPENDENT HOUSE', 'VILLA'];
       case 'commercial':
         // Removed 'INDUSTRIAL' from filter options as requested
@@ -228,14 +269,11 @@ const PropertySearch = () => {
     }, 0);
   };
   const [uiBudget, setUiBudget] = useState<[number, number]>(filters.budget);
-  const [uiArea, setUiArea] = useState<[number, number]>(filters.area);
   const [uiLandArea, setUiLandArea] = useState<[number, number]>(filters.landArea);
   const [landAreaUnit, setLandAreaUnit] = useState<string>(filters.landAreaUnit);
   const budgetKey = `${filters.budget[0]}-${filters.budget[1]}`;
-  const areaKey = `${filters.area[0]}-${filters.area[1]}`;
   const landAreaKey = `${filters.landArea[0]}-${filters.landArea[1]}-${filters.landAreaUnit}`;
   useEffect(() => { setUiBudget(filters.budget); }, [budgetKey]);
-  useEffect(() => { setUiArea(filters.area); }, [areaKey]);
   useEffect(() => { 
     setUiLandArea(filters.landArea); 
     setLandAreaUnit(filters.landAreaUnit);
@@ -243,9 +281,6 @@ const PropertySearch = () => {
     
     const commitBudget = (value: [number, number]) => {
       preserveScroll(() => updateFilter('budget', snapBudget(activeTab, value)));
-    };
-    const commitArea = (value: [number, number]) => {
-      preserveScroll(() => updateFilter('area', value));
     };
     
     const commitLandArea = (value: [number, number]) => {
@@ -353,107 +388,11 @@ const PropertySearch = () => {
       </div>
 
       <Separator />
-
-      {/* Area (Sq. Ft.) Filter - Only show for non-land tabs */}
-      {activeTab !== 'land' && (
-        <>
-          <div>
-            <h4 className="font-semibold mb-3" id="area-label">Area (Sq. Ft.)</h4>
-            <div className="space-y-3">
-              <div className="relative">
-                <Slider 
-                  value={uiArea}
-                  onValueChange={(value) => setUiArea(value as [number, number])}
-                  onValueCommit={(value) => commitArea(value as [number, number])}
-                  max={6000} 
-                  min={0} 
-                  step={50} 
-                  className="w-full"
-                  aria-labelledby="area-label"
-                  aria-valuemin={0}
-                  aria-valuemax={6000}
-                  aria-valuenow={uiArea[1]}
-                />
-              </div>
-              <div className="flex justify-between text-sm font-medium text-foreground">
-                <span>{uiArea[0] === 0 ? '0' : uiArea[0].toLocaleString()} sq ft</span>
-                <span>{uiArea[1] >= 6000 ? '6,000+ sq ft' : uiArea[1].toLocaleString() + ' sq ft'}</span>
-              </div>
-              {/* Manual Area Input Fields */}
-              <div className="space-y-2 mb-3">
-                <div className="text-sm font-medium text-gray-700">Enter Area Range</div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label htmlFor="min-area" className="text-xs text-gray-500 mb-1 block">Min Area (sq ft)</label>
-                    <Input 
-                      id="min-area"
-                      type="number" 
-                      placeholder="Min area" 
-                      value={uiArea[0].toString()} 
-                      onChange={e => {
-                        const value = parseInt(e.target.value) || 0;
-                        if (value <= uiArea[1]) setUiArea([value, uiArea[1]]);
-                      }} 
-                      onBlur={() => commitArea(uiArea)}
-                      onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
-                      className="h-8 text-sm"
-                      aria-label="Minimum area in square feet"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="max-area" className="text-xs text-gray-500 mb-1 block">Max Area (sq ft)</label>
-                    <Input 
-                      id="max-area"
-                      type="number" 
-                      placeholder="Max area" 
-                      value={uiArea[1].toString()} 
-                      onChange={e => {
-                        const value = parseInt(e.target.value) || 0;
-                        if (value >= uiArea[0]) setUiArea([uiArea[0], Math.min(value, 10000)]);
-                      }} 
-                      onBlur={() => commitArea(uiArea)}
-                      onKeyDown={e => { if (e.key === 'Enter') commitArea(uiArea); }}
-                      className="h-8 text-sm"
-                      aria-label="Maximum area in square feet"
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* Quick Area Range Buttons */}
-              <div className="grid grid-cols-3 gap-2 mt-3">
-                <Button variant={uiArea[0] === 0 && uiArea[1] === 1000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 1000]); commitArea([0, 1000]); }} className="text-xs h-8">
-                  Under 1000
-                </Button>
-                <Button variant={uiArea[0] === 1000 && uiArea[1] === 2000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([1000, 2000]); commitArea([1000, 2000]); }} className="text-xs h-8">
-                  1000-2000
-                </Button>
-                <Button variant={uiArea[0] === 2000 && uiArea[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([2000, 3000]); commitArea([2000, 3000]); }} className="text-xs h-8">
-                  2000-3000
-                </Button>
-                <Button variant={uiArea[0] === 3000 && uiArea[1] === 4000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([3000, 4000]); commitArea([3000, 4000]); }} className="text-xs h-8">
-                  3000-4000
-                </Button>
-                <Button variant={uiArea[0] === 4000 && uiArea[1] === 5000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([4000, 5000]); commitArea([4000, 5000]); }} className="text-xs h-8">
-                  4000-5000
-                </Button>
-                <Button variant={uiArea[0] === 5000 && uiArea[1] === 6000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([5000, 6000]); commitArea([5000, 6000]); }} className="text-xs h-8">
-                  5000-6000
-                </Button>
-                <Button variant={uiArea[0] === 0 && uiArea[1] === 3000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([0, 3000]); commitArea([0, 3000]); }} className="text-xs h-8">
-                  Under 3000
-                </Button>
-                <Button variant={uiArea[0] === 6000 && uiArea[1] === 6000 ? "default" : "outline"} size="sm" onClick={() => { setUiArea([6000, 6000]); commitArea([6000, 6000]); }} className="text-xs h-8">
-                  6000+
-                </Button>
-              </div>
-            </div>
-          </div>
-          <Separator />
-        </>
-      )}
       
-      {/* Land Area Filter (only show for land tab) */}
-      {activeTab === 'land' && (
+      {/* Land Area Filter - show for land tab or when land property types are selected */}
+      {(activeTab === 'land' || 
+        (filters.propertyType.length > 0 && 
+         ['AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'].includes(filters.propertyType[0]))) && (
         <>
           <div>
             <LandAreaFilter
@@ -507,8 +446,13 @@ const PropertySearch = () => {
       {/* Show separator only if there's content after Property Type */}
       {(activeTab === 'commercial' || activeTab === 'buy' || activeTab === 'rent') && <Separator />}
 
-      {/* Commercial-only: Floor filter (moved up for visibility) */}
-      {activeTab === 'commercial' && (
+      {/* Determine if we should show commercial-specific filters */}
+      {/* Commercial-only: Floor filter (show for commercial properties in any tab) */}
+      {(activeTab === 'commercial' || 
+        (MERGE_COMM_LAND_IN_BUY_RENT && 
+         ((activeTab === 'buy' || activeTab === 'rent') && 
+          filters.propertyType.length > 0 && 
+          ['OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING'].includes(filters.propertyType[0])))) && (
         <>
         <div>
           <div className="flex items-center justify-between mb-3">
@@ -544,8 +488,12 @@ const PropertySearch = () => {
       )}
 
 
-  {/* BHK Filter (hide for land and commercial) */}
-  {activeTab !== 'land' && activeTab !== 'commercial' && (
+  {/* BHK Filter (hide for land and commercial property types) */}
+  {activeTab !== 'land' && 
+   !(filters.propertyType.length > 0 && 
+     ['AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND', 
+      'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING'].includes(filters.propertyType[0])) && 
+   activeTab !== 'commercial' && (
     <>
     <div>
         <div className="flex items-center justify-between mb-3">
@@ -581,8 +529,12 @@ const PropertySearch = () => {
       </>
   )}
 
-  {/* Property Status (hide for land and commercial) */}
-  {activeTab !== 'land' && activeTab !== 'commercial' && (
+  {/* Property Status (hide for land and commercial property types) */}
+  {activeTab !== 'land' && 
+   activeTab !== 'commercial' && 
+   !(filters.propertyType.length > 0 && 
+     ['AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND',
+      'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING'].includes(filters.propertyType[0])) && (
     <>
     <div>
         <div className="flex items-center justify-between mb-3">
@@ -621,8 +573,10 @@ const PropertySearch = () => {
       </>
   )}
 
-  {/* Furnishing (not relevant for land; also show for commercial) */}
-  {activeTab !== 'land' && (
+  {/* Furnishing (not relevant for land property types; show for residential and commercial) */}
+  {activeTab !== 'land' && 
+   !(filters.propertyType.length > 0 && 
+     ['AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'].includes(filters.propertyType[0])) && (
     <>
     <div>
         <div className="flex items-center justify-between mb-3">
@@ -661,8 +615,12 @@ const PropertySearch = () => {
       </>
   )}
 
-  {/* Age of Property (hide for land and commercial) */}
-  {activeTab !== 'land' && activeTab !== 'commercial' && (<div>
+  {/* Age of Property (hide for land and commercial property types) */}
+  {activeTab !== 'land' && 
+   activeTab !== 'commercial' && 
+   !(filters.propertyType.length > 0 && 
+     ['AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND',
+      'OFFICE', 'RETAIL', 'WAREHOUSE', 'SHOWROOM', 'RESTAURANT', 'CO-WORKING'].includes(filters.propertyType[0])) && (<div>
       {/* end commercial-only filters (moved earlier) */}
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold">Age of Property</h4>
@@ -927,8 +885,19 @@ const PropertySearch = () => {
               <TabsList className="grid w-full lg:w-auto grid-cols-4 bg-gray-100" role="tablist" aria-label="Property listing type">
                 <TabsTrigger value="buy" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'buy'}>Buy</TabsTrigger>
                 <TabsTrigger value="rent" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'rent'}>Rent</TabsTrigger>
-                <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
-                <TabsTrigger value="land" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'land'}>Land/Plot</TabsTrigger>
+                {SHOW_LEGACY_COMMERCIAL_LAND_TABS && (
+                  <>
+                    <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
+                    <TabsTrigger value="land" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'land'}>Land/Plot</TabsTrigger>
+                  </>
+                )}
+                {!SHOW_LEGACY_COMMERCIAL_LAND_TABS && (
+                  <>
+                    {/* Empty triggers to maintain the grid layout */}
+                    <div className="hidden lg:block"></div>
+                    <div className="hidden lg:block"></div>
+                  </>
+                )}
               </TabsList>
             </Tabs>
 
@@ -1259,22 +1228,12 @@ const PropertySearch = () => {
                       <X size={12} />
                     </button>
                   </Badge>}
-
-                {/* Area filter badge - only for non-land tabs */}
-                {filters.areaDirty && activeTab !== 'land' && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    {filters.area[0]} - {filters.area[1] >= 6000 ? '6000+' : filters.area[1]} sq ft
-                    <button onClick={() => {
-                      updateFilter('area', [0, 6000]);
-                      updateFilter('areaDirty', false);
-                    }} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
-                      <X size={12} />
-                    </button>
-                  </Badge>
-                )}
                 
-                {/* Land Area filter badge - only for land tab */}
-                {filters.landAreaDirty && activeTab === 'land' && (
+                {/* Land Area filter badge - for land tab or land property types */}
+                {filters.landAreaDirty && 
+                 (activeTab === 'land' || 
+                  (filters.propertyType.length > 0 && 
+                   ['AGRICULTURAL LAND', 'COMMERCIAL LAND', 'INDUSTRIAL LAND'].includes(filters.propertyType[0]))) && (
                   <Badge variant="secondary" className="flex items-center gap-1">
                     {filters.landArea[0]} - {filters.landArea[1]} {filters.landAreaUnit}
                     <button onClick={() => {

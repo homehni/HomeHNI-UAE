@@ -61,6 +61,9 @@ type GoogleMaps = {
 type GoogleNS = { maps?: GoogleMaps };
 type WindowWithGoogle = Window & { google?: GoogleNS };
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
+  // Feature flags for merging Commercial & Land/Plot into Buy/Rent tabs
+  const MERGE_COMM_LAND_IN_BUY_RENT = true; // Keep true for new behavior
+  const SHOW_LEGACY_COMMERCIAL_LAND_TABS = false; // Set to false to hide old tabs
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('buy');
   const [searchQuery, setSearchQuery] = useState('');
@@ -77,13 +80,38 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [selectedFurnishing, setSelectedFurnishing] = useState<string[]>([]);
   // Budget defaults to full range based on the active tab (5Cr for buy/commercial/land, 5L for rent)
   const [budget, setBudget] = useState<[number, number]>([0, getBudgetSliderMaxHome('buy')]);
-  const [area, setArea] = useState<[number, number]>([0, 10000]);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileAcInitRef = useRef(false);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpenDropdown(null);
+      }
+    };
+
+    if (openDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [openDropdown]);
 
   const addLocation = (location: string) => {
     const trimmed = location.trim();
@@ -159,10 +187,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     if (budget[0] > 0) params.set('budgetMin', String(budget[0]));
     if (budget[1] < getBudgetSliderMaxHome(activeTab)) params.set('budgetMax', String(budget[1]));
 
-    // Area
-    if (area[0] > 0) params.set('areaMin', String(area[0]));
-    if (area[1] < 10000) params.set('areaMax', String(area[1]));
-
     // Furnishing -> furnished filter
     if (selectedFurnishing.length > 0) {
       const furnishedTokens = selectedFurnishing.map(mapFurnishingLabelToFilter);
@@ -183,19 +207,17 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       }
     }
   };
-  const navigationTabs = [{
-    id: 'buy',
-    label: 'BUY'
-  }, {
-    id: 'rent',
-    label: 'RENT'
-  }, {
-    id: 'commercial',
-    label: 'COMMERCIAL'
-  }, {
-    id: 'land',
-    label: 'LAND/PLOT'
-  }];
+  const navigationTabs = [
+    { id: 'buy', label: 'BUY' },
+    { id: 'rent', label: 'RENT' },
+    // Keep legacy tabs visible until approved to remove
+    ...(SHOW_LEGACY_COMMERCIAL_LAND_TABS
+      ? [
+          { id: 'commercial', label: 'COMMERCIAL' },
+          { id: 'land', label: 'LAND/PLOT' },
+        ]
+      : []),
+  ];
 
   // When switching tabs, reset budget to the full default range for that tab
   useEffect(() => {
@@ -723,18 +745,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       Budget <ChevronRight size={14} />
                     </Button>
                   </div>
-
-                  {/* Area */}
-                  <div className="relative">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => { setOpenDropdown('area'); setIsMobileOverlayOpen(true); }}
-                      className={`h-9 text-xs flex items-center gap-1`}
-                    >
-                      Area <ChevronRight size={14} />
-                    </Button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -891,18 +901,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400' : ''}`}
                       >
                         Budget <ChevronRight size={14} className={`transition-transform ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
-                      </Button>
-                    </div>
-
-                    {/* Area */}
-                    <div className="relative">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setOpenDropdown(openDropdown === 'area' ? null : 'area')}
-                        className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'area' ? 'bg-blue-50 border-blue-400' : ''}`}
-                      >
-                        Area <ChevronRight size={14} className={`transition-transform ${openDropdown === 'area' ? 'rotate-90' : ''}`} />
                       </Button>
                     </div>
 
@@ -1064,12 +1062,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
                     </div>
                   )}
-                  {openDropdown === 'area' && (
-                    <div>
-                      <div className="text-xs text-gray-500 mb-2">{area[0]} - {area[1] >= 10000 ? '10,000+': area[1].toLocaleString()} sq ft</div>
-                      <Slider value={area} onValueChange={(v) => setArea(v as [number, number])} min={0} max={10000} step={100} />
-                    </div>
-                  )}
                 </div>
               )}
             </div>
@@ -1101,23 +1093,23 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         )}
     {/* Desktop Search Section */}
   <div className="hidden sm:block absolute bottom-0 left-0 right-0 transform translate-y-1/2 z-50">
-          <div className="max-w-4xl mx-auto px-2 sm:px-4">
-            <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl mx-auto">
               {/* Navigation Tabs */}
-              <div className="bg-white rounded-t-lg shadow-xl border border-gray-100">
+              <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-4 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
-                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5">
+                  <TabsList className="grid w-full grid-cols-2 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
+                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5 hover:text-brand-red">
                         {tab.label}
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-3 sm:px-6 py-2 bg-white rounded-b-lg">
-                    {/* Search Bar - pill style with in-field search icon (parity with results page) */}
-                    <div className="relative flex items-center">
+                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl">
+                    {/* Search Bar - Compact responsive design */}
+                    <div className="relative flex items-center mb-4">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
                       <div
-                        className="relative flex items-center gap-2 px-4 py-2 pl-12 pr-14 min-h-[3rem] w-full border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
+                        className="relative flex items-center gap-2 px-4 py-3 pl-12 pr-14 min-h-[3rem] w-full border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60"
                         onClick={() => {
                           if (inputRef.current) {
                             inputRef.current.focus();
@@ -1132,7 +1124,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
                             onKeyPress={handleKeyPress}
                             placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Search locality...'}
-                            className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-400"
+                            className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-500 font-medium"
                             style={{ appearance: "none" }}
                           />
                           {selectedLocations.length > 0 && (
@@ -1141,17 +1133,17 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 e.stopPropagation();
                                 removeLocation(selectedLocations[0]);
                               }}
-                              className="absolute right-0 hover:bg-gray-100 rounded-full p-1"
+                              className="absolute right-0 hover:bg-gray-100 rounded-full p-1 transition-colors"
                             >
                               <X size={14} className="text-gray-500" />
                             </button>
                           )}
                         </div>
 
-                        {/* In-field Search icon triggers navigation */}
+                        {/* Compact Search Button */}
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 absolute right-2 top-1/2 -translate-y-1/2"
+                          className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 absolute right-2 top-1/2 -translate-y-1/2 transition-all duration-200 shadow-md hover:shadow-lg"
                           aria-label="Search"
                           onClick={handleSearch}
                           disabled={!(searchQuery.trim().length > 0 || selectedLocations.length > 0)}
@@ -1164,40 +1156,40 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                     </div>
 
-                    {/* Desktop: Collapsible Filter Dropdowns */}
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                    {/* Compact Responsive Filter Dropdowns */}
+                    <div ref={dropdownRef} className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
                       {/* Property type: Property Type or Land/Space Type */}
-                      {(
-                        <div className="relative">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
-                            className={`flex items-center gap-1 ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400' : ''}`}
-                          >
-                            <span className="text-sm">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
-                            <ChevronRight size={14} className={`transition-transform ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
-                          </Button>
-                          {openDropdown === 'propertyType' && (
-                            <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[400px]">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                {getPropertyTypesForHomepage(activeTab).map(type => (
-                                  <label key={type} className="flex items-center gap-2 text-sm">
-                                    <Checkbox
-                                      checked={selectedPropertyTypes.includes(type)}
-                                      onCheckedChange={(checked) => {
-                                        if (checked) setSelectedPropertyTypes(prev => [...prev, type]);
-                                        else setSelectedPropertyTypes(prev => prev.filter(t => t !== type));
-                                      }}
-                                    />
-                                    <span className="capitalize">{type.toLowerCase()}</span>
-                                  </label>
-                                ))}
-                              </div>
+                      <div className="relative">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                        >
+                          <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
+                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
+                        </Button>
+                        {openDropdown === 'propertyType' && (
+                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[300px] sm:max-w-[350px] animate-in slide-in-from-top-2 duration-200">
+                            <h4 className="text-base font-semibold mb-3 text-gray-800">Select Property Type</h4>
+                            <div className="grid grid-cols-1 gap-2">
+                              {getPropertyTypesForHomepage(activeTab).map(type => (
+                                <label key={type} className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                                  <Checkbox
+                                    checked={selectedPropertyTypes.includes(type)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) setSelectedPropertyTypes(prev => [...prev, type]);
+                                      else setSelectedPropertyTypes(prev => prev.filter(t => t !== type));
+                                    }}
+                                    className="rounded-md"
+                                  />
+                                  <span className="capitalize font-medium">{type.toLowerCase()}</span>
+                                </label>
+                              ))}
                             </div>
-                          )}
-                        </div>
-                      )}
+                          </div>
+                        )}
+                      </div>
 
                       {/* Bedroom (only for Buy/Rent) */}
                       {(activeTab === 'buy' || activeTab === 'rent') && (
@@ -1206,26 +1198,26 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
-                          className={`flex items-center gap-1 ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400' : ''}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
-                          <span className="text-sm">Bedroom</span>
-                          <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
+                          <span className="text-sm font-medium">Bedroom</span>
+                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'bedroom' && (activeTab === 'buy' || activeTab === 'rent') && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
-                            <h4 className="text-sm font-semibold mb-3">Number of Bedrooms</h4>
+                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[250px] max-w-[300px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200">
+                            <h4 className="text-base font-semibold mb-3 text-gray-800">Number of Bedrooms</h4>
                             <div className="flex flex-wrap gap-2">
                               {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
                                 <Button
                                   key={bhk}
                                   variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
                                   size="sm"
-                                  className="text-xs px-3"
+                                  className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
                                   onClick={() => {
                                     setSelectedBedrooms(prev => prev.includes(bhk) ? prev.filter(b => b !== bhk) : [...prev, bhk]);
                                   }}
                                 >
-                                  + {bhk}
+                                  {bhk}
                                 </Button>
                               ))}
                             </div>
@@ -1242,21 +1234,21 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               variant="outline"
                               size="sm"
                               onClick={() => setOpenDropdown(openDropdown === 'availability' ? null : 'availability')}
-                              className={`flex items-center gap-1 ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400' : ''}`}
+                              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                             >
-                              <span className="text-sm">Availability</span>
-                              <ChevronRight size={14} className={`transition-transform ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
+                              <span className="text-sm font-medium">Availability</span>
+                              <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
                             </Button>
                             {openDropdown === 'availability' && (
-                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
-                                <h4 className="text-sm font-semibold mb-3">Availability</h4>
-                                <div className="grid grid-cols-2 gap-2">
+                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200">
+                                <h4 className="text-base font-semibold mb-3 text-gray-800">Availability</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                   {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
                                     <Button
                                       key={option}
                                       variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
                                       size="sm"
-                                      className="text-xs px-3"
+                                      className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
                                       onClick={() => {
                                         setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
                                       }}
@@ -1274,26 +1266,26 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               variant="outline"
                               size="sm"
                               onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                              className={`flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
+                              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                             >
-                              <span className="text-sm">Property Status</span>
-                              <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
+                              <span className="text-sm font-medium">Property Status</span>
+                              <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
                             </Button>
                             {openDropdown === 'construction' && (
-                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[280px] md:min-w-[360px]">
-                                <h4 className="text-sm font-semibold mb-3">Property Status</h4>
+                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[220px] max-w-[260px] sm:min-w-[250px] sm:max-w-[280px] animate-in slide-in-from-top-2 duration-200">
+                                <h4 className="text-base font-semibold mb-3 text-gray-800">Property Status</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {['Under Construction', 'Ready'].map(status => (
                                     <Button
                                       key={status}
                                       variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
                                       size="sm"
-                                      className="text-xs px-3"
+                                      className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
                                       onClick={() => {
                                         setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
                                       }}
                                     >
-                                      + {status}
+                                      {status}
                                     </Button>
                                   ))}
                                 </div>
@@ -1309,26 +1301,26 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'furnishing' ? null : 'furnishing')}
-                          className={`flex items-center gap-1 ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400' : ''}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
-                          <span className="text-sm">Furnishing</span>
-                          <ChevronRight size={14} className={`transition-transform ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
+                          <span className="text-sm font-medium">Furnishing</span>
+                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'furnishing' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[240px]">
-                            <h4 className="text-sm font-semibold mb-3">Furnishing</h4>
+                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[200px] max-w-[240px] sm:min-w-[220px] sm:max-w-[260px] animate-in slide-in-from-top-2 duration-200">
+                            <h4 className="text-base font-semibold mb-3 text-gray-800">Furnishing</h4>
                             <div className="flex flex-wrap gap-2">
                               {['Full', 'Semi', 'None'].map(level => (
                                 <Button
                                   key={level}
                                   variant={selectedFurnishing.includes(level) ? 'default' : 'outline'}
                                   size="sm"
-                                  className="text-xs px-3"
+                                  className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
                                   onClick={() => {
                                     setSelectedFurnishing(prev => prev.includes(level) ? prev.filter(p => p !== level) : [...prev, level]);
                                   }}
                                 >
-                                  + {level}
+                                  {level}
                                 </Button>
                               ))}
                             </div>
@@ -1342,48 +1334,28 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'budget' ? null : 'budget')}
-                          className={`flex items-center gap-1 ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400' : ''}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
-                          <span className="text-sm">Budget</span>
-                          <ChevronRight size={14} className={`transition-transform ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
+                          <span className="text-sm font-medium">Budget</span>
+                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'budget' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[320px] md:min-w-[400px]">
-                            <h4 className="text-sm font-semibold mb-3">Select Price Range</h4>
-                            <div className="text-xs text-gray-500 mb-2">
+                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-50 min-w-[360px] md:min-w-[480px] animate-in slide-in-from-top-2 duration-200">
+                            <h4 className="text-base font-semibold mb-3 text-gray-800">Select Price Range</h4>
+                            <div className="text-base text-gray-600 mb-3 font-medium">
                               ₹{formatBudget(budget[0])} - ₹{activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
                             </div>
-                            <Slider value={budget} onValueChange={(v) => setBudget(v as [number, number])} min={0} max={getBudgetSliderMaxHome(activeTab)} step={getBudgetSliderStepHome(activeTab)} />
+                            <Slider value={budget} onValueChange={(v) => setBudget(v as [number, number])} min={0} max={getBudgetSliderMaxHome(activeTab)} step={getBudgetSliderStepHome(activeTab)} className="mb-4" />
                           </div>
                         )}
                       </div>
 
-                      {/* Area */}
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'area' ? null : 'area')}
-                          className={`flex items-center gap-1 ${openDropdown === 'area' ? 'bg-blue-50 border-blue-400' : ''}`}
-                        >
-                          <span className="text-sm">Area</span>
-                          <ChevronRight size={14} className={`transition-transform ${openDropdown === 'area' ? 'rotate-90' : ''}`} />
-                        </Button>
-                        {openDropdown === 'area' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 min-w-[320px] md:min-w-[400px]">
-                            <h4 className="text-sm font-semibold mb-3">Select Area (Sq. Ft.)</h4>
-                            <div className="text-xs text-gray-500 mb-2">{area[0]} - {area[1] >= 10000 ? '10,000+': area[1].toLocaleString()} sq ft</div>
-                            <Slider value={area} onValueChange={(v) => setArea(v as [number, number])} min={0} max={10000} step={100} />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Clear (UI only) */}
+                      {/* Enhanced Clear Button */}
                       {(selectedPropertyTypes.length || selectedBedrooms.length || selectedConstructionStatus.length || selectedFurnishing.length || selectedAvailability.length) > 0 && (
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-blue-600 hover:text-blue-700"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium transition-all duration-200"
                           onClick={() => {
                             setSelectedPropertyTypes([]);
                             setSelectedBedrooms([]);
@@ -1391,10 +1363,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             setSelectedFurnishing([]);
                             setSelectedAvailability([]);
                             setBudget([0, getBudgetSliderMaxHome(activeTab)]);
-                            setArea([0, 10000]);
                           }}
                         >
-                          Clear
+                          Clear Filters
                         </Button>
                       )}
                     </div>
@@ -1418,11 +1389,29 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   function getPropertyTypesForHomepage(tab: string): string[] {
     switch (tab) {
       case 'rent':
-        // Restrict Rent -> Property Type to these four options
-        return ['Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel'];
+        // Rent now combines residential + commercial rentals (PG/Hostel included)
+        return MERGE_COMM_LAND_IN_BUY_RENT
+          ? [
+              // Residential rentals
+              'Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel',
+              // Commercial rentals
+              'Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial',
+              // Optional: land rentals (rare)
+              'Commercial Land', 'Industrial Land'
+            ]
+          : ['Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel'];
       case 'buy':
-        // Limit Buy -> Property Type to only these three options (label: Flat/Apartment)
-        return ['Flat/Apartment', 'Independent House', 'Villa'];
+        // Buy now combines residential + commercial sale + land/plot
+        return MERGE_COMM_LAND_IN_BUY_RENT
+          ? [
+              // Residential sale
+              'Flat/Apartment', 'Independent House', 'Villa', 'Penthouse', 'Duplex', 'Builder Floor', 'Studio Apartment', 'Gated Community Villa',
+              // Commercial sale
+              'Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial',
+              // Land/Plot
+              'Commercial Land', 'Industrial Land', 'Agricultural Land'
+            ]
+          : ['Flat/Apartment', 'Independent House', 'Villa'];
       case 'commercial':
         return ['Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial'];
       case 'land':
@@ -1487,6 +1476,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       'Studio Apartment': 'STUDIO APARTMENT',
       'Co-Living': 'CO-LIVING',
       'Co-Working': 'CO-WORKING',
+      'Coworking': 'CO-WORKING', // Map both variants to the same token
       'Commercial Land': 'COMMERCIAL LAND',
       'Industrial Land': 'INDUSTRIAL LAND',
       'Agricultural Land': 'AGRICULTURAL LAND',
