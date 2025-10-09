@@ -273,6 +273,14 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     setHistoryMessages([]);
   };
 
+  // Reset chatbot to initial state
+  const handleCloseChatbot = () => {
+    setCurrentView('initial');
+    setSelectedService('');
+    setSelectedFAQ(null);
+    setIsOpen(false);
+  };
+
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
 
@@ -1154,13 +1162,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleCloseChatbot}
               className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2"
             >
               <Minus size={20} className="sm:w-5 sm:h-5" />
             </button>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleCloseChatbot}
               className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             >
               <X size={20} className="sm:w-5 sm:h-5" />
@@ -2181,13 +2189,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         </div>
         <h1 className="font-poppins text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={handleCloseChatbot}
           className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2"
         >
           <Minus size={20} className="sm:w-5 sm:h-5" />
         </button>
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={handleCloseChatbot}
           className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
         >
           <X size={20} className="sm:w-5 sm:h-5" />
@@ -2279,7 +2287,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           </button>
           <h1 className="text-lg font-semibold text-gray-900 flex-1">Chat History</h1>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={handleCloseChatbot}
             className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
           >
             <X size={20} />
@@ -2369,7 +2377,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               </p>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleCloseChatbot}
               className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
             >
               <X size={20} />
@@ -2769,7 +2777,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   </CardTitle>
                 </div>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleCloseChatbot}
                   className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <X size={20} />
@@ -2800,7 +2808,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   <CardTitle className="text-lg sm:text-xl font-semibold text-gray-900">Real Estate Assistant</CardTitle>
                 </div>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleCloseChatbot}
                   className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <X size={20} />
