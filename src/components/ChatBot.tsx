@@ -208,12 +208,6 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
         setSearchDetailsForm({ name: '', email: '', phone: '' });
         setShowSearchDetailsForm(false);
         setInputValue('');
-        
-        // Initialize conversation for Search
-        if (user) {
-          const searchType = searchContext.activeTab || 'buy';
-          initializeConversation('search', `Search - ${searchType}`, initialMsg.text);
-        }
       }
     }
   }, [searchContext?.activeTab, user]);
@@ -299,6 +293,13 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
     };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
+    
+    // Initialize conversation on first user message for search context
+    if (searchContext && user && !conversationId && messages.length === 1) {
+      const searchType = searchContext.activeTab || 'buy';
+      const initialBotMessage = messages[0]?.text || `Search - ${searchType}`;
+      await initializeConversation('search', `Search - ${searchType}`, initialBotMessage);
+    }
     
     // Save user message to history
     await saveMessageToHistory(inputValue, false);
@@ -1342,6 +1343,12 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     setPlanChatMessages(prev => [...prev, userMessage]);
     const budgetValue = planChatInput;
     
+    // Initialize conversation on first user message
+    if (user && !conversationId && planChatMessages.length === 1) {
+      const initialBotMessage = planChatMessages[0]?.text || 'Plans Conversation';
+      await initializeConversation('plan', 'Plans Conversation', initialBotMessage);
+    }
+    
     // Save user message to history
     await saveMessageToHistory(planChatInput, false);
     
@@ -1446,6 +1453,12 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
 
     setPropertyChatMessages(prev => [...prev, userMessage]);
     const inputValue = propertyChatInput;
+    
+    // Initialize conversation on first user message
+    if (user && !conversationId && propertyChatMessages.length === 1) {
+      const initialBotMessage = propertyChatMessages[0]?.text || 'Property Inquiry';
+      await initializeConversation('property', 'Property Inquiry', initialBotMessage);
+    }
     
     // Save user message to history
     await saveMessageToHistory(propertyChatInput, false);
@@ -1955,6 +1968,13 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
     };
 
     setServiceChatMessages(prev => [...prev, userMessage]);
+    
+    // Initialize conversation on first user message
+    if (user && !conversationId && serviceChatMessages.length === 1) {
+      const serviceName = selectedService ? getServiceName(selectedService) : 'Service';
+      const initialBotMessage = serviceChatMessages[0]?.text || `${serviceName} Service`;
+      await initializeConversation('service', `${serviceName} Service`, initialBotMessage);
+    }
     
     // Save user message to history
     await saveMessageToHistory(serviceChatInput, false);
@@ -2700,11 +2720,6 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                   timestamp: new Date()
                 }
               ]);
-              
-              // Initialize conversation for Plans
-              if (user) {
-                await initializeConversation('plan', 'Plans Conversation', introText);
-              }
             } else if (location.pathname === '/plans') {
               // Just open to existing chat
               setCurrentView('plan-support');
@@ -2728,11 +2743,6 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                     timestamp: new Date()
                   }
                 ]);
-                
-                // Initialize conversation for Service
-                if (user) {
-                  await initializeConversation('service', `${serviceTab} Service`, introText);
-                }
               } else {
                 // Just open to existing chat
                 setCurrentView('service-support');
@@ -2768,11 +2778,6 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                     timestamp: new Date()
                   }
                 ]);
-                
-                // Initialize conversation for Service
-                if (user) {
-                  await initializeConversation('service', `${service} Service`, introText);
-                }
               } else {
                 // Just open to existing chat
                 setCurrentView('service-support');
@@ -2793,11 +2798,6 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                     timestamp: new Date()
                   }
                 ]);
-                
-                // Initialize conversation for Property
-                if (user) {
-                  await initializeConversation('property', 'Property Inquiry', introText);
-                }
               } else {
                 // Just open to existing chat
                 setCurrentView('property-support');
