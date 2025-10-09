@@ -154,3 +154,4 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
     </div>
   );
 };
+
