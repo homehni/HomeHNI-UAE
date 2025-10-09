@@ -1162,7 +1162,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               {service?.label || selectedService.replace(/_/g, ' ').toUpperCase()}
             </span>
             <button
-              onClick={handleCloseChatbot}
+              onClick={() => setIsOpen(false)}
               className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2"
             >
               <Minus size={20} className="sm:w-5 sm:h-5" />
@@ -2189,7 +2189,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
         </div>
         <h1 className="font-poppins text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
         <button
-          onClick={handleCloseChatbot}
+          onClick={() => setIsOpen(false)}
           className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2"
         >
           <Minus size={20} className="sm:w-5 sm:h-5" />
