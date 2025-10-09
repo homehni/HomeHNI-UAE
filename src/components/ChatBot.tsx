@@ -1540,18 +1540,26 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           </div>
           <span className="font-poppins text-xl font-semibold text-gray-900">Home HNI Support</span>
         </div>
-        <button 
-          onClick={() => {
-            setIsOpen(false);
-            setCurrentView('initial');
-            setPlanChatMessages([]);
-            setShowDetailsForm(false);
-            setUserDetails({ name: '', email: '', phone: '', budget: '' });
-          }}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <X size={20} className="text-gray-600" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <Minus size={20} className="text-gray-600" />
+          </button>
+          <button 
+            onClick={() => {
+              setIsOpen(false);
+              setCurrentView('initial');
+              setPlanChatMessages([]);
+              setShowDetailsForm(false);
+              setUserDetails({ name: '', email: '', phone: '', budget: '' });
+            }}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} className="text-gray-600" />
+          </button>
+        </div>
       </div>
 
       {/* Chat Messages */}
@@ -1701,18 +1709,26 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           </div>
           <span className="font-poppins text-xl font-semibold text-gray-900">Home HNI Support</span>
         </div>
-        <button 
-          onClick={() => {
-            setIsOpen(false);
-            setCurrentView('initial');
-            setPropertyChatMessages([]);
-            setShowPropertyDetailsForm(false);
-            setPropertyUserDetails({ name: '', email: '', phone: '', budget: '' });
-          }}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-        >
-          <X size={20} className="text-gray-600" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <Minus size={20} className="text-gray-600" />
+          </button>
+          <button 
+            onClick={() => {
+              setIsOpen(false);
+              setCurrentView('initial');
+              setPropertyChatMessages([]);
+              setShowPropertyDetailsForm(false);
+              setPropertyUserDetails({ name: '', email: '', phone: '', budget: '' });
+            }}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} className="text-gray-600" />
+          </button>
+        </div>
       </div>
 
       {/* Chat Messages */}
@@ -2029,18 +2045,26 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
             </div>
             <span className="font-poppins text-xl font-semibold text-gray-900">{serviceName} Support</span>
           </div>
-          <button 
-            onClick={() => {
-              setIsOpen(false);
-              setCurrentView('initial');
-              setServiceChatMessages([]);
-              setShowServiceDetailsForm(false);
-              setServiceUserDetails({ name: '', email: '', phone: '', service: '' });
-            }}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X size={20} className="text-gray-600" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <Minus size={20} className="text-gray-600" />
+            </button>
+            <button 
+              onClick={() => {
+                setIsOpen(false);
+                setCurrentView('initial');
+                setServiceChatMessages([]);
+                setShowServiceDetailsForm(false);
+                setServiceUserDetails({ name: '', email: '', phone: '', service: '' });
+              }}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={20} className="text-gray-600" />
+            </button>
+          </div>
         </div>
 
         {/* Chat Messages */}
@@ -2776,12 +2800,20 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
                      'Commercial Property Assistant'}
                   </CardTitle>
                 </div>
-                <button
-                  onClick={handleCloseChatbot}
-                  className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X size={20} />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <Minus size={20} />
+                  </button>
+                  <button
+                    onClick={handleCloseChatbot}
+                    className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
               </div>
             </CardHeader>
           )}
