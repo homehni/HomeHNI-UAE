@@ -10,7 +10,7 @@ import { createConversation, saveMessage, getUserConversations, getConversationM
 
 
 
-import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare, Check, Clock } from 'lucide-react';
+import { Home, X, Send, MapPin, Calendar, Phone, Mail, User, Bed, Bath, Square, Building2, UserCircle, Search, History, HelpCircle, Globe, Wind, ShoppingBag, Hammer, FileCheck, Zap, Sofa, Sparkles, PaintBucket, Wrench, Scale, BadgeDollarSign, Shield, TruckIcon, Brush, Droplet, FileText, CreditCard, GraduationCap, UserCheck, Ban, UserPlus, Receipt, MoreHorizontal, ArrowLeft, MessageSquare, Check, Clock, Minus } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -2168,6 +2168,12 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
           <Home size={20} className="text-white" />
         </div>
         <h1 className="font-poppins text-xl font-semibold text-gray-900 flex-1">Help Center</h1>
+        <button
+          onClick={() => setIsOpen(false)}
+          className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2"
+        >
+          <Minus size={20} className="sm:w-5 sm:h-5" />
+        </button>
         <button
           onClick={() => setIsOpen(false)}
           className="text-gray-600 hover:text-gray-900 p-1.5 hover:bg-gray-100 rounded-full transition-colors"
