@@ -193,20 +193,27 @@ const ChatBot = ({ searchContext, serviceContext }: ChatBotProps = {}) => {
   }, [messages]);
   
   // Reset chat when activeTab changes in search context
+  const prevActiveTabRef = useRef(searchContext?.activeTab);
+  
   useEffect(() => {
     if (searchContext) {
-      const initialMsg = getInitialMessage();
-      setMessages([initialMsg]);
-      setConversationStep('budget_selection');
-      setUserPreferences({});
-      setSearchDetailsForm({ name: '', email: '', phone: '' });
-      setShowSearchDetailsForm(false);
-      setInputValue('');
-      
-      // Initialize conversation for Search
-      if (user) {
-        const searchType = searchContext.activeTab || 'buy';
-        initializeConversation('search', `Search - ${searchType}`, initialMsg.text);
+      // Only reset if activeTab actually changed, not on every render
+      if (prevActiveTabRef.current !== searchContext.activeTab) {
+        prevActiveTabRef.current = searchContext.activeTab;
+        
+        const initialMsg = getInitialMessage();
+        setMessages([initialMsg]);
+        setConversationStep('budget_selection');
+        setUserPreferences({});
+        setSearchDetailsForm({ name: '', email: '', phone: '' });
+        setShowSearchDetailsForm(false);
+        setInputValue('');
+        
+        // Initialize conversation for Search
+        if (user) {
+          const searchType = searchContext.activeTab || 'buy';
+          initializeConversation('search', `Search - ${searchType}`, initialMsg.text);
+        }
       }
     }
   }, [searchContext?.activeTab, user]);
