@@ -1170,11 +1170,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'propertyType' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[300px] sm:max-w-[350px] animate-in slide-in-from-top-2 duration-200">
-                            <h4 className="text-base font-semibold mb-3 text-gray-800">Select Property Type</h4>
-                            <div className="grid grid-cols-1 gap-2">
+                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[300px] sm:max-w-[350px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
+                            <h4 className="text-base font-semibold mb-3 text-foreground">Select Property Type</h4>
+                            <div className="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto">
                               {getPropertyTypesForHomepage(activeTab).map(type => (
-                                <label key={type} className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                                <label key={type} className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors">
                                   <Checkbox
                                     checked={selectedPropertyTypes.includes(type)}
                                     onCheckedChange={(checked) => {
@@ -1204,8 +1204,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'bedroom' && (activeTab === 'buy' || activeTab === 'rent') && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[250px] max-w-[300px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200">
-                            <h4 className="text-base font-semibold mb-3 text-gray-800">Number of Bedrooms</h4>
+                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[250px] max-w-[300px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
+                            <h4 className="text-base font-semibold mb-3 text-foreground">Number of Bedrooms</h4>
                             <div className="flex flex-wrap gap-2">
                               {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
                                 <Button
@@ -1240,8 +1240,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
                             </Button>
                             {openDropdown === 'availability' && (
-                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200">
-                                <h4 className="text-base font-semibold mb-3 text-gray-800">Availability</h4>
+                              <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
+                                <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                   {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
                                     <Button
@@ -1272,8 +1272,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
                             </Button>
                             {openDropdown === 'construction' && (
-                              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[220px] max-w-[260px] sm:min-w-[250px] sm:max-w-[280px] animate-in slide-in-from-top-2 duration-200">
-                                <h4 className="text-base font-semibold mb-3 text-gray-800">Property Status</h4>
+                              <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[220px] max-w-[260px] sm:min-w-[250px] sm:max-w-[280px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
+                                <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {['Under Construction', 'Ready'].map(status => (
                                     <Button
@@ -1307,8 +1307,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'furnishing' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-[9999] min-w-[200px] max-w-[240px] sm:min-w-[220px] sm:max-w-[260px] animate-in slide-in-from-top-2 duration-200">
-                            <h4 className="text-base font-semibold mb-3 text-gray-800">Furnishing</h4>
+                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[200px] max-w-[240px] sm:min-w-[220px] sm:max-w-[260px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
+                            <h4 className="text-base font-semibold mb-3 text-foreground">Furnishing</h4>
                             <div className="flex flex-wrap gap-2">
                               {['Full', 'Semi', 'None'].map(level => (
                                 <Button
@@ -1340,9 +1340,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
                         </Button>
                         {openDropdown === 'budget' && (
-                          <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 z-50 min-w-[360px] md:min-w-[480px] animate-in slide-in-from-top-2 duration-200">
-                            <h4 className="text-base font-semibold mb-3 text-gray-800">Select Price Range</h4>
-                            <div className="text-base text-gray-600 mb-3 font-medium">
+                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[300px] sm:min-w-[360px] md:min-w-[480px] max-w-[90vw] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
+                            <h4 className="text-base font-semibold mb-3 text-foreground">Select Price Range</h4>
+                            <div className="text-base text-muted-foreground mb-3 font-medium">
                               ₹{formatBudget(budget[0])} - ₹{activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
                             </div>
                             <Slider value={budget} onValueChange={(v) => setBudget(v as [number, number])} min={0} max={getBudgetSliderMaxHome(activeTab)} step={getBudgetSliderStepHome(activeTab)} className="mb-4" />
