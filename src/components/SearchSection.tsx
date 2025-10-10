@@ -1096,7 +1096,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               {/* Navigation Tabs */}
-              <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-2 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
                     {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5 hover:text-brand-red">
