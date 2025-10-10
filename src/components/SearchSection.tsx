@@ -1270,7 +1270,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`flex items-center justify-between gap-1.5 px-3 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm whitespace-nowrap ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                      className={`flex items-center justify-start gap-2 px-5 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm whitespace-nowrap ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                     >
                                       <span className="text-sm font-medium">Property Status</span>
                                       <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
