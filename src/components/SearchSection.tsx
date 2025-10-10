@@ -1108,7 +1108,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl min-h-[160px]">
+                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl">
                     {/* Search Bar - Compact responsive design */}
                     <div className="relative flex items-center mb-4">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
