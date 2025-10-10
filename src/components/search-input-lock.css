@@ -1,0 +1,46 @@
+/* CSS for locked/unlocked search input states */
+.search-input-locked {
+  background-color: #ffffff;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.search-container-unlocked {
+  border-color: #e11d48 !important; /* Red border when unlocked (rose-600) */
+  box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.1);
+  z-index: 20; /* Raise above other elements when in edit mode */
+}
+
+.search-container-locked {
+  border-color: #e5e7eb !important; /* Gray border when locked */
+  background-color: #ffffff;
+}
+
+/* Animation for the unlock transition */
+@keyframes unlockPulse {
+  0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(225, 29, 72, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+}
+
+.search-unlock-animation {
+  animation: unlockPulse 1s;
+}
+
+/* Edit mode indication - notification removed */
+
+/* Search button expansion animation */
+@keyframes expandButton {
+  from { width: 32px; padding-left: 0; padding-right: 0; }
+  to { width: auto; padding-left: 0.75rem; padding-right: 0.75rem; }
+}
+
+.search-button-expanded {
+  animation: expandButton 0.3s ease-out forwards;
+}
+
+/* Fade in animation for indicators */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

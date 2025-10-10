@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '@/components/search-input-lock.css';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon, Lock, Unlock } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerTrigger } from '@/components/ui/drawer';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Header from '@/components/Header';
@@ -20,6 +21,7 @@ import PropertyTools from '@/components/PropertyTools';
 import ChatBot from '@/components/ChatBot';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useSearchTrigger } from '@/hooks/useSearchTrigger';
 import { AreaUnit } from '@/utils/areaConverter';
 import { LandAreaFilter } from '@/components/LandAreaFilter';
 
@@ -76,6 +78,17 @@ type GoogleMaps = {
 };
 type GoogleNS = { maps?: GoogleMaps };
 type WindowWithGoogle = Window & { google?: GoogleNS };
+// Function to normalize location text for better searching and display
+const normalizeLocation = (location: string): string => {
+  if (!location) return '';
+  
+  // Trim whitespace and capitalize each word
+  return location.trim()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
 const PropertySearch = () => {
   const navigate = useNavigate();
   // Results view mode
@@ -83,6 +96,12 @@ const PropertySearch = () => {
   // Remove client-side pagination; rely on Load More for dataset growth
   const locationInputRef = useRef<HTMLInputElement>(null);
   const [cityBounds, setCityBounds] = useState<LatLngBounds | null>(null);
+  // Track whether the search field is locked (prevents manual typing)
+  const [isSearchLocked, setIsSearchLocked] = useState<boolean>(true);
+  // Track the temporary location text input (before search submission)
+  const [tempLocationText, setTempLocationText] = useState<string>('');
+  // Track search trigger state
+  const { searchTriggered, triggerSearch, resetTrigger } = useSearchTrigger();
   
   // Header dropdowns removed; rely on left sidebar filters only
 
@@ -90,7 +109,7 @@ const PropertySearch = () => {
     filters,
     activeTab,
     setActiveTab,
-    filteredProperties,
+    filteredProperties: allFilteredProperties,
     updateFilter,
     clearAllFilters,
     availableLocalities,
@@ -99,6 +118,11 @@ const PropertySearch = () => {
     hasMore,
     propertyCount
   } = useSimplifiedSearch();
+  
+  // Only show filteredProperties when search has been triggered
+  const filteredProperties = useMemo(() => {
+    return searchTriggered ? allFilteredProperties : [];
+  }, [searchTriggered, allFilteredProperties]);
 
   // Debounce the location input for better performance
   const debouncedLocation = useDebounce(filters.location, 300);
@@ -171,6 +195,32 @@ const PropertySearch = () => {
   const totalProperties = filteredProperties.length;
 
   // No client-side page reset needed
+
+  // Lock search input on initial load and when locations are updated
+  useEffect(() => {
+    // Lock the search field whenever we have locations or a query has been performed
+    if (filters.locations.length > 0 || window.location.search.includes('loc=')) {
+      setIsSearchLocked(true);
+    }
+    
+    // Initialize tempLocationText with current location value
+    setTempLocationText(filters.location);
+  }, [filters.locations, filters.location]);
+  
+  // Check if we should show results on initial load
+  useEffect(() => {
+    // If we have search params in the URL, we should trigger search on initial load
+    if (window.location.search.length > 0) {
+      triggerSearch();
+    }
+  }, [triggerSearch]);
+  
+  // Lock the search field after a search is performed
+  useEffect(() => {
+    if (filters.trigger === 'search') {
+      setIsSearchLocked(true);
+    }
+  }, [filters.trigger]);
 
   // Keep input focused after adding locations
   // Redirect from legacy tabs when they're hidden
@@ -844,12 +894,20 @@ const PropertySearch = () => {
           // Normalize the location for better search matching
           const normalizedLocation = normalizeLocation(locationValue);
           
-          // Update the location directly
+          // Update the location directly but DO NOT trigger search yet
           console.log('✅ Google Places - Setting location:', normalizedLocation);
           updateFilter('location', normalizedLocation);
           
-          // Trigger search with the new location
-          setTimeout(() => updateFilter('trigger', 'search'), 0);
+          // Update tempLocationText to match the selected location
+          setTempLocationText(normalizedLocation);
+          
+          // Lock the search field to indicate selection is complete
+          setIsSearchLocked(true);
+          
+          // Reset search triggered flag to hide results until search button is clicked
+          resetTrigger();
+          
+          // DO NOT trigger search automatically - wait for explicit search button click
         }
       });
     };
@@ -880,22 +938,29 @@ const PropertySearch = () => {
         <div className="container mx-auto px-4 py-4">
           {/* Top Row: Tabs and Location Search */}
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center pt-4">
-            {/* Search Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
-              <TabsList className="grid w-full lg:w-auto grid-cols-4 bg-gray-100" role="tablist" aria-label="Property listing type">
-                <TabsTrigger value="buy" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'buy'}>Buy</TabsTrigger>
-                <TabsTrigger value="rent" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'rent'}>Rent</TabsTrigger>
+            {/* Search Tabs - Styled to match screenshot */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-64">
+              <TabsList className="grid w-full grid-cols-2 bg-white border border-gray-200 rounded-full overflow-hidden h-12 p-0.5" role="tablist" aria-label="Property listing type">
+                <TabsTrigger 
+                  value="buy" 
+                  className="data-[state=active]:bg-brand-red data-[state=active]:text-white rounded-full text-base font-medium h-full" 
+                  role="tab" 
+                  aria-selected={activeTab === 'buy'}
+                >
+                  Buy
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="rent" 
+                  className="data-[state=active]:bg-brand-red data-[state=active]:text-white rounded-full text-base font-medium h-full" 
+                  role="tab" 
+                  aria-selected={activeTab === 'rent'}
+                >
+                  Rent
+                </TabsTrigger>
                 {SHOW_LEGACY_COMMERCIAL_LAND_TABS && (
                   <>
-                    <TabsTrigger value="commercial" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
-                    <TabsTrigger value="land" className="text-xs lg:text-sm" role="tab" aria-selected={activeTab === 'land'}>Land/Plot</TabsTrigger>
-                  </>
-                )}
-                {!SHOW_LEGACY_COMMERCIAL_LAND_TABS && (
-                  <>
-                    {/* Empty triggers to maintain the grid layout */}
-                    <div className="hidden lg:block"></div>
-                    <div className="hidden lg:block"></div>
+                    <TabsTrigger value="commercial" className="hidden" role="tab" aria-selected={activeTab === 'commercial'}>Commercial</TabsTrigger>
+                    <TabsTrigger value="land" className="hidden" role="tab" aria-selected={activeTab === 'land'}>Land/Plot</TabsTrigger>
                   </>
                 )}
               </TabsList>
@@ -905,8 +970,15 @@ const PropertySearch = () => {
             <div className="flex-1 w-full">
               {/* Multi-Location Search Bar */}
               <div 
-                className="flex items-center gap-2 px-4 py-2.5 min-h-[52px] border border-brand-red/40 rounded-full bg-white shadow-sm focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 transition"
+                className={`flex items-center gap-2 px-4 py-2.5 min-h-[48px] border border-gray-200 rounded-full bg-white shadow-sm transition relative
+                  ${isSearchLocked 
+                    ? 'search-container-locked cursor-pointer' 
+                    : 'search-container-unlocked search-unlock-animation focus-within:ring-2 focus-within:ring-brand-red/30'}`}
                 onClick={() => {
+                  // Unlock the search field when clicked
+                  setIsSearchLocked(false);
+                  // Initialize tempLocationText with current location
+                  setTempLocationText(filters.location);
                   if (locationInputRef.current && filters.locations.length < 3) {
                     locationInputRef.current.focus();
                   }
@@ -935,43 +1007,100 @@ const PropertySearch = () => {
                   ))}
                 </div>
                 
+                {/* Lock/Unlock indicator removed */}
+                
                 {/* Input Field */}
                 <input
                   ref={locationInputRef}
-                  value={filters.location}
+                  value={isSearchLocked ? filters.location : tempLocationText}
                   onChange={e => {
-                    const normalizedLocation = normalizeLocation(e.target.value);
-                    updateFilter('location', normalizedLocation);
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && filters.location.trim()) {
-                      e.preventDefault();
-                      updateFilter('trigger', 'search');
+                    // Only allow typing when search is unlocked
+                    if (!isSearchLocked) {
+                      // Update the temporary text without triggering search
+                      setTempLocationText(e.target.value);
                     }
                   }}
-                  onFocus={e => e.target.select()}
-                  placeholder="Search locality..."
-                  className="flex-1 min-w-[120px] outline-none bg-transparent text-sm placeholder:text-muted-foreground"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && tempLocationText.trim()) {
+                      e.preventDefault();
+                      // Only update filter but DON'T trigger search yet - wait for explicit search button click
+                      const normalizedLocation = normalizeLocation(tempLocationText);
+                      updateFilter('location', normalizedLocation);
+                      // Lock the search field after text is confirmed
+                      setIsSearchLocked(true);
+                      // Reset search triggered flag to hide results until search button is clicked
+                      resetTrigger();
+                    }
+                  }}
+                  onFocus={e => {
+                    if (!isSearchLocked) {
+                      e.target.select();
+                    }
+                  }}
+                  readOnly={isSearchLocked}
+                  placeholder={isSearchLocked ? "Search locality..." : "Search locality..."}
+                  className={`flex-1 min-w-[120px] outline-none text-sm placeholder:text-gray-500
+                    ${isSearchLocked ? 'cursor-pointer search-input-locked' : 
+                     (tempLocationText !== filters.location ? 'bg-rose-50 text-rose-800 font-medium' : 'bg-transparent')}`}
                 />
                 
                 {/* Search Icon Button */}
                 <button
                   type="button"
-                  className="flex items-center justify-center h-8 w-8 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40 transition-colors shrink-0"
-                  aria-label="Add location"
+                  className={`flex items-center justify-center h-10 transition-all ${!isSearchLocked && tempLocationText !== filters.location 
+                    ? "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded" 
+                    : "w-auto px-5 rounded-full text-white bg-brand-red hover:bg-brand-red-dark"} 
+                    focus:outline-none focus:ring-2 focus:ring-brand-red/40 shrink-0`}
+                  aria-label={isSearchLocked ? "Search" : "Add location"}
                   onClick={(e) => {
                     e.stopPropagation();
-                    const typed = (filters.location || '').trim();
-                    if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
-                      updateFilter('locations', [...filters.locations, typed]);
-                      updateFilter('location', '');
-                      setTimeout(() => {
-                        locationInputRef.current?.focus();
-                      }, 0);
+                    
+                    // Always trigger search when the search button is clicked
+                    if (isSearchLocked) {
+                      // If locked, just trigger search with existing parameters
+                      updateFilter('trigger', 'search');
+                      // Set search as triggered to show results
+                      triggerSearch();
+                    } else {
+                      // Otherwise add the location if valid
+                      const typed = tempLocationText.trim();
+                      if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
+                        // First update the real location with our temporary text
+                        const normalizedLocation = normalizeLocation(typed);
+                        updateFilter('location', normalizedLocation);
+                        updateFilter('locations', [...filters.locations, normalizedLocation]);
+                        setTempLocationText('');
+                        // Lock the search field after adding location
+                        setIsSearchLocked(true);
+                        
+                        // Now trigger search explicitly
+                        updateFilter('trigger', 'search');
+                        // Set search as triggered to show results
+                        triggerSearch();
+                        
+                        setTimeout(() => {
+                          locationInputRef.current?.focus();
+                        }, 0);
+                      } else if (typed) {
+                        // If there's a typed location, update the real location and perform search
+                        const normalizedLocation = normalizeLocation(typed);
+                        updateFilter('location', normalizedLocation);
+                        
+                        // Now trigger search explicitly
+                        updateFilter('trigger', 'search');
+                        // Set search as triggered to show results
+                        triggerSearch();
+                        
+                        // Lock the search field after search
+                        setIsSearchLocked(true);
+                      }
                     }
                   }}
                 >
                   <SearchIcon className="h-4 w-4" />
+                  {!isSearchLocked && tempLocationText !== filters.location && (
+                    <span className="ml-1 text-sm font-medium">Search</span>
+                  )}
                 </button>
                 
                 {/* Clear All Locations Button */}
@@ -983,6 +1112,13 @@ const PropertySearch = () => {
                       updateFilter('locations', []);
                       updateFilter('location', '');
                       updateFilter('selectedCity', '');
+                      setTempLocationText('');
+                      // Unlock the search field when clearing all locations
+                      setIsSearchLocked(false);
+                      // Trigger search with empty location
+                      updateFilter('trigger', 'search');
+                      // Set search as triggered to show results
+                      triggerSearch();
                     }}
                     className="flex items-center justify-center h-8 w-8 rounded-full hover:bg-gray-100 transition-colors shrink-0"
                     aria-label="Clear all locations"
@@ -1321,10 +1457,31 @@ const PropertySearch = () => {
               </div>
             </>}
 
-            {/* Properties Grid/List - Real-time results */}
-            {isLoading && filteredProperties.length === 0 ? <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+            {/* Properties Grid/List - Results only shown after search is triggered */}
+            {!searchTriggered ? (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">Ready to find properties?</h3>
+                <p className="text-gray-500 mb-4">
+                  Select your search criteria and click the search button to see results
+                </p>
+                <Button 
+                  onClick={() => {
+                    updateFilter('trigger', 'search');
+                    triggerSearch();
+                  }}
+                  className="bg-brand-red hover:bg-brand-red-dark"
+                >
+                  <SearchIcon className="h-4 w-4 mr-2" />
+                  Search Now
+                </Button>
+              </div>
+            ) : isLoading && filteredProperties.length === 0 ? (
+              <div className="grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="bg-gray-100 animate-pulse rounded-lg h-80"></div>)}
-              </div> : filteredProperties.length > 0 ? <>
+              </div>
+            ) : filteredProperties.length > 0 ? (
+              <>
                 <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
                   {filteredProperties.map(property => (
                     <PropertyCard
@@ -1365,7 +1522,9 @@ const PropertySearch = () => {
                     </Button>
                   </div>
                 )}
-              </> : <div className="text-center py-16">
+              </>
+            ) : (
+              <div className="text-center py-16">
                 <div className="text-6xl mb-4">🏠</div>
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">No properties found</h3>
                 <p className="text-gray-500 mb-4">
@@ -1374,7 +1533,8 @@ const PropertySearch = () => {
                 <Button onClick={clearAllFilters} variant="outline">
                   Clear All Filters
                 </Button>
-              </div>}
+              </div>
+            )}
 
             {/* Removed client-side pagination */}
           </div>
