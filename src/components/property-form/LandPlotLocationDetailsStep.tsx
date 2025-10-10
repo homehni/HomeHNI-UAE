@@ -189,14 +189,17 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
       attach(localityInputRef.current, (place, el) => {
         const value = place?.formatted_address || place?.name || '';
         
-        // Parse address components
+        // Parse address components to extract city, state and pincode
+        let cityName = '';
         let state = '';
         let pincode = '';
         
         if (place?.address_components) {
           place.address_components.forEach((component: any) => {
             const types = component.types;
-            if (types.includes('administrative_area_level_1')) {
+            if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+              cityName = component.long_name;
+            } else if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
@@ -211,7 +214,14 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
           form.setValue('locality', value, { shouldValidate: true });
         }
         
-        // Update other fields
+        // Update other fields including city
+        if (cityName) {
+          form.setValue('city', cityName, { shouldValidate: true });
+          if (cityInputRef.current) {
+            cityInputRef.current.value = cityName;
+          }
+          setSelectedCity(cityName);
+        }
         if (state) form.setValue('state', state, { shouldValidate: true });
         if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         

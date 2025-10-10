@@ -168,21 +168,30 @@ export const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
         form.setValue('locality', value, { shouldValidate: true });
       }
       
-      // Parse address components to extract state and pincode
+      // Parse address components to extract city, state and pincode
       if (place?.address_components) {
+        let cityName = '';
         let state = '';
         let pincode = '';
         
         place.address_components.forEach((component: any) => {
           const types = component.types;
-          if (types.includes('administrative_area_level_1')) {
+          if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+            cityName = component.long_name;
+          } else if (types.includes('administrative_area_level_1')) {
             state = component.long_name;
           } else if (types.includes('postal_code')) {
             pincode = component.long_name;
           }
         });
         
-        // Update the form fields
+        // Update the form fields including city
+        if (cityName) {
+          form.setValue('city', cityName, { shouldValidate: true });
+          if (cityInputRef.current) {
+            cityInputRef.current.value = cityName;
+          }
+        }
         if (state) form.setValue('state', state, { shouldValidate: true });
         if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
       }
