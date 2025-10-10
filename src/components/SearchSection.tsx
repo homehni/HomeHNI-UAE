@@ -89,13 +89,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
 
-  // Close dropdown when clicking outside (desktop + mobile overlay)
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as Node;
-      const insideDesktop = dropdownRef.current?.contains(target);
-      const insideMobile = mobileSearchContainerRef.current?.contains(target);
-      if (!insideDesktop && !insideMobile) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
       }
     };
@@ -107,12 +104,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     };
 
     if (openDropdown) {
-      document.addEventListener('mousedown', handlePointerDown);
-      document.addEventListener('touchstart', handlePointerDown, { passive: true } as any);
+      document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleKeyDown);
       return () => {
-        document.removeEventListener('mousedown', handlePointerDown);
-        document.removeEventListener('touchstart', handlePointerDown as any);
+        document.removeEventListener('mousedown', handleClickOutside);
         document.removeEventListener('keydown', handleKeyDown);
       };
     }
@@ -758,7 +753,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
         {/* Mobile Full-screen Search Overlay */}
         {isMobileOverlayOpen && (
-          <div ref={mobileSearchContainerRef} className="sm:hidden fixed inset-0 z-[60] bg-white flex flex-col">
+          <div className="sm:hidden fixed inset-0 z-[60] bg-white flex flex-col">
             {/* Header with tabs and close */}
             <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b">
               <div className="flex bg-gray-100 rounded-full overflow-hidden">
@@ -1097,7 +1092,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         )}
     {/* Desktop Search Section */}
-  <div className="hidden sm:block absolute left-0 right-0 bottom-8 z-50 transform-gpu will-change-transform">
+  <div className="hidden sm:block absolute bottom-0 left-0 right-0 transform translate-y-1/2 z-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               {/* Navigation Tabs */}
@@ -1109,7 +1104,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl min-h-[160px]">
+                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl min-h-[140px]">
                     {/* Search Bar - Compact responsive design */}
                     <div className="relative flex items-center mb-4">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
@@ -1162,19 +1157,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     </div>
 
                     {/* Compact Responsive Filter Dropdowns */}
-                    <div
-                      ref={dropdownRef}
-                      className="flex items-center justify-center gap-2 sm:gap-3 h-11 sm:flex-nowrap overflow-x-hidden"
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onTouchStart={(e) => e.stopPropagation()}
-                    >
+                    <div ref={dropdownRef} className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 min-h-[40px]">
                       {/* Property type: Property Type or Land/Space Type */}
                       <div className="relative">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
                           <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
@@ -1208,7 +1198,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
                           <span className="text-sm font-medium">Bedroom</span>
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
@@ -1244,7 +1234,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               variant="outline"
                               size="sm"
                               onClick={() => setOpenDropdown(openDropdown === 'availability' ? null : 'availability')}
-                              className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                             >
                               <span className="text-sm font-medium">Availability</span>
                               <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
@@ -1276,7 +1266,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               variant="outline"
                               size="sm"
                               onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                              className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                             >
                               <span className="text-sm font-medium">Property Status</span>
                               <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
@@ -1311,7 +1301,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'furnishing' ? null : 'furnishing')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
                           <span className="text-sm font-medium">Furnishing</span>
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
@@ -1344,7 +1334,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           variant="outline"
                           size="sm"
                           onClick={() => setOpenDropdown(openDropdown === 'budget' ? null : 'budget')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                         >
                           <span className="text-sm font-medium">Budget</span>
                           <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
@@ -1360,22 +1350,24 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         )}
                       </div>
 
-                      {/* Enhanced Clear Button - always render to reserve space */}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${((selectedPropertyTypes.length || selectedBedrooms.length || selectedConstructionStatus.length || selectedFurnishing.length || selectedAvailability.length) > 0) ? '' : 'invisible pointer-events-none'}`}
-                        onClick={() => {
-                          setSelectedPropertyTypes([]);
-                          setSelectedBedrooms([]);
-                          setSelectedConstructionStatus([]);
-                          setSelectedFurnishing([]);
-                          setSelectedAvailability([]);
-                          setBudget([0, getBudgetSliderMaxHome(activeTab)]);
-                        }}
-                      >
-                        Clear Filters
-                      </Button>
+                      {/* Enhanced Clear Button */}
+                      {(selectedPropertyTypes.length || selectedBedrooms.length || selectedConstructionStatus.length || selectedFurnishing.length || selectedAvailability.length) > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium transition-all duration-200"
+                          onClick={() => {
+                            setSelectedPropertyTypes([]);
+                            setSelectedBedrooms([]);
+                            setSelectedConstructionStatus([]);
+                            setSelectedFurnishing([]);
+                            setSelectedAvailability([]);
+                            setBudget([0, getBudgetSliderMaxHome(activeTab)]);
+                          }}
+                        >
+                          Clear Filters
+                        </Button>
+                      )}
                     </div>
                   </TabsContent>
                 </Tabs>
