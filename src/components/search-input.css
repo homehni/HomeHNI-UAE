@@ -31,3 +31,12 @@ input[type="search"].hide-clear-button {
   -webkit-appearance: none !important;
   appearance: none !important;
 }
+
+/* Hide scrollbar while allowing scroll (cross-browser) */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
