@@ -1108,7 +1108,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl overflow-hidden">
+                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl">
                     {/* Search Bar - Compact responsive design */}
                     <div className="relative flex items-center mb-4">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
@@ -1162,7 +1162,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                     {/* Compact Responsive Filter Dropdowns */}
                     <div
-                      className="flex items-center justify-start gap-2 sm:gap-3 h-11 sm:flex-nowrap overflow-x-hidden px-4 sm:px-6 py-4"
+                      className="flex items-center justify-center gap-2 sm:gap-3 sm:flex-nowrap overflow-visible px-4 sm:px-6 py-4"
                     >
                       {/* Property type: Property Type or Land/Space Type */}
                       <Popover open={openDropdown === 'propertyType'} onOpenChange={(open) => setOpenDropdown(open ? 'propertyType' : null)}>
