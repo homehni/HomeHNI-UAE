@@ -1270,10 +1270,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                      className={`w-full flex items-center justify-between gap-1.5 px-3 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                     >
-                                      <span className="text-sm font-medium">Property Status</span>
-                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
+                                      <span className="text-sm font-medium truncate">Property Status</span>
+                                      <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[250px] sm:w-[280px] p-4">
