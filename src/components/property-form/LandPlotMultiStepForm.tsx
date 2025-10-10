@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLandPlotPropertyForm } from '@/hooks/useLandPlotPropertyForm';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { LandPlotPropertyDetailsStep } from './LandPlotPropertyDetailsStep';
 import { LandPlotLocationDetailsStep } from './LandPlotLocationDetailsStep';
 import { LandPlotSaleDetailsStep } from './LandPlotSaleDetailsStep';
@@ -38,6 +39,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const currentFormId = isMobile ? 'landplot-step-form-m' : 'landplot-step-form-d';
   
   console.log('LandPlotMultiStepForm rendering with props:', {
     isSubmitting,
@@ -263,6 +266,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
                   onBack={prevStep}
                   currentStep={2}
                   totalSteps={7}
+                  formId={`${currentFormId}-m`}
                 />
               )}
 

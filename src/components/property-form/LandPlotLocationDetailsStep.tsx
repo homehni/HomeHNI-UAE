@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -26,6 +26,7 @@ interface LandPlotLocationDetailsStepProps {
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
+  formId?: string;
 }
 
 export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepProps> = ({
@@ -33,7 +34,8 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   onNext,
   onBack,
   currentStep,
-  totalSteps
+  totalSteps,
+  formId
 }) => {
   const cityInputRef = useRef<HTMLInputElement | null>(null);
   const localityInputRef = useRef<HTMLInputElement | null>(null);
@@ -42,9 +44,6 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
   const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
-  const [selectedCity, setSelectedCity] = useState(initialData.city || '');
-  // When we set city due to locality selection, avoid clearing locality in the watcher
-  const isLocalitySettingCityRef = useRef(false);
 
   const form = useForm<LandPlotLocationData>({
     resolver: zodResolver(landPlotLocationSchema),
@@ -60,48 +59,27 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
 
   // Update form values when initialData changes
   useEffect(() => {
-    if (initialData.city) {
-      form.setValue('city', initialData.city);
-      setSelectedCity(initialData.city);
-    }
     if (initialData.locality) {
       form.setValue('locality', initialData.locality);
     }
     if (initialData.landmark) {
       form.setValue('landmark', initialData.landmark);
     }
+    if (initialData.city) {
+      form.setValue('city', initialData.city);
+    }
+    if (initialData.state) {
+      form.setValue('state', initialData.state);
+    }
+    if (initialData.pincode) {
+      form.setValue('pincode', initialData.pincode);
+    }
   }, [initialData, form]);
 
-  // Watch for city changes and clear locality
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === 'city' && value.city !== selectedCity) {
-        // If the city change was triggered by locality selection, don't clear locality
-        if (isLocalitySettingCityRef.current) {
-          setSelectedCity(value.city || '');
-          setLocationMismatchWarning('');
-          isLocalitySettingCityRef.current = false;
-        } else {
-          form.setValue('locality', '');
-          form.setValue('state', '');
-          form.setValue('pincode', '');
-          setSelectedCity(value.city || '');
-          setLocationMismatchWarning('');
-          setShowMap(false);
-          if (localityInputRef.current) {
-            localityInputRef.current.value = '';
-          }
-        }
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form, selectedCity]);
-
-  // Google Maps Places Autocomplete and Map preview
-  useEffect(() => {
+  // Google Maps utility functions
+  const loadGoogleMaps = useCallback(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
-
-    const loadGoogleMaps = () => new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if ((window as any).google?.maps?.places) {
         resolve();
         return;
@@ -120,160 +98,164 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
       script.onerror = () => reject(new Error('Google Maps failed to load'));
       document.head.appendChild(script);
     });
+  }, []);
 
-    const getComponent = (components: any[], type: string) =>
-      components.find((c) => c.types?.includes(type))?.long_name as string | undefined;
-
-    const setMapTo = (lat: number, lng: number, title?: string) => {
-      const google = (window as any).google;
-      if (!google || !mapContainerRef.current) return;
-      if (!mapRef.current) {
-        mapRef.current = new google.maps.Map(mapContainerRef.current, {
-          center: { lat, lng },
-          zoom: 15,
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: false,
+  const setMapTo = useCallback((lat: number, lng: number, title?: string) => {
+    const google = (window as any).google;
+    if (!google || !mapContainerRef.current) return;
+    if (!mapRef.current) {
+      mapRef.current = new google.maps.Map(mapContainerRef.current, {
+        center: {
+          lat,
+          lng
+        },
+        zoom: 15,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false
+      });
+      markerRef.current = new google.maps.Marker({
+        position: {
+          lat,
+          lng
+        },
+        map: mapRef.current,
+        title: title || 'Selected location'
+      });
+    } else {
+      mapRef.current.setCenter({
+        lat,
+        lng
+      });
+      if (markerRef.current) {
+        markerRef.current.setPosition({
+          lat,
+          lng
         });
-        markerRef.current = new google.maps.Marker({
-          position: { lat, lng },
-          map: mapRef.current,
-          title: title || 'Selected location',
-        });
+        if (title) markerRef.current.setTitle(title);
       } else {
-        mapRef.current.setCenter({ lat, lng });
-        if (markerRef.current) {
-          markerRef.current.setPosition({ lat, lng });
-          if (title) markerRef.current.setTitle(title);
-        } else {
-          markerRef.current = new google.maps.Marker({ position: { lat, lng }, map: mapRef.current, title });
-        }
+        markerRef.current = new google.maps.Marker({
+          position: {
+            lat,
+            lng
+          },
+          map: mapRef.current,
+          title
+        });
       }
-      setShowMap(true);
+    }
+    setShowMap(true);
+  }, []);
+  
+  const initAutocomplete = useCallback(() => {
+    const google = (window as any).google;
+    if (!google?.maps?.places) return;
+    const options = {
+      fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+      types: ['geocode'],
+      componentRestrictions: {
+        country: 'in' as const
+      }
     };
-
-    const initAutocomplete = () => {
-      const google = (window as any).google;
-      if (!google?.maps?.places) return;
-
-      const options = {
-        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
-        types: ['geocode'],
+    const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
+      if (!el) return;
+      const ac = new google.maps.places.Autocomplete(el, options);
+      ac.addListener('place_changed', () => {
+        const place = ac.getPlace();
+        onPlace(place, el);
+      });
+    };
+    // Attach autocomplete to city field
+    if (cityInputRef.current) {
+      const cityOptions = {
+        fields: ['address_components', 'name'],
+        types: ['(cities)'],
         componentRestrictions: { country: 'in' as const }
       };
-
-      const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
-        if (!el) return;
-        const ac = new google.maps.places.Autocomplete(el, options);
-        ac.addListener('place_changed', () => {
-          const place = ac.getPlace();
-          onPlace(place, el);
-        });
-      };
-
-      // Attach autocomplete to city field
-      if (cityInputRef.current) {
-        const cityOptions = {
-          fields: ['address_components', 'name'],
-          types: ['(cities)'],
-          componentRestrictions: { country: 'in' as const }
-        };
-        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
-        cityAc.addListener('place_changed', () => {
-          const place = cityAc.getPlace();
-          if (place?.address_components) {
-            let cityName = '';
-            place.address_components.forEach((component: any) => {
-              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
-                cityName = component.long_name;
-              }
-            });
-            if (cityName && cityInputRef.current) {
-              cityInputRef.current.value = cityName;
-              form.setValue('city', cityName, { shouldValidate: true });
-            }
-          }
-        });
-      }
-
-      attach(localityInputRef.current, (place, el) => {
-        const value = place?.formatted_address || place?.name || '';
-        
-        // Parse address components
-        let state = '';
-        let pincode = '';
-        let derivedCity = '';
-        
+      const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
+      cityAc.addListener('place_changed', () => {
+        const place = cityAc.getPlace();
         if (place?.address_components) {
+          let cityName = '';
           place.address_components.forEach((component: any) => {
-            const types = component.types;
-            if (types.includes('administrative_area_level_1')) {
-              state = component.long_name;
-            } else if (types.includes('postal_code')) {
-              pincode = component.long_name;
-            } else if (types.includes('locality') || types.includes('postal_town')) {
-              // Preferred city types
-              derivedCity = component.long_name;
-            } else if (
-              types.includes('administrative_area_level_2') ||
-              types.includes('administrative_area_level_3')
-            ) {
-              // Fallbacks often used as city/district in India
-              if (!derivedCity) derivedCity = component.long_name;
+            if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+              cityName = component.long_name;
             }
           });
-        }
-
-        // Final fallback: derive from formatted address if we found state and a comma-separated list
-        if (!derivedCity && value) {
-          const parts = value.split(',').map((s: string) => s.trim());
-          if (parts.length >= 2) {
-            if (state) {
-              const stateIndex = parts.findIndex((p) => p.toLowerCase() === state.toLowerCase());
-              if (stateIndex > 0) {
-                derivedCity = parts[stateIndex - 1];
-              }
-            }
-            if (!derivedCity && parts.length >= 2) {
-              // Heuristic: second token is usually the city
-              derivedCity = parts[1];
-            }
+          if (cityName && cityInputRef.current) {
+            cityInputRef.current.value = cityName;
+            form.setValue('city', cityName, { shouldValidate: true });
           }
         }
-
-        setLocationMismatchWarning('');
-        
-        if (value) {
-          el.value = value;
-          form.setValue('locality', value, { shouldValidate: true });
-        }
-        
-        // Update other fields
-        if (state) form.setValue('state', state, { shouldValidate: true });
-        if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
-        if (derivedCity) {
-          // Fill city automatically without clearing locality
-          isLocalitySettingCityRef.current = true;
-          if (cityInputRef.current) {
-            cityInputRef.current.value = derivedCity;
-            // Fire an input event to notify any uncontrolled consumers
-            cityInputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
-          }
-          form.setValue('city', derivedCity, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
-          setSelectedCity(derivedCity);
-          // Clear any existing error and trigger validation to update UI
-          form.clearErrors('city');
-          form.trigger('city');
-        }
-        
-        const loc = place?.geometry?.location;
-        if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
       });
+    }
 
-    };
+    attach(localityInputRef.current, (place, el) => {
+      const value = place?.formatted_address || place?.name || '';
+      if (value) {
+        el.value = value;
+        form.setValue('locality', value, {
+          shouldValidate: true
+        });
+      }
+      // Parse address components to extract state and pincode
+      if (place?.address_components) {
+        let state = '';
+        let pincode = '';
+        place.address_components.forEach((component: any) => {
+          const types = component.types;
+          if (types.includes('administrative_area_level_1')) {
+            state = component.long_name;
+          } else if (types.includes('postal_code')) {
+            pincode = component.long_name;
+          }
+        });
+        // Update the form fields
+        if (state) form.setValue('state', state, {
+          shouldValidate: true
+        });
+        if (pincode) form.setValue('pincode', pincode, {
+          shouldValidate: true
+        });
+      }
+      const loc = place?.geometry?.location;
+      if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
+    });
+  }, [form, setMapTo]);
 
-    loadGoogleMaps().then(initAutocomplete).catch(console.error);
-  }, [form]);
+  // Watch for city changes and reinitialize autocomplete
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'city') {
+        setLocationMismatchWarning('');
+        // Clear locality when city changes
+        form.setValue('locality', '', {
+          shouldValidate: false
+        });
+        if (localityInputRef.current) {
+          localityInputRef.current.value = '';
+        }
+        // Reinitialize autocomplete when city changes
+        const reinitialize = async () => {
+          try {
+            await loadGoogleMaps();
+            initAutocomplete();
+          } catch (error) {
+            console.error('Failed to reinitialize autocomplete:', error);
+          }
+        };
+        setTimeout(reinitialize, 100);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, initAutocomplete, loadGoogleMaps]);
+
+  // Google Maps Places Autocomplete and Map preview
+  useEffect(() => {
+    loadGoogleMaps().then(() => {
+      initAutocomplete();
+    }).catch(console.error);
+  }, [initAutocomplete, loadGoogleMaps]);
 
   const onSubmit = (data: LandPlotLocationData) => {
     // Convert to LocationDetails format and include parsed city, state, pincode
@@ -289,95 +271,92 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   };
 
   return (
-    <div className="bg-background p-6">
-      <div className="text-left mb-8 pt-4 md:pt-0">
-        <h2 className="text-2xl font-semibold text-red-600 mb-2">Location Details</h2>
-      </div>
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <h1 className="text-2xl mb-6 font-semibold text-red-600">Location Details</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* City Field and Landmark */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="city"
+        <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* City Selection */}
+          <FormField 
+            control={form.control} 
+            name="city" 
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  City (Optional)
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input 
+                      placeholder="Search 'Bangalore', 'Mumbai', etc..." 
+                      className="h-12 pl-10" 
+                      {...field} 
+                      ref={el => {
+                        field.ref(el);
+                        cityInputRef.current = el;
+                      }} 
+                    />
+                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} 
+          />
+
+          {/* Locality/Area and Landmark */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField 
+              control={form.control} 
+              name="locality" 
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  <FormLabel className="text-sm font-medium flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-primary" />
-                    City (Optional)
+                    Locality/Area *
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input 
-                        placeholder="Search 'Mumbai', 'Bangalore', etc..." 
+                        placeholder="Search 'Bellandur, Bengaluru, Karnataka'..." 
                         className="h-12 pl-10" 
                         {...field} 
                         ref={el => {
                           field.ref(el);
-                          cityInputRef.current = el;
+                          localityInputRef.current = el;
                         }} 
                       />
                       <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     </div>
                   </FormControl>
                   <FormMessage />
+                  {locationMismatchWarning && (
+                    <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="w-6 h-6 bg-red-100 rounded flex items-center justify-center flex-shrink-0">
+                        <span className="text-red-600 text-sm font-bold">✕</span>
+                      </div>
+                      <p className="text-sm text-red-600">{locationMismatchWarning}</p>
+                    </div>
+                  )}
                 </FormItem>
-              )}
+              )} 
             />
 
-            <FormField
-              control={form.control}
-              name="landmark"
+            <FormField 
+              control={form.control} 
+              name="landmark" 
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Landmark (Optional)</FormLabel>
+                  <FormLabel className="text-sm font-medium">Landmark (Optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="e.g., Near Metro Station"
-                      className="h-12"
-                      {...field}
-                    />
+                    <Input placeholder="e.g., Near Metro Station" className="h-12" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              )}
+              )} 
             />
           </div>
-
-          {/* Locality/Area */}
-          <FormField
-            control={form.control}
-            name="locality"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">Locality/Area *</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      placeholder="Search 'Bellandur, Bengaluru, Karnataka'..."
-                      className="h-12 pl-10"
-                      {...field}
-                      ref={(el) => {
-                        field.ref(el)
-                        localityInputRef.current = el
-                      }}
-                    />
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  </div>
-                </FormControl>
-                {locationMismatchWarning && (
-                  <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mt-2">
-                    <X className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-red-600">
-                      Please select another locality in {locationMismatchWarning}
-                    </p>
-                  </div>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           {showMap && (
             <div className="w-full h-64 md:h-80 rounded-lg border overflow-hidden">
@@ -385,7 +364,17 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             </div>
           )}
 
-          {/* Navigation Buttons - Removed, using sticky buttons instead */}
+          {/* Navigation Buttons */}
+          <div className="flex justify-between pt-4 md:pt-6" style={{ visibility: 'hidden' }}>
+            <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <Button type="submit" className="h-10 px-4 md:h-12 md:px-8">
+              Save & Continue
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
