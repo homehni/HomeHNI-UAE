@@ -1119,8 +1119,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           }
                         }}
                       >
-                        {/* Search row with red border */}
-                        <div className="relative px-4 pt-3 pb-2 pl-12 pr-14 w-full border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60 overflow-visible">
+                      {/* Search row with red border and button */}
+                        <div className="flex items-center gap-2">
+                        <div className="relative px-4 pt-3 pb-2 pl-12 pr-4 flex-1 border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60 overflow-visible">
                         {/* Location Row */}
                         <div className="relative flex items-center">
                           <MapPin className="absolute left-0 -ml-8 text-brand-red pointer-events-none flex-shrink-0" size={18} />
@@ -1146,18 +1147,19 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               </button>
                             )}
                           </div>
-
-                          {/* Compact Search Button */}
-                          <button
-                            type="button"
-                            className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 absolute right-2 top-1/2 -translate-y-1/2 transition-all duration-200 shadow-md hover:shadow-lg"
-                            aria-label="Search"
-                            onClick={handleSearch}
-                            disabled={!(searchQuery.trim().length > 0 || selectedLocations.length > 0)}
-                          >
-                            <SearchIcon className="h-4 w-4" />
-                          </button>
                         </div>
+                        </div>
+
+                        {/* Compact Search Button */}
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                          aria-label="Search"
+                          onClick={handleSearch}
+                          disabled={!(searchQuery.trim().length > 0 || selectedLocations.length > 0)}
+                        >
+                          <SearchIcon className="h-4 w-4" />
+                        </button>
                         </div>
 
                         {/* Filter row outside red border */}
