@@ -214,6 +214,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
         // Set locality value from the place
         const localityValue = place?.formatted_address || place?.name || '';
         if (localityValue) {
+          el.value = localityValue;
           form.setValue('locality', localityValue, { shouldValidate: true });
         }
         
