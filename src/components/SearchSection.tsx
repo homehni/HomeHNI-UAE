@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
@@ -84,18 +85,18 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileAcInitRef = useRef(false);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
 
-  // Close dropdown when clicking outside (desktop + mobile overlay)
+  // Close dropdown when clicking outside (mobile overlay only) or pressing Escape
   useEffect(() => {
+    if (!isMobileOverlayOpen) return;
+    
     const handlePointerDown = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node;
-      const insideDesktop = dropdownRef.current?.contains(target);
       const insideMobile = mobileSearchContainerRef.current?.contains(target);
-      if (!insideDesktop && !insideMobile) {
+      if (!insideMobile) {
         setOpenDropdown(null);
       }
     };
@@ -106,17 +107,15 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       }
     };
 
-    if (openDropdown) {
-      document.addEventListener('mousedown', handlePointerDown);
-      document.addEventListener('touchstart', handlePointerDown, { passive: true } as any);
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('mousedown', handlePointerDown);
-        document.removeEventListener('touchstart', handlePointerDown as any);
-        document.removeEventListener('keydown', handleKeyDown);
-      };
-    }
-  }, [openDropdown]);
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown, { passive: true } as any);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown as any);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMobileOverlayOpen]);
 
   const addLocation = (location: string) => {
     const trimmed = location.trim();
@@ -1163,202 +1162,253 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                     {/* Compact Responsive Filter Dropdowns */}
                     <div
-                      ref={dropdownRef}
                       className="flex items-center justify-center gap-2 sm:gap-3 h-11 sm:flex-nowrap overflow-x-hidden"
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onTouchStart={(e) => e.stopPropagation()}
                     >
                       {/* Property type: Property Type or Land/Space Type */}
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                        >
-                          <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
-                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
-                        </Button>
-                        {openDropdown === 'propertyType' && (
-                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[300px] sm:max-w-[350px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
-                            <h4 className="text-base font-semibold mb-3 text-foreground">Select Property Type</h4>
-                            <div className="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto">
-                              {getPropertyTypesForHomepage(activeTab).map(type => (
-                                <label key={type} className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors">
-                                  <Checkbox
-                                    checked={selectedPropertyTypes.includes(type)}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) setSelectedPropertyTypes(prev => [...prev, type]);
-                                      else setSelectedPropertyTypes(prev => prev.filter(t => t !== type));
-                                    }}
-                                    className="rounded-md"
-                                  />
-                                  <span className="capitalize font-medium">{type.toLowerCase()}</span>
-                                </label>
-                              ))}
-                            </div>
+                      <Popover open={openDropdown === 'propertyType'} onOpenChange={(open) => setOpenDropdown(open ? 'propertyType' : null)}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          >
+                            <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
+                            <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-[300px] sm:w-[350px] p-4">
+                          <h4 className="text-base font-semibold mb-3 text-foreground">Select Property Type</h4>
+                          <div className="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto">
+                            {getPropertyTypesForHomepage(activeTab).map(type => (
+                              <label key={type} className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors">
+                                <Checkbox
+                                  checked={selectedPropertyTypes.includes(type)}
+                                  onCheckedChange={(checked) => {
+                                    if (checked) setSelectedPropertyTypes(prev => [...prev, type]);
+                                    else setSelectedPropertyTypes(prev => prev.filter(t => t !== type));
+                                  }}
+                                  className="rounded-md"
+                                />
+                                <span className="capitalize font-medium">{type.toLowerCase()}</span>
+                              </label>
+                            ))}
                           </div>
-                        )}
-                      </div>
+                        </PopoverContent>
+                      </Popover>
 
                       {/* Bedroom (only for Buy/Rent) */}
                       {(activeTab === 'buy' || activeTab === 'rent') && (
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                        >
-                          <span className="text-sm font-medium">Bedroom</span>
-                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
-                        </Button>
-                        {openDropdown === 'bedroom' && (activeTab === 'buy' || activeTab === 'rent') && (
-                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[250px] max-w-[300px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
-                            <h4 className="text-base font-semibold mb-3 text-foreground">Number of Bedrooms</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
-                                <Button
-                                  key={bhk}
-                                  variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
-                                  size="sm"
-                                  className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                  onClick={() => {
-                                    setSelectedBedrooms(prev => prev.includes(bhk) ? prev.filter(b => b !== bhk) : [...prev, bhk]);
-                                  }}
-                                >
-                                  {bhk}
-                                </Button>
-                              ))}
-                            </div>
+                      <Popover open={openDropdown === 'bedroom'} onOpenChange={(open) => setOpenDropdown(open ? 'bedroom' : null)}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          >
+                            <span className="text-sm font-medium">Bedroom</span>
+                            <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-[280px] sm:w-[320px] p-4">
+                          <h4 className="text-base font-semibold mb-3 text-foreground">Number of Bedrooms</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
+                              <Button
+                                key={bhk}
+                                variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
+                                size="sm"
+                                className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
+                                onClick={() => {
+                                  setSelectedBedrooms(prev => prev.includes(bhk) ? prev.filter(b => b !== bhk) : [...prev, bhk]);
+                                }}
+                              >
+                                {bhk}
+                              </Button>
+                            ))}
                           </div>
-                        )}
-                      </div>
+                        </PopoverContent>
+                      </Popover>
                       )}
 
                       {/* Availability for RENT; Property Status for others (not for land) */}
                       {activeTab !== 'land' && (
                         activeTab === 'rent' ? (
-                          <div className="relative">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setOpenDropdown(openDropdown === 'availability' ? null : 'availability')}
-                              className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                            >
-                              <span className="text-sm font-medium">Availability</span>
-                              <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
-                            </Button>
-                            {openDropdown === 'availability' && (
-                              <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[250px] max-w-[280px] sm:min-w-[280px] sm:max-w-[320px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
-                                <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                  {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
-                                    <Button
-                                      key={option}
-                                      variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
-                                      size="sm"
-                                      className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                      onClick={() => {
-                                        setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
-                                      }}
-                                    >
-                                      {option}
-                                    </Button>
-                                  ))}
-                                </div>
+                          <Popover open={openDropdown === 'availability'} onOpenChange={(open) => setOpenDropdown(open ? 'availability' : null)}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                              >
+                                <span className="text-sm font-medium">Availability</span>
+                                <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent align="start" className="w-[280px] sm:w-[320px] p-4">
+                              <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
+                                  <Button
+                                    key={option}
+                                    variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
+                                    size="sm"
+                                    className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
+                                    onClick={() => {
+                                      setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
+                                    }}
+                                  >
+                                    {option}
+                                  </Button>
+                                ))}
                               </div>
-                            )}
-                          </div>
+                            </PopoverContent>
+                          </Popover>
                         ) : (
-                          <div className="relative">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                              className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                            >
-                              <span className="text-sm font-medium">Property Status</span>
-                              <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                            </Button>
-                            {openDropdown === 'construction' && (
-                              <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[220px] max-w-[260px] sm:min-w-[250px] sm:max-w-[280px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
-                                <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {['Under Construction', 'Ready'].map(status => (
-                                    <Button
-                                      key={status}
-                                      variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
-                                      size="sm"
-                                      className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                      onClick={() => {
-                                        setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
-                                      }}
-                                    >
-                                      {status}
-                                    </Button>
-                                  ))}
-                                </div>
+                          <Popover open={openDropdown === 'construction'} onOpenChange={(open) => setOpenDropdown(open ? 'construction' : null)}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                              >
+                                <span className="text-sm font-medium">Property Status</span>
+                                <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent align="start" className="w-[250px] sm:w-[280px] p-4">
+                              <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {['Under Construction', 'Ready'].map(status => (
+                                  <Button
+                                    key={status}
+                                    variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
+                                    size="sm"
+                                    className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
+                                    onClick={() => {
+                                      setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
+                                    }}
+                                  >
+                                    {status}
+                                  </Button>
+                                ))}
                               </div>
-                            )}
-                          </div>
+                            </PopoverContent>
+                          </Popover>
                         )
                       )}
 
                       {/* Furnishing */}
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'furnishing' ? null : 'furnishing')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                        >
-                          <span className="text-sm font-medium">Furnishing</span>
-                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
-                        </Button>
-                        {openDropdown === 'furnishing' && (
-                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[200px] max-w-[240px] sm:min-w-[220px] sm:max-w-[260px] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
-                            <h4 className="text-base font-semibold mb-3 text-foreground">Furnishing</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {['Full', 'Semi', 'None'].map(level => (
-                                <Button
-                                  key={level}
-                                  variant={selectedFurnishing.includes(level) ? 'default' : 'outline'}
-                                  size="sm"
-                                  className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                  onClick={() => {
-                                    setSelectedFurnishing(prev => prev.includes(level) ? prev.filter(p => p !== level) : [...prev, level]);
-                                  }}
-                                >
-                                  {level}
-                                </Button>
-                              ))}
-                            </div>
+                      <Popover open={openDropdown === 'furnishing'} onOpenChange={(open) => setOpenDropdown(open ? 'furnishing' : null)}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          >
+                            <span className="text-sm font-medium">Furnishing</span>
+                            <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-[220px] sm:w-[260px] p-4">
+                          <h4 className="text-base font-semibold mb-3 text-foreground">Furnishing</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {['Full', 'Semi', 'None'].map(level => (
+                              <Button
+                                key={level}
+                                variant={selectedFurnishing.includes(level) ? 'default' : 'outline'}
+                                size="sm"
+                                className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
+                                onClick={() => {
+                                  setSelectedFurnishing(prev => prev.includes(level) ? prev.filter(p => p !== level) : [...prev, level]);
+                                }}
+                              >
+                                {level}
+                              </Button>
+                            ))}
                           </div>
-                        )}
-                      </div>
+                        </PopoverContent>
+                      </Popover>
 
                       {/* Budget */}
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'budget' ? null : 'budget')}
-                          className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                        >
-                          <span className="text-sm font-medium">Budget</span>
-                          <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
-                        </Button>
-                        {openDropdown === 'budget' && (
-                          <div className="absolute top-full left-0 mt-2 bg-background border border-gray-200 rounded-xl shadow-2xl p-4 z-[9999] min-w-[300px] sm:min-w-[360px] md:min-w-[480px] max-w-[90vw] animate-in slide-in-from-top-2 duration-200 backdrop-blur-sm">
-                            <h4 className="text-base font-semibold mb-3 text-foreground">Select Price Range</h4>
-                            <div className="text-base text-muted-foreground mb-3 font-medium">
-                              ₹{formatBudget(budget[0])} - ₹{activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
-                            </div>
-                            <Slider value={budget} onValueChange={(v) => setBudget(v as [number, number])} min={0} max={getBudgetSliderMaxHome(activeTab)} step={getBudgetSliderStepHome(activeTab)} className="mb-4" />
+                      <Popover open={openDropdown === 'budget'} onOpenChange={(open) => setOpenDropdown(open ? 'budget' : null)}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={`flex items-center whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                          >
+                            <span className="text-sm font-medium">Budget</span>
+                            <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-[360px] sm:w-[480px] p-4">
+                          <h4 className="text-base font-semibold mb-3 text-foreground">Budget Range</h4>
+                          <div className="text-sm font-medium mb-3 text-foreground">
+                            ₹{formatBudget(budget[0])} - ₹{activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
                           </div>
-                        )}
-                      </div>
+                          <Slider
+                            value={budget}
+                            onValueChange={(v) => {
+                              const next = snapBudget(activeTab, v as [number, number]);
+                              setBudget(next);
+                            }}
+                            min={0}
+                            max={getBudgetSliderMaxHome(activeTab)}
+                            step={getBudgetSliderStepHome(activeTab)}
+                            className="mb-4"
+                          />
+                          {/* Precise inputs */}
+                          <div className="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                              <label className="block text-xs font-medium text-muted-foreground mb-1.5">Min Budget</label>
+                              <input
+                                type="number"
+                                inputMode="numeric"
+                                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
+                                value={budget[0]}
+                                onChange={(e) => {
+                                  const val = Math.max(0, Number(e.target.value) || 0);
+                                  const next: [number, number] = [val, budget[1]];
+                                  setBudget(snapBudget(activeTab, next));
+                                }}
+                              />
+                              <div className="text-xs text-muted-foreground mt-1">₹ in Rupees</div>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-medium text-muted-foreground mb-1.5">Max Budget</label>
+                              <input
+                                type="number"
+                                inputMode="numeric"
+                                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
+                                value={budget[1]}
+                                onChange={(e) => {
+                                  const maxAllowed = getBudgetSliderMaxHome(activeTab);
+                                  const val = Math.min(maxAllowed, Math.max(0, Number(e.target.value) || 0));
+                                  const next: [number, number] = [budget[0], val];
+                                  setBudget(snapBudget(activeTab, next));
+                                }}
+                              />
+                              <div className="text-xs text-muted-foreground mt-1">₹ in Rupees</div>
+                            </div>
+                          </div>
+                          {/* Quick presets */}
+                          <div className="grid grid-cols-3 gap-2">
+                            {activeTab === 'rent' ? (
+                              <>
+                                <Button size="sm" variant={budget[0]===0&&budget[1]===50000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([0, 50000])}>Under 50K</Button>
+                                <Button size="sm" variant={budget[0]===0&&budget[1]===100000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([0, 100000])}>Under 1L</Button>
+                                <Button size="sm" variant={budget[0]===100000&&budget[1]===200000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([100000, 200000])}>1L-2L</Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button size="sm" variant={budget[0]===0&&budget[1]===5000000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([0, 5000000])}>Under 50L</Button>
+                                <Button size="sm" variant={budget[0]===5000000&&budget[1]===10000000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([5000000, 10000000])}>50L-1Cr</Button>
+                                <Button size="sm" variant={budget[0]===10000000&&budget[1]===20000000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([10000000, 20000000])}>1-2Cr</Button>
+                              </>
+                            )}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
 
                       {/* Enhanced Clear Button - always render to reserve space */}
                       <Button
