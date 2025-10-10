@@ -1232,70 +1232,37 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             )}
 
                             {/* Availability for RENT; Property Status for others (not for land) */}
-                            {activeTab !== 'land' && (
-                              activeTab === 'rent' ? (
-                                <Popover open={openDropdown === 'availability'} onOpenChange={(open) => setOpenDropdown(open ? 'availability' : null)}>
-                                  <PopoverTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                                    >
-                                      <span className="text-sm font-medium">Availability</span>
-                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[280px] sm:w-[320px] p-4">
-                                    <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                      {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
-                                        <Button
-                                          key={option}
-                                          variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
-                                          size="sm"
-                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                          onClick={() => {
-                                            setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
-                                          }}
-                                        >
-                                          {option}
-                                        </Button>
-                                      ))}
-                                    </div>
-                                  </PopoverContent>
-                                </Popover>
-                              ) : (
-                                <Popover open={openDropdown === 'construction'} onOpenChange={(open) => setOpenDropdown(open ? 'construction' : null)}>
-                                  <PopoverTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className={`gap-2 px-8 py-2 rounded-lg border-2 overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
-                                    >
-                                      <span className="text-sm font-medium">Property Status</span>
-                                      <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[250px] sm:w-[280px] p-4">
-                                    <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                      {['Under Construction', 'Ready'].map(status => (
-                                        <Button
-                                          key={status}
-                                          variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
-                                          size="sm"
-                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                          onClick={() => {
-                                            setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
-                                          }}
-                                        >
-                                          {status}
-                                        </Button>
-                                      ))}
-                                    </div>
-                                  </PopoverContent>
-                                </Popover>
-                              )
+                            {activeTab === 'rent' && (
+                              <Popover open={openDropdown === 'availability'} onOpenChange={(open) => setOpenDropdown(open ? 'availability' : null)}>
+                                <PopoverTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  >
+                                    <span className="text-sm font-medium">Availability</span>
+                                    <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[280px] sm:w-[320px] p-4">
+                                  <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
+                                      <Button
+                                        key={option}
+                                        variant={selectedAvailability.includes(option) ? 'default' : 'outline'}
+                                        size="sm"
+                                        className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
+                                        onClick={() => {
+                                          setSelectedAvailability(prev => prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]);
+                                        }}
+                                      >
+                                        {option}
+                                      </Button>
+                                    ))}
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
                             )}
 
                             {/* Furnishing */}
