@@ -1413,7 +1413,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                           </div>
                           {/* Clear button below, right-aligned */}
-                          <div className="mt-2 flex justify-end px-2">
+                          <div className="hidden mt-2 flex justify-end px-2">
                             <Button
                               variant="ghost"
                               size="sm"
