@@ -70,7 +70,7 @@ export const calculatePGPropertyCompletion = (property: PGPropertyData): Complet
     { key: 'food_included', weight: 5, required: true },
     
     // Location Details (25% weight)
-    { key: 'city', weight: 8, required: true },
+  { key: 'city', weight: 8, required: false },
     { key: 'locality', weight: 8, required: true },
     { key: 'state', weight: 4, required: true },
     { key: 'landmark', weight: 5, required: false },
@@ -216,7 +216,7 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
       { key: 'super_area', weight: 5, required: true },
       
       // Location Details (25% weight)
-      { key: 'city', weight: 8, required: true },
+  { key: 'city', weight: 8, required: false },
       { key: 'locality', weight: 8, required: true },
       { key: 'state', weight: 4, required: true },
       { key: 'pincode', weight: 5, required: true },
@@ -247,7 +247,7 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
       { key: 'super_area', weight: 12, required: true },
       
       // Location Details (30% weight)
-      { key: 'city', weight: 8, required: true },
+  { key: 'city', weight: 8, required: false },
       { key: 'locality', weight: 8, required: true },
       { key: 'state', weight: 7, required: true },
       { key: 'pincode', weight: 7, required: true },
@@ -268,7 +268,7 @@ export const calculatePropertyCompletion = (property: PropertyData): CompletionR
       { key: 'super_area', weight: 5, required: true },
       
       // Location Details (25% weight)
-      { key: 'city', weight: 8, required: true },
+  { key: 'city', weight: 8, required: false },
       { key: 'locality', weight: 8, required: true },
       { key: 'state', weight: 4, required: true },
       { key: 'pincode', weight: 5, required: true },

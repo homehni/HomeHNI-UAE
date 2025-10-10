@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +11,7 @@ import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, MapPin, X } from 'lucide-react';
 
 const landPlotLocationSchema = z.object({
-  city: z.string().min(1, "City is required"),
+  city: z.string().optional(),
   locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
   state: z.string().optional(),
@@ -42,6 +43,8 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   const [showMap, setShowMap] = useState(false);
   const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
   const [selectedCity, setSelectedCity] = useState(initialData.city || '');
+  // When we set city due to locality selection, avoid clearing locality in the watcher
+  const isLocalitySettingCityRef = useRef(false);
 
   const form = useForm<LandPlotLocationData>({
     resolver: zodResolver(landPlotLocationSchema),
@@ -73,14 +76,21 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name === 'city' && value.city !== selectedCity) {
-        form.setValue('locality', '');
-        form.setValue('state', '');
-        form.setValue('pincode', '');
-        setSelectedCity(value.city || '');
-        setLocationMismatchWarning('');
-        setShowMap(false);
-        if (localityInputRef.current) {
-          localityInputRef.current.value = '';
+        // If the city change was triggered by locality selection, don't clear locality
+        if (isLocalitySettingCityRef.current) {
+          setSelectedCity(value.city || '');
+          setLocationMismatchWarning('');
+          isLocalitySettingCityRef.current = false;
+        } else {
+          form.setValue('locality', '');
+          form.setValue('state', '');
+          form.setValue('pincode', '');
+          setSelectedCity(value.city || '');
+          setLocationMismatchWarning('');
+          setShowMap(false);
+          if (localityInputRef.current) {
+            localityInputRef.current.value = '';
+          }
         }
       }
     });
@@ -192,6 +202,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
         // Parse address components
         let state = '';
         let pincode = '';
+        let derivedCity = '';
         
         if (place?.address_components) {
           place.address_components.forEach((component: any) => {
@@ -200,8 +211,34 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
+            } else if (types.includes('locality') || types.includes('postal_town')) {
+              // Preferred city types
+              derivedCity = component.long_name;
+            } else if (
+              types.includes('administrative_area_level_2') ||
+              types.includes('administrative_area_level_3')
+            ) {
+              // Fallbacks often used as city/district in India
+              if (!derivedCity) derivedCity = component.long_name;
             }
           });
+        }
+
+        // Final fallback: derive from formatted address if we found state and a comma-separated list
+        if (!derivedCity && value) {
+          const parts = value.split(',').map((s: string) => s.trim());
+          if (parts.length >= 2) {
+            if (state) {
+              const stateIndex = parts.findIndex((p) => p.toLowerCase() === state.toLowerCase());
+              if (stateIndex > 0) {
+                derivedCity = parts[stateIndex - 1];
+              }
+            }
+            if (!derivedCity && parts.length >= 2) {
+              // Heuristic: second token is usually the city
+              derivedCity = parts[1];
+            }
+          }
         }
 
         setLocationMismatchWarning('');
@@ -214,6 +251,20 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
         // Update other fields
         if (state) form.setValue('state', state, { shouldValidate: true });
         if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
+        if (derivedCity) {
+          // Fill city automatically without clearing locality
+          isLocalitySettingCityRef.current = true;
+          if (cityInputRef.current) {
+            cityInputRef.current.value = derivedCity;
+            // Fire an input event to notify any uncontrolled consumers
+            cityInputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+          form.setValue('city', derivedCity, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+          setSelectedCity(derivedCity);
+          // Clear any existing error and trigger validation to update UI
+          form.clearErrors('city');
+          form.trigger('city');
+        }
         
         const loc = place?.geometry?.location;
         if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
@@ -254,7 +305,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
                 <FormItem>
                   <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-primary" />
-                    City *
+                    City (Optional)
                   </FormLabel>
                   <FormControl>
                     <div className="relative">

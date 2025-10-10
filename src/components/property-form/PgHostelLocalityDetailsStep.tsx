@@ -10,7 +10,7 @@ import { LocationDetails } from '@/types/property';
 import { MapPin, X } from 'lucide-react';
 
 const pgHostelLocationSchema = z.object({
-  city: z.string().min(1, "City is required"),
+  city: z.string().optional(),
   locality: z.string().min(1, "Locality/Area is required"),
   landmark: z.string().optional(),
   state: z.string().optional(),
@@ -206,7 +206,7 @@ export function PgHostelLocalityDetailsStep({
                   <FormItem>
                     <FormLabel className="text-sm font-medium flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary" />
-                      City *
+                      City (Optional)
                     </FormLabel>
                     <FormControl>
                       <div className="relative">
