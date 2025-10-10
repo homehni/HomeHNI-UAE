@@ -1164,7 +1164,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                         {/* Filter row outside red border */}
                         <div className="mt-3 overflow-visible">
-                          <div className="grid grid-cols-5 gap-2 sm:gap-3 w-full px-2 max-w-full">
+                          <div className="grid grid-cols-5 gap-2 sm:gap-3 w-full max-w-full">
                             {/* Property type: Property Type or Land/Space Type */}
                             <Popover open={openDropdown === 'propertyType'} onOpenChange={(open) => setOpenDropdown(open ? 'propertyType' : null)}>
                               <PopoverTrigger asChild>
