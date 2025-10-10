@@ -1092,7 +1092,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         )}
     {/* Desktop Search Section */}
-  <div className="hidden sm:block absolute bottom-0 left-0 right-0 transform translate-y-1/2 z-50">
+  <div className="hidden sm:block absolute left-0 right-0 bottom-8 z-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               {/* Navigation Tabs */}
