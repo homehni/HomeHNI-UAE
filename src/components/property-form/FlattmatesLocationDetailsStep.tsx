@@ -191,17 +191,16 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
       // City aliases for validation
 
       attach(localityInputRef.current, (place, el) => {
-        // Parse address components to extract city, state and pincode
-        let cityName = '';
+        const value = place?.formatted_address || place?.name || '';
+        
+        // Parse address components
         let state = '';
         let pincode = '';
         
         if (place?.address_components) {
           place.address_components.forEach((component: any) => {
             const types = component.types;
-            if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-              cityName = component.long_name;
-            } else if (types.includes('administrative_area_level_1')) {
+            if (types.includes('administrative_area_level_1')) {
               state = component.long_name;
             } else if (types.includes('postal_code')) {
               pincode = component.long_name;
@@ -211,23 +210,12 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
 
         setLocationMismatchWarning('');
         
-        // Set locality value from the place
-        const localityValue = place?.formatted_address || place?.name || '';
-        if (localityValue) {
-          el.value = localityValue;
-          form.setValue('locality', localityValue, { shouldValidate: true });
+        if (value) {
+          el.value = value;
+          form.setValue('locality', value, { shouldValidate: true });
         }
         
-        // Update city field
-        if (cityName) {
-          form.setValue('city', cityName, { shouldValidate: true });
-          if (cityInputRef.current) {
-            cityInputRef.current.value = cityName;
-          }
-          setSelectedCity(cityName);
-        }
-        
-        // Update state and pincode
+        // Update other fields
         if (state) form.setValue('state', state, { shouldValidate: true });
         if (pincode) form.setValue('pincode', pincode, { shouldValidate: true });
         

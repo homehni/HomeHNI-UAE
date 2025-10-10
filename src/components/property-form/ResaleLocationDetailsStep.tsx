@@ -185,49 +185,33 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     }
 
     attach(localityInputRef.current, (place, el) => {
-      // Parse address components to extract city, state and pincode
-      let cityName = '';
-      let state = '';
-      let pincode = '';
-      
+      const value = place?.formatted_address || place?.name || '';
+      if (value) {
+        el.value = value;
+        form.setValue('locality', value, {
+          shouldValidate: true
+        });
+      }
+      // Parse address components to extract state and pincode
       if (place?.address_components) {
+        let state = '';
+        let pincode = '';
         place.address_components.forEach((component: any) => {
           const types = component.types;
-          if (types.includes('locality') || types.includes('administrative_area_level_2')) {
-            cityName = component.long_name;
-          } else if (types.includes('administrative_area_level_1')) {
+          if (types.includes('administrative_area_level_1')) {
             state = component.long_name;
           } else if (types.includes('postal_code')) {
             pincode = component.long_name;
           }
         });
-      }
-      
-      // Set locality value from the place
-      const localityValue = place?.formatted_address || place?.name || '';
-      if (localityValue) {
-        el.value = localityValue;
-        form.setValue('locality', localityValue, {
+        // Update the form fields
+        if (state) form.setValue('state', state, {
+          shouldValidate: true
+        });
+        if (pincode) form.setValue('pincode', pincode, {
           shouldValidate: true
         });
       }
-      
-      // Update city field
-      if (cityName) {
-        form.setValue('city', cityName, { shouldValidate: true });
-        if (cityInputRef.current) {
-          cityInputRef.current.value = cityName;
-        }
-      }
-      
-      // Update state and pincode
-      if (state) form.setValue('state', state, {
-        shouldValidate: true
-      });
-      if (pincode) form.setValue('pincode', pincode, {
-        shouldValidate: true
-      });
-      
       const loc = place?.geometry?.location;
       if (loc) setMapTo(loc.lat(), loc.lng(), place?.name || 'Selected location');
     });
