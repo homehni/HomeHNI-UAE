@@ -87,7 +87,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
   const mobileAcInitRef = useRef(false);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Close dropdown when clicking outside (mobile overlay only) or pressing Escape
   useEffect(() => {
@@ -1166,7 +1175,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         <div className="mt-3 overflow-visible">
                           <div className="grid grid-cols-5 gap-2 sm:gap-3 w-full px-2 max-w-full">
                             {/* Property type: Property Type or Land/Space Type */}
-                            <Popover open={openDropdown === 'propertyType'} onOpenChange={(open) => setOpenDropdown(open ? 'propertyType' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'propertyType' : null)}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1199,7 +1208,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                             {/* Bedroom (only for Buy/Rent) */}
                             {(activeTab === 'buy' || activeTab === 'rent') && (
-                            <Popover open={openDropdown === 'bedroom'} onOpenChange={(open) => setOpenDropdown(open ? 'bedroom' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'bedroom'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'bedroom' : null)}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1234,7 +1243,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             {/* Availability for RENT; Property Status for others (not for land) */}
                             {activeTab !== 'land' && (
                               activeTab === 'rent' ? (
-                                <Popover open={openDropdown === 'availability'} onOpenChange={(open) => setOpenDropdown(open ? 'availability' : null)}>
+                                <Popover open={!isMobile && openDropdown === 'availability'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'availability' : null)}>
                                   <PopoverTrigger asChild>
                                     <Button
                                       variant="outline"
@@ -1265,7 +1274,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   </PopoverContent>
                                 </Popover>
                               ) : (
-                                <Popover open={openDropdown === 'construction'} onOpenChange={(open) => setOpenDropdown(open ? 'construction' : null)}>
+                                <Popover open={!isMobile && openDropdown === 'construction'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'construction' : null)}>
                                   <PopoverTrigger asChild>
                                     <Button
                                       variant="outline"
@@ -1299,7 +1308,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             )}
 
                             {/* Furnishing */}
-                            <Popover open={openDropdown === 'furnishing'} onOpenChange={(open) => setOpenDropdown(open ? 'furnishing' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'furnishing'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'furnishing' : null)}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1331,7 +1340,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             </Popover>
 
                             {/* Budget */}
-                            <Popover open={openDropdown === 'budget'} onOpenChange={(open) => setOpenDropdown(open ? 'budget' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'budget'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'budget' : null)}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
