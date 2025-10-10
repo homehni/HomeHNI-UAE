@@ -89,10 +89,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside (desktop + mobile overlay)
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      const insideDesktop = dropdownRef.current?.contains(target);
+      const insideMobile = mobileSearchContainerRef.current?.contains(target);
+      if (!insideDesktop && !insideMobile) {
         setOpenDropdown(null);
       }
     };
@@ -104,10 +107,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     };
 
     if (openDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handlePointerDown);
+      document.addEventListener('touchstart', handlePointerDown, { passive: true } as any);
       document.addEventListener('keydown', handleKeyDown);
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handlePointerDown);
+        document.removeEventListener('touchstart', handlePointerDown as any);
         document.removeEventListener('keydown', handleKeyDown);
       };
     }
@@ -753,7 +758,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
         {/* Mobile Full-screen Search Overlay */}
         {isMobileOverlayOpen && (
-          <div className="sm:hidden fixed inset-0 z-[60] bg-white flex flex-col">
+          <div ref={mobileSearchContainerRef} className="sm:hidden fixed inset-0 z-[60] bg-white flex flex-col">
             {/* Header with tabs and close */}
             <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b">
               <div className="flex bg-gray-100 rounded-full overflow-hidden">
@@ -1092,7 +1097,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         )}
     {/* Desktop Search Section */}
-  <div className="hidden sm:block absolute left-0 right-0 bottom-8 z-50">
+  <div className="hidden sm:block absolute left-0 right-0 bottom-8 z-50 transform-gpu will-change-transform">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               {/* Navigation Tabs */}
@@ -1157,7 +1162,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     </div>
 
                     {/* Compact Responsive Filter Dropdowns */}
-                    <div ref={dropdownRef} className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 min-h-[40px]">
+                    <div
+                      ref={dropdownRef}
+                      className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 min-h-[40px]"
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onTouchStart={(e) => e.stopPropagation()}
+                    >
                       {/* Property type: Property Type or Land/Space Type */}
                       <div className="relative">
                         <Button
