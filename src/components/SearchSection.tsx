@@ -628,6 +628,18 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       backgroundImage: `url(${cmsContent?.content?.heroImage || '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png'})`,
       backgroundPosition: 'center calc(50% - 2%)'
     }}>
+    
+    {/* Hero Title Overlay */}
+    <div className="absolute top-[20%] sm:top-[25%] md:top-[30%] left-0 right-0 z-10 px-4">
+      <h1 className="text-white text-center font-bold text-2xl sm:text-3xl md:text-5xl lg:text-6xl tracking-wider whitespace-nowrap overflow-hidden text-ellipsis mx-auto" 
+          style={{ 
+            textShadow: '0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3)',
+            letterSpacing: '0.1em'
+          }}>
+        WORLD'S LARGEST FIND YOUR PROPERTY SITE
+      </h1>
+    </div>
+    
     {/* Mobile Search Section - opens full-screen overlay */}
   <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50" ref={mobileSearchContainerRef}>
           <div className="bg-white rounded-lg shadow-xl border border-gray-100">
