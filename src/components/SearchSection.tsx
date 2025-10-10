@@ -1104,7 +1104,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </TabsTrigger>)}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl">
+                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl min-h-[140px]">
                     {/* Search Bar - Compact responsive design */}
                     <div className="relative flex items-center mb-4">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
@@ -1157,7 +1157,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     </div>
 
                     {/* Compact Responsive Filter Dropdowns */}
-                    <div ref={dropdownRef} className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                    <div ref={dropdownRef} className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 min-h-[40px]">
                       {/* Property type: Property Type or Land/Space Type */}
                       <div className="relative">
                         <Button
