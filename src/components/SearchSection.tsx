@@ -1113,7 +1113,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     <div className="relative flex items-center mb-4">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-red z-10 pointer-events-none flex-shrink-0" size={18} />
                       <div
-                        className="relative flex items-center gap-2 px-4 py-3 pl-12 pr-14 min-h-[3rem] w-full border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60"
+                        className="relative flex items-center gap-2 px-4 py-3 pl-12 pr-14 min-h-[3rem] w-full border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60 mb-4"
                         onClick={() => {
                           if (inputRef.current) {
                             inputRef.current.focus();
