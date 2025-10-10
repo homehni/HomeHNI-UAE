@@ -1161,8 +1161,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     </div>
 
                     {/* Compact Responsive Filter Dropdowns */}
-                    <div
-                      className="flex items-center justify-center gap-2 sm:gap-3 h-11 sm:flex-nowrap overflow-x-hidden pl-2"
+                    	<div
+                      className="flex items-center justify-center gap-2 sm:gap-3 h-11 sm:flex-nowrap overflow-visible pl-4 sm:pl-5"
                     >
                       {/* Property type: Property Type or Land/Space Type */}
                       <Popover open={openDropdown === 'propertyType'} onOpenChange={(open) => setOpenDropdown(open ? 'propertyType' : null)}>
