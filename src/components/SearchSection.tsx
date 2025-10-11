@@ -626,7 +626,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       {/* Hero Image Background - mobile responsive */}
       <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px]" style={{
       backgroundImage: `url(${cmsContent?.content?.heroImage || '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png'})`,
-      backgroundPosition: 'center calc(50% - 2%)'
+      backgroundPosition: 'center calc(50% + 10%)'
     }}>
     {/* Mobile Search Section - opens full-screen overlay */}
   <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50" ref={mobileSearchContainerRef}>
