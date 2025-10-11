@@ -41,6 +41,7 @@ interface Property {
   is_featured?: boolean;
   is_edited?: boolean;
   is_visible?: boolean;
+  rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
 }
 
 interface PropertyTableProps {
@@ -58,6 +59,8 @@ interface PropertyTableProps {
     rejected: number;
     deleted: number;
     featuredPending?: number;
+    rented?: number;
+    sold?: number;
   };
   onView: (property: Property) => void;
   onApprove: (id: string) => void;
@@ -80,7 +83,15 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   onStatusFilterChange,
   featuredFilter,
   onFeaturedFilterChange,
-  stats,
+  stats = {
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    deleted: 0,
+    rented: 0,
+    sold: 0
+  },
   onView,
   onApprove,
   onReject,
@@ -320,6 +331,17 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                        new Date(property.updated_at) > new Date(property.created_at) && (
                         <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-300 font-medium px-2 py-1">
                           ✏️ Edited recently
+                        </Badge>
+                      )}
+                      {/* Property rental status badge */}
+                      {property.rental_status === 'rented' && (
+                        <Badge className="text-xs bg-red-100 text-red-800 border-red-300 font-medium px-2 py-1">
+                          Rented
+                        </Badge>
+                      )}
+                      {property.rental_status === 'sold' && (
+                        <Badge className="text-xs bg-green-100 text-green-800 border-green-300 font-medium px-2 py-1">
+                          Sold
                         </Badge>
                       )}
                     </div>

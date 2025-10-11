@@ -9,6 +9,83 @@ INSTRUCTIONS:
 These endpoints follow your existing pattern and use your Gmail/Nodemailer setup.
 */
 
+// ================= NEW: User Registration Admin Alert =================
+// Sends an alert to the admin when a new user registers
+app.post('/api/send-user-registration-alert', async (req, res) => {
+    const { adminEmail, userEmail, userName } = req.body;
+
+    const apiKey = req.headers['x-api-key'];
+    if (apiKey !== process.env.EMAIL_API_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!adminEmail || !userEmail) {
+        return res.status(400).json({ error: 'adminEmail and userEmail are required' });
+    }
+
+    const mailOptions = {
+        from: '"HomeHNI" <' + process.env.EMAIL_USER + '>',
+        to: adminEmail,
+        subject: 'New User Registered on HomeHNI',
+        html: generateUserRegistrationAdminAlertHTML(userName || 'New User', userEmail)
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('User registration admin alert sent:', info.messageId);
+        res.json({ success: true, messageId: info.messageId });
+    } catch (error) {
+        console.error('Error sending user registration alert:', error);
+        res.status(500).json({ success: false, error: 'Failed to send email', details: error.message });
+    }
+});
+
+function generateUserRegistrationAdminAlertHTML(userName, userEmail) {
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New User Registered</title>
+    <style>
+        body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:#f6f7fb; color:#222; margin:0; }
+        .container { max-width:680px; margin:24px auto; background:#fff; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); overflow:hidden; }
+        .header { background:linear-gradient(135deg,#e53935,#e35d5b); color:#fff; padding:24px; }
+        .header h1 { margin:0; font-size:22px; font-weight:700; }
+        .content { padding:24px; }
+        .row { margin-bottom:16px; }
+        .label { color:#6b7280; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+        .value { font-size:16px; font-weight:600; margin-top:4px; }
+        .cta { margin-top:24px; }
+        .button { display:inline-block; padding:10px 16px; background:#111827; color:#fff !important; text-decoration:none; border-radius:8px; font-weight:600; }
+        .footer { padding:18px 24px; color:#6b7280; font-size:12px; border-top:1px solid #f1f5f9; }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>New user just registered</h1>
+            </div>
+            <div class="content">
+                <div class="row">
+                    <div class="label">Name</div>
+                    <div class="value">${userName}</div>
+                </div>
+                <div class="row">
+                    <div class="label">Email</div>
+                    <div class="value">${userEmail}</div>
+                </div>
+                <div class="cta">
+                    <a class="button" href="mailto:${userEmail}">Contact User</a>
+                </div>
+            </div>
+            <div class="footer">HomeHNI • Admin Alert</div>
+        </div>
+    </body>
+    </html>`;
+}
+
 // Password Reset Email Endpoint
 app.post('/api/send-password-reset-email', async (req, res) => {
   const { email, name, resetUrl } = req.body;

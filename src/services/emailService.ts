@@ -608,3 +608,16 @@ export async function sendReportProblemEmail(
     feedbackDetails: problemData.feedbackDetails
   });
 }
+
+// 25. Admin Alert on User Registration - Notify admin when a new user registers
+export async function sendUserRegistrationAdminAlert(
+  adminEmail: string,
+  userEmail: string,
+  userName?: string
+) {
+  return sendEmail('/send-user-registration-alert', {
+    adminEmail,
+    userEmail,
+    userName: userName || 'New User'
+  });
+}

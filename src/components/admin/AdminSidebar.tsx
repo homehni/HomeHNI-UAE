@@ -56,6 +56,12 @@ const navigationItems = [
     group: 'Content',
   },
   {
+    title: 'Property Status',
+    url: '/admin/property-status',
+    icon: Star,
+    group: 'Content',
+  },
+  {
     title: 'Lead Management',
     url: '/admin/leads',
     icon: MessageSquare,
@@ -77,12 +83,6 @@ const navigationItems = [
     title: 'Regions & Localization',
     url: '/admin/regions',
     icon: MapPin,
-    group: 'Configuration',
-  },
-  {
-    title: 'Security & Audit',
-    url: '/admin/security',
-    icon: Shield,
     group: 'Configuration',
   },
   {

@@ -15,6 +15,7 @@ import { SalePropertyFormData, SalePropertyInfo } from '@/types/saleProperty';
 import { CommercialSaleFormData } from '@/types/commercialSaleProperty';
 import { LandPlotFormData } from '@/types/landPlotProperty';
 import { supabase } from '@/integrations/supabase/client';
+import { useSettings } from '@/contexts/SettingsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { uploadSingleFile, uploadPropertyImagesByType } from '@/services/fileUploadService';
@@ -54,6 +55,7 @@ export const PostProperty: React.FC = () => {
   const [targetStep, setTargetStep] = useState<number | null>(null);
   const [lastSubmissionId, setLastSubmissionId] = useState<string | null>(null);
   const { user } = useAuth();
+  const { settings: appSettings } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -804,6 +806,8 @@ export const PostProperty: React.FC = () => {
         // Insert into BOTH property_submissions (for admin review) AND properties (for immediate public visibility)
         
         // 1. Insert into property_submissions for admin review
+        const autoApprove = Boolean(appSettings.auto_approve_properties);
+        const initialStatus = autoApprove ? 'approved' : 'new';
         const { data: inserted, error: insertError } = await supabase
           .from('property_submissions')
           .insert({
@@ -811,7 +815,7 @@ export const PostProperty: React.FC = () => {
             title: propertyData.title || 'New Property Submission',
             city: propertyData.city || 'Unknown',
             state: propertyData.state || 'Unknown', 
-            status: 'new',
+            status: initialStatus,
             payload: {
               ...propertyData,
               images: imageUrls.map(img => img.url),

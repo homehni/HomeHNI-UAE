@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { PropertyTable } from '@/components/admin/PropertyTable';
 import { PropertyReviewModal } from '@/components/admin/PropertyReviewModal';
 import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 import { useToast } from '@/hooks/use-toast';
+import { useSettings } from '@/contexts/SettingsContext';
 import { mapBhkType, mapPropertyType, mapListingType, mapFurnishing } from '@/utils/propertyMappings';
  
 // Property submission interface for new table
@@ -13,7 +15,7 @@ interface PropertySubmission {
   city: string;
   state: string;
   status: string;
-  payload: any;
+  payload: PropertyPayload;
   created_at: string;
   user_id?: string;
   // Add fields that PropertyTable expects
@@ -34,6 +36,45 @@ interface PropertySubmission {
   is_edited?: boolean;
   is_visible?: boolean;
   updated_at?: string;
+  rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
+}
+
+interface PropertyPayload {
+  property_type?: string;
+  listing_type?: string;
+  bhk_type?: string;
+  locality?: string;
+  expected_price?: number;
+  super_area?: number;
+  description?: string;
+  images?: string[];
+  rejection_reason?: string;
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
+  owner_role?: string;
+  is_featured?: boolean;
+  is_visible?: boolean;
+  state?: string;
+  city?: string;
+  street_address?: string;
+  pincode?: string;
+  carpet_area?: number;
+  availability_type?: string;
+  videos?: string[];
+  ownerInfo?: {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+  };
+  propertyInfo?: {
+    propertyDetails?: Record<string, unknown>;
+    saleDetails?: Record<string, unknown>;
+    rentalDetails?: Record<string, unknown>;
+    additionalInfo?: Record<string, unknown>;
+    amenities?: Record<string, unknown>;
+  };
+  [key: string]: unknown; // For additional properties
 }
 
 const AdminProperties = () => {
@@ -47,6 +88,7 @@ const AdminProperties = () => {
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [rentalStatusFilter, setRentalStatusFilter] = useState('all');
   const [featuredFilter, setFeaturedFilter] = useState(false);
   const [newPropertyCount, setNewPropertyCount] = useState(0);
   const [lastViewedTime, setLastViewedTime] = useState<string>(new Date().toISOString());
@@ -60,10 +102,137 @@ const AdminProperties = () => {
     approved: 0,
     rejected: 0,
     deleted: 0,
-    featuredPending: 0
+    featuredPending: 0,
+    rented: 0,
+    sold: 0
   });
 
   const { toast } = useToast();
+
+  // Get location to parse URL parameters
+  const location = useLocation();
+  
+  // Define fetchProperties with useCallback
+  const fetchProperties = useCallback(async () => {
+    try {
+      // Fetch only property submissions (properties table is auto-synced via trigger)
+      const submissionsResult = await supabase
+        .from('property_submissions')
+        .select('*, rental_status')
+        .order('created_at', { ascending: false });
+
+      if (submissionsResult.error) throw submissionsResult.error;
+
+      // Transform submissions to match PropertyTable interface
+      const transformedSubmissions = submissionsResult.data?.map(submission => {
+        // Parse the payload if it's a string
+        let payload: Record<string, unknown> = {};
+        try {
+          payload = typeof submission.payload === 'string' 
+            ? JSON.parse(submission.payload) 
+            : submission.payload || {};
+        } catch (e) {
+          console.warn('Error parsing payload for submission:', submission.id, e);
+          payload = {};
+        }
+        
+        return {
+          ...submission,
+          property_type: payload?.property_type as string || 'Unknown',
+          listing_type: payload?.listing_type as string || 'Unknown',
+          bhk_type: payload?.bhk_type as string || '',
+          locality: payload?.locality as string || 'Unknown',
+          expected_price: payload?.expected_price as number || 0,
+          super_area: payload?.super_area as number || 0,
+          description: payload?.description as string || '',
+          images: payload?.images as string[] || [],
+          rejection_reason: payload?.rejection_reason as string || '',
+          owner_name: payload?.owner_name as string || 'Unknown',
+          owner_email: payload?.owner_email as string || '',
+          owner_phone: payload?.owner_phone as string || '',
+          owner_role: payload?.owner_role as string || 'Owner',
+          is_featured: payload?.is_featured as boolean || false,
+          is_visible: payload?.is_visible !== false // Default to true unless explicitly false
+        };
+      }) || [];
+
+      setProperties(transformedSubmissions as PropertySubmission[]);
+      
+      // Calculate stats based on submissions data
+      const total = transformedSubmissions?.length || 0;
+      const pending = transformedSubmissions?.filter(p => p.status === 'new').length || 0;
+      const approved = transformedSubmissions?.filter(p => p.status === 'approved').length || 0;
+      const rejected = transformedSubmissions?.filter(p => p.status === 'rejected').length || 0;
+      const deleted = transformedSubmissions?.filter(p => p.status === 'deleted').length || 0;
+      const featuredPending = 0;
+      const rented = transformedSubmissions?.filter(p => p.rental_status === 'rented').length || 0;
+      const sold = transformedSubmissions?.filter(p => p.rental_status === 'sold').length || 0;
+
+      setStats({ total, pending, approved, rejected, deleted, featuredPending, rented, sold });
+    } catch (error) {
+      console.error('Error fetching property submissions:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch property submissions',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
+
+  // Define filterProperties with useCallback
+  const filterProperties = useCallback(() => {
+    let filtered = properties;
+
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter(property =>
+        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        property.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        property.state.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by status (map 'pending' to 'new' for submissions)
+    if (statusFilter !== 'all') {
+      if (statusFilter === 'pending') {
+        filtered = filtered.filter(property => property.status === 'new');
+      } else if (statusFilter === 'edited-recently') {
+        // Show only edited properties
+        filtered = filtered.filter(property => property.is_edited === true);
+      } else {
+        filtered = filtered.filter(property => property.status === statusFilter);
+      }
+    }
+    
+    // Filter by rental status
+    if (rentalStatusFilter !== 'all') {
+      filtered = filtered.filter(property => property.rental_status === rentalStatusFilter);
+    }
+
+    // Filter by featured status
+    if (featuredFilter) {
+      filtered = filtered.filter(property => property.is_featured === true);
+    }
+
+    setFilteredProperties(filtered);
+  }, [properties, searchTerm, statusFilter, rentalStatusFilter, featuredFilter]);
+  
+  // Initialize filters from URL query parameters
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const statusParam = searchParams.get('status');
+    const rentalStatusParam = searchParams.get('rentalstatus');
+    
+    if (statusParam) {
+      setStatusFilter(statusParam);
+    }
+    
+    if (rentalStatusParam) {
+      setRentalStatusFilter(rentalStatusParam);
+    }
+  }, [location]);
 
   useEffect(() => {
     fetchProperties();
@@ -110,104 +279,11 @@ const AdminProperties = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [toast]);
+  }, [toast, fetchProperties]);
 
   useEffect(() => {
     filterProperties();
-  }, [properties, searchTerm, statusFilter, featuredFilter]);
-
-  const fetchProperties = async () => {
-    try {
-      // Fetch only property submissions (properties table is auto-synced via trigger)
-      const submissionsResult = await supabase
-        .from('property_submissions')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (submissionsResult.error) throw submissionsResult.error;
-
-      // Transform submissions to match PropertyTable interface
-      const transformedSubmissions = submissionsResult.data?.map(submission => {
-        // Parse the payload if it's a string
-        let payload: any = {};
-        try {
-          payload = typeof submission.payload === 'string' 
-            ? JSON.parse(submission.payload) 
-            : submission.payload || {};
-        } catch (e) {
-          console.warn('Error parsing payload for submission:', submission.id, e);
-          payload = {};
-        }
-        
-        return {
-          ...submission,
-          property_type: payload?.property_type || 'Unknown',
-          listing_type: payload?.listing_type || 'Unknown',
-          bhk_type: payload?.bhk_type || '',
-          locality: payload?.locality || 'Unknown',
-          expected_price: payload?.expected_price || 0,
-          super_area: payload?.super_area || 0,
-          description: payload?.description || '',
-          images: payload?.images || [],
-          rejection_reason: payload?.rejection_reason || '',
-          owner_name: payload?.owner_name || 'Unknown',
-          owner_email: payload?.owner_email || '',
-          owner_phone: payload?.owner_phone || '',
-          owner_role: payload?.owner_role || 'Owner',
-          is_featured: payload?.is_featured || false,
-          is_visible: payload?.is_visible !== false // Default to true unless explicitly false
-        };
-      }) || [];
-
-      setProperties(transformedSubmissions as PropertySubmission[]);
-      
-      // Calculate stats based on submissions data
-      const total = transformedSubmissions?.length || 0;
-      const pending = transformedSubmissions?.filter(p => p.status === 'new').length || 0;
-      const approved = transformedSubmissions?.filter(p => p.status === 'approved').length || 0;
-      const rejected = transformedSubmissions?.filter(p => p.status === 'rejected').length || 0;
-      const deleted = transformedSubmissions?.filter(p => p.status === 'deleted').length || 0;
-      const featuredPending = 0;
-
-      setStats({ total, pending, approved, rejected, deleted, featuredPending });
-    } catch (error) {
-      console.error('Error fetching property submissions:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch property submissions',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterProperties = () => {
-    let filtered = properties;
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(property =>
-        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.state.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by status (map 'pending' to 'new' for submissions)
-    if (statusFilter !== 'all') {
-      if (statusFilter === 'pending') {
-        filtered = filtered.filter(property => property.status === 'new');
-      } else if (statusFilter === 'edited-recently') {
-        // Show only edited properties
-        filtered = filtered.filter(property => property.is_edited === true);
-      } else {
-        filtered = filtered.filter(property => property.status === statusFilter);
-      }
-    }
-
-    setFilteredProperties(filtered);
-  };
+  }, [filterProperties]);
 
   const handleApprove = async (propertyId: string) => {
     setActionLoading(true);
@@ -266,7 +342,7 @@ const AdminProperties = () => {
         }
 
       // Parse the payload
-      let payload: any = {};
+      let payload: PropertyPayload = {};
       try {
         payload = typeof submission.payload === 'string' 
           ? JSON.parse(submission.payload) 

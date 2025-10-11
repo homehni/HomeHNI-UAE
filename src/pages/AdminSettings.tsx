@@ -18,10 +18,12 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useSettings } from '@/contexts/SettingsContext';
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { settings: globalSettings, set: setGlobalSetting, refresh } = useSettings();
   
   useEffect(() => {
     // Set up real-time subscription for platform settings
@@ -49,7 +51,7 @@ const AdminSettings = () => {
     };
   }, [toast]);
 
-  // Mock settings state - in a real app, this would come from a database
+  // Local editable state (seeded from global settings)
   const [settings, setSettings] = useState({
     notifications: {
       emailAlerts: true,
@@ -58,10 +60,10 @@ const AdminSettings = () => {
       dailyReports: true,
     },
     general: {
-      siteName: 'HomeHNI',
-      adminEmail: 'admin@homehni.com',
-      maintenanceMode: false,
-      autoApproveProperties: false,
+      siteName: globalSettings.site_name || 'HomeHNI',
+      adminEmail: globalSettings.admin_email || 'admin@homehni.com',
+      maintenanceMode: Boolean(globalSettings.maintenance_mode),
+      autoApproveProperties: Boolean(globalSettings.auto_approve_properties),
     },
     security: {
       twoFactorAuth: false,
@@ -70,11 +72,32 @@ const AdminSettings = () => {
     }
   });
 
+  // Keep local UI state in sync when global settings load/change
+  useEffect(() => {
+    setSettings((prev) => ({
+      ...prev,
+      general: {
+        ...prev.general,
+        siteName: globalSettings.site_name || prev.general.siteName,
+        adminEmail: globalSettings.admin_email || prev.general.adminEmail,
+        maintenanceMode: Boolean(globalSettings.maintenance_mode),
+        autoApproveProperties: Boolean(globalSettings.auto_approve_properties),
+      }
+    }));
+  }, [globalSettings.site_name, globalSettings.admin_email, globalSettings.maintenance_mode, globalSettings.auto_approve_properties]);
+
   const handleSaveSettings = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Persist platform settings
+      await Promise.all([
+        setGlobalSetting('maintenance_mode', settings.general.maintenanceMode),
+        setGlobalSetting('auto_approve_properties', settings.general.autoApproveProperties),
+        setGlobalSetting('site_name', settings.general.siteName),
+        setGlobalSetting('admin_email', settings.general.adminEmail),
+        setGlobalSetting('notify_user_registration', settings.notifications.userRegistrationAlerts),
+      ]);
+      await refresh();
       
       toast({
         title: 'Success',
@@ -91,7 +114,7 @@ const AdminSettings = () => {
     }
   };
 
-  const updateSetting = (section: string, key: string, value: any) => {
+  const updateSetting = (section: 'notifications' | 'general' | 'security', key: string, value: boolean | string | number) => {
     setSettings(prev => ({
       ...prev,
       [section]: {

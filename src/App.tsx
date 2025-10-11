@@ -52,6 +52,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminAuth from "./pages/AdminAuth";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import PropertyStatus from "./pages/admin/PropertyStatus";
 import AdminLayout from "@/components/admin/AdminLayout";
 import AdminOrEmployeeRoute from "@/components/admin/AdminOrEmployeeRoute";
 import AdminProperties from "./pages/AdminProperties";
@@ -66,13 +67,15 @@ import { FinanceProtectedRoute } from "@/components/admin/FinanceProtectedRoute"
 import { EmployeeRedirectHandler } from "@/components/admin/EmployeeRedirectHandler";
 import { AdminRegions } from "./pages/AdminRegions";
 import { AdminSEO } from "./pages/AdminSEO";
-import { AdminAudit } from "./pages/AdminAudit";
+// AdminAudit removed
 import AdminPageManagement from "./pages/AdminPageManagement";
 import { AdminWebsiteCMS } from "./pages/AdminWebsiteCMS";
 import ContentManagementPage from "./pages/ContentManagement";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import GeolocationRedirect from "./components/GeolocationRedirect";
+import { SettingsProvider } from '@/contexts/SettingsContext';
+import MaintenanceGate from '@/components/MaintenanceGate';
 
 import Architecture from "./pages/Architects";
 import Interior from "./pages/Interior";
@@ -106,6 +109,13 @@ import PostService from "./pages/PostService";
 import { EmployeeDashboard } from "./pages/EmployeeDashboard";
 import Plans from "./pages/Plans";
 import Services from "./pages/Services";
+import { useUserRegistrationAlerts } from '@/listeners/userRegistrationAlerts';
+
+const RegistrationAlertsActivator: React.FC = () => {
+  // This component must be rendered within SettingsProvider
+  useUserRegistrationAlerts();
+  return null;
+};
 
 const App: React.FC = () => {
   const [queryClient] = useState(() => new QueryClient({
@@ -119,6 +129,9 @@ const App: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SettingsProvider>
+      {/* Activate alerts under the SettingsProvider so it can read settings context */}
+      <RegistrationAlertsActivator />
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -126,6 +139,7 @@ const App: React.FC = () => {
           <BrowserRouter>
             <>
               <ScrollToTop />
+              <MaintenanceGate>
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
@@ -262,6 +276,7 @@ const App: React.FC = () => {
   </AdminOrEmployeeRoute>
 }>
               <Route index element={<AdminDashboard />} />
+              <Route path="property-status" element={<PropertyStatus />} />
               <Route path="employees" element={<EmployeeManagement />} />
               <Route path="content" element={<ContentManagementPage />} />
               <Route path="analytics" element={<AdminAnalytics />} />
@@ -270,7 +285,7 @@ const App: React.FC = () => {
               <Route path="featured-properties" element={<Navigate to="/admin/listings" replace />} />
               <Route path="website-cms" element={<AdminWebsiteCMS />} />
               <Route path="regions" element={<AdminRegions />} />
-              <Route path="security" element={<AdminAudit />} />
+              {/* Security & Audit removed */}
               <Route path="settings" element={<AdminSettings />} />
               <Route path="seo" element={<AdminSEO />} />
               <Route path="pages" element={<AdminPageManagement />} />
@@ -319,10 +334,12 @@ const App: React.FC = () => {
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
+              </MaintenanceGate>
             </>
           </BrowserRouter>
         </GeolocationRedirect>
       </TooltipProvider>
+      </SettingsProvider>
     </QueryClientProvider>
   );
 };

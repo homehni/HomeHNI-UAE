@@ -25,6 +25,8 @@ interface DashboardStats {
   totalLeads: number;
   pendingProperties: number;
   newLeads: number;
+  rentedProperties: number;
+  soldProperties: number;
   monthlyGrowth: number;
 }
 
@@ -42,18 +44,24 @@ const AdminDashboard = () => {
 
   // Optimized data fetching with React Query and caching
   const fetchDashboardStats = useCallback(async () => {
-    const [usersResult, propertiesResult, leadsResult] = await Promise.all([
+    const [usersResult, propertiesResult, leadsResult, rentedSoldResult] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact' }),
       supabase.from('properties').select('id, status', { count: 'exact' }),
       supabase.from('leads').select('id, status, created_at', { count: 'exact' }),
+      supabase.from('properties').select('id, rental_status, listing_type').not('rental_status', 'eq', 'available'),
     ]);
 
     if (usersResult.error) throw usersResult.error;
     if (propertiesResult.error) throw propertiesResult.error;
     if (leadsResult.error) throw leadsResult.error;
+    if (rentedSoldResult.error) throw rentedSoldResult.error;
 
     const pendingProperties = propertiesResult.data?.filter(p => p.status === 'pending').length || 0;
     const newLeads = leadsResult.data?.filter(l => l.status === 'new').length || 0;
+    
+    // Count properties by rental status
+    const rentedProperties = rentedSoldResult.data?.filter(p => p.rental_status === 'rented').length || 0;
+    const soldProperties = rentedSoldResult.data?.filter(p => p.rental_status === 'sold').length || 0;
 
     return {
       totalUsers: usersResult.count || 0,
@@ -61,6 +69,8 @@ const AdminDashboard = () => {
       totalLeads: leadsResult.count || 0,
       pendingProperties,
       newLeads,
+      rentedProperties,
+      soldProperties,
       monthlyGrowth: 12.5, // Mock data - replace with real calculation
     };
   }, []);
@@ -73,6 +83,8 @@ const AdminDashboard = () => {
       totalLeads: 0,
       pendingProperties: 0,
       newLeads: 0,
+      rentedProperties: 0,
+      soldProperties: 0,
       monthlyGrowth: 0,
     }, 
     isLoading,
@@ -333,14 +345,9 @@ const AdminDashboard = () => {
         {statCards.map((stat, index) => (
           <Card key={index}>
             <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                  <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                </div>
+              <div>
+                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
               </div>
             </CardContent>
           </Card>
@@ -410,6 +417,54 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Property Status Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Property Status</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+              className="flex items-center p-4 rounded-xl border border-red-100 bg-white shadow-sm cursor-pointer hover:bg-red-50 transition-colors"
+              onClick={() => window.location.href = '/admin/property-status?status=rented'}
+            >
+              <div className="p-3 rounded-full bg-red-100 mr-4">
+                <Building2 className="h-6 w-6 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium">Rented Properties</h3>
+                <div className="flex items-center mt-1">
+                  <span className="text-2xl font-bold text-red-600">{stats.rentedProperties}</span>
+                  <span className="ml-2 text-sm text-gray-500">marked as rented</span>
+                </div>
+              </div>
+              <Button size="sm" variant="ghost">
+                View All
+              </Button>
+            </div>
+            
+            <div
+              className="flex items-center p-4 rounded-xl border border-green-100 bg-white shadow-sm cursor-pointer hover:bg-green-50 transition-colors"
+              onClick={() => window.location.href = '/admin/property-status?status=sold'}
+            >
+              <div className="p-3 rounded-full bg-green-100 mr-4">
+                <Building2 className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium">Sold Properties</h3>
+                <div className="flex items-center mt-1">
+                  <span className="text-2xl font-bold text-green-600">{stats.soldProperties}</span>
+                  <span className="ml-2 text-sm text-gray-500">marked as sold</span>
+                </div>
+              </div>
+              <Button size="sm" variant="ghost">
+                View All
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
       <Card>
