@@ -1105,7 +1105,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         )}
     {/* Desktop Search Section */}
-  <div className="hidden sm:block absolute left-0 right-0 bottom-4 z-50 transform-gpu will-change-transform">
+    {/* Note: Keep desktop search below header dropdowns to avoid overlap.
+       The header is rendered earlier with z-50; previously both had z-50,
+       causing the search (later in DOM) to overlay dropdown menus.
+       Lowering to z-30 resolves stacking without changing layout. */}
+  <div className="hidden sm:block absolute left-0 right-0 bottom-0 translate-y-3 z-30 transform-gpu will-change-transform">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               {/* Navigation Tabs */}

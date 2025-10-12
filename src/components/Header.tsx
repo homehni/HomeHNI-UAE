@@ -262,6 +262,7 @@ const Header = () => {
                 </button>
 
                 {/* Services Dropdown */}
+                {/* Dropdown content uses z-[100]; ensure other overlapping elements (e.g., homepage search) have lower z-index. */}
                 <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
                   <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                     SERVICES
@@ -304,6 +305,7 @@ const Header = () => {
                 </div>
 
                 {/* Plans Dropdown */}
+                {/* Same z-index guidance as above to avoid overlap issues. */}
                 <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
                   <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
                     PLANS
