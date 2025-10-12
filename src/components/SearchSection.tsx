@@ -1109,9 +1109,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
        The header is rendered earlier with z-50; previously both had z-50,
        causing the search (later in DOM) to overlay dropdown menus.
        Lowering to z-30 resolves stacking without changing layout. */}
-  <div className="hidden sm:block absolute left-0 right-0 bottom-0 translate-y-3 z-30 transform-gpu will-change-transform">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl mx-auto">
+  <div className="hidden sm:block absolute left-0 right-0 bottom-0 translate-y-3 md:translate-y-8 lg:translate-y-8 xl:translate-y-6 2xl:translate-y-3 z-30 transform-gpu will-change-transform">
+          <div className="max-w-4xl md:max-w-3xl lg:max-w-4xl xl:max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl md:max-w-2xl lg:max-w-3xl mx-auto">
               {/* Navigation Tabs */}
               <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
