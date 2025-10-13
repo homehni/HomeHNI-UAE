@@ -11,10 +11,10 @@ import Stats from '@/components/Stats';
 import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
 import RealEstateSlider from '@/components/RealEstateSlider';
+import FeaturedProperties from '@/components/FeaturedProperties';
 
 // Lazy load heavy components
 import { 
-  LazyFeaturedProperties, 
   LazyHomeServices,
   LazyCustomerTestimonials,
   LazyMobileAppSection 
@@ -22,7 +22,6 @@ import {
 
 // Import loading skeletons
 import {
-  FeaturedPropertiesSkeleton,
   HomeServicesSkeleton,
   CustomerTestimonialsSkeleton,
   MobileAppSectionSkeleton
@@ -66,9 +65,7 @@ const Index = () => {
           <LazyHomeServices />
         </Suspense>
         
-        <Suspense fallback={<FeaturedPropertiesSkeleton />}>
-          <LazyFeaturedProperties />
-        </Suspense>
+        <FeaturedProperties />
         
         <Services />
         <WhyUseSection />
