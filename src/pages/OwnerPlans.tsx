@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Star, Check, Phone, Clock, Users, Shield, UserCheck, Globe, Camera, Lock, FileText, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,9 +13,11 @@ import Marquee from '@/components/Marquee';
 import PayButton from '@/components/PayButton';
 import GSTDisplay from '@/components/GSTDisplay';
 import { calculateTotalWithGST } from '@/utils/gstCalculator';
+import { supabase } from '@/integrations/supabase/client';
 
 interface OwnerPlansProps { embedded?: boolean }
 const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
+  const navigate = useNavigate();
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 1,
     commercial: 1, 
@@ -23,6 +25,73 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
     agricultural: 1
   });
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  
+  // Handle free plan subscription
+  const handleFreeSubscription = async (planName: string) => {
+    try {
+      // Get the current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        // If user is not logged in, redirect to login or show login dialog
+        // You may want to implement a login dialog here
+        alert("Please log in to subscribe to a free plan");
+        return;
+      }
+      
+      // Generate a unique payment ID for the free subscription
+      const freePaymentId = `free-${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+      const currentDate = new Date();
+      const expiryDate = new Date();
+      const invoiceNumber = `INV-FREE-${Date.now()}`;
+      
+      // Calculate expiry date based on plan type (similar to paid plans)
+      if (planName.toLowerCase().includes('lifetime')) {
+        expiryDate.setFullYear(expiryDate.getFullYear() + 100); // 100 years for lifetime
+      } else if (planName.toLowerCase().includes('year')) {
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+      } else {
+        expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
+      }
+      
+      // Record free subscription in the payments table
+      const { error: paymentError } = await supabase
+        .from('payments')
+        .insert({
+          user_id: user.id,
+          payment_id: freePaymentId,
+          plan_name: planName,
+          amount_paise: 0, // Free plan has 0 cost
+          amount_rupees: 0,
+          currency: 'INR',
+          status: 'success',
+          payment_method: 'free',
+          payment_date: currentDate.toISOString(),
+          invoice_number: invoiceNumber,
+          plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
+          plan_duration: planName.toLowerCase().includes('lifetime') 
+            ? 'lifetime' 
+            : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+          expires_at: expiryDate.toISOString(),
+          metadata: {
+            free_plan: true
+          }
+        });
+        
+      if (paymentError) {
+        console.error('Error recording free subscription:', paymentError);
+        alert("There was an error processing your subscription. Please try again.");
+        return;
+      }
+      
+      // Redirect to the success page
+      navigate(`/payment/success?payment_id=${freePaymentId}`);
+      
+    } catch (error) {
+      console.error('Error in free subscription process:', error);
+      alert("There was an error processing your subscription. Please try again.");
+    }
+  };
 
   const tabPlans = {
     residential: [
@@ -371,13 +440,14 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
                         
                         {plan.isFree ? (
                           <Button 
+                            onClick={() => handleFreeSubscription(`Owner — ${plan.name}`)}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
                                 ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                           >
-                            Get Started - FREE
+                            Subscribe - FREE
                           </Button>
                         ) : (
                           <PayButton

@@ -13,6 +13,7 @@ import Marquee from "@/components/Marquee";
 import { Link } from "react-router-dom";
 import GSTDisplay from '@/components/GSTDisplay';
 import { calculateTotalWithGST } from '@/utils/gstCalculator';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SellerPlansProps { embedded?: boolean }
 const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
@@ -392,8 +393,60 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                                 ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
+                            onClick={() => {
+                              // Record the free subscription in the database
+                              const recordFreePlan = async () => {
+                                try {
+                                  const { data: { user } } = await supabase.auth.getUser();
+                                  
+                                  if (!user) {
+                                    // Redirect to auth page if not logged in
+                                    window.location.href = '/auth?redirect=plans';
+                                    return;
+                                  }
+                                  
+                                  // Calculate current and expiry date
+                                  const currentDate = new Date();
+                                  const expiryDate = new Date();
+                                  expiryDate.setMonth(expiryDate.getMonth() + 1); // Free plans valid for 1 month
+                                  
+                                  // Create a random payment ID for free plans
+                                  const freePaymentId = `free_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+                                  const invoiceNumber = `INV-FREE-${Date.now()}`;
+                                  
+                                  // Record the free subscription in payments table
+                                  await supabase.from('payments').insert({
+                                    user_id: user.id,
+                                    payment_id: freePaymentId,
+                                    plan_name: `Seller — ${plan.name} (Free)`,
+                                    amount_paise: 0,
+                                    amount_rupees: 0,
+                                    currency: 'INR',
+                                    status: 'success',
+                                    payment_method: 'free',
+                                    payment_date: currentDate.toISOString(),
+                                    invoice_number: invoiceNumber,
+                                    plan_type: 'subscription',
+                                    plan_duration: '1 month',
+                                    expires_at: expiryDate.toISOString(),
+                                    metadata: {
+                                      notes: { plan: plan.name, category: "seller", type: tabKey, isFree: true }
+                                    }
+                                  });
+                                  
+                                  // Redirect to success page
+                                  window.location.href = `/payment/success?payment_id=${freePaymentId}`;
+                                } catch (error) {
+                                  console.error('Error recording free plan:', error);
+                                  // Redirect to success page anyway for better UX
+                                  window.location.href = '/payment/success';
+                                }
+                              };
+                              
+                              recordFreePlan();
+                            }}
                           >
-                            Get Started - FREE
+                            Subscribe - FREE
                           </Button>
                         ) : (
                           <PayButton
