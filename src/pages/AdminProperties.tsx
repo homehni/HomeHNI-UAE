@@ -41,8 +41,11 @@ interface PropertySubmission {
 
 interface PropertyPayload {
   property_type?: string;
+  propertyType?: string; // camelCase version
   listing_type?: string;
+  listingType?: string; // camelCase version
   bhk_type?: string;
+  bhkType?: string; // camelCase version
   locality?: string;
   expected_price?: number;
   super_area?: number;
@@ -66,6 +69,8 @@ interface PropertyPayload {
     fullName?: string;
     email?: string;
     phone?: string;
+    phoneNumber?: string; // Alternative field name
+    role?: string;
   };
   propertyInfo?: {
     propertyDetails?: Record<string, unknown>;
@@ -73,6 +78,21 @@ interface PropertyPayload {
     rentalDetails?: Record<string, unknown>;
     additionalInfo?: Record<string, unknown>;
     amenities?: Record<string, unknown>;
+  };
+  originalFormData?: {
+    ownerInfo?: {
+      fullName?: string;
+      email?: string;
+      phoneNumber?: string;
+      role?: string;
+    };
+    propertyInfo?: {
+      propertyDetails?: Record<string, unknown>;
+      saleDetails?: Record<string, unknown>;
+      rentalDetails?: Record<string, unknown>;
+      additionalInfo?: Record<string, unknown>;
+      amenities?: Record<string, unknown>;
+    };
   };
   [key: string]: unknown; // For additional properties
 }
@@ -429,18 +449,20 @@ const AdminProperties = () => {
           return submission.title;
         }
         
-        if (ownerInfo && ownerInfo.listingType) {
+        // Check if this is a land property and generate appropriate title
+        if (mappedPropertyType.toLowerCase().includes('land')) {
           // Use consistent casing for sale/Sale to prevent duplicates
           const saleText = mappedListingType.toLowerCase() === 'sale' ? 'Sale' : 'Rent';
           
-          const listingTypeMap: { [key: string]: string } = {
-            'Industrial land': `Industrial Land For ${saleText}`,
-            'Agricultural Land': `Agricultural Land For ${saleText}`,
-            'Commercial land': `Commercial Land For ${saleText}`
+          const propertyTypeMap: { [key: string]: string } = {
+            'industrial land': `Industrial Land For ${saleText}`,
+            'agricultural land': `Agricultural Land For ${saleText}`,
+            'commercial land': `Commercial Land For ${saleText}`
           };
-          const generatedTitle = listingTypeMap[ownerInfo.listingType];
+          const normalized = mappedPropertyType.toLowerCase();
+          const generatedTitle = propertyTypeMap[normalized];
           if (generatedTitle) {
-            console.log('Generated title for property:', generatedTitle);
+            console.log('Generated title for land property:', generatedTitle);
             return generatedTitle;
           }
         }
@@ -453,20 +475,20 @@ const AdminProperties = () => {
         .from('properties')
         .update({
           user_id: userIdToAssign,
-          title: propertyTitle,
+          title: propertyTitle as string,
           property_type: mappedPropertyType,
           listing_type: mappedListingType,
           bhk_type: bhkValue,
           
           // Enhanced property details mapping
-          furnishing: mapFurnishing(payload.furnishing || amenities.furnishing || null),
-          availability_type: payload.availability_type || 'immediate',
+          furnishing: mapFurnishing(String(payload.furnishing || amenities.furnishing || '')),
+          availability_type: (payload.availability_type as string) || 'immediate',
           
           // NEW: Additional property characteristics
-          property_age: propertyDetails.propertyAge || saleDetails.propertyAge || null,
-          facing_direction: propertyDetails.facing || null,
-          floor_type: propertyDetails.floorType || null,
-          registration_status: saleDetails.registrationStatus || null,
+          property_age: String(propertyDetails.propertyAge || saleDetails.propertyAge || ''),
+          facing_direction: String(propertyDetails.facing || ''),
+          floor_type: String(propertyDetails.floorType || ''),
+          registration_status: String(saleDetails.registrationStatus || ''),
           
           // Location details
           state: submission.state || payload.state || '',
@@ -474,20 +496,20 @@ const AdminProperties = () => {
           locality: payload.locality || '',
           street_address: payload.street_address || '',
           pincode: payload.pincode || '',
-          landmarks: payload.landmarks || additionalInfo.directionsTip || '',
+          landmarks: String(payload.landmarks || additionalInfo.directionsTip || ''),
           
           // Property specifications
-          description: payload.description || additionalInfo.description || '',
-          bathrooms: propertyDetails.bathrooms || payload.bathrooms || amenities.bathrooms || 0,
-          balconies: propertyDetails.balconies || payload.balconies || amenities.balcony || 0,
-          floor_no: propertyDetails.floorNo || payload.floor_no || null,
-          total_floors: propertyDetails.totalFloors || payload.total_floors || null,
+          description: String(payload.description || additionalInfo.description || ''),
+          bathrooms: Number(propertyDetails.bathrooms || payload.bathrooms || amenities.bathrooms || 0),
+          balconies: Number(propertyDetails.balconies || payload.balconies || amenities.balcony || 0),
+          floor_no: Number(propertyDetails.floorNo || payload.floor_no || 0) || null,
+          total_floors: Number(propertyDetails.totalFloors || payload.total_floors || 0) || null,
           super_area: Math.max(Number(payload.super_area || propertyDetails.superBuiltUpArea) || 0, 1),
-          carpet_area: payload.carpet_area || null,
+          carpet_area: Number(payload.carpet_area || 0) || null,
           
           // Financial details
-          availability_date: payload.availability_date || saleDetails.possessionDate || rentalDetails.availableFrom || null,
-          expected_price: Math.max(payload.expected_price || saleDetails.expectedPrice || rentalDetails.expectedPrice || 1, 1),
+          availability_date: String(payload.availability_date || saleDetails.possessionDate || rentalDetails.availableFrom || ''),
+          expected_price: Math.max(Number(payload.expected_price || saleDetails.expectedPrice || rentalDetails.expectedPrice) || 1, 1),
           price_negotiable: payload.price_negotiable !== false,
           maintenance_charges: Math.max(Number(payload.maintenance_charges || saleDetails.maintenanceCharges || rentalDetails.maintenanceCharges) || 0, 0),
           // Security deposit only for rental properties, not for sale/land properties
@@ -498,12 +520,12 @@ const AdminProperties = () => {
           home_loan_available: saleDetails.homeLoanAvailable === true || saleDetails.homeLoanAvailable === 'Yes',
           
           // NEW: Property services and amenities
-          water_supply: amenities.waterSupply || null,
-          power_backup: amenities.powerBackup || null,
+          water_supply: String(amenities.waterSupply || ''),
+          power_backup: String(amenities.powerBackup || ''),
           gated_security: amenities.gatedSecurity === true || amenities.gatedSecurity === 'Yes' || amenities.gatedSecurity === 'yes',
-          who_will_show: amenities.whoWillShow || additionalInfo.whoWillShow || null,
-          current_property_condition: amenities.currentPropertyCondition || null,
-          secondary_phone: additionalInfo.secondaryNumber || null,
+          who_will_show: String(amenities.whoWillShow || additionalInfo.whoWillShow || ''),
+          current_property_condition: String(amenities.currentPropertyCondition || ''),
+          secondary_phone: String(additionalInfo.secondaryNumber || ''),
           
           // NEW: Store amenities and documents as JSON
           amenities: {
@@ -528,13 +550,13 @@ const AdminProperties = () => {
             security: amenities.security,
             wifi: amenities.wifi,
             currentPropertyCondition: amenities.currentPropertyCondition
-          },
+          } as any,
           additional_documents: {
             allotmentLetter: additionalInfo.allotmentLetter,
             saleDeedCertificate: additionalInfo.saleDeedCertificate,
             propertyTaxPaid: additionalInfo.propertyTaxPaid,
             occupancyCertificate: additionalInfo.occupancyCertificate
-          },
+          } as any,
           
           // Media
           images: imagesNormalized,
