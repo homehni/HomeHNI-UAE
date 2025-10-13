@@ -1167,7 +1167,7 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Interested in your Properties
+                Owners you contacted
               </div>
             </nav>
           </div>
