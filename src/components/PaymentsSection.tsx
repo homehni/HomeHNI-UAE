@@ -302,17 +302,36 @@ const PaymentsSection: React.FC = () => {
     pdf.text('Amount Payable:', totalX, totalY + 32);
     pdf.text(`Rs. ${totalAmount.toLocaleString()}`, pageWidth - 25, totalY + 32, { align: 'right' });
     
-    // Payment Details Section - uniform formatting
-    const paymentDetailsY = totalY + 60;
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Payment Details:', 20, paymentDetailsY);
+    // Define the position for subscription details
+    const detailsY = totalY + 60;
+
+    // Subscription Details Section - removed title to prevent redundant labels
+    const subscriptionDetailsY = detailsY + 65;
     
+    // Add subscription details without any section header
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(9);
-    pdf.text(`Payment Method: ${payment.payment_method || 'razorpay'}`, 20, paymentDetailsY + 15);
-    pdf.text(`Transaction Date: ${format(new Date(payment.payment_date), 'MMMM do, yyyy')}`, 20, paymentDetailsY + 25);
-    pdf.text(`Currency: ${payment.currency}`, 20, paymentDetailsY + 35);
+    pdf.text(`Start Date: ${format(new Date(payment.payment_date), 'MMMM dd, yyyy')}`, 20, subscriptionDetailsY + 15);
+    
+    if (payment.expires_at) {
+      const nextBillingLabel = payment.plan_type === 'lifetime' ? 'Expiry Date:' : 'Next Billing Date:';
+      pdf.text(`${nextBillingLabel} ${format(new Date(payment.expires_at), 'MMMM dd, yyyy')}`, 20, subscriptionDetailsY + 25);
+    }
+    
+    // Add a note about subscription
+    pdf.setFont('helvetica', 'italic');
+    pdf.text('This subscription gives you full access to all features in the selected plan.', 20, subscriptionDetailsY + 45);
+    
+    // Draw red line above footer
+    pdf.setDrawColor(220, 38, 38); 
+    pdf.setLineWidth(1);
+    pdf.line(20, pageHeight - 30, pageWidth - 20, pageHeight - 30);
+    
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(8);
+    pdf.setTextColor(100, 100, 100); // Dark gray text for footer
+    pdf.text('Thank you for your business! For any inquiries, please contact support at homehni8@gmail.com', pageWidth / 2, pageHeight - 20, { align: 'center' });
+    pdf.text('Home HNI Pvt Ltd | www.homehni.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
     
     // Save the PDF
     const fileName = `HomeHNI_Invoice_${payment.invoice_number || payment.payment_id.slice(-8)}_${format(new Date(payment.payment_date), 'yyyy-MM-dd')}.pdf`;
@@ -475,16 +494,27 @@ const PaymentsSection: React.FC = () => {
                 )}
               </div>
 
-              {selectedPayment.expires_at && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-blue-600" />
                     <span className="text-sm font-medium text-blue-900">
-                      Plan expires on {format(new Date(selectedPayment.expires_at), 'PPP')}
+                      Subscription Start Date: {format(new Date(selectedPayment.payment_date), 'PPP')}
                     </span>
                   </div>
+                  
+                  {selectedPayment.expires_at && (
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-blue-600" />
+                      <span className="text-sm font-medium text-blue-900">
+                        {selectedPayment.plan_type === 'lifetime' 
+                          ? `Plan expires on ${format(new Date(selectedPayment.expires_at), 'PPP')}` 
+                          : `Next billing date: ${format(new Date(selectedPayment.expires_at), 'PPP')}`}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
 
               {selectedPayment.invoice_number && (
                 <div className="flex justify-end pt-4 border-t">
