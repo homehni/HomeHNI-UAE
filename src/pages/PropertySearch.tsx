@@ -786,7 +786,7 @@ const PropertySearch = () => {
     return locationMappings[normalized] || location;
   }, []);
 
-  // Initialize Google Maps Places Autocomplete
+  // Initialize Google Maps Places Autocomplete - but only when the search is actually unlocked
   useEffect(() => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
     const loadGoogleMaps = () => {
@@ -807,6 +807,7 @@ const PropertySearch = () => {
     };
     const initAutocomplete = () => {
       const w = window as WindowWithGoogle;
+      if (isSearchLocked) return; // Don't initialize if search is locked
       if (!w.google?.maps?.places || !locationInputRef.current) return;
       
       const getOptions = () => ({
@@ -912,9 +913,13 @@ const PropertySearch = () => {
       });
     };
     
-    loadGoogleMaps().then(initAutocomplete).catch(console.error);
+    // Only load Google Maps API and initialize autocomplete when search is unlocked
+    if (!isSearchLocked) {
+      loadGoogleMaps().then(initAutocomplete).catch(console.error);
+    }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Intentionally empty dependency array for initial load only
+  }, [isSearchLocked]); // Re-initialize when search lock state changes
 
   // City restriction logic removed - allowing search across all cities
   return <div className="min-h-screen bg-background">
@@ -1502,26 +1507,7 @@ const PropertySearch = () => {
                     ))}
                   </div>
                 
-                {/* Load More Button - Better performance than pagination for large datasets */}
-                {hasMore && (
-                  <div className="flex justify-center mt-8">
-                    <Button 
-                      onClick={loadMoreProperties}
-                      disabled={isLoading}
-                      size="lg"
-                      className="min-w-48"
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Loading...
-                        </>
-                      ) : (
-                        <>Load More Properties ({Math.max(propertyCount - filteredProperties.length, 0)} remaining)</>
-                      )}
-                    </Button>
-                  </div>
-                )}
+                {/* Load More button removed intentionally pending server-side filtered pagination */}
               </>
             ) : (
               <div className="text-center py-16">
