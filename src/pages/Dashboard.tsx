@@ -1115,7 +1115,7 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Owners you Contacted
+                People Showing Interest
           </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
