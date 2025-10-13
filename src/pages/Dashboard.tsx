@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import type { Json } from '@/integrations/supabase/types';
+import { fetchContactedOwners } from '@/services/leadService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -132,6 +133,22 @@ export const Dashboard: React.FC = () => {
   
   const [properties, setProperties] = useState<CombinedProperty[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [contactedProperties, setContactedProperties] = useState<{
+    id: string;
+    title: string;
+    property_type: string;
+    listing_type: string;
+    expected_price: number;
+    city: string;
+    locality: string;
+    created_at: string;
+    images?: string[];
+    owner_name?: string;
+    owner_email?: string;
+    owner_phone?: string;
+    contact_date: string;
+  }[]>([]);
+  const [contactedPropertiesLoading, setContactedPropertiesLoading] = useState(true);
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
   const [requirementsPage, setRequirementsPage] = useState(1);
@@ -188,8 +205,34 @@ export const Dashboard: React.FC = () => {
       fetchServiceSubmissions();
       fetchPropertyRequirements();
       fetchFavorites();
+      fetchContactedOwnersData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+  
+  // Fetch properties where the current user has contacted owners
+  const fetchContactedOwnersData = async () => {
+    if (!user) return;
+    
+    try {
+      setContactedPropertiesLoading(true);
+      console.log('Dashboard: Fetching properties where user has contacted owners');
+      
+      const data = await fetchContactedOwners(user.id);
+      
+      console.log('Dashboard: Fetched contacted properties:', data);
+      setContactedProperties(data);
+    } catch (error) {
+      console.error('Error fetching contacted owners:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load your contacted properties. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setContactedPropertiesLoading(false);
+    }
+  };
 
   // Load profile name from Supabase profiles when user changes
   useEffect(() => {
@@ -1768,15 +1811,126 @@ export const Dashboard: React.FC = () => {
             <PaymentsSection />
           )}
 
-          {/* Interested in your Properties Content */}
+          {/* Owners you contacted tab */}
           {activeSidebarItem === 'interested' && (
             <div className="space-y-6">
-              <h1 className="text-2xl font-semibold text-gray-900">Interested in your Properties</h1>
-              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No interested parties</h3>
-                <p className="text-gray-500">People interested in your properties will appear here</p>
+              <div className="mb-6">
+                <h1 className="text-2xl font-semibold text-gray-900">Owners You Contacted</h1>
+                <p className="text-gray-600 mt-1">
+                  Properties where you've reached out to owners through contact forms
+                </p>
               </div>
+              
+              {/* Loading State */}
+              {contactedPropertiesLoading && (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+                  <p className="text-gray-600">Loading properties you've contacted...</p>
+                </div>
+              )}
+              
+              {/* Empty State */}
+              {!contactedPropertiesLoading && contactedProperties.length === 0 && (
+                <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+                  <MessageSquare className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No contacted properties yet</h3>
+                  <p className="text-gray-500 mb-4">When you contact property owners, they'll appear here</p>
+                  <Button onClick={() => navigate('/property-search')}>
+                    <Search className="h-4 w-4 mr-2" />
+                    Browse Properties
+                  </Button>
+                </div>
+              )}
+              
+              {/* Properties Grid */}
+              {!contactedPropertiesLoading && contactedProperties.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {contactedProperties.map((property) => (
+                    <Card key={property.id} className="overflow-hidden hover:shadow-lg transition-all">
+                      {/* Property Image */}
+                      <div className="h-48 bg-gray-200 relative">
+                        {property.images && property.images.length > 0 ? (
+                          <img
+                            src={property.images[0]}
+                            alt={property.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full bg-gray-100">
+                            <Home className="h-12 w-12 text-gray-400" />
+                          </div>
+                        )}
+                        
+                        {/* Contact Badge */}
+                        <div className="absolute bottom-2 right-2">
+                          <Badge className="bg-green-600">
+                            <Phone className="h-3 w-3 mr-1" />
+                            Contacted
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <CardContent className="p-4">
+                        <div className="mb-2">
+                          <h3 className="font-medium text-gray-900 line-clamp-1">{property.title}</h3>
+                          <p className="text-sm text-gray-600">
+                            {property.locality}, {property.city}
+                          </p>
+                        </div>
+                        
+                        <div className="flex justify-between items-center mb-4">
+                          <span className="text-lg font-bold text-gray-900">
+                            ₹{property.expected_price.toLocaleString('en-IN')}
+                          </span>
+                          <Badge className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'}`}>
+                            For {property.listing_type === 'rent' ? 'Rent' : 'Sale'}
+                          </Badge>
+                        </div>
+                        
+                        {/* Contact Information */}
+                        <div className="border-t pt-3 mt-2">
+                          <h4 className="text-sm font-medium text-gray-900 mb-2">Owner Contact</h4>
+                          
+                          {property.owner_name && (
+                            <div className="flex items-center text-sm mb-1">
+                              <User className="h-3 w-3 mr-2 text-gray-500" />
+                              <span>{property.owner_name}</span>
+                            </div>
+                          )}
+                          
+                          {property.owner_phone && (
+                            <div className="flex items-center text-sm mb-1">
+                              <Phone className="h-3 w-3 mr-2 text-gray-500" />
+                              <span>{property.owner_phone}</span>
+                            </div>
+                          )}
+                          
+                          {property.owner_email && (
+                            <div className="flex items-center text-sm mb-1 break-all">
+                              <MessageCircle className="h-3 w-3 mr-2 text-gray-500 flex-shrink-0" />
+                              <span className="truncate">{property.owner_email}</span>
+                            </div>
+                          )}
+                          
+                          <div className="flex items-center text-xs text-gray-500 mt-2">
+                            <span>Contacted on {new Date(property.contact_date).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                      
+                      {/* Action Button */}
+                      <div className="px-4 pb-4">
+                        <Button 
+                          className="w-full"
+                          onClick={() => navigate(`/property/${property.id}`)}
+                        >
+                          View Property
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

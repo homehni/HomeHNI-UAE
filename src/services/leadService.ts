@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 export interface CreateLeadData {
   property_id: string;
@@ -6,6 +7,22 @@ export interface CreateLeadData {
   interested_user_email: string;
   interested_user_phone?: string;
   message?: string;
+}
+
+export interface ContactedProperty {
+  id: string;
+  title: string;
+  property_type: string;
+  listing_type: string;
+  expected_price: number;
+  city: string;
+  locality: string;
+  created_at: string;
+  images?: string[];
+  owner_name?: string;
+  owner_email?: string;
+  owner_phone?: string;
+  contact_date: string;
 }
 
 // Service to create a new lead
@@ -64,4 +81,100 @@ export const fetchLeadsForOwner = async () => {
   }
 
   return data || [];
+};
+
+// Service to fetch properties where the current user has contacted owners
+export const fetchContactedOwners = async (userId: string) => {
+  console.log('leadService: Fetching properties where user has contacted owners, userId:', userId);
+  
+  try {
+    // First, get leads with property information where the current user is the interested party
+    // We'll use the current user's email to match against interested_user_email
+    const { data: currentUser, error: userError } = await supabase.auth.getUser();
+    
+    if (userError) {
+      console.error('leadService: Error getting current user:', userError);
+      throw userError;
+    }
+    
+    const userEmail = currentUser.user?.email;
+    
+    if (!userEmail) {
+      console.error('leadService: User email not available');
+      return [];
+    }
+    
+    // Get all leads where the email matches the current user
+    const { data: leadsData, error: leadsError } = await supabase
+      .from('leads')
+      .select('*, property_id')
+      .eq('interested_user_email', userEmail)
+      .order('created_at', { ascending: false });
+    
+    if (leadsError) {
+      console.error('leadService: Error fetching leads:', leadsError);
+      throw leadsError;
+    }
+    
+    console.log('leadService: Found leads for user email:', leadsData);
+    
+    // If no leads found, return empty array
+    if (!leadsData || leadsData.length === 0) {
+      return [];
+    }
+    
+    // Extract property IDs from leads
+    const propertyIds = leadsData.map(lead => lead.property_id);
+    
+    // Get property details using the property IDs
+    const properties: ContactedProperty[] = [];
+    
+    for (const propertyId of propertyIds) {
+      try {
+        // Fetch the property details using RPC to bypass RLS
+        const { data: propertyData, error: propertyError } = await supabase
+          .rpc('get_public_property_by_id', { property_id: propertyId });
+        
+        if (propertyError) {
+          console.error(`leadService: Error fetching property ${propertyId}:`, propertyError);
+          continue;
+        }
+        
+        if (propertyData && propertyData.length > 0) {
+          // Need to use any for this dynamic data structure from RPC
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const property = propertyData[0] as any;
+          
+          // Find the corresponding lead to get contact date
+          const lead = leadsData.find(l => l.property_id === propertyId);
+          
+          properties.push({
+            id: String(property.id || ''),
+            title: String(property.title || ''),
+            property_type: String(property.property_type || ''),
+            listing_type: String(property.listing_type || ''),
+            expected_price: Number(property.expected_price || 0),
+            city: String(property.city || ''),
+            locality: String(property.locality || ''),
+            created_at: String(property.created_at || ''),
+            images: Array.isArray(property.images) ? property.images : [],
+            // Try all possible field names for owner contact details and convert to string
+            owner_name: String(property.owner_name || property.user_name || ''),  
+            owner_email: String(property.owner_email || property.user_email || ''),
+            owner_phone: String(property.owner_phone || property.user_phone || ''),
+            contact_date: lead?.created_at || ''
+          });
+        }
+      } catch (error) {
+        console.error(`leadService: Error processing property ${propertyId}:`, error);
+      }
+    }
+    
+    console.log('leadService: Processed contacted properties:', properties);
+    
+    return properties;
+  } catch (error) {
+    console.error('leadService: Error in fetchContactedOwners:', error);
+    throw error;
+  }
 };
