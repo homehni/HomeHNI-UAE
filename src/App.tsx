@@ -99,7 +99,6 @@ import LandlordGuide from "./pages/LandlordGuide";
 import TenantGuide from "./pages/TenantGuide";
 import PropertyDetails from "./pages/PropertyDetails";
 import PropertySearch from "./pages/PropertySearch";
-import { MyInterests } from "./pages/MyInterests";
 import PagePreview from "./pages/PagePreview";
 import DynamicPage from "./pages/DynamicPage";
 import DeveloperPage from "./pages/DeveloperPage";
@@ -227,13 +226,6 @@ const App: React.FC = () => {
             <Route path="/property/:id" element={<PropertyDetails />} />
             <Route path="/search" element={<PropertySearch />} />
             <Route path="/property-search" element={<PropertySearch />} />
-            
-            {/* My Interests Route */}
-            <Route path="/my-interests" element={
-              <ProtectedRoute>
-                <MyInterests />
-              </ProtectedRoute>
-            } />
             
             {/* Developer Routes */}
             <Route path="/developer/:developerId" element={<DeveloperPage />} />

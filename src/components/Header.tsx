@@ -209,7 +209,7 @@ const Header = () => {
                       <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
                         <span>My Listings</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate('/my-interests')}>
+                      <DropdownMenuItem onClick={() => navigate('/dashboard?tab=interest')}>
                         <span>My Interest</span>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -463,7 +463,7 @@ const Header = () => {
                     <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
                       <span>My Listings</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/my-interests')}>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard?tab=interest')}>
                       <span>My Interest</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
