@@ -302,7 +302,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
       <div className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
         <div className="max-w-6xl mx-auto">
           <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
-            <h2 className={embedded ? "text-2xl font-bold mb-2" : "text-3xl font-bold mb-4"}>Rental Plans</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">Rental Plans</h2>
             <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>Choose between Owner plans for renting out property or Tenant plans for finding rental property</p>
           </div>
 
