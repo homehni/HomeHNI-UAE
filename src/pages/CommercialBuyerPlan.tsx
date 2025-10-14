@@ -367,7 +367,7 @@ const CommercialBuyerPlan = () => {
       <section id="pricing" className="py-8 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-            Choose Your Plan
+            Commercial Buyer plan
           </h2>
           <p className="text-sm text-muted-foreground text-center mb-8">Select the category that best fits your property search needs</p>
           
