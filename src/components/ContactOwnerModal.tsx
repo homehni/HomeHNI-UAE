@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { sendContactOwnerEmail } from '@/services/emailService';
 import { checkContactUsage, useContactAttempt } from '@/services/contactUsageService';
@@ -26,6 +28,8 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   propertyTitle,
   listingType
 }) => {
+  const { user } = useAuth();
+  const { profile } = useProfile();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -37,6 +41,17 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   const [remainingUses, setRemainingUses] = useState(50);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Auto-fill form with user profile data when modal opens and user is logged in
+  useEffect(() => {
+    if (isOpen && user && profile) {
+      setFormData(prev => ({
+        ...prev,
+        name: profile.full_name || prev.name,
+        email: user.email || prev.email
+      }));
+    }
+  }, [isOpen, user, profile]);
 
   // Check contact usage when modal opens
   useEffect(() => {

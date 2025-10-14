@@ -5,9 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
 const ArchitectsEmbedded = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
+  // Auto-fill state
+  const [autoFillData, setAutoFillData] = useState({ name: '', email: '' });
+  
+  // Effect to set auto-fill data when user/profile changes
+  useEffect(() => {
+    if (user && profile) {
+      setAutoFillData({
+        name: profile.full_name || '',
+        email: user.email || ''
+      });
+    }
+  }, [user, profile]);
+
   // Major cities in India
   const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
   const services = [{
@@ -123,7 +142,6 @@ const ArchitectsEmbedded = () => {
     type: null,
     text: ''
   });
-  const { toast } = useToast();
   return <div className="bg-background">
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
@@ -181,7 +199,7 @@ const ArchitectsEmbedded = () => {
                 });
               }
             }}>
-                <Input id="arch-name-mobile" name="name" placeholder="Name" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+                <Input id="arch-name-mobile" name="name" placeholder="Name" defaultValue={autoFillData.name} className="h-10 md:h-12 text-sm md:text-base bg-background" required />
                 <div className="flex gap-2 md:gap-3">
                   <Select defaultValue="+91" name="countryCode">
                     <SelectTrigger className="w-24 md:w-32 h-10 md:h-12 bg-background">
@@ -195,7 +213,7 @@ const ArchitectsEmbedded = () => {
                   </Select>
                   <Input id="arch-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
                 </div>
-                <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+                <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" defaultValue={autoFillData.email} className="h-10 md:h-12 text-sm md:text-base bg-background" required />
                 <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
@@ -391,7 +409,7 @@ const ArchitectsEmbedded = () => {
                 });
               }
             }}>
-              <Input id="arch-name" name="name" placeholder="Name" required />
+              <Input id="arch-name" name="name" placeholder="Name" defaultValue={autoFillData.name} required />
 
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
@@ -405,7 +423,7 @@ const ArchitectsEmbedded = () => {
                 <Input id="arch-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="arch-email" name="email" type="email" placeholder="Email ID" required />
+              <Input id="arch-email" name="email" type="email" placeholder="Email ID" defaultValue={autoFillData.email} required />
 
               <div className="flex gap-2">
                 <Select name="projectType" required>

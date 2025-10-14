@@ -5,10 +5,32 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { Shield, Camera, Lock, Bell, Smartphone, Home, Clock, CheckCircle, Star, X, Users, Building2, Zap, Headphones, Award, TrendingUp } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
 
 const HomeSecurityEmbedded = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
+  // Auto-fill state for form fields
+  const [autoFillData, setAutoFillData] = useState({
+    name: '',
+    email: ''
+  });
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setAutoFillData({
+        name: profile.full_name || '',
+        email: user.email || ''
+      });
+    }
+  }, [user, profile]);
+
   // Major cities in India
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
@@ -156,7 +178,6 @@ const HomeSecurityEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
-  const { toast } = useToast();
 
   return (
     <div className="bg-background">
@@ -234,13 +255,20 @@ const HomeSecurityEmbedded = () => {
                   });
                 }
               }}>
-                <Input id="security-name" name="name" placeholder="Name" required />
+                <Input 
+                  id="security-name" 
+                  name="name" 
+                  placeholder="Name" 
+                  defaultValue={autoFillData.name}
+                  required 
+                />
 
                 <Input 
                   id="security-email" 
                   name="email" 
                   type="email" 
                   placeholder="Email" 
+                  defaultValue={autoFillData.email}
                   required 
                 />
 
@@ -341,6 +369,7 @@ const HomeSecurityEmbedded = () => {
                   id="security-name-mobile" 
                   name="name" 
                   placeholder="Name" 
+                  defaultValue={autoFillData.name}
                   className="h-12 text-base bg-background"
                   required 
                 />
@@ -350,6 +379,7 @@ const HomeSecurityEmbedded = () => {
                   name="email" 
                   type="email" 
                   placeholder="Email" 
+                  defaultValue={autoFillData.email}
                   className="h-12 text-base bg-background"
                   required 
                 />

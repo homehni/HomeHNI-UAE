@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { sanitizeText, sanitizeEmail, sanitizePhone } from '@/utils/inputSanitization';
 import { Loader2, Shield, Mail, Phone, User } from 'lucide-react';
@@ -30,6 +32,8 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
 }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { profile } = useProfile();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [canContact, setCanContact] = useState(true);
   const [remainingUses, setRemainingUses] = useState(50);
@@ -39,6 +43,17 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
     phone: '',
     message: ''
   });
+
+  // Auto-fill form with user profile data when component mounts and user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setFormData(prev => ({
+        ...prev,
+        name: profile.full_name || prev.name,
+        email: user.email || prev.email
+      }));
+    }
+  }, [user, profile]);
 
   // Check contact usage when component mounts
   useEffect(() => {

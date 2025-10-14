@@ -5,10 +5,32 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { Truck, Package, Shield, Clock, CheckCircle, Star, Users, Building2, Home, Car, Award, Headphones, Globe, TrendingUp, FileText, X, Plus, Minus } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
 
 const PackersMoversEmbedded = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
+  // Auto-fill state for form fields
+  const [autoFillData, setAutoFillData] = useState({
+    name: '',
+    email: ''
+  });
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setAutoFillData({
+        name: profile.full_name || '',
+        email: user.email || ''
+      });
+    }
+  }, [user, profile]);
+
   // Major cities in India
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
@@ -130,7 +152,6 @@ const PackersMoversEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
-  const { toast } = useToast();
 
   return (
     <div className="bg-background">
@@ -208,7 +229,7 @@ const PackersMoversEmbedded = () => {
                   });
                 }
               }}>
-                <Input id="moving-name" name="name" placeholder="Name" required />
+                <Input id="moving-name" name="name" placeholder="Name" defaultValue={autoFillData.name} required />
 
                 <div className="flex gap-2">
                   <Select defaultValue="+91" name="countryCode">
@@ -222,7 +243,7 @@ const PackersMoversEmbedded = () => {
                   <Input id="moving-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
                 </div>
 
-                <Input id="moving-email" name="email" type="email" placeholder="Email ID" required />
+                <Input id="moving-email" name="email" type="email" placeholder="Email ID" defaultValue={autoFillData.email} required />
 
                 <Select name="city" required>
                   <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
@@ -305,6 +326,7 @@ const PackersMoversEmbedded = () => {
                   id="moving-name-mobile"
                   name="name"
                   placeholder="Name"
+                  defaultValue={autoFillData.name}
                   className="h-12 text-base bg-background"
                   required
                 />
@@ -335,6 +357,7 @@ const PackersMoversEmbedded = () => {
                   name="email"
                   type="email"
                   placeholder="Email ID"
+                  defaultValue={autoFillData.email}
                   className="h-12 text-base bg-background"
                 />
 

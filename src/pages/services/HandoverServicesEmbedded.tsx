@@ -5,10 +5,32 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { Building2, Users, FileCheck, Search, Database, Headphones, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, ShieldCheck, Home, Key, Users2, Building } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
 
 const HandoverServicesEmbedded = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
+  // Auto-fill state for form fields
+  const [autoFillData, setAutoFillData] = useState({
+    name: '',
+    email: ''
+  });
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setAutoFillData({
+        name: profile.full_name || '',
+        email: user.email || ''
+      });
+    }
+  }, [user, profile]);
+
   // Major cities in India
   const majorCities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur",
@@ -130,7 +152,6 @@ const HandoverServicesEmbedded = () => {
   }];
 
   const [formMessage, setFormMessage] = useState<{ type: 'success' | 'error' | null; text: string }>({ type: null, text: '' });
-  const { toast } = useToast();
 
   return (
     <div className="bg-background">
@@ -208,7 +229,13 @@ const HandoverServicesEmbedded = () => {
                   });
                 }
               }}>
-                <Input id="handover-name" name="name" placeholder="Name" required />
+                <Input 
+                  id="handover-name" 
+                  name="name" 
+                  placeholder="Name" 
+                  defaultValue={autoFillData.name}
+                  required 
+                />
 
                 <div className="flex gap-2">
                   <Select defaultValue="+91" name="countryCode">
@@ -222,7 +249,14 @@ const HandoverServicesEmbedded = () => {
                   <Input id="handover-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
                 </div>
 
-                <Input id="handover-email" name="email" type="email" placeholder="Email ID" required />
+                <Input 
+                  id="handover-email" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                  defaultValue={autoFillData.email}
+                  required 
+                />
 
                   <Select name="city" required>
                     <SelectTrigger className="flex-1"><SelectValue placeholder="City" /></SelectTrigger>
@@ -302,6 +336,7 @@ const HandoverServicesEmbedded = () => {
                   id="handover-name-mobile" 
                   name="name" 
                   placeholder="Name" 
+                  defaultValue={autoFillData.name}
                   className="h-12 text-base bg-background"
                   required 
                 />
@@ -332,6 +367,7 @@ const HandoverServicesEmbedded = () => {
                   name="email" 
                   type="email" 
                   placeholder="Email ID" 
+                  defaultValue={autoFillData.email}
                   className="h-12 text-base bg-background"
                 />
 

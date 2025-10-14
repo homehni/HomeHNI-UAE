@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import PersonalDetailsStep from './legal-form/PersonalDetailsStep';
 import PropertyInformationStep from './legal-form/PropertyInformationStep';
 import LegalQueryStep from './legal-form/LegalQueryStep';
@@ -52,6 +54,8 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
   const totalSteps = 5;
 
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
   
   const [formData, setFormData] = useState<FormData>({
     personalDetails: {
@@ -84,6 +88,20 @@ const LegalServicesForm = ({ isOpen, onClose }: LegalServicesFormProps) => {
       preferredTime: '',
     },
   });
+
+  // Auto-fill form with user profile data when modal opens and user is logged in
+  useEffect(() => {
+    if (isOpen && user && profile) {
+      setFormData(prev => ({
+        ...prev,
+        personalDetails: {
+          ...prev.personalDetails,
+          fullName: profile.full_name || prev.personalDetails.fullName,
+          email: user.email || prev.personalDetails.email
+        }
+      }));
+    }
+  }, [isOpen, user, profile]);
 
   const steps = [
     { id: 1, title: 'Personal Details', component: PersonalDetailsStep },

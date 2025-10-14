@@ -5,12 +5,33 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { Building2, Users, FileText, Wrench, PaintBucket, Truck, Clock, CheckCircle, Shield, Star, X, Home, Briefcase, Scale, Hammer, Palette, Package } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
 import { CategorizedImageUpload } from "@/components/CategorizedImageUpload";
 import { sendServiceProviderEmail } from "@/services/emailService";
+
 const ServiceSuite = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
+  // Auto-fill state for form fields
+  const [autoFillData, setAutoFillData] = useState({
+    email: ''
+  });
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setAutoFillData({
+        email: user.email || ''
+      });
+    }
+  }, [user, profile]);
+
   const [statesData, setStatesData] = useState<any>(null);
   const [selectedState, setSelectedState] = useState("");
   const [selectedStateDesktop, setSelectedStateDesktop] = useState("");
@@ -128,9 +149,6 @@ const ServiceSuite = () => {
     question: "Is there any guarantee on the services provided?",
     answer: "Yes, all services come with quality assurance and customer satisfaction guarantee. We also provide post-service support for any issues."
   }];
-  const {
-    toast
-  } = useToast();
 
   // Load states and cities data
   useEffect(() => {
@@ -277,7 +295,13 @@ const ServiceSuite = () => {
 
             <form className="space-y-3" onSubmit={e => handleFormSubmit(e, false)} id="desktop-service-form" key={formResetKey}>
               <Input name="companyName" type="text" placeholder="Company Name" required />
-              <Input name="email" type="email" placeholder="Email ID" required />
+              <Input 
+                name="email" 
+                type="email" 
+                placeholder="Email ID" 
+                defaultValue={autoFillData.email}
+                required 
+              />
 
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
@@ -326,7 +350,14 @@ const ServiceSuite = () => {
 
               <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)} id="mobile-service-form" key={formResetKey}>
                 <Input name="companyName" type="text" placeholder="Company Name" className="h-12 text-base bg-background" required />
-                <Input name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+                <Input 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                  defaultValue={autoFillData.email}
+                  className="h-12 text-base bg-background" 
+                  required 
+                />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">

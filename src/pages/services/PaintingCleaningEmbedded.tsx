@@ -5,9 +5,32 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
 import { PaintBucket, Sparkles, Home, Building2, Clock, CheckCircle, Shield, Star, Users, Crown, Globe, Headphones, Paintbrush, Droplets, X } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
+
 const PaintingCleaningEmbedded = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  
+  // Auto-fill state for form fields
+  const [autoFillData, setAutoFillData] = useState({
+    name: '',
+    email: ''
+  });
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setAutoFillData({
+        name: profile.full_name || '',
+        email: user.email || ''
+      });
+    }
+  }, [user, profile]);
+
   // Major cities in India
   const majorCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Kalyan-Dombivli", "Vasai-Virar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli-Dharwad"];
   const services = [{
@@ -123,7 +146,6 @@ const PaintingCleaningEmbedded = () => {
     type: null,
     text: ''
   });
-  const { toast } = useToast();
   return <div className="bg-background">
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
@@ -190,7 +212,13 @@ const PaintingCleaningEmbedded = () => {
               }
               (e.currentTarget as HTMLFormElement).reset();
             }}>
-              <Input id="painting-name" name="name" placeholder="Name" required />
+              <Input 
+                id="painting-name" 
+                name="name" 
+                placeholder="Name" 
+                defaultValue={autoFillData.name}
+                required 
+              />
 
               <div className="flex gap-2">
                 <Select defaultValue="+91" name="countryCode">
@@ -204,7 +232,13 @@ const PaintingCleaningEmbedded = () => {
                 <Input id="painting-phone" name="phone" type="tel" placeholder="Phone Number" className="flex-1" required />
               </div>
 
-              <Input id="painting-email" name="email" type="email" placeholder="Email ID" />
+              <Input 
+                id="painting-email" 
+                name="email" 
+                type="email" 
+                placeholder="Email ID" 
+                defaultValue={autoFillData.email}
+              />
 
               <div className="flex gap-2">
                 <Select name="serviceType">
@@ -279,7 +313,14 @@ const PaintingCleaningEmbedded = () => {
               }
               (e.currentTarget as HTMLFormElement).reset();
             }}>
-                <Input id="painting-name-mobile" name="name" placeholder="Name" className="h-12 text-base bg-background" required />
+                <Input 
+                  id="painting-name-mobile" 
+                  name="name" 
+                  placeholder="Name" 
+                  defaultValue={autoFillData.name}
+                  className="h-12 text-base bg-background" 
+                  required 
+                />
 
                 <div className="flex gap-3">
                   <Select defaultValue="+91" name="countryCode">
@@ -295,7 +336,14 @@ const PaintingCleaningEmbedded = () => {
                   <Input id="painting-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
                 </div>
 
-                <Input id="painting-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" />
+                <Input 
+                  id="painting-email-mobile" 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email ID" 
+                  defaultValue={autoFillData.email}
+                  className="h-12 text-base bg-background" 
+                />
 
                 <div className="flex flex-col md:flex-row gap-3">
                   <Select name="serviceType">
