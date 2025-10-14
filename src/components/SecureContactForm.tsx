@@ -32,7 +32,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [canContact, setCanContact] = useState(true);
-  const [remainingUses, setRemainingUses] = useState(3);
+  const [remainingUses, setRemainingUses] = useState(50);
   const [formData, setFormData] = useState({
     name: '',
     email: '',

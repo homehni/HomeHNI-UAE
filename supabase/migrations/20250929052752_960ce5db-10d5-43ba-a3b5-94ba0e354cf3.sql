@@ -1,6 +1,6 @@
 -- Add contact usage tracking to profiles table
 ALTER TABLE public.profiles 
-ADD COLUMN IF NOT EXISTS free_contact_uses INTEGER DEFAULT 3,
+ADD COLUMN IF NOT EXISTS free_contact_uses INTEGER DEFAULT 50,
 ADD COLUMN IF NOT EXISTS total_contact_uses INTEGER DEFAULT 0,
 ADD COLUMN IF NOT EXISTS last_contact_use_at TIMESTAMP WITH TIME ZONE;
 
