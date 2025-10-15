@@ -104,7 +104,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">Property Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select" />
@@ -126,7 +126,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">BHK Type *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">
                         <SelectValue placeholder="Select" />
@@ -382,10 +382,8 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                     </FormItem>} /> : null}
             </div>}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-end pt-4" style={{
-          visibility: 'hidden'
-        }}>
+          {/* Navigation Buttons - Visible only on mobile as backup */}
+          <div className="flex justify-end pt-4 lg:hidden">
             <Button type="submit" variant="destructive" className="h-12 px-8 bg-red-800 hover:bg-red-900">
               Next Step
               <ArrowRight className="h-4 w-4 ml-2" />

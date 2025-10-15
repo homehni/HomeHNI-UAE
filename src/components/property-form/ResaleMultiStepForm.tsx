@@ -106,6 +106,9 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   }, []);
 
   const currentFormId = isMobile ? 'resale-step-form-m' : 'resale-step-form-d';
+  
+  // Create a ref to store the current step's submit function
+  const currentStepSubmitRef = React.useRef<(() => void) | null>(null);
 
   // Save intermediate data after each successful step (backup like other forms)
   const saveIntermediateData = (stepData: any, stepNumber: number) => {
@@ -426,16 +429,42 @@ const handleScheduleSubmit = (data: any) => {
             <Button 
               type="button" 
               onClick={() => {
+                // Try multiple methods to find and submit the form
+                let formSubmitted = false;
+                
+                // Method 1: Try to find form by current ID
                 const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
                 if (formEl) {
                   formEl.requestSubmit();
-                } else {
-                  const anyForm = document.querySelector('form');
+                  formSubmitted = true;
+                }
+                
+                // Method 2: If ID lookup fails, find form by querySelector
+                if (!formSubmitted) {
+                  const anyForm = document.querySelector('form') as HTMLFormElement | null;
                   if (anyForm) {
-                    (anyForm as HTMLFormElement).requestSubmit();
+                    anyForm.requestSubmit();
+                    formSubmitted = true;
                   }
                 }
-                scrollToTop();
+                
+                // Method 3: If form element approach fails, try to trigger submit event
+                if (!formSubmitted) {
+                  const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+                  if (submitButton) {
+                    submitButton.click();
+                    formSubmitted = true;
+                  }
+                }
+                
+                // Method 4: Last resort - dispatch submit event
+                if (!formSubmitted) {
+                  const forms = document.querySelectorAll('form');
+                  if (forms.length > 0) {
+                    const event = new Event('submit', { bubbles: true, cancelable: true });
+                    forms[0].dispatchEvent(event);
+                  }
+                }
               }}
               className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
             >
