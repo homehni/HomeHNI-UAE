@@ -105,7 +105,7 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const currentFormId = isMobile ? 'resale-step-form-m' : 'resale-step-form-d';
+  const desktopFormId = 'resale-step-form-d', mobileFormId = 'resale-step-form-m';
   
   // Create a ref to store the current step's submit function
   const currentStepSubmitRef = React.useRef<(() => void) | null>(null);
@@ -238,7 +238,7 @@ const handleScheduleSubmit = (data: any) => {
                 initialData={propertyDetails}
                 onNext={handlePropertyDetailsNext}
                 onBack={() => {}}
-                formId={currentFormId}
+                formId={mobileFormId}
               />
             )}
 
@@ -249,7 +249,7 @@ const handleScheduleSubmit = (data: any) => {
                 onBack={prevStep}
                 currentStep={2}
                 totalSteps={4}
-                formId={currentFormId}
+                formId={mobileFormId}
               />
             )}
 
@@ -259,7 +259,7 @@ const handleScheduleSubmit = (data: any) => {
                 propertyDetails={propertyDetails}
                 onNext={handleSaleDetailsNext}
                 onBack={prevStep}
-                formId={currentFormId}
+                formId={mobileFormId}
               />
             )}
 
@@ -268,7 +268,7 @@ const handleScheduleSubmit = (data: any) => {
                 initialData={amenities as any}
                 onNext={handleAmenitiesNext}
                 onBack={prevStep}
-                formId={currentFormId}
+                formId={mobileFormId}
               />
             )}
 
@@ -279,7 +279,7 @@ const handleScheduleSubmit = (data: any) => {
                 onBack={prevStep}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
-                formId={currentFormId}
+                formId={mobileFormId}
               />
             )}
 
@@ -289,7 +289,7 @@ const handleScheduleSubmit = (data: any) => {
                 onNext={handleScheduleNext}
                 onBack={prevStep}
                 onSubmit={handleScheduleSubmit}
-                formId={currentFormId}
+                formId={mobileFormId}
               />
             )}
 
@@ -330,7 +330,7 @@ const handleScheduleSubmit = (data: any) => {
                     initialData={propertyDetails}
                     onNext={handlePropertyDetailsNext}
                     onBack={() => {}} // No back on first step
-                    formId={currentFormId}
+                    formId={desktopFormId}
                   />
                 )}
 
@@ -342,7 +342,7 @@ const handleScheduleSubmit = (data: any) => {
                     onBack={prevStep}
                     currentStep={2}
                     totalSteps={4}
-                    formId={currentFormId}
+                    formId={desktopFormId}
                   />
                 )}
 
@@ -353,7 +353,7 @@ const handleScheduleSubmit = (data: any) => {
                     propertyDetails={propertyDetails}
                     onNext={handleSaleDetailsNext}
                     onBack={prevStep}
-                    formId={currentFormId}
+                    formId={desktopFormId}
                   />
                 )}
 
@@ -363,7 +363,7 @@ const handleScheduleSubmit = (data: any) => {
                     initialData={amenities as any}
                     onNext={handleAmenitiesNext}
                     onBack={prevStep}
-                    formId={currentFormId}
+                    formId={desktopFormId}
                   />
                 )}
 
@@ -375,7 +375,7 @@ const handleScheduleSubmit = (data: any) => {
                     onBack={prevStep}
                     onSubmit={handleSubmit}
                     isSubmitting={isSubmitting}
-                    formId={currentFormId}
+                    formId={desktopFormId}
                   />
                 )}
 
@@ -386,7 +386,7 @@ const handleScheduleSubmit = (data: any) => {
                     onNext={handleScheduleNext}
                     onBack={prevStep}
                     onSubmit={handleScheduleSubmit}
-                    formId={currentFormId}
+                    formId={desktopFormId}
                   />
                 )}
 
@@ -429,17 +429,24 @@ const handleScheduleSubmit = (data: any) => {
             <Button 
               type="button" 
               onClick={() => {
-                // Try multiple methods to find and submit the form
+                // Submit the visible form (desktop first, then mobile)
                 let formSubmitted = false;
-                
-                // Method 1: Try to find form by current ID
-                const formEl = document.getElementById(currentFormId) as HTMLFormElement | null;
-                if (formEl) {
-                  formEl.requestSubmit();
-                  formSubmitted = true;
-                }
-                
-                // Method 2: If ID lookup fails, find form by querySelector
+
+                const trySubmit = (id: string) => {
+                  const formEl = document.getElementById(id) as HTMLFormElement | null;
+                  if (formEl) {
+                    const isHidden = formEl.offsetParent === null;
+                    if (!isHidden) {
+                      formEl.requestSubmit();
+                      return true;
+                    }
+                  }
+                  return false;
+                };
+
+                formSubmitted = trySubmit('resale-step-form-d') || trySubmit('resale-step-form-m');
+
+                // Fallbacks
                 if (!formSubmitted) {
                   const anyForm = document.querySelector('form') as HTMLFormElement | null;
                   if (anyForm) {
@@ -447,8 +454,7 @@ const handleScheduleSubmit = (data: any) => {
                     formSubmitted = true;
                   }
                 }
-                
-                // Method 3: If form element approach fails, try to trigger submit event
+
                 if (!formSubmitted) {
                   const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement | null;
                   if (submitButton) {
@@ -456,13 +462,12 @@ const handleScheduleSubmit = (data: any) => {
                     formSubmitted = true;
                   }
                 }
-                
-                // Method 4: Last resort - dispatch submit event
+
                 if (!formSubmitted) {
                   const forms = document.querySelectorAll('form');
                   if (forms.length > 0) {
                     const event = new Event('submit', { bubbles: true, cancelable: true });
-                    forms[0].dispatchEvent(event);
+                    (forms[0] as HTMLFormElement).dispatchEvent(event);
                   }
                 }
               }}
