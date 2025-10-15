@@ -338,9 +338,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
             </div>}
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between pt-4 md:pt-6" style={{
-          visibility: 'hidden'
-        }}>
+          <div className="flex justify-between pt-4 md:pt-6">
             <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
               {!isMobile && <ArrowLeft className="h-4 w-4 mr-2" />}
               Back
