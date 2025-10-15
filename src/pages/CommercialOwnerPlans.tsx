@@ -485,7 +485,7 @@ const CommercialOwnerPlans = () => {
           </h2>
           <p className="text-sm text-muted-foreground text-center mb-8">Select the category that best fits your property needs</p>
 
-          <Tabs defaultValue="residential" className="w-full">
+          <Tabs defaultValue={(new URLSearchParams(window.location.search).get('category') as 'residential'|'commercial'|'industrial'|'agricultural') || 'residential'} className="w-full">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6 p-1 gap-1 bg-muted rounded-lg h-auto">
               <TabsTrigger value="residential" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Residential</TabsTrigger>
               <TabsTrigger value="commercial" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Commercial</TabsTrigger>
@@ -712,7 +712,7 @@ const CommercialOwnerPlans = () => {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Why Choose Our Commercial Owner Plans?
+            Benefits of Choosing This Plan
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {keyBenefits.map((benefit, index) => (

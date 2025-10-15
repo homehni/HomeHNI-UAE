@@ -371,7 +371,7 @@ const CommercialBuyerPlan = () => {
           </h2>
           <p className="text-sm text-muted-foreground text-center mb-8">Select the category that best fits your property search needs</p>
           
-          <Tabs defaultValue="residential" className="w-full">
+          <Tabs defaultValue={(new URLSearchParams(window.location.search).get('category') as 'residential'|'commercial'|'industrial'|'agricultural') || 'residential'} className="w-full">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6 p-1 gap-1 bg-muted rounded-lg h-auto">
               <TabsTrigger value="residential" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Residential</TabsTrigger>
               <TabsTrigger value="commercial" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Commercial</TabsTrigger>

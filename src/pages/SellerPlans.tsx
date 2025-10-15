@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import PayButton from '@/components/PayButton';
@@ -17,6 +18,16 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface SellerPlansProps { embedded?: boolean }
 const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
+  const location = useLocation();
+  
+  // Reactive category from URL
+  const [category, setCategory] = useState(() => (new URLSearchParams(location.search).get('category') as 'residential'|'commercial'|'industrial'|'agricultural') || 'residential');
+  
+  useEffect(() => {
+    const urlCategory = (new URLSearchParams(location.search).get('category') as 'residential'|'commercial'|'industrial'|'agricultural') || 'residential';
+    setCategory(urlCategory);
+  }, [location.search]);
+  
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 1,
     commercial: 1, 
@@ -342,7 +353,14 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
             <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>Select the category that best fits your property selling needs</p>
           </div>
 
-          <Tabs defaultValue="residential" className="w-full">
+          <Tabs value={category} onValueChange={(v) => {
+            const value = v as 'residential'|'commercial'|'industrial'|'agricultural';
+            setCategory(value);
+            const url = new URL(window.location.href);
+            url.searchParams.set('tab', 'seller');
+            url.searchParams.set('category', value);
+            window.history.pushState(null, '', url.toString());
+          }} className="w-full">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">
               <TabsTrigger value="residential" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Residential</TabsTrigger>
               <TabsTrigger value="commercial" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Commercial</TabsTrigger>

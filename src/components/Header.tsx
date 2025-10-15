@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ChevronDown, Menu, UserPlus, LogIn, LogOut } from 'lucide-react';
+import { ChevronDown, Menu, UserPlus, LogIn, LogOut, Search } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -21,13 +21,11 @@ const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
-  const [isLifetimePlansDropdownOpen, setIsLifetimePlansDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isResidentialPlanOpen, setIsResidentialPlanOpen] = useState(false);
   const [isCommercialPlanOpen, setIsCommercialPlanOpen] = useState(false);
   
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const lifetimePlansHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -45,19 +43,6 @@ const Header = () => {
   const handleServicesLeave = () => {
     servicesHoverTimeoutRef.current = setTimeout(() => {
       setIsServicesDropdownOpen(false);
-    }, 150);
-  };
-
-  const handleLifetimePlansHover = () => {
-    if (lifetimePlansHoverTimeoutRef.current) {
-      clearTimeout(lifetimePlansHoverTimeoutRef.current);
-    }
-    setIsLifetimePlansDropdownOpen(true);
-  };
-
-  const handleLifetimePlansLeave = () => {
-    lifetimePlansHoverTimeoutRef.current = setTimeout(() => {
-      setIsLifetimePlansDropdownOpen(false);
     }, 150);
   };
 
@@ -304,42 +289,16 @@ const Header = () => {
                   )}
                 </div>
 
-                {/* Plans Dropdown */}
-                {/* Same z-index guidance as above to avoid overlap issues. */}
-                <div className="relative" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
-                  <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-                    PLANS
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </button>
-                  
-                  {isLifetimePlansDropdownOpen && (
-                    <div className="absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleLifetimePlansHover} onMouseLeave={handleLifetimePlansLeave}>
-                      <div className="py-2">
-                        <button onClick={() => navigate('/plans?tab=agent')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Agent Plans
-                        </button>
-                        <button onClick={() => navigate('/plans?tab=builder-lifetime')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Builder Lifetime Plans
-                        </button>
-                        <button onClick={() => navigate('/plans?tab=buyer')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Buyer Plans
-                        </button>
-                        <button onClick={() => navigate('/plans?tab=seller')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Seller Plans
-                        </button>
-                        <button onClick={() => navigate('/plans?tab=commercial-buyer')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Commercial Buyer Plans
-                        </button>
-                        <button onClick={() => navigate('/plans?tab=commercial-seller')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Commercial Seller Plans
-                        </button>
-                        <button onClick={() => navigate('/plans?tab=owner')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Owner Plans
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                {/* Find Your Plan Button */}
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => navigate('/plans')}
+                  className={`font-medium px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 uppercase ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
+                >
+                  <Search className="mr-1 h-3 w-3 xl:h-4 xl:w-4" />
+                  Find Your Plan
+                </Button>
 
                 <a href="/service-suite" onClick={e => {
                   e.preventDefault();

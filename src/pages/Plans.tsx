@@ -10,10 +10,10 @@ import SellerPlans from './SellerPlans';
 import OwnerPlans from './OwnerPlans';
 import CommercialBuyerPlan from './CommercialBuyerPlan';
 import CommercialSellerPlans from './CommercialSellerPlans';
-import CommercialOwnerPlans from './CommercialOwnerPlans';
 import BuilderLifetimePlans from './BuilderLifetimePlans';
 import AgentPlans from './AgentPlans';
 import RentalPlans from './RentalPlans';
+import PlanWizard from '@/components/PlanWizard';
 
 const sections = [
   { id: 'buyer', label: 'Buyer Plans' },
@@ -29,20 +29,21 @@ const sections = [
 const Plans = () => {
   const [active, setActive] = useState<string>('buyer');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showWizard, setShowWizard] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     document.title = 'Plans – Buyer, Seller, Owner and Commercial Plans';
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    console.log('URL tab parameter:', tab); // Debug log
+    const skipWizard = params.get('skipWizard');
     if (tab && sections.some((s) => s.id === tab)) {
-      console.log('Setting active tab to:', tab); // Debug log
       setActive(tab);
     } else {
-      console.log('No valid tab found, defaulting to buyer'); // Debug log
       setActive('buyer');
     }
+    // Show wizard by default unless skipWizard=true
+    setShowWizard(skipWizard === 'true' ? false : true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.search]); // Listen to search parameter changes
 
@@ -100,6 +101,8 @@ const Plans = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Plan Recommendation Wizard - overlaid, non-disruptive */}
+      <PlanWizard open={showWizard} onOpenChange={setShowWizard} />
       <Marquee />
       <Header />
 
@@ -163,8 +166,7 @@ const Plans = () => {
 
                 {active === 'owner' && (
                   <>
-                    
-                    <CommercialOwnerPlans />
+                    <OwnerPlans />
                   </>
                 )}
 

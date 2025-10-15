@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OwnerPlans from './OwnerPlans';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -16,8 +16,11 @@ interface RentalPlansProps {
   embedded?: boolean 
 }
 
+type Category = 'residential' | 'commercial' | 'industrial' | 'agricultural';
+
 const RentalPlans = ({ embedded }: RentalPlansProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedTenantPlan, setSelectedTenantPlan] = useState({
     residential: 0,
     commercial: 0,
@@ -91,6 +94,21 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
       alert("There was an error processing your subscription. Please try again.");
     }
   };
+
+  // Derive current tab/category from URL and keep them in sync
+  const getParam = (key: string) => new URLSearchParams(location.search).get(key);
+  const initialOuter = (getParam('rentalRole') as 'owner' | 'tenant') || 'owner';
+  const initialCategory = (getParam('category') as Category) || 'residential';
+  const [outerTab, setOuterTab] = useState<'owner' | 'tenant'>(initialOuter);
+  const [tenantCategory, setTenantCategory] = useState<Category>(initialCategory);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const role = (params.get('rentalRole') as 'owner' | 'tenant') || 'owner';
+    const cat = (params.get('category') as Category) || 'residential';
+    setOuterTab(role);
+    setTenantCategory(cat);
+  }, [location.search]);
 
   const tenantPlansData = {
     residential: [
@@ -306,7 +324,18 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
             <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>Choose between Owner plans for renting out property or Tenant plans for finding rental property</p>
           </div>
 
-          <Tabs defaultValue="owner" className="w-full">
+          <Tabs value={outerTab} onValueChange={(v) => {
+            const value = v as 'owner' | 'tenant';
+            setOuterTab(value);
+            const url = new URL(window.location.href);
+            url.searchParams.set('tab', 'rental');
+            url.searchParams.set('rentalRole', value);
+            // preserve category when switching tabs
+            if (!url.searchParams.get('category')) {
+              url.searchParams.set('category', tenantCategory);
+            }
+            window.history.pushState(null, '', url.toString());
+          }} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">
               <TabsTrigger value="owner" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Owner Plans</TabsTrigger>
               <TabsTrigger value="tenant" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Tenant Plans</TabsTrigger>
@@ -317,7 +346,15 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
             </TabsContent>
 
             <TabsContent value="tenant" className="space-y-8">
-              <Tabs defaultValue="residential" className="w-full">
+              <Tabs value={tenantCategory} onValueChange={(v) => {
+                const value = v as Category;
+                setTenantCategory(value);
+                const url = new URL(window.location.href);
+                url.searchParams.set('tab', 'rental');
+                url.searchParams.set('rentalRole', 'tenant');
+                url.searchParams.set('category', value);
+                window.history.pushState(null, '', url.toString());
+              }} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">
                   <TabsTrigger value="residential" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Residential</TabsTrigger>
                   <TabsTrigger value="commercial" className="text-xs sm:text-sm md:text-base py-2 sm:py-3 px-2 sm:px-4 data-[state=active]:bg-background data-[state=active]:text-foreground whitespace-nowrap">Commercial</TabsTrigger>

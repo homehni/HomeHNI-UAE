@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Phone, MessageCircle } from 'lucide-react';
+import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Phone, MessageCircle, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
@@ -94,6 +94,14 @@ const Sidebar = ({
     label: 'Post Your Property',
     hasSubmenu: false,
     onClick: handlePostPropertyClick
+  }, {
+    id: 'find-your-plan',
+    label: 'Find Your Plan',
+    hasSubmenu: false,
+    onClick: () => {
+      navigate('/plans');
+      onClose();
+    }
   },
   // { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
   {
@@ -332,7 +340,10 @@ const Sidebar = ({
             <nav className="p-2">
             {menuItems.map(item => <div key={item.id} className="mb-1" ref={item.id === 'contact-us' ? contactUsRef : null}>
                   <button onClick={item.onClick || (item.hasSubmenu ? () => toggleSection(item.id) : undefined)} className="w-full text-left px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-800 rounded-lg flex items-center justify-between transition-colors">
-                    <span className="text-sm font-medium">{item.label}</span>
+                    <div className="flex items-center">
+                      {item.id === 'find-your-plan' && <Search size={16} className="mr-2 text-brand-red" />}
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </div>
                     {item.hasSubmenu && <ChevronDown size={16} className={`transform transition-transform ${expandedSections.includes(item.id) ? 'rotate-180' : ''}`} />}
                   </button>
                   
