@@ -247,7 +247,7 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 pt-16 sm:pt-0">
       {/* Property Preview Section - Hidden */}
-      <div className="hidden bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Property Preview</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -267,7 +267,7 @@ export const ResalePreviewStep: React.FC<ResalePreviewStepProps> = ({
           <div className="space-y-3">
             <h3 className="font-semibold text-gray-700">Location & Contact</h3>
             <div className="space-y-2 text-sm">
-              <p><span className="font-medium">Location:</span> {propertyInfo?.locationDetails?.locality || 'Not specified'}, {propertyInfo?.locationDetails?.city || 'Not specified'}</p>
+              <p><span className="font-medium">Location:</span> {propertyInfo?.locationDetails?.locality || 'Not specified'}{propertyInfo?.locationDetails?.city && `, ${propertyInfo.locationDetails.city}`}</p>
               <p><span className="font-medium">Owner:</span> {ownerInfo?.fullName || 'Not specified'}</p>
               <p><span className="font-medium">Email:</span> {ownerInfo?.email || 'Not specified'}</p>
               <p><span className="font-medium">Phone:</span> {ownerInfo?.phoneNumber || 'Not specified'}</p>
