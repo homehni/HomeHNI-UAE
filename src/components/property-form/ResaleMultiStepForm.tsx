@@ -238,7 +238,7 @@ const handleScheduleSubmit = (data: any) => {
                 initialData={propertyDetails}
                 onNext={handlePropertyDetailsNext}
                 onBack={() => {}}
-                formId={`${currentFormId}-m`}
+                formId={currentFormId}
               />
             )}
 
@@ -249,7 +249,7 @@ const handleScheduleSubmit = (data: any) => {
                 onBack={prevStep}
                 currentStep={2}
                 totalSteps={4}
-                formId={`${currentFormId}-m`}
+                formId={currentFormId}
               />
             )}
 
@@ -259,7 +259,7 @@ const handleScheduleSubmit = (data: any) => {
                 propertyDetails={propertyDetails}
                 onNext={handleSaleDetailsNext}
                 onBack={prevStep}
-                formId={`${currentFormId}-m`}
+                formId={currentFormId}
               />
             )}
 
@@ -268,7 +268,7 @@ const handleScheduleSubmit = (data: any) => {
                 initialData={amenities as any}
                 onNext={handleAmenitiesNext}
                 onBack={prevStep}
-                formId={`${currentFormId}-m`}
+                formId={currentFormId}
               />
             )}
 
@@ -279,7 +279,7 @@ const handleScheduleSubmit = (data: any) => {
                 onBack={prevStep}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
-                formId={`${currentFormId}-m`}
+                formId={currentFormId}
               />
             )}
 
@@ -289,7 +289,7 @@ const handleScheduleSubmit = (data: any) => {
                 onNext={handleScheduleNext}
                 onBack={prevStep}
                 onSubmit={handleScheduleSubmit}
-                formId={`${currentFormId}-m`}
+                formId={currentFormId}
               />
             )}
 
