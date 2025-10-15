@@ -381,14 +381,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                       <FormMessage />
                     </FormItem>} /> : null}
             </div>}
-
-          {/* Navigation Buttons - Visible only on mobile as backup */}
-          <div className="flex justify-end pt-4 lg:hidden">
-            <Button type="submit" variant="destructive" className="h-12 px-8 bg-red-800 hover:bg-red-900">
-              Next Step
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          </div>
         </form>
       </Form>
     </div>
