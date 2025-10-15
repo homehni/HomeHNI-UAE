@@ -337,17 +337,6 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
               <div ref={mapContainerRef} className="w-full h-full" />
             </div>}
 
-          {/* Navigation Buttons - Visible only on mobile as backup */}
-          <div className="flex justify-between pt-4 md:pt-6 lg:hidden">
-            <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
-              {!isMobile && <ArrowLeft className="h-4 w-4 mr-2" />}
-              Back
-            </Button>
-            <Button type="submit" className="h-10 px-4 md:h-12 md:px-8">
-              Save & Continue
-              {!isMobile && <ArrowRight className="h-4 w-4 ml-2" />}
-            </Button>
-          </div>
         </form>
       </Form>
     </div>;
