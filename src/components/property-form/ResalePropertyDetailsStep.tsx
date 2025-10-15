@@ -13,7 +13,7 @@ const resalePropertyDetailsSchema = z.object({
   title: z.string().optional(),
   // Made optional - will be auto-generated
   propertyType: z.string().optional(),
-  bhkType: z.string().optional(),
+  bhkType: z.string().min(1, "BHK Type is required"),
   ownershipType: z.string().optional(),
   builtUpArea: z.number().optional(),
   carpetArea: z.number().optional(),
@@ -125,7 +125,7 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
             <FormField control={form.control} name="bhkType" render={({
             field
           }) => <FormItem>
-                  <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
+                  <FormLabel className="text-sm font-medium">BHK Type *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-12">

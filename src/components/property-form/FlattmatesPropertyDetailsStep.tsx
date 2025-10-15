@@ -114,7 +114,8 @@ export function FlattmatesPropertyDetailsStep({
   };
 
   const isFormValid = () => {
-    return true; // All fields are now optional
+    // BHK Type is now required
+    return formData.bhkType && formData.bhkType.trim() !== '';
   };
 
   return (
@@ -152,7 +153,7 @@ export function FlattmatesPropertyDetailsStep({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="bhkType">BHK Type</Label>
+                    <Label htmlFor="bhkType">BHK Type *</Label>
                     <Select
                       value={formData.bhkType}
                       onValueChange={(value) => {
@@ -171,6 +172,9 @@ export function FlattmatesPropertyDetailsStep({
                         <SelectItem value="5+ BHK">5+ BHK</SelectItem>
                       </SelectContent>
                     </Select>
+                    {!formData.bhkType && (
+                      <p className="text-sm text-red-600 mt-1">BHK Type is required</p>
+                    )}
                   </div>
                 </div>
 

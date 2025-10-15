@@ -364,8 +364,8 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
             </div>
           )}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between pt-4 md:pt-6">
+          {/* Navigation Buttons - Hidden as sticky buttons handle navigation */}
+          <div className="flex justify-between pt-4 md:pt-6" style={{ visibility: 'hidden' }}>
             <Button type="button" variant="outline" onClick={onBack} className="h-10 px-4 md:h-12 md:px-8">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

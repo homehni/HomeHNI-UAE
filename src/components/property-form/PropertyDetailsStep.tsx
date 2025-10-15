@@ -15,7 +15,7 @@ const propertyDetailsSchema = z.object({
   title: z.string().optional(),
   // Made optional - will be auto-generated
   propertyType: z.string().optional(),
-  bhkType: z.string().optional(),
+  bhkType: z.string().min(1, "BHK Type is required"),
   buildingType: z.string().optional(),
   propertyAge: z.string().min(1, "Property age is required"),
   facing: z.string().optional(),
@@ -164,7 +164,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
               <FormField control={form.control} name="bhkType" render={({
               field
             }) => <FormItem className="min-w-0">
-                    <FormLabel className="text-sm font-medium">BHK Type</FormLabel>
+                    <FormLabel className="text-sm font-medium">BHK Type *</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="h-10 w-full max-w-full focus:ring-inset focus:ring-offset-0 truncate">
