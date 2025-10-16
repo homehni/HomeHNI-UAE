@@ -342,7 +342,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
             </TabsList>
 
             <TabsContent value="owner" className="space-y-8">
-              <OwnerPlans embedded />
+              <OwnerPlans embedded showTitle={false} />
             </TabsContent>
 
             <TabsContent value="tenant" className="space-y-8">

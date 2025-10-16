@@ -18,6 +18,7 @@ interface PropertyResult {
   propertyType: string;
   listingType?: string;
   isNew?: boolean;
+  ownerId?: string; // Add owner ID for ownership detection
 }
 
 interface SearchResults {
@@ -116,6 +117,8 @@ export const SearchResultsPanel: React.FC<SearchResultsPanelProps> = ({
                   isNew={property.isNew}
                   size="compact"
                   rental_status="available"
+                  ownerId={property.ownerId}
+                  showOwnerActions={true}
                 />
               ))}
             </div>

@@ -326,6 +326,7 @@ const ServiceSuite = () => {
                   <SelectItem value="property-management">Property Management</SelectItem>
                   <SelectItem value="handover-services">Handover Services</SelectItem>
                   <SelectItem value="rent-receipts">Rent Receipts</SelectItem>
+                  <SelectItem value="loan-services">Loan Services</SelectItem>
                   <SelectItem value="other">Other Services</SelectItem>
                 </SelectContent>
               </Select>
@@ -386,6 +387,7 @@ const ServiceSuite = () => {
                     <SelectItem value="property-management">Property Management</SelectItem>
                     <SelectItem value="handover-services">Handover Services</SelectItem>
                     <SelectItem value="rent-receipts">Rent Receipts</SelectItem>
+                    <SelectItem value="loan-services">Loan Services</SelectItem>
                     <SelectItem value="other">Other Services</SelectItem>
                   </SelectContent>
                 </Select>

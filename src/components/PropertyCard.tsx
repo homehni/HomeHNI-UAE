@@ -1,4 +1,4 @@
-import { Heart, MapPin, Bed, Bath, Square, Phone } from 'lucide-react';
+import { Heart, MapPin, Bed, Bath, Square, Phone, Edit2, ToggleLeft, ToggleRight, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,8 @@ import { PropertyWatermark } from '@/components/property-details/PropertyWaterma
 import { supabase } from '@/integrations/supabase/client';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface PropertyCardProps {
   id: string;
@@ -26,6 +28,8 @@ interface PropertyCardProps {
   isNew?: boolean;
   size?: 'default' | 'compact' | 'large';
   rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
+  ownerId?: string; // Add owner ID to check ownership
+  showOwnerActions?: boolean; // Flag to show/hide owner actions
 }
 
 const PropertyCard = ({
@@ -41,10 +45,17 @@ const PropertyCard = ({
   listingType,
   isNew = false,
   size = 'default',
-  rental_status = 'available'
+  rental_status = 'available',
+  ownerId,
+  showOwnerActions = false
 }: PropertyCardProps) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [showContactModal, setShowContactModal] = useState(false);
+  const [propertyStatus, setPropertyStatus] = useState(rental_status);
+
+  // Check if current user owns this property
+  const isOwner = user && ownerId && user.id === ownerId;
 
   // Generate a proper title if the current title is "Untitled"
   const getDisplayTitle = () => {
@@ -66,6 +77,275 @@ const PropertyCard = ({
     if (lower.includes('l')) return Math.round(num * 100000);
     if (lower.includes('k')) return Math.round(num * 1000);
     return Math.round(num);
+  };
+
+  // Owner action handlers
+  const handleEditProperty = () => {
+    // Navigate to edit property page
+    navigate(`/edit-property/${id}?tab=basic`);
+  };
+
+  const handleTogglePropertyStatus = async () => {
+    const currentStatus = rental_status || 'available';
+    const newStatus = currentStatus === 'available' ? 'inactive' : 'available';
+
+    try {
+      // Try properties table first
+      const { data: propsUpdated, error: propsErr } = await supabase
+        .from('properties')
+        .update({ rental_status: newStatus })
+        .eq('id', id)
+        .select('id');
+
+      if (propsErr) throw propsErr;
+
+      if (!propsUpdated || propsUpdated.length === 0) {
+        // Fallback to submissions table
+        const { data: subsUpdated, error: subsErr } = await supabase
+          .from('property_submissions')
+          .update({ rental_status: newStatus })
+          .eq('id', id)
+          .select('id');
+
+        if (subsErr) throw subsErr;
+        if (!subsUpdated || subsUpdated.length === 0) throw new Error('No matching property found to update');
+      }
+
+      toast.success(
+        newStatus === 'available' ? 'Property Activated' : 'Property Deactivated',
+        {
+          description: `Your property is now ${newStatus === 'available' ? 'active' : 'inactive'}.`,
+        }
+      );
+
+      // Reload the page to reflect the changes
+      window.location.reload();
+    } catch (error) {
+      console.error('Toggle property status failed', error);
+      toast.error('Failed to update property status. Please try again.');
+    }
+  };
+
+  const refreshPropertyStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('status')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+
+      if (['available', 'inactive', 'rented', 'sold'].includes(data.status)) {
+        setPropertyStatus(data.status as 'available' | 'inactive' | 'rented' | 'sold');
+      } else {
+        console.warn('Unexpected property status:', data.status);
+      }
+    } catch (error) {
+      console.error('Failed to refresh property status:', error);
+    }
+  };
+
+  const handleUpgradeProperty = () => {
+    // Comprehensive property type and listing type mapping to correct plan pages
+    
+    const propType = propertyType.toLowerCase();
+    const listType = listingType?.toLowerCase() || 'sale';
+    const titleLower = title.toLowerCase();
+    
+    let planTab = '';
+    let category = 'residential';
+    
+    // Determine if it's a rental (rent/lease) or sale property
+    const isRental = listType.includes('rent') || listType.includes('lease');
+    
+    // RESIDENTIAL PROPERTIES
+    const isResidentialApartment = propType.includes('apartment') || 
+                                    propType.includes('flat') || 
+                                    propType.includes('1bhk') || 
+                                    propType.includes('2bhk') || 
+                                    propType.includes('3bhk') || 
+                                    propType.includes('4bhk') ||
+                                    titleLower.includes('apartment') ||
+                                    titleLower.includes('flat');
+    
+    const isResidentialHouse = propType.includes('house') || 
+                               propType.includes('villa') || 
+                               propType.includes('bungalow') ||
+                               propType.includes('independent') ||
+                               titleLower.includes('villa') ||
+                               titleLower.includes('house');
+    
+    const isPGHostel = propType.includes('pg') || 
+                       propType.includes('hostel') ||
+                       titleLower.includes('pg') ||
+                       titleLower.includes('hostel');
+    
+    // COMMERCIAL PROPERTIES
+    const isOfficeSpace = propType.includes('office') || 
+                          propType.includes('coworking') ||
+                          titleLower.includes('office space') ||
+                          titleLower.includes('coworking');
+    
+    const isRetailShop = propType.includes('shop') || 
+                         propType.includes('retail') || 
+                         propType.includes('showroom') ||
+                         titleLower.includes('shop') ||
+                         titleLower.includes('retail');
+    
+    const isWarehouse = propType.includes('warehouse') || 
+                        propType.includes('godown') || 
+                        propType.includes('storage') ||
+                        titleLower.includes('warehouse') ||
+                        titleLower.includes('godown');
+    
+    const isCommercialBuilding = propType.includes('commercial building') || 
+                                 propType.includes('commercial space') ||
+                                 titleLower.includes('commercial building');
+    
+    // INDUSTRIAL PROPERTIES  
+    const isIndustrial = propType.includes('industrial') || 
+                         propType.includes('factory') || 
+                         propType.includes('manufacturing') ||
+                         propType.includes('industrial land') ||
+                         propType.includes('industrial plot') ||
+                         titleLower.includes('industrial') ||
+                         titleLower.includes('factory');
+    
+    // AGRICULTURAL/LAND PROPERTIES
+    const isAgriculturalLand = propType.includes('agricultural') || 
+                               propType.includes('farm') || 
+                               propType.includes('farmland') ||
+                               titleLower.includes('agricultural') ||
+                               titleLower.includes('farm');
+    
+    const isResidentialPlot = propType.includes('plot') || 
+                              propType.includes('land') ||
+                              (titleLower.includes('plot') && !titleLower.includes('industrial') && !titleLower.includes('agricultural')) ||
+                              (titleLower.includes('land') && !titleLower.includes('industrial') && !titleLower.includes('agricultural'));
+    
+    // MAPPING LOGIC BASED ON YOUR REQUIREMENTS
+    
+    // 1. RESIDENTIAL PROPERTIES
+    if (isResidentialApartment || isResidentialHouse || isPGHostel) {
+      category = 'residential';
+      if (isRental) {
+        // Residential property for rent -> Owner Plans
+        planTab = 'owner';
+      } else {
+        // Residential property for sale -> Seller Plans -> Residential
+        planTab = 'seller';
+      }
+    }
+    
+    // 2. RESIDENTIAL PLOTS/LAND
+    else if (isResidentialPlot && !isIndustrial && !isAgriculturalLand) {
+      category = 'residential';
+      if (isRental) {
+        planTab = 'owner';
+      } else {
+        // Residential plot for sale -> Seller Plans -> Residential
+        planTab = 'seller';
+      }
+    }
+    
+    // 3. AGRICULTURAL LAND
+    else if (isAgriculturalLand) {
+      category = 'agricultural';
+      if (isRental) {
+        // Agricultural land for rent -> Owner Plans -> Agricultural
+        planTab = 'owner';
+      } else {
+        // Agricultural land for sale -> Seller Plans -> Agricultural
+        planTab = 'seller';
+      }
+    }
+    
+    // 4. WAREHOUSE (Special case - goes to Commercial Seller Plans -> Industrial)
+    else if (isWarehouse) {
+      if (isRental) {
+        // Warehouse for rent -> Owner Plans -> Commercial
+        planTab = 'owner';
+        category = 'commercial';
+      } else {
+        // Warehouse for sale -> Commercial Seller Plans -> Industrial
+        planTab = 'commercial-seller';
+        category = 'industrial';
+      }
+    }
+    
+    // 5. INDUSTRIAL PROPERTIES
+    else if (isIndustrial) {
+      category = 'industrial';
+      if (isRental) {
+        // Industrial property for rent -> Owner Plans -> Industrial
+        planTab = 'owner';
+      } else {
+        // Industrial property for sale -> Commercial Seller Plans -> Industrial
+        planTab = 'commercial-seller';
+      }
+    }
+    
+    // 6. OFFICE SPACE
+    else if (isOfficeSpace) {
+      category = 'commercial';
+      if (isRental) {
+        // Office space for rent -> Owner Plans -> Commercial
+        planTab = 'owner';
+      } else {
+        // Office space for sale -> Commercial Seller Plans -> Commercial
+        planTab = 'commercial-seller';
+      }
+    }
+    
+    // 7. RETAIL SHOP/SHOWROOM
+    else if (isRetailShop) {
+      category = 'commercial';
+      if (isRental) {
+        // Retail shop for rent -> Owner Plans -> Commercial
+        planTab = 'owner';
+      } else {
+        // Retail shop for sale -> Commercial Seller Plans -> Commercial
+        planTab = 'commercial-seller';
+      }
+    }
+    
+    // 8. OTHER COMMERCIAL PROPERTIES
+    else if (isCommercialBuilding || propType.includes('commercial')) {
+      category = 'commercial';
+      if (isRental) {
+        // Commercial property for rent -> Owner Plans -> Commercial
+        planTab = 'owner';
+      } else {
+        // Commercial property for sale -> Commercial Seller Plans -> Commercial
+        planTab = 'commercial-seller';
+      }
+    }
+    
+    // 9. DEFAULT FALLBACK (Residential)
+    else {
+      category = 'residential';
+      if (isRental) {
+        planTab = 'owner';
+      } else {
+        planTab = 'seller';
+      }
+    }
+    
+    // Special handling for Flatmates and PG/Hostel properties
+    const isFlatmatesOrPGHostel = propType.includes('pg') || propType.includes('hostel') || propType.includes('flatmates') || titleLower.includes('pg') || titleLower.includes('hostel') || titleLower.includes('flatmates');
+
+    if (isFlatmatesOrPGHostel) {
+      navigate(`/plans?tab=rental&rentalRole=tenant&category=residential&skipWizard=true`);
+      return;
+    }
+    
+    // Navigate to the specific plan with category, bypassing the wizard
+    // Use property-specific route to ensure wizard doesn't appear
+    navigate(`/property/${id}/plans?tab=${planTab}&category=${category}&skipWizard=true`);
+
+    // Refresh property status after navigation (e.g., after payment success)
+    refreshPropertyStatus();
   };
 
   const formatPrice = (priceStr: string) => {
@@ -292,6 +572,12 @@ const PropertyCard = ({
               New
             </div>
           )}
+          {/* Premium badge - visible only for premium properties */}
+          {rental_status === 'available' && (
+            <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-md text-xs font-medium">
+              Premium
+            </div>
+          )}
         </div>
 
         {/* Content section */}
@@ -337,19 +623,69 @@ const PropertyCard = ({
               )}
               {/* Footer actions */}
               <div className="mt-3 flex justify-between items-center">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 text-xs px-3 border-gray-200 hover:bg-gray-50 card-border"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowContactModal(true);
-                  }}
-                >
-                  <Phone size={12} className="mr-1" />
-                  <span>Contact</span>
-                </Button>
-                {/* keep price repeated for mobile stacking? already shown above */}
+                {showOwnerActions && isOwner ? (
+                  // Owner action buttons
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs px-3 border-gray-200 hover:bg-gray-50 card-border"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditProperty();
+                      }}
+                    >
+                      <Edit2 size={12} className="mr-1" />
+                      <span>Edit</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={cn(
+                        "h-8 text-xs px-3 card-border",
+                        rental_status === 'available' 
+                          ? "border-red-200 hover:bg-red-50 text-red-600" 
+                          : "border-green-200 hover:bg-green-50 text-green-600"
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTogglePropertyStatus();
+                      }}
+                    >
+                      {rental_status === 'available' ? (
+                        <><ToggleRight size={12} className="mr-1" />Deactivate</>
+                      ) : (
+                        <><ToggleLeft size={12} className="mr-1" />Activate</>
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs px-3 border-yellow-200 hover:bg-yellow-50 text-yellow-600 card-border"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUpgradeProperty();
+                      }}
+                    >
+                      <Crown size={12} className="mr-1" />
+                      <span>Go Premium</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs px-3 border-gray-200 hover:bg-gray-50 card-border"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowContactModal(true);
+                    }}
+                  >
+                    <Phone size={12} className="mr-1" />
+                    <span>Contact</span>
+                  </Button>
+                )}
+                <div className="text-lg font-bold text-black">{formatPrice(price)}</div>
               </div>
             </>
           ) : (
@@ -360,18 +696,67 @@ const PropertyCard = ({
                 <span className="text-xs line-clamp-1 text-uniform">{location}</span>
               </div>
               <div className="flex justify-between items-end mt-auto">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-3 py-1 card-border"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowContactModal(true);
-                  }}
-                >
-                  <Phone size={7} className="mr-0.5 sm:mr-0.5 mr-0" />
-                  <span className="hidden sm:inline">Contact</span>
-                </Button>
+                {showOwnerActions && isOwner ? (
+                  // Owner action buttons for compact view
+                  <div className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-2 py-1 card-border"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditProperty();
+                      }}
+                    >
+                      <Edit2 size={7} className="mr-0.5" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={cn(
+                        "h-5 text-xs px-2 py-1 card-border",
+                        rental_status === 'available' 
+                          ? "border-red-200 hover:bg-red-50 text-red-600" 
+                          : "border-green-200 hover:bg-green-50 text-green-600"
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTogglePropertyStatus();
+                      }}
+                    >
+                      {rental_status === 'available' ? (
+                        <ToggleRight size={7} />
+                      ) : (
+                        <ToggleLeft size={7} />
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-5 text-xs border-yellow-200 hover:bg-yellow-50 text-yellow-600 px-2 py-1 card-border"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUpgradeProperty();
+                      }}
+                    >
+                      <Crown size={7} />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-3 py-1 card-border"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowContactModal(true);
+                    }}
+                  >
+                    <Phone size={7} className="mr-0.5 sm:mr-0.5 mr-0" />
+                    <span className="hidden sm:inline">Contact</span>
+                  </Button>
+                )}
                 <div className="text-xs font-bold text-black">{formatPrice(price)}</div>
               </div>
             </>

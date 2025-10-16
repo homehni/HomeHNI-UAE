@@ -107,6 +107,7 @@ import PaymentFailed from "./pages/payments/Failed";
 import PostService from "./pages/PostService";
 import { EmployeeDashboard } from "./pages/EmployeeDashboard";
 import Plans from "./pages/Plans";
+import PropertyPlans from "./pages/PropertyPlans";
 import Services from "./pages/Services";
 import { useUserRegistrationAlerts } from '@/listeners/userRegistrationAlerts';
 
@@ -143,6 +144,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/about" element={<AboutSidebar />} />
+            <Route path="/property/:id/plans" element={<PropertyPlans />} />
             <Route path="/plans" element={<Plans />} />
             <Route path="/services" element={<Services />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

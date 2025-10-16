@@ -607,7 +607,7 @@ const FeaturedProperties = ({
         </Card>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
-          {displayedProperties.map(property => <PropertyCard key={property.id} {...property} size="compact" />)}
+          {displayedProperties.map(property => <PropertyCard key={property.id} {...property} size="compact" showOwnerActions={true} />)}
         </div>
 
         {filtered.length > 20 && (

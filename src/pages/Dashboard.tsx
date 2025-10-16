@@ -293,7 +293,7 @@ export const Dashboard: React.FC = () => {
       // Show ONLY properties table entries belonging to the user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
-        .select('*')
+        .select('*, is_premium') // Include is_premium column
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
 
@@ -1413,7 +1413,7 @@ export const Dashboard: React.FC = () => {
                               <div className="flex flex-col items-center justify-center">
                                 <div className="relative w-20 h-20 bg-gray-200/70 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-300/70 transition-colors group p-4">
                                   <svg className="w-6 h-6 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 002-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                   </svg>
                                   <span className="text-xs font-normal text-gray-600 text-center leading-tight">

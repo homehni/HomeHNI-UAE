@@ -1503,6 +1503,8 @@ const PropertySearch = () => {
                         listingType={property.listingType}
                         size={viewMode === 'list' ? 'large' : 'default'}
                         rental_status="available"
+                        ownerId={property.ownerId}
+                        showOwnerActions={true}
                       />
                     ))}
                   </div>

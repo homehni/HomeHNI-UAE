@@ -15,8 +15,11 @@ import GSTDisplay from '@/components/GSTDisplay';
 import { calculateTotalWithGST } from '@/utils/gstCalculator';
 import { supabase } from '@/integrations/supabase/client';
 
-interface OwnerPlansProps { embedded?: boolean }
-const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
+interface OwnerPlansProps { 
+  embedded?: boolean;
+  showTitle?: boolean;
+}
+const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
   const navigate = useNavigate();
   const [selectedPlans, setSelectedPlans] = useState({
     residential: 1,
@@ -393,6 +396,18 @@ const OwnerPlans = ({ embedded }: OwnerPlansProps) => {
       {/* Pricing Plans with Tabs */}
       <section className={embedded ? "p-0 bg-transparent" : "py-16 px-4 bg-gray-50"}>
         <div className={embedded ? "" : "max-w-6xl mx-auto"}>
+          
+          {/* Section heading - Show only if showTitle is true */}
+          {showTitle && (
+            <div className={embedded ? "text-center mb-6 pt-8" : "text-center mb-12 pt-10"}>
+              <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
+                Owner Plans
+              </h2>
+              <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>
+                Find qualified tenants quickly and save thousands on brokerage with our specialized owner plans.
+              </p>
+            </div>
+          )}
 
           <Tabs defaultValue={(new URLSearchParams(window.location.search).get('category') as 'residential'|'commercial'|'industrial'|'agricultural') || 'residential'} className="w-full">
             <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 p-1 gap-1 bg-muted rounded-lg h-auto">

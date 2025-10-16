@@ -280,6 +280,25 @@ export default function PayButton({
               }
             })();
             
+            // After payment success and before redirect
+            const params = new URLSearchParams(window.location.search);
+            const propertyId = params.get('propertyId');
+            if (propertyId) {
+              try {
+                const { error: premiumError } = await supabase
+                  .from('properties')
+                  .update({ is_premium: true } as any) // type assertion to bypass TS error
+                  .eq('id', propertyId);
+                if (premiumError) {
+                  console.error('Error updating property to premium:', premiumError);
+                } else {
+                  console.log('Property marked as premium:', propertyId);
+                }
+              } catch (err) {
+                console.error('Unexpected error updating property to premium:', err);
+              }
+            }
+            
             // Redirect to success page or dashboard
             setTimeout(() => {
               window.location.href = `/payment/success?payment_id=${response.razorpay_payment_id || ""}`;

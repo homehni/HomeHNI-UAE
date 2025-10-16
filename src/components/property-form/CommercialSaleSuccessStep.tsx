@@ -12,7 +12,7 @@ interface CommercialSaleSuccessStepProps {
   onGoToDashboard: () => void;
   createdSubmissionId?: string | null;
   onEdit?: (step: number) => void;
-  gallery?: { images?: any[] };
+  gallery?: { images?: Array<{ url: string; alt?: string }> };
   ownerInfo?: Partial<OwnerInfo>;
 }
 
@@ -41,9 +41,9 @@ export const CommercialSaleSuccessStep = ({
     ] as (string | undefined)[];
 
     const fullNameCandidates = [
-      ownerInfo?.fullName,
-      (user as any)?.user_metadata?.full_name,
-      (user as any)?.user_metadata?.name,
+      (user as { user_metadata?: { full_name?: string; name?: string } })?.user_metadata?.full_name,
+      (user as { user_metadata?: { full_name?: string; name?: string } })?.user_metadata?.name,
+      ownerInfo?.fullName
     ] as (string | undefined)[];
 
     const email = emailCandidates.find(Boolean);
@@ -62,7 +62,7 @@ export const CommercialSaleSuccessStep = ({
         variant: "destructive"
       });
       console.warn('[CommercialSaleSuccessStep] Missing contact details for Premium upgrade', { email, fullName, ownerInfo, user });
-      window.open('/plans?tab=commercial-seller', '_blank');
+      window.open(`/property/${createdSubmissionId}/plans?skipWizard=true`, '_blank');
       return;
     }
 

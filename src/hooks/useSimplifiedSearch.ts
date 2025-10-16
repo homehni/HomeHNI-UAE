@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { convertArea, getStandardizedAreaUnit, AreaUnit } from '@/utils/areaConverter';
 
 // Build select columns at module scope to avoid hook dependency warnings
-const BASE_COLUMNS = 'id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit';
+const BASE_COLUMNS = 'id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit, user_id';
 // Keep extra fields conservative to avoid schema mismatches: floor_no and parking are commonly present.
 const EXTRA_COMMERCIAL_COLUMNS = ', floor_no, floor_type';
 const SELECT_COLUMNS = `${BASE_COLUMNS}${EXTRA_COMMERCIAL_COLUMNS}`;
@@ -30,6 +30,7 @@ interface Property {
   bhkType: string;
   listingType: string;
   isNew?: boolean;
+  ownerId?: string; // Add owner ID for ownership detection
   // Plot/Land specific attributes
   plotAreaUnit?: string; // The unit of measurement for land area
   // Commercial-specific attributes used for filtering
@@ -90,6 +91,7 @@ export const useSimplifiedSearch = () => {
     plot_area_unit?: string;
     floor_no?: number | 'basement' | null;
     floor_type?: string | null;
+    user_id?: string;
   };
 
   // Dynamic budget range based on active tab
@@ -404,6 +406,7 @@ export const useSimplifiedSearch = () => {
       bhkType: property.bhk_type || '1bhk',
       listingType: property.listing_type || 'sale',
       isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      ownerId: property.user_id, // Add owner ID for ownership detection
       plotAreaUnit: property.plot_area_unit ? getStandardizedAreaUnit(property.plot_area_unit) : 'sq.ft',
       // Commercial specifics (best-effort mapping; values may be absent on residential/land)
       floorNo: ((): number | 'basement' | 'ground' | undefined => {
