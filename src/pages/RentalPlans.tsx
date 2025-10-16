@@ -53,7 +53,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
       } else if (planName.toLowerCase().includes('year')) {
         expiryDate.setFullYear(expiryDate.getFullYear() + 1);
       } else {
-        expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
+        expiryDate.setDate(expiryDate.getDate() + 45); // Default to 45 days
       }
       
       // Record free subscription in the payments table
@@ -73,7 +73,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
           plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
           plan_duration: planName.toLowerCase().includes('lifetime') 
             ? 'lifetime' 
-            : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+            : planName.toLowerCase().includes('year') ? '1 year' : '45 days',
           expires_at: expiryDate.toISOString(),
           metadata: {
             free_plan: true
@@ -223,19 +223,19 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
   const tenantPlanDetailsData = {
     residential: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "30 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Property Search Assistance" },
         { icon: <FileText className="w-5 h-5" />, text: "Basic Documentation Help" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Tenant Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Documentation Support" },
         { icon: <Users className="w-5 h-5" />, text: "Property Visit Coordination" },
         { icon: <Globe className="w-5 h-5" />, text: "Priority Listing Access" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Personal Tenant Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Legal Documentation Review" },
         { icon: <Users className="w-5 h-5" />, text: "Personalized Property Tours" },
@@ -251,14 +251,14 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
         { icon: <FileText className="w-5 h-5" />, text: "Business Documentation Support" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "75 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Commercial Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Legal Commercial Documentation" },
         { icon: <Users className="w-5 h-5" />, text: "Office Visit Coordination" },
         { icon: <Globe className="w-5 h-5" />, text: "Prime Location Access" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Corporate Space Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Legal Review" },
         { icon: <Users className="w-5 h-5" />, text: "Executive Property Tours" },
@@ -269,19 +269,19 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
     ],
     industrial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Site Search" },
         { icon: <FileText className="w-5 h-5" />, text: "Industrial Documentation" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Facility Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Compliance Documentation" },
         { icon: <Users className="w-5 h-5" />, text: "Site Visit Coordination" },
         { icon: <Globe className="w-5 h-5" />, text: "Industrial Zone Access" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Specialist" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Compliance Review" },
         { icon: <Users className="w-5 h-5" />, text: "Specialized Site Tours" },
@@ -297,14 +297,14 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
         { icon: <FileText className="w-5 h-5" />, text: "Land Documentation Help" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "75 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Land Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Land Title Verification" },
         { icon: <Users className="w-5 h-5" />, text: "Farm Visit Coordination" },
         { icon: <Globe className="w-5 h-5" />, text: "Rural Area Access" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Specialist" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Land Survey" },
         { icon: <Users className="w-5 h-5" />, text: "Agricultural Site Tours" },

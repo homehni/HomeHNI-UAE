@@ -86,7 +86,7 @@ export default function PayButton({
               } else if (planName.toLowerCase().includes('year')) {
                 expiryDate.setFullYear(expiryDate.getFullYear() + 1);
               } else {
-                expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
+                expiryDate.setDate(expiryDate.getDate() + 45); // Default to 45 days
               }
               
               // Get property ID from URL if present
@@ -109,7 +109,7 @@ export default function PayButton({
                   plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
                   plan_duration: planName.toLowerCase().includes('lifetime') 
                     ? 'lifetime' 
-                    : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+                    : planName.toLowerCase().includes('year') ? '1 year' : '45 days',
                   expires_at: expiryDate.toISOString(),
                   ...(propertyId && { property_id: propertyId }), // Include property_id if present
                   metadata: {
@@ -168,7 +168,7 @@ export default function PayButton({
                 } else if (planName.toLowerCase().includes('year')) {
                   expiryDate.setFullYear(expiryDate.getFullYear() + 1);
                 } else {
-                  expiryDate.setMonth(expiryDate.getMonth() + 1);
+                  expiryDate.setDate(expiryDate.getDate() + 45);
                 }
                 
                 // Generate proper invoice number with timestamp
@@ -184,7 +184,7 @@ export default function PayButton({
                 const planType = planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription';
                 const planDuration = planName.toLowerCase().includes('lifetime') 
                   ? 'Lifetime Access' 
-                  : planName.toLowerCase().includes('year') ? '1 Year' : '1 Month';
+                  : planName.toLowerCase().includes('year') ? '1 Year' : '45 Days';
                 
                 // Get next billing date (null for lifetime plans)
                 const nextBillingDate = planType === 'lifetime' 
@@ -331,7 +331,7 @@ export default function PayButton({
                     plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
                     plan_duration: planName.toLowerCase().includes('lifetime') 
                       ? 'lifetime' 
-                      : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+                      : planName.toLowerCase().includes('year') ? '1 year' : '45 days',
                     expires_at: null,
                     metadata: {
                       error_message: error instanceof Error ? error.message : 'Unknown error',
@@ -380,7 +380,7 @@ export default function PayButton({
                     plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
                     plan_duration: planName.toLowerCase().includes('lifetime') 
                       ? 'lifetime' 
-                      : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+                      : planName.toLowerCase().includes('year') ? '1 year' : '45 days',
                     expires_at: null,
                     metadata: {
                       cancelled_at: currentDate.toISOString(),

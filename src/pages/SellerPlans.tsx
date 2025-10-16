@@ -160,12 +160,12 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
   const tabPlanDetails = {
     residential: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
         { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Relationship Manager (RM)- Super Fast Closure" },
         { icon: <FileText className="w-5 h-5" />, text: "Sale Agreement Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Top Slot Listing For 5x More Visibility" },
@@ -173,7 +173,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         { icon: <Megaphone className="w-5 h-5" />, text: "Social Media Marketing" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Relationship Manager" },
         { icon: <FileText className="w-5 h-5" />, text: "Premium Sale Agreement Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Featured Listing Priority" },
@@ -182,7 +182,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         { icon: <Lock className="w-5 h-5" />, text: "Privacy Protection" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Legal Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Slot Guarantee" },
@@ -194,13 +194,13 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
     ],
     commercial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Commercial Property Expert" },
         { icon: <FileText className="w-5 h-5" />, text: "Commercial Sale Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Business Listing Priority" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Commercial Manager" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Commercial Legal Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Business Exposure" },
@@ -208,7 +208,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         { icon: <Megaphone className="w-5 h-5" />, text: "Corporate Social Media Strategy" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Executive Business Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Enterprise Documentation Suite" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Exclusive Business Promotion" },
@@ -219,13 +219,13 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
     ],
     industrial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Property Specialist" },
         { icon: <FileText className="w-5 h-5" />, text: "Industrial Sale Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Industrial Network Exposure" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Senior Industrial Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Industrial Legal Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Enterprise-Grade Marketing" },
@@ -233,7 +233,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         { icon: <Shield className="w-5 h-5" />, text: "Compliance Verification Support" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "240 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Executive Industrial Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Regulatory Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Custom Industrial Marketing" },
@@ -244,13 +244,13 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
     ],
     agricultural: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Land Expert" },
         { icon: <FileText className="w-5 h-5" />, text: "Farm Sale Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Farming Community Reach" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Marketing Specialist" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Farm Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Agricultural Network Marketing" },
@@ -258,7 +258,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         { icon: <Megaphone className="w-5 h-5" />, text: "Agricultural Social Media" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Senior Agricultural Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Premium Farm Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Agricultural Marketing" },
@@ -426,7 +426,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                                   // Calculate current and expiry date
                                   const currentDate = new Date();
                                   const expiryDate = new Date();
-                                  expiryDate.setMonth(expiryDate.getMonth() + 1); // Free plans valid for 1 month
+                                  expiryDate.setDate(expiryDate.getDate() + 45); // Free plans valid for 45 days
                                   
                                   // Create a random payment ID for free plans
                                   const freePaymentId = `free_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
@@ -445,7 +445,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                                     payment_date: currentDate.toISOString(),
                                     invoice_number: invoiceNumber,
                                     plan_type: 'subscription',
-                                    plan_duration: '1 month',
+                                    plan_duration: '45 days',
                                     expires_at: expiryDate.toISOString(),
                                     metadata: {
                                       notes: { plan: plan.name, category: "seller", type: tabKey, isFree: true }

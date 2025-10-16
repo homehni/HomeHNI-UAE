@@ -54,7 +54,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
       } else if (planName.toLowerCase().includes('year')) {
         expiryDate.setFullYear(expiryDate.getFullYear() + 1);
       } else {
-        expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
+        expiryDate.setDate(expiryDate.getDate() + 45); // Default to 45 days
       }
       
       // Record free subscription in the payments table
@@ -74,7 +74,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
           plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
           plan_duration: planName.toLowerCase().includes('lifetime') 
             ? 'lifetime' 
-            : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+            : planName.toLowerCase().includes('year') ? '1 year' : '45 days',
           expires_at: expiryDate.toISOString(),
           metadata: {
             free_plan: true
@@ -239,7 +239,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
         { icon: <Camera className="w-5 h-5" />, text: "Photoshoot Of Your Property" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Relationship Manager" },
         { icon: <FileText className="w-5 h-5" />, text: "Premium Documentation Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Featured Listing Priority" },
@@ -248,7 +248,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
         { icon: <Lock className="w-5 h-5" />, text: "Privacy Protection" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Personal Field Assistant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Legal Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Slot Guarantee" },
@@ -260,13 +260,13 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
     ],
     commercial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Commercial Property Expert" },
         { icon: <FileText className="w-5 h-5" />, text: "Commercial Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Business Listing Priority" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Commercial Manager" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Legal Framework" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Business Exposure" },
@@ -274,7 +274,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
         { icon: <Camera className="w-5 h-5" />, text: "Professional Space Photography" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Executive Account Manager" },
         { icon: <FileText className="w-5 h-5" />, text: "Enterprise Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Exclusive Business Promotion" },
@@ -285,13 +285,13 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
     ],
     industrial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Property Specialist" },
         { icon: <FileText className="w-5 h-5" />, text: "Industrial Compliance Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Industrial Network Exposure" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Senior Industrial Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Regulatory Documentation" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Enterprise-Grade Marketing" },
@@ -299,7 +299,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
         { icon: <Shield className="w-5 h-5" />, text: "Compliance Verification" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Executive Industrial Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Regulatory Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Custom Marketing Solutions" },
@@ -310,13 +310,13 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
     ],
     agricultural: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "60 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Land Expert" },
         { icon: <FileText className="w-5 h-5" />, text: "Land Documentation Support" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Farming Community Reach" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Crop Planning Assistance" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Agricultural Network Marketing" },
@@ -324,7 +324,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
         { icon: <Shield className="w-5 h-5" />, text: "Soil Quality Assessment" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Senior Agricultural Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Farm Planning" },
         { icon: <TrendingUp className="w-5 h-5" />, text: "Premium Agricultural Marketing" },

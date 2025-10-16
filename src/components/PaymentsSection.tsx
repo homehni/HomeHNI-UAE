@@ -275,7 +275,7 @@ const PaymentsSection: React.FC = () => {
     pdf.setFontSize(9);
     pdf.text(payment.plan_name, 25, tableY + 25);
     pdf.text(payment.plan_type || 'subscription', 85, tableY + 25);
-    pdf.text(payment.plan_duration || '1 month', 135, tableY + 25);
+    pdf.text(payment.plan_duration || '45 days', 135, tableY + 25);
     pdf.text(`Rs. ${basePrice.toLocaleString()}`, pageWidth - 25, tableY + 25, { align: 'right' });
     
     // Totals Section - Right aligned with uniform formatting

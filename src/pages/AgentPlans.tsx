@@ -259,7 +259,7 @@ const AgentPlans = () => {
                                   // Calculate current and expiry date
                                   const currentDate = new Date();
                                   const expiryDate = new Date();
-                                  expiryDate.setMonth(expiryDate.getMonth() + 1); // Free plans valid for 1 month
+                                  expiryDate.setDate(expiryDate.getDate() + 45); // Free plans valid for 45 days
                                   
                                   // Create a random payment ID for free plans
                                   const freePaymentId = `free_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
@@ -278,7 +278,7 @@ const AgentPlans = () => {
                                     payment_date: currentDate.toISOString(),
                                     invoice_number: invoiceNumber,
                                     plan_type: 'subscription',
-                                    plan_duration: '1 month',
+                                    plan_duration: '45 days',
                                     expires_at: expiryDate.toISOString(),
                                     metadata: {
                                       notes: { plan: plan.name, category: "agent", type: tabKey, isFree: true }

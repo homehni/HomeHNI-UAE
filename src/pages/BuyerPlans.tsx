@@ -147,13 +147,13 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
   const tabPlanDetails = {
     residential: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 25 Property Contacts" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Complimentary Legal Consultation" },
         { icon: <FileText className="w-5 h-5" />, text: "Loan Assistance Support" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "90 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 50 Property Contacts" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Complimentary Legal Consultation" },
         { icon: <FileText className="w-5 h-5" />, text: "Loan Assistance Support" },
@@ -161,7 +161,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         { icon: <TrendingUp className="w-5 h-5" />, text: "Expert Negotiates Best Price" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "Unlimited Property Contacts" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Premium Legal Consultation" },
         { icon: <FileText className="w-5 h-5" />, text: "Priority Loan Assistance" },
@@ -173,13 +173,13 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
     ],
     commercial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 30 Commercial Properties" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Commercial Legal Consultation" },
         { icon: <FileText className="w-5 h-5" />, text: "Business Loan Assistance" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 75 Commercial Properties" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Expert Commercial Advisor" },
         { icon: <FileText className="w-5 h-5" />, text: "Priority Business Financing" },
@@ -187,7 +187,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         { icon: <TrendingUp className="w-5 h-5" />, text: "Business Deal Negotiation" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "Unlimited Commercial Access" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Dedicated Commercial Manager" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Business Setup Support" },
@@ -198,13 +198,13 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
     ],
     industrial: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 20 Industrial Properties" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Legal Support" },
         { icon: <FileText className="w-5 h-5" />, text: "Industrial Loan Guidance" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 50 Industrial Properties" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Industrial Property Expert" },
         { icon: <FileText className="w-5 h-5" />, text: "Compliance Documentation" },
@@ -212,7 +212,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         { icon: <Shield className="w-5 h-5" />, text: "Regulatory Assistance" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "240 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "Unlimited Industrial Access" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Senior Industrial Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Regulatory Support" },
@@ -223,13 +223,13 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
     ],
     agricultural: [
       [
-        { icon: <Clock className="w-5 h-5" />, text: "120 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 25 Agricultural Properties" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Legal Guidance" },
         { icon: <FileText className="w-5 h-5" />, text: "Farm Loan Assistance" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "150 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "View up to 60 Agricultural Properties" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Agricultural Specialist" },
         { icon: <FileText className="w-5 h-5" />, text: "Crop Planning Support" },
@@ -237,7 +237,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
         { icon: <Shield className="w-5 h-5" />, text: "Soil Quality Assessment" }
       ],
       [
-        { icon: <Clock className="w-5 h-5" />, text: "180 Days Plan Validity" },
+        { icon: <Clock className="w-5 h-5" />, text: "45 Days Plan Validity" },
         { icon: <Home className="w-5 h-5" />, text: "Unlimited Agricultural Access" },
         { icon: <UserCheck className="w-5 h-5" />, text: "Senior Agricultural Consultant" },
         { icon: <FileText className="w-5 h-5" />, text: "Complete Farm Planning" },
@@ -376,7 +376,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                                   // Calculate current and expiry date
                                   const currentDate = new Date();
                                   const expiryDate = new Date();
-                                  expiryDate.setMonth(expiryDate.getMonth() + 1); // Free plans valid for 1 month
+                                  expiryDate.setDate(expiryDate.getDate() + 45); // Free plans valid for 45 days
                                   
                                   // Create a random payment ID for free plans
                                   const freePaymentId = `free_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
@@ -395,7 +395,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                                     payment_date: currentDate.toISOString(),
                                     invoice_number: invoiceNumber,
                                     plan_type: 'subscription',
-                                    plan_duration: '1 month',
+                                    plan_duration: '45 days',
                                     expires_at: expiryDate.toISOString(),
                                     metadata: {
                                       notes: { plan: plan.name, category: "buyer", type: tabKey, isFree: true }

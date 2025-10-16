@@ -45,7 +45,7 @@ const CommercialBuyerPlan = () => {
       } else if (planName.toLowerCase().includes('year')) {
         expiryDate.setFullYear(expiryDate.getFullYear() + 1);
       } else {
-        expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
+        expiryDate.setDate(expiryDate.getDate() + 45); // Default to 45 days
       }
       
       // Record free subscription in the payments table
@@ -65,7 +65,7 @@ const CommercialBuyerPlan = () => {
           plan_type: planName.toLowerCase().includes('lifetime') ? 'lifetime' : 'subscription',
           plan_duration: planName.toLowerCase().includes('lifetime') 
             ? 'lifetime' 
-            : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
+            : planName.toLowerCase().includes('year') ? '1 year' : '45 days',
           expires_at: expiryDate.toISOString(),
           metadata: {
             free_plan: true
