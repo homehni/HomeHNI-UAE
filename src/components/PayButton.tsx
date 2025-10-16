@@ -89,6 +89,10 @@ export default function PayButton({
                 expiryDate.setMonth(expiryDate.getMonth() + 1); // Default to 1 month
               }
               
+              // Get property ID from URL if present
+              const params = new URLSearchParams(window.location.search);
+              const propertyId = params.get('propertyId');
+              
               const { error: paymentError } = await supabase
                 .from('payments')
                 .insert({
@@ -98,7 +102,7 @@ export default function PayButton({
                   amount_paise: amountPaise,
                   amount_rupees: amountPaise / 100,
                   currency: 'INR',
-                  status: 'success',
+                  status: 'SUCCESS',
                   payment_method: 'razorpay',
                   payment_date: currentDate.toISOString(),
                   invoice_number: invoiceNumber,
@@ -107,6 +111,7 @@ export default function PayButton({
                     ? 'lifetime' 
                     : planName.toLowerCase().includes('year') ? '1 year' : '1 month',
                   expires_at: expiryDate.toISOString(),
+                  ...(propertyId && { property_id: propertyId }), // Include property_id if present
                   metadata: {
                     razorpay_payment_id: response.razorpay_payment_id,
                     razorpay_order_id: response.razorpay_order_id || null,

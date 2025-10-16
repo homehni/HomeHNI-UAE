@@ -860,14 +860,17 @@ export const Dashboard: React.FC = () => {
     const isRent = property.listing_type === 'rent';
     
     let planTab = '';
+    let category = 'residential';
     
     if (isCommercial) {
+      category = 'commercial';
       if (isRent) {
-        planTab = 'commercial-owner';
+        planTab = 'owner';
       } else {
-        planTab = 'commercial-seller';
+        planTab = 'seller';
       }
     } else {
+      category = 'residential';
       if (isRent) {
         planTab = 'owner';
       } else {
@@ -875,7 +878,8 @@ export const Dashboard: React.FC = () => {
       }
     }
     
-    navigate(`/plans?tab=${planTab}`);
+    // Navigate with property ID so payment can be linked to this specific property
+    navigate(`/plans?tab=${planTab}&category=${category}&skipWizard=true&propertyId=${property.id}`);
   };
 
   const handleUpdateName = async () => {
