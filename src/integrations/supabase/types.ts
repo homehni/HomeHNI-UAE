@@ -766,6 +766,7 @@ export type Database = {
           plan_duration: string | null
           plan_name: string
           plan_type: string | null
+          property_id: string | null
           razorpay_order_id: string | null
           razorpay_signature: string | null
           status: string
@@ -787,6 +788,7 @@ export type Database = {
           plan_duration?: string | null
           plan_name: string
           plan_type?: string | null
+          property_id?: string | null
           razorpay_order_id?: string | null
           razorpay_signature?: string | null
           status?: string
@@ -808,13 +810,22 @@ export type Database = {
           plan_duration?: string | null
           plan_name?: string
           plan_type?: string | null
+          property_id?: string | null
           razorpay_order_id?: string | null
           razorpay_signature?: string | null
           status?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "payments_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       platform_settings: {
         Row: {
@@ -939,6 +950,7 @@ export type Database = {
           id: string
           images: string[] | null
           is_featured: boolean
+          is_premium: boolean | null
           is_visible: boolean | null
           landmarks: string | null
           listing_type: string
@@ -997,6 +1009,7 @@ export type Database = {
           id?: string
           images?: string[] | null
           is_featured?: boolean
+          is_premium?: boolean | null
           is_visible?: boolean | null
           landmarks?: string | null
           listing_type: string
@@ -1055,6 +1068,7 @@ export type Database = {
           id?: string
           images?: string[] | null
           is_featured?: boolean
+          is_premium?: boolean | null
           is_visible?: boolean | null
           landmarks?: string | null
           listing_type?: string
