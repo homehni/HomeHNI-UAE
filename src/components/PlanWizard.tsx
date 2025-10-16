@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Check, ChevronLeft, ChevronRight, User, Building2, Home, Factory, Sprout, Users, Hammer, Briefcase } from 'lucide-react';
 
-type UserRole = 'buyer' | 'seller' | 'owner' | 'tenant' | 'commercial-buyer' | 'commercial-seller' | 'builder-lifetime' | 'agent';
+type UserRole = 'buyer' | 'seller' | 'owner' | 'tenant' | 'commercial-buyer' | 'builder-lifetime' | 'agent';
 type Category = 'residential' | 'commercial' | 'industrial' | 'agricultural';
 
 interface PlanWizardProps {
@@ -20,7 +20,6 @@ const roleOptions: Array<{ id: UserRole; label: string; icon: React.ReactNode; h
   { id: 'owner', label: 'Owner (Rental)', icon: <Home className="w-5 h-5" />, tab: 'rental' },
   { id: 'tenant', label: 'Tenant', icon: <Users className="w-5 h-5" />, tab: 'rental' },
   { id: 'commercial-buyer', label: 'Commercial Buyer', icon: <Building2 className="w-5 h-5" />, tab: 'commercial-buyer' },
-  { id: 'commercial-seller', label: 'Commercial Seller', icon: <Building2 className="w-5 h-5" />, tab: 'commercial-seller' },
   { id: 'builder-lifetime', label: 'Builder', icon: <Hammer className="w-5 h-5" />, tab: 'builder-lifetime' },
   { id: 'agent', label: 'Agent', icon: <Briefcase className="w-5 h-5" />, tab: 'agent' },
 ];
@@ -62,8 +61,8 @@ export default function PlanWizard({ open, onOpenChange }: PlanWizardProps) {
   function needsCategorySelection(role: UserRole) {
     // Rental owner/tenant also benefit from a category to preselect their inner tabs
     if (role === 'owner' || role === 'tenant') return true;
-  // Buyer/Seller/Commercial Buyer/Seller need category to open correct tab
-  if (role === 'buyer' || role === 'seller' || role === 'commercial-buyer' || role === 'commercial-seller') return true;
+    // Buyer/Seller/Commercial Buyer need category to open correct tab
+    if (role === 'buyer' || role === 'seller' || role === 'commercial-buyer') return true;
     // Builder/Agent pages generally have their own structure without categories
     return false;
   }
@@ -94,10 +93,6 @@ export default function PlanWizard({ open, onOpenChange }: PlanWizardProps) {
         break;
       case 'commercial-buyer':
         tab = 'commercial-buyer';
-        if (selectedCategory) query.category = selectedCategory;
-        break;
-      case 'commercial-seller':
-        tab = 'commercial-seller';
         if (selectedCategory) query.category = selectedCategory;
         break;
       case 'builder-lifetime':
