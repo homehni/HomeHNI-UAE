@@ -30,6 +30,7 @@ interface PropertyCardProps {
   rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
   ownerId?: string; // Add owner ID to check ownership
   showOwnerActions?: boolean; // Flag to show/hide owner actions
+  is_premium?: boolean; // Premium status based on payment
 }
 
 const PropertyCard = ({
@@ -47,7 +48,8 @@ const PropertyCard = ({
   size = 'default',
   rental_status = 'available',
   ownerId,
-  showOwnerActions = false
+  showOwnerActions = false,
+  is_premium = false
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -572,8 +574,8 @@ const PropertyCard = ({
               New
             </div>
           )}
-          {/* Premium badge - visible only for premium properties */}
-          {rental_status === 'available' && (
+          {/* Premium badge - visible only for properties with successful payments */}
+          {is_premium && (
             <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-md text-xs font-medium">
               Premium
             </div>

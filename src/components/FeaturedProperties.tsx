@@ -100,6 +100,7 @@ const extractImageUrl = (imageData: any): string => {
    image: string | { url: string } | (string | { url: string })[];
    propertyType: string;
    isNew?: boolean;
+   is_premium?: boolean;
  };
 const FeaturedProperties = ({
   properties: propsProperties
@@ -183,7 +184,8 @@ const FeaturedProperties = ({
             bathrooms: element.content?.bathrooms || 0,
             image: element.images?.[0] || element.content?.image || '/placeholder.svg',
             propertyType: element.content?.propertyType || 'Property',
-            isNew: element.content?.isNew || false
+            isNew: element.content?.isNew || false,
+            is_premium: false // Content elements are not premium
           };
         });
         
@@ -246,7 +248,8 @@ const FeaturedProperties = ({
             bathrooms: property.bathrooms || 0,
             image: property.images || [],
             propertyType: displayPropertyType,
-            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // New if created within last 7 days
+            isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // New if created within last 7 days
+            is_premium: (property as any).is_premium || false
           };
         });
 

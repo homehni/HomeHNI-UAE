@@ -293,7 +293,7 @@ export const Dashboard: React.FC = () => {
       // Show ONLY properties table entries belonging to the user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
-        .select('*, is_premium') // Include is_premium column
+        .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
 

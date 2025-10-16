@@ -125,7 +125,7 @@ export const CommercialSaleMultiStepForm = ({
           }}
           createdSubmissionId={createdSubmissionId}
           onEdit={handleEdit}
-          gallery={gallery}
+          gallery={gallery as any}
           ownerInfo={ownerInfo}
         />
       );
