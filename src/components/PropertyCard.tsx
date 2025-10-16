@@ -342,6 +342,27 @@ const PropertyCard = ({
       return;
     }
     
+    // Special handling for Agricultural Land
+    if (isAgriculturalLand && !isRental) {
+      navigate(`/plans?tab=seller&category=agricultural&skipWizard=true&propertyId=${id}`);
+      refreshPropertyStatus();
+      return;
+    }
+    
+    // Special handling for Industrial Land
+    if (isIndustrial && !isRental) {
+      navigate(`/plans?tab=seller&category=industrial&skipWizard=true&propertyId=${id}`);
+      refreshPropertyStatus();
+      return;
+    }
+    
+    // Special handling for Commercial Land (if it's a land/plot)
+    if (category === 'commercial' && !isRental && (propType.includes('land') || titleLower.includes('land'))) {
+      navigate(`/plans?tab=seller&category=commercial&skipWizard=true&propertyId=${id}`);
+      refreshPropertyStatus();
+      return;
+    }
+
     // Navigate to the specific plan with category, bypassing the wizard
     // Use property-specific route to ensure wizard doesn't appear
     navigate(`/property/${id}/plans?tab=${planTab}&category=${category}&skipWizard=true`);

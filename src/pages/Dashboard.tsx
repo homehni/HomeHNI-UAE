@@ -875,11 +875,37 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleUpgradeProperty = (property: CombinedProperty) => {
-    // Check if it's commercial land based on title or property type
-    const isCommercialLand = property.title?.toLowerCase().includes('commercial land') || 
-                             property.property_type?.toLowerCase().includes('commercial');
+    // First, check for specific land types that need custom handling
     
-    // Check if it's industrial property (warehouse, industrial)
+    // Check if it's agricultural land based on title or property type
+    const isAgriculturalLand = property.title?.toLowerCase().includes('agricultural land') || 
+                              property.property_type?.toLowerCase().includes('agricultural');
+    
+    // Check if it's industrial land based on title
+    const isIndustrialLand = property.title?.toLowerCase().includes('industrial land');
+    
+    // Check if it's commercial land based on title
+    const isCommercialLand = property.title?.toLowerCase().includes('commercial land');
+    
+    // Direct routing for specific land types (as per the requirement)
+    if (isAgriculturalLand && property.listing_type !== 'rent') {
+      navigate(`/plans?tab=seller&category=agricultural&propertyId=${property.id}`);
+      return;
+    }
+    
+    if (isIndustrialLand && property.listing_type !== 'rent') {
+      navigate(`/plans?tab=seller&category=industrial&propertyId=${property.id}`);
+      return;
+    }
+    
+    if (isCommercialLand && property.listing_type !== 'rent') {
+      navigate(`/plans?tab=seller&category=commercial&propertyId=${property.id}`);
+      return;
+    }
+    
+    // For other property types, continue with the original logic
+    
+    // Check if it's industrial property (warehouse, industrial) 
     const isIndustrial = property.property_type === 'warehouse' || 
                         property.property_type === 'industrial' ||
                         property.property_type?.toLowerCase().includes('industrial');
@@ -896,7 +922,11 @@ export const Dashboard: React.FC = () => {
     let planTab = '';
     let category = 'residential';
     
-    if (isIndustrial) {
+    if (isAgriculturalLand) {
+      // Agricultural land properties
+      category = 'agricultural';
+      planTab = isRent ? 'rental' : 'seller';
+    } else if (isIndustrial) {
       // Industrial properties (warehouse, industrial)
       category = 'industrial';
       planTab = isRent ? 'rental' : 'seller';

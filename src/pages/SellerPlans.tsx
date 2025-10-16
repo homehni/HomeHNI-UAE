@@ -112,6 +112,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "INDUSTRIAL PROMOTION",
         badgeColor: "bg-gray-600",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -120,6 +121,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "ENTERPRISE MARKETING",
         badgeColor: "bg-slate-700",
+        amountPaise: 2899900,
       },
       {
         name: "Industrial Elite",
@@ -127,6 +129,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST", 
         badge: "INDUSTRIAL EXPERT",
         badgeColor: "bg-zinc-800",
+        amountPaise: 4599900,
       }
     ],
     agricultural: [
@@ -138,6 +141,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "FARM MARKETING",
         badgeColor: "bg-green-600",
+        amountPaise: 99900,
         isFree: true,
       },
       {
@@ -146,6 +150,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST",
         badge: "AGRICULTURAL BOOST",
         badgeColor: "bg-emerald-600",
+        amountPaise: 1499900,
       },
       {
         name: "Farm Platinum",
@@ -153,6 +158,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
         gst: "+18% GST", 
         badge: "FARM EXPERT",
         badgeColor: "bg-teal-600",
+        amountPaise: 2299900,
       }
     ]
   };

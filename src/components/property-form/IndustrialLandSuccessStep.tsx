@@ -60,7 +60,7 @@ export const IndustrialLandSuccessStep = ({
           title: "Premium Plans Sent!",
           description: "Check your email for personalized industrial land premium plan recommendations.",
         });
-        window.open('/plans?tab=seller', '_blank');
+        window.open('/plans?tab=seller&category=industrial', '_blank');
       } else {
         throw new Error('Failed to send email');
       }
@@ -71,7 +71,7 @@ export const IndustrialLandSuccessStep = ({
         description: "Unable to send premium plan details. Please try again later.",
         variant: "destructive"
       });
-      window.open('/plans?tab=seller', '_blank');
+      window.open('/plans?tab=seller&category=industrial', '_blank');
     } finally {
       setIsEmailLoading(false);
     }

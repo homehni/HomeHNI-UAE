@@ -60,7 +60,7 @@ export const CommercialLandSuccessStep = ({
           title: "Premium Plans Sent!",
           description: "Check your email for personalized commercial land premium plan recommendations.",
         });
-        window.open('/plans?tab=seller', '_blank');
+        window.open('/plans?tab=seller&category=commercial', '_blank');
       } else {
         throw new Error('Failed to send email');
       }
@@ -71,7 +71,7 @@ export const CommercialLandSuccessStep = ({
         description: "Unable to send premium plan details. Please try again later.",
         variant: "destructive"
       });
-      window.open('/plans?tab=seller', '_blank');
+      window.open('/plans?tab=seller&category=commercial', '_blank');
     } finally {
       setIsEmailLoading(false);
     }
