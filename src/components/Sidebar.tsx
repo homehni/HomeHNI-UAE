@@ -206,7 +206,7 @@ const Sidebar = ({
     }, {
       label: 'Corpoarate Commercial Seller Plans',
       onClick: () => {
-        navigate('/plans?tab=commercial-seller');
+        navigate('/plans?tab=seller&category=commercial');
         onClose();
       }
     }]

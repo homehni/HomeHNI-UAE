@@ -349,6 +349,12 @@ export const PostProperty: React.FC = () => {
       dataKeys: Object.keys(data)
     });
     
+    // Prevent multiple simultaneous submissions
+    if (isSubmitting) {
+      console.warn('Submission already in progress, ignoring duplicate call');
+      return;
+    }
+    
     if (!user) {
       toast({
         title: "Authentication Required",

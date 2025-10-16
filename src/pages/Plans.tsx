@@ -7,9 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import BuyerPlans from './BuyerPlans';
 import SellerPlans from './SellerPlans';
-import OwnerPlans from './OwnerPlans';
 import CommercialBuyerPlan from './CommercialBuyerPlan';
-import CommercialSellerPlans from './CommercialSellerPlans';
 import BuilderLifetimePlans from './BuilderLifetimePlans';
 import AgentPlans from './AgentPlans';
 import RentalPlans from './RentalPlans';
@@ -18,10 +16,8 @@ import PlanWizard from '@/components/PlanWizard';
 const sections = [
   { id: 'buyer', label: 'Buyer Plans' },
   { id: 'seller', label: 'Seller Plans' },
-  { id: 'owner', label: 'Owner Plans' },
   { id: 'rental', label: 'Rental Plans' },
   { id: 'commercial-buyer', label: 'Commercial Buyer Plans' },
-  { id: 'commercial-seller', label: 'Commercial Seller Plans' },
   { id: 'builder-lifetime', label: 'Builder Lifetime Plans' },
   { id: 'agent', label: 'Agent Plans' },
 ];
@@ -39,7 +35,7 @@ const Plans = () => {
   });
 
   useEffect(() => {
-    document.title = 'Plans – Buyer, Seller, Owner and Commercial Plans';
+    document.title = 'Plans – Buyer, Seller, Rental and Commercial Plans';
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
     const skipWizard = params.get('skipWizard');
@@ -173,12 +169,6 @@ const Plans = () => {
                   </>
                 )}
 
-                {active === 'owner' && (
-                  <>
-                    <OwnerPlans embedded showTitle={true} />
-                  </>
-                )}
-
                 {active === 'rental' && (
                   <>
                     
@@ -190,13 +180,6 @@ const Plans = () => {
                   <>
                     
                     <CommercialBuyerPlan />
-                  </>
-                )}
-
-                {active === 'commercial-seller' && (
-                  <>
-                    
-                    <CommercialSellerPlans />
                   </>
                 )}
 

@@ -86,7 +86,7 @@ export const CommercialSaleSuccessStep = ({
       setIsEmailLoading(false);
     }
     
-    window.open('/plans?tab=commercial-seller', '_blank');
+    window.open('/plans?tab=seller&category=commercial', '_blank');
   };
 
   const handleGoDashboard = () => {

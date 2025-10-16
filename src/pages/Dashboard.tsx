@@ -875,36 +875,58 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleUpgradeProperty = (property: CombinedProperty) => {
+    // Check if it's commercial land based on title or property type
+    const isCommercialLand = property.title?.toLowerCase().includes('commercial land') || 
+                             property.property_type?.toLowerCase().includes('commercial');
+    
+    // Check if it's industrial property (warehouse, industrial)
+    const isIndustrial = property.property_type === 'warehouse' || 
+                        property.property_type === 'industrial' ||
+                        property.property_type?.toLowerCase().includes('industrial');
+    
     // Determine the appropriate pricing plan based on property type and listing type
-    const isCommercial = property.property_type === 'commercial' || 
+    const isCommercial = (isCommercialLand ||
+                        property.property_type === 'commercial' || 
                         property.property_type === 'office' || 
                         property.property_type === 'shop' || 
-                        property.property_type === 'warehouse' || 
-                        property.property_type === 'showroom';
+                        property.property_type === 'showroom') && !isIndustrial; // Exclude industrial from commercial
     
     const isRent = property.listing_type === 'rent';
     
     let planTab = '';
     let category = 'residential';
     
-    if (isCommercial) {
+    if (isIndustrial) {
+      // Industrial properties (warehouse, industrial)
+      category = 'industrial';
+      planTab = isRent ? 'rental' : 'seller';
+    } else if (isCommercial) {
+      // Commercial properties (office, shop, showroom, commercial land)
       category = 'commercial';
       if (isRent) {
-        planTab = 'owner';
+        // Commercial rental properties now use rental tab with owner role
+        planTab = 'rental';
       } else {
         planTab = 'seller';
       }
     } else {
+      // Residential properties
       category = 'residential';
       if (isRent) {
-        planTab = 'owner';
+        // All residential rental properties (including PG/Hostel) use rental tab
+        planTab = 'rental';
       } else {
         planTab = 'seller';
       }
     }
     
     // Navigate with property ID so payment can be linked to this specific property
-    navigate(`/plans?tab=${planTab}&category=${category}&skipWizard=true&propertyId=${property.id}`);
+    // For rental properties, add rentalRole=owner parameter
+    const url = planTab === 'rental' 
+      ? `/plans?tab=${planTab}&category=${category}&skipWizard=true&propertyId=${property.id}&rentalRole=owner`
+      : `/plans?tab=${planTab}&category=${category}&skipWizard=true&propertyId=${property.id}`;
+    
+    navigate(url);
   };
 
   const handleUpdateName = async () => {

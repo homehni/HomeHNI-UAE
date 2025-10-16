@@ -180,11 +180,11 @@ const Header = () => {
                           <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
                             <span>Commercial Buyer Plan</span>
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=seller&category=commercial')}>
                             <span>Commercial Seller Plan</span>
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
-                            <span>Owner Plan</span>
+                          <DropdownMenuItem onClick={() => navigate('/plans?tab=rental&rentalRole=owner')}>
+                            <span>Rental Owner Plan</span>
                           </DropdownMenuItem>
                         </div>
                       )}
@@ -408,11 +408,11 @@ const Header = () => {
                         <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
                           <span>Commercial Buyer Plan</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-seller')}>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=seller&category=commercial')}>
                           <span>Commercial Seller Plan</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=owner')}>
-                          <span>Owner Plan</span>
+                        <DropdownMenuItem onClick={() => navigate('/plans?tab=rental&rentalRole=owner')}>
+                          <span>Rental Owner Plan</span>
                         </DropdownMenuItem>
                       </div>
                     )}
