@@ -123,7 +123,24 @@ const FeaturedProperties = ({
         const contentElements = await contentElementsService.getFeaturedProperties();
         
         // 2. From properties table (newly approved properties)
-        const propertiesData = await fetchFeaturedProperties();
+        type DBProp = {
+          id: string;
+          title?: string;
+          expected_price?: number;
+          super_area?: number;
+          bhk_type?: string;
+          bathrooms?: number;
+          images?: string[] | Array<string | { url: string }>;
+          property_type?: string;
+          listing_type?: string;
+          locality?: string;
+          city?: string;
+          status?: string;
+          is_featured?: boolean;
+          is_premium?: boolean;
+          created_at?: string;
+        };
+        const propertiesData = (await fetchFeaturedProperties()) as DBProp[];
         
         // Validate content elements referencing properties against current database
         const referencedPropertyIds = contentElements
@@ -137,7 +154,7 @@ const FeaturedProperties = ({
             .select('id, status')
             .in('id', referencedPropertyIds);
           if (!existingErr && existingProps) {
-            validPropertyIdSet = new Set(existingProps.map((p: any) => p.id));
+            validPropertyIdSet = new Set(existingProps.map((p: { id: string }) => p.id));
           }
         }
 
@@ -150,6 +167,7 @@ const FeaturedProperties = ({
 
         // Transform filtered content_elements to FeaturedProperty format
         const contentElementProperties = filteredContentElements.map(element => {
+          const matched = (propertiesData || []).find((p) => p.id === (element.content?.id as string | undefined));
           const rawPrice = element.content?.price || '₹0';
           
           // Format price if it's a raw number
@@ -185,12 +203,12 @@ const FeaturedProperties = ({
             image: element.images?.[0] || element.content?.image || '/placeholder.svg',
             propertyType: element.content?.propertyType || 'Property',
             isNew: element.content?.isNew || false,
-            is_premium: false // Content elements are not premium
+            is_premium: !!(matched && matched.is_premium)
           };
         });
         
         // Transform properties table data to FeaturedProperty format
-        const transformedProperties = propertiesData.map(property => {
+  const transformedProperties = propertiesData.map((property) => {
           // Handle PG/Hostel properties specially - check multiple conditions
           const isPGHostel = property.property_type === 'pg_hostel' || 
                             property.property_type === 'PG/Hostel' || 
@@ -249,7 +267,7 @@ const FeaturedProperties = ({
             image: property.images || [],
             propertyType: displayPropertyType,
             isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // New if created within last 7 days
-            is_premium: (property as any).is_premium || false
+            is_premium: !!property.is_premium
           };
         });
 
@@ -288,7 +306,7 @@ const FeaturedProperties = ({
                 return;
               }
 
-              const record = payload.new as any;
+              const record = payload.new as DBProp;
               if (!record) return;
 
               const qualifies = record.is_featured === true;
@@ -312,7 +330,8 @@ const FeaturedProperties = ({
                   bathrooms: record.bathrooms || 0,
                   image: record.images || [],
                   propertyType: record.property_type?.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Property',
-                  isNew: true
+                  isNew: true,
+                  is_premium: !!record.is_premium
                 };
                 setFeaturedProperties(prev => {
                   const without = prev.filter(p => p.id !== newProperty.id);
@@ -610,7 +629,9 @@ const FeaturedProperties = ({
         </Card>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
-          {displayedProperties.map(property => <PropertyCard key={property.id} {...property} size="compact" showOwnerActions={true} />)}
+          {displayedProperties.map(property => (
+            <PropertyCard key={property.id} {...property} size="compact" showOwnerActions={true} />
+          ))}
         </div>
 
         {filtered.length > 20 && (

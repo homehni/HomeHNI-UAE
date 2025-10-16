@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { convertArea, getStandardizedAreaUnit, AreaUnit } from '@/utils/areaConverter';
 
 // Build select columns at module scope to avoid hook dependency warnings
-const BASE_COLUMNS = 'id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit, user_id';
+const BASE_COLUMNS = 'id, title, locality, city, expected_price, super_area, bhk_type, bathrooms, images, property_type, furnishing, availability_type, property_age, listing_type, created_at, plot_area_unit, user_id, is_premium';
 // Keep extra fields conservative to avoid schema mismatches: floor_no and parking are commonly present.
 const EXTRA_COMMERCIAL_COLUMNS = ', floor_no, floor_type';
 const SELECT_COLUMNS = `${BASE_COLUMNS}${EXTRA_COMMERCIAL_COLUMNS}`;
@@ -92,6 +92,7 @@ export const useSimplifiedSearch = () => {
     floor_no?: number | 'basement' | null;
     floor_type?: string | null;
     user_id?: string;
+    is_premium?: boolean;
   };
 
   // Dynamic budget range based on active tab
@@ -408,6 +409,7 @@ export const useSimplifiedSearch = () => {
       isNew: new Date(property.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       ownerId: property.user_id, // Add owner ID for ownership detection
       plotAreaUnit: property.plot_area_unit ? getStandardizedAreaUnit(property.plot_area_unit) : 'sq.ft',
+    is_premium: !!property.is_premium,
       // Commercial specifics (best-effort mapping; values may be absent on residential/land)
       floorNo: ((): number | 'basement' | 'ground' | undefined => {
         const f = property.floor_no as number | 'basement' | null | undefined;

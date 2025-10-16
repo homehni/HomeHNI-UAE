@@ -538,7 +538,12 @@ const PropertyCard = ({
   };
 
   return (
-    <Card className="w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 border-brand-red/30 hover:border-brand-red/60" onClick={() => {
+    <Card className={cn(
+      "w-full overflow-hidden card-border hover-lift cursor-pointer bg-white border-2 transition-shadow",
+      is_premium
+        ? "border-amber-200 ring-2 ring-amber-300 hover:ring-4 hover:ring-amber-400 shadow-md"
+        : "border-brand-red/30 hover:border-brand-red/60"
+    )} onClick={() => {
       sessionStorage.setItem(`property-${id}`, JSON.stringify(propertyForPage));
       window.open(`/property/${id}`, '_blank');
     }}>
@@ -576,8 +581,11 @@ const PropertyCard = ({
           )}
           {/* Premium badge - visible only for properties with successful payments */}
           {is_premium && (
-            <div className="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded-md text-xs font-medium">
-              Premium
+            <div className="pointer-events-none absolute bottom-2 right-2 z-20">
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/95 text-amber-950 shadow px-2 py-0.5 text-[10px] sm:text-xs">
+                <Crown className="w-3 h-3" />
+                Premium
+              </span>
             </div>
           )}
         </div>
@@ -660,18 +668,20 @@ const PropertyCard = ({
                         <><ToggleLeft size={12} className="mr-1" />Activate</>
                       )}
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 text-xs px-3 border-yellow-200 hover:bg-yellow-50 text-yellow-600 card-border"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleUpgradeProperty();
-                      }}
-                    >
-                      <Crown size={12} className="mr-1" />
-                      <span>Go Premium</span>
-                    </Button>
+                    {!is_premium && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs px-3 border-yellow-200 hover:bg-yellow-50 text-yellow-600 card-border"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUpgradeProperty();
+                        }}
+                      >
+                        <Crown size={12} className="mr-1" />
+                        <span>Go Premium</span>
+                      </Button>
+                    )}
                   </div>
                 ) : (
                   <Button

@@ -1501,6 +1501,7 @@ const PropertySearch = () => {
                         image={property.image}
                         propertyType={property.propertyType}
                         listingType={property.listingType}
+                        is_premium={property.is_premium}
                         size={viewMode === 'list' ? 'large' : 'default'}
                         rental_status="available"
                         ownerId={property.ownerId}

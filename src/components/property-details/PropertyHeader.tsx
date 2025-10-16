@@ -18,6 +18,7 @@ interface PropertyHeaderProps {
     listing_type?: string;
     security_deposit?: number;
     plot_area_unit?: string;
+    is_premium?: boolean;
     payload?: {
       plot_area?: number;
       super_area?: number;
@@ -151,9 +152,19 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
           <div className="block lg:hidden min-w-0">
             {/* Property Info Section - Mobile */}
             <div className="px-3 sm:px-4 py-3 border-b border-gray-200 min-w-0">
-              <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 break-words">
-                {property.title}
-              </h1>
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900 break-words flex-1">
+                  {property.title}
+                </h1>
+                {property.is_premium && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/95 text-amber-950 shadow px-2 py-0.5 text-[10px] sm:text-xs flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
+                      <path d="M12 2l2.39 4.84 5.34.78-3.86 3.76.91 5.32L12 14.77 7.22 16.7l.91-5.32L4.27 7.62l5.34-.78L12 2z" />
+                    </svg>
+                    Premium
+                  </span>
+                )}
+              </div>
               <p className="text-sm sm:text-base text-gray-600 break-words">
                 {property.locality}
               </p>
@@ -212,9 +223,19 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
             
             {/* Property Info Section */}
             <div className="flex-1 px-6 py-4 border-r border-gray-200">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">
-                {property.title}
-              </h1>
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {property.title}
+                </h1>
+                {property.is_premium && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/95 text-amber-950">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    Premium
+                  </span>
+                )}
+              </div>
               <p className="text-gray-600 truncate max-w-xs">
                 {property.locality}
               </p>

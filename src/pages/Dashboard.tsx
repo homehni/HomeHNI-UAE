@@ -47,6 +47,8 @@ interface Property {
   images?: string[];
   videos?: string[];
   status: string;
+  // Premium flag from payments trigger
+  is_premium?: boolean;
   rental_status?: string;
   created_at: string;
   updated_at?: string;
@@ -293,6 +295,7 @@ export const Dashboard: React.FC = () => {
       // Show ONLY properties table entries belonging to the user
       const { data: propertiesData, error: propertiesError } = await supabase
         .from('properties')
+        // include is_premium explicitly for clarity
         .select('*')
         .eq('user_id', user?.id)
         .order('created_at', { ascending: false });
@@ -306,6 +309,28 @@ export const Dashboard: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // Realtime updates: reflect premium status changes immediately
+  useEffect(() => {
+    if (!user?.id) return;
+    const channel = supabase
+      .channel('properties-premium-updates')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'properties', filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          const updated = payload.new as Partial<Property> & { id: string };
+          if (updated?.id) {
+            setProperties(prev => prev.map(p => p.id === updated.id ? { ...p, is_premium: (updated as any).is_premium } : p));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      try { supabase.removeChannel(channel); } catch {}
+    };
+  }, [user?.id]);
 
   const fetchLeads = async () => {
     try {
@@ -1321,7 +1346,7 @@ export const Dashboard: React.FC = () => {
                   const statusBadge = getStatusBadge();
 
                   return (
-                    <Card key={property.id} className="relative bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                    <Card key={property.id} className={`relative bg-white border ${property.is_premium ? 'border-amber-200 ring-2 ring-amber-300 hover:ring-4 hover:ring-amber-400' : 'border-gray-200'} shadow-sm hover:shadow-md transition-shadow overflow-hidden`}>
                       {/* Status Badge - Top Left */}
                       <div className={`absolute top-2 left-2 z-20 px-2 py-1 text-xs font-medium rounded text-white ${
                         (property.rental_status || 'available') === 'available' 
@@ -1330,6 +1355,16 @@ export const Dashboard: React.FC = () => {
                       }`}>
                         {(property.rental_status || 'available') === 'available' ? 'Active' : 'Inactive'}
                       </div>
+
+                      {/* Premium Badge - Bottom right corner if premium */}
+                      {property.is_premium && (
+                        <div className="pointer-events-none absolute bottom-2 right-2 z-20">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/95 text-amber-950 shadow px-2 py-0.5 text-[10px] sm:text-xs">
+                            <Medal className="w-3 h-3" />
+                            Premium
+                          </span>
+                        </div>
+                      )}
 
                       {/* Diagonal Ribbon - Top Right Corner */}
                       <div className="absolute top-0 right-0 z-10">
@@ -1392,13 +1427,15 @@ export const Dashboard: React.FC = () => {
                             </div>
 
                             {/* Go Premium Button */}
-                            <Button
-                              onClick={() => handleUpgradeProperty(property)}
-                              className="bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 px-3 h-7 font-normal w-auto mb-3"
-                            >
-                              <Medal className="w-3 h-3 mr-1" />
-                              Go Premium
-                            </Button>
+                            {!property.is_premium && (
+                              <Button
+                                onClick={() => handleUpgradeProperty(property)}
+                                className="bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 px-3 h-7 font-normal w-auto mb-3"
+                              >
+                                <Medal className="w-3 h-3 mr-1" />
+                                Go Premium
+                              </Button>
+                            )}
 
                           </div>
 
@@ -1869,6 +1906,7 @@ export const Dashboard: React.FC = () => {
                         <div className="absolute bottom-2 right-2">
                           <Badge className="bg-green-600">
                             <Phone className="h-3 w-3 mr-1" />
+
                             Contacted
                           </Badge>
                         </div>

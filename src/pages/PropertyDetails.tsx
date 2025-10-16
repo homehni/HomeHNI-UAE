@@ -62,6 +62,7 @@ interface Property {
   age_of_building?: string | null;
   preferred_tenant?: string | null;
   plot_area_unit?: string;
+  is_premium?: boolean;
   // Note: Owner contact info removed for security
 }
 const PropertyDetails: React.FC = () => {

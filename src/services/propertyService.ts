@@ -49,16 +49,6 @@ export const fetchPublicProperties = async () => {
 
 // Service to fetch featured properties for the home page - ONLY from properties table with is_featured=true
 export const fetchFeaturedProperties = async () => {
-  // Fetch ONLY approved properties from properties table where is_featured is explicitly true
-  // This ensures property_submissions are excluded and only show in dashboard/search
-  const { data, error } = await supabase
-    .rpc('get_public_properties');
-    
-  if (error) {
-    console.error('Error fetching featured properties:', error);
-    throw error;
-  }
-
   // Also fetch curated featured entries (publicly selectable) - only visible properties
   const { data: curatedRows, error: curatedErr } = await supabase
     .from('featured_properties')
@@ -81,16 +71,41 @@ export const fetchFeaturedProperties = async () => {
       .filter(r => !r.featured_until || new Date(r.featured_until) >= today)
       .map(r => r.property_id)
   );
-  
-  // ONLY include approved properties from properties table with is_featured=true OR curated
-  // New submissions (property_submissions) are excluded - they only appear in dashboard and search
-  const featuredData = (data || [])
-    .filter((p: any) => 
-      (Boolean(p.is_featured) || curatedIds.has(p.id)) && 
-      p.status === 'approved'
-    );
-  
-  return featuredData;
+
+  // Fetch properties directly from properties table so we can include is_premium
+  // Query A: approved, visible, is_featured = true
+  const { data: featuredProps, error: featuredErr } = await supabase
+    .from('properties')
+    .select('id, title, expected_price, super_area, bhk_type, bathrooms, images, property_type, listing_type, locality, city, status, is_featured, is_premium, created_at')
+    .eq('status', 'approved')
+    .eq('is_visible', true)
+    .eq('is_featured', true);
+
+  if (featuredErr) {
+    console.error('Error fetching featured properties (is_featured=true):', featuredErr);
+  }
+
+  // Query B: approved, visible, curated IDs
+  let curatedProps: any[] = [];
+  if (curatedIds.size > 0) {
+    const { data: curatedPropsData, error: curatedPropsErr } = await supabase
+      .from('properties')
+      .select('id, title, expected_price, super_area, bhk_type, bathrooms, images, property_type, listing_type, locality, city, status, is_featured, is_premium, created_at')
+      .eq('status', 'approved')
+      .eq('is_visible', true)
+      .in('id', Array.from(curatedIds));
+    if (curatedPropsErr) {
+      console.warn('Warning: could not fetch curated properties list:', curatedPropsErr);
+    } else {
+      curatedProps = curatedPropsData || [];
+    }
+  }
+
+  // Merge and unique by id
+  const merged = [...(featuredProps || []), ...curatedProps];
+  const uniqueById = Array.from(new Map(merged.map((p) => [p.id, p])).values());
+
+  return uniqueById;
 };
 
 // Service to fetch a single public property by ID - uses secure database function
