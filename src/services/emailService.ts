@@ -564,7 +564,7 @@ export async function sendGrievanceRedressalEmail(
   });
 }
 
-// 23. Authentication: Password Reset Email - Send when user requests password reset
+// 23. Authentication: Password Reset Email - Send when user requests password reset (USES EXTERNAL API)
 export async function sendPasswordResetEmail(
   userEmail: string, 
   userName: string,
@@ -577,7 +577,7 @@ export async function sendPasswordResetEmail(
   });
 }
 
-// 24. Authentication: Email Verification - Send when user signs up
+// 24. Authentication: Email Verification - Send when user signs up (USES EXTERNAL API)
 export async function sendEmailVerificationEmail(
   userEmail: string, 
   userName: string,

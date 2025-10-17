@@ -30,5 +30,5 @@ verify_jwt = false
 [functions.confirm-user]
 verify_jwt = false
 
-[functions.send-verification-email]
+[functions.update-password]
 verify_jwt = false

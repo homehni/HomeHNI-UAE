@@ -271,18 +271,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const verificationUrl = `${window.location.origin}/auth?mode=verify&email=${encodeURIComponent(email)}`;
         
-        const verificationResult = await supabase.functions.invoke('send-verification-email', {
-          body: {
-            email: email,
-            name: fullName || email.split('@')[0],
-            verificationUrl: verificationUrl
-          }
-        });
+        const verificationResult = await sendEmailVerificationEmail(
+          email, 
+          fullName || email.split('@')[0], 
+          verificationUrl
+        );
 
-        if (verificationResult.error) {
-          console.error('Custom verification email failed:', verificationResult.error);
-        } else {
+        if (verificationResult.success) {
           console.log('Custom verification email sent successfully');
+        } else {
+          console.error('Custom verification email failed:', verificationResult.error);
         }
       } catch (error) {
         console.error('Failed to send custom verification email:', error);
@@ -318,31 +316,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Continue with fallback name
       }
 
-      // Generate password reset with Supabase
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth?mode=reset-password`,
-      });
-
-      if (error) {
-        throw error;
+      // Send password reset email using our external API service
+      const resetUrl = `${window.location.origin}/auth?mode=reset-password&email=${encodeURIComponent(email)}`;
+      
+      const emailResult = await sendPasswordResetEmail(email, userName, resetUrl);
+      
+      if (!emailResult.success) {
+        throw new Error(emailResult.error?.message || 'Failed to send password reset email');
       }
 
-      // Send custom password reset email using our service
-      try {
-        const resetUrl = `${window.location.origin}/auth?mode=reset-password&email=${encodeURIComponent(email)}`;
-        
-        const emailResult = await sendPasswordResetEmail(email, userName, resetUrl);
-        
-        if (emailResult.success) {
-          console.log('Custom password reset email sent successfully');
-        } else {
-          console.error('Custom password reset email failed:', emailResult.error);
-          // Don't throw error here - the Supabase reset email will still be sent
-        }
-      } catch (emailError) {
-        console.error('Failed to send custom password reset email:', emailError);
-        // Don't throw error here - the Supabase reset email will still be sent
-      }
+      console.log('Password reset email sent successfully');
 
       // Log audit event
       try {

@@ -142,38 +142,16 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
       const signupPassword = signUpForm.password;
       await signUpWithPassword(signupEmail, signupPassword, signUpForm.fullName);
 
-      // Try immediate login (works when email confirmations are disabled)
-      try {
-        await signInWithPassword(signupEmail, signupPassword);
-        setSignUpMessage({ type: 'success', text: 'Account created! Signing you in...' });
-      } catch (err: any) {
-        const lc = (err?.message || '').toLowerCase();
-        if (lc.includes('email not confirmed') || lc.includes('email_not_confirmed')) {
-          try {
-            setSignUpMessage({ type: 'success', text: 'Finalizing your account. Please wait...' });
-            const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email: signupEmail })
-            });
-            if (!res.ok) throw new Error('Auto-confirm failed');
-            await signInWithPassword(signupEmail, signupPassword);
-            setSignUpMessage({ type: 'success', text: 'Account confirmed! Signing you in...' });
-          } catch (_) {
-            setSignUpMessage({ type: 'success', text: 'Account created! Please try logging in now.' });
-            setActiveTab('signin');
-            setSignInForm(prev => ({ ...prev, email: signupEmail }));
-          }
-        } else {
-          setSignUpMessage({ type: 'error', text: err?.message || 'Account created, but auto-login failed. Please sign in.' });
-          setActiveTab('signin');
-          setSignInForm(prev => ({ ...prev, email: signupEmail }));
-        }
-      }
-
-      // Clear signup form
+      // Don't auto-login - require email verification
+      setSignUpMessage({ 
+        type: 'success', 
+        text: 'Account created successfully! Please check your email and click the verification link to activate your account.' 
+      });
+      
+      // Clear signup form and switch to signin tab
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
       setActiveTab('signin');
+      setSignInForm(prev => ({ ...prev, email: signupEmail }));
     } catch (error: any) {
       console.debug('Signup (dialog) error caught', {
         raw: error,

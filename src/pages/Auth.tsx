@@ -156,37 +156,16 @@ export const Auth: React.FC = () => {
       const signupPassword = signUpForm.password;
       await signUpWithPassword(signupEmail, signupPassword, signUpForm.fullName);
 
-      // Try immediate login (works when email confirmations are disabled)
-      try {
-        await signInWithPassword(signupEmail, signupPassword);
-        setSignUpMessage({ type: 'success', text: 'Account created! Signing you in...' });
-      } catch (err: any) {
-        const lc = (err?.message || '').toLowerCase();
-        if (lc.includes('email not confirmed') || lc.includes('email_not_confirmed')) {
-          try {
-            setSignUpMessage({ type: 'success', text: 'Finalizing your account. Please wait...' });
-            const res = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email: signupEmail })
-            });
-            if (!res.ok) throw new Error('Auto-confirm failed');
-            await signInWithPassword(signupEmail, signupPassword);
-            setSignUpMessage({ type: 'success', text: 'Account confirmed! Signing you in...' });
-          } catch (_) {
-            setSignUpMessage({ type: 'success', text: 'Account created! Please try logging in now.' });
-            setActiveTab('signin');
-            setSignInForm(prev => ({ ...prev, email: signupEmail }));
-          }
-        } else {
-          setSignUpMessage({ type: 'error', text: err?.message || 'Account created, but auto-login failed. Please sign in.' });
-          setActiveTab('signin');
-          setSignInForm(prev => ({ ...prev, email: signupEmail }));
-        }
-      }
-
-      // Clear signup form
+      // Don't auto-login - require email verification
+      setSignUpMessage({ 
+        type: 'success', 
+        text: 'Account created successfully! Please check your email and click the verification link to activate your account.' 
+      });
+      
+      // Clear signup form and switch to signin tab
       setSignUpForm({ fullName: '', email: '', password: '', confirmPassword: '' });
+      setActiveTab('signin');
+      setSignInForm(prev => ({ ...prev, email: signupEmail }));
     } catch (error: any) {
       console.debug('Signup error caught', {
         raw: error,
@@ -263,12 +242,31 @@ export const Auth: React.FC = () => {
     setIsUpdatingPassword(true);
 
     try {
+      // Get email from URL parameters
+      const urlParams = new URLSearchParams(location.search);
+      const email = urlParams.get('email');
+      
+      if (!email) {
+        throw new Error('Email address is required for password reset');
+      }
+
+      // Call the update-password edge function
       const { supabase } = await import('@/integrations/supabase/client');
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
+      
+      const { data, error } = await supabase.functions.invoke('update-password', {
+        body: {
+          email: email,
+          newPassword: newPassword
+        }
       });
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(error.message || 'Failed to update password');
+      }
+
+      if (!data?.success) {
+        throw new Error(data?.error || 'Failed to update password');
+      }
 
       setPasswordUpdateMessage({ type: 'success', text: "Password updated successfully! You can now login with your new password." });
 

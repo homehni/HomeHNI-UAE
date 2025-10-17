@@ -1,127 +1,197 @@
-# HomeHNI Custom Email Templates
+# Email Templates for HomeHNI Authentication
 
-This project now includes custom branded email templates for authentication flows.
+This document contains comprehensive email templates for all authentication flows in the HomeHNI application.
 
-## Templates Created
+## Overview
 
-### 1. Password Reset Email (`send-password-reset-email`)
-- **Location**: `/supabase/functions/send-password-reset-email/index.ts`
-- **Purpose**: Sent when users request password reset
-- **Features**:
-  - Professional HomeHNI branding with gradient header
-  - Secure reset button with hover effects
-  - Security notice with 1-hour expiration
-  - Responsive design for mobile devices
-  - Alternative text link for accessibility
+The email system uses Supabase Edge Functions with Resend for reliable email delivery. All templates are designed with:
+- Professional branding consistent with HomeHNI
+- Mobile-responsive design
+- Security best practices
+- Clear call-to-action buttons
+- Fallback text links
 
-### 2. Email Verification Template (`send-verification-email`)
-- **Location**: `/supabase/functions/send-verification-email/index.ts`
-- **Purpose**: Sent when new users sign up (updated existing template)
-- **Features**:
-  - Welcome message with HomeHNI branding
-  - Benefits list showing what users get after verification
-  - Prominent verification button
-  - 24-hour expiration notice
-  - Professional footer with links
+## Templates Included
 
-## Integration Details
+### 1. Email Verification Template
+**Function**: `send-verification-email`
+**Purpose**: Sent when users sign up to verify their email address
+**Features**:
+- Welcome message with benefits
+- Prominent verification button
+- Security notice about link expiration
+- Fallback text link
 
-### AuthContext Updates
-- Added new `resetPassword` function to AuthContext
-- Function fetches user's name from profile for personalization
-- Calls Supabase's resetPasswordForEmail + sends custom branded email
-- Includes audit logging for security tracking
+### 2. Password Reset Template
+**Function**: `send-password-reset-email`
+**Purpose**: Sent when users request password reset
+**Features**:
+- Clear password reset instructions
+- Security warnings about link expiration
+- Help section for users who didn't request reset
+- Professional styling
 
-### Component Updates
-- Updated `AuthDialog.tsx` to use new resetPassword function
-- Updated `Auth.tsx` to use new resetPassword function
-- Both components now send branded emails instead of default Supabase emails
+### 3. Supabase Auth Integration Templates
+**Functions**: `send-auth-verification-email`, `send-auth-password-reset-email`
+**Purpose**: Direct integration with Supabase Auth system
+**Features**:
+- Uses Supabase's built-in email system
+- Custom branding and styling
+- Reliable delivery through Supabase infrastructure
 
-### Email Service Integration
-- Signup process now sends both welcome email and custom verification email
-- Password reset sends custom branded email with user's name
-- All emails use HomeHNI branding and professional styling
+## Template Structure
 
-## Configuration
-
-### Email Settings
-- **From**: HomeHNI <noreply@homehni.in>
-- **Branding**: HomeHNI red theme (#DC2626, #B91C1C)
-- **Service**: Resend API (configured in Supabase functions)
-
-### Environment Variables Needed
-Make sure these are set in your Supabase function environment:
+All templates follow this structure:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags and responsive viewport -->
+  <!-- Inline CSS for maximum compatibility -->
+</head>
+<body>
+  <div class="email-container">
+    <!-- Header with logo and branding -->
+    <!-- Main content area -->
+    <!-- Call-to-action button -->
+    <!-- Fallback text link -->
+    <!-- Security notices -->
+    <!-- Footer with links -->
+  </div>
+</body>
+</html>
 ```
-RESEND_API_KEY=your_resend_api_key_here
+
+## Key Features
+
+### Responsive Design
+- Mobile-first approach
+- Flexible layouts that work on all devices
+- Optimized typography and spacing
+
+### Branding
+- Consistent HomeHNI color scheme (#DC2626)
+- Professional logo treatment
+- Branded footer with links
+
+### Security
+- Clear expiration notices
+- Security warnings for suspicious activity
+- Professional tone to build trust
+
+### Accessibility
+- High contrast colors
+- Clear typography
+- Semantic HTML structure
+- Alt text for images
+
+## Usage
+
+### In Edge Functions
+```typescript
+const emailResponse = await resend.emails.send({
+  from: "HomeHNI <noreply@homehni.in>",
+  to: [email],
+  subject: "Your Subject Here",
+  html: templateHtml
+});
 ```
 
-## Deployment
+### In Frontend
+```typescript
+import { sendEmailVerificationEmail, sendPasswordResetEmail } from '@/services/emailService';
 
-To deploy these functions to Supabase:
+// Send verification email
+await sendEmailVerificationEmail(email, name, verificationUrl);
+
+// Send password reset email
+await sendPasswordResetEmail(email, name, resetUrl);
+```
+
+## Environment Variables Required
+
+Make sure these environment variables are set in your Supabase project:
 
 ```bash
-# Deploy password reset function
-npx supabase functions deploy send-password-reset-email
-
-# Deploy updated verification function  
-npx supabase functions deploy send-verification-email
+RESEND_API_KEY=your_resend_api_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SITE_URL=https://homehni.in
 ```
 
 ## Testing
 
-1. **Password Reset**:
-   - Go to login page
-   - Click "Forgot Password"
-   - Enter email address
-   - Check email for custom branded reset message
+### Local Testing
+1. Deploy edge functions: `supabase functions deploy`
+2. Test with curl or Postman
+3. Check Resend dashboard for delivery status
 
-2. **Email Verification**:
-   - Sign up with new email address
-   - Check email for custom branded verification message
+### Production Testing
+1. Test with real email addresses
+2. Verify links work correctly
+3. Check spam folder delivery
+4. Test on different email clients
 
-3. **Google OAuth**:
-   - Continues to work as before
-   - No custom emails needed for Google signup
+## Troubleshooting
 
-## Template Features
+### Common Issues
+1. **Emails not sending**: Check RESEND_API_KEY
+2. **Links not working**: Verify SITE_URL environment variable
+3. **Styling issues**: Test in different email clients
+4. **Spam issues**: Check Resend reputation and authentication
 
-### Design Elements
-- HomeHNI logo with house emoji (🏠)
-- Red gradient header (#DC2626 to #B91C1C)
-- Professional typography and spacing
-- Responsive design for mobile
-- Security-focused messaging
-- Clear call-to-action buttons
+### Debug Steps
+1. Check Supabase function logs
+2. Verify environment variables
+3. Test with different email providers
+4. Check Resend delivery logs
 
-### Security Features
-- Time-limited links (1 hour for reset, 24 hours for verification)
-- Clear security notices
-- Professional "no-reply" messaging
-- Audit logging for all auth events
+## Customization
 
-## File Structure
-```
-/supabase/functions/
-  ├── send-password-reset-email/
-  │   └── index.ts          # New password reset email function
-  └── send-verification-email/
-      └── index.ts          # Updated verification email function
-
-/src/contexts/
-  └── AuthContext.tsx       # Updated with resetPassword function
-
-/src/components/
-  └── AuthDialog.tsx        # Updated to use custom reset function
-
-/src/pages/
-  └── Auth.tsx             # Updated to use custom reset function
+### Colors
+Update the CSS variables in each template:
+```css
+:root {
+  --primary-color: #DC2626;
+  --primary-dark: #B91C1C;
+  --text-color: #333333;
+  --background-color: #f5f5f5;
+}
 ```
 
-## Benefits
+### Content
+- Update welcome messages
+- Modify benefit lists
+- Change footer links
+- Adjust security notices
 
-1. **Consistent Branding**: All emails now match HomeHNI's visual identity
-2. **Professional Appearance**: High-quality HTML templates with modern design
-3. **Better User Experience**: Clear messaging and prominent action buttons
-4. **Security**: Proper time limits and security notices
-5. **Responsive**: Works well on all devices
-6. **Accessibility**: Alternative text links and good contrast ratios
+### Styling
+- Modify button styles
+- Update typography
+- Change layout spacing
+- Adjust mobile breakpoints
+
+## Best Practices
+
+1. **Always test** emails in multiple clients
+2. **Keep templates simple** for maximum compatibility
+3. **Use inline CSS** for reliable rendering
+4. **Include fallback text** for all links
+5. **Test mobile responsiveness** thoroughly
+6. **Monitor delivery rates** and spam complaints
+7. **Keep content concise** and actionable
+8. **Use professional language** throughout
+
+## Support
+
+For issues with email templates or delivery:
+1. Check Supabase function logs
+2. Review Resend dashboard
+3. Test with different email addresses
+4. Verify environment configuration
+5. Contact support if needed
+
+---
+
+*Last updated: January 2025*
+*Version: 1.0*
