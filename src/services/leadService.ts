@@ -88,8 +88,7 @@ export const fetchContactedOwners = async (userId: string) => {
   console.log('leadService: Fetching properties where user has contacted owners, userId:', userId);
   
   try {
-    // First, get leads with property information where the current user is the interested party
-    // We'll use the current user's email to match against interested_user_email
+    // Get the current user's email
     const { data: currentUser, error: userError } = await supabase.auth.getUser();
     
     if (userError) {
@@ -103,6 +102,41 @@ export const fetchContactedOwners = async (userId: string) => {
       console.error('leadService: User email not available');
       return [];
     }
+    
+    console.log('leadService: Fetching contacted properties for email:', userEmail);
+    
+    // Try to use the new RPC function first
+    const { data: rpcData, error: rpcError } = await supabase
+      .rpc('get_contacted_properties_with_owners', { p_user_email: userEmail });
+    
+    // If RPC function exists and works, use it
+    if (!rpcError && rpcData) {
+      console.log('leadService: Fetched contacted properties from RPC:', rpcData);
+      
+      // Transform the RPC response to match the ContactedProperty interface
+      const properties: ContactedProperty[] = rpcData.map((item: any) => ({
+        id: String(item.property_id || ''),
+        title: String(item.property_title || ''),
+        property_type: String(item.property_type || ''),
+        listing_type: String(item.listing_type || ''),
+        expected_price: Number(item.expected_price || 0),
+        city: String(item.city || ''),
+        locality: String(item.locality || ''),
+        created_at: String(item.property_created_at || ''),
+        images: Array.isArray(item.images) ? item.images : [],
+        owner_name: String(item.owner_name || 'Property Owner'),
+        owner_email: String(item.owner_email || ''),
+        owner_phone: String(item.owner_phone || ''),
+        contact_date: String(item.contact_date || '')
+      }));
+      
+      console.log('leadService: Processed contacted properties:', properties);
+      return properties;
+    }
+    
+    // Fallback: If RPC function doesn't exist, use manual approach
+    console.log('leadService: RPC function not available, using fallback approach');
+    console.log('leadService: RPC Error:', rpcError);
     
     // Get all leads where the email matches the current user
     const { data: leadsData, error: leadsError } = await supabase
@@ -123,15 +157,17 @@ export const fetchContactedOwners = async (userId: string) => {
       return [];
     }
     
-    // Extract property IDs from leads
-    const propertyIds = leadsData.map(lead => lead.property_id);
+    // Extract unique property IDs from leads (deduplicate)
+    const propertyIds = [...new Set(leadsData.map(lead => lead.property_id))];
     
-    // Get property details using the property IDs
+    console.log('leadService: Unique property IDs:', propertyIds);
+    
+    // Get property details and owner information
     const properties: ContactedProperty[] = [];
     
     for (const propertyId of propertyIds) {
       try {
-        // Fetch the property details using RPC to bypass RLS
+        // Fetch the property details using RPC
         const { data: propertyData, error: propertyError } = await supabase
           .rpc('get_public_property_by_id', { property_id: propertyId });
         
@@ -141,9 +177,40 @@ export const fetchContactedOwners = async (userId: string) => {
         }
         
         if (propertyData && propertyData.length > 0) {
-          // Need to use any for this dynamic data structure from RPC
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const property = propertyData[0] as any;
+          
+          // Get owner contact details using the secure RPC
+          let ownerName = 'Property Owner';
+          let ownerEmail = '';
+          let ownerPhone = '';
+          
+          try {
+            const { data: ownerData, error: ownerError } = await supabase
+              .rpc('get_property_owner_contact', { property_id: propertyId });
+            
+            console.log(`leadService: Owner data for property ${propertyId}:`, ownerData);
+            
+            if (!ownerError && ownerData && ownerData.length > 0) {
+              ownerName = ownerData[0].owner_name || 'Property Owner';
+              ownerEmail = ownerData[0].owner_email || '';
+              ownerPhone = (ownerData[0] as any).owner_phone || ''; // Phone will be available after migration
+            } else {
+              console.warn(`Could not fetch owner contact for property ${propertyId}:`, ownerError);
+            }
+          } catch (ownerErr) {
+            console.warn(`Error fetching owner details for property ${propertyId}:`, ownerErr);
+          }
+          
+          // Fallback: Try to get owner info directly from property data if RPC didn't work
+          if (!ownerEmail && property.owner_email) {
+            ownerEmail = String(property.owner_email);
+          }
+          if (ownerName === 'Property Owner' && property.owner_name) {
+            ownerName = String(property.owner_name);
+          }
+          if (!ownerPhone && property.owner_phone) {
+            ownerPhone = String(property.owner_phone);
+          }
           
           // Find the corresponding lead to get contact date
           const lead = leadsData.find(l => l.property_id === propertyId);
@@ -158,10 +225,9 @@ export const fetchContactedOwners = async (userId: string) => {
             locality: String(property.locality || ''),
             created_at: String(property.created_at || ''),
             images: Array.isArray(property.images) ? property.images : [],
-            // Try all possible field names for owner contact details and convert to string
-            owner_name: String(property.owner_name || property.user_name || ''),  
-            owner_email: String(property.owner_email || property.user_email || ''),
-            owner_phone: String(property.owner_phone || property.user_phone || ''),
+            owner_name: ownerName,
+            owner_email: ownerEmail,
+            owner_phone: ownerPhone,
             contact_date: lead?.created_at || ''
           });
         }
@@ -170,7 +236,7 @@ export const fetchContactedOwners = async (userId: string) => {
       }
     }
     
-    console.log('leadService: Processed contacted properties:', properties);
+    console.log('leadService: Processed contacted properties (fallback):', properties);
     
     return properties;
   } catch (error) {

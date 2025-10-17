@@ -291,6 +291,14 @@ export const PropertyActions: React.FC<PropertyActionsProps> = ({
 
   // Handler to check contact limits before opening contact modal
   const handleContactClick = async () => {
+    // If user is not logged in, open the contact modal directly
+    // The modal itself will handle authentication and contact limits
+    if (!user) {
+      onContact();
+      return;
+    }
+    
+    // For logged-in users, check contact limits before opening modal
     const status = await checkContactUsage();
     
     if (!status.canContact) {

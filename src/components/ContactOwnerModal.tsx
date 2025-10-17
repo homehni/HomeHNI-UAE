@@ -57,11 +57,18 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       checkContactUsage().then((status) => {
-        setCanContact(status.canContact);
-        setRemainingUses(status.remainingUses);
+        // For non-logged-in users, show default 50 contacts available
+        // The actual limit will be enforced server-side via create_contact_lead RPC
+        if (!user) {
+          setCanContact(true);
+          setRemainingUses(50);
+        } else {
+          setCanContact(status.canContact);
+          setRemainingUses(status.remainingUses);
+        }
       });
     }
-  }, [isOpen]);
+  }, [isOpen, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,11 +148,14 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
 
       console.log('ContactOwnerModal: Success! Listing type:', listingType);
       
-      // Use a contact attempt (decrement free uses)
-      const contactResult = await useContactAttempt();
-      if (contactResult.success) {
-        setRemainingUses(contactResult.remainingUses);
-        console.log('ContactOwnerModal: Contact attempt used, remaining:', contactResult.remainingUses);
+      // Use a contact attempt (decrement free uses) - only for logged-in users
+      let contactResult = { success: true, remainingUses: 50 };
+      if (user) {
+        contactResult = await useContactAttempt();
+        if (contactResult.success) {
+          setRemainingUses(contactResult.remainingUses);
+          console.log('ContactOwnerModal: Contact attempt used, remaining:', contactResult.remainingUses);
+        }
       }
       
       // Send email notification to property owner
@@ -178,9 +188,15 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       }
       
       // Show success message with remaining uses info
-      const successMessage = contactResult.remainingUses > 0 
-        ? `Contact sent! You have ${contactResult.remainingUses} free contacts remaining.`
-        : "Contact sent! You've used all free contacts. Subscribe to continue contacting more properties.";
+      let successMessage = '';
+      if (!user) {
+        // Non-logged-in users - encourage signup
+        successMessage = "Contact sent! Sign up to track your inquiries and get more features.";
+      } else {
+        successMessage = contactResult.remainingUses > 0 
+          ? `Contact sent! You have ${contactResult.remainingUses} free contacts remaining.`
+          : "Contact sent! You've used all free contacts. Subscribe to continue contacting more properties.";
+      }
       
       toast({
         title: "Interest Registered Successfully!",
@@ -197,9 +213,13 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       // Close modal first
       onClose();
       
-      // Redirect logic based on remaining uses
+      // Redirect logic based on user state and remaining uses
       setTimeout(() => {
-        if (contactResult.remainingUses === 0) {
+        if (!user) {
+          // Non-logged-in users - redirect to auth page
+          console.log('ContactOwnerModal: Non-logged-in user, redirecting to auth');
+          navigate('/auth?redirectTo=/search');
+        } else if (contactResult.remainingUses === 0) {
           // No more free uses - redirect to payment plans
           console.log('ContactOwnerModal: No free uses left, redirecting to plans');
           navigate('/plans');
