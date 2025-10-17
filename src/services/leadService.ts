@@ -110,14 +110,14 @@ export const fetchContactedOwners = async (userId: string) => {
     
     // Try to use the new RPC function first
     const { data: rpcData, error: rpcError } = await supabase
-      .rpc('get_contacted_properties_with_owners', { p_user_email: normalizedEmail });
+      .rpc('get_contacted_properties_with_owners' as any, { p_user_email: normalizedEmail });
     
     // If RPC function exists and works, use it
-    if (!rpcError && rpcData) {
+    if (!rpcError && rpcData && Array.isArray(rpcData)) {
       console.log('leadService: Fetched contacted properties from RPC:', rpcData);
       
       // Transform the RPC response to match the ContactedProperty interface
-      const properties: ContactedProperty[] = rpcData.map((item: any) => ({
+      const properties: ContactedProperty[] = (rpcData as any[]).map((item: any) => ({
         id: String(item.property_id || ''),
         title: String(item.property_title || ''),
         property_type: String(item.property_type || ''),

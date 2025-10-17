@@ -1297,10 +1297,12 @@ const PropertySearch = () => {
                   </SelectContent>
                 </Select>
                 
+                {/* Save Search button - commented out until further required
                 <Button variant="ghost" size="sm" aria-label="Save current search criteria" className="hidden sm:inline-flex">
                   <Bookmark size={16} className="mr-1" aria-hidden="true" />
                   Save Search
                 </Button>
+                */}
 
                 {/* View mode toggles */}
                 <div className="hidden sm:flex items-center gap-1" role="group" aria-label="View mode">
