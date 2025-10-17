@@ -28,6 +28,7 @@ interface PropertyCardProps {
   isNew?: boolean;
   size?: 'default' | 'compact' | 'large';
   rental_status?: 'available' | 'inactive' | 'rented' | 'sold';
+  property_status?: 'approved' | 'rejected' | 'pending'; // Admin approval status
   ownerId?: string; // Add owner ID to check ownership
   showOwnerActions?: boolean; // Flag to show/hide owner actions
   is_premium?: boolean; // Premium status based on payment
@@ -47,6 +48,7 @@ const PropertyCard = ({
   isNew = false,
   size = 'default',
   rental_status = 'available',
+  property_status,
   ownerId,
   showOwnerActions = false,
   is_premium = false
@@ -55,6 +57,9 @@ const PropertyCard = ({
   const { user } = useAuth();
   const [showContactModal, setShowContactModal] = useState(false);
   const [propertyStatus, setPropertyStatus] = useState(rental_status);
+  
+  // Determine watermark status: rejected takes priority over rental_status
+  const watermarkStatus = property_status === 'rejected' ? 'rejected' : rental_status;
 
   // Check if current user owns this property
   const isOwner = user && ownerId && user.id === ownerId;
@@ -572,7 +577,7 @@ const PropertyCard = ({
       <div className={cn(size === 'large' ? 'md:flex md:flex-row md:items-stretch' : '')}>
         {/* Image section */}
         <div className={cn('relative', size === 'large' ? 'md:w-96 lg:w-[28rem] md:flex-shrink-0' : '')}>
-          <PropertyWatermark status={rental_status}>
+          <PropertyWatermark status={watermarkStatus as any}>
             <div className={cn(
               'overflow-hidden',
               size === 'large' ? 'h-52 md:h-52 lg:h-56 w-full' : 'h-24'

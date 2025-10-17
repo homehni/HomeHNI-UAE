@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import type { Json } from '@/integrations/supabase/types';
@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import MyChats from '@/components/dashboard/MyChats';
+import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 
 interface Property {
   id: string;
@@ -200,20 +201,8 @@ export const Dashboard: React.FC = () => {
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      fetchProperties();
-      fetchLeads();
-      fetchServiceSubmissions();
-      fetchPropertyRequirements();
-      fetchFavorites();
-      fetchContactedOwnersData();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-  
   // Fetch properties where the current user has contacted owners
-  const fetchContactedOwnersData = async () => {
+  const fetchContactedOwnersData = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -234,7 +223,66 @@ export const Dashboard: React.FC = () => {
     } finally {
       setContactedPropertiesLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProperties();
+      fetchLeads();
+      fetchServiceSubmissions();
+      fetchPropertyRequirements();
+      fetchFavorites();
+      fetchContactedOwnersData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+  
+  // Listen for contact creation events from ContactOwnerModal
+  useEffect(() => {
+    const handleContactCreated = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      console.log('Dashboard: Contact created event received:', customEvent.detail);
+      
+      // Refresh contacted properties after a delay to ensure DB write completes
+      setTimeout(() => {
+        console.log('Dashboard: Refreshing contacted properties after new contact');
+        fetchContactedOwnersData();
+      }, 2000); // Increased to 2 seconds for more reliable database sync
+    };
+    
+    window.addEventListener('contactCreated', handleContactCreated);
+    
+    return () => {
+      window.removeEventListener('contactCreated', handleContactCreated);
+    };
+  }, [fetchContactedOwnersData]);
+  
+  // Real-time subscription for new leads (when user contacts a property) - backup method
+  useEffect(() => {
+    if (!user?.email) return;
+    
+    const channel = supabase
+      .channel('user-leads-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'leads',
+          filter: `interested_user_email=eq.${user.email}`
+        },
+        (payload) => {
+          console.log('Dashboard: New lead detected via realtime, refreshing contacted properties');
+          // Refresh contacted properties when a new lead is created
+          fetchContactedOwnersData();
+        }
+      )
+      .subscribe();
+    
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.email, fetchContactedOwnersData]);
 
   // Load profile name from Supabase profiles when user changes
   useEffect(() => {
@@ -1493,28 +1541,30 @@ export const Dashboard: React.FC = () => {
 
                           {/* Right Side - Image Area */}
                           <div className="flex-shrink-0 ml-3 w-24 h-24 bg-white rounded-md flex items-center justify-center pr-3">
-                            {(property.images && property.images.length > 0) ? (
-                              <img
-                                src={getImageUrl()}
-                                alt={property.title}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.src = '/placeholder.svg';
-                                }}
-                              />
-                            ) : (
-                              <div className="flex flex-col items-center justify-center">
-                                <div className="relative w-20 h-20 bg-gray-200/70 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-300/70 transition-colors group p-4">
-                                  <svg className="w-6 h-6 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 002-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  </svg>
-                                  <span className="text-xs font-normal text-gray-600 text-center leading-tight">
-                                    Upload Media
-                                  </span>
+                            <PropertyWatermark status={property.status === 'rejected' ? 'rejected' : (property.rental_status as any) || 'available'}>
+                              {(property.images && property.images.length > 0) ? (
+                                <img
+                                  src={getImageUrl()}
+                                  alt={property.title}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = '/placeholder.svg';
+                                  }}
+                                />
+                              ) : (
+                                <div className="flex flex-col items-center justify-center">
+                                  <div className="relative w-20 h-20 bg-gray-200/70 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-300/70 transition-colors group p-4">
+                                    <svg className="w-6 h-6 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 002-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <span className="text-xs font-normal text-gray-600 text-center leading-tight">
+                                      Upload Media
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
+                            </PropertyWatermark>
                           </div>
                         </div>
 

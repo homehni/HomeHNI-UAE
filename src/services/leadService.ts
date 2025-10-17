@@ -105,9 +105,12 @@ export const fetchContactedOwners = async (userId: string) => {
     
     console.log('leadService: Fetching contacted properties for email:', userEmail);
     
+    // Normalize email to lowercase for consistent matching
+    const normalizedEmail = userEmail.toLowerCase();
+    
     // Try to use the new RPC function first
     const { data: rpcData, error: rpcError } = await supabase
-      .rpc('get_contacted_properties_with_owners', { p_user_email: userEmail });
+      .rpc('get_contacted_properties_with_owners', { p_user_email: normalizedEmail });
     
     // If RPC function exists and works, use it
     if (!rpcError && rpcData) {
@@ -139,10 +142,11 @@ export const fetchContactedOwners = async (userId: string) => {
     console.log('leadService: RPC Error:', rpcError);
     
     // Get all leads where the email matches the current user
+    // Use normalized (lowercase) email for matching since leads store emails in lowercase
     const { data: leadsData, error: leadsError } = await supabase
       .from('leads')
       .select('*, property_id')
-      .eq('interested_user_email', userEmail)
+      .eq('interested_user_email', normalizedEmail)
       .order('created_at', { ascending: false });
     
     if (leadsError) {

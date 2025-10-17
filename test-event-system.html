@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Event System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .log {
+      background: #f5f5f5;
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 4px solid #2196F3;
+      font-family: monospace;
+    }
+    .success {
+      border-left-color: #4CAF50;
+      background: #e8f5e9;
+    }
+    .error {
+      border-left-color: #f44336;
+      background: #ffebee;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Event System Test</h1>
+  <p>This page tests if the custom event system is working correctly.</p>
+
+  <div class="section">
+    <h2>Step 1: Setup Listener</h2>
+    <button onclick="setupListener()">Setup Event Listener</button>
+    <div id="listener-status"></div>
+  </div>
+
+  <div class="section">
+    <h2>Step 2: Trigger Event</h2>
+    <button onclick="triggerEvent()">Trigger 'contactCreated' Event</button>
+    <div id="trigger-status"></div>
+  </div>
+
+  <div class="section">
+    <h2>Event Log</h2>
+    <div id="event-log"></div>
+  </div>
+
+  <div class="section">
+    <h2>Instructions for Testing HomeHNI</h2>
+    <ol>
+      <li>Open HomeHNI app in a new tab</li>
+      <li>Navigate to /dashboard?tab=interested</li>
+      <li>Open browser console (F12)</li>
+      <li>Paste this code and press Enter:
+        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto;">
+window.addEventListener('contactCreated', (e) => {
+  console.log('✅ Event received!', e.detail);
+});
+console.log('Listener added. Now contact a property!');
+        </pre>
+      </li>
+      <li>In a NEW tab, open any property</li>
+      <li>Click "Contact" and submit the form</li>
+      <li>Switch back to Dashboard tab and check console</li>
+      <li>You should see: "✅ Event received!" followed by property details</li>
+    </ol>
+  </div>
+
+  <script>
+    let listenerActive = false;
+    
+    function log(message, type = 'log') {
+      const logDiv = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = `log ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logDiv.insertBefore(entry, logDiv.firstChild);
+    }
+
+    function setupListener() {
+      if (listenerActive) {
+        log('Listener already active!', 'error');
+        return;
+      }
+
+      window.addEventListener('contactCreated', (event) => {
+        const customEvent = event;
+        log(`✅ contactCreated event received!`, 'success');
+        log(`Property ID: ${customEvent.detail.propertyId}`, 'success');
+        log(`Timestamp: ${new Date(customEvent.detail.timestamp).toLocaleTimeString()}`, 'success');
+      });
+
+      listenerActive = true;
+      document.getElementById('listener-status').innerHTML = 
+        '<div class="log success">✅ Listener is now active and waiting for events</div>';
+      log('Event listener setup complete', 'success');
+    }
+
+    function triggerEvent() {
+      const testPropertyId = 'test-' + Math.random().toString(36).substr(2, 9);
+      
+      log(`Triggering event for property: ${testPropertyId}`, 'log');
+      
+      window.dispatchEvent(new CustomEvent('contactCreated', {
+        detail: {
+          propertyId: testPropertyId,
+          timestamp: Date.now()
+        }
+      }));
+
+      document.getElementById('trigger-status').innerHTML = 
+        '<div class="log">Event dispatched! Check log below.</div>';
+      
+      log('Event dispatched successfully', 'log');
+    }
+
+    // Auto-setup listener on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      log('Page loaded. Click "Setup Event Listener" to begin.', 'log');
+    });
+  </script>
+</body>
+</html>
+

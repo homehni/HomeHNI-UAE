@@ -374,7 +374,23 @@ const AdminProperties = () => {
 
       // Ensure we have a user_id to assign (fallback to current admin if submission has none)
       const { data: authUser } = await supabase.auth.getUser();
-      const userIdToAssign = submission.user_id || authUser.user?.id;
+      let userIdToAssign = submission.user_id || authUser.user?.id;
+      
+      // If submission doesn't have user_id, try to get it from properties table (for rejected properties)
+      if (!userIdToAssign || userIdToAssign === authUser.user?.id) {
+        console.log('Submission user_id not found, checking properties table for original owner...');
+        const { data: existingProperty } = await supabase
+          .from('properties')
+          .select('user_id')
+          .eq('id', propertyId)
+          .single();
+        
+        if (existingProperty?.user_id) {
+          userIdToAssign = existingProperty.user_id;
+          console.log('Found original owner in properties table:', userIdToAssign);
+        }
+      }
+      
       if (!userIdToAssign) {
         throw new Error('Approval requires an authenticated admin user.');
       }
@@ -470,10 +486,11 @@ const AdminProperties = () => {
         return submission.title || payload.title || 'Untitled Property';
       })();
 
-      // Update existing property instead of inserting (prevents duplicates)
+      // Use upsert to handle both new and existing properties (prevents duplicates, handles rejected re-approvals)
       const { data: insertedProperty, error: insertError } = await supabase
         .from('properties')
-        .update({
+        .upsert({
+          id: propertyId, // Include ID for upsert to work correctly
           user_id: userIdToAssign,
           title: propertyTitle as string,
           property_type: mappedPropertyType,
@@ -573,7 +590,6 @@ const AdminProperties = () => {
           admin_reviewed_at: new Date().toISOString(),
           admin_reviewed_by: currentUser.user.id
         })
-        .eq('id', propertyId)
         .select()
         .single();
 
@@ -922,6 +938,83 @@ const AdminProperties = () => {
     setReviewModalOpen(true);
   };
 
+  // Direct reject without modal - just marks as rejected
+  const handleDirectReject = async (property: PropertySubmission) => {
+    setActionLoading(true);
+    try {
+      const isEditedProperty = property?.is_edited;
+
+      if (isEditedProperty) {
+        // Update the properties table
+        const { error } = await supabase
+          .from('properties')
+          .update({
+            status: 'rejected',
+            rejection_reason: 'Rejected by admin',
+            admin_reviewed_at: new Date().toISOString()
+          })
+          .eq('id', property.id);
+
+        if (error) throw error;
+      } else {
+        // Update property_submissions
+        let updatedPayload: any = {};
+        try {
+          updatedPayload = typeof property?.payload === 'string' 
+            ? JSON.parse(property.payload) 
+            : property?.payload || {};
+        } catch (e) {
+          updatedPayload = {};
+        }
+        
+        updatedPayload.rejection_reason = 'Rejected by admin';
+        
+        const { error: submissionError } = await supabase
+          .from('property_submissions')
+          .update({
+            status: 'rejected',
+            payload: updatedPayload,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', property.id);
+
+        if (submissionError) throw submissionError;
+
+        // Also update in properties table if it exists there
+        const { error: propertiesError } = await supabase
+          .from('properties')
+          .update({
+            status: 'rejected',
+            rejection_reason: 'Rejected by admin',
+            admin_reviewed_at: new Date().toISOString()
+            // Note: We don't update owner fields here to preserve them
+          })
+          .eq('id', property.id);
+
+        // Don't throw error if property doesn't exist in properties table
+        if (propertiesError) {
+          console.log('Property not found in properties table (might be submission only)');
+        }
+      }
+
+      toast({
+        title: 'Property Rejected',
+        description: 'The property has been marked as rejected and is no longer visible to users.',
+      });
+
+      fetchProperties();
+    } catch (error) {
+      console.error('Error rejecting property:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to reject property',
+        variant: 'destructive'
+      });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // Handle visibility toggle for properties
   const handleToggleVisibility = async (propertyId: string, isVisible: boolean) => {
     setActionLoading(true);
@@ -1034,7 +1127,7 @@ const AdminProperties = () => {
           setReviewModalOpen(true);
         }}
         onApprove={handleApprove}
-        onReject={handleRejectWithProperty as any}
+        onReject={handleDirectReject as any}
         onDelete={(id) => {
           setPropertyToDelete(id);
           setDeleteModalOpen(true);

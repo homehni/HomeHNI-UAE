@@ -53,7 +53,7 @@ BEGIN
   FROM public.leads l
   INNER JOIN public.properties p ON l.property_id = p.id
   LEFT JOIN public.profiles prof ON prof.user_id = p.user_id
-  WHERE l.interested_user_email = p_user_email
+  WHERE LOWER(l.interested_user_email) = LOWER(p_user_email)
     AND p.status = 'approved'
     AND p.is_visible = true
   ORDER BY l.created_at DESC;

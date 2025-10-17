@@ -36,7 +36,7 @@ BEGIN
       l.created_at AS contact_date,
       l.message AS lead_message
     FROM public.leads l
-    WHERE l.interested_user_email = p_user_email
+    WHERE LOWER(l.interested_user_email) = LOWER(p_user_email)
     ORDER BY l.property_id, l.created_at DESC
   )
   SELECT 

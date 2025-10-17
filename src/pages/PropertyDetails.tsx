@@ -625,7 +625,7 @@ const PropertyDetails: React.FC = () => {
               {/* Left - Image Gallery */}
               <div className="lg:col-span-2 min-w-0">
                 <div className="mt-6 sm:mt-0 overflow-hidden">
-                  <PropertyWatermark status={mergedProperty?.rental_status || 'available'}>
+                  <PropertyWatermark status={mergedProperty?.status === 'rejected' ? 'rejected' : (mergedProperty?.rental_status || 'available')}>
                     <PropertyImageGallery property={mergedProperty as any} />
                   </PropertyWatermark>
                 </div>

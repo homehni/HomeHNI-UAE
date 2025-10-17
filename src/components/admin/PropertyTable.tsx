@@ -407,6 +407,19 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                         </>
                       )}
                       
+                      {property.status === 'rejected' && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => onApprove(property.id)}
+                          disabled={actionLoading}
+                          className="h-9 w-9 p-0 hover:bg-green-50 hover:text-green-600"
+                          title="Re-Approve Property"
+                        >
+                          <CheckCircle className="h-4 w-4" />
+                        </Button>
+                      )}
+                      
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -414,6 +427,7 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                             variant="ghost"
                             className="h-9 w-9 p-0 hover:bg-gray-50"
                             title="More Options"
+                            disabled={actionLoading}
                           >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
@@ -423,9 +437,24 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
                             <Eye className="mr-2 h-4 w-4" />
                             View Details
                           </DropdownMenuItem>
+                          {property.status === 'approved' && (
+                            <DropdownMenuItem 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onReject(property);
+                              }}
+                              className="text-orange-600"
+                            >
+                              <XCircle className="mr-2 h-4 w-4" />
+                              Reject
+                            </DropdownMenuItem>
+                          )}
                           {property.status !== 'deleted' && (
                             <DropdownMenuItem 
-                              onClick={() => onDelete(property.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete(property.id);
+                              }}
                               className="text-red-600"
                             >
                               <Trash2 className="mr-2 h-4 w-4" />

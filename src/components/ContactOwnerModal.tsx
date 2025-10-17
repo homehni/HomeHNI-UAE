@@ -213,6 +213,13 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
       // Close modal first
       onClose();
       
+      // Trigger a custom event to notify Dashboard to refresh
+      console.log('ContactOwnerModal: Dispatching contactCreated event for property:', propertyId);
+      window.dispatchEvent(new CustomEvent('contactCreated', { 
+        detail: { propertyId, timestamp: Date.now() } 
+      }));
+      console.log('ContactOwnerModal: Event dispatched successfully');
+      
       // Redirect logic based on user state and remaining uses
       setTimeout(() => {
         if (!user) {

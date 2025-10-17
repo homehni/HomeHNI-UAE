@@ -458,7 +458,8 @@ export const useSimplifiedSearch = () => {
         const { count } = await supabase
           .from('properties')
           .select('*', { count: 'exact', head: true })
-          .eq('is_visible', true);
+          .eq('is_visible', true)
+          .neq('status', 'rejected'); // Exclude rejected properties from count
 
         setPropertyCount(count || 0);
 
@@ -468,6 +469,7 @@ export const useSimplifiedSearch = () => {
           .from('properties')
           .select(SELECT_COLUMNS)
           .eq('is_visible', true)
+          .neq('status', 'rejected') // Exclude rejected properties from search
           .order('created_at', { ascending: false })
           .limit(BATCH_SIZE); // Load first batch only
 
@@ -536,6 +538,7 @@ export const useSimplifiedSearch = () => {
         .from('properties')
         .select(SELECT_COLUMNS)
         .eq('is_visible', true)
+        .neq('status', 'rejected') // Exclude rejected properties from search
         .order('created_at', { ascending: false })
         .range(allProperties.length, allProperties.length + BATCH_SIZE - 1);
 
