@@ -813,7 +813,7 @@ export const PostProperty: React.FC = () => {
         
         // 1. Insert into property_submissions for admin review
         const autoApprove = Boolean(appSettings.auto_approve_properties);
-        const initialStatus = autoApprove ? 'approved' : 'new';
+        const initialStatus = autoApprove ? 'approved' : 'pending';
         const { data: inserted, error: insertError } = await supabase
           .from('property_submissions')
           .insert({
