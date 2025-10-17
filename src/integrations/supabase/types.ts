@@ -1549,6 +1549,26 @@ export type Database = {
           role_name: string
         }[]
       }
+      get_contacted_properties_with_owners: {
+        Args: { p_user_email: string }
+        Returns: {
+          city: string
+          contact_date: string
+          expected_price: number
+          images: string[]
+          lead_message: string
+          listing_type: string
+          locality: string
+          owner_email: string
+          owner_name: string
+          owner_phone: string
+          property_created_at: string
+          property_id: string
+          property_title: string
+          property_type: string
+          state: string
+        }[]
+      }
       get_current_employee_id: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -1577,39 +1597,12 @@ export type Database = {
         Returns: {
           owner_email: string
           owner_name: string
+          owner_phone: string
           property_title: string
         }[]
       }
       get_public_pg_hostel_properties: {
         Args: Record<PropertyKey, never>
-        Returns: {
-          amenities: Json
-          available_from: string
-          available_services: Json
-          city: string
-          created_at: string
-          description: string
-          expected_deposit: number
-          expected_rent: number
-          food_included: boolean
-          gate_closing_time: string
-          id: string
-          images: string[]
-          landmark: string
-          locality: string
-          parking: string
-          place_available_for: string
-          preferred_guests: string
-          property_type: string
-          state: string
-          status: string
-          title: string
-          updated_at: string
-          videos: string[]
-        }[]
-      }
-      get_public_pg_hostel_property_by_id: {
-        Args: { property_id: string }
         Returns: {
           amenities: Json
           available_from: string
@@ -1711,6 +1704,7 @@ export type Database = {
           id: string
           images: string[]
           is_featured: boolean
+          is_premium: boolean
           landmarks: string
           listing_type: string
           locality: string
@@ -1730,6 +1724,7 @@ export type Database = {
           title: string
           total_floors: number
           updated_at: string
+          user_id: string
           videos: string[]
           water_supply: string
         }[]
