@@ -23,6 +23,7 @@ import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapFurnishing } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
+import { updateUserProfile } from '@/services/profileService';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -59,6 +60,62 @@ export const PostProperty: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  // Auto-save user profile data after property submission
+  const autoSaveUserProfile = async (ownerInfo: OwnerInfo) => {
+    if (!user) return;
+
+    try {
+      // Prepare profile data to update
+      const profileUpdates: any = {};
+      
+      // Only update fields that have values and are different from current profile
+      if (ownerInfo.fullName && ownerInfo.fullName.trim()) {
+        profileUpdates.full_name = ownerInfo.fullName.trim();
+      }
+      
+      if (ownerInfo.phoneNumber && ownerInfo.phoneNumber.trim()) {
+        profileUpdates.phone = ownerInfo.phoneNumber.trim();
+      }
+      
+      // Update WhatsApp preference if provided
+      if (ownerInfo.whatsappUpdates !== undefined) {
+        profileUpdates.whatsapp_opted_in = ownerInfo.whatsappUpdates;
+      }
+
+      // Only proceed if there are updates to make
+      if (Object.keys(profileUpdates).length === 0) {
+        console.log('No profile updates needed');
+        return;
+      }
+
+      console.log('Auto-saving user profile with updates:', profileUpdates);
+      
+      // Update the user profile
+      await updateUserProfile(profileUpdates);
+      
+      console.log('User profile auto-saved successfully');
+      
+      // Also update auth metadata for consistency
+      try {
+        const { error: authMetaError } = await supabase.auth.updateUser({
+          data: { 
+            full_name: profileUpdates.full_name || user.user_metadata?.full_name,
+            profile_phone: profileUpdates.phone || user.user_metadata?.profile_phone
+          },
+        });
+        if (authMetaError) {
+          console.warn('Auth metadata update failed (non-blocking):', authMetaError);
+        }
+      } catch (authError) {
+        console.warn('Auth metadata update failed (non-blocking):', authError);
+      }
+      
+    } catch (error) {
+      console.error('Error auto-saving user profile:', error);
+      throw error; // Re-throw to be caught by the caller
+    }
+  };
 
   // Extract edit mode, and step from URL parameters
   useEffect(() => {
@@ -1001,6 +1058,14 @@ export const PostProperty: React.FC = () => {
             : "Your property has been published successfully and is now live on the platform.",
           variant: "success",
         });
+      }
+
+      // Auto-save user profile data after successful property submission
+      try {
+        await autoSaveUserProfile(data.ownerInfo);
+      } catch (profileError) {
+        console.error('Failed to auto-save user profile:', profileError);
+        // Don't block the main flow if profile save fails
       }
 
       // Stay on the Preview step after submission - no redirect

@@ -46,6 +46,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     if (profile) {
       if (profile.full_name) setName(profile.full_name);
       if (user?.email) setEmail(user.email);
+      if (profile.phone) setPhoneNumber(profile.phone);
     }
   }, [profile, user]);
 
@@ -144,7 +145,10 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-9 text-sm border border-gray-300 rounded-md"
+                disabled={!!user}
+                className={`w-full h-9 text-sm border border-gray-300 rounded-md ${
+                  user ? 'bg-gray-100 cursor-not-allowed' : ''
+                }`}
               />
             </div>
 
@@ -152,8 +156,10 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <div className="space-y-1">
               <Label htmlFor="mobile" className="text-sm font-medium text-gray-700">Mobile Number *</Label>
               <div className="flex">
-                <Select defaultValue="+91">
-                  <SelectTrigger className="w-16 rounded-r-none border-r-0 h-9 text-sm">
+                <Select defaultValue="+91" disabled={!!(user && profile?.phone)}>
+                  <SelectTrigger className={`w-16 rounded-r-none border-r-0 h-9 text-sm ${
+                    user && profile?.phone ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -165,7 +171,10 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   placeholder="Enter your mobile number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="flex-1 rounded-l-none h-9 text-sm"
+                  disabled={!!(user && profile?.phone)}
+                  className={`flex-1 rounded-l-none h-9 text-sm ${
+                    user && profile?.phone ? 'bg-gray-100 cursor-not-allowed' : ''
+                  }`}
                 />
               </div>
             </div>
