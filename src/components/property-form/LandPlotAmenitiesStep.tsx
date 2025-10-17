@@ -11,9 +11,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { LandPlotAmenities } from '@/types/landPlotProperty';
 
 const amenitiesSchema = z.object({
-  waterSupply: z.enum(['municipal', 'borewell', 'tank', 'none']).optional(),
-  electricityConnection: z.enum(['available', 'nearby', 'none']).optional(),
-  sewageConnection: z.enum(['connected', 'septic_tank', 'none']).optional(),
+  waterSupply: z.string().optional().transform(val => val === '' ? undefined : val),
+  electricityConnection: z.string().optional().transform(val => val === '' ? undefined : val),
+  sewageConnection: z.string().optional().transform(val => val === '' ? undefined : val),
   roadWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   
   gatedSecurity: z.boolean().optional(),

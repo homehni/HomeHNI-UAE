@@ -30,6 +30,7 @@ interface Property {
   bhkType: string;
   listingType: string;
   isNew?: boolean;
+  is_premium?: boolean; // Premium status flag
   ownerId?: string; // Add owner ID for ownership detection
   // Plot/Land specific attributes
   plotAreaUnit?: string; // The unit of measurement for land area

@@ -22,4 +22,7 @@ export interface Property {
   city: string;
   bhkType: string;
   isNew?: boolean;
+  is_premium?: boolean;
+  listingType?: string;
+  ownerId?: string;
 }
