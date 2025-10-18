@@ -801,6 +801,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   value={selectedLocations.length > 0 ? selectedLocations[0] : searchQuery}
                   onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Backspace' && selectedLocations.length > 0) {
+                      e.preventDefault();
+                      removeLocation(selectedLocations[0]);
+                    }
+                  }}
                   className="w-full pl-9 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base hide-clear-button"
                   autoComplete="off"
                   aria-autocomplete="both"
@@ -1144,6 +1150,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               value={selectedLocations.length > 0 ? selectedLocations[0] : searchQuery}
                               onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
                               onKeyPress={handleKeyPress}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Backspace' && selectedLocations.length > 0) {
+                                  e.preventDefault();
+                                  removeLocation(selectedLocations[0]);
+                                }
+                              }}
                               placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Search locality...'}
                               className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-500 font-medium"
                               style={{ appearance: "none" }}
