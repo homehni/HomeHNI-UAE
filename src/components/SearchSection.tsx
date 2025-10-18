@@ -86,8 +86,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
   const mobileAcInitRef = useRef(false);
+  const filterScrollRef = useRef<HTMLDivElement>(null);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
 
   // Detect mobile viewport
@@ -97,6 +100,35 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Check scroll position for arrows
+  const checkScroll = () => {
+    if (filterScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = filterScrollRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  // Initialize scroll check
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [activeTab]);
+
+  // Scroll functions
+  const scrollLeft = () => {
+    if (filterScrollRef.current) {
+      filterScrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (filterScrollRef.current) {
+      filterScrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
 
   // Close dropdown when clicking outside (mobile overlay only) or pressing Escape
   useEffect(() => {
@@ -1176,15 +1208,43 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         </div>
 
                         {/* Filter row outside red border */}
-                        <div className="mt-3 overflow-visible">
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 w-full px-2 max-w-full">
+                        <div className="mt-3 relative">
+                          {/* Left Arrow - visible on tablet only when there's content to scroll */}
+                          {showLeftArrow && (
+                            <button
+                              onClick={scrollLeft}
+                              className="hidden sm:flex lg:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition-colors"
+                              aria-label="Scroll left"
+                            >
+                              <ChevronRight size={16} className="rotate-180 text-gray-700" />
+                            </button>
+                          )}
+                          
+                          {/* Right Arrow - visible on tablet only when there's content to scroll */}
+                          {showRightArrow && (
+                            <button
+                              onClick={scrollRight}
+                              className="hidden sm:flex lg:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition-colors"
+                              aria-label="Scroll right"
+                            >
+                              <ChevronRight size={16} className="text-gray-700" />
+                            </button>
+                          )}
+                          
+                          {/* Scrollable container for tablet, grid for desktop */}
+                          <div 
+                            ref={filterScrollRef}
+                            onScroll={checkScroll}
+                            className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible scrollbar-hide sm:px-10 lg:px-2"
+                          >
+                            <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-2 sm:gap-3 w-full min-w-max lg:min-w-0">
                             {/* Property type: Property Type or Land/Space Type */}
                             <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'propertyType' : null)}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                 >
                                   <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
@@ -1217,7 +1277,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                 >
                                   <span className="text-sm font-medium">Bedroom</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
@@ -1252,7 +1312,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                     >
                                       <span className="text-sm font-medium">Availability</span>
                                       <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
@@ -1283,7 +1343,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`gap-2 px-5 py-2 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                      className={`flex-shrink-0 lg:w-full gap-2 px-5 py-2 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                     >
                                       <span className="text-sm font-medium">Property Status</span>
                                       <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
@@ -1317,7 +1377,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                 >
                                   <span className="text-sm font-medium">Furnishing</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
@@ -1349,7 +1409,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
                                 >
                                   <span className="text-sm font-medium">Budget</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
@@ -1424,6 +1484,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               </PopoverContent>
                             </Popover>
 
+                          </div>
                           </div>
                           {/* Clear button below, right-aligned */}
                           <div className="hidden mt-2 flex justify-end px-2">
