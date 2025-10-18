@@ -293,7 +293,7 @@ export const PostProperty: React.FC = () => {
     setPropertySelectionData(data);
     
     // Clear any existing form drafts when starting fresh from property selection
-    if (data.listingType === 'Resale') {
+    if (data.listingType === 'Resale' || data.listingType === 'Sale') {
       localStorage.removeItem('resale-form-data');
       console.log('Cleared resale form draft - starting fresh');
     } else if (data.listingType === 'Rent') {
@@ -334,11 +334,12 @@ export const PostProperty: React.FC = () => {
       // Route to appropriate form based on listing type for non-commercial
       switch (data.listingType) {
         case 'Resale':
+        case 'Sale':
           if (data.propertyType === 'Land/Plot') {
-            console.log('Routing to land-plot-form for Land/Plot Resale');
+            console.log('Routing to land-plot-form for Land/Plot Resale/Sale');
             setCurrentStep('land-plot-form');
           } else {
-            console.log('Routing to resale-form for Residential Resale');
+            console.log('Routing to resale-form for Residential Resale/Sale');
             setCurrentStep('resale-form');
           }
           break;
@@ -374,6 +375,7 @@ export const PostProperty: React.FC = () => {
       // Route to appropriate form based on listing type for non-commercial
       switch (data.listingType) {
         case 'Resale':
+        case 'Sale':
           if (data.propertyType === 'Land/Plot') {
             setCurrentStep('land-plot-form');
           } else {

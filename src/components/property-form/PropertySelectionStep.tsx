@@ -57,7 +57,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
       case 'Land/Plot':
         return ['Industrial land', 'Agricultural Land', 'Commercial land'];
       default: // Residential
-        return ['Rent', 'Resale', 'PG/Hostel', 'Flatmates'];
+        return ['Rent', 'Sale', 'PG/Hostel', 'Flatmates'];
     }
   };
 
