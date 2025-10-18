@@ -35,6 +35,43 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
   }
+
+  /* Visible scrollbar for filter container - hidden on mobile and desktop, visible on tablet */
+  .filter-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge - hide */
+    scrollbar-width: none;  /* Firefox - hide on mobile */
+  }
+  
+  .filter-scroll-container::-webkit-scrollbar {
+    display: none;  /* Hide on mobile by default */
+  }
+
+  /* Show scrollbar on tablet (sm to lg breakpoint) */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .filter-scroll-container {
+      scrollbar-width: thin;  /* Firefox */
+      scrollbar-color: hsl(var(--brand-red)) hsl(var(--muted));
+    }
+    
+    .filter-scroll-container::-webkit-scrollbar {
+      display: block;
+      height: 8px;
+    }
+    
+    .filter-scroll-container::-webkit-scrollbar-track {
+      background: hsl(var(--muted));
+      border-radius: 4px;
+    }
+    
+    .filter-scroll-container::-webkit-scrollbar-thumb {
+      background: hsl(var(--brand-red));
+      border-radius: 4px;
+    }
+    
+    .filter-scroll-container::-webkit-scrollbar-thumb:hover {
+      background: hsl(var(--brand-maroon));
+    }
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 

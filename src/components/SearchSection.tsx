@@ -86,11 +86,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const mobileSearchContainerRef = useRef<HTMLDivElement>(null);
   const mobileAcInitRef = useRef(false);
-  const filterScrollRef = useRef<HTMLDivElement>(null);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
 
   // Detect mobile viewport
@@ -100,35 +97,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Check scroll position for arrows
-  const checkScroll = () => {
-    if (filterScrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = filterScrollRef.current;
-      setShowLeftArrow(scrollLeft > 0);
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
-
-  // Initialize scroll check
-  useEffect(() => {
-    checkScroll();
-    window.addEventListener('resize', checkScroll);
-    return () => window.removeEventListener('resize', checkScroll);
-  }, [activeTab]);
-
-  // Scroll functions
-  const scrollLeft = () => {
-    if (filterScrollRef.current) {
-      filterScrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (filterScrollRef.current) {
-      filterScrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
-    }
-  };
 
   // Close dropdown when clicking outside (mobile overlay only) or pressing Escape
   useEffect(() => {
@@ -1208,36 +1176,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         </div>
 
                         {/* Filter row outside red border */}
-                        <div className="mt-3 relative">
-                          {/* Left Arrow - visible on tablet only when there's content to scroll */}
-                          {showLeftArrow && (
-                            <button
-                              onClick={scrollLeft}
-                              className="hidden sm:flex lg:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition-colors"
-                              aria-label="Scroll left"
-                            >
-                              <ChevronRight size={16} className="rotate-180 text-gray-700" />
-                            </button>
-                          )}
-                          
-                          {/* Right Arrow - visible on tablet only when there's content to scroll */}
-                          {showRightArrow && (
-                            <button
-                              onClick={scrollRight}
-                              className="hidden sm:flex lg:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-8 h-8 rounded-full bg-white border border-gray-300 shadow-md hover:bg-gray-50 transition-colors"
-                              aria-label="Scroll right"
-                            >
-                              <ChevronRight size={16} className="text-gray-700" />
-                            </button>
-                          )}
-                          
-                          {/* Scrollable container for tablet, grid for desktop */}
-                          <div 
-                            ref={filterScrollRef}
-                            onScroll={checkScroll}
-                            className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible scrollbar-hide sm:px-10 lg:px-2"
-                          >
-                            <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-2 sm:gap-3 w-full min-w-max lg:min-w-0">
+                        <div className="mt-3">
+                          {/* Scrollable container for tablet with visible scrollbar, grid for desktop */}
+                          <div className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible filter-scroll-container">
+                            <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-2 sm:gap-3 w-full min-w-max lg:min-w-0 pb-2">
                             {/* Property type: Property Type or Land/Space Type */}
                             <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'propertyType' : null)}>
                               <PopoverTrigger asChild>
