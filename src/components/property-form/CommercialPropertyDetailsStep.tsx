@@ -20,7 +20,7 @@ const commercialPropertyDetailsSchema = z.object({
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
   furnishingStatus: z.string().optional(),
-  superBuiltUpArea: z.number().optional(),
+  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be at least 1"),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
   entranceWidth: z.string().optional(),
@@ -317,7 +317,6 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
                       Sq.ft
                     </div>
                   </div>
-                  <FormMessage />
                 </FormItem>
               )}
             />

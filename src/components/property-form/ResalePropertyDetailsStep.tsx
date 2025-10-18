@@ -15,7 +15,7 @@ const resalePropertyDetailsSchema = z.object({
   propertyType: z.string().optional(),
   bhkType: z.string().min(1, "BHK Type is required"),
   ownershipType: z.string().optional(),
-  builtUpArea: z.number().optional(),
+  builtUpArea: z.number().min(1, "Built up area is required and must be at least 1"),
   carpetArea: z.number().optional(),
   propertyAge: z.string().optional(),
   facing: z.string().optional(),
@@ -208,7 +208,6 @@ export const ResalePropertyDetailsStep: React.FC<ResalePropertyDetailsStepProps>
                       Sq.ft
                     </div>
                   </div>
-                  <FormMessage />
                 </FormItem>} />
 
             <FormField control={form.control} name="carpetArea" render={({

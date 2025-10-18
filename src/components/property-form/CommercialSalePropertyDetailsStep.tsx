@@ -19,7 +19,7 @@ const commercialSalePropertyDetailsSchema = z.object({
   facing: z.string().optional(),
   floorNo: z.string().optional(),
   totalFloors: z.string().optional(),
-  superBuiltUpArea: z.number().optional(),
+  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be at least 1"),
   furnishingStatus: z.string().optional(),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
@@ -293,7 +293,6 @@ export const CommercialSalePropertyDetailsStep = ({
                       Sq.ft
                     </div>
                   </div>
-                  <FormMessage />
                 </FormItem>} />
 
             <FormField control={form.control} name="furnishingStatus" render={({

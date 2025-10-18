@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotDetails } from '@/types/landPlotProperty';
 
 const landPlotDetailsSchema = z.object({
-  plotArea: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
+  plotArea: z.number().min(1, "Plot area is required and must be at least 1"),
   plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'sq-m', 'acre', 'marla', 'cents', 'bigha', 'kottah', 'kanal', 'grounds', 'ares', 'biswa', 'gunta', 'aankadam', 'hectare', 'chataks', 'perch']).optional(),
   plotLength: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   plotWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
@@ -99,6 +99,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                   min="1"
                   {...register('plotArea', { 
                     valueAsNumber: true,
+                    required: "Plot area is required",
                     min: { value: 1, message: "Plot area must be at least 1" }
                   })}
                   onKeyDown={(e) => { if (['-','+','e','E','.'].includes(e.key)) e.preventDefault(); }}
@@ -131,9 +132,6 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
                   </SelectContent>
                 </Select>
               </div>
-              {errors.plotArea && (
-                <p className="text-red-500 text-sm">{errors.plotArea.message}</p>
-              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="boundaryWall" className="text-sm font-medium text-gray-700">

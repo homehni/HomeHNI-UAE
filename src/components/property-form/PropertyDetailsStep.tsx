@@ -17,7 +17,7 @@ const propertyDetailsSchema = z.object({
   propertyType: z.string().optional(),
   bhkType: z.string().min(1, "BHK Type is required"),
   buildingType: z.string().optional(),
-  propertyAge: z.string().min(1, "Property age is required"),
+  propertyAge: z.string().optional(),
   facing: z.string().optional(),
   floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
@@ -133,7 +133,6 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
                         Sq.ft
                       </div>
                     </div>
-                    <FormMessage />
                   </FormItem>} />
             </div>
 
