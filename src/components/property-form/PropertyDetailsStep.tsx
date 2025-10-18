@@ -22,7 +22,7 @@ const propertyDetailsSchema = z.object({
   floorType: z.string().optional(),
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
-  superBuiltUpArea: z.number().min(1, "Enter a value"),
+  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be at least 1"),
   onMainRoad: z.boolean().optional(),
   cornerProperty: z.boolean().optional()
 });
