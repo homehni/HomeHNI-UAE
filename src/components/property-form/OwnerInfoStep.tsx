@@ -152,9 +152,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                 type="email"
                 {...register('email')}
                 placeholder="Enter your email address"
-                disabled={!!user}
+                disabled={!!(user && user.email)}
                 className={`${errors.email && touchedFields.email ? 'border-destructive' : ''} ${
-                  user ? 'bg-gray-100 cursor-not-allowed' : ''
+                  user && user.email ? 'bg-gray-100 cursor-not-allowed' : ''
                 }`}
                 onBlur={handleBlur}
                 onInput={handleBlur}
@@ -169,10 +169,8 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             <div className="space-y-2">
               <Label htmlFor="phoneNumber">Mobile Number *</Label>
               <div className="flex">
-                <Select defaultValue="+91" disabled={!!(user && profile?.phone)}>
-                  <SelectTrigger className={`w-20 rounded-r-none border-r-0 ${
-                    user && profile?.phone ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}>
+                <Select defaultValue="+91">
+                  <SelectTrigger className="w-20 rounded-r-none border-r-0">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -186,10 +184,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   type="tel"
                   {...register('phoneNumber')}
                   placeholder="Enter your mobile number"
-                  disabled={!!(user && profile?.phone)}
-                  className={`flex-1 rounded-l-none ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''} ${
-                    user && profile?.phone ? 'bg-gray-100 cursor-not-allowed' : ''
-                  }`}
+                  className={`flex-1 rounded-l-none ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
                   onBlur={handleBlur}
                   onInput={handleBlur}
                   autoComplete="tel"
