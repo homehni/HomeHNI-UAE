@@ -57,7 +57,6 @@ export const Auth: React.FC = () => {
   const [signInMessage, setSignInMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   const [signUpMessage, setSignUpMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   const [resetMessage, setResetMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
-  const [passwordUpdateMessage, setPasswordUpdateMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
 
   useEffect(() => {
     // Update password reset mode when location (including hash) changes
@@ -66,6 +65,62 @@ export const Auth: React.FC = () => {
     const hashParams = new URLSearchParams((location.hash || '').replace(/^#/, ''));
     const isRecovery = hashParams.get('type') === 'recovery';
     setIsPasswordResetMode(mode === 'reset-password' || isRecovery);
+  }, [location]);
+
+  // Handle email verification when user clicks verification link
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    const email = params.get('email');
+    
+    if (mode === 'verify' && email) {
+      // Call the confirm-user edge function to verify the email
+      const confirmEmail = async () => {
+        try {
+          console.log('Starting email verification for:', email);
+          
+          // Try the confirm-user edge function
+          const response = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email.trim().toLowerCase() })
+          });
+          
+          console.log('Confirm-user response status:', response.status);
+          const result = await response.json();
+          console.log('Confirm-user response:', result);
+          
+          if (response.ok) {
+            if (result.success) {
+              setSignInMessage({ 
+                type: 'success', 
+                text: 'Email verified successfully! You can now sign in with your credentials.' 
+              });
+              // Clear the URL parameters
+              window.history.replaceState({}, document.title, '/auth');
+            } else {
+              setSignInMessage({ 
+                type: 'error', 
+                text: `Email verification failed: ${result.error || 'Unknown error'}` 
+              });
+            }
+          } else {
+            setSignInMessage({ 
+              type: 'error', 
+              text: `Email verification failed: ${result.error || 'Server error'}` 
+            });
+          }
+        } catch (error) {
+          console.error('Email verification error:', error);
+          setSignInMessage({ 
+            type: 'error', 
+            text: 'Email verification failed. Please try again or contact support.' 
+          });
+        }
+      };
+      
+      confirmEmail();
+    }
   }, [location]);
 
   useEffect(() => {
@@ -103,8 +158,11 @@ export const Auth: React.FC = () => {
     e.preventDefault();
     setSignInMessage({ type: null, text: '' });
     try {
+      console.log('Attempting to sign in with:', signInForm.email);
       await signInWithPassword(signInForm.email, signInForm.password);
+      console.log('Sign in successful');
     } catch (error: any) {
+      console.log('Sign in error:', error);
       const msg = (error?.message || '').toLowerCase();
       if (msg.includes('email not confirmed') || msg.includes('email_not_confirmed')) {
         setSignInMessage({ type: 'error', text: 'Please check your email and click the verification link to confirm your account before signing in.' });
@@ -497,6 +555,7 @@ export const Auth: React.FC = () => {
                           Login
                         </Button>
                       </form>
+
 
                       <div className="text-center">
                         <Button 
