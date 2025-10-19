@@ -254,7 +254,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw errObj;
       }
 
-      // Send welcome email after successful signup
+      // Send welcome email after successful signup (don't block signup if this fails)
       try {
         const emailResult = await sendWelcomeEmail(email, fullName || email.split('@')[0]);
         if (emailResult.success) {
@@ -267,7 +267,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Don't block signup if email fails
       }
 
-      // Also send custom verification email if needed
+      // Also send custom verification email if needed (don't block signup if this fails)
       try {
         const verificationUrl = `${window.location.origin}/auth?mode=verify&email=${encodeURIComponent(email)}`;
         
@@ -286,6 +286,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Failed to send custom verification email:', error);
         // Don't block signup if email fails
       }
+
+      // Return success - user was created successfully regardless of email status
+      return { success: true, message: 'User created successfully' };
     } catch (err: any) {
       const fallback = 'Sign up failed';
       const message = err?.message || fallback;
