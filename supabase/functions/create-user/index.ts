@@ -217,45 +217,10 @@ Deno.serve(async (req) => {
     }
 
 
-    // Generate email verification URL
-    const { data: verifyData, error: verifyError } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'signup',
-      email: email.trim(),
-      password: password.trim(),
-      options: {
-        redirectTo: `${req.headers.get('origin') || 'https://homehni.in'}/auth?verified=true`
-      }
-    });
-
-    if (verifyError) {
-      console.error('Failed to generate verification link:', verifyError);
-      // Continue without verification email rather than failing
-    } else {
-      // Send verification email using our email service
-      try {
-        const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-verification-email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${serviceRoleKey}`,
-          },
-          body: JSON.stringify({
-            email: email.trim(),
-            name: name.trim(),
-            verificationUrl: verifyData.properties?.action_link || verifyData.properties?.email_otp || '#'
-          })
-        });
-
-        const emailResult = await emailResponse.json();
-        if (!emailResult.success) {
-          console.error('Failed to send verification email:', emailResult.error);
-        } else {
-          console.log('Verification email sent successfully');
-        }
-      } catch (emailError) {
-        console.error('Error sending verification email:', emailError);
-      }
-    }
+    // Note: Email verification is handled by the frontend AuthContext
+    // The user is created with email_confirm: false, so they must verify their email
+    // before they can sign in. The verification email is sent via the external API
+    // in the AuthContext.signUpWithPassword function.
 
     console.log('=== USER CREATED SUCCESSFULLY ===');
     console.log('User ID:', authData.user.id);
