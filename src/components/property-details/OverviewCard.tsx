@@ -302,13 +302,13 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { 
       icon: Zap, 
       label: 'Electricity Connection', 
-      value: property.electricity_connection || 'Not specified' 
+      value: (property as any).electricity_connection || 'Not specified' 
     },
     { 
       icon: Droplets, 
       label: 'Sewage Connection', 
       value: (() => {
-        const rawValue = property.sewage_connection;
+        const rawValue = (property as any).sewage_connection;
         if (!rawValue || rawValue === 'Not specified') return 'Not specified';
         // Format the value by replacing underscores with spaces and capitalizing
         return rawValue.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());

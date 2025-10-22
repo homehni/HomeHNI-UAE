@@ -86,9 +86,9 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     plot_area: property.plot_area
   });
   console.log('🔍 PropertyInfoCards DEBUG - Infrastructure:', {
-    electricity_connection: property.electricity_connection,
-    sewage_connection: property.sewage_connection,
-    water_supply: property.water_supply
+    electricity_connection: (property as any).electricity_connection,
+    sewage_connection: (property as any).sewage_connection,
+    water_supply: (property as any).water_supply
   });
   console.log('🔍 PropertyInfoCards DEBUG - Ownership:', {
     ownership_type: property.ownership_type,
@@ -394,8 +394,9 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     const v = property.boundary_wall;
     console.log('Boundary wall debug - direct values:', {v, boundary_wall: property.boundary_wall});
     
-    if (v === undefined || v === null || v === '') return 'Not specified';
+    if (v === undefined || v === null) return 'Not specified';
     const s = String(v).toLowerCase().trim();
+    if (s === '') return 'Not specified';
     if (['yes', 'y', 'present', 'available', 'have', 'true', '1'].includes(s)) return 'Yes';
     if (['no', 'n', 'absent', 'not available', 'none', 'false', '0'].includes(s)) return 'No';
     if (s.includes('partial')) return 'Partial';

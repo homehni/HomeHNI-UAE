@@ -137,7 +137,6 @@ interface PropertyPreviewData {
   parking?: string | null;
   age_of_building?: string | null;
   preferred_tenant?: string | null;
-  plot_area_unit?: string;
   
   // Owner info
   owner_name?: string;
@@ -178,8 +177,6 @@ interface PropertyPreviewData {
   facing?: string;
   rent_negotiable?: boolean;
   monthly_maintenance?: string;
-  price_negotiable?: boolean;
-  possession_date?: string;
   furnishing?: string;
   power_backup?: string;
   lift?: string;
@@ -332,7 +329,7 @@ export const PropertyPreviewPage: React.FC = () => {
               console.log('Using original draft image URL:', cleanImg);
               return cleanImg;
             }) : [],
-            categorized_images: draftData.categorized_images,
+            categorized_images: (draftData as any).categorized_images,
             videos: draftData.videos || [],
             status: draftData.status || 'draft',
             created_at: draftData.created_at,
@@ -1483,7 +1480,6 @@ export const PropertyPreviewPage: React.FC = () => {
       parking: draft.parking,
       age_of_building: draft.property_age,
       preferred_tenant: draft.preferred_tenant,
-      plot_area_unit: draft.plot_area_unit,
       floor_no: draft.floor_no,
       total_floors: draft.total_floors,
     };

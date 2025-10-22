@@ -1578,12 +1578,6 @@ export const Dashboard: React.FC = () => {
                                   onLoad={() => {
                                     console.log('🔍 Image loaded successfully for:', property.title);
                                   }}
-                                  onLoadStart={() => {
-                                    console.log('🔍 Image load started for:', property.title);
-                                  }}
-                                  onLoadEnd={() => {
-                                    console.log('🔍 Image load ended for:', property.title);
-                                  }}
                                 />
                               </>
                             ) : (

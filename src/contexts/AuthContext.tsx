@@ -287,8 +287,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Don't block signup if email fails
       }
 
-      // Return success - user was created successfully regardless of email status
-      return { success: true, message: 'User created successfully' };
+      // User was created successfully regardless of email status
+      // Success! No need to return anything as the function signature is Promise<void>
     } catch (err: any) {
       const fallback = 'Sign up failed';
       const message = err?.message || fallback;

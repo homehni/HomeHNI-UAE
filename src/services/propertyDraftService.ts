@@ -403,7 +403,7 @@ export class PropertyDraftService {
           };
           console.log('Land/Plot step 4 amenities update data:', updateData);
         } else {
-          // Handle other property types
+          // Handle other property types - only include properties that exist in PropertyDraft
           updateData = {
             ...updateData,
             furnishing: stepData.furnishing,
@@ -416,32 +416,7 @@ export class PropertyDraftService {
             gated_security: stepData.gatedSecurity,
             current_property_condition: stepData.currentPropertyCondition,
             directions_tip: stepData.directionsTip,
-            // Additional amenities
-            bathrooms: stepData.bathrooms,
-            balconies: stepData.balconies,
-            pet_allowed: stepData.petAllowed,
-            non_veg_allowed: stepData.nonVegAllowed,
-            who_will_show: stepData.whoWillShow,
-            secondary_phone: stepData.secondaryNumber,
-            more_similar_units: stepData.moreSimilarUnits,
-            // Amenities checkboxes
-            internet_services: stepData.internetServices,
-            air_conditioner: stepData.airConditioner,
-            club_house: stepData.clubHouse,
-            intercom: stepData.intercom,
-            swimming_pool: stepData.swimmingPool,
-            children_play_area: stepData.childrenPlayArea,
-            fire_safety: stepData.fireSafety,
-            servant_room: stepData.servantRoom,
-            shopping_center: stepData.shoppingCenter,
-            gas_pipeline: stepData.gasPipeline,
-            park: stepData.park,
-            rain_water_harvesting: stepData.rainWaterHarvesting,
-            sewage_treatment_plant: stepData.sewageTreatmentPlant,
-            house_keeping: stepData.houseKeeping,
-            visitor_parking: stepData.visitorParking,
-            water_storage_facility: stepData.waterStorageFacility,
-            wifi: stepData.wifi
+            // Note: Removed amenities that don't exist in PropertyDraft interface
           };
         }
         break;

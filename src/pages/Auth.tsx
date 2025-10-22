@@ -44,6 +44,7 @@ export const Auth: React.FC = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [passwordUpdateMessage, setPasswordUpdateMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   
   const [signInForm, setSignInForm] = useState({ email: '', password: '' });
   const [signUpForm, setSignUpForm] = useState({ 
