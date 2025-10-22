@@ -19,7 +19,6 @@ const roleOptions: Array<{ id: UserRole; label: string; icon: React.ReactNode; h
   { id: 'seller', label: 'Seller', icon: <Briefcase className="w-5 h-5" />, tab: 'seller' },
   { id: 'owner', label: 'Owner (Rental)', icon: <Home className="w-5 h-5" />, tab: 'rental' },
   { id: 'tenant', label: 'Tenant', icon: <Users className="w-5 h-5" />, tab: 'rental' },
-  { id: 'commercial-buyer', label: 'Commercial Buyer', icon: <Building2 className="w-5 h-5" />, tab: 'commercial-buyer' },
   { id: 'builder-lifetime', label: 'Builder', icon: <Hammer className="w-5 h-5" />, tab: 'builder-lifetime' },
   { id: 'agent', label: 'Agent', icon: <Briefcase className="w-5 h-5" />, tab: 'agent' },
 ];
@@ -61,8 +60,8 @@ export default function PlanWizard({ open, onOpenChange }: PlanWizardProps) {
   function needsCategorySelection(role: UserRole) {
     // Rental owner/tenant also benefit from a category to preselect their inner tabs
     if (role === 'owner' || role === 'tenant') return true;
-    // Buyer/Seller/Commercial Buyer need category to open correct tab
-    if (role === 'buyer' || role === 'seller' || role === 'commercial-buyer') return true;
+    // Buyer/Seller need category to open correct tab
+    if (role === 'buyer' || role === 'seller') return true;
     // Builder/Agent pages generally have their own structure without categories
     return false;
   }
@@ -89,10 +88,6 @@ export default function PlanWizard({ open, onOpenChange }: PlanWizardProps) {
       case 'tenant':
         tab = 'rental';
         query.rentalRole = 'tenant';
-        if (selectedCategory) query.category = selectedCategory;
-        break;
-      case 'commercial-buyer':
-        tab = 'commercial-buyer';
         if (selectedCategory) query.category = selectedCategory;
         break;
       case 'builder-lifetime':
