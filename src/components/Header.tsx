@@ -22,8 +22,6 @@ const Header = () => {
   const [isLegalFormOpen, setIsLegalFormOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [isResidentialPlanOpen, setIsResidentialPlanOpen] = useState(false);
-  const [isCommercialPlanOpen, setIsCommercialPlanOpen] = useState(false);
   
   const servicesHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
@@ -134,68 +132,14 @@ const Header = () => {
                         <span>Profile</span>
                       </DropdownMenuItem>
                       
-                      {/* Residential Plan with custom dropdown */}
-                      <DropdownMenuItem 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsResidentialPlanOpen(!isResidentialPlanOpen);
-                        }}
-                        onSelect={(e) => e.preventDefault()}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span>Residential Plan</span>
-                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isResidentialPlanOpen ? 'rotate-180' : ''}`} />
-                        </div>
-                      </DropdownMenuItem>
-                      
-                      {isResidentialPlanOpen && (
-                        <div className="pl-4 space-y-0">
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=buyer')}>
-                            <span>Buyer Plan</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
-                            <span>Seller Plan</span>
-                          </DropdownMenuItem>
-                        </div>
-                      )}
-
-                      {/* Commercial Plan with custom dropdown */}
-                      <DropdownMenuItem 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsCommercialPlanOpen(!isCommercialPlanOpen);
-                        }}
-                        onSelect={(e) => e.preventDefault()}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span>Commercial Plan</span>
-                          <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCommercialPlanOpen ? 'rotate-180' : ''}`} />
-                        </div>
-                      </DropdownMenuItem>
-                      
-                      {isCommercialPlanOpen && (
-                        <div className="pl-4 space-y-0">
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
-                            <span>Commercial Buyer Plan</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=seller&category=commercial')}>
-                            <span>Commercial Seller Plan</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigate('/plans?tab=rental&rentalRole=owner')}>
-                            <span>Rental Owner Plan</span>
-                          </DropdownMenuItem>
-                        </div>
-                      )}
                       <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                         <span>Dashboard</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
-                        <span>My Listings</span>
+                        <span>Your Properties</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/dashboard?tab=interest')}>
-                        <span>My Interest</span>
+                        <span>Your shortlists</span>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleSignOut}>
@@ -362,68 +306,14 @@ const Header = () => {
                       <span>My Chats</span>
                     </DropdownMenuItem>
                     
-                    {/* Residential Plan with custom dropdown */}
-                    <DropdownMenuItem 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsResidentialPlanOpen(!isResidentialPlanOpen);
-                      }}
-                      onSelect={(e) => e.preventDefault()}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <span>Residential Plan</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isResidentialPlanOpen ? 'rotate-180' : ''}`} />
-                      </div>
-                    </DropdownMenuItem>
-                    
-                    {isResidentialPlanOpen && (
-                      <div className="pl-4 space-y-0">
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=buyer')}>
-                          <span>Buyer Plan</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=seller')}>
-                          <span>Seller Plan</span>
-                        </DropdownMenuItem>
-                      </div>
-                    )}
-
-                    {/* Commercial Plan with custom dropdown */}
-                    <DropdownMenuItem 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsCommercialPlanOpen(!isCommercialPlanOpen);
-                      }}
-                      onSelect={(e) => e.preventDefault()}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <span>Commercial Plan</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isCommercialPlanOpen ? 'rotate-180' : ''}`} />
-                      </div>
-                    </DropdownMenuItem>
-                    
-                    {isCommercialPlanOpen && (
-                      <div className="pl-4 space-y-0">
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=commercial-buyer')}>
-                          <span>Commercial Buyer Plan</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=seller&category=commercial')}>
-                          <span>Commercial Seller Plan</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/plans?tab=rental&rentalRole=owner')}>
-                          <span>Rental Owner Plan</span>
-                        </DropdownMenuItem>
-                      </div>
-                    )}
                     <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                       <span>Dashboard</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/dashboard?tab=properties')}>
-                      <span>My Listings</span>
+                      <span>Your Properties</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/dashboard?tab=interest')}>
-                      <span>My Interest</span>
+                      <span>Your shortlists</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
