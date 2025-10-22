@@ -5,9 +5,12 @@ interface CommercialSaleSidebarProps {
   currentStep: number;
   completedSteps: number[];
   onStepClick: (step: number) => void;
+  onPreview?: () => void;
+  draftId?: string | null;
+  isSavingDraft?: boolean;
 }
 
-export const CommercialSaleSidebar = ({ currentStep, completedSteps, onStepClick }: CommercialSaleSidebarProps) => {
+export const CommercialSaleSidebar = ({ currentStep, completedSteps, onStepClick, onPreview, draftId, isSavingDraft }: CommercialSaleSidebarProps) => {
   const steps = [
     { 
       id: 2, 
@@ -64,8 +67,25 @@ export const CommercialSaleSidebar = ({ currentStep, completedSteps, onStepClick
     <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
       {/* Logo/Header */}
       <div className="mb-4 p-2">
-        <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-          <Home className="w-5 h-5 text-white" />
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+            <Home className="w-5 h-5 text-white" />
+          </div>
+          {/* Preview Button */}
+          {onPreview && currentStep !== 8 && (
+            <button
+              onClick={onPreview}
+              disabled={!draftId || isSavingDraft}
+              className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md border transition-colors ${
+                !draftId || isSavingDraft
+                  ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
+                  : 'bg-white text-blue-600 border-blue-600 hover:bg-blue-50'
+              }`}
+            >
+              <Eye className="w-3 h-3" />
+              {isSavingDraft ? 'Saving...' : 'Preview'}
+            </button>
+          )}
         </div>
       </div>
 

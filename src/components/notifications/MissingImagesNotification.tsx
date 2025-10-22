@@ -54,7 +54,7 @@ export const MissingImagesNotification: React.FC<MissingImagesNotificationProps>
             <Button
               size="sm"
               variant="outline"
-              onClick={() => navigate(`/property/${propertyId}?refresh=true`)}
+              onClick={() => navigate(`/buy/preview/${propertyId}/detail?refresh=true`)}
               className="h-7 px-3 text-xs border-orange-300 text-orange-700 hover:bg-orange-50"
             >
               View Property

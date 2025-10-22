@@ -38,6 +38,18 @@ interface PropertyDetailsCardProps {
     boundary_wall?: string;
     road_width?: number;
     plot_area_unit?: string;
+    // Additional Land/Plot fields
+    plot_area?: number;
+    corner_plot?: boolean;
+    road_facing?: string;
+    land_type?: string;
+    plot_shape?: string;
+    gated_community?: boolean;
+    gated_project?: string;
+    floors_allowed?: number;
+    survey_number?: string;
+    sub_division?: string;
+    village_name?: string;
     amenities?: {
       gym?: boolean;
       clubHouse?: boolean;
@@ -69,6 +81,7 @@ interface PropertyDetailsCardProps {
     place_available_for?: string;
     preferred_guests?: string;
     available_from?: string;
+    preferred_tenant?: string;
     food_included?: boolean;
     gate_closing_time?: string;
     available_services?: {
@@ -81,6 +94,15 @@ interface PropertyDetailsCardProps {
 }
 
 export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ property }) => {
+  console.log('DEBUG: PropertyDetailsCard received property:', JSON.stringify({
+    property_type: property.property_type,
+    plot_area: property.plot_area,
+    plot_area_unit: property.plot_area_unit,
+    plot_length: property.plot_length,
+    plot_width: property.plot_width,
+    boundary_wall: property.boundary_wall,
+    land_type: property.land_type
+  }, null, 2));
   const formatMaintenance = (charges?: number) => {
     if (!charges) return 'Not specified';
     return `₹${charges.toLocaleString()}/month`;
@@ -92,17 +114,19 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   };
 
   const formatArea = (superArea?: number, carpetArea?: number) => {
-    const area = superArea || carpetArea;
-    if (!area) return 'Not specified';
-    
     const isPlot = property.property_type?.toLowerCase().includes('plot') || 
                    property.property_type?.toLowerCase().includes('land');
+    
+    // For Land/Plot properties, use plot_area instead of superArea/carpetArea
+    const area = isPlot ? property.plot_area : (superArea || carpetArea);
+    if (!area) return 'Not specified';
     
     console.log('PropertyDetailsCard formatArea:', {
       area,
       propertyType: property.property_type,
       plotAreaUnit: property.plot_area_unit,
-      isPlot
+      isPlot,
+      plot_area: property.plot_area
     });
     
     if (isPlot && property.plot_area_unit) {
@@ -191,10 +215,19 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   // Different details for different property types
   const details = isPlotProperty ? [
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'Land Type', value: property.land_type || 'Not specified' },
     { label: 'Plot Area', value: formatArea(property.super_area, property.carpet_area) },
     { label: 'Dimensions (L × W)', value: formatDimensions(property.plot_length, property.plot_width) },
     { label: 'Boundary Wall', value: formatBoundaryWall(property.boundary_wall) },
     { label: 'Road Width', value: formatRoadWidth(property.road_width) },
+    { label: 'Road Facing', value: property.road_facing || 'Not specified' },
+    { label: 'Corner Plot', value: property.corner_plot ? 'Yes' : 'No' },
+    { label: 'Plot Shape', value: property.plot_shape || 'Not specified' },
+    { label: 'Gated Project', value: property.gated_project || 'Not specified' },
+    { label: 'Floors Allowed', value: property.floors_allowed ? `${property.floors_allowed}` : 'Not specified' },
+    { label: 'Survey Number', value: property.survey_number || 'Not specified' },
+    { label: 'Sub Division', value: property.sub_division || 'Not specified' },
+    { label: 'Village Name', value: property.village_name || 'Not specified' },
     { label: 'Ownership', value: formatOwnership(property.owner_role) },
     { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
     { label: 'Water Connection', value: property.water_supply || 'Not specified' },
@@ -216,6 +249,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   ] : [
     // Basic property specifications only
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
+    { label: 'Space Type', value: (property as any).space_type || 'Not specified' },
     { label: 'BHK', value: property.bhk_type || 'Not specified' },
     { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
     { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
@@ -226,6 +260,9 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Facing', value: property.facing_direction || 'Not specified' },
     { label: 'Floor Type', value: property.floor_type || 'Not specified' },
     { label: 'Water Supply', value: property.water_supply || 'Not specified' },
+    { label: 'Available From', value: property.available_from ? new Date(property.available_from).toLocaleDateString('en-IN') : 'Not specified' },
+    { label: 'Preferred Tenant', value: property.preferred_tenant || 'Not specified' },
+    { label: 'Parking', value: property.parking || 'Not specified' },
     { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
     { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
     { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
@@ -330,7 +367,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
                 // Skip if not truthy or if it's a system field
                 if (!value) return null;
                 if (typeof value === 'string' && (value === 'Not Available' || value === 'Not specified')) return null;
-                if (['directionsTip', 'secondaryNumber', 'whoWillShow', 'currentPropertyCondition'].includes(key)) return null;
+                if (['directionsTip', 'secondaryNumber', 'whoWillShow', 'currentPropertyCondition', 'who_will_show', 'current_property_condition', 'directions_tip', 'secondary_phone'].includes(key)) return null;
 
                 // Map keys to display names
                 const amenityDisplayNames: Record<string, string> = {

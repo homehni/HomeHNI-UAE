@@ -64,7 +64,7 @@ export async function sendListingLiveEmail(
     locality: propertyData.locality,
     phone: propertyData.phone,
     propertyType: propertyData.propertyType,
-    propertyUrl: `https://homehni.com/property/${propertyData.id}`
+    propertyUrl: `https://homehni.com/buy/preview/${propertyData.id}/detail`
   });
 }
 
@@ -218,7 +218,7 @@ export async function sendPropertySubmittedEmail(
     propertyType: propertyData.propertyType,
     locality: propertyData.locality,
     dashboardUrl: 'https://homehni.com/dashboard',
-    propertyUrl: `https://homehni.com/property/${propertyData.propertyId}`
+    propertyUrl: `https://homehni.com/buy/preview/${propertyData.propertyId}/detail`
   });
 }
 

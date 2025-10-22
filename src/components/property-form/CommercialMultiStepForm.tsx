@@ -12,6 +12,9 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { ScheduleStep } from './ScheduleStep';
 import { CommercialPreviewStep } from './CommercialPreviewStep';
 import { OwnerInfo, CommercialFormData, CommercialPropertyDetails, LocationDetails, CommercialRentalDetails, CommercialAmenities, PropertyGallery, AdditionalInfo, ScheduleInfo } from '@/types/property';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { useToast } from '@/hooks/use-toast';
+import { Eye } from 'lucide-react';
 
 interface CommercialMultiStepFormProps {
   onSubmit: (data: CommercialFormData) => void;
@@ -28,6 +31,9 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   targetStep = null,
   createdSubmissionId
 }) => {
+  const { toast } = useToast();
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     currentStep,
@@ -53,6 +59,82 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     getFormData,
     isStepValid
   } = useCommercialPropertyForm();
+
+  // Handle preview functionality
+  const handlePreview = async () => {
+    if (!draftId) {
+      toast({
+        title: "No Draft Available",
+        description: "Please save your progress first before previewing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Open preview in new tab using the unified preview page
+      window.open(`/buy/preview/${draftId}/detail`, '_blank');
+    } catch (error) {
+      console.error('Error opening preview:', error);
+      toast({
+        title: "Preview Error",
+        description: "Failed to open preview. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Save draft and proceed to next step
+  const saveDraftAndNext = async (stepData: any, stepNumber: number, formType: 'rental' | 'sale' | 'commercial' | 'land') => {
+    try {
+      setIsSavingDraft(true);
+      
+      console.log('=== COMMERCIAL DRAFT SAVE DEBUG ===');
+      console.log('Step number:', stepNumber);
+      console.log('Form type:', formType);
+      console.log('Step data:', stepData);
+      console.log('Draft ID:', draftId);
+      
+      // Prepare owner info for draft
+      const ownerData = {
+        owner_name: ownerInfo.fullName,
+        owner_email: ownerInfo.email,
+        owner_phone: ownerInfo.phoneNumber,
+        whatsapp_updates: ownerInfo.whatsappUpdates
+      };
+
+      // Save draft
+      const draft = await PropertyDraftService.saveFormData(draftId, stepData, stepNumber, formType);
+      
+      console.log('Draft saved successfully:', draft);
+      
+      // Update owner info if not already set
+      if (stepNumber === 0) {
+        await PropertyDraftService.updateDraft(draft.id, ownerData);
+      }
+      
+      setDraftId(draft.id);
+      nextStep();
+      
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      
+      // Show user-friendly error message
+      const errorMessage = error instanceof Error ? error.message : "Failed to save draft. Please try again.";
+      
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive"
+      });
+      
+      // Still allow user to proceed to next step even if draft save fails
+      console.warn('Draft save failed, but allowing user to continue to next step');
+      nextStep();
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
 
   // Initialize with owner info from previous step
   useEffect(() => {
@@ -94,38 +176,38 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   // Step handlers
   const handlePropertyDetailsNext = (data: Partial<CommercialPropertyDetails>) => {
     updatePropertyDetails(data);
-    nextStep();
+    saveDraftAndNext(data, 1, 'commercial');
     scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: Partial<LocationDetails>) => {
     updateLocationDetails(data);
-    nextStep();
+    saveDraftAndNext(data, 2, 'commercial');
     scrollToTop();
   };
 
   const handleRentalDetailsNext = (data: Partial<CommercialRentalDetails>) => {
     updateRentalDetails(data);
-    nextStep();
+    saveDraftAndNext(data, 3, 'commercial');
     scrollToTop();
   };
 
   const handleAmenitiesNext = (data: CommercialAmenities) => {
     updateAmenities(data);
-    nextStep();
+    saveDraftAndNext(data, 4, 'commercial');
     scrollToTop();
   };
 
   const handleGalleryNext = (data: Partial<PropertyGallery>) => {
     updateGallery(data);
-    nextStep();
+    saveDraftAndNext(data, 5, 'commercial');
     scrollToTop();
   };
 
 
 const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
   updateScheduleInfo(data);
-  nextStep();
+  saveDraftAndNext(data, 6, 'commercial');
   scrollToTop();
 };
 
@@ -253,6 +335,9 @@ const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
             currentStep={currentStep}
             completedSteps={completedSteps}
             onStepClick={goToStep}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
 

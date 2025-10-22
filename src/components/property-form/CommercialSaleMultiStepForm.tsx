@@ -12,6 +12,7 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { CommercialSaleScheduleStep } from './CommercialSaleScheduleStep';
 import { CommercialSaleSuccessStep } from './CommercialSaleSuccessStep';
 import { OwnerInfo } from '@/types/property';
+import { PropertyDraftService } from '@/services/propertyDraftService';
 
 interface CommercialSaleMultiStepFormProps {
   onSubmit: (data: any) => void;
@@ -29,6 +30,8 @@ export const CommercialSaleMultiStepForm = ({
   createdSubmissionId
 }: CommercialSaleMultiStepFormProps) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const {
     currentStep,
     ownerInfo,
@@ -96,6 +99,57 @@ export const CommercialSaleMultiStepForm = ({
     goToStep(step);
   };
 
+  // Save draft and proceed to next step
+  const saveDraftAndNext = async (stepData: any) => {
+    if (isSavingDraft) return;
+    
+    setIsSavingDraft(true);
+    try {
+      console.log('Commercial Sale - Saving draft for step:', currentStep, 'with data:', stepData);
+      
+      // Map Commercial Sale step numbers to PropertyDraftService step numbers
+      let draftStepNumber = currentStep;
+      if (currentStep === 2) draftStepNumber = 1; // Property Details
+      if (currentStep === 3) draftStepNumber = 2; // Location Details
+      if (currentStep === 4) draftStepNumber = 3; // Sale Details
+      if (currentStep === 5) draftStepNumber = 4; // Amenities
+      if (currentStep === 6) draftStepNumber = 5; // Gallery
+      if (currentStep === 7) draftStepNumber = 6; // Schedule
+      
+      console.log('Commercial Sale - Mapped step number:', draftStepNumber);
+      
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        stepData,
+        draftStepNumber,
+        'commercial-sale'
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Commercial Sale - Draft saved successfully with ID:', savedDraft.id);
+      }
+      
+      nextStep();
+      scrollToTop();
+    } catch (error) {
+      console.error('Commercial Sale - Failed to save draft:', error);
+      // Still proceed to next step even if draft save fails
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
+
+  // Handle preview button click
+  const handlePreview = () => {
+    if (draftId) {
+      const previewUrl = PropertyDraftService.generatePreviewUrl(draftId);
+      window.open(previewUrl, '_blank');
+    }
+  };
+
   const scrollToTop = () => {
     try {
       const el = document.scrollingElement || document.documentElement || document.body;
@@ -115,8 +169,8 @@ export const CommercialSaleMultiStepForm = ({
           onEditProperty={() => handleEdit(2)}
           onPreviewListing={() => {
             if (createdSubmissionId) {
-              // Navigate to the specific property preview
-              window.open(`/property/${createdSubmissionId}`, '_blank');
+              // Use the preview page instead of separate property page
+              window.open(`/buy/preview/${createdSubmissionId}/detail`, '_blank');
             }
           }}
           onGoToDashboard={() => {
@@ -138,8 +192,7 @@ export const CommercialSaleMultiStepForm = ({
             initialData={propertyDetails}
             onNext={(data) => {
               updatePropertyDetails(data);
-              nextStep();
-              scrollToTop();
+              saveDraftAndNext(data);
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -153,8 +206,7 @@ export const CommercialSaleMultiStepForm = ({
             onNext={(data) => {
               console.log('Step 3 onNext called with data:', data);
               updateLocationDetails(data);
-              nextStep();
-              scrollToTop();
+              saveDraftAndNext(data);
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -168,8 +220,7 @@ export const CommercialSaleMultiStepForm = ({
             onNext={(data) => {
               console.log('Step 4 onNext called with data:', data);
               updateSaleDetails(data);
-              nextStep();
-              scrollToTop();
+              saveDraftAndNext(data);
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -183,8 +234,7 @@ export const CommercialSaleMultiStepForm = ({
             onNext={(data) => {
               console.log('Step 5 onNext called with data:', data);
               updateAmenities(data);
-              nextStep();
-              scrollToTop();
+              saveDraftAndNext(data);
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -198,8 +248,7 @@ export const CommercialSaleMultiStepForm = ({
             onNext={(data) => {
               console.log('Step 6 onNext called with data:', data);
               updateGallery(data);
-              nextStep();
-              scrollToTop();
+              saveDraftAndNext(data);
             }}
             onBack={prevStep}
             currentStep={currentStep}
@@ -249,6 +298,9 @@ export const CommercialSaleMultiStepForm = ({
             currentStep={currentStep}
             completedSteps={completedSteps}
             onStepClick={goToStep}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
 

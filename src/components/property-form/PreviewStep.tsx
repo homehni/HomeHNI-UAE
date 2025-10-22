@@ -78,7 +78,7 @@ export const PreviewStep: React.FC<PreviewStepProps> = ({
   const handlePreviewListing = () => {
     if (previewPropertyId) {
       // Open the specific property details page in a new tab
-      window.open(`/property/${previewPropertyId}`, '_blank');
+      window.open(`/buy/preview/${previewPropertyId}/detail`, '_blank');
     } else {
       // Fallback: open property search in new tab if no ID available
       window.open('/search', '_blank');

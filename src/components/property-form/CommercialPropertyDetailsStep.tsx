@@ -80,6 +80,8 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
     onNext({
       ...initialData,
       ...data,
+      // Map superBuiltUpArea to builtUpArea for compatibility with PropertyDraftService
+      builtUpArea: data.superBuiltUpArea,
       onMainRoad,
       cornerProperty,
       loadingFacility,

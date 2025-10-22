@@ -17,6 +17,8 @@ import { OwnerInfo, PropertyDetails, LocationDetails, PropertyGallery, Additiona
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { Eye } from 'lucide-react';
 
 interface FlattmatesMultiStepFormProps {
   onSubmit: (data: FlattmatesFormData) => void;
@@ -35,6 +37,8 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 }) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -114,6 +118,21 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
   });
 
   const [isEmailLoading, setIsEmailLoading] = useState(false);
+
+  // Handle preview functionality
+  const handlePreview = async () => {
+    if (!draftId) {
+      toast({
+        title: "No Preview Available",
+        description: "Please complete at least one step to preview your property.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const previewUrl = PropertyDraftService.generatePreviewUrl(draftId);
+    window.open(previewUrl, '_blank');
+  };
 
   useEffect(() => {
     if (initialOwnerInfo) {
@@ -618,7 +637,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
   const handlePreviewListing = () => {
     if (createdSubmissionId) {
-      window.open(`/property/${createdSubmissionId}`, '_blank');
+      window.open(`/buy/preview/${createdSubmissionId}/detail`, '_blank');
     } else {
       window.open('/search', '_blank');
     }
@@ -656,6 +675,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
               currentStep={7} // All steps completed
               completedSteps={[1, 2, 3, 4, 5, 6, 7]}
               steps={sidebarSteps}
+              onPreview={handlePreview}
+              draftId={draftId}
+              isSavingDraft={isSavingDraft}
             />
           </div>
 
@@ -1228,6 +1250,9 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             currentStep={currentStep}
             completedSteps={completedSteps}
             steps={sidebarSteps}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
 

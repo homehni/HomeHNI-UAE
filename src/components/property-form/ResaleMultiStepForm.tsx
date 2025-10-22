@@ -17,6 +17,9 @@ import { Home, MapPin, DollarSign, Sparkles, Camera, Info, Calendar, CheckCircle
 
 import { OwnerInfo } from '@/types/property';
 import { SalePropertyFormData } from '@/types/saleProperty';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { useToast } from '@/hooks/use-toast';
+import { Eye } from 'lucide-react';
 
 interface ResaleMultiStepFormProps {
   onSubmit: (data: SalePropertyFormData) => void;
@@ -33,6 +36,10 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   targetStep = null,
   createdSubmissionId = null
 }) => {
+  const { toast } = useToast();
+  const [draftId, setDraftId] = React.useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = React.useState(false);
+
   const {
     currentStep,
     ownerInfo,
@@ -57,6 +64,65 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     getFormData,
     isStepValid
   } = useSalePropertyForm();
+
+  // Handle preview functionality
+  const handlePreview = async () => {
+    if (!draftId) {
+      toast({
+        title: "No Preview Available",
+        description: "Please complete at least one step to preview your property.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const previewUrl = PropertyDraftService.generatePreviewUrl(draftId);
+    window.open(previewUrl, '_blank');
+  };
+
+  // Save draft and proceed to next step
+  const saveDraftAndNext = async (stepData: any, stepNumber: number, formType: 'rental' | 'sale' | 'commercial' | 'land') => {
+    try {
+      setIsSavingDraft(true);
+      
+      // Prepare owner info for draft
+      const ownerData = {
+        owner_name: ownerInfo.fullName,
+        owner_email: ownerInfo.email,
+        owner_phone: ownerInfo.phoneNumber,
+        whatsapp_updates: ownerInfo.whatsappUpdates
+      };
+
+      // Save draft
+      const draft = await PropertyDraftService.saveFormData(draftId, stepData, stepNumber, formType);
+      
+      // Update owner info if not already set
+      if (stepNumber === 0) {
+        await PropertyDraftService.updateDraft(draft.id, ownerData);
+      }
+      
+      setDraftId(draft.id);
+      nextStep();
+      
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      
+      // Show user-friendly error message
+      const errorMessage = error instanceof Error ? error.message : "Failed to save draft. Please try again.";
+      
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive"
+      });
+      
+      // Still allow user to proceed to next step even if draft save fails
+      console.warn('Draft save failed, but allowing user to continue to next step');
+      nextStep();
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
 
   // Initialize with owner info if provided
   const ownerInfoInitRef = React.useRef(false);
@@ -133,72 +199,53 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     }
   };
 
+  const handleOwnerInfoNext = (data: any) => {
+    updateOwnerInfo(data);
+    saveDraftAndNext(data, 0, 'sale'); // Step 0 for owner info
+  };
 
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
-    saveIntermediateData(data, 1);
-    nextStep();
+    saveDraftAndNext(data, 1, 'sale');
     scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: any) => {
     updateLocationDetails(data);
-    saveIntermediateData(data, 2);
-    nextStep();
+    saveDraftAndNext(data, 2, 'sale');
     scrollToTop();
   };
 
   const handleSaleDetailsNext = (data: any) => {
     updateSaleDetails(data);
-    saveIntermediateData(data, 3);
-    nextStep();
+    saveDraftAndNext(data, 3, 'sale');
     scrollToTop();
   };
 
   const handleAmenitiesNext = (data: any) => {
     updateAmenities(data);
-    saveIntermediateData(data, 4);
-    nextStep();
+    saveDraftAndNext(data, 4, 'sale');
     scrollToTop();
   };
 
   const handleGalleryNext = (data: any) => {
     console.log('Gallery step next - data received:', data);
     updateGallery(data);
-    
-    // Save complete form data including gallery to localStorage
-    const completeFormData = {
-      ownerInfo,
-      propertyDetails,
-      locationDetails,
-      saleDetails,
-      amenities,
-      gallery: data, // Use the new gallery data
-      additionalInfo,
-      scheduleInfo,
-      currentStep: 6, // Moving to next step
-      completedSteps: [...completedSteps, 5],
-      formType: 'resale'
-    };
-    localStorage.setItem('resale-form-data', JSON.stringify(completeFormData));
-    console.log('Saved complete resale form data with gallery to localStorage:', completeFormData);
-    
-    nextStep();
+    saveDraftAndNext(data, 5, 'sale');
     scrollToTop();
   };
 
 
   const handleScheduleNext = (data: any) => {
     updateScheduleInfo(data);
-    saveIntermediateData(data, 6);
-    nextStep();
+    saveDraftAndNext(data, 6, 'sale');
     scrollToTop();
   };
 
 const handleScheduleSubmit = (data: any) => {
   console.log('[ResaleMultiStepForm] Schedule submit: received data', data);
   updateScheduleInfo(data);
-  saveIntermediateData(data, 6);
+  saveDraftAndNext(data, 6, 'sale');
   const formData = getFormData();
   console.log('[ResaleMultiStepForm] Submitting resale form data:', formData);
   onSubmit(formData as SalePropertyFormData);
@@ -315,6 +362,9 @@ const handleScheduleSubmit = (data: any) => {
             currentStep={currentStep}
             completedSteps={completedSteps}
             steps={sidebarSteps}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
 

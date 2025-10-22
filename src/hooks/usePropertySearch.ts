@@ -365,7 +365,7 @@ export const usePropertySearch = () => {
            property.super_area && `${property.super_area} sq ft`,
            property.is_featured && 'Featured'
          ].filter(Boolean),
-         url: `/property/${property.id}`,
+         url: `/buy/preview/${property.id}/detail`,
          rental_status: rentalStatuses[property.id] || 'available'
        }));
 

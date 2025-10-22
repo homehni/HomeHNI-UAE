@@ -126,6 +126,8 @@ export const CommercialSalePropertyDetailsStep = ({
       floorNo: parseInt(data.floorNo),
       totalFloors: parseInt(data.totalFloors),
       superBuiltUpArea: data.superBuiltUpArea,
+      // Map superBuiltUpArea to builtUpArea for compatibility with PropertyDraftService
+      builtUpArea: data.superBuiltUpArea,
       onMainRoad,
       cornerProperty,
       loadingFacility

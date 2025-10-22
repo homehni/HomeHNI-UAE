@@ -48,6 +48,7 @@ import { VerifyEmail } from "./pages/VerifyEmail";
 import { Dashboard } from "./pages/Dashboard";
 import { PostProperty } from "./pages/PostProperty";
 import { EditPropertyInline } from "./pages/EditPropertyInline";
+import { PropertyPreviewPage } from "./pages/PropertyPreviewPage";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import AdminAuth from "./pages/AdminAuth";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
@@ -225,9 +226,12 @@ const App: React.FC = () => {
             } />
             
             {/* Property Routes */}
-            <Route path="/property/:id" element={<PropertyDetails />} />
+            <Route path="/property/:id" element={<PropertyPreviewPage />} />
             <Route path="/search" element={<PropertySearch />} />
             <Route path="/property-search" element={<PropertySearch />} />
+            
+            {/* Property Preview Route */}
+            <Route path="/buy/preview/:draftId/detail" element={<PropertyPreviewPage />} />
             
             {/* Developer Routes */}
             <Route path="/developer/:developerId" element={<DeveloperPage />} />

@@ -12,6 +12,7 @@ import {
   Shield,
   Utensils,
   Key,
+  CheckCircle,
 } from 'lucide-react';
 
 interface PropertyInfoCardsProps {
@@ -40,6 +41,8 @@ interface PropertyInfoCardsProps {
     furnishing_status?: string;
     amenities?: { furnishing?: string } | Record<string, unknown>;
     // Plot specific
+    plot_area?: number;
+    plot_area_unit?: string;
     plot_length?: number;
     plot_width?: number;
     // Legacy/alternate keys support for submissions and table rows
@@ -51,9 +54,12 @@ interface PropertyInfoCardsProps {
     boundaryWall?: string;
     ownership_type?: string;
     owner_role?: string;
-    plot_area_unit?: string;
+    possession_date?: string;
+    approved_by?: string;
     // Property submission data
     payload?: {
+      plot_area?: number;
+      plot_area_unit?: string;
       plot_length?: number;
       plotLength?: number;
       plot_width?: number;
@@ -64,12 +70,35 @@ interface PropertyInfoCardsProps {
       roadWidth?: number;
       ownership_type?: string;
       ownershipType?: string;
+      possession_date?: string;
+      approved_by?: string;
       [key: string]: any;
     };
   };
 }
 
 export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }) => {
+  console.log('🔍 PropertyInfoCards DEBUG - Full property object:', property);
+  console.log('🔍 PropertyInfoCards DEBUG - Property type:', property.property_type);
+  console.log('🔍 PropertyInfoCards DEBUG - Plot dimensions:', {
+    plot_length: property.plot_length,
+    plot_width: property.plot_width,
+    plot_area: property.plot_area
+  });
+  console.log('🔍 PropertyInfoCards DEBUG - Infrastructure:', {
+    electricity_connection: property.electricity_connection,
+    sewage_connection: property.sewage_connection,
+    water_supply: property.water_supply
+  });
+  console.log('🔍 PropertyInfoCards DEBUG - Ownership:', {
+    ownership_type: property.ownership_type,
+    approved_by: property.approved_by
+  });
+  console.log('🔍 PropertyInfoCards DEBUG - Other fields:', {
+    boundary_wall: property.boundary_wall,
+    road_width: property.road_width,
+    possession_date: property.possession_date
+  });
   // Debug: Log property data for Land/Plot properties
   const isLandPlot = property.property_type?.toLowerCase().includes('land') || 
                      property.property_type?.toLowerCase().includes('plot');
@@ -182,6 +211,39 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const getPossession = () => {
+    console.log('PropertyInfoCards getPossession:', {
+      availability_type: property.availability_type,
+      available_from: property.available_from,
+      possession_date: property.possession_date,
+      available_from_type: typeof property.available_from,
+      possession_date_type: typeof property.possession_date
+    });
+    
+    // For Land/Plot properties, check possession_date first
+    if (property.possession_date) {
+      const s = String(property.possession_date);
+      const ddmmyyyy = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+      const date = ddmmyyyy.test(s)
+        ? (() => { const [dd, mm, yyyy] = s.split('/').map(Number); return new Date(yyyy, (mm || 1) - 1, dd || 1); })()
+        : new Date(s);
+      const now = new Date();
+      const diffTime = date.getTime() - now.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      console.log('PropertyInfoCards possession calculation (possession_date):', {
+        dateString: s,
+        parsedDate: date,
+        now: now,
+        diffDays: diffDays
+      });
+      
+      if (diffDays <= 0) return 'Immediately';
+      if (diffDays <= 30) return `In ${diffDays} days`;
+      if (diffDays <= 365) return `In ${Math.ceil(diffDays / 30)} months`;
+      return `In ${Math.ceil(diffDays / 365)} years`;
+    }
+    
+    // Fallback to original logic for other property types
     const at = property.availability_type?.toLowerCase();
     if (at === 'immediate' || at === 'immediately') return 'Immediately';
     if (!property.available_from) return 'Immediately';
@@ -194,8 +256,16 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     const diffTime = date.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
+    console.log('PropertyInfoCards possession calculation:', {
+      dateString: s,
+      parsedDate: date,
+      now: now,
+      diffDays: diffDays,
+      result: diffDays <= 0 ? 'Immediately' : formatDate(s)
+    });
+    
     if (diffDays <= 0) return 'Immediately';
-    if (diffDays <= 30) return 'Within a month';
+    // Always show the actual date instead of generic text
     return formatDate(s);
   };
 
@@ -210,7 +280,7 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   const getAgeOfBuilding = () => {
     const raw = property.age_of_building || property.property_age;
     if (!raw) return 'Not specified';
-    return String(raw).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+    return String(raw).replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
   const getFurnishing = () => {
@@ -222,6 +292,17 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   const getFloorText = () => {
     const floor = property.floor_no;
     const total = property.total_floors;
+    
+    // Debug logging
+    console.log('PropertyInfoCards getFloorText debug:', JSON.stringify({
+      floor_no: floor,
+      total_floors: total,
+      floor_type: typeof floor,
+      total_type: typeof total,
+      property_floor_no: property.floor_no,
+      property_total_floors: property.total_floors
+    }, null, 2));
+    
     const floorText = (floor === undefined || floor === null)
       ? 'Ground Floor'
       : (floor === 0 ? 'Ground Floor' : `${floor}${floor === 1 ? 'st' : floor === 2 ? 'nd' : floor === 3 ? 'rd' : 'th'} Floor`);
@@ -257,6 +338,13 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
 
   const isPlot = property.property_type?.toLowerCase().includes('plot') || 
                  property.property_type?.toLowerCase().includes('land');
+  
+  console.log('🔍 PropertyInfoCards DEBUG - isPlot detection:', {
+    property_type: property.property_type,
+    isPlot: isPlot,
+    includes_plot: property.property_type?.toLowerCase().includes('plot'),
+    includes_land: property.property_type?.toLowerCase().includes('land')
+  });
   const isPG = property.property_type?.toLowerCase().includes('pg') || 
                property.property_type?.toLowerCase().includes('hostel') ||
                property.property_type?.toLowerCase().includes('coliving');
@@ -277,52 +365,11 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const formatDimensions = () => {
-    // Support multiple possible keys from different data sources
-    // Extract from any path where it might exist
-    const possiblePaths = {
-      // Direct property fields
-      directL: property.plot_length,
-      directW: property.plot_width,
-      
-      // Alternative direct fields
-      altL: property.length,
-      altW: property.width,
-      
-      // Fields in payload
-      payloadL: property.payload?.plot_length,
-      payloadW: property.payload?.plot_width,
-      
-      // Alternative fields in payload
-      altPayloadL: property.payload?.plotLength,
-      altPayloadW: property.payload?.plotWidth,
-      
-      // Deeply nested in originalFormData
-      nestedL: property.payload?.originalFormData?.propertyInfo?.plotDetails?.plotLength,
-      nestedW: property.payload?.originalFormData?.propertyInfo?.plotDetails?.plotWidth,
-      
-      // Direct in propertyInfo
-      propInfoL: property.payload?.originalFormData?.propertyInfo?.plotLength,
-      propInfoW: property.payload?.originalFormData?.propertyInfo?.plotWidth,
-    };
+    // For final submitted properties, data should be directly on the property object
+    const L = property.plot_length;
+    const W = property.plot_width;
     
-    console.log('Dimensions debug paths:', possiblePaths);
-    
-    // Try all possible locations
-    const L = possiblePaths.directL ?? 
-              possiblePaths.altL ?? 
-              possiblePaths.payloadL ?? 
-              possiblePaths.altPayloadL ?? 
-              possiblePaths.nestedL ?? 
-              possiblePaths.propInfoL;
-              
-    const W = possiblePaths.directW ?? 
-              possiblePaths.altW ?? 
-              possiblePaths.payloadW ?? 
-              possiblePaths.altPayloadW ?? 
-              possiblePaths.nestedW ?? 
-              possiblePaths.propInfoW;
-    
-    console.log('Final dimensions:', {L, W});
+    console.log('Dimensions debug - direct values:', {L, W, property_type: property.property_type});
     
     if (!L || !W) return 'Not specified';
     // Always show linear dimensions in feet regardless of area unit
@@ -330,80 +377,22 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   };
 
   const formatOwnership = () => {
-    const raw = property.ownership_type || property.owner_role || 
-               (property.payload?.ownership_type) || 
-               (property.payload?.ownershipType);
+    const raw = property.ownership_type || property.owner_role;
+    console.log('Ownership debug - direct values:', {raw, ownership_type: property.ownership_type, owner_role: property.owner_role});
     if (!raw) return 'Not specified';
     return String(raw).replace(/[_-]/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
   };
 
   const formatRoadWidth = () => {
-    // Create a structured object of all possible paths
-    const possiblePaths = {
-      // Direct properties
-      directRW: property.road_width,
-      directAltRW: property.roadWidth,
-      
-      // In payload
-      payloadRW: property.payload?.road_width,
-      payloadAltRW: property.payload?.roadWidth,
-      
-      // Nested in originalFormData.propertyInfo
-      plotDetailsRW: property.payload?.originalFormData?.propertyInfo?.plotDetails?.roadWidth,
-      amenitiesRW: property.payload?.originalFormData?.propertyInfo?.amenities?.roadWidth,
-      
-      // Direct in propertyInfo
-      propInfoRW: property.payload?.originalFormData?.propertyInfo?.roadWidth,
-    };
-    
-    console.log('Road width debug paths:', possiblePaths);
-    
-    // Try all possible locations
-    const rw = possiblePaths.directRW ?? 
-               possiblePaths.directAltRW ?? 
-               possiblePaths.payloadRW ?? 
-               possiblePaths.payloadAltRW ?? 
-               possiblePaths.plotDetailsRW ?? 
-               possiblePaths.amenitiesRW ?? 
-               possiblePaths.propInfoRW;
-    
-    console.log('Final road width:', {rw});
-    
+    const rw = property.road_width;
+    console.log('Road width debug - direct values:', {rw, road_width: property.road_width});
     if (!rw && rw !== 0) return 'Not specified';
     return `${rw} ft.`;
   };
 
   const formatBoundaryWall = () => {
-    // Create a structured object of all possible paths
-    const possiblePaths = {
-      // Direct properties
-      directBW: property.boundary_wall,
-      directAltBW: property.boundaryWall,
-      
-      // In payload
-      payloadBW: property.payload?.boundary_wall,
-      payloadAltBW: property.payload?.boundaryWall,
-      
-      // Nested in originalFormData.propertyInfo
-      plotDetailsBW: property.payload?.originalFormData?.propertyInfo?.plotDetails?.boundaryWall,
-      amenitiesBW: property.payload?.originalFormData?.propertyInfo?.amenities?.boundaryWall,
-      
-      // Direct in propertyInfo
-      propInfoBW: property.payload?.originalFormData?.propertyInfo?.boundaryWall,
-    };
-    
-    console.log('Boundary wall debug paths:', possiblePaths);
-    
-    // Try all possible locations
-    const v = possiblePaths.directBW ?? 
-              possiblePaths.directAltBW ?? 
-              possiblePaths.payloadBW ?? 
-              possiblePaths.payloadAltBW ?? 
-              possiblePaths.plotDetailsBW ?? 
-              possiblePaths.amenitiesBW ?? 
-              possiblePaths.propInfoBW;
-    
-    console.log('Final boundary wall value:', {v});
+    const v = property.boundary_wall;
+    console.log('Boundary wall debug - direct values:', {v, boundary_wall: property.boundary_wall});
     
     if (v === undefined || v === null || v === '') return 'Not specified';
     const s = String(v).toLowerCase().trim();
@@ -465,6 +454,13 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   const roadWidthValue = formatRoadWidth();
   const boundaryWallValue = formatBoundaryWall();
   
+  console.log('🔍 PropertyInfoCards DEBUG - Formatted values:', {
+    dimensionsValue,
+    ownershipValue,
+    roadWidthValue,
+    boundaryWallValue
+  });
+  
   // Log the final values for debugging
   if (isLandPlot) {
     console.log('PropertyInfoCards - Final formatted values:', {
@@ -495,6 +491,11 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       icon: Shield,
       title: ownershipValue,
       subtitle: 'Ownership',
+    },
+    {
+      icon: CheckCircle,
+      title: property.approved_by || 'Not specified',
+      subtitle: 'Authority Approved',
     },
     {
       icon: MapPin,
@@ -590,7 +591,22 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       : isCommercial
         ? commercialInfoCards
         : defaultInfoCards;
-  const filteredCards = infoCards;
+        
+  console.log('🔍 PropertyInfoCards DEBUG - Card selection:', {
+    isPlot,
+    isPG,
+    isCommercial,
+    selectedCards: isPlot ? 'plotInfoCards' : isPG ? 'pgInfoCards' : isCommercial ? 'commercialInfoCards' : 'defaultInfoCards',
+    plotInfoCardsLength: plotInfoCards.length,
+    plotInfoCards: plotInfoCards
+  });
+  const filteredCards = infoCards.filter(card => {
+    // Hide cards with "Not specified" values
+    if (card.title === 'Not specified') {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden min-w-0">

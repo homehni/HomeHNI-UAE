@@ -1,9 +1,13 @@
 import React from 'react';
-import { Home, MapPin, DollarSign, Star, Camera, Calendar } from 'lucide-react';
+import { Home, MapPin, DollarSign, Star, Camera, Calendar, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface PgHostelSidebarProps {
   currentStep: number;
   completedSteps: number[];
+  onPreview?: () => void;
+  draftId?: string | null;
+  isSavingDraft?: boolean;
 }
 
 const steps = [
@@ -16,7 +20,7 @@ const steps = [
   { id: 7, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
 ];
 
-export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebarProps) {
+export function PgHostelSidebar({ currentStep, completedSteps, onPreview, draftId, isSavingDraft = false }: PgHostelSidebarProps) {
   const calculatePropertyScore = () => {
     // Calculate score based on completed steps
     const totalSteps = steps.length;
@@ -30,10 +34,25 @@ export function PgHostelSidebar({ currentStep, completedSteps }: PgHostelSidebar
 
   return (
     <div className="hidden lg:block w-80 bg-white border-r border-gray-200 p-6 h-full">
-      {/* Header with red square icon */}
+      {/* Header with red square icon and Preview Button */}
       <div className="mb-8">
-        <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center mb-4">
-          <Home className="w-5 h-5 text-white" />
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+            <Home className="w-5 h-5 text-white" />
+          </div>
+          {/* Preview Button */}
+          {currentStep !== 7 && onPreview && (
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={onPreview}
+              disabled={!draftId || isSavingDraft}
+              className="h-8 px-3 text-xs border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
+            >
+              <Eye className="h-3 w-3 mr-1" />
+              {isSavingDraft ? 'Saving...' : 'Preview'}
+            </Button>
+          )}
         </div>
       </div>
       

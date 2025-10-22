@@ -350,6 +350,18 @@ export const Dashboard: React.FC = () => {
 
       if (propertiesError) throw propertiesError;
 
+      console.log('🔍 Dashboard fetchProperties - Raw data:', propertiesData);
+      console.log('🔍 Dashboard fetchProperties - Sample property:', propertiesData?.[0]);
+      
+      // Debug: Check if any properties have images
+      const propertiesWithImages = propertiesData?.filter(p => p.images && p.images.length > 0);
+      console.log('🔍 Dashboard fetchProperties - Properties with images:', propertiesWithImages?.length);
+      console.log('🔍 Dashboard fetchProperties - Properties without images:', propertiesData?.filter(p => !p.images || p.images.length === 0)?.length);
+      
+      if (propertiesWithImages && propertiesWithImages.length > 0) {
+        console.log('🔍 Dashboard fetchProperties - Sample property with images:', propertiesWithImages[0]);
+      }
+      
       setProperties((propertiesData || []) as CombinedProperty[]);
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -733,12 +745,12 @@ export const Dashboard: React.FC = () => {
       
       sessionStorage.setItem(`property-${propertyId}`, JSON.stringify(propertyForDetails));
       
-      // Open property details in new tab - this will show the full PropertyDetails page
-      const newWindow = window.open(`/property/${propertyId}`, '_blank');
+      // Open property details in new tab - use unified preview page
+      const newWindow = window.open(`/buy/preview/${propertyId}/detail`, '_blank');
       
       if (!newWindow) {
         // Fallback if popup is blocked - navigate in same tab
-        window.location.href = `/property/${propertyId}`;
+        window.location.href = `/buy/preview/${propertyId}/detail`;
       }
       
       console.log('Property details opened successfully');
@@ -1415,15 +1427,26 @@ export const Dashboard: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                 {filteredProperties.map((property) => {
                   const getImageUrl = () => {
+                    console.log('🔍 Dashboard getImageUrl - Property:', property.title, 'Images:', property.images);
+                    console.log('🔍 Dashboard getImageUrl - Images length:', property.images?.length);
+                    console.log('🔍 Dashboard getImageUrl - Images type:', typeof property.images);
+                    console.log('🔍 Dashboard getImageUrl - Full property object:', property);
+                    
                     if (property.images && property.images.length > 0) {
                       const firstImage = property.images[0];
+                      console.log('🔍 Dashboard getImageUrl - First image:', firstImage, 'Type:', typeof firstImage);
                       if (typeof firstImage === 'string') {
-                        return firstImage.startsWith('http') ? firstImage : firstImage;
+                        const result = firstImage.startsWith('http') ? firstImage : firstImage;
+                        console.log('🔍 Dashboard getImageUrl - String result:', result);
+                        return result;
                       }
                       if (firstImage && typeof firstImage === 'object' && 'url' in firstImage) {
-                        return (firstImage as any).url;
+                        const result = (firstImage as any).url;
+                        console.log('🔍 Dashboard getImageUrl - Object result:', result);
+                        return result;
                       }
                     }
+                    console.log('🔍 Dashboard getImageUrl - Returning placeholder because no images found');
                     return '/placeholder.svg';
                   };
 
@@ -1541,30 +1564,41 @@ export const Dashboard: React.FC = () => {
 
                           {/* Right Side - Image Area */}
                           <div className="flex-shrink-0 ml-3 w-24 h-24 bg-white rounded-md flex items-center justify-center pr-3">
-                            <PropertyWatermark status={property.status === 'rejected' ? 'rejected' : (property.rental_status as any) || 'available'}>
-                              {(property.images && property.images.length > 0) ? (
+                            {(property.images && property.images.length > 0) ? (
+                              <>
+                                {console.log('🔍 Rendering image for:', property.title, 'URL:', getImageUrl())}
                                 <img
                                   src={getImageUrl()}
                                   alt={property.title}
-                                  className="w-full h-full object-cover"
+                                  className="w-full h-full object-cover rounded-md"
                                   onError={(e) => {
+                                    console.log('🔍 Image load error for:', property.title, 'URL:', e.currentTarget.src);
                                     e.currentTarget.src = '/placeholder.svg';
                                   }}
+                                  onLoad={() => {
+                                    console.log('🔍 Image loaded successfully for:', property.title);
+                                  }}
+                                  onLoadStart={() => {
+                                    console.log('🔍 Image load started for:', property.title);
+                                  }}
+                                  onLoadEnd={() => {
+                                    console.log('🔍 Image load ended for:', property.title);
+                                  }}
                                 />
-                              ) : (
-                                <div className="flex flex-col items-center justify-center">
-                                  <div className="relative w-20 h-20 bg-gray-200/70 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-300/70 transition-colors group p-4">
-                                    <svg className="w-6 h-6 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 002-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <span className="text-xs font-normal text-gray-600 text-center leading-tight">
-                                      Upload Media
-                                    </span>
-                                  </div>
+                              </>
+                            ) : (
+                              <div className="flex flex-col items-center justify-center">
+                                <div className="relative w-20 h-20 bg-gray-200/70 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-300/70 transition-colors group p-4">
+                                  <svg className="w-6 h-6 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 002-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  </svg>
+                                  <span className="text-xs font-normal text-gray-600 text-center leading-tight">
+                                    Upload Media
+                                  </span>
                                 </div>
-                              )}
-                            </PropertyWatermark>
+                              </div>
+                            )}
                           </div>
                         </div>
 

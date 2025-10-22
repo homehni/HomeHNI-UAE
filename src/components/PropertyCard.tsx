@@ -370,7 +370,7 @@ const PropertyCard = ({
 
     // Navigate to the specific plan with category, bypassing the wizard
     // Use property-specific route to ensure wizard doesn't appear
-    navigate(`/property/${id}/plans?tab=${planTab}&category=${category}&skipWizard=true`);
+    navigate(`/buy/preview/${id}/plans?tab=${planTab}&category=${category}&skipWizard=true`);
 
     // Refresh property status after navigation (e.g., after payment success)
     refreshPropertyStatus();

@@ -566,6 +566,10 @@ export const PostProperty: React.FC = () => {
         propertyTypeRawForFolder,
         user.id
       );
+      
+      console.log('🔍 PostProperty - Uploaded image URLs:', imageUrls);
+      console.log('🔍 PostProperty - Image URLs type:', typeof imageUrls);
+      console.log('🔍 PostProperty - Image URLs length:', imageUrls?.length);
 
       // Upload video if provided
       let videoUrls: string[] = [];
@@ -873,6 +877,20 @@ export const PostProperty: React.FC = () => {
         // 1. Insert into property_submissions for admin review
         const autoApprove = Boolean(appSettings.auto_approve_properties);
         const initialStatus = autoApprove ? 'approved' : 'pending';
+        const submissionPayload = {
+          ...propertyData,
+          images: imageUrls.map(img => img.url),
+          videos: videoUrls,
+          originalFormData: {
+            ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
+            propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
+          }
+        };
+        
+        console.log('🔍 PostProperty - Submission payload images:', submissionPayload.images);
+        console.log('🔍 PostProperty - Image URLs:', imageUrls);
+        console.log('🔍 PostProperty - Full submission payload:', submissionPayload);
+        
         const { data: inserted, error: insertError } = await supabase
           .from('property_submissions')
           .insert({
@@ -881,15 +899,7 @@ export const PostProperty: React.FC = () => {
             city: propertyData.city || 'Unknown',
             state: propertyData.state || 'Unknown', 
             status: initialStatus,
-            payload: {
-              ...propertyData,
-              images: imageUrls.map(img => img.url),
-              videos: videoUrls,
-              originalFormData: {
-                ownerInfo: JSON.parse(JSON.stringify(data.ownerInfo)),
-                propertyInfo: JSON.parse(JSON.stringify(data.propertyInfo))
-              }
-            }
+            payload: submissionPayload
           })
           .select('id')
           .single();

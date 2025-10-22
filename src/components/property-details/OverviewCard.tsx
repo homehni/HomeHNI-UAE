@@ -17,7 +17,8 @@ import {
   Phone,
   Clock,
   Zap,
-  MapPin
+  MapPin,
+  Dumbbell
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -53,6 +54,9 @@ interface OverviewCardProps {
     security_deposit?: number;
     plot_area_unit?: string;
     amenities?: Record<string, unknown>;
+    // Land/Plot specific fields
+    road_width?: number;
+    boundary_wall?: string;
   };
 }
 
@@ -130,6 +134,13 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
                             property.property_type?.toLowerCase().includes('hostel') ||
                             property.property_type?.toLowerCase().includes('coliving');
 
+  // Check if property is Commercial
+  const isCommercialProperty = property.property_type?.toLowerCase().includes('commercial') ||
+                              property.property_type?.toLowerCase().includes('office') ||
+                              property.property_type?.toLowerCase().includes('retail') ||
+                              property.property_type?.toLowerCase().includes('warehouse') ||
+                              property.property_type?.toLowerCase().includes('showroom');
+
   const getIconForItem = (label: string) => {
     const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
       'Furnishing Status': Sofa,
@@ -161,6 +172,14 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   const getAmenityString = (key: string): string | undefined => {
     const a = property.amenities && typeof property.amenities === 'object' ? property.amenities as Record<string, unknown> : undefined;
     const v = a ? a[key] : undefined;
+    console.log(`OverviewCard getAmenityString(${key}):`, {
+      amenities: property.amenities,
+      amenitiesType: typeof property.amenities,
+      key,
+      value: v,
+      valueType: typeof v,
+      rawValue: v
+    });
     if (typeof v === 'string' && v.trim().length > 0) return v;
     if (typeof v === 'boolean') return v ? 'Yes' : 'No';
     return undefined;
@@ -237,7 +256,12 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { 
       icon: Droplets, 
       label: 'Water Supply', 
-      value: property.water_supply || 'Not specified' 
+      value: (() => {
+        const rawValue = property.water_supply || getAmenityString('waterSupply');
+        if (!rawValue || rawValue === 'Not specified') return 'Not specified';
+        // Format the value by replacing underscores with spaces and capitalizing
+        return rawValue.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+      })()
     },
     { 
       icon: Layers, 
@@ -260,28 +284,83 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
       value: getAmenityString('nonVegAllowed') || 'Not specified'
     },
     { 
+      icon: Dumbbell, 
+      label: 'Gym', 
+      value: getAmenityString('gym') || 'Not specified'
+    },
+    { 
       icon: Shield, 
-      label: 'Security', 
-      value: getSecurity() 
+      label: 'Gated Security', 
+      value: getAmenityString('gatedSecurity') || 'Not specified'
     },
     { 
       icon: Home, 
       label: 'Property Condition', 
       value: getAmenityString('currentPropertyCondition') || property.current_property_condition || 'Not specified' 
     },
+    // Land/Plot specific infrastructure fields
+    { 
+      icon: Zap, 
+      label: 'Electricity Connection', 
+      value: property.electricity_connection || 'Not specified' 
+    },
+    { 
+      icon: Droplets, 
+      label: 'Sewage Connection', 
+      value: (() => {
+        const rawValue = property.sewage_connection;
+        if (!rawValue || rawValue === 'Not specified') return 'Not specified';
+        // Format the value by replacing underscores with spaces and capitalizing
+        return rawValue.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+      })()
+    },
+    { 
+      icon: MapPin, 
+      label: 'Road Width', 
+      value: property.road_width ? `${property.road_width} ft.` : 'Not specified' 
+    },
+    { 
+      icon: Shield, 
+      label: 'Boundary Wall', 
+      value: property.boundary_wall ? property.boundary_wall.charAt(0).toUpperCase() + property.boundary_wall.slice(1) : 'Not specified' 
+    },
   ];
 
   const filteredOverviewItems = overviewItems.filter(item => {
     // Hide irrelevant items for Land/Plot
-    if (isPlotProperty && ['Bathroom','Furnishing Status','Floor','Non-Veg Allowed','Pet Allowed'].includes(item.label)) {
+    if (isPlotProperty && ['Washrooms','Furnishing Status','Floor','Non-Veg Allowed','Pet Allowed','Gym','Gated Security','Road Width','Boundary Wall'].includes(item.label)) {
       return false;
     }
     // Hide placeholders for PG/Hostel
     if (isPGHostelProperty && ['Bathroom','Floor'].includes(item.label)) {
       return false;
     }
-    return item.value !== 'Not specified' && item.value !== undefined;
+    // Hide irrelevant items for Commercial properties
+    if (isCommercialProperty && ['Washrooms','Non-Veg Allowed','Pet Allowed','Gated Security'].includes(item.label)) {
+      return false;
+    }
+    
+    // Hide amenities marked as "Not Available" for Commercial properties
+    if (isCommercialProperty && (item.value === 'Not Available' || item.value === 'not-available')) {
+      return false;
+    }
+    
+    const shouldShow = item.value !== 'Not specified' && item.value !== undefined;
+    console.log(`OverviewCard filtering ${item.label}:`, {
+      value: item.value,
+      shouldShow,
+      isPlotProperty,
+      isPGHostelProperty,
+      isCommercialProperty,
+      rawValue: item.value
+    });
+    return shouldShow;
   });
+  
+  console.log('OverviewCard final filtered items:', filteredOverviewItems.map(item => ({
+    label: item.label,
+    value: item.value
+  })));
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm">

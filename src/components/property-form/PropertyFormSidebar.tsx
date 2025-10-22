@@ -1,5 +1,6 @@
 import React from 'react';
-import { Home, MapPin, Building, Sparkles, Camera, Calendar, CheckCircle } from 'lucide-react';
+import { Home, MapPin, Building, Sparkles, Camera, Calendar, CheckCircle, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface SidebarStep {
   number: number;
@@ -13,12 +14,18 @@ interface PropertyFormSidebarProps {
   currentStep: number;
   completedSteps: number[];
   steps: { title: string; icon: React.ReactNode }[];
+  onPreview?: () => void;
+  draftId?: string | null;
+  isSavingDraft?: boolean;
 }
 
 export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
   currentStep,
   completedSteps,
-  steps
+  steps,
+  onPreview,
+  draftId,
+  isSavingDraft = false
 }) => {
   const sidebarSteps: SidebarStep[] = steps.map((step, index) => ({
     number: index + 1,
@@ -48,10 +55,25 @@ export const PropertyFormSidebar: React.FC<PropertyFormSidebarProps> = ({
 
   return (
     <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
-      {/* Logo/Header */}
+      {/* Logo/Header with Preview Button */}
       <div className="mb-4 p-2">
-        <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-          <Home className="w-5 h-5 text-white" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+            <Home className="w-5 h-5 text-white" />
+          </div>
+          {/* Preview Button */}
+          {currentStep !== 7 && onPreview && (
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={onPreview}
+              disabled={!draftId || isSavingDraft}
+              className="h-8 px-3 text-xs border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
+            >
+              <Eye className="h-3 w-3 mr-1" />
+              {isSavingDraft ? 'Saving...' : 'Preview'}
+            </Button>
+          )}
         </div>
       </div>
 

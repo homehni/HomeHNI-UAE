@@ -52,7 +52,11 @@ export const CommercialGalleryStep: React.FC<CommercialGalleryStepProps> = ({
   const form = useForm({
     resolver: zodResolver(commercialGallerySchema),
     defaultValues: {
-      images: initialData.categorizedImages ? {
+      images: initialData.categorized_images ? {
+        frontView: initialData.categorized_images.frontView || [],
+        interiorView: initialData.categorized_images.interiorView || [],
+        others: initialData.categorized_images.others || []
+      } : initialData.categorizedImages ? {
         frontView: initialData.categorizedImages.frontView || [],
         interiorView: initialData.categorizedImages.interiorView || [],
         others: initialData.categorizedImages.others || Array.isArray(initialData.images) ? initialData.images : []

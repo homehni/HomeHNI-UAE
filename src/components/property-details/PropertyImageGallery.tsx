@@ -18,6 +18,17 @@ export const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({ prop
   const [initialImageIndex, setInitialImageIndex] = useState(0);
   const { isFavorite, toggleFavorite } = useFavorites();
 
+  console.log('PropertyImageGallery received property:', {
+    id: property.id,
+    title: property.title,
+    images: property.images,
+    imagesType: typeof property.images,
+    imagesLength: Array.isArray(property.images) ? property.images.length : 'not array',
+    imagesContent: property.images,
+    firstImage: Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : 'no images'
+  });
+
+
   const handleImageClick = (index: number) => {
     setInitialImageIndex(index);
     setShowImageModal(true);

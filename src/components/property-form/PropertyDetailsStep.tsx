@@ -86,6 +86,8 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       ...initialData,
       // Keep existing fields like title, bhkType, etc.
       ...data,
+      // Map superBuiltUpArea to builtUpArea for compatibility with PropertyDraftService
+      builtUpArea: data.superBuiltUpArea,
       onMainRoad: data.onMainRoad || false,
       cornerProperty: data.cornerProperty || false
     } as PropertyDetails);

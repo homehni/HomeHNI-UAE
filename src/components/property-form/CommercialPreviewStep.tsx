@@ -48,9 +48,9 @@ export const CommercialPreviewStep: React.FC<CommercialPreviewStepProps> = ({
     console.log('formData:', formData);
     
     if (previewPropertyId) {
-      console.log('Opening property page:', `/property/${previewPropertyId}`);
-      // Open the specific property details page in a new tab
-      window.open(`/property/${previewPropertyId}`, '_blank');
+      console.log('Opening preview page:', `/buy/preview/${previewPropertyId}/detail`);
+      // Use the preview page instead of separate property page
+      window.open(`/buy/preview/${previewPropertyId}/detail`, '_blank');
     } else {
       console.log('Property submitted but not yet live. Navigating to property search.');
       // Navigate to property search page since property is not yet live

@@ -1,16 +1,23 @@
 import React from 'react';
 import { Building, MapPin, IndianRupee, Sparkles, Camera, FileText, Calendar, Home, CheckCircle, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface CommercialSidebarProps {
   currentStep: number;
   completedSteps: number[];
   onStepClick: (step: number) => void;
+  onPreview?: () => void;
+  draftId?: string | null;
+  isSavingDraft?: boolean;
 }
 
 export const CommercialSidebar: React.FC<CommercialSidebarProps> = ({
   currentStep,
   completedSteps,
-  onStepClick
+  onStepClick,
+  onPreview,
+  draftId,
+  isSavingDraft = false
 }) => {
   const steps = [
     { 
@@ -59,10 +66,25 @@ export const CommercialSidebar: React.FC<CommercialSidebarProps> = ({
 
   return (
     <div className="w-80 bg-white border-r border-gray-200 h-full p-3 flex-shrink-0">
-      {/* Logo/Header */}
+      {/* Logo/Header with Preview Button */}
       <div className="mb-4 p-2">
-        <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-          <Home className="w-5 h-5 text-white" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+            <Home className="w-5 h-5 text-white" />
+          </div>
+          {/* Preview Button */}
+          {currentStep !== 8 && onPreview && (
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={onPreview}
+              disabled={!draftId || isSavingDraft}
+              className="h-8 px-3 text-xs border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
+            >
+              <Eye className="h-3 w-3 mr-1" />
+              {isSavingDraft ? 'Saving...' : 'Preview'}
+            </Button>
+          )}
         </div>
       </div>
 

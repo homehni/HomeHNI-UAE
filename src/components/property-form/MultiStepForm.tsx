@@ -11,8 +11,10 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import { PropertyFormSidebar } from './PropertyFormSidebar';
 import { ScheduleStep } from './ScheduleStep';
 import { PreviewStep } from './PreviewStep';
-import { User, Home, MapPin, DollarSign, Sparkles, Camera, Calendar, CheckCircle } from 'lucide-react';
+import { User, Home, MapPin, DollarSign, Sparkles, Camera, Calendar, CheckCircle, Eye } from 'lucide-react';
 import { OwnerInfo, PropertyInfo } from '@/types/property';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { useToast } from '@/hooks/use-toast';
 
 interface MultiStepFormProps {
   onSubmit: (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo }) => void;
@@ -35,6 +37,10 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     targetStep,
     createdSubmissionId
   });
+
+  const { toast } = useToast();
+  const [draftId, setDraftId] = React.useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = React.useState(false);
 
   const {
     currentStep,
@@ -110,62 +116,102 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
     scrollToTop();
   }, [currentStep]);
 
+  // Function to save draft and proceed to next step
+  const saveDraftAndNext = async (stepData: any, stepNumber: number, formType: 'rental' | 'sale' | 'commercial' | 'land') => {
+    try {
+      setIsSavingDraft(true);
+      
+      // Prepare owner info for draft
+      const ownerData = {
+        owner_name: ownerInfo.fullName,
+        owner_email: ownerInfo.email,
+        owner_phone: ownerInfo.phoneNumber,
+        whatsapp_updates: ownerInfo.whatsappUpdates
+      };
+
+      // Save draft
+      const draft = await PropertyDraftService.saveFormData(draftId, stepData, stepNumber, formType);
+      
+      // Update owner info if not already set
+      if (stepNumber === 0) {
+        await PropertyDraftService.updateDraft(draft.id, ownerData);
+      }
+      
+      setDraftId(draft.id);
+      nextStep();
+      scrollToTop();
+      
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      
+      // Show user-friendly error message
+      const errorMessage = error instanceof Error ? error.message : "Failed to save draft. Please try again.";
+      
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive"
+      });
+      
+      // Still allow user to proceed to next step even if draft save fails
+      // This prevents blocking the user's progress
+      console.warn('Draft save failed, but allowing user to continue to next step');
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
+
+  // Function to open preview
+  const handlePreview = async () => {
+    if (!draftId) {
+      toast({
+        title: "No Preview Available",
+        description: "Please complete at least one step to preview your property.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const previewUrl = PropertyDraftService.generatePreviewUrl(draftId);
+    window.open(previewUrl, '_blank');
+  };
+
   const handleOwnerInfoNext = (data: any) => {
     updateOwnerInfo(data);
-    nextStep();
-    scrollToTop();
+    saveDraftAndNext(data, 0, 'rental'); // Step 0 for owner info
   };
 
   const handlePropertyDetailsNext = (data: any) => {
     updatePropertyDetails(data);
-    nextStep();
-    scrollToTop();
+    saveDraftAndNext(data, 1, 'rental');
   };
 
   const handleLocationDetailsNext = (data: any) => {
     updateLocationDetails(data);
-    nextStep();
-    scrollToTop();
+    saveDraftAndNext(data, 2, 'rental');
   };
 
-  const handleRentalDetailsNext = (data: any, amenitiesData?: any) => {
+  const handleRentalDetailsNext = async (data: any, amenitiesData?: any) => {
     updateRentalDetails(data);
     if (amenitiesData) {
       updateAmenities(amenitiesData);
+      // Also save amenities data to step 4
+      await PropertyDraftService.saveFormData(draftId, amenitiesData, 4, 'rental');
     }
-    nextStep();
-    scrollToTop();
+    saveDraftAndNext(data, 3, 'rental');
   };
 
   const handleAmenitiesNext = (data: any) => {
     updateAmenities(data);
-    nextStep();
-    scrollToTop();
+    saveDraftAndNext(data, 4, 'rental');
   };
 
   const handleGalleryNext = (data: any) => {
     console.log('Gallery step next - data received:', data);
     updateGallery(data);
-    
-    // Save complete form data including gallery to localStorage
-    const completeFormData = {
-      ownerInfo,
-      propertyDetails,
-      locationDetails,
-      rentalDetails,
-      amenities,
-      gallery: data, // Use the new gallery data
-      additionalInfo,
-      scheduleInfo,
-      currentStep: 6, // Moving to next step
-      completedSteps: [...completedSteps, 5],
-      formType: 'rental'
-    };
-    localStorage.setItem('rental-form-data', JSON.stringify(completeFormData));
-    console.log('Saved complete rental form data with gallery to localStorage:', completeFormData);
-    
-    nextStep();
-    scrollToTop();
+    saveDraftAndNext(data, 5, 'rental');
   };
 
   const handleScheduleSubmit = async (data: any) => {
@@ -207,6 +253,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
+
       {/* Three Column Layout */}
       <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Sidebar */}
@@ -215,6 +262,9 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
             currentStep={currentStep}
             completedSteps={completedSteps}
             steps={sidebarSteps}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
 
@@ -302,11 +352,14 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                 type="button" 
                 variant="outline" 
                 onClick={currentStep === 1 ? () => {} : prevStep}
-                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-2 sm:order-1"
+                className="h-10 sm:h-10 px-4 sm:px-6 w-full sm:w-auto order-3 sm:order-1"
                 disabled={currentStep === 1}
               >
                 Back
               </Button>
+              
+              {/* Preview Button - Moved to top left corner */}
+              
               <Button 
                 type="button" 
                 onClick={() => {
@@ -341,7 +394,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   
                   scrollToTop();
                 }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-3 font-semibold"
               >
                 {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
               </Button>

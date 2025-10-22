@@ -75,6 +75,9 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     room_cleaning: 'Room Cleaning',
     laundry: 'Laundry',
     warden_facility: 'Warden Facility',
+    // Land/Plot infrastructure fields
+    electricityConnection: 'Electricity Connection',
+    sewageConnection: 'Sewage Connection',
     // "What You Get" section amenities
     waterStorageFacility: 'Water Storage Facility',
     currentPropertyCondition: 'Property Condition'
@@ -103,6 +106,8 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
       'Park': TreePine,
       'Visitor Parking': Car,
       'Sewage Treatment': Droplets,
+      'Electricity Connection': Zap,
+      'Sewage Connection': Droplets,
     };
     return iconMap[amenity] || Home;
   };
@@ -125,6 +130,12 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
       const availableAmenities: Array<{name: string, icon: React.ComponentType<unknown>}> = [];
       Object.entries(amenities).forEach(([rawKey, value]) => {
         const key = String(rawKey);
+        
+        // Skip non-amenity fields that should be displayed elsewhere
+        if (['whoWillShow', 'currentPropertyCondition', 'directionsTip', 'secondaryNumber', 'who_will_show', 'current_property_condition', 'directions_tip', 'secondary_phone', 'nonVegAllowed', 'petAllowed', 'gym', 'gatedSecurity', 'non_veg_allowed', 'pet_allowed'].includes(key)) {
+          return;
+        }
+        
         const strVal = typeof value === 'string' ? value.toLowerCase().trim() : '';
         const truthy = (
           value === true ||
@@ -135,7 +146,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
             'full','partial','dg-backup','overhead-tank','underground-tank','borewell','excellent','good','average'
           ].includes(strVal)) ||
           // Show non-empty descriptive strings that aren't explicit negatives
-          (typeof value === 'string' && strVal.length > 0 && !['no','none','n/a','na','not available','false'].includes(strVal))
+          (typeof value === 'string' && strVal.length > 0 && !['no','none','n/a','na','not available','not-available','false'].includes(strVal))
         );
         if (truthy) {
           const mapped = amenityKeyMap[key];

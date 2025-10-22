@@ -16,6 +16,8 @@ import { PgHostelAmenitiesStep } from './PgHostelAmenitiesStep';
 import { PgHostelGalleryStep } from './PgHostelGalleryStep';
 import { PgHostelScheduleStep } from './PgHostelScheduleStep';
 import { PGHostelFormData, OwnerInfo } from '@/types/property';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { Eye } from 'lucide-react';
 
 // Define local interfaces to match the components
 interface LocalOwnerInfo {
@@ -42,6 +44,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   createdSubmissionId
 }) => {
   const { toast } = useToast();
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   // Skip owner info and property info - start from room details
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -132,6 +136,30 @@ const [propertyInfo, setPropertyInfo] = useState({
     endTime: '',
     availableAllDay: true
   });
+
+  // Handle preview functionality
+  const handlePreview = async () => {
+    if (!draftId) {
+      toast({
+        title: "No Draft Available",
+        description: "Please save your progress first before previewing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Open preview in new tab using the unified preview page
+      window.open(`/buy/preview/${draftId}/detail`, '_blank');
+    } catch (error) {
+      console.error('Error opening preview:', error);
+      toast({
+        title: "Preview Error",
+        description: "Failed to open preview. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -461,7 +489,10 @@ const [propertyInfo, setPropertyInfo] = useState({
             <div className="w-80 flex-shrink-0">
               <PgHostelSidebar 
                 currentStep={7} // All steps completed
-                completedSteps={[1, 2, 3, 4, 5, 6, 7]} 
+                completedSteps={[1, 2, 3, 4, 5, 6, 7]}
+                onPreview={handlePreview}
+                draftId={draftId}
+                isSavingDraft={isSavingDraft}
               />
             </div>
 
@@ -495,7 +526,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                       </Button>
                       <Button 
                         type="button" 
-                        onClick={() => window.open(`/property/${createdSubmissionId}`, '_blank')} 
+                        onClick={() => window.open(`/buy/preview/${createdSubmissionId}/detail`, '_blank')} 
                         disabled={isSubmitting}
                         className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
                       >
@@ -732,7 +763,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                     </Button>
                     <Button 
                       type="button" 
-                      onClick={() => window.open(`/property/${createdSubmissionId}`, '_blank')} 
+                      onClick={() => window.open(`/buy/preview/${createdSubmissionId}/detail`, '_blank')} 
                       disabled={isSubmitting}
                       className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
                     >
@@ -937,7 +968,10 @@ const [propertyInfo, setPropertyInfo] = useState({
         <div className="w-80 flex-shrink-0">
           <PgHostelSidebar 
             currentStep={currentStep} 
-            completedSteps={completedSteps} 
+            completedSteps={completedSteps}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
         

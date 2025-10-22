@@ -40,7 +40,7 @@ export const PropertySuccessNotification: React.FC<PropertySuccessNotificationPr
             {/* Action Button */}
             <Button
               size="sm"
-              onClick={() => navigate(`/property/${propertyId}?refresh=true`)}
+              onClick={() => navigate(`/buy/preview/${propertyId}/detail?refresh=true`)}
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <Eye className="w-4 h-4 mr-2" />

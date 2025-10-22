@@ -60,7 +60,24 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
 
   const onSubmit = (data: LandPlotDetailsForm) => {
     console.log('Form submission data:', data);
-    onNext(data);
+    
+    // Map listingType to landType for the database
+    const landTypeMap: Record<string, string> = {
+      'Industrial land': 'industrial',
+      'Commercial land': 'commercial', 
+      'Agricultural Land': 'agricultural'
+    };
+    
+    const landType = landTypeMap[listingType || ''] || 'industrial';
+    
+    // Add landType to the form data (no propertyType needed for Land/Plot)
+    const formDataWithType = {
+      ...data,
+      landType: landType
+    };
+    
+    console.log('Enhanced form data:', formDataWithType);
+    onNext(formDataWithType as any);
   };
 
   return (
@@ -69,7 +86,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
         <h2 className="text-2xl font-semibold text-red-600 mb-2">Land/Plot Details</h2>
       </div>
 
-      <form onSubmit={handleSubmit(onNext)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Property Title */}
           {/* <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700">

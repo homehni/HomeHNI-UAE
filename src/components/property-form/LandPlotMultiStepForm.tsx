@@ -19,6 +19,9 @@ import { CommercialLandSuccessStep } from './CommercialLandSuccessStep';
 import { Badge } from '@/components/ui/badge';
 import { OwnerInfo, ScheduleInfo, PropertyGallery } from '@/types/property';
 import { LandPlotFormData, LandPlotDetails, LandPlotLocationDetails, LandPlotSaleDetails, LandPlotAmenities } from '@/types/landPlotProperty';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { useToast } from '@/hooks/use-toast';
+import { Eye } from 'lucide-react';
 
 interface LandPlotMultiStepFormProps {
   onSubmit: (data: LandPlotFormData) => void;
@@ -37,6 +40,9 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
   createdSubmissionId,
   listingType = 'Industrial land'
 }) => {
+  const { toast } = useToast();
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -72,6 +78,30 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     getFormData,
     isStepValid
   } = useLandPlotPropertyForm();
+
+  // Handle preview functionality
+  const handlePreview = async () => {
+    if (!draftId) {
+      toast({
+        title: "No Draft Available",
+        description: "Please save your progress first before previewing.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Open preview in new tab using the unified preview page
+      window.open(`/buy/preview/${draftId}/detail`, '_blank');
+    } catch (error) {
+      console.error('Error opening preview:', error);
+      toast({
+        title: "Preview Error",
+        description: "Failed to open preview. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   console.log('LandPlotMultiStepForm currentStep:', currentStep);
 
@@ -127,34 +157,169 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     scrollToTop();
   }, [currentStep]);
 
-  const handlePlotDetailsNext = (data: unknown) => {
-    updatePlotDetails(data as Partial<LandPlotDetails>);
-    nextStep();
-    scrollToTop();
+  const handlePlotDetailsNext = async (data: unknown) => {
+    if (isSavingDraft) return;
+    
+    setIsSavingDraft(true);
+    try {
+      console.log('Land/Plot - Saving draft for step:', currentStep, 'with data:', data);
+      
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        data,
+        1, // Property Details step
+        'land'
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Land/Plot - Draft saved successfully with ID:', savedDraft.id);
+      }
+      
+      updatePlotDetails(data as Partial<LandPlotDetails>);
+      nextStep();
+      scrollToTop();
+    } catch (error) {
+      console.error('Land/Plot - Failed to save draft:', error);
+      // Still proceed to next step even if draft save fails
+      updatePlotDetails(data as Partial<LandPlotDetails>);
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
   };
 
-  const handleLocationDetailsNext = (data: unknown) => {
-    updateLocationDetails(data as Partial<LandPlotLocationDetails>);
-    nextStep();
-    scrollToTop();
+  const handleLocationDetailsNext = async (data: unknown) => {
+    if (isSavingDraft) return;
+    
+    setIsSavingDraft(true);
+    try {
+      console.log('Land/Plot - Saving draft for step:', currentStep, 'with data:', data);
+      
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        data,
+        2, // Location Details step
+        'land'
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Land/Plot - Draft saved successfully with ID:', savedDraft.id);
+      }
+      
+      updateLocationDetails(data as Partial<LandPlotLocationDetails>);
+      nextStep();
+      scrollToTop();
+    } catch (error) {
+      console.error('Land/Plot - Failed to save draft:', error);
+      // Still proceed to next step even if draft save fails
+      updateLocationDetails(data as Partial<LandPlotLocationDetails>);
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
   };
 
-  const handleSaleDetailsNext = (data: unknown) => {
-    updateSaleDetails(data as Partial<LandPlotSaleDetails>);
-    nextStep();
-    scrollToTop();
+  const handleSaleDetailsNext = async (data: unknown) => {
+    if (isSavingDraft) return;
+    
+    setIsSavingDraft(true);
+    try {
+      console.log('Land/Plot - Saving draft for step:', currentStep, 'with data:', data);
+      
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        data,
+        3, // Sale Details step
+        'land'
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Land/Plot - Draft saved successfully with ID:', savedDraft.id);
+      }
+      
+      updateSaleDetails(data as Partial<LandPlotSaleDetails>);
+      nextStep();
+      scrollToTop();
+    } catch (error) {
+      console.error('Land/Plot - Failed to save draft:', error);
+      // Still proceed to next step even if draft save fails
+      updateSaleDetails(data as Partial<LandPlotSaleDetails>);
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
   };
 
-  const handleAmenitiesNext = (data: unknown) => {
-    updateAmenities(data as Partial<LandPlotAmenities>);
-    nextStep();
-    scrollToTop();
+  const handleAmenitiesNext = async (data: unknown) => {
+    if (isSavingDraft) return;
+    
+    setIsSavingDraft(true);
+    try {
+      console.log('Land/Plot - Saving draft for step:', currentStep, 'with data:', data);
+      
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        data,
+        4, // Amenities step
+        'land'
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Land/Plot - Draft saved successfully with ID:', savedDraft.id);
+      }
+      
+      updateAmenities(data as Partial<LandPlotAmenities>);
+      nextStep();
+      scrollToTop();
+    } catch (error) {
+      console.error('Land/Plot - Failed to save draft:', error);
+      // Still proceed to next step even if draft save fails
+      updateAmenities(data as Partial<LandPlotAmenities>);
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
   };
 
-  const handleGalleryNext = (data: unknown) => {
-    updateGallery(data as Partial<PropertyGallery>);
-    nextStep();
-    scrollToTop();
+  const handleGalleryNext = async (data: unknown) => {
+    if (isSavingDraft) return;
+    
+    setIsSavingDraft(true);
+    try {
+      console.log('Land/Plot - Saving draft for step:', currentStep, 'with data:', data);
+      
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        data,
+        5, // Gallery step
+        'land'
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Land/Plot - Draft saved successfully with ID:', savedDraft.id);
+      }
+      
+      updateGallery(data as PropertyGallery);
+      nextStep();
+      scrollToTop();
+    } catch (error) {
+      console.error('Land/Plot - Failed to save draft:', error);
+      // Still proceed to next step even if draft save fails
+      updateGallery(data as PropertyGallery);
+      nextStep();
+      scrollToTop();
+    } finally {
+      setIsSavingDraft(false);
+    }
   };
 
   const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
@@ -196,7 +361,8 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   const handlePreviewListing = () => {
     if (createdSubmissionId) {
-      window.open(`/property/${createdSubmissionId}`, '_blank');
+      // Use the preview page instead of separate property page
+      window.open(`/buy/preview/${createdSubmissionId}/detail`, '_blank');
     }
   };
 
@@ -244,6 +410,9 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
           <LandPlotSidebar 
             currentStep={currentStep}
             completedSteps={completedSteps}
+            onPreview={handlePreview}
+            draftId={draftId}
+            isSavingDraft={isSavingDraft}
           />
         </div>
 
