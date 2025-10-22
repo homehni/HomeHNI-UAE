@@ -471,54 +471,36 @@ const PropertySearch = () => {
           )}
         </div>
         
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              className="w-full justify-between text-left font-normal h-10"
-            >
-              <span className="truncate">
-                {filters.propertyType.length === 0 || filters.propertyType[0] === 'ALL'
-                  ? 'Select Property Type'
-                  : filters.propertyType[0]}
-              </span>
-              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[280px] p-0" align="start">
-            <div className="border-b px-3 py-2">
-              <h4 className="font-semibold text-sm">Select Property Type</h4>
-            </div>
-            <ScrollArea className="h-[300px]">
-              <RadioGroup
-                value={filters.propertyType.length === 0 ? 'ALL' : filters.propertyType[0]}
-                onValueChange={(value) => {
+        <div className="space-y-2">
+          {propertyTypes.map(type => (
+            <div key={type} className="flex items-center space-x-2">
+              <Checkbox
+                id={`property-type-${type}`}
+                checked={
+                  (filters.propertyType.length === 0 && type === 'ALL') ||
+                  (filters.propertyType.length > 0 && filters.propertyType[0] === type)
+                }
+                onCheckedChange={(checked) => {
                   preserveScroll(() => {
-                    if (value === 'ALL') {
+                    if (type === 'ALL') {
                       updateFilter('propertyType', []);
+                    } else if (checked) {
+                      updateFilter('propertyType', [type]);
                     } else {
-                      updateFilter('propertyType', [value]);
+                      updateFilter('propertyType', []);
                     }
                   });
                 }}
-                className="p-3"
+              />
+              <label
+                htmlFor={`property-type-${type}`}
+                className="text-sm cursor-pointer flex-1"
               >
-                {propertyTypes.map(type => (
-                  <div key={type} className="flex items-center space-x-3 py-2">
-                    <RadioGroupItem value={type} id={`property-type-${type}`} />
-                    <label
-                      htmlFor={`property-type-${type}`}
-                      className="text-sm font-normal cursor-pointer flex-1"
-                    >
-                      {type}
-                    </label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </ScrollArea>
-          </PopoverContent>
-        </Popover>
+                {type}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Show separator only if there's content after Property Type */}
