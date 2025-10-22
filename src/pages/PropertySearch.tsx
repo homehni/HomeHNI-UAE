@@ -14,6 +14,9 @@ import PropertyCard from '@/components/PropertyCard';
 import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon, Lock, Unlock } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerTrigger } from '@/components/ui/drawer';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { ChevronDown } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -467,30 +470,55 @@ const PropertySearch = () => {
             </Button>
           )}
         </div>
-        <div className="space-y-2">
-          {propertyTypes.map(type => (
-            <button
-              key={type}
-              onClick={() => {
-                preserveScroll(() => {
-                  if (type === 'ALL') {
-                    updateFilter('propertyType', []);
-                  } else {
-                    updateFilter('propertyType', [type]);
-                  }
-                });
-              }}
-              className={`w-full text-left px-3 py-2 rounded-full text-sm font-medium transition-colors ${
-                (filters.propertyType.length === 0 && type === 'ALL') ||
-                (filters.propertyType.length > 0 && filters.propertyType[0] === type)
-                  ? 'bg-primary text-primary-foreground shadow'
-                  : 'bg-muted/60 hover:bg-muted/80 text-foreground'
-              }`}
+        
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              className="w-full justify-between text-left font-normal h-10"
             >
-              {type}
-            </button>
-          ))}
-        </div>
+              <span className="truncate">
+                {filters.propertyType.length === 0 || filters.propertyType[0] === 'ALL'
+                  ? 'Select Property Type'
+                  : filters.propertyType[0]}
+              </span>
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[280px] p-0" align="start">
+            <div className="border-b px-3 py-2">
+              <h4 className="font-semibold text-sm">Select Property Type</h4>
+            </div>
+            <ScrollArea className="h-[300px]">
+              <RadioGroup
+                value={filters.propertyType.length === 0 ? 'ALL' : filters.propertyType[0]}
+                onValueChange={(value) => {
+                  preserveScroll(() => {
+                    if (value === 'ALL') {
+                      updateFilter('propertyType', []);
+                    } else {
+                      updateFilter('propertyType', [value]);
+                    }
+                  });
+                }}
+                className="p-3"
+              >
+                {propertyTypes.map(type => (
+                  <div key={type} className="flex items-center space-x-3 py-2">
+                    <RadioGroupItem value={type} id={`property-type-${type}`} />
+                    <label
+                      htmlFor={`property-type-${type}`}
+                      className="text-sm font-normal cursor-pointer flex-1"
+                    >
+                      {type}
+                    </label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </ScrollArea>
+          </PopoverContent>
+        </Popover>
       </div>
 
       {/* Show separator only if there's content after Property Type */}
