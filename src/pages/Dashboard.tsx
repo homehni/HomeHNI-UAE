@@ -1433,11 +1433,24 @@ export const Dashboard: React.FC = () => {
                     console.log('🔍 Dashboard getImageUrl - Full property object:', property);
                     
                     if (property.images && property.images.length > 0) {
-                      const firstImage = property.images[0];
+                      let firstImage = property.images[0];
                       console.log('🔍 Dashboard getImageUrl - First image:', firstImage, 'Type:', typeof firstImage);
+                      
                       if (typeof firstImage === 'string') {
+                        // Clean up double-stringified URLs (remove extra quotes)
+                        firstImage = firstImage.trim();
+                        if (firstImage.startsWith('"') && firstImage.endsWith('"')) {
+                          firstImage = firstImage.slice(1, -1);
+                        }
+                        // Handle escaped quotes
+                        if (firstImage.startsWith('\\"') && firstImage.endsWith('\\"')) {
+                          firstImage = firstImage.slice(2, -2);
+                        }
+                        // Remove any remaining backslashes from escaped quotes
+                        firstImage = firstImage.replace(/\\"/g, '"');
+                        
                         const result = firstImage.startsWith('http') ? firstImage : firstImage;
-                        console.log('🔍 Dashboard getImageUrl - String result:', result);
+                        console.log('🔍 Dashboard getImageUrl - Cleaned string result:', result);
                         return result;
                       }
                       if (firstImage && typeof firstImage === 'object' && 'url' in firstImage) {
