@@ -1366,26 +1366,26 @@ export const Dashboard: React.FC = () => {
         )}
 
         {/* Main Content Area */}
-        <div className="flex-1 p-4 lg:p-6 lg:ml-0 min-h-screen">
+        <div className="flex-1 p-3 sm:p-4 lg:p-6 lg:ml-0 min-h-screen">
           {/* Content based on sidebar selection */}
           {activeSidebarItem === 'properties' && (
             <div className="space-y-6">
               {/* Header */}
-              <div className="mb-6">
-                <h1 className="text-2xl font-semibold text-gray-900">
+              <div className="mb-4 sm:mb-6">
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 break-words">
                 You have already posted {properties.length} properties on Home HNI
                 </h1>
               </div>
 
               {/* Filter Tabs */}
-              <div className="mb-6">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4 gap-4">
-                  <div className="flex flex-wrap gap-1">
+              <div className="mb-4 sm:mb-6">
+                <div className="flex flex-col gap-3 sm:gap-4">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {['All', 'Rent', 'Sale', 'Commercial-Rent', 'Commercial-Sale', 'PG/Hostel', 'Flatmates', 'Land/Plot'].map((filter) => (
                       <button
                         key={filter}
                         onClick={() => setSelectedFilter(filter)}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                        className={`px-2.5 sm:px-3 lg:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
                           selectedFilter === filter
                             ? 'bg-red-500 text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
@@ -1395,8 +1395,8 @@ export const Dashboard: React.FC = () => {
                       </button>
                     ))}
                   </div>
-                  <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Only Active</span>
+                  <div className="flex items-center space-x-2 self-end">
+                  <span className="text-xs sm:text-sm text-gray-600 whitespace-nowrap">Only Active</span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input 
                       type="checkbox" 
@@ -1414,17 +1414,17 @@ export const Dashboard: React.FC = () => {
             {loading ? (
               <div className="text-center py-8">Loading properties...</div>
             ) : filteredProperties.length === 0 ? (
-                <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                  <Building className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
-                  <p className="text-gray-500 mb-4">Start by adding your first property listing</p>
-                  <Button onClick={() => navigate('/post-property')}>
+                <div className="text-center py-8 sm:py-12 bg-white rounded-lg border border-gray-200 px-4">
+                  <Building className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-gray-400 mb-3 sm:mb-4" />
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
+                  <p className="text-sm sm:text-base text-gray-500 mb-3 sm:mb-4">Start by adding your first property listing</p>
+                  <Button onClick={() => navigate('/post-property')} className="text-sm">
                     <Plus className="h-4 w-4 mr-2" />
                     List Your First Property
                   </Button>
                 </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                 {filteredProperties.map((property) => {
                   const getImageUrl = () => {
                     console.log('🔍 Dashboard getImageUrl - Property:', property.title, 'Images:', property.images);
@@ -1484,7 +1484,7 @@ export const Dashboard: React.FC = () => {
                   return (
                     <Card key={property.id} className={`relative bg-white border ${property.is_premium ? 'border-amber-200 ring-2 ring-amber-300 hover:ring-4 hover:ring-amber-400' : 'border-gray-200'} shadow-sm hover:shadow-md transition-shadow overflow-hidden`}>
                       {/* Status Badge - Top Left */}
-                      <div className={`absolute top-2 left-2 z-20 px-2 py-1 text-xs font-medium rounded text-white ${
+                      <div className={`absolute top-1.5 sm:top-2 left-1.5 sm:left-2 z-20 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded text-white ${
                         (property.rental_status || 'available') === 'available' 
                           ? 'bg-gray-500' 
                           : 'bg-gray-500'
@@ -1494,9 +1494,9 @@ export const Dashboard: React.FC = () => {
 
                       {/* Premium Badge - Bottom right corner if premium */}
                       {property.is_premium && (
-                        <div className="pointer-events-none absolute bottom-2 right-2 z-20">
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/95 text-amber-950 shadow px-2 py-0.5 text-[10px] sm:text-xs">
-                            <Medal className="w-3 h-3" />
+                        <div className="pointer-events-none absolute bottom-1.5 sm:bottom-2 right-1.5 sm:right-2 z-20">
+                          <span className="inline-flex items-center gap-0.5 sm:gap-1 rounded-full bg-amber-400/95 text-amber-950 shadow px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] lg:text-xs">
+                            <Medal className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                             Premium
                           </span>
                         </div>
@@ -1504,7 +1504,7 @@ export const Dashboard: React.FC = () => {
 
                       {/* Diagonal Ribbon - Top Right Corner */}
                       <div className="absolute top-0 right-0 z-10">
-                        <div className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-xs font-medium py-1 px-6 transform rotate-45 translate-x-3 translate-y-2`}>
+                        <div className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'} text-white text-[9px] sm:text-xs font-medium py-0.5 sm:py-1 px-4 sm:px-6 transform rotate-45 translate-x-2 sm:translate-x-3 translate-y-1.5 sm:translate-y-2`}>
                           For {property.listing_type === 'rent' ? 'Rent' : 'Buy'}
                         </div>
                       </div>
@@ -1513,38 +1513,38 @@ export const Dashboard: React.FC = () => {
                         {/* Horizontal Layout: Text Left, Image Right */}
                         <div className="flex items-center">
                           {/* Left Side - Text Content */}
-                          <div className="flex-1 p-3">
+                          <div className="flex-1 p-2 sm:p-3 min-w-0">
                             {/* Title with External Link Icon */}
-                            <div className="mb-2 mt-8">
+                            <div className="mb-1.5 sm:mb-2 mt-6 sm:mt-8">
                               <div 
-                                className="inline-flex items-center gap-1 cursor-pointer group"
+                                className="inline-flex items-center gap-1 cursor-pointer group max-w-full"
                                 title={property.title}
                                 onClick={() => handleViewProperty(property)}
                               >
-                                <h3 className="font-medium text-gray-800 text-sm leading-tight truncate hover:text-red-500 transition-colors">
+                                <h3 className="font-medium text-gray-800 text-xs sm:text-sm leading-tight truncate hover:text-red-500 transition-colors">
                                   {property.title}
                                 </h3>
-                                <svg className="w-3 h-3 text-gray-400 group-hover:text-red-500 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-400 group-hover:text-red-500 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
                               </div>
                             </div>
                             
-                            <div className="text-xs text-gray-500 mb-1">
+                            <div className="text-[10px] sm:text-xs text-gray-500 mb-0.5 sm:mb-1 truncate">
                               {property.locality || property.city}
                             </div>
-                            <div className="text-sm text-gray-600 mb-3">
-                              <span>{property.listing_type === 'rent' ? 'Rent:' : 'Price:'} </span>
-                              <span className="font-medium text-gray-900">₹{property.expected_price.toLocaleString()}</span>
+                            <div className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">
+                              <span className="text-[10px] sm:text-xs">{property.listing_type === 'rent' ? 'Rent:' : 'Price:'} </span>
+                              <span className="font-medium text-gray-900 text-xs sm:text-sm">₹{property.expected_price.toLocaleString()}</span>
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-2 mb-3">
+                            <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-3">
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleEditProperty(property)}
-                                className="text-xs px-3 py-1 h-7 font-normal"
+                                className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 h-6 sm:h-7 font-normal"
                               >
                                 Edit
                               </Button>
@@ -1552,7 +1552,7 @@ export const Dashboard: React.FC = () => {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleTogglePropertyStatus(property)}
-                                className={`text-xs px-3 py-1 h-7 font-normal ${
+                                className={`text-[10px] sm:text-xs px-2 sm:px-3 py-1 h-6 sm:h-7 font-normal whitespace-nowrap ${
                                   (property.rental_status || 'available') === 'available' 
                                     ? 'text-orange-600 hover:text-orange-700' 
                                     : 'text-green-600 hover:text-green-700'
@@ -1566,9 +1566,9 @@ export const Dashboard: React.FC = () => {
                             {!property.is_premium && (
                               <Button
                                 onClick={() => handleUpgradeProperty(property)}
-                                className="bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 px-3 h-7 font-normal w-auto mb-3"
+                                className="bg-red-500 hover:bg-red-600 text-white text-[10px] sm:text-xs py-1 sm:py-1.5 px-2 sm:px-3 h-6 sm:h-7 font-normal w-auto mb-2 sm:mb-3"
                               >
-                                <Medal className="w-3 h-3 mr-1" />
+                                <Medal className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />
                                 Go Premium
                               </Button>
                             )}
@@ -1576,7 +1576,7 @@ export const Dashboard: React.FC = () => {
                           </div>
 
                           {/* Right Side - Image Area */}
-                          <div className="flex-shrink-0 ml-3 w-24 h-24 bg-white rounded-md flex items-center justify-center pr-3">
+                          <div className="flex-shrink-0 ml-2 sm:ml-3 w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-md flex items-center justify-center pr-2 sm:pr-3">
                             {(property.images && property.images.length > 0) ? (
                               <>
                                 {console.log('🔍 Rendering image for:', property.title, 'URL:', getImageUrl())}
