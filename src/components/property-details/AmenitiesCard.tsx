@@ -82,12 +82,12 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     cooking_allowed: 'Cooking Allowed',
     common_tv: 'Common TV',
     mess: 'Mess',
+    // Land/Plot specific amenities
+    electricityConnection: 'Electricity Connection',
+    sewageConnection: 'Sewage Connection',
     room_cleaning: 'Room Cleaning',
     laundry: 'Laundry',
     warden_facility: 'Warden Facility',
-    // Land/Plot infrastructure fields
-    electricityConnection: 'Electricity Connection',
-    sewageConnection: 'Sewage Connection',
     // "What You Get" section amenities
     waterStorageFacility: 'Water Storage Facility',
     currentPropertyCondition: 'Property Condition'
@@ -154,7 +154,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
         const key = String(rawKey);
         
         // Skip non-amenity fields that should be displayed elsewhere
-        if (['whoWillShow', 'currentPropertyCondition', 'directionsTip', 'secondaryNumber', 'who_will_show', 'current_property_condition', 'directions_tip', 'secondary_phone', 'nonVegAllowed', 'petAllowed', 'gym', 'gatedSecurity', 'non_veg_allowed', 'pet_allowed'].includes(key)) {
+        if (['whoWillShow', 'currentPropertyCondition', 'directionsTip', 'secondaryNumber', 'who_will_show', 'current_property_condition', 'directions_tip', 'secondary_phone', 'nonVegAllowed', 'petAllowed', 'gym', 'gatedSecurity', 'non_veg_allowed', 'pet_allowed', 'parking'].includes(key)) {
           return;
         }
         
@@ -165,7 +165,9 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
           value === '1' ||
           (typeof value === 'string' && [
             'yes','true','y','included','available','daily','bike','car','both',
-            'full','partial','dg-backup','overhead-tank','underground-tank','borewell','excellent','good','average'
+            'full','partial','dg-backup','overhead-tank','underground-tank','borewell','excellent','good','average',
+            '24x7-security','daytime-security','covered','open','guard','cctv',
+            'septic-tank','municipal','three-phase','single-phase'
           ].includes(strVal)) ||
           // Show non-empty descriptive strings that aren't explicit negatives
           (typeof value === 'string' && strVal.length > 0 && !['no','none','n/a','na','not available','not-available','false'].includes(strVal))
@@ -182,9 +184,72 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
             const powerBackupMap: Record<string, string> = {
               'full': 'Full Power Backup',
               'partial': 'Partial Power Backup',
-              'dg-backup': 'DG Backup'
+              'dg-backup': 'DG Backup',
+              'available': 'Power Backup',
+              'not-available': 'No Power Backup'
             };
             displayName = powerBackupMap[value] || displayName;
+          }
+          
+          if (key === 'waterStorageFacility' && typeof value === 'string') {
+            const waterStorageMap: Record<string, string> = {
+              'overhead-tank': 'Overhead Tank',
+              'underground-tank': 'Underground Tank',
+              'both': 'Both Overhead & Underground',
+              'none': 'No Storage',
+              'tank': 'Water Tank',
+              'borewell': 'Borewell'
+            };
+            displayName = waterStorageMap[value] || displayName;
+          }
+          
+          if (key === 'security' && typeof value === 'string') {
+            const securityMap: Record<string, string> = {
+              '24x7-security': '24x7 Security',
+              'daytime-security': 'Daytime Security',
+              'none': 'No Security',
+              'guard': 'Security Guard',
+              'cctv': 'CCTV',
+              'both': 'Guard & CCTV'
+            };
+            displayName = securityMap[value] || displayName;
+          }
+          
+          if (key === 'lift' && typeof value === 'string') {
+            const liftMap: Record<string, string> = {
+              'available': 'Lift',
+              'not-available': 'No Lift'
+            };
+            displayName = liftMap[value] || displayName;
+          }
+          
+          if (key === 'parking' && typeof value === 'string') {
+            const parkingMap: Record<string, string> = {
+              'covered': 'Covered Parking',
+              'open': 'Open Parking',
+              'none': 'No Parking'
+            };
+            displayName = parkingMap[value] || displayName;
+          }
+          
+          if (key === 'electricityConnection' && typeof value === 'string') {
+            const electricityMap: Record<string, string> = {
+              'available': 'Electricity Connection',
+              'not-available': 'No Electricity',
+              'three-phase': 'Three Phase Connection',
+              'single-phase': 'Single Phase Connection'
+            };
+            displayName = electricityMap[value] || displayName;
+          }
+          
+          if (key === 'sewageConnection' && typeof value === 'string') {
+            const sewageMap: Record<string, string> = {
+              'septic-tank': 'Septic Tank',
+              'municipal': 'Municipal Connection',
+              'not-available': 'No Sewage Connection',
+              'available': 'Sewage Connection'
+            };
+            displayName = sewageMap[value] || displayName;
           }
           
           availableAmenities.push({

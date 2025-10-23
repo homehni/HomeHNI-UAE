@@ -257,7 +257,42 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Ownership', value: formatOwnership(property.owner_role) },
     { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
     { label: 'Water Connection', value: property.water_supply || 'Not specified' },
-    { label: 'Electricity', value: property.power_backup || 'Available' },
+    { label: 'Electricity', value: (() => {
+        // Check both direct property field and amenities object
+        const directValue = (property as any).electricity_connection;
+        const amenityValue = property.amenities?.electricityConnection;
+        const value = directValue || amenityValue;
+        
+        if (!value) return 'Not specified';
+        
+        // Map values to user-friendly names
+        const electricityMap: Record<string, string> = {
+          'available': 'Available',
+          'not-available': 'Not Available',
+          'three-phase': 'Three Phase',
+          'single-phase': 'Single Phase'
+        };
+        
+        return electricityMap[value] || value.charAt(0).toUpperCase() + value.slice(1);
+      })() },
+    { label: 'Sewage Connection', value: (() => {
+        // Check both direct property field and amenities object
+        const directValue = (property as any).sewage_connection;
+        const amenityValue = property.amenities?.sewageConnection;
+        const value = directValue || amenityValue;
+        
+        if (!value) return 'Not specified';
+        
+        // Map values to user-friendly names
+        const sewageMap: Record<string, string> = {
+          'septic-tank': 'Septic Tank',
+          'municipal': 'Municipal Connection',
+          'available': 'Available',
+          'not-available': 'Not Available'
+        };
+        
+        return sewageMap[value] || value.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+      })() },
     { label: 'Registration', value: property.registration_status || 'Not specified' },
     { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
     { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
@@ -426,6 +461,45 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
                   bathrooms: 'Bathrooms',
                   balconies: 'Balconies'
                 };
+
+                // Map values to display names for specific amenities
+                const amenityValueMappings: Record<string, Record<string, string>> = {
+                  waterStorageFacility: {
+                    'overhead-tank': 'Overhead Tank',
+                    'underground-tank': 'Underground Tank',
+                    'both': 'Both Overhead & Underground',
+                    'none': 'No Storage',
+                    'tank': 'Water Tank',
+                    'borewell': 'Borewell'
+                  },
+                  security: {
+                    '24x7-security': '24x7 Security',
+                    'daytime-security': 'Daytime Security',
+                    'none': 'No Security',
+                    'guard': 'Security Guard',
+                    'cctv': 'CCTV',
+                    'both': 'Guard & CCTV'
+                  },
+                  powerBackup: {
+                    'available': 'Available',
+                    'not-available': 'Not Available'
+                  },
+                  lift: {
+                    'available': 'Available',
+                    'not-available': 'Not Available'
+                  },
+                  parking: {
+                    'covered': 'Covered Parking',
+                    'open': 'Open Parking',
+                    'none': 'No Parking'
+                  },
+                  currentPropertyCondition: {
+                    'excellent': 'Excellent',
+                    'good': 'Good',
+                    'average': 'Average',
+                    'below-average': 'Below Average'
+                  }
+                };
                 
                 const displayName = amenityDisplayNames[key] || key.replace(/([A-Z])/g, ' $1').trim();
                 let displayValue = '';
@@ -433,7 +507,10 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
                 if (typeof value === 'boolean') {
                   displayValue = value ? 'Yes' : 'No';
                 } else if (typeof value === 'string') {
-                  if (key === 'parking') {
+                  // Check if we have a specific mapping for this amenity value
+                  if (amenityValueMappings[key] && amenityValueMappings[key][value]) {
+                    displayValue = amenityValueMappings[key][value];
+                  } else if (key === 'parking') {
                     if (value === 'none') return null;
                     if (value === 'bike') displayValue = 'Bike';
                     else if (value === 'car') displayValue = 'Car';

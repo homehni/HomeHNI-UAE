@@ -748,6 +748,11 @@ export const PostProperty: React.FC = () => {
         gym: ((data.propertyInfo as any)?.amenities?.gym) || null,
         gated_security: ((data.propertyInfo as any)?.amenities?.gatedSecurity) || null,
         lift: ((data.propertyInfo as any)?.amenities?.lift) || null,
+        water_storage_facility: ((data.propertyInfo as any)?.amenities?.waterStorageFacility) || null,
+        security: ((data.propertyInfo as any)?.amenities?.security) || null,
+        // Land/Plot specific infrastructure fields
+        electricity_connection: ((data.propertyInfo as any)?.amenities?.electricityConnection) || null,
+        sewage_connection: ((data.propertyInfo as any)?.amenities?.sewageConnection) || null,
         // Property age mapping
         property_age: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,
         // Add owner information directly to properties table
@@ -815,6 +820,9 @@ export const PostProperty: React.FC = () => {
             road_width: propertyData.road_width,
             boundary_wall: propertyData.boundary_wall,
             ownership_type: propertyData.ownership_type,
+            // Land/Plot infrastructure fields
+            electricity_connection: propertyData.electricity_connection,
+            sewage_connection: propertyData.sewage_connection,
             status: 'pending', // Reset to pending for review - CRITICAL: prevents public visibility
             updated_at: new Date().toISOString(),
             // Additional fields - access from the original property data

@@ -261,11 +261,6 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
       value: getAmenityString('powerBackup') || property.power_backup || 'Not specified' 
     },
     { 
-      icon: MapPin, 
-      label: 'Parking', 
-      value: getParking()
-    },
-    { 
       icon: Droplets, 
       label: 'Water Storage Facility', 
       value: getAmenityString('waterStorageFacility') || 'Not specified' 
@@ -324,16 +319,45 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
     { 
       icon: Zap, 
       label: 'Electricity Connection', 
-      value: (property as any).electricity_connection || 'Not specified' 
+      value: (() => {
+        // Check both direct property field and amenities object
+        const directValue = (property as any).electricity_connection;
+        const amenityValue = property.amenities?.electricityConnection;
+        const value = directValue || amenityValue;
+        
+        if (!value || value === 'Not specified') return 'Not specified';
+        
+        // Map values to user-friendly names
+        const electricityMap: Record<string, string> = {
+          'available': 'Available',
+          'not-available': 'Not Available',
+          'three-phase': 'Three Phase',
+          'single-phase': 'Single Phase'
+        };
+        
+        return electricityMap[value] || value.charAt(0).toUpperCase() + value.slice(1);
+      })()
     },
     { 
       icon: Droplets, 
       label: 'Sewage Connection', 
       value: (() => {
-        const rawValue = (property as any).sewage_connection;
-        if (!rawValue || rawValue === 'Not specified') return 'Not specified';
-        // Format the value by replacing underscores with spaces and capitalizing
-        return rawValue.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+        // Check both direct property field and amenities object
+        const directValue = (property as any).sewage_connection;
+        const amenityValue = property.amenities?.sewageConnection;
+        const value = directValue || amenityValue;
+        
+        if (!value || value === 'Not specified') return 'Not specified';
+        
+        // Map values to user-friendly names
+        const sewageMap: Record<string, string> = {
+          'septic-tank': 'Septic Tank',
+          'municipal': 'Municipal Connection',
+          'available': 'Available',
+          'not-available': 'Not Available'
+        };
+        
+        return sewageMap[value] || value.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
       })()
     },
     { 

@@ -1165,6 +1165,9 @@ export const PropertyPreviewPage: React.FC = () => {
                 shoppingCenter: payload?.amenities?.shoppingCenter,
                 gasPipeline: payload?.amenities?.gasPipeline,
                 park: payload?.amenities?.park,
+                // Land/Plot specific amenities
+                electricityConnection: payload?.amenities?.electricityConnection || payload?.electricity_connection,
+                sewageConnection: payload?.amenities?.sewageConnection || payload?.sewage_connection,
                 rainWaterHarvesting: payload?.amenities?.rainWaterHarvesting,
                 sewageTreatmentPlant: payload?.amenities?.sewageTreatmentPlant,
                 houseKeeping: payload?.amenities?.houseKeeping,

@@ -47,6 +47,7 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
     }
   });
 
+
   return (
     <div className="bg-background p-6">
         <div className="text-left mb-8 pt-4 md:pt-0">
