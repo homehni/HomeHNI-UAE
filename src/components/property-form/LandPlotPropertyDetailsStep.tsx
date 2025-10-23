@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlotDetails } from '@/types/landPlotProperty';
 
 const landPlotDetailsSchema = z.object({
-  plotArea: z.number().min(1, "Plot area is required and must be at least 1"),
+  plotArea: z.number().min(0, "Plot area must be 0 or greater").optional().or(z.literal(0)),
   plotAreaUnit: z.enum(['sq-ft', 'sq-yard', 'sq-m', 'acre', 'marla', 'cents', 'bigha', 'kottah', 'kanal', 'grounds', 'ares', 'biswa', 'gunta', 'aankadam', 'hectare', 'chataks', 'perch']).optional(),
   plotLength: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
   plotWidth: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),

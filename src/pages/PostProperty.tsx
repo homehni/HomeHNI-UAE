@@ -460,10 +460,16 @@ export const PostProperty: React.FC = () => {
         listingType = (data.propertyInfo as any).pgDetails.listingType;
       } else if ('flattmatesDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as any).flattmatesDetails.listingType;
+      } else if ('plotDetails' in data.propertyInfo) {
+        // For land/plot properties, use the owner's listing type
+        listingType = data.ownerInfo?.listingType || 'Sale';
       } else if ('rentalDetails' in data.propertyInfo && (data.propertyInfo as any).rentalDetails) {
         listingType = (data.propertyInfo as any).rentalDetails.listingType || 'Rent';
       } else if ('commercialSaleDetails' in data.propertyInfo) {
         listingType = (data.propertyInfo as any).commercialSaleDetails.listingType || 'Sale';
+      } else {
+        // Fallback for regular residential properties - use owner's listing type
+        listingType = data.ownerInfo?.listingType || 'Rent';
       }
       
       console.log('Extracted listing type:', listingType);
@@ -661,10 +667,15 @@ export const PostProperty: React.FC = () => {
                                      data.propertyInfo.propertyDetails.propertyType : 
                                      ('plotDetails' in data.propertyInfo) ? 
                                      data.propertyInfo.plotDetails.propertyType : 
-                                     listingType),
+                                     data.ownerInfo?.propertyType || 'Residential'),
         listing_type: mapListingType(listingType),
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
-                 mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null,
+                 mapBhkType(data.propertyInfo.propertyDetails.bhkType) : 
+                 (mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
+                                 data.propertyInfo.propertyDetails.propertyType : 
+                                 ('plotDetails' in data.propertyInfo) ? 
+                                 data.propertyInfo.plotDetails.propertyType : 
+                                 data.ownerInfo?.propertyType || 'Residential') === 'pg_hostel' ? null : null),
         bathrooms: ((data.propertyInfo as any)?.amenities?.bathrooms) || 
                   (('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? 
                   Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0),
@@ -687,8 +698,8 @@ export const PostProperty: React.FC = () => {
         description: data.propertyInfo.additionalInfo.description || null,
         images: imageUrls.map(img => img.url),
         videos: videoUrls,
-  availability_type: 'immediate',
-        status: 'pending',
+        availability_type: 'immediate',
+        status: 'active',
         is_featured: true, // Mark all submitted properties as featured candidates
         // Plot area unit for Land/Plot properties
         plot_area_unit: ('plotDetails' in data.propertyInfo) ? 
@@ -714,7 +725,7 @@ export const PostProperty: React.FC = () => {
         // PG/Hostel specific fields for better display compatibility
         expected_rent: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.expectedPrice) || null : null,
         expected_deposit: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.securityDeposit) || null : null,
-  available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
+        available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
         parking: ((data.propertyInfo as any)?.amenities?.parking) || null,
         age_of_building: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,
         preferred_tenant: ((data.propertyInfo as any)?.flattmatesDetails?.genderPreference) || 
@@ -733,6 +744,12 @@ export const PostProperty: React.FC = () => {
                          (data.propertyInfo as any).propertyDetails.facing : null,
         floor_type: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.floorType) ? 
                    (data.propertyInfo as any).propertyDetails.floorType : null,
+        // Additional amenities fields for better display
+        gym: ((data.propertyInfo as any)?.amenities?.gym) || null,
+        gated_security: ((data.propertyInfo as any)?.amenities?.gatedSecurity) || null,
+        lift: ((data.propertyInfo as any)?.amenities?.lift) || null,
+        // Property age mapping
+        property_age: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,
         // Add owner information directly to properties table
         owner_name: data.ownerInfo.fullName || 'Anonymous',
         owner_email: data.ownerInfo.email || '',
@@ -891,6 +908,20 @@ export const PostProperty: React.FC = () => {
         console.log('🔍 PostProperty - Image URLs:', imageUrls);
         console.log('🔍 PostProperty - Full submission payload:', submissionPayload);
         
+        console.log('🚨 FINAL PROPERTY DATA BEING SENT TO DATABASE:', propertyData);
+        console.log('🚨 CRITICAL FIELDS CHECK:', {
+          property_type: propertyData.property_type,
+          listing_type: propertyData.listing_type,
+          bhk_type: propertyData.bhk_type,
+          status: propertyData.status,
+          availability_type: propertyData.availability_type,
+          super_area: propertyData.super_area,
+          expected_price: propertyData.expected_price,
+          bathrooms: propertyData.bathrooms,
+          balconies: propertyData.balconies,
+          furnishing: propertyData.furnishing
+        });
+        
         const { data: inserted, error: insertError } = await supabase
           .from('property_submissions')
           .insert({
@@ -915,13 +946,26 @@ export const PostProperty: React.FC = () => {
       }
 
       if (error) {
-        console.error('Database insertion error - Full details:', {
+        console.error('🚨 DATABASE INSERTION ERROR - FULL DETAILS:', {
           error,
           code: error.code,
           message: error.message,
           details: error.details,
           hint: error.hint,
-          propertyDataSent: propertyData
+          propertyDataSent: propertyData,
+          // Log specific fields that might be causing issues
+          criticalFields: {
+            property_type: propertyData.property_type,
+            listing_type: propertyData.listing_type,
+            bhk_type: propertyData.bhk_type,
+            status: propertyData.status,
+            availability_type: propertyData.availability_type,
+            furnishing: propertyData.furnishing,
+            bathrooms: propertyData.bathrooms,
+            balconies: propertyData.balconies,
+            super_area: propertyData.super_area,
+            expected_price: propertyData.expected_price
+          }
         });
         
         // Provide specific error messages based on error type
@@ -1030,7 +1074,8 @@ export const PostProperty: React.FC = () => {
                         : listingType === 'PG/Hostel' ? 'PG/Hostel' : listingType === 'Flatmates' ? 'Flatmates' : 'Commercial'),
         listing_type: priceDetailsDraft?.listingType || 'Sale',
         bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
-                 data.propertyInfo.propertyDetails.bhkType : null,
+                 data.propertyInfo.propertyDetails.bhkType : 
+                 (listingType === 'PG/Hostel' ? null : null),
         state: data.propertyInfo.locationDetails.state || 'Unknown',
         city: data.propertyInfo.locationDetails.city || 'Unknown',
         locality: data.propertyInfo.locationDetails.locality || 'Unknown',

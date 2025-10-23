@@ -156,6 +156,7 @@ export interface PGHostelAmenities extends PropertyAmenities {
   laundry?: 'included' | 'paid' | 'not-available';
   commonArea?: 'tv-room' | 'study-room' | 'recreation' | 'all';
   cleaning?: 'daily' | 'weekly' | 'self';
+  wardenFacility?: 'available' | 'not-available';
   // Raw parking selection for PG/Hostel (used to display Bike/Car/Both/None accurately)
   parkingType?: 'none' | 'bike' | 'car' | 'both';
   roomAmenities?: {

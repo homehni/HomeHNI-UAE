@@ -13,6 +13,7 @@ import { PropertyHero } from '@/components/property-details/PropertyHero';
 import { PropertyDetailsCard } from '@/components/property-details/PropertyDetailsCard';
 import { LocationCard } from '@/components/property-details/LocationCard';
 import { OverviewCard } from '@/components/property-details/OverviewCard';
+import { RoomDetailsCard } from '@/components/property-details/RoomDetailsCard';
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
 import { RelatedPropertiesCard } from '@/components/property-details/RelatedPropertiesCard';
@@ -67,8 +68,27 @@ const generatePropertyTitle = (data: any): string => {
     return `${formattedSpaceType} For ${formattedListingType}`;
   }
   
+  // For PG/Hostel properties
+  if (propertyType.toLowerCase().includes('pg') || propertyType.toLowerCase().includes('hostel')) {
+    const roomType = data.room_type || data.roomType || '';
+    const roomTypeMap: Record<string, string> = {
+      'single': 'Single',
+      'double': 'Double',
+      'three': 'Three', 
+      'four': 'Four'
+    };
+    const formattedRoomType = roomType ? roomTypeMap[roomType.toLowerCase()] || capitalize(roomType) : '';
+    const pgType = propertyType.toLowerCase().includes('pg') ? 'PG' : 'Hostel';
+    
+    if (formattedRoomType) {
+      return `${formattedRoomType} ${pgType} Property`;
+    } else {
+      return `${pgType} Property`;
+    }
+  }
+
   // For Land/Plot properties, prioritize land_type over property_type
-  if (landType) {
+  if (landType && (propertyType === 'Land/Plot' || propertyType.toLowerCase() === 'land' || propertyType.toLowerCase() === 'plot')) {
     // Map land type values to proper display names
     const getLandTypeDisplayName = (value: string): string => {
       const landTypeMap: Record<string, string> = {
@@ -174,6 +194,35 @@ interface PropertyPreviewData {
   electricity_connection?: string;
   sewage_connection?: string;
   
+  // PG/Hostel specific fields
+  room_type?: string;
+  gender_preference?: string;
+  preferred_guests?: string;
+  food_included?: string;
+  gate_closing_time?: string;
+  pg_rules?: any;
+  available_services?: {
+    laundry?: string;
+    room_cleaning?: string;
+    warden_facility?: string;
+  };
+  
+  // PG/Hostel amenities
+  common_tv?: boolean;
+  refrigerator?: boolean;
+  mess?: boolean;
+  cooking_allowed?: boolean;
+  
+  // PG/Hostel room amenities
+  room_amenities?: {
+    cupboard?: boolean;
+    geyser?: boolean;
+    tv?: boolean;
+    ac?: boolean;
+    bedding?: boolean;
+    attachedBathroom?: boolean;
+  };
+  
   facing?: string;
   rent_negotiable?: boolean;
   monthly_maintenance?: string;
@@ -271,15 +320,16 @@ export const PropertyPreviewPage: React.FC = () => {
               console.log('DEBUG: draftDataAny.land_type:', draftDataAny.land_type);
               console.log('DEBUG: draftDataAny.listing_type:', draftDataAny.listing_type);
               
-              // For existing drafts with null land_type, derive it from listing_type
-              if (!draftDataAny.land_type && draftDataAny.listing_type) {
+              // For existing drafts with null land_type, derive it from listing_type ONLY for Land/Plot properties
+              if (!draftDataAny.land_type && draftDataAny.listing_type && 
+                  (draftDataAny.property_type === 'Land/Plot' || draftDataAny.property_type?.toLowerCase() === 'land' || draftDataAny.property_type?.toLowerCase() === 'plot')) {
                 const landTypeMap: Record<string, string> = {
                   'Industrial land': 'industrial',
                   'Commercial land': 'commercial', 
                   'Agricultural Land': 'agricultural'
                 };
                 const derivedLandType = landTypeMap[draftDataAny.listing_type] || 'industrial';
-                console.log('DEBUG: Derived land_type from listing_type:', derivedLandType);
+                console.log('DEBUG: Derived land_type from listing_type for Land/Plot property:', derivedLandType);
                 draftDataAny.land_type = derivedLandType;
               }
               
@@ -289,7 +339,7 @@ export const PropertyPreviewPage: React.FC = () => {
             listing_type: draftData.listing_type || 'rent',
             bhk_type: draftData.bhk_type,
             expected_price: draftDataAny.expected_price || 0,
-            expected_rent: draftDataAny.expected_price || 0,
+            expected_rent: draftDataAny.expected_rent || draftDataAny.expected_price || 0,
             expected_deposit: draftDataAny.expected_deposit || draftDataAny.security_deposit || 0,
             price_negotiable: draftDataAny.price_negotiable,
             possession_date: draftDataAny.possession_date,
@@ -398,6 +448,29 @@ export const PropertyPreviewPage: React.FC = () => {
             village_name: draftDataAny.village_name,
             electricity_connection: draftDataAny.electricity_connection,
             sewage_connection: draftDataAny.sewage_connection,
+            // PG/Hostel specific fields (from additional_info JSONB)
+            room_type: draftDataAny.room_type || draftDataAny.additional_info?.room_type,
+            gender_preference: draftDataAny.additional_info?.gender_preference,
+            preferred_guests: draftDataAny.additional_info?.preferred_guests,
+            food_included: draftDataAny.additional_info?.food_included,
+            gate_closing_time: draftDataAny.additional_info?.gate_closing_time,
+            pg_rules: draftDataAny.additional_info?.pg_rules,
+            available_services: draftDataAny.additional_info?.available_services,
+            // PG/Hostel amenities from additional_info
+            common_tv: draftDataAny.additional_info?.common_tv,
+            refrigerator: draftDataAny.additional_info?.refrigerator,
+            mess: draftDataAny.additional_info?.mess,
+            cooking_allowed: draftDataAny.additional_info?.cooking_allowed,
+            // PG/Hostel room amenities from additional_info
+            room_amenities: draftDataAny.additional_info?.room_amenities,
+            // Debug logging for PG/Hostel services
+            ...(draftDataAny.property_type?.toLowerCase().includes('pg') || draftDataAny.property_type?.toLowerCase().includes('hostel') || draftDataAny.property_type === 'PG/Hostel' ? {
+              debug_services: {
+                property_type: draftDataAny.property_type,
+                available_services: draftDataAny.additional_info?.available_services,
+                additional_info: draftDataAny.additional_info
+              }
+            } : {}),
             facing: draftDataAny.facing_direction,
             preferred_tenant: draftDataAny.preferred_tenant,
             power_backup: draftDataAny.power_backup,
@@ -646,7 +719,6 @@ export const PropertyPreviewPage: React.FC = () => {
                   visitorParking: payload?.amenities?.visitorParking,
                   waterStorageFacility: payload?.amenities?.waterStorageFacility,
                   wifi: payload?.amenities?.wifi,
-                  furnishing: payload?.amenities?.furnishing || payload?.furnishing,
                   parking: payload?.amenities?.parking || payload?.parking
                 },
                 // Map other fields
@@ -1471,6 +1543,11 @@ export const PropertyPreviewPage: React.FC = () => {
         // Land/Plot infrastructure fields
         electricityConnection: draft.electricity_connection,
         sewageConnection: draft.sewage_connection,
+        // PG/Hostel amenities
+        common_tv: draft.common_tv,
+        refrigerator: draft.refrigerator,
+        mess: draft.mess,
+        cooking_allowed: draft.cooking_allowed,
         // Keep existing amenities if any
         ...draft.amenities
       },
@@ -1479,9 +1556,25 @@ export const PropertyPreviewPage: React.FC = () => {
       available_from: draft.available_from,
       parking: draft.parking,
       age_of_building: draft.property_age,
-      preferred_tenant: draft.preferred_tenant,
       floor_no: draft.floor_no,
       total_floors: draft.total_floors,
+      // PG/Hostel services
+      available_services: draft.available_services,
+      // PG/Hostel preferences
+      gender_preference: draft.gender_preference,
+      preferred_guests: draft.preferred_guests,
+      // Map preferred_guests to preferred_tenant for display compatibility
+      preferred_tenant: draft.preferred_guests,
+      // PG/Hostel details
+      food_included: draft.food_included,
+      gate_closing_time: draft.gate_closing_time,
+      // PG/Hostel amenities
+      common_tv: draft.common_tv,
+      refrigerator: draft.refrigerator,
+      mess: draft.mess,
+      cooking_allowed: draft.cooking_allowed,
+      // PG/Hostel room amenities
+      room_amenities: draft.room_amenities,
     };
     console.log('Converted property:', converted);
     return converted;
@@ -1540,6 +1633,22 @@ export const PropertyPreviewPage: React.FC = () => {
   }
 
   const property = convertDraftToProperty(propertyData);
+  
+  // Debug logging for PG/Hostel services and room amenities
+  console.log('PropertyPreviewPage - About to render OverviewCard with property:', {
+    property_type: property.property_type,
+    available_services: (property as any).available_services,
+    room_cleaning_value: (property as any).available_services?.room_cleaning,
+    laundry_value: (property as any).available_services?.laundry,
+    warden_facility_value: (property as any).available_services?.warden_facility,
+    debug_services: (property as any).debug_services,
+    room_amenities: (property as any).room_amenities,
+    gate_closing_time: (property as any).gate_closing_time,
+    food_included: (property as any).food_included,
+    preferred_guests: (property as any).preferred_guests,
+    preferred_tenant: (property as any).preferred_tenant,
+    is_pg_hostel: property.property_type === 'PG/Hostel' || property.property_type?.toLowerCase().includes('pg') || property.property_type?.toLowerCase().includes('hostel')
+  });
   
   // Debug the final property object
   console.log('Final property object for PropertyImageGallery:', {
@@ -1614,6 +1723,19 @@ export const PropertyPreviewPage: React.FC = () => {
             <div className="space-y-6 overflow-x-hidden">
               {/* Overview */}
               <OverviewCard property={property as any} />
+              
+              {/* Room Details - Only for PG/Hostel */}
+              {(property.property_type === 'PG/Hostel' || property.property_type?.toLowerCase().includes('pg') || property.property_type?.toLowerCase().includes('hostel')) && (
+                <>
+                  {console.log('RoomDetailsCard render check:', {
+                    property_type: property.property_type,
+                    room_amenities: (property as any).room_amenities,
+                    has_room_amenities: !!(property as any).room_amenities,
+                    room_amenities_keys: (property as any).room_amenities ? Object.keys((property as any).room_amenities) : 'no room_amenities'
+                  })}
+                  <RoomDetailsCard room_amenities={(property as any).room_amenities} />
+                </>
+              )}
               
               {/* Description */}
               {property.description && (

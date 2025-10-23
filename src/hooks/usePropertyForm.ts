@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PropertyFormData, 
   OwnerInfo, 
@@ -71,7 +71,7 @@ export const usePropertyForm = () => {
     }
   };
 
-  const goToStep = (step: number) => {
+  const goToStep = useCallback((step: number) => {
     console.log('🎯 goToStep called with step:', step);
     console.log('Current step before change:', currentStep);
     if (step >= 1 && step <= 7) {
@@ -80,11 +80,11 @@ export const usePropertyForm = () => {
     } else {
       console.log('❌ Invalid step:', step, 'Valid range: 1-7');
     }
-  };
+  }, [currentStep]);
 
-  const updateOwnerInfo = (data: Partial<OwnerInfo>) => {
+  const updateOwnerInfo = useCallback((data: Partial<OwnerInfo>) => {
     setOwnerInfo(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
     const updatePropertyDetails = (data: Partial<PropertyDetails>) => {
     console.log('Updating property details with:', data);

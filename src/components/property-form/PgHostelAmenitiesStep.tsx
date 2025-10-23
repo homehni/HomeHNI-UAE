@@ -67,14 +67,25 @@ export function PgHostelAmenitiesStep({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('PgHostelAmenitiesStep - handleSubmit called with formData:', JSON.stringify(formData, null, 2));
+    console.log('PgHostelAmenitiesStep - Services in formData:', {
+      laundry: formData.laundry,
+      roomCleaning: formData.roomCleaning,
+      wardenFacility: formData.wardenFacility
+    });
     onNext(formData);
   };
 
   const handleAmenityChange = (amenity: string, value: boolean | string) => {
-    setFormData(prev => ({
-      ...prev,
-      [amenity]: value
-    }));
+    console.log(`PgHostelAmenitiesStep - handleAmenityChange: ${amenity} = ${value}`);
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        [amenity]: value
+      };
+      console.log('PgHostelAmenitiesStep - Updated formData:', newData);
+      return newData;
+    });
   };
 
   const availableAmenities = [

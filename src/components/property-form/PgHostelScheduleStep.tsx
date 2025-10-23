@@ -63,12 +63,63 @@ export function PgHostelScheduleStep({
   });
 
   const onFormSubmit = (data: ScheduleFormData) => {
+    console.log('PgHostelScheduleStep - onFormSubmit called with data:', data);
+    console.log('PgHostelScheduleStep - onSubmit available:', !!onSubmit);
+    console.log('PgHostelScheduleStep - onNext available:', !!onNext);
+    
     if (onSubmit) {
+      console.log('PgHostelScheduleStep - Calling onSubmit');
       onSubmit(data);
     } else {
+      console.log('PgHostelScheduleStep - Calling onNext');
       onNext(data);
     }
   };
+
+  // Add form validation debug logging
+  const handleFormSubmit = (data: ScheduleFormData) => {
+    console.log('PgHostelScheduleStep - Form validation passed, data:', data);
+    onFormSubmit(data);
+  };
+
+  const handleFormError = (errors: any) => {
+    console.error('PgHostelScheduleStep - Form validation failed:', errors);
+    console.error('PgHostelScheduleStep - Form values:', form.getValues());
+  };
+
+  // Custom form submission handler that cleans the data
+  const handleFormSubmitWithCleanup = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const formData = form.getValues();
+    console.log('PgHostelScheduleStep - Raw form data:', formData);
+    
+    // Clean the data by converting empty strings to undefined
+    const cleanedData = {
+      ...formData,
+      paintingService: formData.paintingService === '' ? undefined : formData.paintingService,
+      cleaningService: formData.cleaningService === '' ? undefined : formData.cleaningService,
+    };
+    
+    console.log('PgHostelScheduleStep - Cleaned form data:', cleanedData);
+    
+    // Validate the cleaned data
+    const validationResult = scheduleSchema.safeParse(cleanedData);
+    
+    if (validationResult.success) {
+      console.log('PgHostelScheduleStep - Validation successful, submitting data');
+      onFormSubmit(validationResult.data);
+    } else {
+      console.error('PgHostelScheduleStep - Validation failed:', validationResult.error);
+      handleFormError(validationResult.error);
+    }
+  };
+
+  // Debug logging for form state
+  React.useEffect(() => {
+    console.log('PgHostelScheduleStep - Form values changed:', form.getValues());
+    console.log('PgHostelScheduleStep - Form errors:', form.formState.errors);
+  }, [form.watch()]);
 
   const getResolvedContact = () => {
     const email = ownerInfo?.email || user?.email;
@@ -179,7 +230,7 @@ export function PgHostelScheduleStep({
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
+            <form onSubmit={handleFormSubmitWithCleanup} className="space-y-8">
               {/* Service Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* Painting Service */}

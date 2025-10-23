@@ -10,18 +10,34 @@ export const mapBhkType = (bhkType: string): string => {
     '4 BHK': '4bhk',
     '5 BHK': '5bhk',
     '5+ BHK': '5bhk+',
-    '6 BHK': '6bhk',
-    '7 BHK': '7bhk',
-    '8 BHK': '8bhk',
-    '9 BHK': '9bhk',
-    '10 BHK': '10bhk',
+    // Map higher BHK types to 5bhk+ since that's the maximum in the constraint
+    '6 BHK': '5bhk+',
+    '7 BHK': '5bhk+',
+    '8 BHK': '5bhk+',
+    '9 BHK': '5bhk+',
+    '10 BHK': '5bhk+',
     'Multiple': 'multiple',
     'Multiple room types': 'multiple',
-    'PG/Hostel': 'multiple' // Changed from 'pg_hostel' to 'multiple' as per the latest database schema
+    'PG/Hostel': 'multiple'
   };
   
   if (!bhkType) return '';
-  return bhkMappings[bhkType] || bhkType.toLowerCase().replace(/\s+/g, '');
+  
+  const mappedValue = bhkMappings[bhkType];
+  if (mappedValue) {
+    return mappedValue;
+  }
+  
+  // For unmapped values, try to normalize and check if it's valid
+  const normalized = bhkType.toLowerCase().replace(/\s+/g, '');
+  const validValues = ['1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5bhk+', 'studio', 'multiple', 'pg_hostel', 'flatmates'];
+  
+  if (validValues.includes(normalized)) {
+    return normalized;
+  }
+  
+  // Default to 1bhk for invalid values
+  return '1bhk';
 };
 
 export const mapPropertyType = (propertyType: string): string => {

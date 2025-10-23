@@ -15,7 +15,7 @@ const resalePropertyDetailsSchema = z.object({
   propertyType: z.string().optional(),
   bhkType: z.string().min(1, "BHK Type is required"),
   ownershipType: z.string().optional(),
-  builtUpArea: z.number().min(1, "Built up area is required and must be at least 1"),
+  builtUpArea: z.number().min(0, "Built up area must be 0 or greater").optional().or(z.literal(0)),
   carpetArea: z.number().optional(),
   propertyAge: z.string().optional(),
   facing: z.string().optional(),

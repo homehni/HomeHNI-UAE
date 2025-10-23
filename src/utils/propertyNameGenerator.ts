@@ -12,15 +12,17 @@ export interface PropertyNameData {
 export const generatePropertyName = (data: PropertyNameData): string => {
   const { bhkType, propertyType, listingType, commercialType, landType } = data;
   
-  // Handle special land types from listing type (Industrial land, Agricultural Land, Commercial land)
-  if (listingType === 'Industrial land') {
-    return 'Industrial Land For Sale';
-  }
-  if (listingType === 'Agricultural Land') {
-    return 'Agricultural Land For Sale';
-  }
-  if (listingType === 'Commercial land') {
-    return 'Commercial Land For Sale';
+  // Handle special land types from listing type ONLY for Land/Plot properties
+  if ((propertyType === 'Land/Plot' || propertyType.toLowerCase() === 'land' || propertyType.toLowerCase() === 'plot')) {
+    if (listingType === 'Industrial land') {
+      return 'Industrial Land For Sale';
+    }
+    if (listingType === 'Agricultural Land') {
+      return 'Agricultural Land For Sale';
+    }
+    if (listingType === 'Commercial land') {
+      return 'Commercial Land For Sale';
+    }
   }
   
   // Handle land type for Land/Plot properties

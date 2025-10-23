@@ -18,7 +18,15 @@ import {
   ShoppingBag,
   Clock,
   Droplets,
-  Sun
+  Sun,
+  Tv,
+  Refrigerator,
+  UtensilsCrossed,
+  MoveUp,
+  ChefHat,
+  Wind,
+  Bed,
+  ShowerHead
 } from 'lucide-react';
 
 interface AmenitiesCardProps {
@@ -72,6 +80,8 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     refrigerator: 'Refrigerator',
     cookingAllowed: 'Cooking Allowed',
     cooking_allowed: 'Cooking Allowed',
+    common_tv: 'Common TV',
+    mess: 'Mess',
     room_cleaning: 'Room Cleaning',
     laundry: 'Laundry',
     warden_facility: 'Warden Facility',
@@ -108,6 +118,18 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
       'Sewage Treatment': Droplets,
       'Electricity Connection': Zap,
       'Sewage Connection': Droplets,
+      'Common TV': Tv,
+      'Mess': UtensilsCrossed,
+      'Lift': MoveUp,
+      'Cooking Allowed': ChefHat,
+      'Refrigerator': Refrigerator,
+      // Room amenities
+      'Cupboard': ShoppingBag,
+      'Geyser': Droplets,
+      'TV': Tv,
+      'AC': Wind,
+      'Bedding': Bed,
+      'Attached Bathroom': ShowerHead,
     };
     return iconMap[amenity] || Home;
   };

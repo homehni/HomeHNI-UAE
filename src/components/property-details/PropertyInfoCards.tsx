@@ -15,6 +15,32 @@ import {
   CheckCircle,
 } from 'lucide-react';
 
+// Utility function to convert 24-hour format to 12-hour format
+const convertTo12HourFormat = (time24: string): string => {
+  if (!time24 || time24 === 'Not Provided') {
+    return 'Not Provided';
+  }
+  
+  // Handle time format like "23:00" or "09:30"
+  const timeMatch = time24.match(/^(\d{1,2}):(\d{2})$/);
+  if (!timeMatch) {
+    return time24; // Return as-is if format doesn't match
+  }
+  
+  const hours = parseInt(timeMatch[1], 10);
+  const minutes = timeMatch[2];
+  
+  if (hours === 0) {
+    return `12:${minutes} AM`;
+  } else if (hours < 12) {
+    return `${hours}:${minutes} AM`;
+  } else if (hours === 12) {
+    return `12:${minutes} PM`;
+  } else {
+    return `${hours - 12}:${minutes} PM`;
+  }
+};
+
 interface PropertyInfoCardsProps {
   property: {
     id: string;
@@ -574,12 +600,21 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
     },
     {
       icon: Utensils,
-      title: property.food_included ? 'Available' : 'Not Available',
+      title: (() => {
+        console.log('PropertyInfoCards - Food Facility check:', {
+          food_included: property.food_included,
+          food_included_type: typeof property.food_included,
+          food_included_truthy: !!property.food_included,
+          result: property.food_included ? 'Available' : 'Not Available'
+        });
+        // Fix: Check for 'yes' specifically, not just truthy
+        return (property.food_included === 'yes' || property.food_included === true) ? 'Available' : 'Not Available';
+      })(),
       subtitle: 'Food Facility',
     },
     {
       icon: Key,
-      title: property.gate_closing_time || 'Not Provided',
+      title: convertTo12HourFormat(property.gate_closing_time || 'Not Provided'),
       subtitle: 'Gate Closing Time',
     },
   ];

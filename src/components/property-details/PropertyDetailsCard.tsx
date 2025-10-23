@@ -1,6 +1,32 @@
 import React from 'react';
 import { Building2 } from 'lucide-react';
 
+// Utility function to convert 24-hour format to 12-hour format
+const convertTo12HourFormat = (time24: string): string => {
+  if (!time24 || time24 === 'Not Provided' || time24 === 'Not specified') {
+    return 'Not specified';
+  }
+  
+  // Handle time format like "23:00" or "09:30"
+  const timeMatch = time24.match(/^(\d{1,2}):(\d{2})$/);
+  if (!timeMatch) {
+    return time24; // Return as-is if format doesn't match
+  }
+  
+  const hours = parseInt(timeMatch[1], 10);
+  const minutes = timeMatch[2];
+  
+  if (hours === 0) {
+    return `12:${minutes} AM`;
+  } else if (hours < 12) {
+    return `${hours}:${minutes} AM`;
+  } else if (hours === 12) {
+    return `12:${minutes} PM`;
+  } else {
+    return `${hours - 12}:${minutes} PM`;
+  }
+};
+
 interface PropertyDetailsCardProps {
   property: {
     property_type: string;
@@ -245,7 +271,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Preferred Guests', value: property.preferred_guests || 'Not specified' },
     { label: 'Available From', value: formatDate(property.available_from) },
     { label: 'Food Included', value: property.food_included ? 'Yes' : 'No' },
-    { label: 'Gate Closing Time', value: property.gate_closing_time || 'Not specified' },
+    { label: 'Gate Closing Time', value: convertTo12HourFormat(property.gate_closing_time || 'Not specified') },
   ] : [
     // Basic property specifications only
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },

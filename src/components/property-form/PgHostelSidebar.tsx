@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, MapPin, DollarSign, Star, Camera, Calendar, Eye } from 'lucide-react';
+import { Home, MapPin, DollarSign, Star, Camera, Calendar, CheckCircle, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PgHostelSidebarProps {
@@ -17,7 +17,8 @@ const steps = [
   { id: 4, title: 'PG Details', description: 'PG rules & preferences', icon: Star },
   { id: 5, title: 'Amenities', description: 'Services & amenities', icon: Star },
   { id: 6, title: 'Gallery', description: 'Photos & videos', icon: Camera },
-  { id: 7, title: 'Schedule', description: 'Availability & schedule', icon: Calendar },
+  { id: 7, title: 'Schedule', description: 'Availability & timing', icon: Calendar },
+  { id: 8, title: 'Congratulations', description: 'Review & publish', icon: CheckCircle },
 ];
 
 export function PgHostelSidebar({ currentStep, completedSteps, onPreview, draftId, isSavingDraft = false }: PgHostelSidebarProps) {
@@ -41,12 +42,12 @@ export function PgHostelSidebar({ currentStep, completedSteps, onPreview, draftI
             <Home className="w-5 h-5 text-white" />
           </div>
           {/* Preview Button */}
-          {currentStep !== 7 && onPreview && (
+          {currentStep !== 8 && onPreview && (
             <Button 
               type="button" 
               variant="outline"
               onClick={onPreview}
-              disabled={!draftId || isSavingDraft}
+              disabled={isSavingDraft}
               className="h-8 px-3 text-xs border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
             >
               <Eye className="h-3 w-3 mr-1" />

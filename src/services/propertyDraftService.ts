@@ -26,6 +26,8 @@ export interface PropertyDraft {
   facing?: string;
   built_up_area?: number;
   carpet_area?: number;
+  bathrooms?: number;
+  balconies?: number;
   
   // Commercial-specific fields
   space_type?: string;
@@ -60,6 +62,26 @@ export interface PropertyDraft {
   // Land/Plot infrastructure fields
   electricity_connection?: string;
   sewage_connection?: string;
+  
+  // PG/Hostel specific fields
+  room_type?: string;
+  gender_preference?: string;
+  preferred_guests?: string;
+  food_included?: string;
+  gate_closing_time?: string;
+  cupboard?: boolean;
+  geyser?: boolean;
+  tv?: boolean;
+  ac?: boolean;
+  bedding?: boolean;
+  attached_bathroom?: boolean;
+  no_smoking?: boolean;
+  no_guardians_stay?: boolean;
+  no_girls_entry?: boolean;
+  no_drinking?: boolean;
+  no_non_veg?: boolean;
+  water_storage_facility?: string;
+  wifi?: string;
   
   // Location Details
   state?: string;
@@ -131,6 +153,8 @@ export class PropertyDraftService {
 
       console.log('Creating draft for user:', user.id);
       console.log('Draft data:', data);
+      console.log('Draft data keys:', Object.keys(data));
+      console.log('Draft data additional_info:', data.additional_info);
 
       const { data: draft, error } = await supabase
         .from('property_drafts')
@@ -164,6 +188,13 @@ export class PropertyDraftService {
    * Update an existing property draft
    */
   static async updateDraft(draftId: string, data: Partial<PropertyDraft>): Promise<PropertyDraft> {
+    console.log('🔍 PropertyDraftService.updateDraft - Attempting to update draft:', {
+      draftId,
+      data,
+      dataKeys: Object.keys(data),
+      dataValues: Object.values(data)
+    });
+
     const { data: draft, error } = await supabase
       .from('property_drafts')
       .update(data)
@@ -172,10 +203,19 @@ export class PropertyDraftService {
       .single();
 
     if (error) {
-      console.error('Error updating draft:', error);
+      console.error('🚨 PropertyDraftService.updateDraft - Database error:', {
+        error,
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        draftId,
+        dataBeingUpdated: data
+      });
       throw new Error('Failed to update property draft');
     }
 
+    console.log('✅ PropertyDraftService.updateDraft - Successfully updated draft:', draft);
     return draft;
   }
 
@@ -236,7 +276,7 @@ export class PropertyDraftService {
     draftId: string | null, 
     stepData: any, 
     stepNumber: number,
-    formType: 'rental' | 'sale' | 'commercial' | 'commercial-sale' | 'land'
+    formType: 'rental' | 'sale' | 'commercial' | 'commercial-sale' | 'land' | 'pg_hostel'
   ): Promise<PropertyDraft> {
     try {
       // Get current user
@@ -274,7 +314,12 @@ export class PropertyDraftService {
           built_up_area: stepData.builtUpArea,
           carpet_area: stepData.carpetArea,
           // Save the actual property type from the form
-          property_type: stepData.propertyType || (formType === 'land' ? 'Land/Plot' : 'Residential'),
+          property_type: stepData.propertyType || (formType === 'land' ? 'Land/Plot' : formType === 'pg_hostel' ? 'PG/Hostel' : 'Residential'),
+          // Store PG/Hostel specific fields in additional_info JSONB field
+          additional_info: {
+            ...(updateData.additional_info || {}),
+            ...(formType === 'pg_hostel' && stepData.selectedTypes?.[0] ? { room_type: stepData.selectedTypes[0] } : {}),
+          },
           // Commercial-specific fields
           space_type: stepData.spaceType,
           building_type: stepData.buildingType,
@@ -309,16 +354,34 @@ export class PropertyDraftService {
         console.log('DEBUG: stepData.landType:', stepData.landType);
         break;
       
-      case 2: // Location Details
-        updateData = {
-          ...updateData,
-          state: stepData.state,
-          city: stepData.city,
-          locality: stepData.locality,
-          pincode: stepData.pincode,
-          society_name: stepData.societyName,
-          landmark: stepData.landmark
-        };
+      case 2: // Location Details or Room Details for PG/Hostel
+        if (formType === 'pg_hostel') {
+          // Handle PG/Hostel room details
+          updateData = {
+            ...updateData,
+            expected_rent: stepData.roomTypeDetails?.[Object.keys(stepData.roomTypeDetails || {})[0]]?.expectedRent,
+            expected_deposit: stepData.roomTypeDetails?.[Object.keys(stepData.roomTypeDetails || {})[0]]?.expectedDeposit,
+            // Store room amenities in additional_info JSONB field
+            additional_info: {
+              ...updateData.additional_info,
+              room_amenities: stepData.roomAmenities
+            }
+          };
+          console.log('PG/Hostel step 2 room details update data:', updateData);
+          console.log('PG/Hostel step 2 roomAmenities from stepData:', stepData.roomAmenities);
+          console.log('PG/Hostel step 2 stepData keys:', Object.keys(stepData));
+        } else {
+          // Handle location details for other property types
+          updateData = {
+            ...updateData,
+            state: stepData.state,
+            city: stepData.city,
+            locality: stepData.locality,
+            pincode: stepData.pincode,
+            society_name: stepData.societyName,
+            landmark: stepData.landmark
+          };
+        }
         break;
       
       case 3: // Rental/Sale Details
@@ -335,7 +398,7 @@ export class PropertyDraftService {
             expected_deposit: stepData.securityDeposit || stepData.expectedDeposit,
             rent_negotiable: stepData.rentNegotiable,
             monthly_maintenance: stepData.monthlyMaintenance,
-            available_from: stepData.availableFrom,
+            available_from: stepData.availableFrom && stepData.availableFrom.trim() !== '' ? stepData.availableFrom : null,
             preferred_tenant: stepData.idealFor ? (Array.isArray(stepData.idealFor) ? stepData.idealFor.join(', ') : stepData.idealFor) : undefined,
             description: stepData.description
           };
@@ -345,7 +408,7 @@ export class PropertyDraftService {
             ...updateData,
             expected_price: stepData.expectedPrice,
             price_negotiable: stepData.priceNegotiable,
-            possession_date: stepData.possessionDate,
+            possession_date: stepData.possessionDate && stepData.possessionDate.trim() !== '' ? stepData.possessionDate : null,
             description: stepData.description
           };
         } else if (formType === 'commercial') {
@@ -358,8 +421,8 @@ export class PropertyDraftService {
             rent_negotiable: stepData.rentNegotiable,
             price_negotiable: stepData.priceNegotiable,
             monthly_maintenance: stepData.monthlyMaintenance,
-            available_from: stepData.availableFrom,
-            possession_date: stepData.possessionDate,
+            available_from: stepData.availableFrom && stepData.availableFrom.trim() !== '' ? stepData.availableFrom : null,
+            possession_date: stepData.possessionDate && stepData.possessionDate.trim() !== '' ? stepData.possessionDate : null,
             preferred_tenant: stepData.idealFor ? (Array.isArray(stepData.idealFor) ? stepData.idealFor.join(', ') : stepData.idealFor) : undefined,
             description: stepData.description
           };
@@ -370,7 +433,7 @@ export class PropertyDraftService {
             ...updateData,
             expected_price: stepData.expectedPrice,
             price_negotiable: stepData.priceNegotiable,
-            possession_date: stepData.possessionDate,
+            possession_date: stepData.possessionDate && stepData.possessionDate.trim() !== '' ? stepData.possessionDate : null,
             description: stepData.description
           };
           console.log('Commercial Sale step 3 update data:', updateData);
@@ -380,16 +443,28 @@ export class PropertyDraftService {
             ...updateData,
             expected_price: stepData.expectedPrice,
             price_negotiable: stepData.priceNegotiable,
-            possession_date: stepData.possessionDate,
+            possession_date: stepData.possessionDate && stepData.possessionDate.trim() !== '' ? stepData.possessionDate : null,
             ownership_type: stepData.ownershipType,
             approved_by: stepData.approvedBy ? (Array.isArray(stepData.approvedBy) ? stepData.approvedBy.join(', ') : stepData.approvedBy) : undefined,
             description: stepData.description
           };
           console.log('Land/Plot step 3 update data:', updateData);
+        } else if (formType === 'pg_hostel') {
+          // Handle PG/Hostel locality details
+          updateData = {
+            ...updateData,
+            city: stepData.city,
+            locality: stepData.locality,
+            state: stepData.state,
+            pincode: stepData.pincode,
+            society_name: stepData.societyName,
+            landmark: stepData.landmark
+          };
+          console.log('PG/Hostel step 3 update data:', updateData);
         }
         break;
       
-      case 4: // Amenities
+      case 4: // Amenities or PG Details
         if (formType === 'land') {
           // Handle Land/Plot amenities
           updateData = {
@@ -402,6 +477,23 @@ export class PropertyDraftService {
             directions_tip: stepData.directionsToProperty,
           };
           console.log('Land/Plot step 4 amenities update data:', updateData);
+        } else if (formType === 'pg_hostel') {
+          // Handle PG/Hostel details
+          updateData = {
+            ...updateData,
+            available_from: stepData.availableFrom && stepData.availableFrom.trim() !== '' ? stepData.availableFrom : null,
+            description: stepData.description,
+            // Store PG/Hostel specific data in additional_info JSONB field
+            additional_info: {
+              ...updateData.additional_info,
+              gender_preference: stepData.genderPreference,
+              preferred_guests: stepData.preferredGuests,
+              food_included: stepData.foodIncluded,
+              gate_closing_time: stepData.gateClosingTime,
+              pg_rules: stepData.rules
+            }
+          };
+          console.log('PG/Hostel step 4 details update data:', updateData);
         } else {
           // Handle other property types - only include properties that exist in PropertyDraft
           updateData = {
@@ -416,61 +508,169 @@ export class PropertyDraftService {
             gated_security: stepData.gatedSecurity,
             current_property_condition: stepData.currentPropertyCondition,
             directions_tip: stepData.directionsTip,
-            // Note: Removed amenities that don't exist in PropertyDraft interface
+            bathrooms: stepData.bathrooms,
+            balconies: stepData.balconies,
           };
         }
         break;
       
-      case 5: // Gallery
-        // Handle image uploads if images are File objects
-        let imageUrls: string[] = [];
-        if (stepData.images && Array.isArray(stepData.images) && stepData.images.length > 0) {
-          // Check if images are File objects or already URLs
-          const firstImage = stepData.images[0];
-          if (firstImage instanceof File) {
-            console.log('Uploading images to storage...');
-            try {
-              const uploadResults = await uploadPropertyImagesByType(
-                stepData.images as File[],
-                updateData.property_type || 'Residential',
-                user.id
-              );
-              imageUrls = uploadResults.map(result => result.url);
-              console.log('Images uploaded successfully:', imageUrls);
-            } catch (error) {
-              console.error('Error uploading images:', error);
-              // Don't fail the entire draft save if image upload fails
-              // Just log the error and continue with empty images
-              console.warn('Continuing without images due to upload failure');
-              imageUrls = [];
+      case 5: // Gallery or Amenities for PG/Hostel
+        if (formType === 'pg_hostel') {
+          // Extract services from amenities
+          const availableServices = {
+            laundry: stepData.laundry === 'yes' ? 'yes' : 'no',
+            room_cleaning: stepData.roomCleaning === 'yes' ? 'yes' : 'no',
+            warden_facility: stepData.wardenFacility === 'yes' ? 'yes' : 'no'
+          };
+          
+          // Handle PG/Hostel amenities
+          console.log('Step 5 - Before update, existing additional_info:', updateData.additional_info);
+          console.log('Step 5 - Existing room_amenities:', updateData.additional_info?.room_amenities);
+          
+          updateData = {
+            ...updateData,
+            power_backup: stepData.powerBackup,
+            lift: stepData.lift,
+            parking: stepData.parking,
+            security: stepData.security,
+            current_property_condition: stepData.currentPropertyCondition,
+            directions_tip: stepData.directionsTip,
+            // Store PG/Hostel specific amenities and services in additional_info JSONB field
+            additional_info: {
+              ...updateData.additional_info,
+              water_storage_facility: stepData.waterStorageFacility,
+              wifi: stepData.wifi,
+              common_tv: stepData.commonTv,
+              refrigerator: stepData.refrigerator,
+              mess: stepData.mess,
+              cooking_allowed: stepData.cookingAllowed,
+              available_services: availableServices,
+              // Make Food Facility dependent on Mess selection
+              food_included: stepData.mess ? 'yes' : 'no'
             }
-          } else if (typeof firstImage === 'string') {
-            // Images are already URLs
-            imageUrls = stepData.images as string[];
+          };
+          
+          console.log('Step 5 - After update, new additional_info:', updateData.additional_info);
+          console.log('Step 5 - Preserved room_amenities:', updateData.additional_info?.room_amenities);
+          console.log('Step 5 - Mess selection:', stepData.mess);
+          console.log('Step 5 - Food Facility set to:', stepData.mess ? 'yes' : 'no');
+          console.log('PG/Hostel step 5 amenities update data:', updateData);
+          console.log('Available services:', availableServices);
+        } else {
+          // Handle Gallery for other property types
+          // Handle image uploads if images are File objects
+          let imageUrls: string[] = [];
+          if (stepData.images && Array.isArray(stepData.images) && stepData.images.length > 0) {
+            // Check if images are File objects or already URLs
+            const firstImage = stepData.images[0];
+            if (firstImage instanceof File) {
+              console.log('Uploading images to storage...');
+              try {
+                const uploadResults = await uploadPropertyImagesByType(
+                  stepData.images as File[],
+                  updateData.property_type || 'Residential',
+                  user.id
+                );
+                imageUrls = uploadResults.map(result => result.url);
+                console.log('Images uploaded successfully:', imageUrls);
+              } catch (error) {
+                console.error('Error uploading images:', error);
+                // Don't fail the entire draft save if image upload fails
+                // Just log the error and continue with empty images
+                console.warn('Continuing without images due to upload failure');
+                imageUrls = [];
+              }
+            } else if (typeof firstImage === 'string') {
+              // Images are already URLs
+              imageUrls = stepData.images as string[];
+            }
           }
+          
+          updateData = {
+            ...updateData,
+            images: imageUrls,
+            categorized_images: stepData.categorizedImages, // Save categorized structure
+            video: stepData.video
+          };
         }
-        
-        updateData = {
-          ...updateData,
-          images: imageUrls,
-          categorized_images: stepData.categorizedImages, // Save categorized structure
-          video: stepData.video
-        };
         break;
       
-      case 6: // Schedule
-        updateData = {
-          ...updateData,
-          schedule_info: stepData
-        };
+      case 6: // Schedule or Gallery for PG/Hostel
+        if (formType === 'pg_hostel') {
+          // Handle PG/Hostel gallery
+          // Handle image uploads if images are File objects
+          let imageUrls: string[] = [];
+          if (stepData.images && Array.isArray(stepData.images) && stepData.images.length > 0) {
+            // Check if images are File objects or already URLs
+            const firstImage = stepData.images[0];
+            if (firstImage instanceof File) {
+              console.log('Uploading PG/Hostel images to storage...');
+              try {
+                const uploadResults = await uploadPropertyImagesByType(
+                  stepData.images as File[],
+                  'PG/Hostel',
+                  user.id
+                );
+                imageUrls = uploadResults.map(result => result.url);
+                console.log('PG/Hostel images uploaded successfully:', imageUrls);
+              } catch (error) {
+                console.error('Error uploading PG/Hostel images:', error);
+                console.warn('Continuing without images due to upload failure');
+                imageUrls = [];
+              }
+            } else if (typeof firstImage === 'string') {
+              // Images are already URLs
+              imageUrls = stepData.images as string[];
+            }
+          }
+          
+          updateData = {
+            ...updateData,
+            images: imageUrls,
+            categorized_images: stepData.categorizedImages,
+            video: stepData.video
+          };
+          console.log('PG/Hostel step 6 gallery update data:', updateData);
+        } else {
+          // Handle Schedule for other property types
+          updateData = {
+            ...updateData,
+            schedule_info: stepData
+          };
+        }
+        break;
+      
+      case 7: // Schedule for PG/Hostel
+        if (formType === 'pg_hostel') {
+          updateData = {
+            ...updateData,
+            schedule_info: stepData
+          };
+          console.log('PG/Hostel step 7 schedule update data:', updateData);
+        }
         break;
     }
 
     console.log('Final updateData:', updateData);
 
     if (draftId) {
-      // Update existing draft
-      return await this.updateDraft(draftId, updateData);
+      // Load existing draft to preserve existing data
+      const existingDraft = await this.getDraft(draftId);
+      if (existingDraft) {
+        // Merge existing additional_info with new data
+        const mergedUpdateData = {
+          ...updateData,
+          additional_info: {
+            ...existingDraft.additional_info,
+            ...updateData.additional_info
+          }
+        };
+        console.log('Merged updateData with existing additional_info:', mergedUpdateData);
+        return await this.updateDraft(draftId, mergedUpdateData);
+      } else {
+        // Fallback to regular update if draft not found
+        return await this.updateDraft(draftId, updateData);
+      }
     } else {
       // Create new draft
       return await this.createDraft({
@@ -480,11 +680,13 @@ export class PropertyDraftService {
         property_type: updateData.property_type || (formType === 'rental' ? 'Residential' : 
                       formType === 'sale' ? 'Residential' :
                       formType === 'commercial' ? 'Commercial' : 
-                      formType === 'commercial-sale' ? 'Commercial' : 'Land/Plot'),
+                      formType === 'commercial-sale' ? 'Commercial' : 
+                      formType === 'pg_hostel' ? 'PG/Hostel' : 'Land/Plot'),
         listing_type: formType === 'rental' ? 'Rent' : 
                      formType === 'sale' ? 'Sale' :
                      formType === 'commercial' ? 'Rent' : 
-                     formType === 'commercial-sale' ? 'Sale' : 'Industrial land'
+                     formType === 'commercial-sale' ? 'Sale' : 
+                     formType === 'pg_hostel' ? 'Rent' : 'Rent'
       });
     }
     } catch (error) {

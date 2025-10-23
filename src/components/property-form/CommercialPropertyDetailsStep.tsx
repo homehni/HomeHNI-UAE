@@ -20,7 +20,7 @@ const commercialPropertyDetailsSchema = z.object({
   totalFloors: z.union([z.number(), z.string()]).optional(),
   floorNo: z.union([z.number(), z.string()]).optional(),
   furnishingStatus: z.string().optional(),
-  superBuiltUpArea: z.number().min(1, "Super built up area is required and must be at least 1"),
+  superBuiltUpArea: z.number().min(0, "Super built up area must be 0 or greater").optional().or(z.literal(0)),
   powerLoad: z.string().optional(),
   ceilingHeight: z.string().optional(),
   entranceWidth: z.string().optional(),

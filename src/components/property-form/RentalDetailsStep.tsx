@@ -19,12 +19,12 @@ import { formatExactPriceDisplay } from '@/utils/priceFormatter';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
-  expectedPrice: z.number().min(1, "Expected rent is required and must be at least 1").optional(),
-  expectedLeaseAmount: z.number().min(1, "Expected lease amount is required and must be at least 1").optional(),
+  expectedPrice: z.number().min(0, "Expected rent must be 0 or greater").optional().or(z.literal(0)),
+  expectedLeaseAmount: z.number().min(0, "Expected lease amount must be 0 or greater").optional().or(z.literal(0)),
   rentNegotiable: z.boolean().optional(),
-  securityDeposit: z.number().optional(),
+  securityDeposit: z.number().min(0, "Security deposit must be 0 or greater").optional().or(z.literal(0)),
   monthlyMaintenance: z.string().optional(),
-  maintenanceAmount: z.number().optional(),
+  maintenanceAmount: z.number().min(0, "Maintenance amount must be 0 or greater").optional().or(z.literal(0)),
   availableFrom: z.string().optional(),
   preferredTenants: z.array(z.string()).optional(),
   furnishing: z.string().optional(),

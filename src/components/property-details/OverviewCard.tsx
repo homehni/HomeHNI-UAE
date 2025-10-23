@@ -57,10 +57,31 @@ interface OverviewCardProps {
     // Land/Plot specific fields
     road_width?: number;
     boundary_wall?: string;
+    // PG/Hostel services
+    available_services?: {
+      laundry?: string;
+      room_cleaning?: string;
+      warden_facility?: string;
+    };
+    // PG/Hostel preferences
+    gender_preference?: string;
+    preferred_guests?: string;
   };
 }
 
 export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
+  console.log('OverviewCard - Property data:', {
+    property_type: property.property_type,
+    available_services: property.available_services,
+    room_cleaning_value: property.available_services?.room_cleaning,
+    laundry_value: property.available_services?.laundry,
+    warden_facility_value: property.available_services?.warden_facility,
+    isPGHostelProperty: property.property_type?.toLowerCase().includes('pg') || 
+                        property.property_type?.toLowerCase().includes('hostel') ||
+                        property.property_type?.toLowerCase().includes('coliving') ||
+                        property.property_type === 'PG/Hostel'
+  });
+
   const formatMaintenance = (charges?: number) => {
     if (!charges) return 'Not specified';
     return `₹${charges.toLocaleString()}/month`;
@@ -132,7 +153,8 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   // Check if property is PG/Hostel/Coliving
   const isPGHostelProperty = property.property_type?.toLowerCase().includes('pg') || 
                             property.property_type?.toLowerCase().includes('hostel') ||
-                            property.property_type?.toLowerCase().includes('coliving');
+                            property.property_type?.toLowerCase().includes('coliving') ||
+                            property.property_type === 'PG/Hostel';
 
   // Check if property is Commercial
   const isCommercialProperty = property.property_type?.toLowerCase().includes('commercial') ||
@@ -324,19 +346,46 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
       label: 'Boundary Wall', 
       value: property.boundary_wall ? property.boundary_wall.charAt(0).toUpperCase() + property.boundary_wall.slice(1) : 'Not specified' 
     },
+    // PG/Hostel services
+    { 
+      icon: Droplets, 
+      label: 'Laundry Service', 
+      value: property.available_services?.laundry === 'yes' ? 'Available' : 'Not Available'
+    },
+    { 
+      icon: Home, 
+      label: 'Room Cleaning', 
+      value: property.available_services?.room_cleaning === 'yes' ? 'Available' : 'Not Available'
+    },
+    { 
+      icon: Shield, 
+      label: 'Warden Facility', 
+      value: property.available_services?.warden_facility === 'yes' ? 'Available' : 'Not Available'
+    },
+    // PG/Hostel preferences
+    { 
+      icon: Users, 
+      label: 'Gender Preference', 
+      value: property.gender_preference || 'Not specified'
+    },
   ];
 
   const filteredOverviewItems = overviewItems.filter(item => {
     // Hide irrelevant items for Land/Plot
-    if (isPlotProperty && ['Washrooms','Furnishing Status','Floor','Non-Veg Allowed','Pet Allowed','Gym','Gated Security','Road Width','Boundary Wall'].includes(item.label)) {
+    if (isPlotProperty && ['Washrooms','Furnishing Status','Floor','Non-Veg Allowed','Pet Allowed','Gym','Gated Security','Road Width','Boundary Wall','Laundry Service','Room Cleaning','Warden Facility','Gender Preference'].includes(item.label)) {
       return false;
     }
     // Hide placeholders for PG/Hostel
-    if (isPGHostelProperty && ['Bathroom','Floor'].includes(item.label)) {
+    if (isPGHostelProperty && ['Washrooms','Floor'].includes(item.label)) {
       return false;
     }
     // Hide irrelevant items for Commercial properties
-    if (isCommercialProperty && ['Washrooms','Non-Veg Allowed','Pet Allowed','Gated Security'].includes(item.label)) {
+    if (isCommercialProperty && ['Washrooms','Non-Veg Allowed','Pet Allowed','Gated Security','Laundry Service','Room Cleaning','Warden Facility','Gender Preference'].includes(item.label)) {
+      return false;
+    }
+    
+    // Hide PG/Hostel services and preferences for non-PG/Hostel properties
+    if (!isPGHostelProperty && ['Laundry Service','Room Cleaning','Warden Facility','Gender Preference'].includes(item.label)) {
       return false;
     }
     
@@ -345,10 +394,17 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
       return false;
     }
     
+    // Hide items with negative/unavailable values
+    const negativeValues = ['Not Available', 'Not available', 'No', 'false', 'No Parking', 'Not specified'];
+    if (negativeValues.includes(item.value)) {
+      return false;
+    }
+    
     const shouldShow = item.value !== 'Not specified' && item.value !== undefined;
     console.log(`OverviewCard filtering ${item.label}:`, {
       value: item.value,
       shouldShow,
+      isNegativeValue: negativeValues.includes(item.value),
       isPlotProperty,
       isPGHostelProperty,
       isCommercialProperty,
