@@ -37,6 +37,8 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   isSubmitting = false,
   formId
 }) => {
+  console.log('🖼️ ResaleGalleryStep rendered with initialData:', initialData);
+  console.log('🖼️ ResaleGalleryStep initialData.categorizedImages:', initialData.categorizedImages);
   const form = useForm({
     resolver: zodResolver(resaleGallerySchema),
     defaultValues: {
@@ -81,15 +83,22 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
   };
 
   const initialImagesState: CategorizedImagesState = (() => {
+    console.log('🖼️ ResaleGalleryStep initialImagesState - initialData.categorizedImages:', initialData.categorizedImages);
+    
+    // Filter out non-File objects (URLs, etc.) to prevent crashes
+    const filterValidFiles = (items: any[]): File[] => {
+      return items.filter(item => item instanceof File);
+    };
+    
     if (initialData.categorizedImages) {
       return {
-        bathroom: initialData.categorizedImages.bathroom || [],
-        bedroom: initialData.categorizedImages.bedroom || [],
-        hall: initialData.categorizedImages.hall || [],
-        kitchen: initialData.categorizedImages.kitchen || [],
-        frontView: initialData.categorizedImages.frontView || [],
-        balcony: initialData.categorizedImages.balcony || [],
-        others: initialData.categorizedImages.others || []
+        bathroom: filterValidFiles(initialData.categorizedImages.bathroom || []),
+        bedroom: filterValidFiles(initialData.categorizedImages.bedroom || []),
+        hall: filterValidFiles(initialData.categorizedImages.hall || []),
+        kitchen: filterValidFiles(initialData.categorizedImages.kitchen || []),
+        frontView: filterValidFiles(initialData.categorizedImages.frontView || []),
+        balcony: filterValidFiles(initialData.categorizedImages.balcony || []),
+        others: filterValidFiles(initialData.categorizedImages.others || [])
       };
     }
     return {
@@ -99,7 +108,7 @@ export const ResaleGalleryStep: React.FC<ResaleGalleryStepProps> = ({
       kitchen: [],
       frontView: [],
       balcony: [],
-      others: Array.isArray(initialData.images) ? (initialData.images as any) : []
+      others: Array.isArray(initialData.images) ? filterValidFiles(initialData.images as any) : []
     };
   })();
 

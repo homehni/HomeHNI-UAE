@@ -24,10 +24,14 @@ interface PropertySelectionData {
 
 interface PropertySelectionStepProps {
   onNext: (data: PropertySelectionData) => void;
+  onCheckDrafts?: () => Promise<boolean>; // Return true if no drafts found, false if drafts found
+  forceProceed?: boolean; // Force proceed without checking drafts
 }
 
 export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
-  onNext
+  onNext,
+  onCheckDrafts,
+  forceProceed = false
 }) => {
   const { user } = useAuth();
   const { profile } = useProfile();
@@ -67,7 +71,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     setSelectedListingType(''); // Reset listing type when property type changes
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('PropertySelectionStep handleSubmit called');
     console.log('Form validation check:', {
       selectedListingType,
@@ -80,7 +84,18 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
     });
     
     if (selectedListingType && phoneNumber && name && email) {
-      console.log('Form is valid, calling onNext with data:', {
+      console.log('Form is valid, checking for drafts first...');
+      
+      // Check for drafts before proceeding (unless forceProceed is true)
+      if (onCheckDrafts && !forceProceed) {
+        const noDraftsFound = await onCheckDrafts();
+        if (!noDraftsFound) {
+          // Drafts were found and modal is shown, don't proceed
+          return;
+        }
+      }
+      
+      console.log('Calling onNext with data:', {
         name,
         email,
         phoneNumber,

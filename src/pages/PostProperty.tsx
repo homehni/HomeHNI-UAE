@@ -24,6 +24,8 @@ import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapF
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
 import { updateUserProfile } from '@/services/profileService';
+import { PropertyDraftService } from '@/services/propertyDraftService';
+import { DraftResumeModal } from '@/components/property-form/DraftResumeModal';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
@@ -38,7 +40,7 @@ export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
   
-  // Debug logging for currentStep changes
+  // Track currentStep changes
   React.useEffect(() => {
     console.log('PostProperty currentStep changed to:', currentStep);
   }, [currentStep]);
@@ -55,6 +57,13 @@ export const PostProperty: React.FC = () => {
   } | null>(null);
   const [targetStep, setTargetStep] = useState<number | null>(null);
   const [lastSubmissionId, setLastSubmissionId] = useState<string | null>(null);
+  
+  // Draft resume functionality
+  const [showDraftResumeModal, setShowDraftResumeModal] = useState(false);
+  const [incompleteDraft, setIncompleteDraft] = useState<any>(null);
+  const [isCheckingDrafts, setIsCheckingDrafts] = useState(false);
+  const [forceProceed, setForceProceed] = useState(false);
+  
   const { user } = useAuth();
   const { settings: appSettings } = useSettings();
   const navigate = useNavigate();
@@ -116,6 +125,81 @@ export const PostProperty: React.FC = () => {
       throw error; // Re-throw to be caught by the caller
     }
   };
+
+  // Function to check for incomplete drafts
+  const checkForIncompleteDrafts = async (): Promise<boolean> => {
+    if (!user || currentStep !== 'property-selection') return true;
+    
+    // Don't check if modal is already open or if user dismissed it
+    if (showDraftResumeModal || incompleteDraft) return false;
+    
+    // Check if user has dismissed the draft modal in this session
+    const draftModalDismissed = sessionStorage.getItem('draftModalDismissed');
+    if (draftModalDismissed === 'true') {
+      console.log('Draft modal was dismissed in this session, skipping check');
+      return true; // Proceed without showing modal
+    }
+    
+    try {
+      setIsCheckingDrafts(true);
+      console.log('Checking for incomplete drafts for user:', user.id);
+      
+      // Clean up old completed drafts first
+      try {
+        await PropertyDraftService.cleanupOldCompletedDrafts();
+        console.log('Cleaned up old completed drafts');
+      } catch (error) {
+        console.warn('Failed to cleanup old drafts:', error);
+        // Don't fail the whole process if cleanup fails
+      }
+      
+      const drafts = await PropertyDraftService.getUserDrafts();
+      console.log('Found all drafts:', drafts);
+      
+      // Find the most recent incomplete draft
+      // A draft is incomplete if:
+      // 1. It has a current_step < 7 (not at preview/final step)
+      // 2. It's not marked as completed
+      // 3. It was updated recently (not older than 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      const incompleteDrafts = drafts.filter(draft => {
+        const isIncomplete = draft.current_step && draft.current_step < 7 && !draft.is_completed;
+        const isRecent = new Date(draft.updated_at || '').getTime() > thirtyDaysAgo.getTime();
+        
+        console.log(`Draft ${draft.id}: current_step=${draft.current_step}, is_completed=${draft.is_completed}, updated_at=${draft.updated_at}, isIncomplete=${isIncomplete}, isRecent=${isRecent}`);
+        
+        return isIncomplete && isRecent;
+      });
+      
+      console.log('Filtered incomplete drafts:', incompleteDrafts);
+      
+      if (incompleteDrafts.length > 0) {
+        // Sort by updated_at to get the most recent
+        const mostRecentDraft = incompleteDrafts.sort((a, b) => 
+          new Date(b.updated_at || '').getTime() - new Date(a.updated_at || '').getTime()
+        )[0];
+        
+        console.log('Found most recent incomplete draft:', mostRecentDraft);
+        setIncompleteDraft(mostRecentDraft);
+        setShowDraftResumeModal(true);
+        return false; // Drafts found, don't proceed
+      }
+      
+      return true; // No drafts found, proceed
+    } catch (error) {
+      console.error('Error checking for incomplete drafts:', error);
+      return true; // On error, proceed anyway
+    } finally {
+      setIsCheckingDrafts(false);
+    }
+  };
+
+  // Check for incomplete drafts when component mounts
+  useEffect(() => {
+    checkForIncompleteDrafts();
+  }, [user, currentStep]);
 
   // Extract edit mode, and step from URL parameters
   useEffect(() => {
@@ -292,6 +376,13 @@ export const PostProperty: React.FC = () => {
     console.log('Property selection data received:', data);
     setPropertySelectionData(data);
     
+    // Reset force proceed flag after use
+    setForceProceed(false);
+    
+    // Clear dismissal flag when user actually starts posting a new property
+    sessionStorage.removeItem('draftModalDismissed');
+    console.log('Cleared draftModalDismissed flag - user is starting new property posting');
+    
     // Clear any existing form drafts when starting fresh from property selection
     if (data.listingType === 'Resale' || data.listingType === 'Sale') {
       localStorage.removeItem('resale-form-data');
@@ -399,6 +490,173 @@ export const PostProperty: React.FC = () => {
     }
   };
 
+  // Draft resume handlers
+  const handleContinueDraft = async () => {
+    if (!incompleteDraft) return;
+    
+    try {
+      console.log('Continuing draft:', incompleteDraft);
+      
+      // Load draft data using PropertyDraftService
+      const draftData = await PropertyDraftService.loadDraftForResume(incompleteDraft.id!);
+      
+      if (!draftData) {
+        throw new Error('Failed to load draft data');
+      }
+      
+      console.log('Loaded draft data:', draftData);
+      
+      // Set owner info from draft
+      const ownerData: OwnerInfo = {
+        fullName: incompleteDraft.owner_name || '',
+        email: incompleteDraft.owner_email || '',
+        phoneNumber: incompleteDraft.owner_phone || '',
+        whatsappUpdates: incompleteDraft.whatsapp_updates || false,
+        propertyType: incompleteDraft.property_type as 'Residential' | 'Commercial' | 'Land/Plot',
+        listingType: incompleteDraft.listing_type as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land'
+      };
+      
+      console.log('Owner data from draft:', ownerData);
+      console.log('Owner listingType:', ownerData.listingType);
+      console.log('Owner propertyType:', ownerData.propertyType);
+      
+      setOwnerInfo(ownerData);
+      setInitialOwnerData(ownerData);
+      
+      // Set target step to resume from
+      setTargetStep(incompleteDraft.current_step);
+      
+      // Store draft ID and form data in sessionStorage for forms to access
+      sessionStorage.setItem('resumeDraftId', incompleteDraft.id!);
+      sessionStorage.setItem('resumeDraftData', JSON.stringify(draftData.formData));
+      
+      // Route to appropriate form based on draft data
+      console.log('Routing based on ownerData:', { propertyType: ownerData.propertyType, listingType: ownerData.listingType });
+      
+      if (ownerData.propertyType === 'Commercial') {
+        console.log('Commercial property detected');
+        if (ownerData.listingType === 'Rent') {
+          console.log('Setting currentStep to commercial-rental-form');
+          setCurrentStep('commercial-rental-form');
+        } else if (ownerData.listingType === 'Sale') {
+          console.log('Setting currentStep to commercial-sale-form');
+          setCurrentStep('commercial-sale-form');
+        }
+      } else {
+        console.log('Non-commercial property, checking listingType:', ownerData.listingType);
+        console.log('Property type:', ownerData.propertyType);
+        
+        // Special handling for PG/Hostel - check property_type instead of listing_type
+        if (ownerData.propertyType === 'PG/Hostel') {
+          console.log('PG/Hostel property detected by property_type, setting currentStep to pg-hostel-form');
+          setCurrentStep('pg-hostel-form');
+        } else {
+          // For other property types, use listing_type
+          switch (ownerData.listingType) {
+            case 'Resale':
+            case 'Sale':
+              if (ownerData.propertyType === 'Land/Plot') {
+                setCurrentStep('land-plot-form');
+              } else {
+                setCurrentStep('resale-form');
+              }
+              break;
+            case 'Industrial land':
+            case 'Agricultural Land':
+            case 'Commercial land':
+              setCurrentStep('land-plot-form');
+              break;
+            case 'PG/Hostel':
+              console.log('PG/Hostel case matched, setting currentStep to pg-hostel-form');
+              setCurrentStep('pg-hostel-form');
+              break;
+            case 'Flatmates':
+              setCurrentStep('flatmates-form');
+              break;
+            default: // 'Rent'
+              console.log('Default case matched (Rent), setting currentStep to rental-form');
+              setCurrentStep('rental-form');
+          }
+        }
+      }
+      
+      setShowDraftResumeModal(false);
+      
+      toast({
+        title: "Draft Resumed",
+        description: `Continuing from ${incompleteDraft.current_step === 1 ? 'Property Details' : 
+                     incompleteDraft.current_step === 2 ? 'Location Details' :
+                     incompleteDraft.current_step === 3 ? 'Rental Details' :
+                     incompleteDraft.current_step === 4 ? 'Amenities' :
+                     incompleteDraft.current_step === 5 ? 'Gallery' :
+                     incompleteDraft.current_step === 6 ? 'Schedule' : 'Preview'} step.`,
+      });
+      
+    } catch (error) {
+      console.error('Error continuing draft:', error);
+      toast({
+        title: "Error",
+        description: "Failed to resume draft. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleStartNewPosting = async () => {
+    if (!incompleteDraft) return;
+    
+    try {
+      // Delete the incomplete draft
+      await PropertyDraftService.deleteDraft(incompleteDraft.id!);
+      console.log('Deleted incomplete draft:', incompleteDraft.id);
+      
+      // Clear all draft-related state
+      setShowDraftResumeModal(false);
+      setIncompleteDraft(null);
+      
+      // Clear any stored draft ID from sessionStorage
+      sessionStorage.removeItem('resumeDraftId');
+      
+      // Set flag to prevent modal from showing again in this session
+      sessionStorage.setItem('draftModalDismissed', 'true');
+      console.log('Set draftModalDismissed flag to prevent popup from showing again');
+      
+      // Set force proceed to allow immediate form submission
+      setForceProceed(true);
+      
+      toast({
+        title: "Starting Fresh",
+        description: "Previous draft has been cleared. You can now start a new property listing.",
+      });
+      
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      // Still close the modal even if deletion fails
+      setShowDraftResumeModal(false);
+      setIncompleteDraft(null);
+      
+      // Clear any stored draft ID from sessionStorage
+      sessionStorage.removeItem('resumeDraftId');
+      
+      // Set force proceed to allow immediate form submission
+      setForceProceed(true);
+      
+      toast({
+        title: "Starting Fresh",
+        description: "You can now start a new property listing.",
+      });
+    }
+  };
+
+  const handleCloseDraftModal = () => {
+    setShowDraftResumeModal(false);
+    setIncompleteDraft(null);
+    
+    // Set flag to prevent modal from showing again in this session
+    sessionStorage.setItem('draftModalDismissed', 'true');
+    console.log('Set draftModalDismissed flag to prevent popup from showing again');
+  };
+
   const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData | LandPlotFormData) => {
     console.log('PostProperty handleSubmit called with data:', data);
     console.log('Data type check:', {
@@ -473,9 +731,14 @@ export const PostProperty: React.FC = () => {
       }
       
       console.log('Extracted listing type:', listingType);
-        
+      
+      // Check if this is a PG/Hostel property
+      const isPGHostel = ('pgDetails' in data.propertyInfo) || 
+                        (('propertyDetails' in data.propertyInfo) && data.propertyInfo.propertyDetails.propertyType === 'PG/Hostel');
+      
+      // Skip BHK validation for PG/Hostel properties since they don't have traditional BHK types
       const mappingValidation = validateMappedValues({
-        bhkType: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : null,
+        bhkType: isPGHostel ? null : (('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? data.propertyInfo.propertyDetails.bhkType : null),
         propertyType: ('propertyDetails' in data.propertyInfo) ? data.propertyInfo.propertyDetails.propertyType : 
                      ('plotDetails' in data.propertyInfo) ? data.propertyInfo.plotDetails.propertyType : 
                      ('commercialSaleDetails' in data.propertyInfo) ? 'Commercial' : 
@@ -669,13 +932,8 @@ export const PostProperty: React.FC = () => {
                                      data.propertyInfo.plotDetails.propertyType : 
                                      data.ownerInfo?.propertyType || 'Residential'),
         listing_type: mapListingType(listingType),
-        bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
-                 mapBhkType(data.propertyInfo.propertyDetails.bhkType) : 
-                 (mapPropertyType(('propertyDetails' in data.propertyInfo) ? 
-                                 data.propertyInfo.propertyDetails.propertyType : 
-                                 ('plotDetails' in data.propertyInfo) ? 
-                                 data.propertyInfo.plotDetails.propertyType : 
-                                 data.ownerInfo?.propertyType || 'Residential') === 'pg_hostel' ? null : null),
+        bhk_type: isPGHostel ? null : (('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
+                 mapBhkType(data.propertyInfo.propertyDetails.bhkType) : null),
         bathrooms: ((data.propertyInfo as any)?.amenities?.bathrooms) || 
                   (('propertyDetails' in data.propertyInfo && 'bathrooms' in data.propertyInfo.propertyDetails) ? 
                   Number(data.propertyInfo.propertyDetails.bathrooms) || 0 : 0),
@@ -760,7 +1018,9 @@ export const PostProperty: React.FC = () => {
         owner_email: data.ownerInfo.email || '',
         owner_phone: data.ownerInfo.phoneNumber || '',
         // Add amenities data
-        amenities: (data.propertyInfo as any).amenities || null
+        amenities: (data.propertyInfo as any).amenities || null,
+        // Add additional_info for PG/Hostel and Flatmates specific data
+        additional_info: (data.propertyInfo as any).additional_info || null
       };
 
       console.log('Prepared property data for database:', propertyData);
@@ -1081,9 +1341,8 @@ export const PostProperty: React.FC = () => {
                         ? (data.propertyInfo.plotDetails.propertyType || 'Land/Plot')
                         : listingType === 'PG/Hostel' ? 'PG/Hostel' : listingType === 'Flatmates' ? 'Flatmates' : 'Commercial'),
         listing_type: priceDetailsDraft?.listingType || 'Sale',
-        bhk_type: ('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
-                 data.propertyInfo.propertyDetails.bhkType : 
-                 (listingType === 'PG/Hostel' ? null : null),
+        bhk_type: isPGHostel ? null : (('propertyDetails' in data.propertyInfo && 'bhkType' in data.propertyInfo.propertyDetails) ? 
+                 data.propertyInfo.propertyDetails.bhkType : null),
         state: data.propertyInfo.locationDetails.state || 'Unknown',
         city: data.propertyInfo.locationDetails.city || 'Unknown',
         locality: data.propertyInfo.locationDetails.locality || 'Unknown',
@@ -1182,7 +1441,11 @@ export const PostProperty: React.FC = () => {
                 
                 {/* Right Form Area - Compact */}
                 <div className="w-full lg:flex-1 max-w-2xl mx-auto lg:mx-0 bg-white rounded-lg shadow-sm border border-gray-200 min-h-fit">
-                  <PropertySelectionStep onNext={handlePropertySelectionNext} />
+        <PropertySelectionStep
+          onNext={handlePropertySelectionNext}
+          onCheckDrafts={checkForIncompleteDrafts}
+          forceProceed={forceProceed}
+        />
                 </div>
               </div>
             </div>
@@ -1286,6 +1549,17 @@ export const PostProperty: React.FC = () => {
       </div>
       {/* Only show Footer on property-selection step */}
       {currentStep === 'property-selection' && <Footer />}
+      
+      {/* Draft Resume Modal */}
+      {incompleteDraft && (
+        <DraftResumeModal
+          isOpen={showDraftResumeModal}
+          onClose={handleCloseDraftModal}
+          onContinue={handleContinueDraft}
+          onStartNew={handleStartNewPosting}
+          draftData={incompleteDraft}
+        />
+      )}
     </div>
   );
 };

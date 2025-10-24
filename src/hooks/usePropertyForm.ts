@@ -96,11 +96,21 @@ export const usePropertyForm = () => {
   };
 
   const updateLocationDetails = (data: Partial<LocationDetails>) => {
-    setLocationDetails(prev => ({ ...prev, ...data }));
+    console.log('Updating location details with:', data);
+    setLocationDetails(prev => {
+      const updated = { ...prev, ...data };
+      console.log('Updated location details:', updated);
+      return updated;
+    });
   };
 
   const updateRentalDetails = (data: Partial<RentalDetails>) => {
-    setRentalDetails(prev => ({ ...prev, ...data }));
+    console.log('Updating rental details with:', data);
+    setRentalDetails(prev => {
+      const updated = { ...prev, ...data };
+      console.log('Updated rental details:', updated);
+      return updated;
+    });
   };
 
   const updateAmenities = (data: Partial<PropertyAmenities>) => {

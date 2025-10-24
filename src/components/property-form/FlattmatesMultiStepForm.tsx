@@ -130,8 +130,17 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       return;
     }
 
-    const previewUrl = PropertyDraftService.generatePreviewUrl(draftId);
-    window.open(previewUrl, '_blank');
+    try {
+      // Open preview in new tab using the unified preview page
+      window.open(`/buy/preview/${draftId}/detail`, '_blank');
+    } catch (error) {
+      console.error('Error opening preview:', error);
+      toast({
+        title: "Preview Error",
+        description: "Failed to open preview. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
@@ -149,6 +158,64 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       setCurrentStep(targetStep);
     }
   }, [targetStep]);
+
+  // Load draft data if resuming from a draft
+  useEffect(() => {
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
+    
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('Loading draft data for FlattmatesMultiStepForm:', draftData);
+        
+        // Load form data from draft
+        if (draftData.propertyDetails) {
+          setPropertyDetails(draftData.propertyDetails);
+        }
+        if (draftData.locationDetails) {
+          setLocationDetails(draftData.locationDetails);
+        }
+        if (draftData.rentalDetails) {
+          setRentalDetails(draftData.rentalDetails);
+        }
+        if (draftData.amenities) {
+          setAmenities(draftData.amenities);
+        }
+        if (draftData.gallery) {
+          setGallery(draftData.gallery);
+        }
+        if (draftData.additionalInfo) {
+          setAdditionalInfo(draftData.additionalInfo);
+        }
+        if (draftData.scheduleInfo) {
+          setScheduleInfo(draftData.scheduleInfo);
+        }
+        
+        // Set draft ID for saving
+        setDraftId(resumeDraftId);
+        
+        // Clear sessionStorage after loading
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+        
+        console.log('Successfully loaded draft data for FlattmatesMultiStepForm');
+      } catch (error) {
+        console.error('Error loading draft data:', error);
+        // Clear sessionStorage on error
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
+    }
+  }, []);
+
+  // Navigate to target step after draft data is loaded
+  useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 7 && draftId) {
+      console.log('Flatmates navigating to target step after draft loaded:', targetStep);
+      setCurrentStep(targetStep);
+    }
+  }, [targetStep, draftId]);
 
   const scrollToTop = () => {
     try {
@@ -238,94 +305,38 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       console.log(`=== saveIntermediateData CALLED ===`);
       console.log(`Saving intermediate data for step ${stepNumber}:`, stepData);
       
-      // Prepare the complete form data with the current step data
-      const completeFormData = {
-        ownerInfo,
-        propertyDetails: stepNumber === 1 ? stepData : propertyDetails,
-        locationDetails: stepNumber === 2 ? stepData : locationDetails,
-        rentalDetails: stepNumber === 3 ? stepData : rentalDetails,
-        amenities: stepNumber === 4 ? stepData : amenities,
-        gallery: stepNumber === 5 ? stepData : gallery,
-        additionalInfo: stepNumber === 6 ? stepData : additionalInfo,
-        scheduleInfo: stepNumber === 7 ? stepData : scheduleInfo,
-        currentStep: stepNumber,
-        completedSteps,
-        formType: 'flatmates'
-      };
+      // Save to localStorage as backup
+      localStorage.setItem('flatmates-form-data', JSON.stringify(stepData));
+      console.log('Saved to localStorage as backup:', stepData);
 
-      console.log('Complete form data prepared:', completeFormData);
-
-      // Generate title for the submission using the current step data
-      const currentPropertyDetails = stepNumber === 1 ? stepData : propertyDetails;
-      const title = currentPropertyDetails.apartmentName
-        ? `${currentPropertyDetails.bhkType} ${currentPropertyDetails.apartmentType} - ${currentPropertyDetails.apartmentName} for Flatmates`
-        : `${currentPropertyDetails.bhkType} ${currentPropertyDetails.apartmentType} for Flatmates`;
-
-      console.log('Generated title:', title);
-
-      // Get current location details for city/state
-      const currentLocationDetails = stepNumber === 2 ? stepData : locationDetails;
-
-      // For now, let's also save to localStorage as a backup
-      localStorage.setItem('flatmates-form-data', JSON.stringify(completeFormData));
-      console.log('Saved to localStorage as backup:', completeFormData);
-
-      // Test: Just log for now, don't actually save to database
-      console.log('Would save to database:', {
-        title,
-        city: currentLocationDetails.city || '',
-        state: currentLocationDetails.state || '',
-        payload: completeFormData,
-        status: 'draft'
-      });
+      // Use PropertyDraftService.saveFormData for proper form handling
+      const savedDraft = await PropertyDraftService.saveFormData(
+        draftId,
+        stepData,
+        stepNumber,
+        'flatmates' // Use 'flatmates' as the form type for Flatmates properties
+      );
+      
+      if (savedDraft?.id) {
+        setDraftId(savedDraft.id);
+        console.log('Draft saved successfully with ID:', savedDraft.id);
+        
+        // Update the property_type and listing_type for Flatmates properties
+        await PropertyDraftService.updateDraft(savedDraft.id, {
+          property_type: 'Flatmates', // Use proper case
+          listing_type: 'Flatmates' // Use proper case, not 'rent'
+        });
+        console.log('Updated property_type and listing_type to Flatmates');
+      }
 
       console.log(`=== saveIntermediateData COMPLETED ===`);
-      
-      // Comment out database operations for now to test
-      /*
-      if (submissionId) {
-        // Update existing submission
-        const { error } = await supabase
-          .from('property_submissions')
-          .update({
-            title,
-            city: currentLocationDetails.city || '',
-            state: currentLocationDetails.state || '',
-            payload: completeFormData,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', submissionId);
-
-        if (error) {
-          console.error('Error updating submission:', error);
-        } else {
-          console.log('Successfully updated submission:', submissionId);
-        }
-      } else {
-        // Create new submission
-        const { data, error } = await supabase
-          .from('property_submissions')
-          .insert({
-            user_id: user?.id || null,
-            title,
-            city: currentLocationDetails.city || '',
-            state: currentLocationDetails.state || '',
-            payload: completeFormData,
-            status: 'draft'
-          })
-          .select()
-          .single();
-
-        if (error) {
-          console.error('Error creating submission:', error);
-        } else {
-          console.log('Successfully created submission:', data.id);
-          setSubmissionId(data.id);
-        }
-      }
-      */
     } catch (error) {
       console.error('Error saving intermediate data:', error);
+      toast({
+        title: "Save Error",
+        description: "Failed to save progress. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 

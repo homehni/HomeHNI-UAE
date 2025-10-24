@@ -26,7 +26,11 @@ import {
   ChefHat,
   Wind,
   Bed,
-  ShowerHead
+  ShowerHead,
+  Building2,
+  Cigarette,
+  Wine,
+  Bath
 } from 'lucide-react';
 
 interface AmenitiesCardProps {
@@ -90,7 +94,15 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     warden_facility: 'Warden Facility',
     // "What You Get" section amenities
     waterStorageFacility: 'Water Storage Facility',
-    currentPropertyCondition: 'Property Condition'
+    currentPropertyCondition: 'Property Condition',
+    // Flatmates-specific amenities
+    attachedBathroom: 'Attached Bathroom',
+    bathrooms: 'Bathrooms',
+    balconies: 'Balconies',
+    smokingAllowed: 'Smoking Allowed',
+    drinkingAllowed: 'Drinking Allowed',
+    secondaryNumber: 'Secondary Number',
+    moreSimilarUnits: 'More Similar Units'
   };
 
   const getIconForAmenity = (amenity: string) => {
@@ -130,6 +142,12 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
       'AC': Wind,
       'Bedding': Bed,
       'Attached Bathroom': ShowerHead,
+      'Bathrooms': Bath,
+      'Balconies': Building2,
+      'Smoking Allowed': Cigarette,
+      'Drinking Allowed': Wine,
+      'Secondary Number': Phone,
+      'More Similar Units': Building
     };
     return iconMap[amenity] || Home;
   };
@@ -154,7 +172,7 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
         const key = String(rawKey);
         
         // Skip non-amenity fields that should be displayed elsewhere
-        if (['whoWillShow', 'currentPropertyCondition', 'directionsTip', 'secondaryNumber', 'who_will_show', 'current_property_condition', 'directions_tip', 'secondary_phone', 'nonVegAllowed', 'petAllowed', 'gym', 'gatedSecurity', 'non_veg_allowed', 'pet_allowed', 'parking'].includes(key)) {
+        if (['whoWillShow', 'currentPropertyCondition', 'directionsTip', 'who_will_show', 'current_property_condition', 'directions_tip', 'secondary_phone', 'nonVegAllowed', 'petAllowed', 'gym', 'gatedSecurity', 'non_veg_allowed', 'pet_allowed', 'parking'].includes(key)) {
           return;
         }
         
@@ -250,6 +268,31 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
               'available': 'Sewage Connection'
             };
             displayName = sewageMap[value] || displayName;
+          }
+          
+          // Flatmates-specific value mappings
+          if (key === 'attachedBathroom' && typeof value === 'boolean') {
+            displayName = value ? 'Attached Bathroom' : 'No Attached Bathroom';
+          }
+          
+          if (key === 'bathrooms' && typeof value === 'number') {
+            displayName = value > 0 ? `${value} Bathroom${value > 1 ? 's' : ''}` : 'No Bathrooms';
+          }
+          
+          if (key === 'balconies' && typeof value === 'number') {
+            displayName = value > 0 ? `${value} Balcon${value > 1 ? 'ies' : 'y'}` : 'No Balconies';
+          }
+          
+          if (key === 'smokingAllowed' && typeof value === 'boolean') {
+            displayName = value ? 'Smoking Allowed' : 'No Smoking';
+          }
+          
+          if (key === 'drinkingAllowed' && typeof value === 'boolean') {
+            displayName = value ? 'Drinking Allowed' : 'No Drinking';
+          }
+          
+          if (key === 'moreSimilarUnits' && typeof value === 'boolean') {
+            displayName = value ? 'More Similar Units Available' : 'No More Similar Units';
           }
           
           availableAmenities.push({

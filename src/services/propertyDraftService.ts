@@ -270,6 +270,25 @@ export class PropertyDraftService {
   }
 
   /**
+   * Clean up old completed drafts (older than 30 days)
+   */
+  static async cleanupOldCompletedDrafts(): Promise<void> {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const { error } = await supabase
+      .from('property_drafts')
+      .delete()
+      .eq('is_completed', true)
+      .lt('updated_at', thirtyDaysAgo.toISOString());
+
+    if (error) {
+      console.error('Error cleaning up old completed drafts:', error);
+      throw new Error('Failed to cleanup old completed drafts');
+    }
+  }
+
+  /**
    * Save form data to draft (handles both create and update)
    */
   static async saveFormData(
@@ -313,6 +332,8 @@ export class PropertyDraftService {
           facing: stepData.facing,
           built_up_area: stepData.builtUpArea,
           carpet_area: stepData.carpetArea,
+          // Map tenantType to preferred_tenant for Flatmates properties
+          preferred_tenant: stepData.tenantType === 'Male' ? 'male' : stepData.tenantType === 'Female' ? 'female' : stepData.tenantType === 'Any' ? 'any' : stepData.tenantType,
           // Save the actual property type from the form
           property_type: stepData.propertyType || (formType === 'land' ? 'Land/Plot' : formType === 'pg_hostel' ? 'PG/Hostel' : 'Residential'),
           // Store PG/Hostel specific fields in additional_info JSONB field
@@ -510,6 +531,25 @@ export class PropertyDraftService {
             directions_tip: stepData.directionsTip,
             bathrooms: stepData.bathrooms,
             balconies: stepData.balconies,
+            // Store Flatmates-specific amenities in additional_info JSONB field
+            additional_info: {
+              ...updateData.additional_info,
+              // Room Details
+              attachedBathroom: stepData.attachedBathroom,
+              bathrooms: stepData.bathrooms,
+              balconies: stepData.balconies,
+              // Flatmate Preferences
+              nonVegAllowed: stepData.nonVegAllowed,
+              smokingAllowed: stepData.smokingAllowed,
+              drinkingAllowed: stepData.drinkingAllowed,
+              // Additional Details
+              whoWillShow: stepData.whoWillShow,
+              secondaryNumber: stepData.secondaryNumber,
+              moreSimilarUnits: stepData.moreSimilarUnits,
+              // Amenities
+              waterStorageFacility: stepData.waterStorageFacility,
+              wifi: stepData.wifi
+            }
           };
         }
         break;
@@ -714,5 +754,334 @@ export class PropertyDraftService {
    */
   static generatePreviewUrl(draftId: string): string {
     return `/buy/preview/${draftId}/detail`;
+  }
+
+  /**
+   * Load draft data for resuming a form
+   */
+  static async loadDraftForResume(draftId: string): Promise<{
+    ownerInfo: any;
+    formData: any;
+    currentStep: number;
+  } | null> {
+    try {
+      const draft = await this.getDraft(draftId);
+      if (!draft) return null;
+
+      console.log('Loading draft for resume:', draft);
+      console.log('🔍 Draft database fields:', {
+        apartment_name: draft.apartment_name,
+        title: draft.title,
+        property_type: draft.property_type,
+        listing_type: draft.listing_type,
+        bhk_type: draft.bhk_type,
+        property_age: draft.property_age,
+        building_type: draft.building_type,
+        facing: draft.facing,
+        floor_type: draft.floor_type,
+        total_floors: draft.total_floors,
+        floor_no: draft.floor_no,
+        super_built_up_area: draft.super_built_up_area,
+        built_up_area: draft.built_up_area,
+        on_main_road: draft.on_main_road,
+        corner_property: draft.corner_property
+      });
+
+      // Extract owner info
+      const ownerInfo = {
+        fullName: draft.owner_name || '',
+        email: draft.owner_email || '',
+        phoneNumber: draft.owner_phone || '',
+        whatsappUpdates: draft.whatsapp_updates || false,
+        propertyType: draft.property_type as 'Residential' | 'Commercial' | 'Land/Plot',
+        listingType: draft.listing_type as 'Rent' | 'Resale' | 'PG/Hostel' | 'Flatmates' | 'Sale' | 'Industrial land' | 'Agricultural Land' | 'Commercial land'
+      };
+
+      // Extract form data based on property type
+      let formData: any = {};
+
+      if (draft.property_type === 'PG/Hostel') {
+        formData = {
+          // Room Types
+          roomTypes: {
+            selectedTypes: draft.additional_info?.room_type ? [draft.additional_info.room_type] : []
+          },
+          // Room Details
+          roomDetails: {
+            roomTypeDetails: draft.expected_rent ? {
+              [draft.additional_info?.room_type || 'single']: {
+                expectedRent: draft.expected_rent,
+                expectedDeposit: draft.expected_deposit || 0,
+                availableRooms: 1
+              }
+            } : {},
+            roomAmenities: draft.additional_info?.room_amenities || {
+              cupboard: false,
+              geyser: false,
+              tv: false,
+              ac: false,
+              bedding: false,
+              attachedBathroom: false
+            }
+          },
+          // Location Details
+          localityDetails: {
+            state: draft.state || '',
+            city: draft.city || '',
+            locality: draft.locality || '',
+            pincode: draft.pincode || '',
+            societyName: draft.society_name || '',
+            landmark: draft.landmark || ''
+          },
+          // PG Details
+          pgDetails: {
+            genderPreference: draft.additional_info?.gender_preference || 'anyone',
+            preferredGuests: draft.additional_info?.preferred_guests || '',
+            gateClosingTime: draft.additional_info?.gate_closing_time || '',
+            foodIncluded: draft.additional_info?.food_included || ''
+          },
+          // Amenities
+          amenities: {
+            laundry: draft.additional_info?.available_services?.laundry || '',
+            roomCleaning: draft.additional_info?.available_services?.room_cleaning || '',
+            wardenFacility: draft.additional_info?.available_services?.warden_facility || '',
+            waterStorageFacility: draft.additional_info?.water_storage_facility || false,
+            wifi: draft.additional_info?.wifi || false,
+            commonTv: draft.additional_info?.common_tv || false,
+            refrigerator: draft.additional_info?.refrigerator || false,
+            mess: draft.additional_info?.mess || false,
+            cookingAllowed: draft.additional_info?.cooking_allowed || false,
+            powerBackup: draft.power_backup || false,
+            lift: draft.lift || false,
+            parking: draft.parking || '',
+            security: draft.security || '',
+            currentPropertyCondition: draft.current_property_condition || '',
+            directionsTip: draft.directions_tip || ''
+          },
+          // Gallery
+          gallery: {
+            images: draft.images || [],
+            video: draft.video || null
+          },
+          // Schedule Info
+          scheduleInfo: draft.schedule_info || {
+            startTime: '',
+            endTime: '',
+            availability: '',
+            availableAllDay: false,
+            cleaningService: '',
+            paintingService: ''
+          }
+        };
+      } else if (draft.property_type === 'flatmates') {
+        formData = {
+          // Property Details
+          propertyDetails: {
+            apartmentType: draft.apartment_type || '',
+            apartmentName: draft.apartment_name || '',
+            bhkType: draft.bhk_type || '',
+            floorNo: draft.floor_no || 0,
+            totalFloors: draft.total_floors || 0,
+            roomType: draft.room_type || '',
+            tenantType: draft.preferred_tenant || '',
+            propertyAge: draft.property_age || '',
+            facing: draft.facing || '',
+            builtUpArea: draft.built_up_area || 0
+          },
+          // Location Details
+          locationDetails: {
+            state: draft.state || '',
+            city: draft.city || '',
+            locality: draft.locality || '',
+            pincode: draft.pincode || '',
+            societyName: draft.society_name || '',
+            landmark: draft.landmark || ''
+          },
+          // Rental Details - using correct field names for RentalDetailsStep
+          rentalDetails: {
+            listingType: 'Rent',
+            expectedPrice: draft.expected_rent || 0,
+            rentNegotiable: draft.rent_negotiable || false,
+            maintenanceExtra: draft.maintenance_extra || false,
+            maintenanceIncluded: draft.maintenance_included || false,
+            maintenanceCharges: draft.maintenance_charges || 0,
+            securityDeposit: draft.expected_deposit || draft.security_deposit || 0,
+            depositNegotiable: false,
+            leaseDuration: '',
+            lockinPeriod: '',
+            availableFrom: draft.available_from || '',
+            idealFor: draft.preferred_tenant ? [draft.preferred_tenant] : []
+          },
+          // Amenities - using correct field names for AmenitiesStep
+          amenities: {
+            bathrooms: draft.bathrooms || 0,
+            balconies: draft.balconies || 0,
+            waterSupply: draft.water_supply || '',
+            petAllowed: draft.pet_allowed || false,
+            gym: draft.gym || false,
+            nonVegAllowed: draft.non_veg_allowed || false,
+            gatedSecurity: draft.gated_security || false,
+            whoWillShow: draft.who_will_show || '',
+            currentPropertyCondition: draft.current_property_condition || '',
+            secondaryNumber: draft.secondary_number || '',
+            moreSimilarUnits: draft.more_similar_units || false,
+            directionsTip: draft.directions_tip || '',
+            lift: draft.lift || 'Not Available',
+            powerBackup: draft.power_backup || 'Not Available',
+            waterStorageFacility: draft.water_storage_facility || 'Not Available',
+            security: draft.security || 'Not Available',
+            wifi: draft.wifi || 'Not Available',
+            internetServices: draft.internet_services || 'Not Available',
+            airConditioner: draft.air_conditioner || 'Not Available',
+            clubHouse: draft.club_house || 'Not Available',
+            intercom: draft.intercom || 'Not Available',
+            swimmingPool: draft.swimming_pool || 'Not Available',
+            childrenPlayArea: draft.children_play_area || 'Not Available',
+            joggingTrack: draft.jogging_track || 'Not Available',
+            landscapedGarden: draft.landscaped_garden || 'Not Available',
+            rainwaterHarvesting: draft.rainwater_harvesting || 'Not Available',
+            vaastuCompliant: draft.vaastu_compliant || 'Not Available',
+            parking: draft.parking || 'Not Available'
+          },
+          // Gallery
+          gallery: {
+            images: draft.images || [],
+            video: draft.video || undefined
+          },
+          // Additional Info
+          additionalInfo: {
+            description: draft.description || '',
+            previousOccupancy: '',
+            paintingRequired: '',
+            cleaningRequired: ''
+          },
+          // Schedule Info
+          scheduleInfo: draft.schedule_info || {
+            availability: 'everyday',
+            paintingService: 'decline',
+            cleaningService: 'decline',
+            startTime: '',
+            endTime: '',
+            availableAllDay: true
+          }
+        };
+      } else {
+        // For other property types (rental, sale, commercial, land)
+        formData = {
+          // Property Details - using correct field names for PropertyDetailsStep
+          propertyDetails: {
+            title: draft.apartment_name || draft.title || '',
+            propertyType: draft.property_type || 'Residential',
+            buildingType: draft.building_type || '',
+            bhkType: draft.bhk_type || '',
+            propertyAge: draft.property_age || '',
+            facing: draft.facing || '',
+            floorType: draft.floor_type || '',
+            totalFloors: draft.total_floors || 1,
+            floorNo: draft.floor_no || 0,
+            superBuiltUpArea: draft.super_built_up_area || draft.built_up_area || 0,
+            onMainRoad: draft.on_main_road || false,
+            cornerProperty: draft.corner_property || false,
+            // Commercial specific
+            spaceType: draft.space_type || '',
+            furnishingStatus: draft.furnishing_status || '',
+            powerLoad: draft.power_load || '',
+            ceilingHeight: draft.ceiling_height || '',
+            entranceWidth: draft.entrance_width || '',
+            loadingFacility: draft.loading_facility || false,
+            // Land/Plot specific
+            plotArea: draft.plot_area || 0,
+            plotAreaUnit: draft.plot_area_unit || 'sq-ft',
+            plotLength: draft.plot_length || 0,
+            plotWidth: draft.plot_width || 0,
+            boundaryWall: draft.boundary_wall || '',
+            cornerPlot: draft.corner_plot || false,
+            roadFacing: draft.road_facing || '',
+            roadWidth: draft.road_width || 0,
+            landType: draft.land_type || '',
+            plotShape: draft.plot_shape || '',
+            gatedCommunity: draft.gated_community || false,
+            gatedProject: draft.gated_project || '',
+            floorsAllowed: draft.floors_allowed || 0,
+            surveyNumber: draft.survey_number || '',
+            subDivision: draft.sub_division || '',
+            villageName: draft.village_name || ''
+          },
+          // Location Details
+          locationDetails: {
+            state: draft.state || '',
+            city: draft.city || '',
+            locality: draft.locality || '',
+            pincode: draft.pincode || '',
+            societyName: draft.society_name || '',
+            landmark: draft.landmark || ''
+          },
+          // Sale Details - using correct field names for SaleDetailsStep
+          saleDetails: {
+            listingType: 'Sale',
+            expectedPrice: draft.expected_price || draft.expected_rent || 0,
+            priceNegotiable: draft.price_negotiable || true,
+            possessionDate: draft.possession_date || '',
+            registrationStatus: draft.registration_status || 'ready_to_move',
+            homeLoanAvailable: draft.home_loan_available || true,
+            maintenanceCharges: draft.maintenance_charges || 0,
+            pricePerSqFt: draft.price_per_sqft || 0,
+            bookingAmount: draft.booking_amount || 0,
+            propertyAge: draft.property_age || '',
+            description: draft.description || ''
+          },
+          // Amenities
+          amenities: {
+            furnishing: draft.furnishing || '',
+            parking: draft.parking || '',
+            powerBackup: draft.power_backup || '',
+            lift: draft.lift || '',
+            waterSupply: draft.water_supply || '',
+            security: draft.security || '',
+            gym: draft.gym || '',
+            gatedSecurity: draft.gated_security || '',
+            currentPropertyCondition: draft.current_property_condition || '',
+            directionsTip: draft.directions_tip || '',
+            bathrooms: draft.bathrooms || 0,
+            balconies: draft.balconies || 0,
+            // Land/Plot specific amenities
+            waterSupply: draft.water_supply || '',
+            electricityConnection: draft.electricity_connection || '',
+            sewageConnection: draft.sewage_connection || '',
+            roadWidth: draft.road_width || 0,
+            gatedSecurity: draft.gated_security || '',
+            directionsToProperty: draft.directions_tip || ''
+          },
+          // Gallery
+          gallery: {
+            images: draft.images || [],
+            video: draft.video || undefined,
+            categorizedImages: draft.categorized_images || {}
+          },
+          // Additional Info
+          additionalInfo: {
+            description: draft.description || ''
+          },
+          // Schedule Info
+          scheduleInfo: draft.schedule_info || {
+            availability: 'everyday',
+            paintingService: 'decline',
+            cleaningService: 'decline',
+            startTime: '',
+            endTime: '',
+            availableAllDay: true
+          }
+        };
+      }
+
+      return {
+        ownerInfo,
+        formData,
+        currentStep: draft.current_step || 1
+      };
+    } catch (error) {
+      console.error('Error loading draft for resume:', error);
+      return null;
+    }
   }
 }

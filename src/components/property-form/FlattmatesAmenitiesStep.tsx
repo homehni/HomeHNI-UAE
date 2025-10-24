@@ -16,8 +16,8 @@ import {
 const amenitiesSchema = z.object({
   // Room Details
   attachedBathroom: z.boolean().optional(),
-  acRoom: z.boolean().optional(),
-  balcony: z.boolean().optional(),
+  bathrooms: z.number().min(0).optional(),
+  balconies: z.number().min(0).optional(),
   
   // Flatmate Preference
   nonVegAllowed: z.boolean().optional(),
@@ -48,8 +48,8 @@ type FlattmatesAmenitiesFormData = z.infer<typeof amenitiesSchema>;
 interface FlattmatesAmenities {
   // Room Details
   attachedBathroom?: boolean;
-  acRoom?: boolean;
-  balcony?: boolean;
+  bathrooms?: number;
+  balconies?: number;
   
   // Flatmate Preference
   nonVegAllowed?: boolean;
@@ -91,8 +91,8 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
     defaultValues: {
       // Room Details
       attachedBathroom: initialData.attachedBathroom || false,
-      acRoom: initialData.acRoom || false,
-      balcony: initialData.balcony || false,
+      bathrooms: initialData.bathrooms || 0,
+      balconies: initialData.balconies || 0,
       
       // Flatmate Preference
       nonVegAllowed: initialData.nonVegAllowed || false,
@@ -124,8 +124,8 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
       form.reset({
         // Room Details
         attachedBathroom: initialData.attachedBathroom || false,
-        acRoom: initialData.acRoom || false,
-        balcony: initialData.balcony || false,
+        bathrooms: initialData.bathrooms || 0,
+        balconies: initialData.balconies || 0,
         
         // Flatmate Preference
         nonVegAllowed: initialData.nonVegAllowed || false,
@@ -178,106 +178,51 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-red-600 mb-4">Room Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Attached Bathroom */}
+              {/* Bathrooms */}
               <FormField
                 control={form.control}
-                name="attachedBathroom"
+                name="bathrooms"
                 render={({ field }) => (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <Bath className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">Attached Bathroom</FormLabel>
+                      <FormLabel className="text-sm font-medium">Bathrooms</FormLabel>
                     </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        type="button"
-                        variant={field.value === false ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => field.onChange(false)}
-                        className="flex-1"
-                      >
-                        No
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={field.value === true ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => field.onChange(true)}
-                        className="flex-1"
-                      >
-                        Yes
-                      </Button>
-                    </div>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="10"
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* AC Room */}
+              {/* Balconies */}
               <FormField
                 control={form.control}
-                name="acRoom"
-                render={({ field }) => (
-                  <FormItem className="border rounded-lg p-4">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <Wind className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">AC Room</FormLabel>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        type="button"
-                        variant={field.value === false ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => field.onChange(false)}
-                        className="flex-1"
-                      >
-                        No
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={field.value === true ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => field.onChange(true)}
-                        className="flex-1"
-                      >
-                        Yes
-                      </Button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Balcony */}
-              <FormField
-                control={form.control}
-                name="balcony"
+                name="balconies"
                 render={({ field }) => (
                   <FormItem className="border rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <Building2 className="w-5 h-5 text-muted-foreground" />
-                      <FormLabel className="text-sm font-medium">Balcony</FormLabel>
+                      <FormLabel className="text-sm font-medium">Balconies</FormLabel>
                     </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        type="button"
-                        variant={field.value === false ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => field.onChange(false)}
-                        className="flex-1"
-                      >
-                        No
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={field.value === true ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => field.onChange(true)}
-                        className="flex-1"
-                      >
-                        Yes
-                      </Button>
-                    </div>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min="0"
+                        max="10"
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

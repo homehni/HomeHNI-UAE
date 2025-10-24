@@ -71,6 +71,8 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   const maintenanceType = form.watch('monthlyMaintenance');
 
   const onSubmit = (data: RentalDetailsForm) => {
+    console.log('RentalDetailsStep onSubmit called with data:', data);
+    
     // Convert form data to RentalDetails format
     const rentalData: RentalDetails = {
       listingType: 'Rent',
@@ -93,6 +95,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
       parking: data.parking,
     };
     
+    console.log('RentalDetailsStep calling onNext with:', { rentalData, amenitiesData });
     onNext(rentalData, amenitiesData);
   };
 

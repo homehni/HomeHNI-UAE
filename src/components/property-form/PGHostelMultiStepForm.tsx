@@ -131,6 +131,93 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
     }
   }, [createdSubmissionId]);
   
+  // Load draft data if resuming from a draft
+  React.useEffect(() => {
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
+    
+    console.log('PGHostelMultiStepForm checking for draft data:', { resumeDraftId, resumeDraftData: !!resumeDraftData });
+    
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('PGHostelMultiStepForm loading draft data:', draftData);
+        console.log('PGHostelMultiStepForm draft data structure:', {
+          roomTypes: draftData.roomTypes,
+          roomDetails: draftData.roomDetails,
+          localityDetails: draftData.localityDetails,
+          pgDetails: draftData.pgDetails,
+          amenities: draftData.amenities,
+          gallery: draftData.gallery,
+          scheduleInfo: draftData.scheduleInfo
+        });
+        
+        // Load form data from draft
+        if (draftData.roomTypes) {
+          console.log('PGHostelMultiStepForm setting roomTypes:', draftData.roomTypes);
+          setRoomTypes(draftData.roomTypes);
+        }
+        if (draftData.roomDetails) {
+          console.log('PGHostelMultiStepForm setting roomDetails:', draftData.roomDetails);
+          setRoomDetails(draftData.roomDetails);
+        }
+        if (draftData.localityDetails) {
+          console.log('PGHostelMultiStepForm setting localityDetails:', draftData.localityDetails);
+          setLocalityDetails(draftData.localityDetails);
+        }
+        if (draftData.pgDetails) {
+          console.log('PGHostelMultiStepForm setting pgDetails:', draftData.pgDetails);
+          setPgDetails(draftData.pgDetails);
+        }
+        if (draftData.amenities) {
+          console.log('PGHostelMultiStepForm setting amenities:', draftData.amenities);
+          setAmenities(draftData.amenities);
+        }
+        if (draftData.gallery) {
+          console.log('PGHostelMultiStepForm setting gallery:', draftData.gallery);
+          setGallery(draftData.gallery);
+        }
+        if (draftData.scheduleInfo) {
+          console.log('PGHostelMultiStepForm setting scheduleInfo:', draftData.scheduleInfo);
+          setScheduleInfo(draftData.scheduleInfo);
+        }
+        
+        // Set draft ID for saving
+        setDraftId(resumeDraftId);
+        console.log('PGHostelMultiStepForm set draftId:', resumeDraftId);
+        
+        // Clear sessionStorage after loading
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+        
+        console.log('Successfully loaded draft data for PGHostelMultiStepForm');
+      } catch (error) {
+        console.error('Error loading draft data:', error);
+        // Clear sessionStorage on error
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
+    }
+  }, []);
+
+  // Navigate to target step if provided
+  React.useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
+      console.log('PG/Hostel navigating to target step:', targetStep);
+      setCurrentStep(targetStep);
+    }
+  }, [targetStep]);
+
+  // Navigate to target step after draft data is loaded
+  const hasNavigatedToTargetStep = React.useRef(false);
+  React.useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 8 && draftId && !hasNavigatedToTargetStep.current) {
+      console.log('PG/Hostel navigating to target step after draft loaded:', targetStep);
+      setCurrentStep(targetStep);
+      hasNavigatedToTargetStep.current = true;
+    }
+  }, [targetStep, draftId]);
+
   // Skip owner info and property info - start from room details
   const [currentStep, setCurrentStep] = useState(1);
   const [showNoPhotosMessage, setShowNoPhotosMessage] = useState(false);
@@ -260,10 +347,11 @@ const [propertyInfo, setPropertyInfo] = useState({
       // Update completed steps
       setCompletedSteps(prev => [...prev.filter(step => step !== stepNumber), stepNumber]);
       
-      toast({
-        title: "Progress Saved",
-        description: "Your progress has been saved successfully.",
-      });
+      // Toast notification disabled for PG/Hostel form
+      // toast({
+      //   title: "Progress Saved",
+      //   description: "Your progress has been saved successfully.",
+      // });
     } catch (error) {
       console.error('Error saving draft:', error);
       toast({
@@ -326,13 +414,15 @@ const [propertyInfo, setPropertyInfo] = useState({
     await saveDraftAndNext(7, data);
     
     // Submit the form and navigate to congratulations page
-    const formData = getFormData();
+    const formData = await getFormDataForSubmission();
     console.log('PG/Hostel form data for submission:', formData);
     console.log('PG/Hostel form data structure check:', {
       hasOwnerInfo: 'ownerInfo' in formData,
       hasPropertyInfo: 'propertyInfo' in formData,
       hasPgDetails: 'pgDetails' in formData.propertyInfo,
+      hasAdditionalInfo: 'additional_info' in formData.propertyInfo,
       pgDetailsKeys: formData.propertyInfo?.pgDetails ? Object.keys(formData.propertyInfo.pgDetails) : 'no pgDetails',
+      additionalInfoKeys: formData.propertyInfo?.additional_info ? Object.keys(formData.propertyInfo.additional_info) : 'no additional_info',
       propertyInfoKeys: formData.propertyInfo ? Object.keys(formData.propertyInfo) : 'no propertyInfo'
     });
     
@@ -348,7 +438,73 @@ const [propertyInfo, setPropertyInfo] = useState({
     }
   };
 
-  // Get form data for submission
+  // Get form data for submission (async version that fetches draft data)
+  const getFormDataForSubmission = async (): Promise<any> => {
+    let additionalInfo = {};
+    
+    // Fetch additional_info from draft if available
+    if (draftId) {
+      try {
+        const draftData = await draftService.getDraft(draftId);
+        additionalInfo = draftData?.additional_info || {};
+        console.log('PG/Hostel - Retrieved additional_info from draft:', additionalInfo);
+      } catch (error) {
+        console.warn('PG/Hostel - Failed to fetch draft additional_info:', error);
+      }
+    }
+
+    return {
+      ownerInfo: {
+        fullName: ownerInfo.fullName,
+        phoneNumber: ownerInfo.phoneNumber,
+        email: ownerInfo.email,
+        whatsappUpdates: ownerInfo.whatsappUpdates,
+        propertyType: 'Residential',
+        listingType: 'PG/Hostel',
+      },
+      propertyInfo: {
+        propertyDetails: {
+          title: propertyInfo.title,
+          propertyType: 'PG/Hostel', // Set the correct property type for PG/Hostel
+          buildingType: '',
+          bhkType: '',
+          propertyAge: '',
+          totalFloors: 0,
+          floorNo: 0,
+          superBuiltUpArea: 0,
+          onMainRoad: false,
+          cornerProperty: false,
+        },
+        locationDetails: localityDetails,
+        pgDetails: {
+          listingType: 'Rent' as const,
+          expectedPrice: roomDetails.roomTypeDetails && Object.keys(roomDetails.roomTypeDetails).length > 0 
+            ? Object.values(roomDetails.roomTypeDetails)[0]?.expectedRent || 0
+            : 0,
+          securityDeposit: roomDetails.roomTypeDetails && Object.keys(roomDetails.roomTypeDetails).length > 0 
+            ? Object.values(roomDetails.roomTypeDetails)[0]?.expectedDeposit || 0
+            : 0,
+          // Add other PG/Hostel specific fields from pgDetails
+          ...pgDetails
+        },
+        amenities: amenities,
+        gallery: gallery,
+        additionalInfo: {
+          description: '',
+          images: [],
+          video: null,
+        },
+        scheduleInfo: scheduleInfo,
+        // PG/Hostel specific fields
+        roomTypes,
+        roomDetails,
+        // Include additional_info from draft
+        additional_info: additionalInfo
+      }
+    };
+  };
+
+  // Get form data for rendering (synchronous version)
   const getFormData = (): any => ({
     ownerInfo: {
       fullName: ownerInfo.fullName,

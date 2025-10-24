@@ -23,10 +23,25 @@ export function PgHostelGalleryStep({
   currentStep, 
   totalSteps 
 }: PgHostelGalleryStepProps) {
+  // Helper function to filter out non-File objects (URLs from resumed drafts)
+  const filterValidFiles = (files: any[]): File[] => {
+    return files.filter(file => file instanceof File);
+  };
+
+  // Filter initialData to only include valid File objects
+  const filteredInitialData = {
+    ...initialData,
+    images: initialData?.images ? filterValidFiles(initialData.images) : []
+  };
+
+  console.log('PgHostelGalleryStep initialData:', initialData);
+  console.log('PgHostelGalleryStep initialData.images:', initialData?.images);
+  console.log('PgHostelGalleryStep filtered images:', filteredInitialData.images);
+
   const [formData, setFormData] = useState<PgHostelGallery>({
     images: [],
     video: undefined,
-    ...initialData,
+    ...filteredInitialData,
   });
 
   const handleSubmit = (e: React.FormEvent) => {

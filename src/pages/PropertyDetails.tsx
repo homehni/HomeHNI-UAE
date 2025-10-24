@@ -117,7 +117,7 @@ const PropertyDetails: React.FC = () => {
   const fetchLatestPropertyData = async () => {
     if (!id) return;
     
-    console.log('Fetching property data for ID:', id);
+    console.log('🔍 PropertyDetails: Starting fetch for propertyId:', id);
     setLoading(true);
     try {
       // First, use secure public function (works for anonymous users)
@@ -126,8 +126,13 @@ const PropertyDetails: React.FC = () => {
 
       if (!pubError && pubData && pubData.length > 0) {
         const raw = pubData[0] as any;
-        console.log('Raw data from RPC get_public_property_by_id:', raw);
-        console.log('RPC user_id field:', raw.user_id);
+        console.log('✅ PropertyDetails: Found property:', raw);
+        console.log('🔍 PropertyDetails: Property type from raw data:', raw.property_type);
+        console.log('🔍 PropertyDetails: Checking if data is complete...');
+        console.log('🔍 PropertyDetails: available_services:', raw.available_services);
+        console.log('🔍 PropertyDetails: preferred_tenant:', raw.preferred_tenant);
+        console.log('🔍 PropertyDetails: food_included:', raw.food_included);
+        console.log('🔍 PropertyDetails: gate_closing_time:', raw.gate_closing_time);
         // Normalize image paths to public URLs
         const normalize = (s: string): string | null => {
           if (!s) return null;
@@ -154,14 +159,192 @@ const PropertyDetails: React.FC = () => {
           user_id: raw.user_id // Explicitly ensure user_id is included
         } as Property;
 
-        // Hydrate furnishing/possession/amenities from original submission when missing (commercial/sale cases)
-        try {
-          const { data: subData, error: subErr } = await supabase
-            .from('property_submissions')
-            .select('payload')
-            .eq('id', id)
-            .maybeSingle();
-          if (!subErr && subData?.payload) {
+        console.log('🔍 PropertyDetails: Processing property data, type:', propertyWithUserId.property_type);
+
+        // Check if data is complete (same logic as PropertyPreviewPage)
+        const hasCompleteData = propertyWithUserId.expected_deposit !== undefined && 
+                               propertyWithUserId.preferred_tenant !== undefined && 
+                               propertyWithUserId.property_age !== null && 
+                               (propertyWithUserId.amenities && Object.keys(propertyWithUserId.amenities).length > 0);
+        
+        console.log('🔍 PropertyDetails: Data completeness check:', {
+          hasCompleteData,
+          expected_deposit: propertyWithUserId.expected_deposit,
+          preferred_tenant: propertyWithUserId.preferred_tenant,
+          property_age: propertyWithUserId.property_age,
+          amenities_count: propertyWithUserId.amenities ? Object.keys(propertyWithUserId.amenities).length : 0
+        });
+
+        // If data is incomplete, fetch from property_submissions (same as PropertyPreviewPage)
+        if (!hasCompleteData) {
+          console.log('🔍 PropertyDetails: Data incomplete, checking property_submissions...');
+          try {
+            const { data: subData, error: subErr } = await supabase
+              .from('property_submissions')
+              .select('*')
+              .eq('id', id)
+              .single();
+
+            if (!subErr && subData) {
+              console.log('✅ PropertyDetails: Found complete data in property_submissions:', subData);
+              const payload = subData.payload as any;
+              
+              // Apply the same data mapping as PropertyPreviewPage
+              propertyWithUserId = {
+                ...propertyWithUserId,
+                // Handle PG/Hostel-specific fields
+                place_available_for: payload?.place_available_for || payload?.gender_preference,
+                food_included: payload?.food_included,
+                gate_closing_time: payload?.gate_closing_time,
+                available_services: payload?.available_services,
+                room_amenities: payload?.room_amenities,
+                // Map amenities the same way as preview
+                amenities: {
+                  lift: payload?.amenities?.lift,
+                  powerBackup: payload?.amenities?.powerBackup || payload?.power_backup,
+                  waterSupply: payload?.amenities?.waterSupply || payload?.water_supply,
+                  security: payload?.amenities?.security || payload?.security,
+                  gym: payload?.amenities?.gym,
+                  gatedSecurity: payload?.amenities?.gatedSecurity === true || payload?.amenities?.gatedSecurity === 'true' || payload?.amenities?.gatedSecurity === '1',
+                  bathrooms: payload?.bathrooms || 0,
+                  balconies: payload?.balconies || 0,
+                  
+                  // PG/Hostel-specific amenities from additional_info
+                  common_tv: payload?.additional_info?.common_tv,
+                  refrigerator: payload?.additional_info?.refrigerator,
+                  mess: payload?.additional_info?.mess,
+                  cooking_allowed: payload?.additional_info?.cooking_allowed,
+                  room_amenities: payload?.additional_info?.room_amenities,
+                  // Convert string booleans to actual booleans
+                  petAllowed: payload?.amenities?.petAllowed === true || payload?.amenities?.petAllowed === 'true' || payload?.amenities?.petAllowed === '1',
+                  nonVegAllowed: payload?.amenities?.nonVegAllowed === true || payload?.amenities?.nonVegAllowed === 'true' || payload?.amenities?.nonVegAllowed === '1',
+                  whoWillShow: payload?.amenities?.whoWillShow,
+                  currentPropertyCondition: payload?.amenities?.currentPropertyCondition,
+                  // ... other amenities
+                }
+              };
+              console.log('🔍 PropertyDetails: Updated property data with submission data:', propertyWithUserId);
+            }
+          } catch (e) {
+            console.warn('PropertyDetails: Failed to fetch from property_submissions (non-fatal):', e);
+          }
+        }
+
+        // For Flatmates and PG/Hostel properties, use the same logic as PropertyPreviewPage
+        const isFlatmatesOrPG = propertyWithUserId.property_type === 'flatmates' || 
+            propertyWithUserId.property_type === 'pg_hostel' ||
+            propertyWithUserId.property_type?.toLowerCase().includes('pg') ||
+            propertyWithUserId.property_type?.toLowerCase().includes('hostel');
+            
+        console.log('🔍 PROPERTY TYPE DEBUG:', {
+          property_type: propertyWithUserId.property_type,
+          isFlatmatesOrPG: isFlatmatesOrPG,
+          id: id
+        });
+        
+        if (isFlatmatesOrPG) {
+          console.log('🔍 FLATMATES/PG DEBUG: Detected Flatmates/PG property, fetching submission data...');
+          try {
+            // Use the exact same data retrieval logic as PropertyPreviewPage
+            const { data: subData, error: subErr } = await supabase
+              .from('property_submissions')
+              .select('*')
+              .eq('id', id)
+              .single();
+
+            console.log('🔍 FLATMATES/PG DEBUG: Submission data:', subData);
+            console.log('🔍 FLATMATES/PG DEBUG: Submission error:', subErr);
+
+            if (!subErr && subData) {
+              const payload = subData.payload as any;
+              console.log('🔍 FLATMATES/PG DEBUG: Payload:', payload);
+              console.log('🔍 FLATMATES/PG DEBUG: Preferred tenant from payload:', payload?.preferred_tenant);
+              console.log('🔍 FLATMATES/PG DEBUG: Food included from payload:', payload?.food_included);
+              console.log('🔍 FLATMATES/PG DEBUG: Gate closing time from payload:', payload?.gate_closing_time);
+              console.log('🔍 FLATMATES/PG DEBUG: Available services from payload:', payload?.available_services);
+              console.log('🔍 FLATMATES/PG DEBUG: Additional info from payload:', payload?.additional_info);
+              
+              // Apply the same data mapping as PropertyPreviewPage
+              propertyWithUserId = {
+                ...propertyWithUserId,
+                // Handle Flatmates-specific fields
+                preferred_tenant: payload?.preferred_tenant || (payload?.property_type === 'flatmates' ? payload?.gender_preference_flatmates : null),
+                bathrooms: payload?.bathrooms || 0,
+                balconies: payload?.balconies || 0,
+                // Hide parking for Flatmates (set to null so it doesn't display)
+                parking: payload?.property_type === 'flatmates' ? null : payload?.parking,
+                
+                // Handle PG/Hostel-specific fields
+                place_available_for: payload?.place_available_for || payload?.gender_preference,
+                food_included: payload?.food_included,
+                gate_closing_time: payload?.gate_closing_time,
+                available_services: payload?.available_services,
+                room_amenities: payload?.room_amenities,
+                // Map amenities the same way as preview
+                amenities: {
+                  lift: payload?.amenities?.lift,
+                  powerBackup: payload?.amenities?.powerBackup || payload?.power_backup,
+                  waterSupply: payload?.amenities?.waterSupply || payload?.water_supply,
+                  security: payload?.amenities?.security || payload?.security,
+                  gym: payload?.amenities?.gym,
+                  gatedSecurity: payload?.amenities?.gatedSecurity === true || payload?.amenities?.gatedSecurity === 'true' || payload?.amenities?.gatedSecurity === '1',
+                  bathrooms: payload?.bathrooms || 0,
+                  balconies: payload?.balconies || 0,
+                  // Flatmates-specific amenities from additional_info
+                  attachedBathroom: payload?.additional_info?.attachedBathroom,
+                  smokingAllowed: payload?.additional_info?.smokingAllowed,
+                  drinkingAllowed: payload?.additional_info?.drinkingAllowed,
+                  secondaryNumber: payload?.additional_info?.secondaryNumber,
+                  moreSimilarUnits: payload?.additional_info?.moreSimilarUnits,
+                  
+                  // PG/Hostel-specific amenities from additional_info
+                  common_tv: payload?.additional_info?.common_tv,
+                  refrigerator: payload?.additional_info?.refrigerator,
+                  mess: payload?.additional_info?.mess,
+                  cooking_allowed: payload?.additional_info?.cooking_allowed,
+                  room_amenities: payload?.additional_info?.room_amenities,
+                  // Convert string booleans to actual booleans
+                  petAllowed: payload?.amenities?.petAllowed === true || payload?.amenities?.petAllowed === 'true' || payload?.amenities?.petAllowed === '1',
+                  nonVegAllowed: payload?.amenities?.nonVegAllowed === true || payload?.amenities?.nonVegAllowed === 'true' || payload?.amenities?.nonVegAllowed === '1',
+                  whoWillShow: payload?.amenities?.whoWillShow,
+                  currentPropertyCondition: payload?.amenities?.currentPropertyCondition,
+                  directionsTip: payload?.amenities?.directionsTip,
+                  internetServices: payload?.amenities?.internetServices,
+                  airConditioner: payload?.amenities?.airConditioner,
+                  clubHouse: payload?.amenities?.clubHouse,
+                  intercom: payload?.amenities?.intercom,
+                  swimmingPool: payload?.amenities?.swimmingPool,
+                  childrenPlayArea: payload?.amenities?.childrenPlayArea,
+                  fireSafety: payload?.amenities?.fireSafety,
+                  servantRoom: payload?.amenities?.servantRoom,
+                  shoppingCenter: payload?.amenities?.shoppingCenter,
+                  gasPipeline: payload?.amenities?.gasPipeline,
+                  park: payload?.amenities?.park,
+                  rainWaterHarvesting: payload?.amenities?.rainWaterHarvesting,
+                  sewageTreatmentPlant: payload?.amenities?.sewageTreatmentPlant,
+                  houseKeeping: payload?.amenities?.houseKeeping,
+                  visitorParking: payload?.amenities?.visitorParking,
+                  waterStorageFacility: payload?.amenities?.waterStorageFacility,
+                  wifi: payload?.amenities?.wifi,
+                  furnishing: payload?.furnishing,
+                  parking: payload?.parking
+                }
+              };
+            }
+          } catch (e) {
+            console.warn('Flatmates/PG data hydration failed (non-fatal):', e);
+          }
+          console.log('🔍 FLATMATES/PG DEBUG: Final property data after mapping:', propertyWithUserId);
+        } else {
+          // Original logic for non-Flatmates properties
+          // Hydrate furnishing/possession/amenities from original submission when missing (commercial/sale cases)
+          try {
+            const { data: subData, error: subErr } = await supabase
+              .from('property_submissions')
+              .select('payload')
+              .eq('id', id)
+              .maybeSingle();
+            if (!subErr && subData?.payload) {
             const orig = subData.payload?.originalFormData?.propertyInfo || {};
             const pd = orig?.propertyDetails || {};
             const rd = orig?.rentalDetails || {};
@@ -176,10 +359,18 @@ const PropertyDetails: React.FC = () => {
             const parking = amenities?.parking || subData.payload?.parking;
             const waterSupply = amenities?.waterSupply || subData.payload?.water_supply;
             const powerBackup = amenities?.powerBackup || subData.payload?.power_backup;
-            const preferredTenant = rd?.idealFor || subData.payload?.preferred_tenant;
+            // For Flatmates properties, get preferred_tenant from the correct field
+            const preferredTenant = subData.payload?.property_type === 'flatmates' 
+              ? subData.payload?.preferred_tenant 
+              : (rd?.idealFor || subData.payload?.preferred_tenant);
             const securityDeposit = rd?.securityDeposit || subData.payload?.security_deposit;
-            const bathrooms = amenities?.bathrooms || pd?.bathrooms || subData.payload?.bathrooms;
-            const balconies = amenities?.balconies || pd?.balconies || subData.payload?.balconies;
+            // For Flatmates properties, get bathrooms and balconies from the correct fields
+            const bathrooms = subData.payload?.property_type === 'flatmates'
+              ? (subData.payload?.bathrooms || amenities?.bathrooms || pd?.bathrooms)
+              : (amenities?.bathrooms || pd?.bathrooms || subData.payload?.bathrooms);
+            const balconies = subData.payload?.property_type === 'flatmates'
+              ? (subData.payload?.balconies || amenities?.balconies || pd?.balconies)
+              : (amenities?.balconies || pd?.balconies || subData.payload?.balconies);
             const floorNo = pd?.floorNo || subData.payload?.floor_no;
             const totalFloors = pd?.totalFloors || subData.payload?.total_floors;
             const facing = pd?.facing || subData.payload?.facing_direction;
@@ -217,9 +408,12 @@ const PropertyDetails: React.FC = () => {
             }
             propertyWithUserId = mergedWithAmenities as Property;
           }
-        } catch (e) {
-          console.warn('Hydration from submission payload failed (non-fatal):', e);
+          } catch (e) {
+            console.warn('Hydration from submission payload failed (non-fatal):', e);
+          }
         }
+        console.log('🔍 PropertyDetails: Final property data before setting:', propertyWithUserId);
+        console.log('🔍 PropertyDetails: Property type in final data:', propertyWithUserId.property_type);
         console.log('Setting property from RPC with user_id:', propertyWithUserId.user_id);
         
         // Fetch rental status for this property

@@ -68,6 +68,21 @@ const generatePropertyTitle = (data: any): string => {
     return `${formattedSpaceType} For ${formattedListingType}`;
   }
   
+  // For Flatmates properties
+  if (propertyType.toLowerCase() === 'flatmates') {
+    // Get the actual apartment type from the form data
+    const apartmentType = data.apartment_type || data.apartmentType || 'Apartment';
+    const formattedApartmentType = capitalize(apartmentType);
+    
+    if (formattedBhkType && formattedApartmentType) {
+      return `${formattedBhkType} ${formattedApartmentType} for Flatmates`;
+    } else if (formattedApartmentType) {
+      return `${formattedApartmentType} for Flatmates`;
+    } else {
+      return 'Property for Flatmates';
+    }
+  }
+
   // For PG/Hostel properties
   if (propertyType.toLowerCase().includes('pg') || propertyType.toLowerCase().includes('hostel')) {
     const roomType = data.room_type || data.roomType || '';
@@ -206,6 +221,22 @@ interface PropertyPreviewData {
     room_cleaning?: string;
     warden_facility?: string;
   };
+  
+  // Flatmates specific fields
+  existing_flatmates?: number;
+  gender_preference_flatmates?: string;
+  occupation?: string;
+  lifestyle_preference?: string;
+  smoking_allowed?: boolean;
+  pets_allowed?: boolean;
+  maintenance_extra?: boolean;
+  maintenance_charges?: number;
+  deposit_negotiable?: boolean;
+  lease_duration?: string;
+  lockin_period?: string;
+  brokerage_type?: string;
+  preferred_tenants?: string;
+  ideal_for?: string[];
   
   // PG/Hostel amenities
   common_tv?: boolean;
@@ -426,6 +457,7 @@ export const PropertyPreviewPage: React.FC = () => {
             floor_no: draftDataAny.floor_no,
             total_floors: draftDataAny.total_floors,
             property_age: draftDataAny.property_age,
+            preferred_tenant: draftDataAny.preferred_tenant,
             space_type: draftDataAny.space_type,
             building_type: draftDataAny.building_type,
             furnishing_status: draftDataAny.furnishing_status,
@@ -456,6 +488,21 @@ export const PropertyPreviewPage: React.FC = () => {
             gate_closing_time: draftDataAny.additional_info?.gate_closing_time,
             pg_rules: draftDataAny.additional_info?.pg_rules,
             available_services: draftDataAny.additional_info?.available_services,
+            // Flatmates specific fields (from additional_info JSONB)
+            existing_flatmates: draftDataAny.additional_info?.existing_flatmates,
+            gender_preference_flatmates: draftDataAny.additional_info?.gender_preference_flatmates,
+            occupation: draftDataAny.additional_info?.occupation,
+            lifestyle_preference: draftDataAny.additional_info?.lifestyle_preference,
+            smoking_allowed: draftDataAny.additional_info?.smoking_allowed,
+            pets_allowed: draftDataAny.additional_info?.pets_allowed,
+            maintenance_extra: draftDataAny.additional_info?.maintenance_extra,
+            maintenance_charges: draftDataAny.additional_info?.maintenance_charges,
+            deposit_negotiable: draftDataAny.additional_info?.deposit_negotiable,
+            lease_duration: draftDataAny.additional_info?.lease_duration,
+            lockin_period: draftDataAny.additional_info?.lockin_period,
+            brokerage_type: draftDataAny.additional_info?.brokerage_type,
+            preferred_tenants: draftDataAny.additional_info?.preferred_tenants,
+            ideal_for: draftDataAny.additional_info?.ideal_for,
             // PG/Hostel amenities from additional_info
             common_tv: draftDataAny.additional_info?.common_tv,
             refrigerator: draftDataAny.additional_info?.refrigerator,
@@ -472,7 +519,6 @@ export const PropertyPreviewPage: React.FC = () => {
               }
             } : {}),
             facing: draftDataAny.facing_direction,
-            preferred_tenant: draftDataAny.preferred_tenant,
             power_backup: draftDataAny.power_backup,
             lift: draftDataAny.lift,
             water_supply: draftDataAny.water_supply,
@@ -686,6 +732,12 @@ export const PropertyPreviewPage: React.FC = () => {
                 videos: payload?.videos || [],
                 status: submissionData.status,
                 created_at: submissionData.created_at,
+                // Map PG/Hostel-specific fields
+                place_available_for: payload?.place_available_for || payload?.gender_preference,
+                food_included: payload?.food_included,
+                gate_closing_time: payload?.gate_closing_time,
+                available_services: payload?.available_services,
+                room_amenities: payload?.room_amenities,
                 // Map amenities from payload.amenities object
                 amenities: {
                   lift: payload?.amenities?.lift,
@@ -701,6 +753,13 @@ export const PropertyPreviewPage: React.FC = () => {
                   nonVegAllowed: payload?.amenities?.nonVegAllowed === true || payload?.amenities?.nonVegAllowed === 'true' || payload?.amenities?.nonVegAllowed === '1',
                   whoWillShow: payload?.amenities?.whoWillShow,
                   currentPropertyCondition: payload?.amenities?.currentPropertyCondition,
+                  
+                  // PG/Hostel-specific amenities from additional_info
+                  common_tv: payload?.additional_info?.common_tv,
+                  refrigerator: payload?.additional_info?.refrigerator,
+                  mess: payload?.additional_info?.mess,
+                  cooking_allowed: payload?.additional_info?.cooking_allowed,
+                  room_amenities: payload?.additional_info?.room_amenities,
                   directionsTip: payload?.amenities?.directionsTip,
                   internetServices: payload?.amenities?.internetServices,
                   airConditioner: payload?.amenities?.airConditioner,
@@ -719,7 +778,13 @@ export const PropertyPreviewPage: React.FC = () => {
                   visitorParking: payload?.amenities?.visitorParking,
                   waterStorageFacility: payload?.amenities?.waterStorageFacility,
                   wifi: payload?.amenities?.wifi,
-                  parking: payload?.amenities?.parking || payload?.parking
+                  parking: payload?.amenities?.parking || payload?.parking,
+                  // Flatmates-specific amenities from additional_info
+                  attachedBathroom: payload?.additional_info?.attachedBathroom,
+                  smokingAllowed: payload?.additional_info?.smokingAllowed,
+                  drinkingAllowed: payload?.additional_info?.drinkingAllowed,
+                  secondaryNumber: payload?.additional_info?.secondaryNumber,
+                  moreSimilarUnits: payload?.additional_info?.moreSimilarUnits
                 },
                 // Map other fields
                 available_from: payload?.available_from,
@@ -1185,7 +1250,7 @@ export const PropertyPreviewPage: React.FC = () => {
               total_floors: payload?.total_floors,
               property_age: payload?.age_of_building || payload?.property_age,
               facing: payload?.facing,
-              preferred_tenant: payload?.preferred_tenant, // Added this
+              preferred_tenant: payload?.preferred_tenant || (payload?.property_type === 'flatmates' ? payload?.gender_preference_flatmates : null), // Added this
               power_backup: payload?.power_backup,
               lift: payload?.lift,
               water_supply: payload?.water_supply,
@@ -1363,7 +1428,7 @@ export const PropertyPreviewPage: React.FC = () => {
             total_floors: payload?.total_floors,
             property_age: payload?.age_of_building || payload?.property_age,
             facing: payload?.facing,
-            preferred_tenant: payload?.preferred_tenant,
+            preferred_tenant: payload?.preferred_tenant || (payload?.property_type === 'flatmates' ? payload?.gender_preference_flatmates : null),
             power_backup: payload?.power_backup,
             lift: payload?.lift,
             water_supply: payload?.water_supply,
@@ -1393,7 +1458,22 @@ export const PropertyPreviewPage: React.FC = () => {
             house_keeping: payload?.house_keeping,
             visitor_parking: payload?.visitor_parking,
             water_storage_facility: payload?.water_storage_facility,
-            wifi: payload?.wifi
+            wifi: payload?.wifi,
+            // Flatmates specific fields
+            existing_flatmates: payload?.existing_flatmates,
+            gender_preference_flatmates: payload?.gender_preference_flatmates,
+            occupation: payload?.occupation,
+            lifestyle_preference: payload?.lifestyle_preference,
+            smoking_allowed: payload?.smoking_allowed,
+            pets_allowed: payload?.pets_allowed,
+            maintenance_extra: payload?.maintenance_extra,
+            maintenance_charges: payload?.maintenance_charges,
+            deposit_negotiable: payload?.deposit_negotiable,
+            lease_duration: payload?.lease_duration,
+            lockin_period: payload?.lockin_period,
+            brokerage_type: payload?.brokerage_type,
+            preferred_tenants: payload?.preferred_tenants,
+            ideal_for: payload?.ideal_for
           };
           
           console.log('Converted data for property_submissions table:', {
@@ -1566,8 +1646,8 @@ export const PropertyPreviewPage: React.FC = () => {
       // PG/Hostel preferences
       gender_preference: draft.gender_preference,
       preferred_guests: draft.preferred_guests,
-      // Map preferred_guests to preferred_tenant for display compatibility
-      preferred_tenant: draft.preferred_guests,
+      // Use the actual preferred_tenant value (not override with preferred_guests)
+      preferred_tenant: draft.preferred_tenant,
       // PG/Hostel details
       food_included: draft.food_included,
       gate_closing_time: draft.gate_closing_time,

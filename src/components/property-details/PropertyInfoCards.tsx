@@ -357,6 +357,18 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       if (g === 'female') return 'Female';
       if (g === 'anyone') return 'Any';
     }
+    
+    // Handle Flatmates properties specifically
+    if (property.property_type?.toLowerCase() === 'flatmates') {
+      const raw = property.preferred_tenant;
+      if (!raw) return 'Any';
+      // Map the gender preference values
+      if (raw === 'male') return 'Male';
+      if (raw === 'female') return 'Female';
+      if (raw === 'any') return 'Any';
+      return raw.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
     const raw = property.preferred_tenant || property.preferred_guests;
     if (!raw) return 'Any';
     return raw.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -453,11 +465,12 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       title: getPossession(),
       subtitle: 'Possession',
     },
-    {
+    // Hide Parking for Flatmates properties
+    ...(property.property_type !== 'flatmates' ? [{
       icon: Car,
       title: getParking(),
       subtitle: 'Parking',
-    },
+    }] : []),
     {
       icon: Calendar,
       title: getAgeOfBuilding(),

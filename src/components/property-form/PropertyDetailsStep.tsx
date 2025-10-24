@@ -41,6 +41,9 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
+  console.log('🏠 PropertyDetailsStep rendered with initialData:', initialData);
+  console.log('🏠 PropertyDetailsStep initialData keys:', Object.keys(initialData));
+  
   const {
     toast
   } = useToast();

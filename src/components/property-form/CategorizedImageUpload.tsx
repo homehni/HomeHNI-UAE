@@ -36,6 +36,18 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   onImagesChange,
   maxImagesPerCategory = 5
 }) => {
+  console.log('📸 CategorizedImageUpload rendered with images:', images);
+  console.log('📸 CategorizedImageUpload images type check:', {
+    bathroom: Array.isArray(images.bathroom),
+    bedroom: Array.isArray(images.bedroom),
+    hall: Array.isArray(images.hall),
+    kitchen: Array.isArray(images.kitchen),
+    frontView: Array.isArray(images.frontView),
+    balcony: Array.isArray(images.balcony),
+    others: Array.isArray(images.others)
+  });
+  console.log('📸 CategorizedImageUpload bathroom content:', images.bathroom);
+  console.log('📸 CategorizedImageUpload bathroom item type:', typeof images.bathroom[0]);
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [activeCategory, setActiveCategory] = useState<keyof CategorizedImages | null>(null);
 

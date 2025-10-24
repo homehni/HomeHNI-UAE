@@ -65,6 +65,82 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     isStepValid
   } = useSalePropertyForm();
 
+  // Initialize with owner info if provided
+  React.useEffect(() => {
+    if (initialOwnerInfo && Object.keys(initialOwnerInfo).length > 0) {
+      updateOwnerInfo(initialOwnerInfo);
+    }
+  }, [initialOwnerInfo, updateOwnerInfo]);
+
+  // Load draft data if resuming from a draft
+  React.useEffect(() => {
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
+    
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('Loading draft data for ResaleMultiStepForm:', draftData);
+        
+        // Load form data from draft
+        if (draftData.propertyDetails) {
+          console.log('Loading propertyDetails:', draftData.propertyDetails);
+          updatePropertyDetails(draftData.propertyDetails);
+        }
+        if (draftData.locationDetails) {
+          console.log('Loading locationDetails:', draftData.locationDetails);
+          updateLocationDetails(draftData.locationDetails);
+        }
+        if (draftData.saleDetails) {
+          console.log('Loading saleDetails:', draftData.saleDetails);
+          updateSaleDetails(draftData.saleDetails);
+        }
+        if (draftData.amenities) {
+          console.log('Loading amenities:', draftData.amenities);
+          updateAmenities(draftData.amenities);
+        }
+        if (draftData.gallery) {
+          console.log('Loading gallery:', draftData.gallery);
+          updateGallery(draftData.gallery);
+        }
+        if (draftData.additionalInfo) {
+          console.log('Loading additionalInfo:', draftData.additionalInfo);
+          updateAdditionalInfo(draftData.additionalInfo);
+        }
+        if (draftData.scheduleInfo) {
+          console.log('Loading scheduleInfo:', draftData.scheduleInfo);
+          updateScheduleInfo(draftData.scheduleInfo);
+        }
+        
+        // Set draft ID for saving
+        setDraftId(resumeDraftId);
+        
+        // Clear sessionStorage after loading
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+        
+        console.log('Successfully loaded draft data for ResaleMultiStepForm');
+      } catch (error) {
+        console.error('Error loading draft data:', error);
+        // Clear sessionStorage on error
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
+    }
+  }, [updatePropertyDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo]);
+
+  // Track if we've already navigated to target step to prevent interference
+  const hasNavigatedToTargetStep = React.useRef(false);
+
+  // Navigate to target step if provided (only once) - combined logic
+  React.useEffect(() => {
+    if (targetStep && targetStep > 0 && targetStep <= 7 && !hasNavigatedToTargetStep.current) {
+      console.log('ResaleMultiStepForm navigating to target step:', targetStep, 'draftId:', draftId);
+      goToStep(targetStep);
+      hasNavigatedToTargetStep.current = true;
+    }
+  }, [targetStep, goToStep, draftId]);
+
   // Handle preview functionality
   const handlePreview = async () => {
     if (!draftId) {
@@ -93,8 +169,11 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
         whatsapp_updates: ownerInfo.whatsappUpdates
       };
 
+      console.log('ResaleMultiStepForm saveDraftAndNext called with:', { stepData, stepNumber, formType, draftId });
+      
       // Save draft
       const draft = await PropertyDraftService.saveFormData(draftId, stepData, stepNumber, formType);
+      console.log('ResaleMultiStepForm draft saved successfully:', draft);
       
       // Update owner info if not already set
       if (stepNumber === 0) {
@@ -102,7 +181,9 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
       }
       
       setDraftId(draft.id);
+      console.log('ResaleMultiStepForm calling nextStep()');
       nextStep();
+      console.log('ResaleMultiStepForm nextStep() completed');
       
     } catch (error) {
       console.error('Error saving draft:', error);
@@ -133,13 +214,13 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
 
-  // Navigate to target step if provided
-  React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 7) {
-      console.log('Navigating to target step:', targetStep);
-      goToStep(targetStep);
-    }
-  }, [targetStep, goToStep]);
+  // Navigate to target step if provided - REMOVED TO PREVENT LOOP
+  // React.useEffect(() => {
+  //   if (targetStep && targetStep > 0 && targetStep <= 7) {
+  //     console.log('Navigating to target step:', targetStep);
+  //     goToStep(targetStep);
+  //   }
+  // }, [targetStep, goToStep]);
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
@@ -205,14 +286,20 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
   };
 
   const handlePropertyDetailsNext = (data: any) => {
+    console.log('ResaleMultiStepForm handlePropertyDetailsNext called with:', data);
     updatePropertyDetails(data);
+    console.log('ResaleMultiStepForm calling saveDraftAndNext');
     saveDraftAndNext(data, 1, 'sale');
+    console.log('ResaleMultiStepForm saveDraftAndNext completed');
     scrollToTop();
   };
 
   const handleLocationDetailsNext = (data: any) => {
+    console.log('ResaleMultiStepForm handleLocationDetailsNext called with:', data);
     updateLocationDetails(data);
+    console.log('ResaleMultiStepForm calling saveDraftAndNext');
     saveDraftAndNext(data, 2, 'sale');
+    console.log('ResaleMultiStepForm saveDraftAndNext completed');
     scrollToTop();
   };
 
@@ -242,23 +329,57 @@ export const ResaleMultiStepForm: React.FC<ResaleMultiStepFormProps> = ({
     scrollToTop();
   };
 
-const handleScheduleSubmit = (data: any) => {
+const handleScheduleSubmit = async (data: any) => {
   console.log('[ResaleMultiStepForm] Schedule submit: received data', data);
   updateScheduleInfo(data);
-  saveDraftAndNext(data, 6, 'sale');
-  const formData = getFormData();
-  console.log('[ResaleMultiStepForm] Submitting resale form data:', formData);
-  onSubmit(formData as SalePropertyFormData);
-  console.log('[ResaleMultiStepForm] Submission triggered. Going to Preview step (7)');
-  goToStep(7);
-  scrollToTop();
+  
+  try {
+    // Save the final draft data
+    await saveDraftAndNext(data, 6, 'sale');
+    
+    // Mark the draft as completed after successful submission
+    if (draftId) {
+      console.log('[ResaleMultiStepForm] Marking draft as completed:', draftId);
+      await PropertyDraftService.updateDraft(draftId, { 
+        is_completed: true,
+        current_step: 7 // Mark as completed at preview step
+      });
+    }
+    
+    const formData = getFormData();
+    console.log('[ResaleMultiStepForm] Submitting resale form data:', formData);
+    onSubmit(formData as SalePropertyFormData);
+    console.log('[ResaleMultiStepForm] Submission triggered. Going to Preview step (7)');
+    goToStep(7);
+    scrollToTop();
+  } catch (error) {
+    console.error('[ResaleMultiStepForm] Error in handleScheduleSubmit:', error);
+    // Still proceed with submission even if draft update fails
+    const formData = getFormData();
+    onSubmit(formData as SalePropertyFormData);
+    goToStep(7);
+    scrollToTop();
+  }
 };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = getFormData();
     
     // Submit form without validation - all fields are now optional
     console.log('Resale form submitted with data:', formData);
+    
+    // Mark the draft as completed after successful submission
+    if (draftId) {
+      console.log('[ResaleMultiStepForm] Marking draft as completed in handleSubmit:', draftId);
+      try {
+        await PropertyDraftService.updateDraft(draftId, { 
+          is_completed: true,
+          current_step: 7 // Mark as completed at preview step
+        });
+      } catch (error) {
+        console.error('[ResaleMultiStepForm] Error marking draft as completed:', error);
+      }
+    }
     
     if (formData.ownerInfo && formData.propertyInfo) {
       onSubmit(formData as SalePropertyFormData);
