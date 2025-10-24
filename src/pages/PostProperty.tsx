@@ -144,36 +144,55 @@ export const PostProperty: React.FC = () => {
       setIsCheckingDrafts(true);
       console.log('Checking for incomplete drafts for user:', user.id);
       
-      // Clean up old completed drafts first
+      // Clean up old drafts first
       try {
         await PropertyDraftService.cleanupOldCompletedDrafts();
         console.log('Cleaned up old completed drafts');
+        
+        // Also clean up old incomplete drafts (more aggressive cleanup)
+        await PropertyDraftService.cleanupOldIncompleteDrafts();
+        console.log('Cleaned up old incomplete drafts');
       } catch (error) {
         console.warn('Failed to cleanup old drafts:', error);
         // Don't fail the whole process if cleanup fails
       }
       
       const drafts = await PropertyDraftService.getUserDrafts();
-      console.log('Found all drafts:', drafts);
+      console.log('🔍 Found all drafts:', drafts);
+      console.log('🔍 Total drafts found:', drafts.length);
       
       // Find the most recent incomplete draft
       // A draft is incomplete if:
       // 1. It has a current_step < 7 (not at preview/final step)
       // 2. It's not marked as completed
-      // 3. It was updated recently (not older than 30 days)
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      // 3. It was updated recently (not older than 3 days)
+      const threeDaysAgo = new Date();
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+      
+      console.log('🔍 Filtering criteria:');
+      console.log('  - Current step < 7');
+      console.log('  - Not completed (is_completed = false)');
+      console.log('  - Updated within last 3 days (after:', threeDaysAgo.toISOString(), ')');
       
       const incompleteDrafts = drafts.filter(draft => {
         const isIncomplete = draft.current_step && draft.current_step < 7 && !draft.is_completed;
-        const isRecent = new Date(draft.updated_at || '').getTime() > thirtyDaysAgo.getTime();
+        const isRecent = new Date(draft.updated_at || '').getTime() > threeDaysAgo.getTime();
         
-        console.log(`Draft ${draft.id}: current_step=${draft.current_step}, is_completed=${draft.is_completed}, updated_at=${draft.updated_at}, isIncomplete=${isIncomplete}, isRecent=${isRecent}`);
+        console.log(`🔍 Draft ${draft.id}:`, {
+          property_type: draft.property_type,
+          current_step: draft.current_step,
+          is_completed: draft.is_completed,
+          updated_at: draft.updated_at,
+          isIncomplete: isIncomplete,
+          isRecent: isRecent,
+          passesFilter: isIncomplete && isRecent
+        });
         
         return isIncomplete && isRecent;
       });
       
-      console.log('Filtered incomplete drafts:', incompleteDrafts);
+      console.log('🔍 Filtered incomplete drafts:', incompleteDrafts);
+      console.log('🔍 Number of incomplete drafts:', incompleteDrafts.length);
       
       if (incompleteDrafts.length > 0) {
         // Sort by updated_at to get the most recent
@@ -519,6 +538,8 @@ export const PostProperty: React.FC = () => {
       console.log('Owner data from draft:', ownerData);
       console.log('Owner listingType:', ownerData.listingType);
       console.log('Owner propertyType:', ownerData.propertyType);
+      console.log('Raw incompleteDraft property_type:', incompleteDraft.property_type);
+      console.log('Raw incompleteDraft listing_type:', incompleteDraft.listing_type);
       
       setOwnerInfo(ownerData);
       setInitialOwnerData(ownerData);
@@ -550,21 +571,15 @@ export const PostProperty: React.FC = () => {
         if (ownerData.propertyType === 'PG/Hostel') {
           console.log('PG/Hostel property detected by property_type, setting currentStep to pg-hostel-form');
           setCurrentStep('pg-hostel-form');
+        } else if (ownerData.propertyType === 'Land/Plot') {
+          console.log('Land/Plot property detected by property_type, setting currentStep to land-plot-form');
+          setCurrentStep('land-plot-form');
         } else {
           // For other property types, use listing_type
           switch (ownerData.listingType) {
             case 'Resale':
             case 'Sale':
-              if (ownerData.propertyType === 'Land/Plot') {
-                setCurrentStep('land-plot-form');
-              } else {
-                setCurrentStep('resale-form');
-              }
-              break;
-            case 'Industrial land':
-            case 'Agricultural Land':
-            case 'Commercial land':
-              setCurrentStep('land-plot-form');
+              setCurrentStep('resale-form');
               break;
             case 'PG/Hostel':
               console.log('PG/Hostel case matched, setting currentStep to pg-hostel-form');
@@ -603,12 +618,20 @@ export const PostProperty: React.FC = () => {
   };
 
   const handleStartNewPosting = async () => {
-    if (!incompleteDraft) return;
+    console.log('🚀 handleStartNewPosting called');
+    console.log('🚀 Current incompleteDraft:', incompleteDraft);
+    
+    if (!incompleteDraft) {
+      console.log('❌ No incomplete draft to delete');
+      return;
+    }
     
     try {
+      console.log('🗑️ Attempting to delete draft:', incompleteDraft.id);
+      
       // Delete the incomplete draft
       await PropertyDraftService.deleteDraft(incompleteDraft.id!);
-      console.log('Deleted incomplete draft:', incompleteDraft.id);
+      console.log('✅ Successfully deleted incomplete draft:', incompleteDraft.id);
       
       // Clear all draft-related state
       setShowDraftResumeModal(false);
@@ -619,7 +642,7 @@ export const PostProperty: React.FC = () => {
       
       // Set flag to prevent modal from showing again in this session
       sessionStorage.setItem('draftModalDismissed', 'true');
-      console.log('Set draftModalDismissed flag to prevent popup from showing again');
+      console.log('✅ Set draftModalDismissed flag to prevent popup from showing again');
       
       // Set force proceed to allow immediate form submission
       setForceProceed(true);
@@ -630,7 +653,7 @@ export const PostProperty: React.FC = () => {
       });
       
     } catch (error) {
-      console.error('Error deleting draft:', error);
+      console.error('❌ Error deleting draft:', error);
       // Still close the modal even if deletion fails
       setShowDraftResumeModal(false);
       setIncompleteDraft(null);
@@ -981,8 +1004,10 @@ export const PostProperty: React.FC = () => {
           return depositValue !== undefined && depositValue !== null ? Number(depositValue) : 0;
         })(),
         // PG/Hostel specific fields for better display compatibility
-        expected_rent: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.expectedPrice) || null : null,
-        expected_deposit: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.securityDeposit) || null : null,
+        expected_rent: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.expectedPrice) || null : 
+                      (('flattmatesDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).flattmatesDetails?.expectedRent) || null : null),
+        expected_deposit: ('pgDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).pgDetails.securityDeposit) || null : 
+                         (('flattmatesDetails' in data.propertyInfo) ? Number((data.propertyInfo as any).flattmatesDetails?.securityDeposit) || null : null),
         available_from: ((data.propertyInfo as any)?.flattmatesDetails?.availableFrom) || ((data.propertyInfo as any)?.rentalDetails?.availableFrom) || null,
         parking: ((data.propertyInfo as any)?.amenities?.parking) || null,
         age_of_building: (('propertyDetails' in data.propertyInfo) && (data.propertyInfo as any).propertyDetails?.propertyAge) ? (data.propertyInfo as any).propertyDetails.propertyAge : null,

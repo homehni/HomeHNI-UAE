@@ -34,6 +34,7 @@ import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
 import AgentPlans from "./pages/AgentPlans";
 import BuilderLifetimePlans from "@/pages/BuilderLifetimePlans";
+import BuilderDealerPlans from "@/pages/BuilderDealerPlans";
 import ServiceSuite from "@/pages/ServiceSuite";
 import CorporateEnquiry from "./pages/CorporateEnquiry";
 import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
@@ -150,7 +151,7 @@ const App: React.FC = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/careers" element={<Careers />} />
+            <Route path="/students" element={<Careers />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/safety" element={<Safety />} />
@@ -172,6 +173,7 @@ const App: React.FC = () => {
             <Route path="/seller-plans" element={<SellerPlans />} />
         <Route path="/agent-plans" element={<AgentPlans />} />
         <Route path="/builder-lifetime-plans" element={<BuilderLifetimePlans />} />
+        <Route path="/builder-dealer-plans" element={<BuilderDealerPlans />} />
         <Route path="/service-suite" element={<ServiceSuite />} />
             <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
           <Route path="/commercial-buyer-plan" element={<CommercialBuyerPlan />} />

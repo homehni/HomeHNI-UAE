@@ -129,6 +129,17 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     boundary_wall: property.boundary_wall,
     land_type: property.land_type
   }, null, 2));
+  
+  // Debug deposit information for Flatmates properties
+  if (property.property_type?.toLowerCase() === 'flatmates') {
+    console.log('🔍 FLATMATES DEPOSIT DEBUG:', {
+      expected_deposit: property.expected_deposit,
+      security_deposit: property.security_deposit,
+      expected_rent: property.expected_rent,
+      expected_price: property.expected_price,
+      all_property_keys: Object.keys(property)
+    });
+  }
   const formatMaintenance = (charges?: number) => {
     if (!charges) return 'Not specified';
     return `₹${charges.toLocaleString()}/month`;
@@ -179,7 +190,14 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   };
 
   const formatFloor = (floorNo?: number, totalFloors?: number) => {
-    if (floorNo !== undefined && totalFloors) {
+    // Handle special floor values
+    if (floorNo === -1) {
+      return 'All floors (Full Building)';
+    } else if (floorNo === -2) {
+      return 'LB (Lower Basement)';
+    } else if (floorNo === -3) {
+      return 'UB (Upper Basement)';
+    } else if (floorNo !== undefined && totalFloors) {
       return `${floorNo}/${totalFloors}`;
     }
     return 'Not specified';
@@ -190,6 +208,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
                         property.property_type?.toLowerCase().includes('land');
   const isPGHostelProperty = property.property_type?.toLowerCase() === 'pg_hostel' ||
                             property.property_type?.toLowerCase() === 'pg/hostel';
+  const isFlatmatesProperty = property.property_type?.toLowerCase() === 'flatmates';
 
   // Helper functions for PG/Hostel properties
   const formatCurrency = (amount?: number) => {
@@ -307,6 +326,30 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     { label: 'Available From', value: formatDate(property.available_from) },
     { label: 'Food Included', value: property.food_included ? 'Yes' : 'No' },
     { label: 'Gate Closing Time', value: convertTo12HourFormat(property.gate_closing_time || 'Not specified') },
+  ] : isFlatmatesProperty ? [
+    { label: 'Property Type', value: 'Flatmates' },
+    { label: 'BHK', value: property.bhk_type || 'Not specified' },
+    { label: 'Expected Rent', value: formatCurrency(property.expected_rent || property.expected_price) },
+    { label: 'Expected Deposit', value: formatCurrency(property.expected_deposit || property.security_deposit) },
+    { label: 'Location', value: formatLocation(undefined, undefined, property.locality, property.landmark) },
+    { label: 'Preferred Tenant', value: property.preferred_tenant || 'Not specified' },
+    { label: 'Available From', value: formatDate(property.available_from) },
+    { label: 'Bathrooms', value: property.bathrooms?.toString() || 'Not specified' },
+    { label: 'Balconies', value: property.balconies?.toString() || 'Not specified' },
+    { label: 'Built-up Area', value: formatArea(property.super_area, property.carpet_area) },
+    { label: 'Floor', value: formatFloor(property.floor_no, property.total_floors) },
+    { label: 'Furnishing', value: property.furnishing || 'Not specified' },
+    { label: 'Property Age', value: property.property_age || 'Not specified' },
+    { label: 'Facing', value: property.facing_direction || 'Not specified' },
+    { label: 'Water Supply', value: property.water_supply || 'Not specified' },
+    { label: 'Parking', value: property.parking || 'Not specified' },
+    { label: 'Gated Security', value: property.gated_security ? 'Yes' : 'No' },
+    { label: 'Who Shows Property', value: property.who_will_show || 'Not specified' },
+    { label: 'Secondary Contact', value: property.secondary_phone || 'Not specified' },
+    { label: 'Property Condition', value: property.current_property_condition || 'Not specified' },
+    { label: 'Gym', value: property.amenities?.gym ? 'Yes' : 'No' },
+    { label: 'Pet Allowed', value: (property as any).amenities?.petAllowed ? 'Yes' : 'No' },
+    { label: 'Non-Veg Allowed', value: (property as any).amenities?.nonVegAllowed ? 'Yes' : 'No' },
   ] : [
     // Basic property specifications only
     { label: 'Type', value: property.property_type?.replace('_', ' ') || 'Not specified' },
@@ -343,6 +386,11 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
     formatCurrency(property.expected_rent),
     property.place_available_for,
     property.food_included ? 'Food Included' : 'Food Not Included'
+  ].filter(fact => fact && fact !== 'Not specified') : isFlatmatesProperty ? [
+    property.bhk_type,
+    formatCurrency(property.expected_rent),
+    formatCurrency(property.expected_deposit || property.security_deposit),
+    property.preferred_tenant
   ].filter(fact => fact && fact !== 'Not specified') : [
     property.bhk_type,
     formatArea(property.super_area, property.carpet_area),

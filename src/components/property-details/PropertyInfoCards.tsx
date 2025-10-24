@@ -329,10 +329,30 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
       property_total_floors: property.total_floors
     }, null, 2));
     
-    const floorText = (floor === undefined || floor === null)
-      ? 'Ground Floor'
-      : (floor === 0 ? 'Ground Floor' : `${floor}${floor === 1 ? 'st' : floor === 2 ? 'nd' : floor === 3 ? 'rd' : 'th'} Floor`);
-    const subtitle = (typeof total === 'number' && total > 0) ? `Of Total ${total} Floors` : undefined;
+    let floorText: string;
+    let subtitle: string | undefined;
+    
+    // Handle special floor values
+    if (floor === -1) {
+      floorText = 'All floors';
+      subtitle = 'Full Building';
+    } else if (floor === -2) {
+      floorText = 'LB';
+      subtitle = 'Lower Basement';
+    } else if (floor === -3) {
+      floorText = 'UB';
+      subtitle = 'Upper Basement';
+    } else if (floor === undefined || floor === null) {
+      floorText = 'Ground Floor';
+      subtitle = (typeof total === 'number' && total > 0) ? `Of Total ${total} Floors` : undefined;
+    } else if (floor === 0) {
+      floorText = 'Ground Floor';
+      subtitle = (typeof total === 'number' && total > 0) ? `Of Total ${total} Floors` : undefined;
+    } else {
+      floorText = `${floor}${floor === 1 ? 'st' : floor === 2 ? 'nd' : floor === 3 ? 'rd' : 'th'} Floor`;
+      subtitle = (typeof total === 'number' && total > 0) ? `Of Total ${total} Floors` : undefined;
+    }
+    
     return { title: floorText, subtitle };
   };
 
@@ -550,7 +570,7 @@ export const PropertyInfoCards: React.FC<PropertyInfoCardsProps> = ({ property }
   ];
 
   const isCommercial = !!property.property_type && (
-    property.property_type.toLowerCase().includes('commercial') ||
+    property.property_type?.toLowerCase().includes('commercial') ||
     ['office', 'shop', 'retail', 'warehouse', 'showroom', 'restaurant', 'co-working', 'coworking']
       .some(t => property.property_type?.toLowerCase().includes(t))
   );

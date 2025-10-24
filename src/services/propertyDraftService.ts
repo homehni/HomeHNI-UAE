@@ -156,12 +156,25 @@ export class PropertyDraftService {
       console.log('Draft data keys:', Object.keys(data));
       console.log('Draft data additional_info:', data.additional_info);
 
+      // Prepare the insert data with required fields
+      const insertData = {
+        ...data,
+        user_id: user.id,
+        // Ensure required fields have default values
+        property_type: data.property_type || 'Commercial',
+        listing_type: data.listing_type || 'Rent',
+        current_step: data.current_step || 1,
+        is_completed: data.is_completed || false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      console.log('Insert data for draft creation:', insertData);
+      console.log('Insert data keys:', Object.keys(insertData));
+
       const { data: draft, error } = await supabase
         .from('property_drafts')
-        .insert([{
-          ...data,
-          user_id: user.id
-        }])
+        .insert([insertData])
         .select()
         .single();
 
@@ -173,6 +186,7 @@ export class PropertyDraftService {
           hint: error.hint,
           code: error.code
         });
+        console.error('Failed insert data:', insertData);
         throw new Error(`Failed to create property draft: ${error.message}`);
       }
 
@@ -258,15 +272,19 @@ export class PropertyDraftService {
    * Delete a property draft
    */
   static async deleteDraft(draftId: string): Promise<void> {
+    console.log(`🗑️ PropertyDraftService.deleteDraft: Attempting to delete draft with ID: ${draftId}`);
+    
     const { error } = await supabase
       .from('property_drafts')
       .delete()
       .eq('id', draftId);
 
     if (error) {
-      console.error('Error deleting draft:', error);
+      console.error('❌ PropertyDraftService.deleteDraft: Error deleting draft:', error);
       throw new Error('Failed to delete property draft');
     }
+    
+    console.log(`✅ PropertyDraftService.deleteDraft: Draft ${draftId} deleted successfully`);
   }
 
   /**
@@ -289,13 +307,37 @@ export class PropertyDraftService {
   }
 
   /**
+   * Clean up old incomplete drafts (older than 7 days)
+   * This is more aggressive cleanup for incomplete drafts
+   */
+  static async cleanupOldIncompleteDrafts(): Promise<void> {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    console.log(`🧹 PropertyDraftService.cleanupOldIncompleteDrafts: Cleaning drafts older than ${sevenDaysAgo.toISOString()}`);
+    
+    const { error } = await supabase
+      .from('property_drafts')
+      .delete()
+      .eq('is_completed', false)
+      .lt('updated_at', sevenDaysAgo.toISOString());
+
+    if (error) {
+      console.error('❌ PropertyDraftService.cleanupOldIncompleteDrafts: Error cleaning up old incomplete drafts:', error);
+      throw new Error('Failed to cleanup old incomplete drafts');
+    }
+    
+    console.log('✅ PropertyDraftService.cleanupOldIncompleteDrafts: Successfully cleaned up old incomplete drafts');
+  }
+
+  /**
    * Save form data to draft (handles both create and update)
    */
   static async saveFormData(
     draftId: string | null, 
     stepData: any, 
     stepNumber: number,
-    formType: 'rental' | 'sale' | 'commercial' | 'commercial-sale' | 'land' | 'pg_hostel'
+    formType: 'rental' | 'sale' | 'commercial' | 'commercial-sale' | 'land' | 'pg_hostel' | 'flatmates'
   ): Promise<PropertyDraft> {
     try {
       // Get current user
@@ -321,12 +363,33 @@ export class PropertyDraftService {
     // Map step data to draft fields
     switch (stepNumber) {
       case 1: // Property Details
+        // Handle special floor values for commercial properties
+        let floorNo = stepData.floorNo;
+        if (typeof stepData.floorNo === 'string') {
+          switch (stepData.floorNo) {
+            case 'full':
+              floorNo = -1; // Special value for "Full Building"
+              break;
+            case 'lower':
+              floorNo = -2; // Special value for "Lower Basement"
+              break;
+            case 'upper':
+              floorNo = -3; // Special value for "Upper Basement"
+              break;
+            case '99+':
+              floorNo = 99; // Special value for "99+"
+              break;
+            default:
+              floorNo = parseInt(stepData.floorNo) || 0;
+          }
+        }
+
         updateData = {
           ...updateData,
           apartment_type: stepData.apartmentType,
           apartment_name: stepData.apartmentName,
           bhk_type: stepData.bhkType,
-          floor_no: stepData.floorNo,
+          floor_no: floorNo,
           total_floors: stepData.totalFloors,
           property_age: stepData.propertyAge,
           facing: stepData.facing,
@@ -412,7 +475,7 @@ export class PropertyDraftService {
         console.log('Expected price:', stepData.expectedPrice);
         console.log('Security deposit:', stepData.securityDeposit);
         
-        if (formType === 'rental') {
+        if (formType === 'rental' || formType === 'flatmates') {
           updateData = {
             ...updateData,
             expected_rent: stepData.expectedPrice || stepData.expectedRent,
@@ -423,7 +486,7 @@ export class PropertyDraftService {
             preferred_tenant: stepData.idealFor ? (Array.isArray(stepData.idealFor) ? stepData.idealFor.join(', ') : stepData.idealFor) : undefined,
             description: stepData.description
           };
-          console.log('Rental update data:', updateData);
+          console.log(`${formType} update data:`, updateData);
         } else if (formType === 'sale') {
           updateData = {
             ...updateData,
@@ -715,7 +778,7 @@ export class PropertyDraftService {
       // Create new draft
       return await this.createDraft({
         ...updateData,
-        user_id: user.id,
+        // Don't pass user_id here - createDraft will handle it
         // Only set property_type if not already set from step 1
         property_type: updateData.property_type || (formType === 'rental' ? 'Residential' : 
                       formType === 'sale' ? 'Residential' :
@@ -769,22 +832,17 @@ export class PropertyDraftService {
       if (!draft) return null;
 
       console.log('Loading draft for resume:', draft);
-      console.log('🔍 Draft database fields:', {
-        apartment_name: draft.apartment_name,
-        title: draft.title,
-        property_type: draft.property_type,
-        listing_type: draft.listing_type,
-        bhk_type: draft.bhk_type,
-        property_age: draft.property_age,
-        building_type: draft.building_type,
-        facing: draft.facing,
-        floor_type: draft.floor_type,
-        total_floors: draft.total_floors,
-        floor_no: draft.floor_no,
-        super_built_up_area: draft.super_built_up_area,
-        built_up_area: draft.built_up_area,
-        on_main_road: draft.on_main_road,
-        corner_property: draft.corner_property
+      console.log('🔍 Draft boolean fields:', {
+        gym: draft.gym,
+        gym_type: typeof draft.gym,
+        gated_security: draft.gated_security,
+        gated_security_type: typeof draft.gated_security,
+        non_veg_allowed: draft.non_veg_allowed,
+        non_veg_allowed_type: typeof draft.non_veg_allowed,
+        pet_allowed: draft.pet_allowed,
+        pet_allowed_type: typeof draft.pet_allowed,
+        more_similar_units: draft.more_similar_units,
+        more_similar_units_type: typeof draft.more_similar_units
       });
 
       // Extract owner info
@@ -873,14 +931,29 @@ export class PropertyDraftService {
             paintingService: ''
           }
         };
-      } else if (draft.property_type === 'flatmates') {
+      } else if (draft.property_type === 'flatmates' || draft.property_type === 'Flatmates') {
         formData = {
           // Property Details
           propertyDetails: {
             apartmentType: draft.apartment_type || '',
             apartmentName: draft.apartment_name || '',
             bhkType: draft.bhk_type || '',
-            floorNo: draft.floor_no || 0,
+            floorNo: (() => {
+              const floorNo = draft.floor_no || 0;
+              // Convert special numeric values back to string values for form
+              switch (floorNo) {
+                case -1:
+                  return 'full'; // "Full Building"
+                case -2:
+                  return 'lower'; // "Lower Basement"
+                case -3:
+                  return 'upper'; // "Upper Basement"
+                case 99:
+                  return '99+'; // "99+"
+                default:
+                  return floorNo;
+              }
+            })(),
             totalFloors: draft.total_floors || 0,
             roomType: draft.room_type || '',
             tenantType: draft.preferred_tenant || '',
@@ -897,34 +970,28 @@ export class PropertyDraftService {
             societyName: draft.society_name || '',
             landmark: draft.landmark || ''
           },
-          // Rental Details - using correct field names for RentalDetailsStep
+          // Rental Details - using correct field names for FlattmatesRentalDetailsStep
           rentalDetails: {
-            listingType: 'Rent',
-            expectedPrice: draft.expected_rent || 0,
+            expectedRent: draft.expected_rent || 0,
+            expectedDeposit: draft.expected_deposit || draft.security_deposit || 0,
             rentNegotiable: draft.rent_negotiable || false,
-            maintenanceExtra: draft.maintenance_extra || false,
-            maintenanceIncluded: draft.maintenance_included || false,
-            maintenanceCharges: draft.maintenance_charges || 0,
-            securityDeposit: draft.expected_deposit || draft.security_deposit || 0,
-            depositNegotiable: false,
-            leaseDuration: '',
-            lockinPeriod: '',
+            monthlyMaintenance: draft.monthly_maintenance || '',
             availableFrom: draft.available_from || '',
-            idealFor: draft.preferred_tenant ? [draft.preferred_tenant] : []
+            description: draft.description || ''
           },
           // Amenities - using correct field names for AmenitiesStep
           amenities: {
             bathrooms: draft.bathrooms || 0,
             balconies: draft.balconies || 0,
             waterSupply: draft.water_supply || '',
-            petAllowed: draft.pet_allowed || false,
-            gym: draft.gym || false,
-            nonVegAllowed: draft.non_veg_allowed || false,
-            gatedSecurity: draft.gated_security || false,
+            petAllowed: typeof draft.pet_allowed === 'string' ? draft.pet_allowed === 'true' : (draft.pet_allowed || false),
+            gym: typeof draft.gym === 'string' ? draft.gym === 'true' : (draft.gym || false),
+            nonVegAllowed: typeof draft.non_veg_allowed === 'string' ? draft.non_veg_allowed === 'true' : (draft.non_veg_allowed || false),
+            gatedSecurity: typeof draft.gated_security === 'string' ? draft.gated_security === 'true' : (draft.gated_security || false),
             whoWillShow: draft.who_will_show || '',
             currentPropertyCondition: draft.current_property_condition || '',
             secondaryNumber: draft.secondary_number || '',
-            moreSimilarUnits: draft.more_similar_units || false,
+            moreSimilarUnits: typeof draft.more_similar_units === 'string' ? draft.more_similar_units === 'true' : (draft.more_similar_units || false),
             directionsTip: draft.directions_tip || '',
             lift: draft.lift || 'Not Available',
             powerBackup: draft.power_backup || 'Not Available',
@@ -978,7 +1045,22 @@ export class PropertyDraftService {
             facing: draft.facing || '',
             floorType: draft.floor_type || '',
             totalFloors: draft.total_floors || 1,
-            floorNo: draft.floor_no || 0,
+            floorNo: (() => {
+              const floorNo = draft.floor_no || 0;
+              // Convert special numeric values back to string values for form
+              switch (floorNo) {
+                case -1:
+                  return 'full'; // "Full Building"
+                case -2:
+                  return 'lower'; // "Lower Basement"
+                case -3:
+                  return 'upper'; // "Upper Basement"
+                case 99:
+                  return '99+'; // "99+"
+                default:
+                  return floorNo;
+              }
+            })(),
             superBuiltUpArea: draft.super_built_up_area || draft.built_up_area || 0,
             onMainRoad: draft.on_main_road || false,
             cornerProperty: draft.corner_property || false,
@@ -1015,6 +1097,22 @@ export class PropertyDraftService {
             pincode: draft.pincode || '',
             societyName: draft.society_name || '',
             landmark: draft.landmark || ''
+          },
+          // Rental Details - for commercial rent properties
+          rentalDetails: {
+            listingType: 'Rent',
+            expectedPrice: draft.expected_rent || draft.expected_price || 0,
+            rentNegotiable: draft.rent_negotiable || false,
+            maintenanceExtra: draft.maintenance_extra || false,
+            maintenanceCharges: draft.maintenance_charges || 0,
+            securityDeposit: draft.expected_deposit || draft.security_deposit || 0,
+            depositNegotiable: draft.deposit_negotiable || false,
+            leaseDuration: draft.lease_duration || '',
+            lockinPeriod: draft.lockin_period || '',
+            availableFrom: draft.available_from || '',
+            businessType: draft.business_type ? (Array.isArray(draft.business_type) ? draft.business_type : [draft.business_type]) : [],
+            leaseTerm: draft.lease_term || '',
+            restrictedActivities: draft.restricted_activities ? (Array.isArray(draft.restricted_activities) ? draft.restricted_activities : [draft.restricted_activities]) : []
           },
           // Sale Details - using correct field names for SaleDetailsStep
           saleDetails: {

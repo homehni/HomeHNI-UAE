@@ -56,6 +56,12 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
   isSubmitting = false,
   formId = 'gallery-form'
 }) => {
+  // Helper function to filter out non-File objects (URL strings from resumed drafts)
+  const filterValidFiles = (items: any[]): File[] => {
+    if (!Array.isArray(items)) return [];
+    return items.filter(item => item instanceof File);
+  };
+
   const form = useForm({
     resolver: zodResolver(gallerySchema),
     defaultValues: {
@@ -63,13 +69,13 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
         // If categorizedImages exists, use it as the source of truth
         if (initialData.categorizedImages) {
           return {
-            bathroom: initialData.categorizedImages.bathroom || [],
-            bedroom: initialData.categorizedImages.bedroom || [],
-            hall: initialData.categorizedImages.hall || [],
-            kitchen: initialData.categorizedImages.kitchen || [],
-            frontView: initialData.categorizedImages.frontView || [],
-            balcony: initialData.categorizedImages.balcony || [],
-            others: initialData.categorizedImages.others || []
+            bathroom: filterValidFiles(initialData.categorizedImages.bathroom || []),
+            bedroom: filterValidFiles(initialData.categorizedImages.bedroom || []),
+            hall: filterValidFiles(initialData.categorizedImages.hall || []),
+            kitchen: filterValidFiles(initialData.categorizedImages.kitchen || []),
+            frontView: filterValidFiles(initialData.categorizedImages.frontView || []),
+            balcony: filterValidFiles(initialData.categorizedImages.balcony || []),
+            others: filterValidFiles(initialData.categorizedImages.others || [])
           };
         }
         
@@ -81,7 +87,7 @@ export const GalleryStep: React.FC<GalleryStepProps> = ({
           kitchen: [] as any[],
           frontView: [] as any[],
           balcony: [] as any[],
-          others: Array.isArray(initialData.images) ? (initialData.images as any[]) : []
+          others: Array.isArray(initialData.images) ? filterValidFiles(initialData.images as any[]) : []
         };
       })(),
       video: initialData.video

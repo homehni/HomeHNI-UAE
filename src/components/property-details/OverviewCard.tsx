@@ -93,7 +93,14 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
   };
 
   const formatFloor = (floorNo?: number, totalFloors?: number) => {
-    if (floorNo !== undefined && totalFloors) {
+    // Handle special floor values
+    if (floorNo === -1) {
+      return 'All floors';
+    } else if (floorNo === -2) {
+      return 'LB';
+    } else if (floorNo === -3) {
+      return 'UB';
+    } else if (floorNo !== undefined && totalFloors) {
       return `${floorNo}/${totalFloors}`;
     }
     return 'Not specified';

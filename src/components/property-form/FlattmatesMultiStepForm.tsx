@@ -503,6 +503,19 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       console.log('Calling saveIntermediateData...');
       await saveIntermediateData(data, 6);
       
+      // Mark the draft as completed after successful submission
+      if (draftId) {
+        console.log('[FlattmatesMultiStepForm] Marking draft as completed:', draftId);
+        try {
+          await PropertyDraftService.updateDraft(draftId, { 
+            is_completed: true,
+            current_step: 7 // Mark as completed at preview step
+          });
+        } catch (error) {
+          console.error('[FlattmatesMultiStepForm] Error marking draft as completed:', error);
+        }
+      }
+      
       // Final submission
       console.log('Preparing final submission...');
       const formData = getFormData();
@@ -638,8 +651,22 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     }
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('FlattmatesMultiStepForm - Final submission called');
+    
+    // Mark the draft as completed after successful submission
+    if (draftId) {
+      console.log('[FlattmatesMultiStepForm] Marking draft as completed in handleSubmit:', draftId);
+      try {
+        await PropertyDraftService.updateDraft(draftId, { 
+          is_completed: true,
+          current_step: 7 // Mark as completed at preview step
+        });
+      } catch (error) {
+        console.error('[FlattmatesMultiStepForm] Error marking draft as completed:', error);
+      }
+    }
+    
     const formData = getFormData();
     console.log('FlattmatesMultiStepForm - Complete form data:', formData);
     onSubmit(formData);

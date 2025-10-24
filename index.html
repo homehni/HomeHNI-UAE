@@ -64,32 +64,29 @@
           if (COUNTRY_DOMAINS[upperCountry]) {
             localStorage.setItem(PREF_KEY, upperCountry);
             location.replace('https://' + COUNTRY_DOMAINS[upperCountry] + location.pathname + location.hash);
-            return;
           }
-        }
-        
-        // 2. Check saved preference
-        const savedCountry = localStorage.getItem(PREF_KEY);
-        if (savedCountry && COUNTRY_DOMAINS[savedCountry]) {
-          location.replace('https://' + COUNTRY_DOMAINS[savedCountry] + location.pathname + location.hash);
-          return;
-        }
-        
-        // 3. Try navigator.language fallback
-        if (navigator.language) {
-          const lang = navigator.language.toLowerCase();
-          let detectedCountry = null;
-          
-          // Extract country from language codes like en-US, en-IN, etc.
-          if (lang.includes('-')) {
-            detectedCountry = lang.split('-')[1].toUpperCase();
-          } else if (lang.includes('_')) {
-            detectedCountry = lang.split('_')[1].toUpperCase();
-          }
-          
-          if (detectedCountry && COUNTRY_DOMAINS[detectedCountry]) {
-            location.replace('https://' + COUNTRY_DOMAINS[detectedCountry] + location.pathname + location.hash);
-            return;
+        } else {
+          // 2. Check saved preference
+          const savedCountry = localStorage.getItem(PREF_KEY);
+          if (savedCountry && COUNTRY_DOMAINS[savedCountry]) {
+            location.replace('https://' + COUNTRY_DOMAINS[savedCountry] + location.pathname + location.hash);
+          } else {
+            // 3. Try navigator.language fallback
+            if (navigator.language) {
+              const lang = navigator.language.toLowerCase();
+              let detectedCountry = null;
+              
+              // Extract country from language codes like en-US, en-IN, etc.
+              if (lang.includes('-')) {
+                detectedCountry = lang.split('-')[1].toUpperCase();
+              } else if (lang.includes('_')) {
+                detectedCountry = lang.split('_')[1].toUpperCase();
+              }
+              
+              if (detectedCountry && COUNTRY_DOMAINS[detectedCountry]) {
+                location.replace('https://' + COUNTRY_DOMAINS[detectedCountry] + location.pathname + location.hash);
+              }
+            }
           }
         }
         

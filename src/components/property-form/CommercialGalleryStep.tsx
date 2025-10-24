@@ -49,21 +49,27 @@ export const CommercialGalleryStep: React.FC<CommercialGalleryStepProps> = ({
   onSubmit,
   isSubmitting = false
 }) => {
+  // Helper function to filter out non-File objects (URL strings from resumed drafts)
+  const filterValidFiles = (items: any[]): File[] => {
+    if (!Array.isArray(items)) return [];
+    return items.filter(item => item instanceof File);
+  };
+
   const form = useForm({
     resolver: zodResolver(commercialGallerySchema),
     defaultValues: {
       images: initialData.categorizedImages ? {
-        frontView: initialData.categorizedImages.frontView || [],
-        interiorView: initialData.categorizedImages.interiorView || [],
-        others: initialData.categorizedImages.others || []
+        frontView: filterValidFiles(initialData.categorizedImages.frontView || []),
+        interiorView: filterValidFiles(initialData.categorizedImages.interiorView || []),
+        others: filterValidFiles(initialData.categorizedImages.others || [])
       } : (initialData as any).categorized_images ? {
-        frontView: (initialData as any).categorized_images.frontView || [],
-        interiorView: (initialData as any).categorized_images.interiorView || [],
-        others: (initialData as any).categorized_images.others || Array.isArray(initialData.images) ? initialData.images : []
+        frontView: filterValidFiles((initialData as any).categorized_images.frontView || []),
+        interiorView: filterValidFiles((initialData as any).categorized_images.interiorView || []),
+        others: filterValidFiles((initialData as any).categorized_images.others || (Array.isArray(initialData.images) ? initialData.images : []))
       } : {
         frontView: [],
         interiorView: [],
-        others: Array.isArray(initialData.images) ? initialData.images : []
+        others: Array.isArray(initialData.images) ? filterValidFiles(initialData.images) : []
       },
       video: initialData.video
     }

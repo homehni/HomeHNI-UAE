@@ -12,8 +12,8 @@ import {
   LandPlotAmenities 
 } from '@/types/landPlotProperty';
 
-export const useLandPlotPropertyForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+export const useLandPlotPropertyForm = (initialStep: number = 1) => {
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
   const [plotDetails, setPlotDetails] = useState<Partial<LandPlotDetails>>({
     propertyType: 'Land/Plot',

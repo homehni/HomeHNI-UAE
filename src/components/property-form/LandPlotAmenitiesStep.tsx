@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -46,6 +46,28 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
       directionsToProperty: (initialData as any)?.directionsToProperty ?? '',
     }
   });
+
+  // Update form values when initialData changes
+  useEffect(() => {
+    if ((initialData as any)?.waterSupply) {
+      setValue('waterSupply', (initialData as any).waterSupply);
+    }
+    if ((initialData as any)?.electricityConnection) {
+      setValue('electricityConnection', (initialData as any).electricityConnection);
+    }
+    if ((initialData as any)?.sewageConnection) {
+      setValue('sewageConnection', (initialData as any).sewageConnection);
+    }
+    if ((initialData as any)?.roadWidth !== undefined) {
+      setValue('roadWidth', (initialData as any).roadWidth);
+    }
+    if ((initialData as any)?.gatedSecurity !== undefined) {
+      setValue('gatedSecurity', (initialData as any).gatedSecurity);
+    }
+    if ((initialData as any)?.directionsToProperty) {
+      setValue('directionsToProperty', (initialData as any).directionsToProperty);
+    }
+  }, [initialData, setValue]);
 
 
   return (

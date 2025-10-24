@@ -86,34 +86,63 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
   onBack,
   formId
 }) => {
+  console.log('FlattmatesAmenitiesStep initialData:', initialData);
+  console.log('FlattmatesAmenitiesStep initialData.gym:', initialData.gym, typeof initialData.gym);
+  console.log('FlattmatesAmenitiesStep initialData.gatedSecurity:', initialData.gatedSecurity, typeof initialData.gatedSecurity);
+  console.log('FlattmatesAmenitiesStep initialData.nonVegAllowed:', initialData.nonVegAllowed, typeof initialData.nonVegAllowed);
+  console.log('FlattmatesAmenitiesStep initialData.petAllowed:', initialData.petAllowed, typeof initialData.petAllowed);
+  console.log('FlattmatesAmenitiesStep initialData.moreSimilarUnits:', initialData.moreSimilarUnits, typeof initialData.moreSimilarUnits);
+  
+  // Helper function to convert string values to booleans
+  const convertToBoolean = (value: any): boolean => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      return value.toLowerCase() === 'true' || value === '1' || value.toLowerCase() === 'yes';
+    }
+    return Boolean(value);
+  };
+  
+  // Convert boolean fields from initialData
+  const convertedInitialData = {
+    ...initialData,
+    attachedBathroom: convertToBoolean(initialData.attachedBathroom),
+    nonVegAllowed: convertToBoolean(initialData.nonVegAllowed),
+    smokingAllowed: convertToBoolean(initialData.smokingAllowed),
+    drinkingAllowed: convertToBoolean(initialData.drinkingAllowed),
+    gym: convertToBoolean(initialData.gym),
+    gatedSecurity: convertToBoolean(initialData.gatedSecurity),
+    moreSimilarUnits: convertToBoolean(initialData.moreSimilarUnits),
+  };
+  
+  console.log('FlattmatesAmenitiesStep convertedInitialData:', convertedInitialData);
   const form = useForm<FlattmatesAmenitiesFormData>({
     resolver: zodResolver(amenitiesSchema),
     defaultValues: {
       // Room Details
-      attachedBathroom: initialData.attachedBathroom || false,
-      bathrooms: initialData.bathrooms || 0,
-      balconies: initialData.balconies || 0,
+      attachedBathroom: convertedInitialData.attachedBathroom || false,
+      bathrooms: convertedInitialData.bathrooms || 0,
+      balconies: convertedInitialData.balconies || 0,
       
       // Flatmate Preference
-      nonVegAllowed: initialData.nonVegAllowed || false,
-      smokingAllowed: initialData.smokingAllowed || false,
-      drinkingAllowed: initialData.drinkingAllowed || false,
+      nonVegAllowed: convertedInitialData.nonVegAllowed || false,
+      smokingAllowed: convertedInitialData.smokingAllowed || false,
+      drinkingAllowed: convertedInitialData.drinkingAllowed || false,
       
       // Additional Details
-      gym: initialData.gym || false,
-      gatedSecurity: initialData.gatedSecurity || false,
+      gym: convertedInitialData.gym || false,
+      gatedSecurity: convertedInitialData.gatedSecurity || false,
       
       // Other fields
-      whoWillShow: initialData.whoWillShow || '',
-      currentPropertyCondition: initialData.currentPropertyCondition || '',
-      secondaryNumber: initialData.secondaryNumber || '',
-      moreSimilarUnits: initialData.moreSimilarUnits || false,
-      directionsTip: initialData.directionsTip || '',
-      lift: initialData.lift || 'Not Available',
-      powerBackup: initialData.powerBackup || 'Not Available',
-      waterStorageFacility: initialData.waterStorageFacility || 'Not Available',
-      security: initialData.security || 'Not Available',
-      wifi: initialData.wifi || 'Not Available',
+      whoWillShow: convertedInitialData.whoWillShow || '',
+      currentPropertyCondition: convertedInitialData.currentPropertyCondition || '',
+      secondaryNumber: convertedInitialData.secondaryNumber || '',
+      moreSimilarUnits: convertedInitialData.moreSimilarUnits || false,
+      directionsTip: convertedInitialData.directionsTip || '',
+      lift: convertedInitialData.lift || 'Not Available',
+      powerBackup: convertedInitialData.powerBackup || 'Not Available',
+      waterStorageFacility: convertedInitialData.waterStorageFacility || 'Not Available',
+      security: convertedInitialData.security || 'Not Available',
+      wifi: convertedInitialData.wifi || 'Not Available',
     },
   });
 
@@ -123,30 +152,30 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
       console.log('FlattmatesAmenitiesStep syncing with initialData:', initialData);
       form.reset({
         // Room Details
-        attachedBathroom: initialData.attachedBathroom || false,
-        bathrooms: initialData.bathrooms || 0,
-        balconies: initialData.balconies || 0,
+        attachedBathroom: convertedInitialData.attachedBathroom || false,
+        bathrooms: convertedInitialData.bathrooms || 0,
+        balconies: convertedInitialData.balconies || 0,
         
         // Flatmate Preference
-        nonVegAllowed: initialData.nonVegAllowed || false,
-        smokingAllowed: initialData.smokingAllowed || false,
-        drinkingAllowed: initialData.drinkingAllowed || false,
+        nonVegAllowed: convertedInitialData.nonVegAllowed || false,
+        smokingAllowed: convertedInitialData.smokingAllowed || false,
+        drinkingAllowed: convertedInitialData.drinkingAllowed || false,
         
         // Additional Details
-        gym: initialData.gym || false,
-        gatedSecurity: initialData.gatedSecurity || false,
+        gym: convertedInitialData.gym || false,
+        gatedSecurity: convertedInitialData.gatedSecurity || false,
         
         // Other fields
-        whoWillShow: initialData.whoWillShow || '',
-        currentPropertyCondition: initialData.currentPropertyCondition || '',
-        secondaryNumber: initialData.secondaryNumber || '',
-        moreSimilarUnits: initialData.moreSimilarUnits || false,
-        directionsTip: initialData.directionsTip || '',
-        lift: initialData.lift || 'Not Available',
-        powerBackup: initialData.powerBackup || 'Not Available',
-        waterStorageFacility: initialData.waterStorageFacility || 'Not Available',
-        security: initialData.security || 'Not Available',
-        wifi: initialData.wifi || 'Not Available',
+        whoWillShow: convertedInitialData.whoWillShow || '',
+        currentPropertyCondition: convertedInitialData.currentPropertyCondition || '',
+        secondaryNumber: convertedInitialData.secondaryNumber || '',
+        moreSimilarUnits: convertedInitialData.moreSimilarUnits || false,
+        directionsTip: convertedInitialData.directionsTip || '',
+        lift: convertedInitialData.lift || 'Not Available',
+        powerBackup: convertedInitialData.powerBackup || 'Not Available',
+        waterStorageFacility: convertedInitialData.waterStorageFacility || 'Not Available',
+        security: convertedInitialData.security || 'Not Available',
+        wifi: convertedInitialData.wifi || 'Not Available',
       });
     }
   }, [initialData, form]);

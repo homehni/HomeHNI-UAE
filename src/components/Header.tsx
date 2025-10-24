@@ -233,15 +233,15 @@ const Header = () => {
                   )}
                 </div>
 
-                {/* Find Your Plan Button */}
+                {/* Post Requirement Button */}
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => navigate('/plans')}
+                  onClick={() => navigate('/post-service')}
                   className={`font-medium px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 uppercase ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
                 >
                   <Search className="mr-1 h-3 w-3 xl:h-4 xl:w-4" />
-                  Find Your Plan
+                  Post Requirement
                 </Button>
 
                 <a href="/service-suite" onClick={e => {

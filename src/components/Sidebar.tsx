@@ -211,11 +211,11 @@ const Sidebar = ({
       }
     }]
   }, {
-    id: 'careers',
-    label: 'Careers',
+    id: 'students',
+    label: 'Students',
     hasSubmenu: false,
     onClick: () => {
-      navigate('/careers');
+      navigate('/students');
       onClose();
     }
   }, {

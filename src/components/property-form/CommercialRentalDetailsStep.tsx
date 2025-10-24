@@ -81,6 +81,32 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
     },
   });
 
+  // Reset form when initialData changes (for draft loading)
+  React.useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log('CommercialRentalDetailsStep: Resetting form with initialData:', initialData);
+      form.reset({
+        listingType: initialData.listingType || 'Rent',
+        expectedPrice: initialData.expectedPrice || undefined,
+        rentNegotiable: initialData.rentNegotiable || false,
+        maintenanceExtra: initialData.maintenanceExtra || false,
+        maintenanceCharges: initialData.maintenanceCharges || undefined,
+        securityDeposit: initialData.securityDeposit || undefined,
+        depositNegotiable: initialData.depositNegotiable || false,
+        leaseDuration: initialData.leaseDuration || '',
+        lockinPeriod: initialData.lockinPeriod || '',
+        availableFrom: initialData.availableFrom || '',
+        businessType: initialData.businessType || [],
+        leaseTerm: initialData.leaseTerm || '',
+      });
+      
+      // Update state variables
+      setSelectedBusinessTypes(initialData.businessType || []);
+      setSelectedRestrictions(initialData.restrictedActivities || []);
+      setShowMaintenanceInput(initialData.maintenanceExtra || false);
+    }
+  }, [initialData, form]);
+
   const predefinedBusinessTypes = ['Bank', 'Retail', 'ATM', 'Service Center', 'Show Room'];
   // const predefinedRestrictions = ['No Loud Music', 'No Alcohol', 'No Non-Veg Food', 'No Heavy Machinery', 'No Chemical Storage'];
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -55,6 +55,43 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       villageName: initialData.villageName || '',
     }
   });
+
+  // Update form values when initialData changes
+  useEffect(() => {
+    if (initialData.plotArea !== undefined) {
+      setValue('plotArea', initialData.plotArea);
+    }
+    if (initialData.plotAreaUnit) {
+      setValue('plotAreaUnit', initialData.plotAreaUnit);
+    }
+    if (initialData.plotLength !== undefined) {
+      setValue('plotLength', initialData.plotLength);
+    }
+    if (initialData.plotWidth !== undefined) {
+      setValue('plotWidth', initialData.plotWidth);
+    }
+    if (initialData.boundaryWall) {
+      setValue('boundaryWall', initialData.boundaryWall);
+    }
+    if (initialData.floorsAllowed !== undefined) {
+      setValue('floorsAllowed', initialData.floorsAllowed);
+    }
+    if (initialData.gatedProject) {
+      setValue('gatedProject', initialData.gatedProject);
+    }
+    if (initialData.gatedCommunity !== undefined) {
+      setValue('gatedCommunity', initialData.gatedCommunity);
+    }
+    if (initialData.surveyNumber) {
+      setValue('surveyNumber', initialData.surveyNumber);
+    }
+    if (initialData.subDivision) {
+      setValue('subDivision', initialData.subDivision);
+    }
+    if (initialData.villageName) {
+      setValue('villageName', initialData.villageName);
+    }
+  }, [initialData, setValue]);
 
   const plotAreaUnit = watch('plotAreaUnit');
 

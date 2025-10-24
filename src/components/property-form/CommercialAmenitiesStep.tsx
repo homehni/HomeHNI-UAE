@@ -48,6 +48,22 @@ export const CommercialAmenitiesStep: React.FC<CommercialAmenitiesStepProps> = (
     },
   });
 
+  // Reset form when initialData changes (for draft loading)
+  React.useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log('CommercialAmenitiesStep: Resetting form with initialData:', initialData);
+      form.reset({
+        powerBackup: initialData.powerBackup || '',
+        lift: initialData.lift || '',
+        parking: initialData.parking || '',
+        waterStorageFacility: initialData.waterStorageFacility || '',
+        security: initialData.security || '',
+        currentPropertyCondition: initialData.currentPropertyCondition || '',
+        directionsTip: initialData.directionsTip || '',
+      });
+    }
+  }, [initialData, form]);
+
   const onSubmit = (data: CommercialAmenitiesForm) => {
     onNext(data as CommercialAmenities);
   };

@@ -132,22 +132,21 @@ const Careers = () => {
       
       {/* Hero Section with banner image merged with header/marquee */}
       <div className="md:pt-8">
-        <div className="relative h-[70vh] overflow-hidden">
+         <div className="relative h-[85vh] overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+           backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
+         }}>
           {/* Banner Background */}
-          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
-          backgroundImage: `url('/lovable-uploads/b97275ad-b157-4783-8b5b-198d7c905011.png')`,
-          backgroundPosition: 'center center'
-        }}></div>
+           <div className="absolute inset-0 bg-red-900/80 pointer-events-none"></div>
         
           {/* Hero Text Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center pt-20">
+          <div className="absolute inset-0 flex items-center pt-20">
             <div className="container mx-auto px-4">
-              <div className="text-white max-w-4xl text-center lg:text-left">
-                <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                  Build Your Career with HomeHNI
+              <div className="text-white max-w-4xl text-center">
+                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+                   Launch Your Sales Career with HomeHNI
                 </h1>
                 <p className="text-lg md:text-xl mb-8 opacity-90 leading-relaxed">
-                  Join India's most innovative real estate technology platform and shape the future of luxury property experiences for High-Net-Worth Individuals
+                  Join India's fastest-growing real estate platform as a Sales Intern and gain hands-on experience in luxury property sales while building your professional network
                 </p>
               </div>
             </div>
@@ -158,7 +157,7 @@ const Careers = () => {
         <div className="hidden lg:block fixed top-32 right-4 z-50 w-[420px]">
           <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
             <CardContent className="p-4">
-              <h3 className="text-xl font-semibold text-foreground mb-1 text-uniform-center">Apply for a Position</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-1 text-uniform-center">Apply for Sales Intern Position</h3>
 
               <form className="space-y-3" onSubmit={async e => {
               e.preventDefault();
@@ -298,7 +297,7 @@ const Careers = () => {
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
             <CardContent className="p-6">
-              <h3 className="text-2xl font-bold text-foreground mb-2 text-uniform-center">Apply for a Position</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-2 text-uniform-center">Apply for Sales Intern Position</h3>
 
                 <form className="space-y-4" onSubmit={async e => {
                 e.preventDefault();
@@ -449,238 +448,252 @@ const Careers = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 pt-4 pb-8">
-          <div className="grid lg:grid-cols-2 gap-8 items-start">
-            <div className="max-w-none lg:pr-8">{/* Content takes full width, padding only for desktop form */}
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            <div className="w-full lg:w-2/3 lg:pr-8 flex flex-col items-center">{/* Content centered */}
             
             {/* Header Section */}
-            <section className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center lg:text-left">Careers at HomeHNI</h1>
-              <p className="text-xl text-gray-600 mb-6 text-center lg:text-left">Shape the Future of High-Value Real Estate with Us</p>
-              <p className="text-gray-700 text-uniform mb-3">
-                At HomeHNI, we are redefining how High-Net-Worth Individuals (HNIs) experience real estate. With technology, transparency, and trust at our core, we're building India's most intelligent platform for premium property discovery and transactions.
-              </p>
-              <p className="text-gray-700 text-uniform">
-                If you're passionate about innovation, problem-solving, and creating real impact in the luxury property space — we want you on our team.
-              </p>
+            <section className="mb-12 pt-12">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-full mb-6">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-red-600 to-gray-900 bg-clip-text text-transparent mb-4">
+                  Sales Internship Program at HomeHNI
+                </h1>
+                <div className="w-20 h-1 bg-gradient-to-r from-red-500 to-red-600 mx-auto mb-4"></div>
+                <p className="text-lg md:text-xl font-semibold text-gray-700 mb-6">Launch Your Sales Career in Luxury Real Estate</p>
+              </div>
+              
+              <div className="bg-gradient-to-r from-gray-50 to-red-50 rounded-xl p-6 border border-red-100 shadow-md">
+                <div className="max-w-3xl mx-auto">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p className="text-gray-700 text-base">
+                          <span className="font-semibold text-gray-900">Exclusive Program:</span> Designed specifically for ambitious college students and recent graduates
+                        </p>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p className="text-gray-700 text-base">
+                          <span className="font-semibold text-gray-900">Hands-on Experience:</span> Gain real experience in high-value property transactions
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p className="text-gray-700 text-base">
+                          <span className="font-semibold text-gray-900">HNI Network:</span> Work directly with High-Net-Worth Individuals
+                        </p>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p className="text-gray-700 text-base">
+                          <span className="font-semibold text-gray-900">Professional Growth:</span> Build your network and sales skills
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </section>
 
             {/* Why Work with HomeHNI */}
             <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Why Work with HomeHNI?</h2>
+              <div className="flex items-center justify-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Why Choose Our Sales Internship?</h2>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
                 <div className="card-border-accent hover-lift p-6 bg-blue-50">
-                  <h3 className="font-semibold text-blue-800 mb-3 text-uniform-center">Innovation-Driven Culture</h3>
-                  <p className="text-blue-700 text-uniform">
-                    We don't just follow trends—we set them. You'll work on cutting-edge real estate tech tools, customer experience automation, and intelligent listing algorithms.
+                  <h3 className="font-semibold text-blue-800 mb-3 text-center">Real Sales Experience</h3>
+                  <p className="text-blue-700 text-center">
+                    Work with actual clients and learn the art of luxury property sales. No coffee runs or filing—just real, hands-on sales experience from day one.
                   </p>
                 </div>
                 
                 <div className="card-border-accent hover-lift p-6 bg-green-50">
-                  <h3 className="font-semibold text-green-800 mb-3 text-uniform-center">Real Impact, Real Growth</h3>
-                  <p className="text-green-700 text-uniform">
-                    Your work directly influences how clients make high-value property decisions. From day one, you'll have ownership and autonomy.
+                  <h3 className="font-semibold text-green-800 mb-3 text-center">High-Value Commissions</h3>
+                  <p className="text-green-700 text-center">
+                    Earn competitive commissions on luxury property sales. Our interns have earned ₹50,000+ in their first month working with premium clients.
                   </p>
                 </div>
                 
                 <div className="card-border-accent hover-lift p-6 bg-purple-50">
-                  <h3 className="font-semibold text-purple-800 mb-3 text-uniform-center">Work with the Best Minds</h3>
-                  <p className="text-purple-700 text-uniform">
-                    Collaborate with experienced professionals from top startups, proptech companies, and the real estate industry.
+                  <h3 className="font-semibold text-purple-800 mb-3 text-center">Mentorship Program</h3>
+                  <p className="text-purple-700 text-center">
+                    Get paired with senior sales professionals who will guide you through every step of the sales process and client relationship building.
                   </p>
                 </div>
                 
                 <div className="card-border-accent hover-lift p-6 bg-yellow-50">
-                  <h3 className="font-semibold text-yellow-800 mb-3 text-uniform-center">Flexible and Hybrid Opportunities</h3>
-                  <p className="text-yellow-700 text-uniform">
-                    We believe in productivity over presence. Enjoy flexible working hours, remote options, and a performance-focused environment.
+                  <h3 className="font-semibold text-yellow-800 mb-3 text-center">Flexible Schedule</h3>
+                  <p className="text-yellow-700 text-center">
+                    Perfect for students! Work around your class schedule with flexible hours and remote work options. Earn while you learn.
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* Current Openings */}
+            {/* Sales Intern Role Details */}
             <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Current Openings</h2>
+              <div className="flex items-center justify-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Sales Intern Role & Responsibilities</h2>
               </div>
               
-              <div className="space-y-8">
+              <div className="space-y-6 max-w-4xl mx-auto">
                 <div className="card-border-red hover-lift p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">1. Real Estate Sales Consultant – HNI Segment</h3>
-                  <div className="space-y-2 text-gray-700 text-uniform">
-                    <p><strong>Location:</strong> Mumbai / Bangalore / Delhi NCR</p>
-                    <p><strong>Experience:</strong> 3+ years in luxury real estate sales</p>
-                    <p><strong>Role:</strong> Build relationships with HNI clients, conduct virtual/onsite property tours, and drive premium property transactions.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">What You'll Do as a Sales Intern</h3>
+                  <div className="space-y-3 text-gray-700">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                      <p><strong>Lead Generation:</strong> Identify and reach out to potential HNI clients through various channels</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                      <p><strong>Client Communication:</strong> Handle initial client inquiries and schedule property viewings</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                      <p><strong>Property Presentations:</strong> Assist in showcasing luxury properties to potential buyers</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                      <p><strong>Sales Support:</strong> Help senior sales professionals with documentation and follow-ups</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                      <p><strong>Market Research:</strong> Analyze luxury property trends and competitor activities</p>
+                    </div>
                   </div>
                 </div>
                 
                 <div className="card-border-blue hover-lift p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">2. Digital Marketing Executive</h3>
-                  <div className="space-y-2 text-gray-700 text-uniform">
-                    <p><strong>Location:</strong> Remote</p>
-                    <p><strong>Experience:</strong> 2–4 years (Real Estate or PropTech preferred)</p>
-                    <p><strong>Role:</strong> Plan, execute, and optimize paid ad campaigns, SEO, content marketing, and email automation for lead generation.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">What We're Looking For</h3>
+                  <div className="space-y-3 text-gray-700">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <p><strong>Education:</strong> Currently pursuing or recently completed Bachelor's/Master's degree</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <p><strong>Communication:</strong> Excellent verbal and written communication skills in English</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <p><strong>Personality:</strong> Confident, outgoing, and comfortable interacting with high-net-worth individuals</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <p><strong>Tech-Savvy:</strong> Comfortable using CRM systems, social media, and digital tools</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <p><strong>Commitment:</strong> Available for 3-6 months internship duration</p>
+                    </div>
                   </div>
                 </div>
                 
                 <div className="card-border-green hover-lift p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">3. Full Stack Developer (React + Node.js)</h3>
-                  <div className="space-y-2 text-gray-700 text-uniform">
-                    <p><strong>Location:</strong> Hybrid (Bangalore Preferred)</p>
-                    <p><strong>Experience:</strong> 2–5 years</p>
-                    <p><strong>Role:</strong> Build scalable, high-performance web platforms and tools for real estate discovery, agent dashboards, and user engagement.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">What You'll Gain</h3>
+                  <div className="space-y-3 text-gray-700">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <p><strong>Sales Skills:</strong> Master the art of luxury property sales and client relationship management</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <p><strong>Industry Knowledge:</strong> Deep understanding of luxury real estate market and trends</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <p><strong>Professional Network:</strong> Connect with industry leaders, developers, and HNI clients</p>
                   </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <p><strong>Commission Earnings:</strong> Earn competitive commissions on successful sales</p>
                 </div>
-                
-                <div className="card-border-purple hover-lift p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-uniform">4. Legal Documentation Executive</h3>
-                  <div className="space-y-2 text-gray-700 text-uniform">
-                    <p><strong>Location:</strong> Remote / Onsite</p>
-                    <p><strong>Experience:</strong> 1–3 years in property law or legal drafting</p>
-                    <p><strong>Role:</strong> Assist clients with sale agreements, title checks, and document review services for property transactions.</p>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <p><strong>Career Growth:</strong> Potential for full-time employment upon successful completion</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Life at HomeHNI */}
+            {/* Student Experience at HomeHNI */}
             <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900"> Life at HomeHNI</h2>
+              <div className="flex items-center justify-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Student Experience at HomeHNI</h2>
               </div>
               
-              <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="bg-gray-50 p-6 rounded-lg max-w-3xl mx-auto">
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-brand-red rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                    <span>Startup agility meets domain expertise</span>
+                    <span>Work alongside experienced sales professionals and learn from the best</span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-brand-red rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                    <span>Transparent feedback culture</span>
+                    <span>Flexible schedule that works around your college classes</span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-brand-red rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                    <span>Monthly knowledge-sharing sessions</span>
+                    <span>Weekly training sessions on sales techniques and market trends</span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-brand-red rounded-full mt-3 mr-4 flex-shrink-0"></div>
-                    <span>Annual offsites, performance rewards, and wellness benefits</span>
+                    <span>Monthly performance reviews and career guidance sessions</span>
+                  </li>
+                  <li className="flex items-start">
+                    <div className="w-2 h-2 bg-brand-red rounded-full mt-3 mr-4 flex-shrink-0"></div>
+                    <span>Networking events with industry leaders and potential employers</span>
                   </li>
                 </ul>
               </div>
               
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mt-6">
-                <p className="text-blue-800 font-medium italic">
-                  "At HomeHNI, you're not just another employee—you're an owner of your work, your ideas, and your journey."<br />
-                  <span className="text-sm">– Team HomeHNI</span>
-                </p>
-              </div>
             </section>
 
-            {/* Don't See Your Role Listed */}
+            {/* Ready to Start Your Sales Journey? */}
             <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Don't See Your Role Listed?</h2>
+              <div className="flex items-center justify-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Ready to Start Your Sales Journey?</h2>
               </div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                We're always looking for passionate thinkers and doers!
+              <p className="text-gray-700 mb-4 leading-relaxed text-center max-w-3xl mx-auto">
+                Don't wait! Our Sales Internship Program has limited spots and fills up quickly.
               </p>
-              <p className="text-gray-700 leading-relaxed">
-                Email us your CV at <strong>careers@homehni.com</strong> with a brief note on why you'd be a great fit.
+              <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto">
+                Apply now using the form on this page, or email us directly at <strong>homehni8@gmail.com</strong> with your resume and a brief note about why you want to join our sales team.
               </p>
             </section>
 
-            {/* Join the HomeHNI Journey */}
-            <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Join the HomeHNI Journey</h2>
-              </div>
-              <div className="bg-gradient-to-r from-brand-red to-red-600 text-white p-8 rounded-lg text-center">
-                <p className="text-lg leading-relaxed">
-                  Whether you're a tech innovator, a real estate enthusiast, or a service professional—this is your chance to shape the premium property experience for tomorrow's India.
-                </p>
-              </div>
-            </section>
 
-            {/* Career Opportunities */}
-            <section className="mb-8">
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Career Opportunities</h2>
-              </div>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Sales Consultant Jobs</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Marketing Executive Roles</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Developer Positions</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Real Estate Careers</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">PropTech Jobs</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Legal Executive Roles</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Remote Work Opportunities</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Hybrid Work Culture</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Flexible Schedule</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Career Growth</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Performance Based Incentives</span>
-                </div>
-              </div>
 
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Work Culture & Benefits
-              </h3>
-              
-              <div className="space-y-3 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Innovation-Driven Environment</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Professional Development</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Health Insurance</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Performance Bonuses</span>
-                </div>
-              </div>
-
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Application Process
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Quick Application</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Online Interview Process</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Fast Hiring Process</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Immediate Joining</span>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Equal Opportunity Employer</span>
-                </div>
-              </div>
-            </section>
-
-            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-              <p className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </p>
-            </div>
             </div>
             
             {/* Right side spacing for sticky form */}
-            <div className="hidden lg:block"></div>
+            <div className="hidden lg:block w-1/3"></div>
           </div>
         </div>
       </div>

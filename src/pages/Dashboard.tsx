@@ -649,7 +649,7 @@ export const Dashboard: React.FC = () => {
     // Apply type filter
     if (filterType !== 'all') {
       filtered = filtered.filter(fav => 
-        fav.properties.listing_type.toLowerCase() === filterType
+        fav.properties.listing_type?.toLowerCase() === filterType
       );
     }
 

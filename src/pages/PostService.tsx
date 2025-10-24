@@ -361,69 +361,69 @@ const PostService = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-28 pb-12 px-4 bg-gradient-to-br from-primary/5 to-primary/10">
+      <section className="pt-32 pb-6 px-4">
         <div className="container mx-auto max-w-7xl text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             Post Your Requirement
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground mb-4 max-w-2xl mx-auto">
             Tell us what you need and we'll match you with the best options from our verified network.
           </p>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-12 px-4">
+      <section className="py-6 px-4">
         <div className="container mx-auto max-w-4xl">
           <Card className="shadow-xl">
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit} className="space-y-3">
                     {/* Personal Details */}
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label htmlFor="name" className="text-base font-medium">Name *</Label>
+                        <Label htmlFor="name" className="text-sm font-medium">Name *</Label>
                         <Input
                           id="name"
                           value={formData.name}
                           onChange={(e) => handleInputChange("name", e.target.value)}
-                          className="mt-2 h-12"
+                          className="mt-1 h-10"
                           placeholder="Your full name"
                         />
                         {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
                       </div>
 
                       <div>
-                        <Label htmlFor="phone" className="text-base font-medium">Phone Number *</Label>
+                        <Label htmlFor="phone" className="text-sm font-medium">Phone Number *</Label>
                         <Input
                           id="phone"
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => handleInputChange("phone", e.target.value)}
-                          className="mt-2 h-12"
+                          className="mt-1 h-10"
                           placeholder="Your phone number"
                         />
                         {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label htmlFor="email" className="text-base font-medium">Email *</Label>
+                        <Label htmlFor="email" className="text-sm font-medium">Email *</Label>
                         <Input
                           id="email"
                           type="email"
                           value={formData.email}
                           onChange={(e) => handleInputChange("email", e.target.value)}
-                          className="mt-2 h-12"
+                          className="mt-1 h-10"
                           placeholder="your.email@example.com"
                         />
                         {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
                       </div>
 
                       <div>
-                        <Label className="text-base font-medium">Country *</Label>
+                        <Label className="text-sm font-medium">Country *</Label>
                         <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                          <SelectTrigger className="mt-2 h-12">
+                          <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select country" />
                           </SelectTrigger>
                           <SelectContent>
@@ -439,9 +439,9 @@ const PostService = () => {
                     </div>
 
                     {/* Location Details */}
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-base font-medium">State *</Label>
+                        <Label className="text-sm font-medium">State *</Label>
                         <Select 
                           value={formData.state} 
                           onValueChange={(value) => {
@@ -449,7 +449,7 @@ const PostService = () => {
                             handleInputChange("city", ""); // Reset city when state changes
                           }}
                         >
-                          <SelectTrigger className="mt-2 h-12">
+                          <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select state" />
                           </SelectTrigger>
                           <SelectContent>
@@ -476,9 +476,9 @@ const PostService = () => {
                       </div>
 
                       <div>
-                        <Label className="text-base font-medium">City *</Label>
+                        <Label className="text-sm font-medium">City *</Label>
                         <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                          <SelectTrigger className="mt-2 h-12">
+                          <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select city" />
                           </SelectTrigger>
                           <SelectContent>
@@ -493,9 +493,9 @@ const PostService = () => {
 
                     {/* Intent Selection */}
                     <div>
-                      <Label className="text-base font-medium">I want to *</Label>
+                      <Label className="text-sm font-medium">I want to *</Label>
                       <Select value={formData.intent} onValueChange={(value) => handleInputChange("intent", value)}>
-                        <SelectTrigger className="mt-2 h-12">
+                        <SelectTrigger className="mt-1 h-10">
                           <SelectValue placeholder="Select what you want to do" />
                         </SelectTrigger>
                         <SelectContent>
@@ -512,9 +512,9 @@ const PostService = () => {
                     {/* Conditional Property Type / Service Category */}
                     {['Buy', 'Sell', 'Lease'].includes(formData.intent) && (
                       <div>
-                        <Label className="text-base font-medium">Property Type *</Label>
+                        <Label className="text-sm font-medium">Property Type *</Label>
                         <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
-                          <SelectTrigger className="mt-2 h-12">
+                          <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select property type" />
                           </SelectTrigger>
                           <SelectContent>
@@ -531,9 +531,9 @@ const PostService = () => {
 
                     {formData.intent === 'Service' && (
                       <div>
-                        <Label className="text-base font-medium">Service Category *</Label>
+                        <Label className="text-sm font-medium">Service Category *</Label>
                         <Select value={formData.serviceCategory} onValueChange={(value) => handleInputChange("serviceCategory", value)}>
-                          <SelectTrigger className="mt-2 h-12">
+                          <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select service category" />
                           </SelectTrigger>
                           <SelectContent>
@@ -550,21 +550,21 @@ const PostService = () => {
 
                     {/* Budget Range */}
                     <div>
-                      <Label className="text-base font-medium">Budget Range</Label>
-                      <div className="mt-4">
+                      <Label className="text-sm font-medium">Budget Range</Label>
+                      <div className="mt-1">
                         <Slider
                           value={formData.budgetRange}
                           onValueChange={(value) => handleInputChange("budgetRange", value)}
                           max={50000000}
                           min={0}
                           step={100000}
-                          className="mb-4"
+                          className="mb-1"
                         />
-                        <div className="flex justify-between text-sm text-muted-foreground">
+                        <div className="flex justify-between text-xs text-muted-foreground">
                           <span>{formatBudgetAmount(formData.budgetRange[0])}</span>
                           <span>{formatBudgetAmount(formData.budgetRange[1])}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-muted-foreground">
                           Range: {formatBudgetAmount(formData.budgetRange[0])} – {formatBudgetAmount(formData.budgetRange[1])}
                         </p>
                       </div>
@@ -572,16 +572,16 @@ const PostService = () => {
                     </div>
 
                     {/* Premium Service Toggle */}
-                    <div className="p-4 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
+                    <div className="p-2 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
                       <div className="flex items-center justify-between">
                         <div>
-                          <Label className="text-base font-medium text-foreground">Premium Service</Label>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Get priority response within 2 hours & dedicated relationship manager
+                          <Label className="text-sm font-medium text-foreground">Premium Service</Label>
+                          <p className="text-xs text-muted-foreground">
+                            Priority response within 2 hours & dedicated manager
                           </p>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <span className="text-lg font-semibold text-primary">₹999</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm font-semibold text-primary">₹999</span>
                           <Switch
                             id="premium-toggle"
                             checked={formData.premiumSelected}
@@ -593,14 +593,14 @@ const PostService = () => {
 
                     {/* Additional Notes */}
                     <div>
-                      <Label htmlFor="notes" className="text-base font-medium">Additional Requirements</Label>
+                      <Label htmlFor="notes" className="text-sm font-medium">Additional Requirements</Label>
                       <Textarea
                         id="notes"
                         value={formData.notes}
                         onChange={(e) => handleInputChange("notes", e.target.value)}
-                        className="mt-2"
+                        className="mt-1"
                         placeholder="Any specific requirements or additional details..."
-                        rows={3}
+                        rows={1}
                       />
                     </div>
 
@@ -608,7 +608,7 @@ const PostService = () => {
                     <Button 
                       type="submit" 
                       disabled={submissionState.isSubmitting}
-                      className="w-full h-12 text-base font-medium"
+                      className="w-full h-9 text-sm font-medium"
                     >
                       {submissionState.isSubmitting ? (
                         <>
@@ -619,47 +619,6 @@ const PostService = () => {
                         "Post Requirement"
                       )}
                     </Button>
-                    
-                    {/* Premium Benefits */}
-                    {formData.premiumSelected && (
-                      <div className="mt-6 p-4 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
-                        <h4 className="text-base font-semibold text-foreground mb-4">Premium Benefits Include:</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-muted-foreground">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Priority response within 2 hours</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Dedicated relationship manager</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Verified property listings only</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Negotiation assistance included</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Legal documentation support</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Site visit coordination</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>Market analysis report</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <span>24/7 customer support</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </form>
                 </CardContent>
                </Card>

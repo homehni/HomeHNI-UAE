@@ -58,7 +58,7 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     updateScheduleInfo,
     getFormData,
     isStepValid
-  } = useCommercialPropertyForm();
+  } = useCommercialPropertyForm(targetStep || 2);
 
   // Handle preview functionality
   const handlePreview = async () => {
@@ -119,8 +119,21 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     } catch (error) {
       console.error('Error saving draft:', error);
       
-      // Show user-friendly error message
-      const errorMessage = error instanceof Error ? error.message : "Failed to save draft. Please try again.";
+      // Show user-friendly error message with more details
+      let errorMessage = "Failed to save draft. Please try again.";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        
+        // Provide more specific error messages for common issues
+        if (error.message.includes('Failed to create property draft')) {
+          errorMessage = "Failed to create draft. Please check your internet connection and try again.";
+        } else if (error.message.includes('User not authenticated')) {
+          errorMessage = "Please log in again to continue.";
+        } else if (error.message.includes('duplicate key')) {
+          errorMessage = "A draft already exists. Please refresh the page and try again.";
+        }
+      }
       
       toast({
         title: "Error",
@@ -143,13 +156,96 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
 
-  // Navigate to target step if provided
+  // Load draft data if resuming from a draft
   useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 7) {
-      console.log('Navigating to target step:', targetStep);
-      goToStep(targetStep);
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
+    
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('Loading draft data for CommercialMultiStepForm:', draftData);
+        
+        // Load form data from draft
+        if (draftData.propertyDetails) {
+          console.log('Loading propertyDetails:', draftData.propertyDetails);
+          updatePropertyDetails(draftData.propertyDetails);
+        }
+        if (draftData.locationDetails) {
+          console.log('Loading locationDetails:', draftData.locationDetails);
+          updateLocationDetails(draftData.locationDetails);
+        }
+        if (draftData.rentalDetails) {
+          console.log('Loading rentalDetails:', draftData.rentalDetails);
+          updateRentalDetails(draftData.rentalDetails);
+        }
+        if (draftData.amenities) {
+          console.log('Loading amenities:', draftData.amenities);
+          updateAmenities(draftData.amenities);
+        }
+        if (draftData.gallery) {
+          console.log('Loading gallery:', draftData.gallery);
+          updateGallery(draftData.gallery);
+        }
+        if (draftData.additionalInfo) {
+          console.log('Loading additionalInfo:', draftData.additionalInfo);
+          updateAdditionalInfo(draftData.additionalInfo);
+        }
+        if (draftData.scheduleInfo) {
+          console.log('Loading scheduleInfo:', draftData.scheduleInfo);
+          updateScheduleInfo(draftData.scheduleInfo);
+        }
+        
+        // Set draft ID for saving
+        setDraftId(resumeDraftId);
+        
+        // Clear sessionStorage after loading
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+        
+        console.log('Successfully loaded draft data for CommercialMultiStepForm');
+      } catch (error) {
+        console.error('Error loading draft data:', error);
+        // Clear sessionStorage on error
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
     }
-  }, [targetStep, goToStep]);
+  }, [updatePropertyDetails, updateLocationDetails, updateRentalDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo]);
+
+  // Auto-save current step when user navigates to a step (only if draft already exists)
+  useEffect(() => {
+    console.log(`🔍 Auto-save check: currentStep=${currentStep}, draftId=${draftId}`);
+    if (draftId && currentStep >= 2) {
+      console.log(`💾 Auto-saving current step: ${currentStep} for draft: ${draftId}`);
+      // Save the current step without changing form data
+      PropertyDraftService.updateDraft(draftId, {
+        current_step: currentStep,
+        updated_at: new Date().toISOString()
+      }).then(() => {
+        console.log(`✅ Successfully auto-saved current step: ${currentStep}`);
+      }).catch(error => {
+        console.error('❌ Error auto-saving current step:', error);
+      });
+    } else {
+      console.log(`⏭️ Skipping auto-save: draftId=${draftId}, currentStep=${currentStep}`);
+    }
+  }, [currentStep, draftId]);
+
+  // Also save current step when draftId is first set (for initial navigation)
+  useEffect(() => {
+    if (draftId && currentStep >= 2) {
+      console.log(`🎯 Draft ID set, saving current step: ${currentStep}`);
+      PropertyDraftService.updateDraft(draftId, {
+        current_step: currentStep,
+        updated_at: new Date().toISOString()
+      }).then(() => {
+        console.log(`✅ Successfully saved current step on draft ID set: ${currentStep}`);
+      }).catch(error => {
+        console.error('❌ Error saving current step on draft ID set:', error);
+      });
+    }
+  }, [draftId]); // Only run when draftId changes, not currentStep
 
   const completedSteps = useMemo(() => {
     const completed = [];
@@ -211,15 +307,44 @@ const handleScheduleNext = (data: Partial<ScheduleInfo>) => {
   scrollToTop();
 };
 
-const handleScheduleSubmit = (data: Partial<ScheduleInfo>) => {
+const handleScheduleSubmit = async (data: Partial<ScheduleInfo>) => {
   updateScheduleInfo(data);
+  
+  // Mark draft as completed if it exists
+  if (draftId) {
+    try {
+      await PropertyDraftService.updateDraft(draftId, {
+        is_completed: true,
+        current_step: 7,
+        updated_at: new Date().toISOString()
+      });
+      console.log('Marked commercial draft as completed:', draftId);
+    } catch (error) {
+      console.error('Error marking draft as completed:', error);
+    }
+  }
+  
   const formData = getFormData();
   onSubmit(formData as CommercialFormData);
   setIsSubmitted(true);
 };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = getFormData();
+    
+    // Mark draft as completed if it exists
+    if (draftId) {
+      try {
+        await PropertyDraftService.updateDraft(draftId, {
+          is_completed: true,
+          current_step: 7,
+          updated_at: new Date().toISOString()
+        });
+        console.log('Marked commercial draft as completed:', draftId);
+      } catch (error) {
+        console.error('Error marking draft as completed:', error);
+      }
+    }
     
     // No validation required - all fields are optional
     onSubmit(formData as CommercialFormData);

@@ -70,6 +70,34 @@ export const CommercialPropertyDetailsStep: React.FC<CommercialPropertyDetailsSt
   const [cornerProperty, setCornerProperty] = useState(form.watch('cornerProperty'));
   const [loadingFacility, setLoadingFacility] = useState(form.watch('loadingFacility'));
 
+  // Reset form when initialData changes (for draft loading)
+  React.useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log('CommercialPropertyDetailsStep: Resetting form with initialData:', initialData);
+      form.reset({
+        propertyType: initialData.propertyType || 'Commercial',
+        spaceType: initialData.spaceType || '',
+        buildingType: initialData.buildingType || '',
+        propertyAge: initialData.propertyAge || '',
+        facing: (initialData as any).facing || '',
+        totalFloors: initialData.totalFloors || 1,
+        floorNo: initialData.floorNo || 0,
+        superBuiltUpArea: initialData.superBuiltUpArea || undefined,
+        powerLoad: initialData.powerLoad || '',
+        ceilingHeight: initialData.ceilingHeight || '',
+        entranceWidth: initialData.entranceWidth || '',
+        loadingFacility: initialData.loadingFacility || false,
+        onMainRoad: initialData.onMainRoad || false,
+        cornerProperty: initialData.cornerProperty || false,
+      });
+      
+      // Update state variables
+      setOnMainRoad(initialData.onMainRoad || false);
+      setCornerProperty(initialData.cornerProperty || false);
+      setLoadingFacility(initialData.loadingFacility || false);
+    }
+  }, [initialData, form]);
+
   const onSubmit = (data: CommercialPropertyDetailsFormData) => {
     console.log('=== PROPERTY DETAILS STEP SUBMIT ===');
     console.log('Form data:', data);

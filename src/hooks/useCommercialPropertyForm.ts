@@ -11,8 +11,8 @@ import {
   ScheduleInfo 
 } from '@/types/property';
 
-export const useCommercialPropertyForm = () => {
-  const [currentStep, setCurrentStep] = useState(2); // Start at Property Details step
+export const useCommercialPropertyForm = (initialStep: number = 2) => {
+  const [currentStep, setCurrentStep] = useState(initialStep); // Use provided initial step
   const [ownerInfo, setOwnerInfo] = useState<Partial<OwnerInfo>>({});
   const [propertyDetails, setPropertyDetails] = useState<Partial<CommercialPropertyDetails>>({
     title: ''
@@ -42,7 +42,7 @@ export const useCommercialPropertyForm = () => {
   }, [currentStep]);
 
   const goToStep = useCallback((step: number) => {
-    if (step >= 2 && step <= 7) { // Valid steps are 2-7
+    if (step >= 1 && step <= 7) { // Allow steps 1-7 to handle draft resume
       setCurrentStep(step);
     }
   }, []);
