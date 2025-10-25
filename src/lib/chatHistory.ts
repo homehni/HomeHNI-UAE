@@ -234,11 +234,17 @@ export const createPropertyOwnerConversation = async (
   let leadConversation = null;
   
   // First, try to find if there's a user with this email
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('user_id')
-    .eq('email', leadEmail)
-    .limit(1);
+  const getProfiles = async () => {
+    // @ts-ignore - Suppress deep type inference error from Supabase
+    const result = await supabase
+      .from('profiles')
+      .select('user_id')
+      .eq('email', leadEmail)
+      .limit(1);
+    return result.data;
+  };
+  
+  const profiles = await getProfiles();
 
   if (profiles && profiles.length > 0) {
     const leadUserId = profiles[0].user_id;
