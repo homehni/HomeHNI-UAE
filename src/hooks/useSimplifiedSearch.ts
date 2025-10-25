@@ -460,7 +460,7 @@ export const useSimplifiedSearch = () => {
           .from('properties')
           .select('*', { count: 'exact', head: true })
           .eq('is_visible', true)
-          .neq('status', 'rejected'); // Exclude rejected properties from count
+          .eq('status', 'approved'); // Only show approved properties
 
         setPropertyCount(count || 0);
 
@@ -470,7 +470,7 @@ export const useSimplifiedSearch = () => {
           .from('properties')
           .select(SELECT_COLUMNS)
           .eq('is_visible', true)
-          .neq('status', 'rejected') // Exclude rejected properties from search
+          .eq('status', 'approved') // Only show approved properties
           .order('created_at', { ascending: false })
           .limit(BATCH_SIZE); // Load first batch only
 
@@ -539,7 +539,7 @@ export const useSimplifiedSearch = () => {
         .from('properties')
         .select(SELECT_COLUMNS)
         .eq('is_visible', true)
-        .neq('status', 'rejected') // Exclude rejected properties from search
+        .eq('status', 'approved') // Only show approved properties
         .order('created_at', { ascending: false })
         .range(allProperties.length, allProperties.length + BATCH_SIZE - 1);
 
