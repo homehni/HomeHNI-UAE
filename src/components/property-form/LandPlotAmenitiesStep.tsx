@@ -49,8 +49,12 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
 
   // Reset form when initialData changes (for draft loading)
   React.useEffect(() => {
-    if (initialData && Object.keys(initialData).length > 0) {
-      console.log('LandPlotAmenitiesStep: Resetting form with initialData:', initialData);
+    // Only reset form if we have meaningful draft data (not just default values)
+    // Check for user-entered values that wouldn't be in default state
+    if (initialData && Object.keys(initialData).length > 0 && 
+        ((initialData as any)?.waterSupply || (initialData as any)?.electricityConnection || 
+         (initialData as any)?.sewageConnection || (initialData as any)?.roadWidth > 0 ||
+         (initialData as any)?.directionsToProperty)) {
       setValue('waterSupply', (initialData as any)?.waterSupply ?? undefined);
       setValue('electricityConnection', (initialData as any)?.electricityConnection ?? undefined);
       setValue('sewageConnection', (initialData as any)?.sewageConnection ?? undefined);

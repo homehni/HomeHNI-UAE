@@ -59,8 +59,12 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
 
   // Reset form when initialData changes (for draft loading)
   React.useEffect(() => {
-    if (initialData && Object.keys(initialData).length > 0) {
-      console.log('LandPlotSaleDetailsStep: Resetting form with initialData:', initialData);
+    // Only reset form if we have meaningful draft data (not just default values)
+    // Check for user-entered values that wouldn't be in default state
+    if (initialData && Object.keys(initialData).length > 0 && 
+        (initialData.expectedPrice > 0 || initialData.possessionDate || 
+         initialData.ownershipType || initialData.approvedBy?.length > 0 ||
+         initialData.description)) {
       // Reset form with new initialData
       setValue('expectedPrice', initialData.expectedPrice);
       setValue('possessionDate', initialData.possessionDate ? new Date(initialData.possessionDate) : undefined);

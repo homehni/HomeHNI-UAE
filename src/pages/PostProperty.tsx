@@ -569,6 +569,22 @@ export const PostProperty: React.FC = () => {
         if (ownerData.propertyType === 'PG/Hostel') {
           console.log('PG/Hostel property detected by property_type, setting currentStep to pg-hostel-form');
           setCurrentStep('pg-hostel-form');
+        } else if (ownerData.propertyType === 'Land/Plot') {
+          // Land/Plot properties - check listing_type for specific routing
+          switch (ownerData.listingType) {
+            case 'Industrial land':
+            case 'Agricultural Land':
+            case 'Commercial land':
+            case 'Resale':
+            case 'Sale':
+            case 'Rent':
+              console.log('Land/Plot property detected, setting currentStep to land-plot-form');
+              setCurrentStep('land-plot-form');
+              break;
+            default:
+              console.log('Land/Plot property with unknown listing type, defaulting to land-plot-form');
+              setCurrentStep('land-plot-form');
+          }
         } else {
           // For other property types, use listing_type
           switch (ownerData.listingType) {

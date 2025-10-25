@@ -39,8 +39,6 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
   onBack,
   listingType,
 }) => {
-  console.log('LandPlotPropertyDetailsStep rendered with initialData:', initialData);
-  
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<LandPlotDetailsForm>({
     resolver: zodResolver(landPlotDetailsSchema),
     defaultValues: {
@@ -60,9 +58,18 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
 
   // Reset form when initialData changes (for draft loading)
   React.useEffect(() => {
-    console.log('LandPlotPropertyDetailsStep useEffect triggered with initialData:', initialData);
-    if (initialData && Object.keys(initialData).length > 0) {
-      console.log('LandPlotPropertyDetailsStep: Resetting form with initialData:', initialData);
+    // Only reset form if we have meaningful draft data (not just default values)
+    // Check for user-entered values that wouldn't be in default state
+    if (initialData && Object.keys(initialData).length > 0 && 
+        (initialData.plotArea > 0 || initialData.plotLength > 0 || initialData.plotWidth > 0 || 
+         initialData.floorsAllowed > 0 || initialData.gatedProject === 'yes' || 
+         initialData.surveyNumber || initialData.subDivision || initialData.villageName ||
+         // Also check for boundary wall changes from default 'no'
+         (initialData.boundaryWall && initialData.boundaryWall !== 'no') ||
+         // Check for gated community changes from default false
+         initialData.gatedCommunity === true ||
+         // Check for plot area unit changes from default 'sq-ft'
+         (initialData.plotAreaUnit && initialData.plotAreaUnit !== 'sq-ft'))) {
       setValue('plotArea', initialData.plotArea || undefined);
       setValue('plotAreaUnit', initialData.plotAreaUnit || 'sq-ft');
       setValue('plotLength', initialData.plotLength || undefined);

@@ -27,6 +27,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import MyChats from '@/components/dashboard/MyChats';
 import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Property {
   id: string;
@@ -72,7 +74,14 @@ interface Lead {
   message: string;
   created_at: string;
   properties: {
+    id: string;
     title: string;
+    property_type: string;
+    listing_type: string;
+    expected_price: number;
+    city: string;
+    locality: string;
+    images?: string[];
   };
 }
 
@@ -200,6 +209,23 @@ export const Dashboard: React.FC = () => {
   const [profileSaveMessage, setProfileSaveMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
+  
+  // Contact lead modal state
+  const [contactLeadModal, setContactLeadModal] = useState<{
+    isOpen: boolean;
+    leadId: string;
+    leadName: string;
+    leadEmail: string;
+    propertyTitle: string;
+  }>({
+    isOpen: false,
+    leadId: '',
+    leadName: '',
+    leadEmail: '',
+    propertyTitle: ''
+  });
+  const [contactMessage, setContactMessage] = useState('');
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   // Fetch properties where the current user has contacted owners
   const fetchContactedOwnersData = useCallback(async () => {
@@ -401,7 +427,7 @@ export const Dashboard: React.FC = () => {
         .from('leads')
         .select(`
           *,
-          properties!inner(title, user_id)
+          properties!inner(id, title, property_type, listing_type, expected_price, city, locality, images, user_id)
         `)
         .eq('properties.user_id', user?.id)
         .order('created_at', { ascending: false });
@@ -442,7 +468,14 @@ export const Dashboard: React.FC = () => {
             leadsWithProperties.push({
               ...lead,
               properties: {
-                title: propertyData[0].title
+                id: propertyData[0].id,
+                title: propertyData[0].title,
+                property_type: propertyData[0].property_type,
+                listing_type: propertyData[0].listing_type,
+                expected_price: propertyData[0].expected_price,
+                city: propertyData[0].city,
+                locality: propertyData[0].locality,
+                images: propertyData[0].images || []
               }
             });
           } else {
@@ -450,8 +483,14 @@ export const Dashboard: React.FC = () => {
             leadsWithProperties.push({
               ...lead,
               properties: {
+                id: '',
                 title: 'Property information unavailable',
-                user_id: null
+                property_type: '',
+                listing_type: '',
+                expected_price: 0,
+                city: '',
+                locality: '',
+                images: []
               }
             });
           }
@@ -461,8 +500,14 @@ export const Dashboard: React.FC = () => {
           leadsWithProperties.push({
             ...lead,
             properties: {
+              id: '',
               title: 'Property information unavailable',
-              user_id: null
+              property_type: '',
+              listing_type: '',
+              expected_price: 0,
+              city: '',
+              locality: '',
+              images: []
             }
           });
         }
@@ -932,6 +977,92 @@ export const Dashboard: React.FC = () => {
 
   const handlePropertyUpdated = () => {
     fetchProperties(); // Refresh the properties list
+  };
+
+  // Contact lead modal functions
+  const openContactLeadModal = (leadId: string, leadName: string, leadEmail: string, propertyTitle: string) => {
+    setContactLeadModal({
+      isOpen: true,
+      leadId,
+      leadName,
+      leadEmail,
+      propertyTitle
+    });
+    setContactMessage('');
+  };
+
+  const closeContactLeadModal = () => {
+    setContactLeadModal({
+      isOpen: false,
+      leadId: '',
+      leadName: '',
+      leadEmail: '',
+      propertyTitle: ''
+    });
+    setContactMessage('');
+  };
+
+  const handleSendMessageToLead = async () => {
+    if (!contactMessage.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a message to send.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSendingMessage(true);
+    try {
+      // Store message in database
+      const { data, error } = await supabase
+        .from('lead_messages')
+        .insert({
+          lead_id: contactLeadModal.leadId,
+          sender_id: user?.id,
+          sender_type: 'owner',
+          message: contactMessage.trim(),
+          is_read: false
+        });
+
+      if (error) throw error;
+
+      // Send email notification to the lead
+      const { error: emailError } = await supabase.functions.invoke('send-email', {
+        body: {
+          to: contactLeadModal.leadEmail,
+          template: 'owner-reply',
+          data: {
+            ownerName: user?.email || 'Property Owner',
+            leadName: contactLeadModal.leadName,
+            propertyTitle: contactLeadModal.propertyTitle,
+            message: contactMessage.trim(),
+            replyUrl: `${window.location.origin}/dashboard?tab=interested`
+          }
+        }
+      });
+
+      if (emailError) {
+        console.warn('Email sending failed:', emailError);
+        // Don't throw error here - message was saved to database
+      }
+
+      toast({
+        title: "Message sent",
+        description: `Your message has been sent to ${contactLeadModal.leadName}.`,
+      });
+
+      closeContactLeadModal();
+    } catch (error) {
+      console.error('Error sending message to lead:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSendingMessage(false);
+    }
   };
 
   const handleUpgradeProperty = (property: CombinedProperty) => {
@@ -1866,47 +1997,120 @@ export const Dashboard: React.FC = () => {
           {/* Leads Content */}
           {activeSidebarItem === 'leads' && (
             <div className="space-y-6">
-              <h1 className="text-2xl font-semibold text-gray-900">Contact Leads</h1>
-            {leads.length === 0 ? (
-              <Card>
-                <CardContent className="text-center py-8">
+              <div className="mb-6">
+                <h1 className="text-2xl font-semibold text-gray-900">Contact Leads</h1>
+                <p className="text-gray-600 mt-1">
+                  People who have shown interest in your properties
+                </p>
+              </div>
+              
+              {/* Empty State */}
+              {leads.length === 0 ? (
+                <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
                   <MessageSquare className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No leads yet</h3>
-                  <p className="text-gray-500">When people show interest in your properties, you'll see them here</p>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid gap-4">
-                {leads.map((lead) => (
-                  <Card key={lead.id}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{lead.interested_user_name}</h3>
-                          <p className="text-sm text-gray-600 mb-2">
-                            Interested in: {lead.properties.title}
-                          </p>
-                          {lead.interested_user_email && (
-                            <p className="text-sm text-gray-600">Email: {lead.interested_user_email}</p>
-                          )}
-                          {lead.interested_user_phone && (
-                            <p className="text-sm text-gray-600">Phone: {lead.interested_user_phone}</p>
-                          )}
-                          {lead.message && (
-                            <p className="text-sm text-gray-600 mt-2">
-                              Message: {lead.message}
-                            </p>
-                          )}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {new Date(lead.created_at).toLocaleDateString()}
+                  <p className="text-gray-500 mb-4">When people show interest in your properties, you'll see them here</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {leads.map((lead) => (
+                    <Card key={lead.id} className="overflow-hidden hover:shadow-lg transition-all">
+                      {/* Property Image */}
+                      <div className="h-48 bg-gray-200 relative">
+                        {lead.properties.images && lead.properties.images.length > 0 ? (
+                          <img
+                            src={lead.properties.images[0]}
+                            alt={lead.properties.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full bg-gray-100">
+                            <Home className="h-12 w-12 text-gray-400" />
+                          </div>
+                        )}
+                        
+                        {/* Lead Badge */}
+                        <div className="absolute bottom-2 right-2">
+                          <Badge className="bg-green-600">
+                            <MessageSquare className="h-3 w-3 mr-1" />
+                            Lead
+                          </Badge>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+                      
+                      <CardContent className="p-4">
+                        <div className="mb-2">
+                          <h3 className="font-medium text-gray-900 line-clamp-1">{lead.properties.title}</h3>
+                          <p className="text-sm text-gray-600">
+                            {lead.properties.locality}, {lead.properties.city}
+                          </p>
+                        </div>
+                        
+                        <div className="flex justify-between items-center mb-4">
+                          <span className="text-lg font-bold text-gray-900">
+                            ₹{lead.properties.expected_price.toLocaleString('en-IN')}
+                          </span>
+                          <Badge className={`${lead.properties.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'}`}>
+                            For {lead.properties.listing_type === 'rent' ? 'Rent' : 'Sale'}
+                          </Badge>
+                        </div>
+                        
+                        {/* Lead Information */}
+                        <div className="border-t pt-3 mt-2">
+                          <h4 className="text-sm font-medium text-gray-900 mb-2">Lead Contact</h4>
+                          
+                          <div className="flex items-center text-sm mb-1">
+                            <User className="h-3 w-3 mr-2 text-gray-500" />
+                            <span>{lead.interested_user_name}</span>
+                          </div>
+                          
+                          {lead.interested_user_phone && (
+                            <div className="flex items-center text-sm mb-1">
+                              <Phone className="h-3 w-3 mr-2 text-gray-500" />
+                              <span>{lead.interested_user_phone}</span>
+                            </div>
+                          )}
+                          
+                          {lead.interested_user_email && (
+                            <div className="flex items-center text-sm mb-1 break-all">
+                              <MessageCircle className="h-3 w-3 mr-2 text-gray-500 flex-shrink-0" />
+                              <span className="truncate">{lead.interested_user_email}</span>
+                            </div>
+                          )}
+                          
+                          {lead.message && (
+                            <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-600">
+                              <strong>Message:</strong> {lead.message}
+                            </div>
+                          )}
+                          
+                          <div className="flex items-center text-xs text-gray-500 mt-2">
+                            <span>Lead received on {new Date(lead.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                      
+                       {/* Action Buttons */}
+                       <div className="px-4 pb-4 space-y-2">
+                         <Button 
+                           className="w-full"
+                           onClick={() => navigate(`/property/${lead.properties.id}`)}
+                         >
+                           View Property
+                         </Button>
+                         <Button 
+                           variant="outline"
+                           className="w-full"
+                           onClick={() => openContactLeadModal(lead.id, lead.interested_user_name, lead.interested_user_email, lead.properties.title)}
+                         >
+                           <MessageSquare className="h-4 w-4 mr-2" />
+                           Contact Lead
+                         </Button>
+                       </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -2138,13 +2342,50 @@ export const Dashboard: React.FC = () => {
       />
 
 
-      {/* Property Edit Modal */}
-      <PropertyEditModal
-        property={editPropertyModal.property}
-        isOpen={editPropertyModal.isOpen}
-        onClose={closeEditModal}
-        onPropertyUpdated={handlePropertyUpdated}
-      />
-    </div>
-  );
+       {/* Property Edit Modal */}
+       <PropertyEditModal
+         property={editPropertyModal.property}
+         isOpen={editPropertyModal.isOpen}
+         onClose={closeEditModal}
+         onPropertyUpdated={handlePropertyUpdated}
+       />
+
+       {/* Contact Lead Modal */}
+       <Dialog open={contactLeadModal.isOpen} onOpenChange={closeContactLeadModal}>
+         <DialogContent className="sm:max-w-[425px]">
+           <DialogHeader>
+             <DialogTitle>Contact Lead</DialogTitle>
+             <DialogDescription>
+               Send a message to {contactLeadModal.leadName} about {contactLeadModal.propertyTitle}
+             </DialogDescription>
+           </DialogHeader>
+           <div className="grid gap-4 py-4">
+             <div className="space-y-2">
+               <label htmlFor="message" className="text-sm font-medium">
+                 Your Message
+               </label>
+               <Textarea
+                 id="message"
+                 placeholder="Type your message here..."
+                 value={contactMessage}
+                 onChange={(e) => setContactMessage(e.target.value)}
+                 className="min-h-[100px]"
+               />
+             </div>
+           </div>
+           <DialogFooter>
+             <Button variant="outline" onClick={closeContactLeadModal}>
+               Cancel
+             </Button>
+             <Button 
+               onClick={handleSendMessageToLead} 
+               disabled={isSendingMessage || !contactMessage.trim()}
+             >
+               {isSendingMessage ? 'Sending...' : 'Send Message'}
+             </Button>
+           </DialogFooter>
+         </DialogContent>
+       </Dialog>
+     </div>
+   );
 };
