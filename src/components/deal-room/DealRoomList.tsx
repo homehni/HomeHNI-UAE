@@ -89,8 +89,11 @@ export const DealRoomList: React.FC<DealRoomListProps> = ({
 
           const lastMessage = messages?.[0];
 
-          // Count unread messages for current user
-          const senderType = lead.properties?.user_id === user.id ? 'user' : 'owner';
+          // Count unread messages sent TO current user (not by them)
+          // If I'm the owner, count unread messages from leads
+          // If I'm the lead, count unread messages from owner
+          const isPropertyOwner = lead.properties?.user_id === user.id;
+          const senderType = isPropertyOwner ? 'lead' : 'owner';
           const { count } = await supabase
             .from('lead_messages')
             .select('*', { count: 'exact', head: true })

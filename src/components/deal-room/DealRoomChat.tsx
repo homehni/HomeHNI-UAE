@@ -47,8 +47,22 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
 
-  // Determine if current user is the owner
-  const isOwner = user?.id ? dealRoom.property_id !== undefined : false;
+  // Determine if current user is the property owner by checking against properties
+  const [isOwner, setIsOwner] = React.useState(false);
+
+  useEffect(() => {
+    if (!user || !dealRoom.property_id) return;
+    
+    // Check if current user owns this property
+    supabase
+      .from('properties')
+      .select('user_id')
+      .eq('id', dealRoom.property_id)
+      .single()
+      .then(({ data }) => {
+        setIsOwner(data?.user_id === user.id);
+      });
+  }, [user, dealRoom.property_id]);
 
   useEffect(() => {
     loadMessages();
@@ -100,7 +114,10 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
     if (!user) return;
 
     try {
-      const senderType = isOwner ? 'user' : 'owner';
+      // Mark messages as read that were sent BY the OTHER party
+      // If I'm the owner, mark messages from leads as read
+      // If I'm the lead, mark messages from owner as read
+      const senderType = isOwner ? 'lead' : 'owner';
       await supabase
         .from('lead_messages')
         .update({ is_read: true })
@@ -143,7 +160,8 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
 
     setSending(true);
     try {
-      const senderType = isOwner ? 'owner' : 'user';
+      // Sender type: 'owner' if property owner, 'lead' if interested user
+      const senderType = isOwner ? 'owner' : 'lead';
       
       const { error } = await supabase
         .from('lead_messages')
