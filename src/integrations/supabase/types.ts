@@ -20,7 +20,7 @@ export type Database = {
           event_data: Json | null
           event_type: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           referrer: string | null
           session_id: string | null
           user_agent: string | null
@@ -31,7 +31,7 @@ export type Database = {
           event_data?: Json | null
           event_type: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           referrer?: string | null
           session_id?: string | null
           user_agent?: string | null
@@ -42,11 +42,38 @@ export type Database = {
           event_data?: Json | null
           event_type?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           referrer?: string | null
           session_id?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      app_settings: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          key: string
+          updated_at: string | null
+          value: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          key: string
+          updated_at?: string | null
+          value: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          key?: string
+          updated_at?: string | null
+          value?: string
         }
         Relationships: []
       }
@@ -55,7 +82,7 @@ export type Database = {
           action: string
           created_at: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           new_values: Json | null
           old_values: Json | null
           record_id: string | null
@@ -67,7 +94,7 @@ export type Database = {
           action: string
           created_at?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           new_values?: Json | null
           old_values?: Json | null
           record_id?: string | null
@@ -79,7 +106,7 @@ export type Database = {
           action?: string
           created_at?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           new_values?: Json | null
           old_values?: Json | null
           record_id?: string | null
@@ -365,6 +392,42 @@ export type Database = {
         }
         Relationships: []
       }
+      email_queue: {
+        Row: {
+          created_at: string | null
+          email_type: string
+          error_message: string | null
+          id: string
+          processed_at: string | null
+          recipient_email: string
+          recipient_name: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email_type: string
+          error_message?: string | null
+          id?: string
+          processed_at?: string | null
+          recipient_email: string
+          recipient_name?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email_type?: string
+          error_message?: string | null
+          id?: string
+          processed_at?: string | null
+          recipient_email?: string
+          recipient_name?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       email_templates: {
         Row: {
           body: string
@@ -643,6 +706,44 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          lead_id: string
+          message: string
+          sender_id: string
+          sender_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          lead_id: string
+          message: string
+          sender_id: string
+          sender_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          lead_id?: string
+          message?: string
+          sender_id?: string
+          sender_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_messages_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
             referencedColumns: ["id"]
           },
         ]
@@ -926,180 +1027,351 @@ export type Database = {
       properties: {
         Row: {
           additional_documents: Json | null
+          additional_info: Json | null
           admin_reviewed_at: string | null
           admin_reviewed_by: string | null
+          air_conditioner: string | null
           amenities: Json | null
+          approved_by: string | null
           availability_date: string | null
           availability_type: string
+          available_services: Json | null
           balconies: number | null
           bathrooms: number | null
           bhk_type: string | null
           booking_amount: number | null
+          boundary_wall: string | null
+          building_type: string | null
           carpet_area: number | null
+          categorized_images: Json | null
+          ceiling_height: string | null
+          children_play_area: string | null
           city: string
+          club_house: string | null
+          corner_plot: boolean | null
+          corner_property: boolean | null
           created_at: string
           current_property_condition: string | null
           description: string | null
+          directions_tip: string | null
+          electricity_connection: string | null
+          entrance_width: string | null
           expected_price: number
           facing_direction: string | null
+          fire_safety: string | null
           floor_no: number | null
           floor_type: string | null
+          floors_allowed: number | null
           furnishing: string | null
+          furnishing_status: string | null
+          gas_pipeline: string | null
+          gated_community: boolean | null
+          gated_project: string | null
           gated_security: boolean | null
+          gym: string | null
           home_loan_available: boolean | null
+          house_keeping: string | null
           id: string
           images: string[] | null
+          intercom: string | null
+          internet_services: string | null
           is_featured: boolean
           is_premium: boolean | null
           is_visible: boolean | null
+          land_type: string | null
           landmarks: string | null
+          lift: string | null
           listing_type: string
+          loading_facility: boolean | null
           locality: string
           maintenance_charges: number | null
+          non_veg_allowed: boolean | null
+          on_main_road: boolean | null
           owner_email: string | null
           owner_name: string | null
           owner_phone: string | null
           owner_role: string | null
+          ownership_type: string | null
+          park: string | null
+          parking: string | null
+          pet_allowed: boolean | null
           pincode: string
+          plot_area: number | null
           plot_area_unit: string | null
+          plot_length: number | null
+          plot_shape: string | null
+          plot_width: number | null
+          possession_date: string | null
           power_backup: string | null
+          power_load: string | null
           price_negotiable: boolean | null
           property_age: string | null
           property_type: string
+          rain_water_harvesting: string | null
           registration_status: string | null
           rejection_reason: string | null
           rental_status: string | null
+          road_facing: string | null
+          road_width: number | null
           secondary_phone: string | null
+          security: string | null
           security_deposit: number | null
+          servant_room: string | null
+          sewage_connection: string | null
+          sewage_treatment_plant: string | null
+          shopping_center: string | null
+          space_type: string | null
           state: string
           status: string | null
           street_address: string | null
+          sub_division: string | null
           super_area: number
+          super_built_up_area: number | null
+          survey_number: string | null
+          swimming_pool: string | null
           title: string
           total_floors: number | null
           updated_at: string
           user_id: string
           videos: string[] | null
+          village_name: string | null
+          visitor_parking: string | null
+          water_storage_facility: string | null
           water_supply: string | null
           who_will_show: string | null
+          wifi: string | null
         }
         Insert: {
           additional_documents?: Json | null
+          additional_info?: Json | null
           admin_reviewed_at?: string | null
           admin_reviewed_by?: string | null
+          air_conditioner?: string | null
           amenities?: Json | null
+          approved_by?: string | null
           availability_date?: string | null
           availability_type: string
+          available_services?: Json | null
           balconies?: number | null
           bathrooms?: number | null
           bhk_type?: string | null
           booking_amount?: number | null
+          boundary_wall?: string | null
+          building_type?: string | null
           carpet_area?: number | null
+          categorized_images?: Json | null
+          ceiling_height?: string | null
+          children_play_area?: string | null
           city: string
+          club_house?: string | null
+          corner_plot?: boolean | null
+          corner_property?: boolean | null
           created_at?: string
           current_property_condition?: string | null
           description?: string | null
+          directions_tip?: string | null
+          electricity_connection?: string | null
+          entrance_width?: string | null
           expected_price: number
           facing_direction?: string | null
+          fire_safety?: string | null
           floor_no?: number | null
           floor_type?: string | null
+          floors_allowed?: number | null
           furnishing?: string | null
+          furnishing_status?: string | null
+          gas_pipeline?: string | null
+          gated_community?: boolean | null
+          gated_project?: string | null
           gated_security?: boolean | null
+          gym?: string | null
           home_loan_available?: boolean | null
+          house_keeping?: string | null
           id?: string
           images?: string[] | null
+          intercom?: string | null
+          internet_services?: string | null
           is_featured?: boolean
           is_premium?: boolean | null
           is_visible?: boolean | null
+          land_type?: string | null
           landmarks?: string | null
+          lift?: string | null
           listing_type: string
+          loading_facility?: boolean | null
           locality: string
           maintenance_charges?: number | null
+          non_veg_allowed?: boolean | null
+          on_main_road?: boolean | null
           owner_email?: string | null
           owner_name?: string | null
           owner_phone?: string | null
           owner_role?: string | null
+          ownership_type?: string | null
+          park?: string | null
+          parking?: string | null
+          pet_allowed?: boolean | null
           pincode: string
+          plot_area?: number | null
           plot_area_unit?: string | null
+          plot_length?: number | null
+          plot_shape?: string | null
+          plot_width?: number | null
+          possession_date?: string | null
           power_backup?: string | null
+          power_load?: string | null
           price_negotiable?: boolean | null
           property_age?: string | null
           property_type: string
+          rain_water_harvesting?: string | null
           registration_status?: string | null
           rejection_reason?: string | null
           rental_status?: string | null
+          road_facing?: string | null
+          road_width?: number | null
           secondary_phone?: string | null
+          security?: string | null
           security_deposit?: number | null
+          servant_room?: string | null
+          sewage_connection?: string | null
+          sewage_treatment_plant?: string | null
+          shopping_center?: string | null
+          space_type?: string | null
           state: string
           status?: string | null
           street_address?: string | null
+          sub_division?: string | null
           super_area: number
+          super_built_up_area?: number | null
+          survey_number?: string | null
+          swimming_pool?: string | null
           title: string
           total_floors?: number | null
           updated_at?: string
           user_id: string
           videos?: string[] | null
+          village_name?: string | null
+          visitor_parking?: string | null
+          water_storage_facility?: string | null
           water_supply?: string | null
           who_will_show?: string | null
+          wifi?: string | null
         }
         Update: {
           additional_documents?: Json | null
+          additional_info?: Json | null
           admin_reviewed_at?: string | null
           admin_reviewed_by?: string | null
+          air_conditioner?: string | null
           amenities?: Json | null
+          approved_by?: string | null
           availability_date?: string | null
           availability_type?: string
+          available_services?: Json | null
           balconies?: number | null
           bathrooms?: number | null
           bhk_type?: string | null
           booking_amount?: number | null
+          boundary_wall?: string | null
+          building_type?: string | null
           carpet_area?: number | null
+          categorized_images?: Json | null
+          ceiling_height?: string | null
+          children_play_area?: string | null
           city?: string
+          club_house?: string | null
+          corner_plot?: boolean | null
+          corner_property?: boolean | null
           created_at?: string
           current_property_condition?: string | null
           description?: string | null
+          directions_tip?: string | null
+          electricity_connection?: string | null
+          entrance_width?: string | null
           expected_price?: number
           facing_direction?: string | null
+          fire_safety?: string | null
           floor_no?: number | null
           floor_type?: string | null
+          floors_allowed?: number | null
           furnishing?: string | null
+          furnishing_status?: string | null
+          gas_pipeline?: string | null
+          gated_community?: boolean | null
+          gated_project?: string | null
           gated_security?: boolean | null
+          gym?: string | null
           home_loan_available?: boolean | null
+          house_keeping?: string | null
           id?: string
           images?: string[] | null
+          intercom?: string | null
+          internet_services?: string | null
           is_featured?: boolean
           is_premium?: boolean | null
           is_visible?: boolean | null
+          land_type?: string | null
           landmarks?: string | null
+          lift?: string | null
           listing_type?: string
+          loading_facility?: boolean | null
           locality?: string
           maintenance_charges?: number | null
+          non_veg_allowed?: boolean | null
+          on_main_road?: boolean | null
           owner_email?: string | null
           owner_name?: string | null
           owner_phone?: string | null
           owner_role?: string | null
+          ownership_type?: string | null
+          park?: string | null
+          parking?: string | null
+          pet_allowed?: boolean | null
           pincode?: string
+          plot_area?: number | null
           plot_area_unit?: string | null
+          plot_length?: number | null
+          plot_shape?: string | null
+          plot_width?: number | null
+          possession_date?: string | null
           power_backup?: string | null
+          power_load?: string | null
           price_negotiable?: boolean | null
           property_age?: string | null
           property_type?: string
+          rain_water_harvesting?: string | null
           registration_status?: string | null
           rejection_reason?: string | null
           rental_status?: string | null
+          road_facing?: string | null
+          road_width?: number | null
           secondary_phone?: string | null
+          security?: string | null
           security_deposit?: number | null
+          servant_room?: string | null
+          sewage_connection?: string | null
+          sewage_treatment_plant?: string | null
+          shopping_center?: string | null
+          space_type?: string | null
           state?: string
           status?: string | null
           street_address?: string | null
+          sub_division?: string | null
           super_area?: number
+          super_built_up_area?: number | null
+          survey_number?: string | null
+          swimming_pool?: string | null
           title?: string
           total_floors?: number | null
           updated_at?: string
           user_id?: string
           videos?: string[] | null
+          village_name?: string | null
+          visitor_parking?: string | null
+          water_storage_facility?: string | null
           water_supply?: string | null
           who_will_show?: string | null
+          wifi?: string | null
         }
         Relationships: []
       }
@@ -1182,88 +1454,328 @@ export type Database = {
       }
       property_drafts: {
         Row: {
+          additional_info: Json | null
+          air_conditioner: string | null
+          apartment_name: string | null
+          apartment_type: string | null
+          approved_by: string | null
+          available_from: string | null
           balconies: number | null
           bathrooms: number | null
           bhk_type: string | null
+          boundary_wall: string | null
+          building_type: string | null
+          built_up_area: number | null
           carpet_area: number | null
+          categorized_images: Json | null
+          ceiling_height: string | null
+          children_play_area: string | null
           city: string | null
+          club_house: string | null
+          corner_plot: boolean | null
+          corner_property: boolean | null
           created_at: string | null
+          current_property_condition: string | null
+          current_step: number | null
           description: string | null
+          directions_tip: string | null
+          electricity_connection: string | null
+          entrance_width: string | null
+          expected_deposit: number | null
           expected_price: number | null
+          expected_rent: number | null
+          facing: string | null
+          fire_safety: string | null
+          floor_no: number | null
+          floors_allowed: number | null
+          furnishing: string | null
+          furnishing_status: string | null
+          gas_pipeline: string | null
+          gated_community: boolean | null
+          gated_project: string | null
+          gated_security: string | null
+          gym: string | null
+          house_keeping: string | null
           id: string
           images: string[] | null
-          listing_type: string | null
+          intercom: string | null
+          internet_services: string | null
+          is_completed: boolean | null
+          land_type: string | null
+          landmark: string | null
+          lift: string | null
+          listing_type: string
+          loading_facility: boolean | null
           locality: string | null
+          monthly_maintenance: string | null
+          more_similar_units: boolean | null
+          non_veg_allowed: boolean | null
+          on_main_road: boolean | null
           owner_email: string | null
           owner_name: string | null
           owner_phone: string | null
-          owner_role: string | null
+          ownership_type: string | null
+          park: string | null
+          parking: string | null
+          pet_allowed: boolean | null
           pincode: string | null
-          property_type: string | null
+          plot_area: number | null
+          plot_area_unit: string | null
+          plot_length: number | null
+          plot_shape: string | null
+          plot_width: number | null
+          possession_date: string | null
+          power_backup: string | null
+          power_load: string | null
+          preferred_tenant: string | null
+          price_negotiable: boolean | null
+          property_age: string | null
+          property_type: string
+          rain_water_harvesting: string | null
+          rent_negotiable: boolean | null
+          road_facing: string | null
+          road_width: number | null
+          schedule_info: Json | null
+          secondary_phone: string | null
+          security: string | null
+          servant_room: string | null
+          sewage_connection: string | null
+          sewage_treatment_plant: string | null
+          shopping_center: string | null
+          society_name: string | null
+          space_type: string | null
           state: string | null
-          status: string | null
-          step_completed: number | null
-          super_area: number | null
-          title: string | null
+          sub_division: string | null
+          super_built_up_area: number | null
+          survey_number: string | null
+          swimming_pool: string | null
+          total_floors: number | null
           updated_at: string | null
-          user_id: string
-          videos: string[] | null
+          user_id: string | null
+          video: string | null
+          village_name: string | null
+          visitor_parking: string | null
+          water_storage_facility: string | null
+          water_supply: string | null
+          whatsapp_updates: boolean | null
+          who_will_show: string | null
+          wifi: string | null
         }
         Insert: {
+          additional_info?: Json | null
+          air_conditioner?: string | null
+          apartment_name?: string | null
+          apartment_type?: string | null
+          approved_by?: string | null
+          available_from?: string | null
           balconies?: number | null
           bathrooms?: number | null
           bhk_type?: string | null
+          boundary_wall?: string | null
+          building_type?: string | null
+          built_up_area?: number | null
           carpet_area?: number | null
+          categorized_images?: Json | null
+          ceiling_height?: string | null
+          children_play_area?: string | null
           city?: string | null
+          club_house?: string | null
+          corner_plot?: boolean | null
+          corner_property?: boolean | null
           created_at?: string | null
+          current_property_condition?: string | null
+          current_step?: number | null
           description?: string | null
+          directions_tip?: string | null
+          electricity_connection?: string | null
+          entrance_width?: string | null
+          expected_deposit?: number | null
           expected_price?: number | null
+          expected_rent?: number | null
+          facing?: string | null
+          fire_safety?: string | null
+          floor_no?: number | null
+          floors_allowed?: number | null
+          furnishing?: string | null
+          furnishing_status?: string | null
+          gas_pipeline?: string | null
+          gated_community?: boolean | null
+          gated_project?: string | null
+          gated_security?: string | null
+          gym?: string | null
+          house_keeping?: string | null
           id?: string
           images?: string[] | null
-          listing_type?: string | null
+          intercom?: string | null
+          internet_services?: string | null
+          is_completed?: boolean | null
+          land_type?: string | null
+          landmark?: string | null
+          lift?: string | null
+          listing_type: string
+          loading_facility?: boolean | null
           locality?: string | null
+          monthly_maintenance?: string | null
+          more_similar_units?: boolean | null
+          non_veg_allowed?: boolean | null
+          on_main_road?: boolean | null
           owner_email?: string | null
           owner_name?: string | null
           owner_phone?: string | null
-          owner_role?: string | null
+          ownership_type?: string | null
+          park?: string | null
+          parking?: string | null
+          pet_allowed?: boolean | null
           pincode?: string | null
-          property_type?: string | null
+          plot_area?: number | null
+          plot_area_unit?: string | null
+          plot_length?: number | null
+          plot_shape?: string | null
+          plot_width?: number | null
+          possession_date?: string | null
+          power_backup?: string | null
+          power_load?: string | null
+          preferred_tenant?: string | null
+          price_negotiable?: boolean | null
+          property_age?: string | null
+          property_type: string
+          rain_water_harvesting?: string | null
+          rent_negotiable?: boolean | null
+          road_facing?: string | null
+          road_width?: number | null
+          schedule_info?: Json | null
+          secondary_phone?: string | null
+          security?: string | null
+          servant_room?: string | null
+          sewage_connection?: string | null
+          sewage_treatment_plant?: string | null
+          shopping_center?: string | null
+          society_name?: string | null
+          space_type?: string | null
           state?: string | null
-          status?: string | null
-          step_completed?: number | null
-          super_area?: number | null
-          title?: string | null
+          sub_division?: string | null
+          super_built_up_area?: number | null
+          survey_number?: string | null
+          swimming_pool?: string | null
+          total_floors?: number | null
           updated_at?: string | null
-          user_id: string
-          videos?: string[] | null
+          user_id?: string | null
+          video?: string | null
+          village_name?: string | null
+          visitor_parking?: string | null
+          water_storage_facility?: string | null
+          water_supply?: string | null
+          whatsapp_updates?: boolean | null
+          who_will_show?: string | null
+          wifi?: string | null
         }
         Update: {
+          additional_info?: Json | null
+          air_conditioner?: string | null
+          apartment_name?: string | null
+          apartment_type?: string | null
+          approved_by?: string | null
+          available_from?: string | null
           balconies?: number | null
           bathrooms?: number | null
           bhk_type?: string | null
+          boundary_wall?: string | null
+          building_type?: string | null
+          built_up_area?: number | null
           carpet_area?: number | null
+          categorized_images?: Json | null
+          ceiling_height?: string | null
+          children_play_area?: string | null
           city?: string | null
+          club_house?: string | null
+          corner_plot?: boolean | null
+          corner_property?: boolean | null
           created_at?: string | null
+          current_property_condition?: string | null
+          current_step?: number | null
           description?: string | null
+          directions_tip?: string | null
+          electricity_connection?: string | null
+          entrance_width?: string | null
+          expected_deposit?: number | null
           expected_price?: number | null
+          expected_rent?: number | null
+          facing?: string | null
+          fire_safety?: string | null
+          floor_no?: number | null
+          floors_allowed?: number | null
+          furnishing?: string | null
+          furnishing_status?: string | null
+          gas_pipeline?: string | null
+          gated_community?: boolean | null
+          gated_project?: string | null
+          gated_security?: string | null
+          gym?: string | null
+          house_keeping?: string | null
           id?: string
           images?: string[] | null
-          listing_type?: string | null
+          intercom?: string | null
+          internet_services?: string | null
+          is_completed?: boolean | null
+          land_type?: string | null
+          landmark?: string | null
+          lift?: string | null
+          listing_type?: string
+          loading_facility?: boolean | null
           locality?: string | null
+          monthly_maintenance?: string | null
+          more_similar_units?: boolean | null
+          non_veg_allowed?: boolean | null
+          on_main_road?: boolean | null
           owner_email?: string | null
           owner_name?: string | null
           owner_phone?: string | null
-          owner_role?: string | null
+          ownership_type?: string | null
+          park?: string | null
+          parking?: string | null
+          pet_allowed?: boolean | null
           pincode?: string | null
-          property_type?: string | null
+          plot_area?: number | null
+          plot_area_unit?: string | null
+          plot_length?: number | null
+          plot_shape?: string | null
+          plot_width?: number | null
+          possession_date?: string | null
+          power_backup?: string | null
+          power_load?: string | null
+          preferred_tenant?: string | null
+          price_negotiable?: boolean | null
+          property_age?: string | null
+          property_type?: string
+          rain_water_harvesting?: string | null
+          rent_negotiable?: boolean | null
+          road_facing?: string | null
+          road_width?: number | null
+          schedule_info?: Json | null
+          secondary_phone?: string | null
+          security?: string | null
+          servant_room?: string | null
+          sewage_connection?: string | null
+          sewage_treatment_plant?: string | null
+          shopping_center?: string | null
+          society_name?: string | null
+          space_type?: string | null
           state?: string | null
-          status?: string | null
-          step_completed?: number | null
-          super_area?: number | null
-          title?: string | null
+          sub_division?: string | null
+          super_built_up_area?: number | null
+          survey_number?: string | null
+          swimming_pool?: string | null
+          total_floors?: number | null
           updated_at?: string | null
-          user_id?: string
-          videos?: string[] | null
+          user_id?: string | null
+          video?: string | null
+          village_name?: string | null
+          visitor_parking?: string | null
+          water_storage_facility?: string | null
+          water_supply?: string | null
+          whatsapp_updates?: boolean | null
+          who_will_show?: string | null
+          wifi?: string | null
         }
         Relationships: []
       }
@@ -1444,7 +1956,7 @@ export type Database = {
       user_sessions: {
         Row: {
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           session_end: string | null
           session_start: string
           user_agent: string | null
@@ -1452,7 +1964,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           session_end?: string | null
           session_start?: string
           user_agent?: string | null
@@ -1460,7 +1972,7 @@ export type Database = {
         }
         Update: {
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           session_end?: string | null
           session_start?: string
           user_agent?: string | null
@@ -1477,12 +1989,10 @@ export type Database = {
         Args: { _email: string }
         Returns: undefined
       }
-      can_contact_owner: {
-        Args: { user_uuid: string }
-        Returns: boolean
-      }
+      auto_approve_pending_properties: { Args: never; Returns: number }
+      can_contact_owner: { Args: { user_uuid: string }; Returns: boolean }
       check_security_status: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           policy_count: number
           rls_enabled: boolean
@@ -1525,24 +2035,15 @@ export type Database = {
         }
         Returns: string
       }
-      detect_suspicious_activity: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      does_auth_user_exist: {
-        Args: { _email: string }
-        Returns: boolean
-      }
-      ensure_unique_slug: {
-        Args: { base_slug: string }
-        Returns: string
-      }
+      detect_suspicious_activity: { Args: never; Returns: undefined }
+      does_auth_user_exist: { Args: { _email: string }; Returns: boolean }
+      ensure_unique_slug: { Args: { base_slug: string }; Returns: string }
       generate_verification_token: {
         Args: { p_email: string; p_user_id: string }
         Returns: string
       }
       get_available_roles: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           description: string
           display_name: string
@@ -1569,16 +2070,10 @@ export type Database = {
           state: string
         }[]
       }
-      get_current_employee_id: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      get_current_user_email: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      get_current_employee_id: { Args: never; Returns: string }
+      get_current_user_email: { Args: never; Returns: string }
       get_current_user_role: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: Database["public"]["Enums"]["app_role"]
       }
       get_property_contact_info: {
@@ -1588,10 +2083,7 @@ export type Database = {
           owner_name: string
         }[]
       }
-      get_property_owner: {
-        Args: { _property_id: string }
-        Returns: string
-      }
+      get_property_owner: { Args: { _property_id: string }; Returns: string }
       get_property_owner_contact: {
         Args: { property_id: string }
         Returns: {
@@ -1602,7 +2094,7 @@ export type Database = {
         }[]
       }
       get_public_pg_hostel_properties: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           amenities: Json
           available_from: string
@@ -1630,9 +2122,10 @@ export type Database = {
         }[]
       }
       get_public_properties: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           additional_documents: Json
+          air_conditioner: string
           amenities: Json
           availability_date: string
           availability_type: string
@@ -1641,47 +2134,75 @@ export type Database = {
           bhk_type: string
           booking_amount: number
           carpet_area: number
+          children_play_area: string
           city: string
+          club_house: string
           created_at: string
           current_property_condition: string
           description: string
+          directions_tip: string
           expected_price: number
           facing_direction: string
+          fire_safety: string
           floor_no: number
           floor_type: string
           furnishing: string
+          gas_pipeline: string
           gated_security: boolean
+          gym: string
           home_loan_available: boolean
+          house_keeping: string
           id: string
           images: string[]
+          intercom: string
+          internet_services: string
           is_featured: boolean
+          is_premium: boolean
           landmarks: string
+          lift: string
           listing_type: string
           locality: string
           maintenance_charges: number
+          non_veg_allowed: boolean
+          park: string
+          parking: string
+          pet_allowed: boolean
           pincode: string
           plot_area_unit: string
           power_backup: string
           price_negotiable: boolean
           property_age: string
           property_type: string
+          rain_water_harvesting: string
           registration_status: string
+          secondary_phone: string
+          security: string
           security_deposit: number
+          servant_room: string
+          sewage_treatment_plant: string
+          shopping_center: string
           state: string
           status: string
           street_address: string
           super_area: number
+          swimming_pool: string
           title: string
           total_floors: number
           updated_at: string
+          user_id: string
           videos: string[]
+          visitor_parking: string
+          water_storage_facility: string
           water_supply: string
+          who_will_show: string
+          wifi: string
         }[]
       }
       get_public_property_by_id: {
         Args: { property_id: string }
         Returns: {
           additional_documents: Json
+          air_conditioner: string
           amenities: Json
           availability_date: string
           availability_type: string
@@ -1690,43 +2211,68 @@ export type Database = {
           bhk_type: string
           booking_amount: number
           carpet_area: number
+          children_play_area: string
           city: string
+          club_house: string
           created_at: string
           current_property_condition: string
           description: string
+          directions_tip: string
           expected_price: number
           facing_direction: string
+          fire_safety: string
           floor_no: number
           floor_type: string
           furnishing: string
+          gas_pipeline: string
           gated_security: boolean
+          gym: string
           home_loan_available: boolean
+          house_keeping: string
           id: string
           images: string[]
+          intercom: string
+          internet_services: string
           is_featured: boolean
           is_premium: boolean
           landmarks: string
+          lift: string
           listing_type: string
           locality: string
           maintenance_charges: number
+          non_veg_allowed: boolean
+          park: string
+          parking: string
+          pet_allowed: boolean
           pincode: string
           plot_area_unit: string
           power_backup: string
           price_negotiable: boolean
           property_age: string
           property_type: string
+          rain_water_harvesting: string
           registration_status: string
+          secondary_phone: string
+          security: string
           security_deposit: number
+          servant_room: string
+          sewage_treatment_plant: string
+          shopping_center: string
           state: string
           status: string
           street_address: string
           super_area: number
+          swimming_pool: string
           title: string
           total_floors: number
           updated_at: string
           user_id: string
           videos: string[]
+          visitor_parking: string
+          water_storage_facility: string
           water_supply: string
+          who_will_show: string
+          wifi: string
         }[]
       }
       get_role_permissions: {
@@ -1737,7 +2283,7 @@ export type Database = {
         }[]
       }
       get_security_recommendations: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           priority: string
           recommendation: string
@@ -1764,7 +2310,7 @@ export type Database = {
         }[]
       }
       get_user_profiles: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           created_at: string
           email: string
@@ -1792,27 +2338,24 @@ export type Database = {
         }
         Returns: boolean
       }
-      has_role: {
-        Args:
-          | { _role: Database["public"]["Enums"]["app_role"]; _user_id: string }
-          | {
+      has_role:
+        | {
+            Args: {
               required_role: Database["public"]["Enums"]["user_role"]
               user_uuid: string
             }
-        Returns: boolean
-      }
-      is_content_manager: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_finance_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_hr_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+            Returns: boolean
+          }
+        | {
+            Args: {
+              _role: Database["public"]["Enums"]["app_role"]
+              _user_id: string
+            }
+            Returns: boolean
+          }
+      is_content_manager: { Args: never; Returns: boolean }
+      is_finance_admin: { Args: never; Returns: boolean }
+      is_hr_admin: { Args: never; Returns: boolean }
       log_audit_event: {
         Args: {
           p_action: string
@@ -1846,10 +2389,7 @@ export type Database = {
         }
         Returns: undefined
       }
-      make_user_admin: {
-        Args: { user_email: string }
-        Returns: string
-      }
+      make_user_admin: { Args: { user_email: string }; Returns: string }
       replace_asset_placeholders: {
         Args: { asset_map: Json; content_data: Json }
         Returns: Json
@@ -1885,10 +2425,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      verify_email_token: {
-        Args: { p_token: string }
-        Returns: Json
-      }
+      verify_email_token: { Args: { p_token: string }; Returns: Json }
     }
     Enums: {
       app_role:

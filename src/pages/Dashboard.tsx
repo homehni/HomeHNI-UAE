@@ -27,6 +27,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import MyChats from '@/components/dashboard/MyChats';
 import { DraftPropertyCard } from '@/components/dashboard/DraftPropertyCard';
+import { DealRoomLayout } from '@/components/deal-room/DealRoomLayout';
 import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
@@ -138,6 +139,7 @@ export const Dashboard: React.FC = () => {
       case 'payments': return 'payments';
       case 'interested': return 'interested';
       case 'chats': return 'chats';
+      case 'dealroom': return 'dealroom';
       default: return 'properties';
     }
   };
@@ -1541,6 +1543,19 @@ export const Dashboard: React.FC = () => {
               </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'dealroom' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('dealroom');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Deal Room 💼
+              </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
                   activeSidebarItem === 'properties' 
                     ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
                     : 'text-gray-600 hover:text-gray-900'
@@ -2445,6 +2460,13 @@ export const Dashboard: React.FC = () => {
           {/* My Chats Content */}
           {activeSidebarItem === 'chats' && (
             <MyChats />
+          )}
+
+          {/* Deal Room Content */}
+          {activeSidebarItem === 'dealroom' && (
+            <div className="h-full">
+              <DealRoomLayout />
+            </div>
           )}
         </div>
       </div>
