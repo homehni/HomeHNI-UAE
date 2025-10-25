@@ -127,11 +127,15 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
 
-  // Navigate to target step if provided
+  // Track if we've already navigated to target step to prevent interference
+  const hasNavigatedToTargetStep = React.useRef(false);
+
+  // Navigate to target step if provided (only once)
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8) {
+    if (targetStep && targetStep > 0 && targetStep <= 8 && !hasNavigatedToTargetStep.current) {
       console.log('Navigating to target step:', targetStep);
       goToStep(targetStep);
+      hasNavigatedToTargetStep.current = true;
     }
   }, [targetStep, goToStep]);
 

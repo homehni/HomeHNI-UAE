@@ -220,6 +220,84 @@ export const PostProperty: React.FC = () => {
     checkForIncompleteDrafts();
   }, [user, currentStep]);
 
+  // Handle resume from dashboard
+  useEffect(() => {
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
+    
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('Resuming draft from dashboard:', resumeDraftId, draftData);
+        
+        // Set owner info from draft
+        const ownerData: OwnerInfo = {
+          fullName: draftData.ownerInfo?.fullName || '',
+          email: draftData.ownerInfo?.email || '',
+          phoneNumber: draftData.ownerInfo?.phoneNumber || '',
+          whatsappUpdates: draftData.ownerInfo?.whatsappUpdates || false,
+          propertyType: draftData.ownerInfo?.propertyType,
+          listingType: draftData.ownerInfo?.listingType
+        };
+        
+        console.log('Owner data from dashboard resume:', ownerData);
+        
+        setOwnerInfo(ownerData);
+        setInitialOwnerData(ownerData);
+        
+        // Set targetStep to the actual step where user left off
+        setTargetStep(draftData.currentStep);
+        
+        // Route to appropriate form based on draft data
+        console.log('Routing based on ownerData from dashboard:', { propertyType: ownerData.propertyType, listingType: ownerData.listingType });
+        
+        if (ownerData.propertyType === 'Commercial') {
+          console.log('Commercial property detected from dashboard');
+          if (ownerData.listingType === 'Rent') {
+            console.log('Setting currentStep to commercial-rental-form from dashboard');
+            setCurrentStep('commercial-rental-form');
+          } else if (ownerData.listingType === 'Sale') {
+            console.log('Setting currentStep to commercial-sale-form from dashboard');
+            setCurrentStep('commercial-sale-form');
+          }
+        } else {
+          console.log('Non-commercial property from dashboard, checking listingType:', ownerData.listingType);
+          console.log('Property type:', ownerData.propertyType);
+          
+          // Special handling for PG/Hostel - check property_type instead of listing_type
+          if (ownerData.propertyType === 'PG/Hostel') {
+            console.log('Setting currentStep to pg-hostel-form from dashboard');
+            setCurrentStep('pg-hostel-form');
+          } else if (ownerData.listingType === 'Flatmates') {
+            console.log('Setting currentStep to flatmates-form from dashboard');
+            setCurrentStep('flatmates-form');
+          } else if (ownerData.propertyType === 'Land/Plot') {
+            console.log('Setting currentStep to land-plot-form from dashboard');
+            setCurrentStep('land-plot-form');
+          } else if (ownerData.listingType === 'Sale') {
+            console.log('Setting currentStep to resale-form from dashboard');
+            setCurrentStep('resale-form');
+          } else {
+            console.log('Setting currentStep to rental-form from dashboard');
+            setCurrentStep('rental-form');
+          }
+        }
+        
+        // Clear sessionStorage after loading
+        // Note: Don't clear here - let the forms handle it after they load the data
+        // sessionStorage.removeItem('resumeDraftId');
+        // sessionStorage.removeItem('resumeDraftData');
+        
+        console.log('Successfully resumed draft from dashboard');
+      } catch (error) {
+        console.error('Error resuming draft from dashboard:', error);
+        // Clear sessionStorage on error
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
+    }
+  }, []);
+
   // Extract edit mode, and step from URL parameters
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);

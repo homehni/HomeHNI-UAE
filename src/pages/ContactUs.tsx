@@ -104,7 +104,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Phone</h3>
-                    <p className="text-gray-600">+91 8074 017 388</p>
+                    <p className="text-gray-600">+91 80740 17388</p>
                   </div>
                 </div>
 
@@ -117,8 +117,8 @@ const ContactUs = () => {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Address</h3>
                     <p className="text-gray-600">
-                      Plot No : 52 E/P<br />
-                      CBI Colony Sahebnagar Kalan
+                      HOMEHNI PRIVATE LIMITED<br />
+                      ΗΝΟ.5.5.558 ABHYUDAYA, NAGAR SAHEB NAGAR, Vanastalipuram, Hayathnagar, Hyderabad- 500070, Telangana
                     </p>
                   </div>
                 </div>

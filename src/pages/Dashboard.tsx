@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import type { Json } from '@/integrations/supabase/types';
-import { fetchContactedOwners } from '@/services/leadService';
+import { fetchContactedOwners, type ContactedProperty } from '@/services/leadService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -26,9 +26,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import MyChats from '@/components/dashboard/MyChats';
+import { DraftPropertyCard } from '@/components/dashboard/DraftPropertyCard';
 import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { PropertyDraftService, type PropertyDraft } from '@/services/propertyDraftService';
 
 interface Property {
   id: string;
@@ -144,22 +146,9 @@ export const Dashboard: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const [properties, setProperties] = useState<CombinedProperty[]>([]);
+  const [drafts, setDrafts] = useState<PropertyDraft[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [contactedProperties, setContactedProperties] = useState<{
-    id: string;
-    title: string;
-    property_type: string;
-    listing_type: string;
-    expected_price: number;
-    city: string;
-    locality: string;
-    created_at: string;
-    images?: string[];
-    owner_name?: string;
-    owner_email?: string;
-    owner_phone?: string;
-    contact_date: string;
-  }[]>([]);
+  const [contactedProperties, setContactedProperties] = useState<ContactedProperty[]>([]);
   const [contactedPropertiesLoading, setContactedPropertiesLoading] = useState(true);
   const [serviceSubmissions, setServiceSubmissions] = useState<ServiceSubmission[]>([]);
   const [propertyRequirements, setPropertyRequirements] = useState<PropertyRequirement[]>([]);
@@ -355,6 +344,69 @@ export const Dashboard: React.FC = () => {
     navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
   };
 
+  // Draft management functions
+  const handleResumeDraft = async (draftId: string) => {
+    try {
+      console.log('Resuming draft:', draftId);
+      
+      // Load draft data using PropertyDraftService
+      const draftData = await PropertyDraftService.loadDraftForResume(draftId);
+      
+      if (!draftData) {
+        throw new Error('Failed to load draft data');
+      }
+      
+      console.log('Loaded draft data:', draftData);
+      
+      // Store draft ID and form data in sessionStorage for forms to access
+      sessionStorage.setItem('resumeDraftId', draftId);
+      sessionStorage.setItem('resumeDraftData', JSON.stringify(draftData.formData));
+      
+      // Navigate to post property page
+      navigate('/post-property');
+      
+      toast({
+        title: "Draft Resumed",
+        description: "Your draft has been loaded. Continue from where you left off.",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error resuming draft:', error);
+      toast({
+        title: "Error",
+        description: "Failed to resume draft. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteDraft = async (draftId: string) => {
+    try {
+      await PropertyDraftService.deleteDraft(draftId);
+      
+      // Remove from local state
+      setDrafts(prev => prev.filter(draft => draft.id !== draftId));
+      
+      toast({
+        title: "Draft Deleted",
+        description: "The draft has been permanently deleted.",
+        variant: "default"
+      });
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete draft. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handlePreviewDraft = (draftId: string) => {
+    // Open preview in new tab using the unified preview page
+    window.open(`/buy/preview/${draftId}/detail`, '_blank');
+  };
+
   // Handle sidebar navigation
   const handleSidebarNavigation = (item: string) => {
     setActiveSidebarItem(item);
@@ -366,14 +418,20 @@ export const Dashboard: React.FC = () => {
 
   const fetchProperties = async () => {
     try {
-      // Show ONLY properties table entries belonging to the user
-      const { data: propertiesData, error: propertiesError } = await supabase
-        .from('properties')
-        // include is_premium explicitly for clarity
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
+      // Fetch both posted properties and drafts in parallel
+      const [propertiesResult, draftsResult] = await Promise.all([
+        // Show ONLY properties table entries belonging to the user
+        supabase
+          .from('properties')
+          .select('*')
+          .eq('user_id', user?.id)
+          .order('created_at', { ascending: false }),
+        
+        // Fetch user's incomplete drafts
+        PropertyDraftService.getUserDrafts()
+      ]);
 
+      const { data: propertiesData, error: propertiesError } = propertiesResult;
       if (propertiesError) throw propertiesError;
 
       console.log('🔍 Dashboard fetchProperties - Raw data:', propertiesData);
@@ -388,7 +446,12 @@ export const Dashboard: React.FC = () => {
         console.log('🔍 Dashboard fetchProperties - Sample property with images:', propertiesWithImages[0]);
       }
       
+      // Filter out completed drafts and set state
+      const incompleteDrafts = draftsResult.filter(draft => !draft.is_completed);
+      console.log('🔍 Dashboard fetchProperties - Incomplete drafts:', incompleteDrafts.length);
+      
       setProperties((propertiesData || []) as CombinedProperty[]);
+      setDrafts(incompleteDrafts);
     } catch (error) {
       console.error('Error fetching properties:', error);
     } finally {
@@ -1016,7 +1079,7 @@ export const Dashboard: React.FC = () => {
     try {
       // Store message in database
       const { data, error } = await supabase
-        .from('lead_messages')
+        .from('lead_messages' as any)
         .insert({
           lead_id: contactLeadModal.leadId,
           sender_id: user?.id,
@@ -1027,30 +1090,15 @@ export const Dashboard: React.FC = () => {
 
       if (error) throw error;
 
-      // Send email notification to the lead
-      const { error: emailError } = await supabase.functions.invoke('send-email', {
-        body: {
-          to: contactLeadModal.leadEmail,
-          template: 'owner-reply',
-          data: {
-            ownerName: user?.email || 'Property Owner',
-            leadName: contactLeadModal.leadName,
-            propertyTitle: contactLeadModal.propertyTitle,
-            message: contactMessage.trim(),
-            replyUrl: `${window.location.origin}/dashboard?tab=interested`
-          }
-        }
-      });
-
-      if (emailError) {
-        console.warn('Email sending failed:', emailError);
-        // Don't throw error here - message was saved to database
-      }
-
       toast({
         title: "Message sent",
         description: `Your message has been sent to ${contactLeadModal.leadName}.`,
       });
+
+      // Refresh the contacted properties to show the new message
+      if (user?.email) {
+        await fetchContactedOwners(user.email);
+      }
 
       closeContactLeadModal();
     } catch (error) {
@@ -1348,8 +1396,41 @@ export const Dashboard: React.FC = () => {
     if (selectedFilter === 'Land/Plot') {
       return property.property_type === 'land' || property.property_type === 'plot';
     }
+    if (selectedFilter === 'Drafts') {
+      return false; // Drafts are handled separately
+    }
     
     return true;
+  });
+
+  const filteredDrafts = drafts.filter(draft => {
+    // Apply category filter to drafts
+    if (selectedFilter === 'All') return true;
+    if (selectedFilter === 'Drafts') return true;
+    
+    if (selectedFilter === 'Rent') {
+      return draft.listing_type === 'Rent' && draft.property_type !== 'Commercial';
+    }
+    if (selectedFilter === 'Sale') {
+      return draft.listing_type === 'Sale' && draft.property_type !== 'Commercial';
+    }
+    if (selectedFilter === 'Commercial-Rent') {
+      return draft.listing_type === 'Rent' && draft.property_type === 'Commercial';
+    }
+    if (selectedFilter === 'Commercial-Sale') {
+      return draft.listing_type === 'Sale' && draft.property_type === 'Commercial';
+    }
+    if (selectedFilter === 'PG/Hostel') {
+      return draft.property_type === 'PG/Hostel';
+    }
+    if (selectedFilter === 'Flatmates') {
+      return draft.listing_type === 'Flatmates';
+    }
+    if (selectedFilter === 'Land/Plot') {
+      return draft.property_type === 'Land/Plot';
+    }
+
+    return false;
   });
 
   if (!user) {
@@ -1504,7 +1585,7 @@ export const Dashboard: React.FC = () => {
               {/* Header */}
               <div className="mb-4 sm:mb-6">
                 <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 break-words">
-                You have already posted {properties.length} properties on Home HNI
+                You have already posted {properties.length} properties{drafts.length > 0 ? ` and ${drafts.length} draft${drafts.length > 1 ? 's' : ''}` : ''} on Home HNI
                 </h1>
               </div>
 
@@ -1512,7 +1593,7 @@ export const Dashboard: React.FC = () => {
               <div className="mb-4 sm:mb-6">
                 <div className="flex flex-col gap-3 sm:gap-4">
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                    {['All', 'Rent', 'Sale', 'Commercial-Rent', 'Commercial-Sale', 'PG/Hostel', 'Flatmates', 'Land/Plot'].map((filter) => (
+                    {['All', 'Rent', 'Sale', 'Commercial-Rent', 'Commercial-Sale', 'PG/Hostel', 'Flatmates', 'Land/Plot', 'Drafts'].map((filter) => (
                       <button
                         key={filter}
                         onClick={() => setSelectedFilter(filter)}
@@ -1544,7 +1625,7 @@ export const Dashboard: React.FC = () => {
               {/* Properties Content */}
             {loading ? (
               <div className="text-center py-8">Loading properties...</div>
-            ) : filteredProperties.length === 0 ? (
+            ) : filteredProperties.length === 0 && filteredDrafts.length === 0 ? (
                 <div className="text-center py-8 sm:py-12 bg-white rounded-lg border border-gray-200 px-4">
                   <Building className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-gray-400 mb-3 sm:mb-4" />
                   <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No properties listed yet</h3>
@@ -1555,7 +1636,10 @@ export const Dashboard: React.FC = () => {
                   </Button>
                 </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+              <div className="space-y-6">
+                {/* Posted Properties */}
+                {filteredProperties.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                 {filteredProperties.map((property) => {
                   const getImageUrl = () => {
                     console.log('🔍 Dashboard getImageUrl - Property:', property.title, 'Images:', property.images);
@@ -1744,6 +1828,28 @@ export const Dashboard: React.FC = () => {
                     </Card>
                   );
                 })}
+                  </div>
+                )}
+
+                {/* Drafts Section */}
+                {filteredDrafts.length > 0 && (
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                      Draft Properties ({filteredDrafts.length})
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                      {filteredDrafts.map((draft) => (
+                        <DraftPropertyCard
+                          key={draft.id}
+                          draft={draft}
+                          onContinue={() => handleResumeDraft(draft.id!)}
+                          onDelete={() => handleDeleteDraft(draft.id!)}
+                          onPreview={() => handlePreviewDraft(draft.id!)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
             </div>
@@ -2092,20 +2198,21 @@ export const Dashboard: React.FC = () => {
                       
                        {/* Action Buttons */}
                        <div className="px-4 pb-4 space-y-2">
-                         <Button 
-                           className="w-full"
-                           onClick={() => navigate(`/property/${lead.properties.id}`)}
-                         >
-                           View Property
-                         </Button>
-                         <Button 
-                           variant="outline"
-                           className="w-full"
-                           onClick={() => openContactLeadModal(lead.id, lead.interested_user_name, lead.interested_user_email, lead.properties.title)}
-                         >
-                           <MessageSquare className="h-4 w-4 mr-2" />
-                           Contact Lead
-                         </Button>
+                        <Button 
+                          className="w-full"
+                          onClick={() => navigate(`/property/${lead.properties.id}`)}
+                        >
+                          View Property
+                        </Button>
+                        {/* Contact Lead button hidden as requested */}
+                        {/* <Button 
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => openContactLeadModal(lead.id, lead.interested_user_name, lead.interested_user_email, lead.properties.title)}
+                        >
+                          <MessageSquare className="h-4 w-4 mr-2" />
+                          Contact Lead
+                        </Button> */}
                        </div>
                     </Card>
                   ))}
@@ -2304,6 +2411,18 @@ export const Dashboard: React.FC = () => {
                           <div className="flex items-center text-xs text-gray-500 mt-2">
                             <span>Contacted on {new Date(property.contact_date).toLocaleDateString()}</span>
                           </div>
+                          
+                          {/* Message Section */}
+                          {property.message && (
+                            <div className="mt-3 pt-3 border-t">
+                              <h5 className="text-sm font-medium text-gray-900 mb-2">Your Message</h5>
+                              <div className="bg-gray-50 rounded-lg p-3">
+                                <p className="text-sm text-gray-700 leading-relaxed">
+                                  {property.message}
+                                </p>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                       

@@ -244,7 +244,7 @@ const PrivacyPolicy = () => {
                 </ul>
               </div>
               <p className="text-gray-700 mt-4 leading-relaxed">
-                To exercise these rights, email us at <strong>privacy@homehni.com</strong>
+                To exercise these rights, email us at <strong>homehni8@gmail.com</strong>
               </p>
             </section>
 
@@ -350,12 +350,12 @@ const PrivacyPolicy = () => {
                   <div className="text-center">
                     <Phone className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Phone</p>
-                    <p className="text-gray-600">+91 8074 017 388</p>
+                    <p className="text-gray-600">+91 80740 17388</p>
                   </div>
                   <div className="text-center">
                     <Building className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600">Plot No: 52 E/P<br />CBI Colony Sahebnagar Kalan</p>
+                    <p className="text-gray-600">HOMEHNI PRIVATE LIMITED<br />ΗΝΟ.5.5.558 ABHYUDAYA, NAGAR SAHEB NAGAR, Vanastalipuram, Hayathnagar, Hyderabad- 500070, Telangana</p>
                   </div>
                 </div>
               </div>

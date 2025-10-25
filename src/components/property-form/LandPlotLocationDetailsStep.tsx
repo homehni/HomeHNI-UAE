@@ -44,6 +44,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   const markerRef = useRef<any>(null);
   const [showMap, setShowMap] = useState(false);
   const [locationMismatchWarning, setLocationMismatchWarning] = useState('');
+  const [isLoadingDraftData, setIsLoadingDraftData] = useState(false);
 
   const form = useForm<LandPlotLocationData>({
     resolver: zodResolver(landPlotLocationSchema),
@@ -59,21 +60,42 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
 
   // Update form values when initialData changes
   useEffect(() => {
-    if (initialData.locality) {
-      form.setValue('locality', initialData.locality);
-    }
-    if (initialData.landmark) {
-      form.setValue('landmark', initialData.landmark);
-    }
-    if (initialData.city) {
-      form.setValue('city', initialData.city);
-    }
-    if (initialData.state) {
-      form.setValue('state', initialData.state);
-    }
-    if (initialData.pincode) {
-      form.setValue('pincode', initialData.pincode);
-    }
+    // Set loading flag to prevent autocomplete interference
+    setIsLoadingDraftData(true);
+    
+    // Add a longer delay to ensure autocomplete doesn't interfere with draft data loading
+    const timer = setTimeout(() => {
+      if (initialData.locality) {
+        form.setValue('locality', initialData.locality);
+        // Also set the input field value directly to ensure it's visible
+        if (localityInputRef.current) {
+          localityInputRef.current.value = initialData.locality;
+        }
+      }
+      if (initialData.landmark) {
+        form.setValue('landmark', initialData.landmark);
+      }
+      if (initialData.city) {
+        form.setValue('city', initialData.city);
+        // Also set the input field value directly
+        if (cityInputRef.current) {
+          cityInputRef.current.value = initialData.city;
+        }
+      }
+      if (initialData.state) {
+        form.setValue('state', initialData.state);
+      }
+      if (initialData.pincode) {
+        form.setValue('pincode', initialData.pincode);
+      }
+      
+      // Clear loading flag after setting values
+      setTimeout(() => {
+        setIsLoadingDraftData(false);
+      }, 100);
+    }, 500); // Increased delay to let autocomplete fully initialize
+
+    return () => clearTimeout(timer);
   }, [initialData, form]);
 
   // Google Maps utility functions
@@ -174,6 +196,9 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
       };
       const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
       cityAc.addListener('place_changed', () => {
+        // Don't interfere if we're loading draft data
+        if (isLoadingDraftData) return;
+        
         const place = cityAc.getPlace();
         if (place?.address_components) {
           let cityName = '';
@@ -191,6 +216,9 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
     }
 
     attach(localityInputRef.current, (place, el) => {
+      // Don't interfere if we're loading draft data
+      if (isLoadingDraftData) return;
+      
       const value = place?.formatted_address || place?.name || '';
       if (value) {
         el.value = value;

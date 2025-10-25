@@ -23,6 +23,7 @@ export interface ContactedProperty {
   owner_email?: string;
   owner_phone?: string;
   contact_date: string;
+  message?: string;
 }
 
 // Service to create a new lead
@@ -130,7 +131,8 @@ export const fetchContactedOwners = async (userId: string) => {
         owner_name: String(item.owner_name || 'Property Owner'),
         owner_email: String(item.owner_email || ''),
         owner_phone: String(item.owner_phone || ''),
-        contact_date: String(item.contact_date || '')
+        contact_date: String(item.contact_date || ''),
+        message: String(item.lead_message || '')
       }));
       
       console.log('leadService: Processed contacted properties:', properties);
@@ -232,7 +234,8 @@ export const fetchContactedOwners = async (userId: string) => {
             owner_name: ownerName,
             owner_email: ownerEmail,
             owner_phone: ownerPhone,
-            contact_date: lead?.created_at || ''
+            contact_date: lead?.created_at || '',
+            message: lead?.message || ''
           });
         }
       } catch (error) {

@@ -178,7 +178,7 @@ const CancellationRefunds = () => {
                     <div className="w-8 h-8 bg-brand-red text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
                     <div>
                       <p className="font-medium text-gray-900">Contact Support</p>
-                      <p className="text-gray-600">Email us at support@homehni.com or call our helpline</p>
+                      <p className="text-gray-600">Email us at homehni8@gmail.com or call our helpline</p>
                     </div>
                   </div>
                   <div className="flex items-start">
@@ -215,7 +215,7 @@ const CancellationRefunds = () => {
               </p>
               <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg">
                 <p className="text-red-800 font-medium">
-                  <strong>Escalation Process:</strong> Contact our customer relations team at disputes@homehni.com. All disputes are reviewed by our senior management team within 7 business days.
+                  <strong>Escalation Process:</strong> Contact our customer relations team at homehni8@gmail.com. All disputes are reviewed by our senior management team within 7 business days.
                 </p>
               </div>
             </section>
@@ -232,17 +232,17 @@ const CancellationRefunds = () => {
                   <div className="text-center">
                     <Mail className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Email</p>
-                    <p className="text-gray-600">support@homehni.com</p>
+                    <p className="text-gray-600">homehni8@gmail.com</p>
                   </div>
                   <div className="text-center">
                     <Phone className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Phone</p>
-                    <p className="text-gray-600">+91 8074 017 388</p>
+                    <p className="text-gray-600">+91 80740 17388</p>
                   </div>
                   <div className="text-center">
                     <Building className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600">Plot No: 52 E/P<br />CBI Colony Sahebnagar Kalan</p>
+                    <p className="text-gray-600">HOMEHNI PRIVATE LIMITED<br />ΗΝΟ.5.5.558 ABHYUDAYA, NAGAR SAHEB NAGAR, Vanastalipuram, Hayathnagar, Hyderabad- 500070, Telangana</p>
                   </div>
                 </div>
               </div>
