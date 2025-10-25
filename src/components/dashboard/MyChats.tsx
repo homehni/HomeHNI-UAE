@@ -49,16 +49,20 @@ const MyChats = () => {
     console.log('🔄 MyChats: Loading conversations...');
     setLoading(true);
     const data = await getUserConversations();
-    console.log('📋 MyChats: Loaded conversations:', data.length, 'conversations');
-    if (data.length > 0) {
+    // Filter to only show AI chatbot conversations, exclude property owner/Deal Room conversations
+    const chatbotConversations = data.filter(conv => 
+      conv.conversation_type !== 'property_owner'
+    );
+    console.log('📋 MyChats: Loaded conversations:', chatbotConversations.length, 'AI chatbot conversations');
+    if (chatbotConversations.length > 0) {
       console.log('📋 MyChats: First conversation:', {
-        id: data[0].id,
-        title: data[0].title,
-        type: data[0].conversation_type,
-        last_message: data[0].last_message
+        id: chatbotConversations[0].id,
+        title: chatbotConversations[0].title,
+        type: chatbotConversations[0].conversation_type,
+        last_message: chatbotConversations[0].last_message
       });
     }
-    setConversations(data);
+    setConversations(chatbotConversations);
     setLoading(false);
   };
 
@@ -104,7 +108,7 @@ const MyChats = () => {
             <CardHeader className="border-b bg-white sticky top-0 z-10">
               <CardTitle className="text-xl">Chat History</CardTitle>
               <CardDescription>
-                Your conversations with our AI assistants and property owners
+                Your conversations with our AI assistants
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden p-0">
@@ -132,7 +136,7 @@ const MyChats = () => {
                   <div className="flex flex-col items-center justify-center h-64 text-center p-6">
                     <MessageSquare className="h-16 w-16 text-gray-300 mb-3" />
                     <p className="text-gray-600 font-medium mb-1">No conversations yet</p>
-                    <p className="text-sm text-gray-400">Start chatting with our AI assistants or contact property owners!</p>
+                    <p className="text-sm text-gray-400">Start chatting with our AI assistants!</p>
                   </div>
                 ) : (
                   <div className="p-4 space-y-3">
@@ -188,35 +192,25 @@ const MyChats = () => {
             
             <ScrollArea className="flex-1 p-4 bg-gray-50">
               <div className="space-y-4 pb-4">
-                        {messages.map((message) => {
-                          const isPropertyOwner = message.metadata?.sender_type === 'property_owner';
-                          const ownerName = message.metadata?.owner_name;
-                          
-                          return (
+                        {messages.map((message) => (
+                          <div
+                            key={message.id}
+                            className={`flex ${message.is_bot ? 'justify-start' : 'justify-end'} animate-fade-in`}
+                          >
                             <div
-                              key={message.id}
-                              className={`flex ${message.is_bot ? 'justify-start' : 'justify-end'} animate-fade-in`}
+                              className={`max-w-[85%] p-3 rounded-2xl shadow-sm ${
+                                message.is_bot
+                                  ? 'bg-white text-gray-800 rounded-tl-none'
+                                  : 'bg-brand-red text-white rounded-tr-none'
+                              }`}
                             >
-                              <div
-                                className={`max-w-[85%] p-3 rounded-2xl shadow-sm ${
-                                  message.is_bot
-                                    ? 'bg-white text-gray-800 rounded-tl-none'
-                                    : 'bg-brand-red text-white rounded-tr-none'
-                                }`}
-                              >
-                                {isPropertyOwner && ownerName && (
-                                  <p className="text-xs font-medium text-gray-600 mb-1">
-                                    {ownerName}
-                                  </p>
-                                )}
-                                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.message}</p>
-                                <p className={`text-xs mt-1 ${message.is_bot ? 'text-gray-400' : 'text-white/70'}`}>
-                                  {format(new Date(message.created_at), 'h:mm a')}
-                                </p>
-                              </div>
+                              <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.message}</p>
+                              <p className={`text-xs mt-1 ${message.is_bot ? 'text-gray-400' : 'text-white/70'}`}>
+                                {format(new Date(message.created_at), 'h:mm a')}
+                              </p>
                             </div>
-                          );
-                        })}
+                          </div>
+                        ))}
               </div>
             </ScrollArea>
           </Card>
@@ -229,7 +223,7 @@ const MyChats = () => {
           <CardHeader>
             <CardTitle>Chat History</CardTitle>
             <CardDescription>
-              View and manage your conversations with our AI assistants and property owners
+              View and manage your conversations with our AI assistants
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
@@ -260,7 +254,7 @@ const MyChats = () => {
                     <div className="flex flex-col items-center justify-center h-full text-center p-6">
                       <MessageSquare className="h-16 w-16 text-gray-300 mb-3" />
                       <p className="text-gray-600 font-medium mb-1">No conversations yet</p>
-                      <p className="text-sm text-gray-400">Start chatting with our AI assistants or contact property owners!</p>
+                      <p className="text-sm text-gray-400">Start chatting with our AI assistants!</p>
                     </div>
                   ) : (
                     <div className="p-3 space-y-2">
@@ -309,35 +303,25 @@ const MyChats = () => {
 
                     <ScrollArea className="flex-1 p-4 bg-white">
                       <div className="space-y-4 max-w-4xl mx-auto pb-4">
-                        {messages.map((message) => {
-                          const isPropertyOwner = message.metadata?.sender_type === 'property_owner';
-                          const ownerName = message.metadata?.owner_name;
-                          
-                          return (
+                        {messages.map((message) => (
+                          <div
+                            key={message.id}
+                            className={`flex ${message.is_bot ? 'justify-start' : 'justify-end'} animate-fade-in`}
+                          >
                             <div
-                              key={message.id}
-                              className={`flex ${message.is_bot ? 'justify-start' : 'justify-end'} animate-fade-in`}
+                              className={`max-w-[70%] p-4 rounded-2xl shadow-sm ${
+                                message.is_bot
+                                  ? 'bg-gray-100 text-gray-800 rounded-tl-none'
+                                  : 'bg-brand-red text-white rounded-tr-none'
+                              }`}
                             >
-                              <div
-                                className={`max-w-[70%] p-4 rounded-2xl shadow-sm ${
-                                  message.is_bot
-                                    ? 'bg-gray-100 text-gray-800 rounded-tl-none'
-                                    : 'bg-brand-red text-white rounded-tr-none'
-                                }`}
-                              >
-                                {isPropertyOwner && ownerName && (
-                                  <p className="text-xs font-medium text-gray-600 mb-2">
-                                    {ownerName}
-                                  </p>
-                                )}
-                                <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.message}</p>
-                                <p className={`text-xs mt-2 ${message.is_bot ? 'text-gray-500' : 'text-white/70'}`}>
-                                  {format(new Date(message.created_at), 'h:mm a')}
-                                </p>
-                              </div>
+                              <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.message}</p>
+                              <p className={`text-xs mt-2 ${message.is_bot ? 'text-gray-500' : 'text-white/70'}`}>
+                                {format(new Date(message.created_at), 'h:mm a')}
+                              </p>
                             </div>
-                          );
-                        })}
+                          </div>
+                        ))}
                       </div>
                     </ScrollArea>
                   </>
