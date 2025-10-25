@@ -81,72 +81,57 @@ export const usePropertySearch = () => {
       setIsLoading(true);
       setError(null);
 
-      // Fetch properties from Supabase property_real (single source of truth)
-      const { data: prRows, error: prError } = await (supabase as any)
-        .from('property_real')
-        .select('id, element_type, element_key, title, property_type, location, images, content, updated_at')
-        .limit(500);
+      // Fetch properties from Supabase properties table
+      const { data: prRows, error: prError } = await supabase
+        .from('properties')
+        .select('id, title, property_type, listing_type, city, state, images, expected_price, furnishing, availability_type, super_area, created_at, is_featured')
+        .eq('is_visible', true)
+        .limit(2000);
 
       if (prError) {
         throw new Error(prError.message);
       }
 
       type AnyRow = {
-        id?: string | null;
-        element_type?: string | null;
-        element_key?: string | null;
-        title?: string | null;
-        property_type?: string | null;
-        location?: string | null;
-        images?: any;
-        content?: any;
-        updated_at?: string | null;
+        id?: string;
+        title?: string;
+        property_type?: string;
+        listing_type?: string;
+        city?: string;
+        state?: string;
+        images?: string[];
+        expected_price?: number;
+        furnishing?: string;
+        availability_type?: string;
+        super_area?: number;
+        created_at?: string;
+        is_featured?: boolean;
       };
 
       const toArray = (v: any): string[] => {
         if (!v) return [];
         if (Array.isArray(v)) return v.filter(Boolean);
-        if (typeof v === 'string') {
-          try {
-            // handle stringified JSON arrays
-            const parsed = JSON.parse(v);
-            return Array.isArray(parsed) ? parsed.filter(Boolean) : [v];
-          } catch {
-            return v.split(',').map((s) => s.trim()).filter(Boolean);
-          }
-        }
         return [];
       };
 
       let propertiesPool: any[] = [];
       (prRows as AnyRow[] | null)?.forEach((row) => {
-        const c = (row.content ?? {}) as any;
-
-        // Extract city/state from content or from location text ("City, State, Country")
-        let city = (c.city ?? '').toString().trim();
-        let state = (c.state ?? '').toString().trim();
-        if ((!city || !state) && row.location) {
-          const parts = row.location.split(',').map((s) => s.trim());
-          city = city || (parts[0] ?? '');
-          state = state || (parts[1] ?? '');
-        }
-
-        const images = toArray(c.images ?? row.images);
+        const images = toArray(row.images);
 
         propertiesPool.push({
-          id: c.id ?? row.id,
-          title: row.title ?? c.title ?? 'Property',
-          property_type: (c.property_type ?? row.property_type ?? '').toLowerCase(),
-          listing_type: (c.listing_type ?? 'sale').toLowerCase(),
-          status: (c.status ?? 'approved').toLowerCase(),
-          expected_price: c.expected_price != null ? Number(c.expected_price) : null,
-          city,
-          state,
-          availability_type: (c.availability_type ?? '').toLowerCase(),
-          is_featured: Boolean(c.is_featured) || /featured/i.test(row.element_key ?? ''),
-          isRecommended: Boolean(c.isRecommended) || /recommended/i.test(row.element_key ?? ''),
-          furnishing: c.furnishing ?? null,
-          super_area: c.super_area ?? null,
+          id: row.id,
+          title: row.title ?? 'Property',
+          property_type: (row.property_type ?? '').toLowerCase(),
+          listing_type: (row.listing_type ?? 'sale').toLowerCase(),
+          status: 'approved', // All visible properties are approved
+          expected_price: row.expected_price != null ? Number(row.expected_price) : null,
+          city: row.city ?? '',
+          state: row.state ?? '',
+          availability_type: (row.availability_type ?? '').toLowerCase(),
+          is_featured: Boolean(row.is_featured),
+          isRecommended: false, // Can be enhanced later
+          furnishing: row.furnishing ?? null,
+          super_area: row.super_area ?? null,
           images,
         });
       });
