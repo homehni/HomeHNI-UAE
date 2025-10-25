@@ -165,7 +165,60 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900"> 9. Governing Law</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 9. Payment Terms</h2>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                All payments for HomeHNI services are processed securely through our payment partners. By using our services, you agree to the following payment terms:
+              </p>
+              <div className="bg-green-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-green-800 mb-3">Payment Methods</h3>
+                <ul className="space-y-2 text-green-700">
+                  <li>• Credit/Debit Cards (Visa, MasterCard, RuPay)</li>
+                  <li>• Net Banking</li>
+                  <li>• UPI Payments</li>
+                  <li>• Digital Wallets</li>
+                  <li>• EMI Options (where applicable)</li>
+                </ul>
+              </div>
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mt-4">
+                <p className="text-blue-800 font-medium">
+                  <strong>Security:</strong> All payment transactions are encrypted and processed through PCI DSS compliant payment gateways. We do not store your payment card details.
+                </p>
+              </div>
+            </section>
+
+            <section className="mb-12">
+              <div className="flex items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900"> 10. Service Fees and Charges</h2>
+              </div>
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                HomeHNI offers both free and premium services. Premium services are charged as per our pricing structure:
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="font-semibold text-gray-800 mb-3">Free Services</h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• Basic property listings</li>
+                    <li>• Property search</li>
+                    <li>• Basic consultation</li>
+                    <li>• Account registration</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="font-semibold text-gray-800 mb-3">Premium Services</h3>
+                  <ul className="space-y-2 text-gray-700">
+                    <li>• Featured property listings</li>
+                    <li>• Advanced property reports</li>
+                    <li>• Legal services</li>
+                    <li>• Property management</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section className="mb-12">
+              <div className="flex items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900"> 11. Governing Law</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 These terms and conditions are governed by and construed in accordance with the laws of India and you irrevocably submit to the exclusive jurisdiction of the courts in that state or location.
@@ -174,7 +227,7 @@ const TermsAndConditions = () => {
 
             <section className="mb-12">
               <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900"> 10. Contact Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900"> 12. Contact Information</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 If you have any questions about these Terms & Conditions, please contact us:

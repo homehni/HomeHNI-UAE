@@ -538,8 +538,6 @@ export const PostProperty: React.FC = () => {
       console.log('Owner data from draft:', ownerData);
       console.log('Owner listingType:', ownerData.listingType);
       console.log('Owner propertyType:', ownerData.propertyType);
-      console.log('Raw incompleteDraft property_type:', incompleteDraft.property_type);
-      console.log('Raw incompleteDraft listing_type:', incompleteDraft.listing_type);
       
       setOwnerInfo(ownerData);
       setInitialOwnerData(ownerData);
@@ -571,15 +569,21 @@ export const PostProperty: React.FC = () => {
         if (ownerData.propertyType === 'PG/Hostel') {
           console.log('PG/Hostel property detected by property_type, setting currentStep to pg-hostel-form');
           setCurrentStep('pg-hostel-form');
-        } else if (ownerData.propertyType === 'Land/Plot') {
-          console.log('Land/Plot property detected by property_type, setting currentStep to land-plot-form');
-          setCurrentStep('land-plot-form');
         } else {
           // For other property types, use listing_type
           switch (ownerData.listingType) {
             case 'Resale':
             case 'Sale':
-              setCurrentStep('resale-form');
+              if (ownerData.propertyType === 'Land/Plot') {
+                setCurrentStep('land-plot-form');
+              } else {
+                setCurrentStep('resale-form');
+              }
+              break;
+            case 'Industrial land':
+            case 'Agricultural Land':
+            case 'Commercial land':
+              setCurrentStep('land-plot-form');
               break;
             case 'PG/Hostel':
               console.log('PG/Hostel case matched, setting currentStep to pg-hostel-form');

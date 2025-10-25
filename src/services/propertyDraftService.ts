@@ -1032,6 +1032,79 @@ export class PropertyDraftService {
             availableAllDay: true
           }
         };
+      } else if (draft.property_type === 'Land/Plot') {
+        formData = {
+          // Plot Details - using correct field names for LandPlotPropertyDetailsStep
+          plotDetails: {
+            propertyType: 'Land/Plot',
+            plotArea: draft.plot_area || 0,
+            plotAreaUnit: draft.plot_area_unit || 'sq-ft',
+            plotLength: draft.plot_length || 0,
+            plotWidth: draft.plot_width || 0,
+            boundaryWall: draft.boundary_wall || 'no',
+            cornerPlot: draft.corner_plot || false,
+            roadFacing: draft.road_facing || 'east',
+            landType: draft.land_type || 'residential',
+            plotShape: draft.plot_shape || 'regular',
+            gatedCommunity: draft.gated_community || false,
+            roadWidth: draft.road_width || 20,
+            gatedProject: draft.gated_project || '',
+            floorsAllowed: draft.floors_allowed || 0,
+            surveyNumber: draft.survey_number || '',
+            subDivision: draft.sub_division || '',
+            villageName: draft.village_name || ''
+          },
+          // Location Details
+          locationDetails: {
+            state: draft.state || '',
+            city: draft.city || '',
+            locality: draft.locality || '',
+            pincode: draft.pincode || '',
+            societyName: draft.society_name || '',
+            landmark: draft.landmark || ''
+          },
+          // Sale Details - using correct field names for LandPlotSaleDetailsStep
+          saleDetails: {
+            listingType: 'Sale',
+            expectedPrice: draft.expected_price || 0,
+            possessionDate: draft.possession_date ? new Date(draft.possession_date) : undefined,
+            priceNegotiable: draft.price_negotiable || false,
+            ownershipType: draft.ownership_type || 'freehold',
+            approvedBy: draft.approved_by ? (Array.isArray(draft.approved_by) ? draft.approved_by : [draft.approved_by]) : [],
+            clearTitles: draft.clear_titles || false,
+            description: draft.description || ''
+          },
+          // Amenities - using correct field names for LandPlotAmenitiesStep
+          amenities: {
+            waterSupply: draft.water_supply || '',
+            electricityConnection: draft.electricity_connection || '',
+            sewageConnection: draft.sewage_connection || '',
+            roadWidth: draft.road_width || 0,
+            gatedSecurity: draft.gated_security || false,
+            directionsToProperty: draft.directions_to_property || ''
+          },
+          // Gallery
+          gallery: {
+            images: draft.images || [],
+            video: draft.video || undefined
+          },
+          // Additional Info
+          additionalInfo: {
+            description: draft.description || '',
+            previousOccupancy: '',
+            paintingRequired: '',
+            cleaningRequired: ''
+          },
+          // Schedule Info
+          scheduleInfo: draft.schedule_info || {
+            availability: 'everyday',
+            paintingService: 'decline',
+            cleaningService: 'decline',
+            startTime: '',
+            endTime: '',
+            availableAllDay: true
+          }
+        };
       } else {
         // For other property types (rental, sale, commercial, land)
         formData = {

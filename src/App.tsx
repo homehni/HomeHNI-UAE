@@ -10,6 +10,9 @@ import Index from "./pages/Index";
 import AboutUs from "./pages/AboutUs";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CancellationRefunds from "./pages/CancellationRefunds";
+import Shipping from "./pages/Shipping";
+import LegalCompliance from "./pages/LegalCompliance";
 import Careers from "./pages/Careers";
 import ContactUs from "./pages/ContactUs";
 import Testimonials from "./pages/Testimonials";
@@ -151,6 +154,9 @@ const App: React.FC = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/cancellation-refunds" element={<CancellationRefunds />} />
+            <Route path="/shipping" element={<Shipping />} />
+            <Route path="/legal-compliance" element={<LegalCompliance />} />
             <Route path="/students" element={<Careers />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/testimonials" element={<Testimonials />} />

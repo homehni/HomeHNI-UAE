@@ -54,7 +54,6 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     targetStep,
     createdSubmissionId
   });
-  
   const {
     currentStep,
     ownerInfo,
@@ -79,7 +78,6 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     getFormData,
     isStepValid
   } = useLandPlotPropertyForm(targetStep || 1);
-
 
   // Handle preview functionality
   const handlePreview = async () => {
@@ -129,133 +127,70 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
 
-  // Load draft data if available (without navigation override)
+  // Navigate to target step if provided
   React.useEffect(() => {
-    const loadDraftData = async () => {
-      if (targetStep && targetStep >= 1) {
-        console.log('LandPlotMultiStepForm - Loading draft data for step:', targetStep);
-        try {
-          // Get the draft ID from session storage or find it
-          const resumeDraftData = sessionStorage.getItem('resumeDraftData');
-          
-          if (resumeDraftData) {
-            const draftData = JSON.parse(resumeDraftData);
-            console.log('Loading draft data for LandPlotMultiStepForm:', draftData);
-            
-            // Load plot details - data is at root level, not in plotDetails object
-            const plotDetailsData = {
-              plotArea: draftData.plotArea,
-              plotAreaUnit: draftData.plotAreaUnit,
-              plotLength: draftData.plotLength,
-              plotWidth: draftData.plotWidth,
-              boundaryWall: draftData.boundaryWall,
-              cornerPlot: draftData.cornerPlot,
-              roadFacing: draftData.roadFacing,
-              roadWidth: draftData.roadWidth,
-              landType: draftData.landType,
-              plotShape: draftData.plotShape,
-              gatedCommunity: draftData.gatedCommunity,
-              gatedProject: draftData.gatedProject,
-              floorsAllowed: draftData.floorsAllowed,
-              surveyNumber: draftData.surveyNumber,
-              subDivision: draftData.subDivision,
-              villageName: draftData.villageName
-            };
-            
-            console.log('Extracted plotDetailsData:', plotDetailsData);
-            
-            // Check if we have any plot data
-            const hasPlotData = Object.values(plotDetailsData).some(value => 
-              value !== undefined && value !== null && value !== '' && value !== 0
-            );
-            
-            if (hasPlotData) {
-              console.log('Loading extracted plotDetails:', plotDetailsData);
-              updatePlotDetails(plotDetailsData);
-              console.log('Plot details updated in form state');
-            } else {
-              console.log('No plot data found in draft');
-            }
-            
-            // Load location details - data might be at root level too
-            const locationDetailsData = {
-              city: draftData.city,
-              locality: draftData.locality,
-              landmark: draftData.landmark,
-              state: draftData.state,
-              pincode: draftData.pincode,
-              societyName: draftData.societyName
-            };
-            
-            console.log('Extracted locationDetailsData:', locationDetailsData);
-            
-            // Check if we have any location data
-            const hasLocationData = Object.values(locationDetailsData).some(value => 
-              value !== undefined && value !== null && value !== ''
-            );
-            
-            if (hasLocationData) {
-              console.log('Loading extracted locationDetails:', locationDetailsData);
-              updateLocationDetails(locationDetailsData);
-              console.log('Location details updated in form state');
-            } else {
-              console.log('No location data found in draft');
-            }
-            
-            // Load sale details - data might be at root level too
-            const saleDetailsData = {
-              expectedPrice: draftData.expectedPrice,
-              possessionDate: draftData.possessionDate,
-              priceNegotiable: draftData.priceNegotiable,
-              ownershipType: draftData.ownershipType,
-              approvedBy: draftData.approvedBy,
-              clearTitles: draftData.clearTitles,
-              description: draftData.description
-            };
-            
-            console.log('Extracted saleDetailsData:', saleDetailsData);
-            
-            // Check if we have any sale data
-            const hasSaleData = Object.values(saleDetailsData).some(value => 
-              value !== undefined && value !== null && value !== '' && value !== 0
-            );
-            
-            if (hasSaleData) {
-              console.log('Loading extracted saleDetails:', saleDetailsData);
-              updateSaleDetails(saleDetailsData);
-              console.log('Sale details updated in form state');
-            } else {
-              console.log('No sale data found in draft');
-            }
-            
-            // Load amenities
-            if (draftData.amenities) {
-              console.log('Loading amenities:', draftData.amenities);
-              updateAmenities(draftData.amenities);
-            }
-            
-            // Load gallery
-            if (draftData.gallery) {
-              console.log('Loading gallery:', draftData.gallery);
-              updateGallery(draftData.gallery);
-            }
-            
-            // Load schedule info
-            if (draftData.scheduleInfo) {
-              console.log('Loading scheduleInfo:', draftData.scheduleInfo);
-              updateScheduleInfo(draftData.scheduleInfo);
-            }
-            
-            console.log('Draft data loaded successfully');
-          }
-        } catch (error) {
-          console.error('Error loading draft data:', error);
-        }
-      }
-    };
+    if (targetStep && targetStep > 0 && targetStep <= 8) {
+      console.log('Navigating to target step:', targetStep);
+      goToStep(targetStep);
+    }
+  }, [targetStep, goToStep]);
+
+  // Load draft data if resuming from a draft
+  React.useEffect(() => {
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
     
-    loadDraftData();
-  }, [targetStep, updatePlotDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateScheduleInfo]);
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('Loading draft data for LandPlotMultiStepForm:', draftData);
+        
+        // Load form data from draft
+        if (draftData.plotDetails) {
+          console.log('Loading plotDetails:', draftData.plotDetails);
+          updatePlotDetails(draftData.plotDetails);
+        }
+        if (draftData.locationDetails) {
+          console.log('Loading locationDetails:', draftData.locationDetails);
+          updateLocationDetails(draftData.locationDetails);
+        }
+        if (draftData.saleDetails) {
+          console.log('Loading saleDetails:', draftData.saleDetails);
+          updateSaleDetails(draftData.saleDetails);
+        }
+        if (draftData.amenities) {
+          console.log('Loading amenities:', draftData.amenities);
+          updateAmenities(draftData.amenities);
+        }
+        if (draftData.gallery) {
+          console.log('Loading gallery:', draftData.gallery);
+          updateGallery(draftData.gallery);
+        }
+        if (draftData.additionalInfo) {
+          console.log('Loading additionalInfo:', draftData.additionalInfo);
+          updateAdditionalInfo(draftData.additionalInfo);
+        }
+        if (draftData.scheduleInfo) {
+          console.log('Loading scheduleInfo:', draftData.scheduleInfo);
+          updateScheduleInfo(draftData.scheduleInfo);
+        }
+        
+        // Set draft ID for saving
+        setDraftId(resumeDraftId);
+        
+        // Clear sessionStorage after loading
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+        
+        console.log('Successfully loaded draft data for LandPlotMultiStepForm');
+      } catch (error) {
+        console.error('Error loading draft data:', error);
+        // Clear sessionStorage on error
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
+    }
+  }, [updatePlotDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo]);
 
   const completedSteps = React.useMemo(() => {
     const completed: number[] = [];
@@ -455,6 +390,20 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     console.log('LandPlotMultiStepForm handleScheduleSubmit called');
     updateScheduleInfo(data);
     
+    // Mark draft as completed if it exists
+    if (draftId) {
+      try {
+        await PropertyDraftService.updateDraft(draftId, {
+          is_completed: true,
+          current_step: 8,
+          updated_at: new Date().toISOString()
+        });
+        console.log('Marked land plot draft as completed:', draftId);
+      } catch (error) {
+        console.error('Error marking draft as completed:', error);
+      }
+    }
+    
     const formData = {
       ownerInfo,
       propertyInfo: {
@@ -518,6 +467,24 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
 
   const handleSubmit = () => {
     console.log('LandPlotMultiStepForm handleSubmit called');
+    
+    // Mark draft as completed if it exists
+    if (draftId) {
+      try {
+        PropertyDraftService.updateDraft(draftId, {
+          is_completed: true,
+          current_step: 8,
+          updated_at: new Date().toISOString()
+        }).then(() => {
+          console.log('Marked land plot draft as completed:', draftId);
+        }).catch(error => {
+          console.error('Error marking draft as completed:', error);
+        });
+      } catch (error) {
+        console.error('Error marking draft as completed:', error);
+      }
+    }
+    
     const formData = getFormData();
     console.log('Form data for submission:', formData);
     onSubmit(formData as LandPlotFormData);

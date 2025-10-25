@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -54,33 +54,23 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
     }
   });
 
-  // Update form values when initialData changes
-  useEffect(() => {
-    if (initialData.expectedPrice !== undefined) {
-      setValue('expectedPrice', initialData.expectedPrice);
-    }
-    if (initialData.possessionDate) {
-      setValue('possessionDate', new Date(initialData.possessionDate));
-    }
-    if (initialData.priceNegotiable !== undefined) {
-      setValue('priceNegotiable', initialData.priceNegotiable);
-    }
-    if (initialData.ownershipType) {
-      setValue('ownershipType', initialData.ownershipType);
-    }
-    if (initialData.approvedBy) {
-      setValue('approvedBy', initialData.approvedBy.join(', '));
-    }
-    if (initialData.clearTitles !== undefined) {
-      setValue('clearTitles', initialData.clearTitles);
-    }
-    if (initialData.description) {
-      setValue('description', initialData.description);
-    }
-  }, [initialData, setValue]);
-
   const selectedDate = watch('possessionDate');
   const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
+
+  // Reset form when initialData changes (for draft loading)
+  React.useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log('LandPlotSaleDetailsStep: Resetting form with initialData:', initialData);
+      // Reset form with new initialData
+      setValue('expectedPrice', initialData.expectedPrice);
+      setValue('possessionDate', initialData.possessionDate ? new Date(initialData.possessionDate) : undefined);
+      setValue('priceNegotiable', initialData.priceNegotiable ?? false);
+      setValue('ownershipType', initialData.ownershipType);
+      setValue('approvedBy', initialData.approvedBy?.join(', ') || '');
+      setValue('clearTitles', initialData.clearTitles ?? false);
+      setValue('description', initialData.description || '');
+    }
+  }, [initialData]);
 
   const handleFormSubmit = (data: SaleDetailsForm) => {
     // Transform the data to match LandPlotSaleDetails type

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -39,6 +39,8 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
   onBack,
   listingType,
 }) => {
+  console.log('LandPlotPropertyDetailsStep rendered with initialData:', initialData);
+  
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<LandPlotDetailsForm>({
     resolver: zodResolver(landPlotDetailsSchema),
     defaultValues: {
@@ -56,42 +58,24 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
     }
   });
 
-  // Update form values when initialData changes
-  useEffect(() => {
-    if (initialData.plotArea !== undefined) {
-      setValue('plotArea', initialData.plotArea);
-    }
-    if (initialData.plotAreaUnit) {
-      setValue('plotAreaUnit', initialData.plotAreaUnit);
-    }
-    if (initialData.plotLength !== undefined) {
-      setValue('plotLength', initialData.plotLength);
-    }
-    if (initialData.plotWidth !== undefined) {
-      setValue('plotWidth', initialData.plotWidth);
-    }
-    if (initialData.boundaryWall) {
+  // Reset form when initialData changes (for draft loading)
+  React.useEffect(() => {
+    console.log('LandPlotPropertyDetailsStep useEffect triggered with initialData:', initialData);
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log('LandPlotPropertyDetailsStep: Resetting form with initialData:', initialData);
+      setValue('plotArea', initialData.plotArea || undefined);
+      setValue('plotAreaUnit', initialData.plotAreaUnit || 'sq-ft');
+      setValue('plotLength', initialData.plotLength || undefined);
+      setValue('plotWidth', initialData.plotWidth || undefined);
       setValue('boundaryWall', initialData.boundaryWall);
-    }
-    if (initialData.floorsAllowed !== undefined) {
-      setValue('floorsAllowed', initialData.floorsAllowed);
-    }
-    if (initialData.gatedProject) {
+      setValue('floorsAllowed', initialData.floorsAllowed || undefined);
       setValue('gatedProject', initialData.gatedProject);
+      setValue('gatedCommunity', initialData.gatedCommunity || false);
+      setValue('surveyNumber', initialData.surveyNumber || '');
+      setValue('subDivision', initialData.subDivision || '');
+      setValue('villageName', initialData.villageName || '');
     }
-    if (initialData.gatedCommunity !== undefined) {
-      setValue('gatedCommunity', initialData.gatedCommunity);
-    }
-    if (initialData.surveyNumber) {
-      setValue('surveyNumber', initialData.surveyNumber);
-    }
-    if (initialData.subDivision) {
-      setValue('subDivision', initialData.subDivision);
-    }
-    if (initialData.villageName) {
-      setValue('villageName', initialData.villageName);
-    }
-  }, [initialData, setValue]);
+  }, [initialData]);
 
   const plotAreaUnit = watch('plotAreaUnit');
 

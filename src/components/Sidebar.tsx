@@ -172,6 +172,14 @@ const Sidebar = ({
       onClose();
     }
   }, {
+    id: 'builder-dealer-plans',
+    label: 'Builder Dealer Plans',
+    hasSubmenu: false,
+    onClick: () => {
+      navigate('/builder-dealer-plans');
+      onClose();
+    }
+  }, {
     id: 'about',
     label: 'About',
     hasSubmenu: false,

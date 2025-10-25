@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -47,27 +47,18 @@ export const LandPlotAmenitiesStep: React.FC<LandPlotAmenitiesStepProps> = ({
     }
   });
 
-  // Update form values when initialData changes
-  useEffect(() => {
-    if ((initialData as any)?.waterSupply) {
-      setValue('waterSupply', (initialData as any).waterSupply);
+  // Reset form when initialData changes (for draft loading)
+  React.useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log('LandPlotAmenitiesStep: Resetting form with initialData:', initialData);
+      setValue('waterSupply', (initialData as any)?.waterSupply ?? undefined);
+      setValue('electricityConnection', (initialData as any)?.electricityConnection ?? undefined);
+      setValue('sewageConnection', (initialData as any)?.sewageConnection ?? undefined);
+      setValue('roadWidth', (initialData as any)?.roadWidth);
+      setValue('gatedSecurity', (initialData as any)?.gatedSecurity ?? false);
+      setValue('directionsToProperty', (initialData as any)?.directionsToProperty ?? '');
     }
-    if ((initialData as any)?.electricityConnection) {
-      setValue('electricityConnection', (initialData as any).electricityConnection);
-    }
-    if ((initialData as any)?.sewageConnection) {
-      setValue('sewageConnection', (initialData as any).sewageConnection);
-    }
-    if ((initialData as any)?.roadWidth !== undefined) {
-      setValue('roadWidth', (initialData as any).roadWidth);
-    }
-    if ((initialData as any)?.gatedSecurity !== undefined) {
-      setValue('gatedSecurity', (initialData as any).gatedSecurity);
-    }
-    if ((initialData as any)?.directionsToProperty) {
-      setValue('directionsToProperty', (initialData as any).directionsToProperty);
-    }
-  }, [initialData, setValue]);
+  }, [initialData]);
 
 
   return (
