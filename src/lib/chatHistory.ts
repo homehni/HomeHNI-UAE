@@ -412,40 +412,23 @@ export const addPropertyOwnerMessage = async (
     // Try exact match first
     let { data: userProfile, error: profileError } = await supabase
       .from('profiles')
-      .select('user_id, email')
-      .eq('email', leadData.interested_user_email)
+      .select('id, user_id')
+      .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
       .single();
     
     console.log('🔍 Exact match result:', { userProfile, profileError });
     
-    // If no exact match, try case-insensitive search
-    if (!userProfile && profileError?.code === 'PGRST116') {
-      console.log('🔍 No exact match, trying case-insensitive search...');
-      const { data: caseInsensitiveProfile, error: caseInsensitiveError } = await supabase
-        .from('profiles')
-        .select('user_id, email')
-        .ilike('email', leadData.interested_user_email)
-        .single();
-      
-      console.log('🔍 Case-insensitive search result:', { caseInsensitiveProfile, caseInsensitiveError });
-      
-      if (caseInsensitiveProfile) {
-        userProfile = caseInsensitiveProfile;
-        profileError = null;
-      }
-    }
-    
     console.log('🔍 Final profile search result:', { userProfile, profileError });
     
     if (userProfile) {
-      console.log('✅ Lead has an account:', userProfile.user_id);
+      console.log('✅ Lead has an account:', userProfile.id);
       
       // Find the lead's conversation using the property title
       const { data: leadConversations } = await supabase
         .from('chat_conversations')
         .select('id, user_id')
         .eq('conversation_type', 'property_owner')
-        .eq('user_id', userProfile.user_id)
+        .eq('user_id', userProfile.id)
         .like('title', `Property Owner Reply: ${propertyTitle}`);
       
       console.log('🔍 Lead conversations found:', leadConversations);
@@ -498,7 +481,7 @@ export const addPropertyOwnerMessage = async (
         const { data: newLeadConversation, error: createError } = await supabase
           .from('chat_conversations')
           .insert({
-            user_id: userProfile.user_id,
+            user_id: userProfile.id,
             conversation_type: 'property_owner',
             title: leadConversationTitle,
             last_message: message,
@@ -517,7 +500,7 @@ export const addPropertyOwnerMessage = async (
             .from('chat_messages')
             .insert({
               conversation_id: newLeadConversation.id,
-              user_id: userProfile.user_id,
+              user_id: userProfile.id,
               message,
               is_bot: true, // Property owner messages appear as bot messages (right side) for lead
               metadata: {

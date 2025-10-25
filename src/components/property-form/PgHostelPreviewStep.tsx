@@ -64,11 +64,11 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
   const { toast } = useToast();
   const { ownerInfo, propertyInfo, roomTypes, roomDetails, localityDetails, pgDetails, amenities, gallery, scheduleInfo } = formData;
   
-  // Get PG details (from form data or additional_info)
-  const pgDetailsData = pgDetails || formData?.additional_info;
+  // Get PG details (from form data)
+  const pgDetailsData = pgDetails || (formData as any)?.additional_info;
   
-  // Get room amenities (from form data or additional_info)
-  const roomAmenitiesData = roomDetails?.roomAmenities || formData?.additional_info?.room_amenities;
+  // Get room amenities (from form data)
+  const roomAmenitiesData = roomDetails?.roomAmenities || (formData as any)?.additional_info?.room_amenities;
 
   const handleSubmit = () => {
     onSubmit();
@@ -117,9 +117,9 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
       return roomDetails.roomTypeDetails[firstRoomType];
     }
     
-    // Fallback: try to get rent/deposit from formData or additional_info
-    const fallbackRent = formData?.expected_rent || formData?.additional_info?.expected_rent || 0;
-    const fallbackDeposit = formData?.expected_deposit || formData?.additional_info?.expected_deposit || 0;
+    // Fallback: try to get rent/deposit from formData
+    const fallbackRent = (formData as any)?.expected_rent || (formData as any)?.additional_info?.expected_rent || 0;
+    const fallbackDeposit = (formData as any)?.expected_deposit || (formData as any)?.additional_info?.expected_deposit || 0;
     
     return { 
       expectedRent: fallbackRent, 
@@ -135,8 +135,8 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
     roomDetails: roomDetails,
     formData: formData,
     firstRoomDetails: firstRoomDetails,
-    expected_rent: formData?.expected_rent,
-    additional_info: formData?.additional_info,
+    expected_rent: (formData as any)?.expected_rent,
+    additional_info: (formData as any)?.additional_info,
     amenities: JSON.stringify(amenities, null, 2),
     pgDetailsData: pgDetailsData,
     services: {

@@ -411,8 +411,7 @@ export const PropertyPreviewPage: React.FC = () => {
               return cleanImg;
             }) : [],
             categorized_images: (draftData as any).categorized_images,
-            videos: draftData.videos || [],
-            status: draftData.status || 'draft',
+            video: (draftData as any).video || undefined,
             created_at: draftData.created_at,
             // Map amenities from individual fields in property_drafts
             amenities: {
@@ -729,11 +728,10 @@ export const PropertyPreviewPage: React.FC = () => {
                   console.log('Using original image URL:', cleanImg);
                   return cleanImg;
                 }) : [],
-                videos: payload?.videos || [],
-                status: submissionData.status,
+                video: payload?.video || undefined,
                 created_at: submissionData.created_at,
                 // Map PG/Hostel-specific fields
-                place_available_for: payload?.place_available_for || payload?.gender_preference,
+                gender_preference: payload?.place_available_for || payload?.gender_preference,
                 food_included: payload?.food_included,
                 gate_closing_time: payload?.gate_closing_time,
                 available_services: payload?.available_services,

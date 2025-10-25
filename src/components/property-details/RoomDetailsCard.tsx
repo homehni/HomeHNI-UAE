@@ -100,7 +100,7 @@ export function RoomDetailsCard({ room_amenities }: RoomDetailsCardProps) {
           return (
             <div key={index} className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
               <div className="w-8 h-8 flex items-center justify-center mb-2">
-                <IconComponent className="w-6 h-6 text-red-600" />
+                <IconComponent />
               </div>
               <span className="text-sm font-medium text-gray-700 text-center">
                 {amenity.name}

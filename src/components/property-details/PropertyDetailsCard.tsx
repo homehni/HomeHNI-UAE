@@ -90,6 +90,8 @@ interface PropertyDetailsCardProps {
       gasPipeline?: boolean;
       park?: boolean;
       internetProvider?: boolean;
+      electricityConnection?: string;
+      sewageConnection?: string;
     };
     additional_documents?: {
       allotmentLetter?: boolean;

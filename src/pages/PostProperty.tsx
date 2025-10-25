@@ -264,8 +264,8 @@ export const PostProperty: React.FC = () => {
           console.log('Non-commercial property from dashboard, checking listingType:', ownerData.listingType);
           console.log('Property type:', ownerData.propertyType);
           
-          // Special handling for PG/Hostel - check property_type instead of listing_type
-          if (ownerData.propertyType === 'PG/Hostel') {
+          // Special handling for PG/Hostel - check listing_type
+          if (ownerData.listingType === 'PG/Hostel') {
             console.log('Setting currentStep to pg-hostel-form from dashboard');
             setCurrentStep('pg-hostel-form');
           } else if (ownerData.listingType === 'Flatmates') {
@@ -643,11 +643,11 @@ export const PostProperty: React.FC = () => {
         console.log('Non-commercial property, checking listingType:', ownerData.listingType);
         console.log('Property type:', ownerData.propertyType);
         
-        // Special handling for PG/Hostel - check property_type instead of listing_type
-        if (ownerData.propertyType === 'PG/Hostel') {
-          console.log('PG/Hostel property detected by property_type, setting currentStep to pg-hostel-form');
+        // Special handling for PG/Hostel - check listing_type
+        if ((ownerData.listingType as string) === 'PG/Hostel') {
+          console.log('PG/Hostel property detected by listing_type, setting currentStep to pg-hostel-form');
           setCurrentStep('pg-hostel-form');
-        } else if (ownerData.propertyType === 'Land/Plot') {
+        } else if ((ownerData.listingType as string) === 'Land/Plot' || ownerData.propertyType === 'Land/Plot') {
           // Land/Plot properties - check listing_type for specific routing
           switch (ownerData.listingType) {
             case 'Industrial land':
@@ -668,7 +668,7 @@ export const PostProperty: React.FC = () => {
           switch (ownerData.listingType) {
             case 'Resale':
             case 'Sale':
-              if (ownerData.propertyType === 'Land/Plot') {
+              if ((ownerData.listingType as string) === 'Land/Plot' || (ownerData.propertyType as string) === 'Land/Plot') {
                 setCurrentStep('land-plot-form');
               } else {
                 setCurrentStep('resale-form');

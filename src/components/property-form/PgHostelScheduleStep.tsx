@@ -97,8 +97,8 @@ export function PgHostelScheduleStep({
     // Clean the data by converting empty strings to undefined
     const cleanedData = {
       ...formData,
-      paintingService: formData.paintingService === '' ? undefined : formData.paintingService,
-      cleaningService: formData.cleaningService === '' ? undefined : formData.cleaningService,
+      paintingService: !formData.paintingService ? undefined : formData.paintingService,
+      cleaningService: !formData.cleaningService ? undefined : formData.cleaningService,
     };
     
     console.log('PgHostelScheduleStep - Cleaned form data:', cleanedData);

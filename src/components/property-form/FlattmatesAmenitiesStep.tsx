@@ -90,7 +90,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
   console.log('FlattmatesAmenitiesStep initialData.gym:', initialData.gym, typeof initialData.gym);
   console.log('FlattmatesAmenitiesStep initialData.gatedSecurity:', initialData.gatedSecurity, typeof initialData.gatedSecurity);
   console.log('FlattmatesAmenitiesStep initialData.nonVegAllowed:', initialData.nonVegAllowed, typeof initialData.nonVegAllowed);
-  console.log('FlattmatesAmenitiesStep initialData.petAllowed:', initialData.petAllowed, typeof initialData.petAllowed);
+  console.log('FlattmatesAmenitiesStep initialData.petAllowed:', (initialData as any).petAllowed, typeof (initialData as any).petAllowed);
   console.log('FlattmatesAmenitiesStep initialData.moreSimilarUnits:', initialData.moreSimilarUnits, typeof initialData.moreSimilarUnits);
   
   // Helper function to convert string values to booleans

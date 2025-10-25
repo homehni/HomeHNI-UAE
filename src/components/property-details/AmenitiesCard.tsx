@@ -96,7 +96,6 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
     waterStorageFacility: 'Water Storage Facility',
     currentPropertyCondition: 'Property Condition',
     // Flatmates-specific amenities
-    attachedBathroom: 'Attached Bathroom',
     bathrooms: 'Bathrooms',
     balconies: 'Balconies',
     smokingAllowed: 'Smoking Allowed',
@@ -132,7 +131,6 @@ export const AmenitiesCard: React.FC<AmenitiesCardProps> = ({ amenities }) => {
       'Sewage Connection': Droplets,
       'Common TV': Tv,
       'Mess': UtensilsCrossed,
-      'Lift': MoveUp,
       'Cooking Allowed': ChefHat,
       'Refrigerator': Refrigerator,
       // Room amenities

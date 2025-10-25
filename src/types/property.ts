@@ -65,6 +65,8 @@ export interface PropertyAmenities {
   moreSimilarUnits?: boolean;
   directionsTip?: string;
   furnishing?: string;
+  electricityConnection?: string;
+  sewageConnection?: string;
   
   // Amenities - using strings for consistency
   lift?: string;
@@ -210,6 +212,9 @@ export interface FlattmatesAmenities extends PropertyAmenities {
   sharedLivingRoom?: boolean;
   dedicatedBathroom?: boolean;
   sharedParking?: boolean;
+  attachedBathroom?: boolean;
+  smokingAllowed?: boolean;
+  drinkingAllowed?: boolean;
 }
 
 export interface FlattmatesInfo {
@@ -235,12 +240,14 @@ export interface FlattmatesFormData {
 
 export interface PropertyDraft {
   id?: string;
-  userId: string;
-  step: number;
+  user_id?: string;
+  userId?: string;
+  step?: number;
   ownerInfo?: Partial<OwnerInfo>;
   propertyInfo?: Partial<PropertyInfo>;
   createdAt?: string;
   updatedAt?: string;
+  [key: string]: any; // Allow any database fields
 }
 
 // Commercial specific interfaces

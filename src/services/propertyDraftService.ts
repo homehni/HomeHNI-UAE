@@ -833,21 +833,21 @@ export class PropertyDraftService {
 
       console.log('Loading draft for resume:', draft);
       console.log('🔍 Draft boolean fields:', {
-        gym: draft.gym,
-        gym_type: typeof draft.gym,
-        gated_security: draft.gated_security,
-        gated_security_type: typeof draft.gated_security,
-        non_veg_allowed: draft.non_veg_allowed,
-        non_veg_allowed_type: typeof draft.non_veg_allowed,
-        pet_allowed: draft.pet_allowed,
-        pet_allowed_type: typeof draft.pet_allowed,
-        more_similar_units: draft.more_similar_units,
-        more_similar_units_type: typeof draft.more_similar_units
+        gym: (draft as any).gym,
+        gym_type: typeof (draft as any).gym,
+        gated_security: (draft as any).gated_security,
+        gated_security_type: typeof (draft as any).gated_security,
+        non_veg_allowed: (draft as any).non_veg_allowed,
+        non_veg_allowed_type: typeof (draft as any).non_veg_allowed,
+        pet_allowed: (draft as any).pet_allowed,
+        pet_allowed_type: typeof (draft as any).pet_allowed,
+        more_similar_units: (draft as any).more_similar_units,
+        more_similar_units_type: typeof (draft as any).more_similar_units
       });
 
       // Extract owner info
       const ownerInfo = {
-        fullName: draft.owner_name || '',
+        fullName: (draft as any).owner_name || '',
         email: draft.owner_email || '',
         phoneNumber: draft.owner_phone || '',
         whatsappUpdates: draft.whatsapp_updates || false,
@@ -972,43 +972,43 @@ export class PropertyDraftService {
           },
           // Rental Details - using correct field names for FlattmatesRentalDetailsStep
           rentalDetails: {
-            expectedRent: draft.expected_rent || 0,
-            expectedDeposit: draft.expected_deposit || draft.security_deposit || 0,
-            rentNegotiable: draft.rent_negotiable || false,
-            monthlyMaintenance: draft.monthly_maintenance || '',
-            availableFrom: draft.available_from || '',
-            description: draft.description || ''
+            expectedRent: (draft as any).expected_rent || 0,
+            expectedDeposit: (draft as any).expected_deposit || (draft as any).security_deposit || 0,
+            rentNegotiable: (draft as any).rent_negotiable || false,
+            monthlyMaintenance: (draft as any).monthly_maintenance || '',
+            availableFrom: (draft as any).available_from || '',
+            description: (draft as any).description || ''
           },
           // Amenities - using correct field names for AmenitiesStep
           amenities: {
-            bathrooms: draft.bathrooms || 0,
-            balconies: draft.balconies || 0,
-            waterSupply: draft.water_supply || '',
-            petAllowed: typeof draft.pet_allowed === 'string' ? draft.pet_allowed === 'true' : (draft.pet_allowed || false),
-            gym: typeof draft.gym === 'string' ? draft.gym === 'true' : (draft.gym || false),
-            nonVegAllowed: typeof draft.non_veg_allowed === 'string' ? draft.non_veg_allowed === 'true' : (draft.non_veg_allowed || false),
-            gatedSecurity: typeof draft.gated_security === 'string' ? draft.gated_security === 'true' : (draft.gated_security || false),
-            whoWillShow: draft.who_will_show || '',
-            currentPropertyCondition: draft.current_property_condition || '',
-            secondaryNumber: draft.secondary_number || '',
-            moreSimilarUnits: typeof draft.more_similar_units === 'string' ? draft.more_similar_units === 'true' : (draft.more_similar_units || false),
-            directionsTip: draft.directions_tip || '',
-            lift: draft.lift || 'Not Available',
-            powerBackup: draft.power_backup || 'Not Available',
-            waterStorageFacility: draft.water_storage_facility || 'Not Available',
-            security: draft.security || 'Not Available',
-            wifi: draft.wifi || 'Not Available',
-            internetServices: draft.internet_services || 'Not Available',
-            airConditioner: draft.air_conditioner || 'Not Available',
-            clubHouse: draft.club_house || 'Not Available',
-            intercom: draft.intercom || 'Not Available',
-            swimmingPool: draft.swimming_pool || 'Not Available',
-            childrenPlayArea: draft.children_play_area || 'Not Available',
-            joggingTrack: draft.jogging_track || 'Not Available',
-            landscapedGarden: draft.landscaped_garden || 'Not Available',
-            rainwaterHarvesting: draft.rainwater_harvesting || 'Not Available',
-            vaastuCompliant: draft.vaastu_compliant || 'Not Available',
-            parking: draft.parking || 'Not Available'
+            bathrooms: (draft as any).bathrooms || 0,
+            balconies: (draft as any).balconies || 0,
+            waterSupply: (draft as any).water_supply || '',
+            petAllowed: typeof (draft as any).pet_allowed === 'string' ? (draft as any).pet_allowed === 'true' : ((draft as any).pet_allowed || false),
+            gym: typeof (draft as any).gym === 'string' ? (draft as any).gym === 'true' : ((draft as any).gym || false),
+            nonVegAllowed: typeof (draft as any).non_veg_allowed === 'string' ? (draft as any).non_veg_allowed === 'true' : ((draft as any).non_veg_allowed || false),
+            gatedSecurity: typeof (draft as any).gated_security === 'string' ? (draft as any).gated_security === 'true' : ((draft as any).gated_security || false),
+            whoWillShow: (draft as any).who_will_show || '',
+            currentPropertyCondition: (draft as any).current_property_condition || '',
+            secondaryNumber: (draft as any).secondary_number || '',
+            moreSimilarUnits: typeof (draft as any).more_similar_units === 'string' ? (draft as any).more_similar_units === 'true' : ((draft as any).more_similar_units || false),
+            directionsTip: (draft as any).directions_tip || '',
+            lift: (draft as any).lift || 'Not Available',
+            powerBackup: (draft as any).power_backup || 'Not Available',
+            waterStorageFacility: (draft as any).water_storage_facility || 'Not Available',
+            security: (draft as any).security || 'Not Available',
+            wifi: (draft as any).wifi || 'Not Available',
+            internetServices: (draft as any).internet_services || 'Not Available',
+            airConditioner: (draft as any).air_conditioner || 'Not Available',
+            clubHouse: (draft as any).club_house || 'Not Available',
+            intercom: (draft as any).intercom || 'Not Available',
+            swimmingPool: (draft as any).swimming_pool || 'Not Available',
+            childrenPlayArea: (draft as any).children_play_area || 'Not Available',
+            joggingTrack: (draft as any).jogging_track || 'Not Available',
+            landscapedGarden: (draft as any).landscaped_garden || 'Not Available',
+            rainwaterHarvesting: (draft as any).rainwater_harvesting || 'Not Available',
+            vaastuCompliant: (draft as any).vaastu_compliant || 'Not Available',
+            parking: (draft as any).parking || 'Not Available'
           },
           // Gallery
           gallery: {
@@ -1071,17 +1071,17 @@ export class PropertyDraftService {
             priceNegotiable: draft.price_negotiable || false,
             ownershipType: draft.ownership_type || 'freehold',
             approvedBy: draft.approved_by ? (Array.isArray(draft.approved_by) ? draft.approved_by : [draft.approved_by]) : [],
-            clearTitles: draft.clear_titles || false,
-            description: draft.description || ''
+            clearTitles: (draft as any).clear_titles || false,
+            description: (draft as any).description || ''
           },
           // Amenities - using correct field names for LandPlotAmenitiesStep
           amenities: {
-            waterSupply: draft.water_supply || '',
-            electricityConnection: draft.electricity_connection || '',
-            sewageConnection: draft.sewage_connection || '',
-            roadWidth: draft.road_width || 0,
-            gatedSecurity: draft.gated_security || false,
-            directionsToProperty: draft.directions_to_property || ''
+            waterSupply: (draft as any).water_supply || '',
+            electricityConnection: (draft as any).electricity_connection || '',
+            sewageConnection: (draft as any).sewage_connection || '',
+            roadWidth: (draft as any).road_width || 0,
+            gatedSecurity: (draft as any).gated_security || false,
+            directionsToProperty: (draft as any).directions_to_property || ''
           },
           // Gallery
           gallery: {
@@ -1110,13 +1110,13 @@ export class PropertyDraftService {
         formData = {
           // Property Details - using correct field names for PropertyDetailsStep
           propertyDetails: {
-            title: draft.apartment_name || draft.title || '',
-            propertyType: draft.property_type || 'Residential',
-            buildingType: draft.building_type || '',
-            bhkType: draft.bhk_type || '',
-            propertyAge: draft.property_age || '',
-            facing: draft.facing || '',
-            floorType: draft.floor_type || '',
+            title: (draft as any).apartment_name || (draft as any).title || '',
+            propertyType: (draft as any).property_type || 'Residential',
+            buildingType: (draft as any).building_type || '',
+            bhkType: (draft as any).bhk_type || '',
+            propertyAge: (draft as any).property_age || '',
+            facing: (draft as any).facing || '',
+            floorType: (draft as any).floor_type || '',
             totalFloors: draft.total_floors || 1,
             floorNo: (() => {
               const floorNo = draft.floor_no || 0;
@@ -1174,32 +1174,32 @@ export class PropertyDraftService {
           // Rental Details - for commercial rent properties
           rentalDetails: {
             listingType: 'Rent',
-            expectedPrice: draft.expected_rent || draft.expected_price || 0,
-            rentNegotiable: draft.rent_negotiable || false,
-            maintenanceExtra: draft.maintenance_extra || false,
-            maintenanceCharges: draft.maintenance_charges || 0,
-            securityDeposit: draft.expected_deposit || draft.security_deposit || 0,
-            depositNegotiable: draft.deposit_negotiable || false,
-            leaseDuration: draft.lease_duration || '',
-            lockinPeriod: draft.lockin_period || '',
-            availableFrom: draft.available_from || '',
-            businessType: draft.business_type ? (Array.isArray(draft.business_type) ? draft.business_type : [draft.business_type]) : [],
-            leaseTerm: draft.lease_term || '',
-            restrictedActivities: draft.restricted_activities ? (Array.isArray(draft.restricted_activities) ? draft.restricted_activities : [draft.restricted_activities]) : []
+            expectedPrice: (draft as any).expected_rent || (draft as any).expected_price || 0,
+            rentNegotiable: (draft as any).rent_negotiable || false,
+            maintenanceExtra: (draft as any).maintenance_extra || false,
+            maintenanceCharges: (draft as any).maintenance_charges || 0,
+            securityDeposit: (draft as any).expected_deposit || (draft as any).security_deposit || 0,
+            depositNegotiable: (draft as any).deposit_negotiable || false,
+            leaseDuration: (draft as any).lease_duration || '',
+            lockinPeriod: (draft as any).lockin_period || '',
+            availableFrom: (draft as any).available_from || '',
+            businessType: (draft as any).business_type ? (Array.isArray((draft as any).business_type) ? (draft as any).business_type : [(draft as any).business_type]) : [],
+            leaseTerm: (draft as any).lease_term || '',
+            restrictedActivities: (draft as any).restricted_activities ? (Array.isArray((draft as any).restricted_activities) ? (draft as any).restricted_activities : [(draft as any).restricted_activities]) : []
           },
           // Sale Details - using correct field names for SaleDetailsStep
           saleDetails: {
             listingType: 'Sale',
-            expectedPrice: draft.expected_price || draft.expected_rent || 0,
-            priceNegotiable: draft.price_negotiable || true,
-            possessionDate: draft.possession_date || '',
-            registrationStatus: draft.registration_status || 'ready_to_move',
-            homeLoanAvailable: draft.home_loan_available || true,
-            maintenanceCharges: draft.maintenance_charges || 0,
-            pricePerSqFt: draft.price_per_sqft || 0,
-            bookingAmount: draft.booking_amount || 0,
-            propertyAge: draft.property_age || '',
-            description: draft.description || ''
+            expectedPrice: (draft as any).expected_price || (draft as any).expected_rent || 0,
+            priceNegotiable: (draft as any).price_negotiable || true,
+            possessionDate: (draft as any).possession_date || '',
+            registrationStatus: (draft as any).registration_status || 'ready_to_move',
+            homeLoanAvailable: (draft as any).home_loan_available || true,
+            maintenanceCharges: (draft as any).maintenance_charges || 0,
+            pricePerSqFt: (draft as any).price_per_sqft || 0,
+            bookingAmount: (draft as any).booking_amount || 0,
+            propertyAge: (draft as any).property_age || '',
+            description: (draft as any).description || ''
           },
           // Amenities
           amenities: {
@@ -1216,12 +1216,10 @@ export class PropertyDraftService {
             bathrooms: draft.bathrooms || 0,
             balconies: draft.balconies || 0,
             // Land/Plot specific amenities
-            waterSupply: draft.water_supply || '',
-            electricityConnection: draft.electricity_connection || '',
-            sewageConnection: draft.sewage_connection || '',
-            roadWidth: draft.road_width || 0,
-            gatedSecurity: draft.gated_security || '',
-            directionsToProperty: draft.directions_tip || ''
+            electricityConnection: (draft as any).electricity_connection || '',
+            sewageConnection: (draft as any).sewage_connection || '',
+            roadWidth: (draft as any).road_width || 0,
+            directionsToProperty: (draft as any).directions_tip || ''
           },
           // Gallery
           gallery: {
