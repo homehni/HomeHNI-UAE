@@ -14,7 +14,7 @@ interface Message {
   id: string;
   lead_id: string;
   sender_id: string;
-  sender_type: 'owner' | 'user';
+  sender_type: 'owner' | 'lead';
   message: string;
   is_read: boolean;
   created_at: string;
@@ -30,6 +30,7 @@ interface DealRoom {
   property_city?: string;
   property_images?: string[];
   created_at: string;
+  message?: string; // Initial message from contact form
 }
 
 interface DealRoomChatProps {
@@ -94,7 +95,22 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      setMessages((data || []) as Message[]);
+
+      // If no messages exist but there's an initial message from leads table, show it
+      if ((!data || data.length === 0) && dealRoom.message) {
+        const initialMessage: Message = {
+          id: `initial-${dealRoom.id}`,
+          lead_id: dealRoom.id,
+          sender_id: '', // Empty since we don't have sender_id in leads table
+          sender_type: 'lead',
+          message: dealRoom.message,
+          is_read: false,
+          created_at: dealRoom.created_at,
+        };
+        setMessages([initialMessage]);
+      } else {
+        setMessages((data || []) as Message[]);
+      }
 
       // Mark messages as read
       await markMessagesAsRead();

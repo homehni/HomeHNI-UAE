@@ -22,6 +22,7 @@ interface DealRoom {
   unread_count?: number;
   last_message?: string;
   last_message_at?: string;
+  message?: string; // Initial message from contact form
 }
 
 interface DealRoomListProps {
@@ -62,6 +63,7 @@ export const DealRoomList: React.FC<DealRoomListProps> = ({
           property_id,
           interested_user_name,
           interested_user_email,
+          message,
           created_at,
           properties (
             id,
@@ -112,8 +114,9 @@ export const DealRoomList: React.FC<DealRoomListProps> = ({
             property_images: lead.properties?.images,
             created_at: lead.created_at,
             unread_count: count || 0,
-            last_message: lastMessage?.message,
+            last_message: lastMessage?.message || lead.message,
             last_message_at: lastMessage?.created_at,
+            message: lead.message,
           };
         })
       );

@@ -14,6 +14,7 @@ interface DealRoom {
   property_city?: string;
   property_images?: string[];
   created_at: string;
+  message?: string; // Initial message from contact form
 }
 
 export const DealRoomLayout: React.FC = () => {
