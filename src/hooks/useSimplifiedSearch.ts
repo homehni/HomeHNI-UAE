@@ -100,7 +100,7 @@ export const useSimplifiedSearch = () => {
   const getBudgetRange = (tab: string): [number, number] => {
     switch (tab) {
       case 'rent':
-        return [0, 500000]; // 0 to 5 Lakh for rent (max ₹5L)
+        return [0, 10000000]; // 0 to 1 Crore for rent (covers all rental ranges)
       case 'buy':
         return [0, 50000000]; // 0 to 5 Crore for buy
       case 'commercial':
