@@ -118,6 +118,7 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   const { toast } = useToast();
   const [draftId, setDraftId] = useState<string | null>(null);
   const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [isCreatingDraft, setIsCreatingDraft] = useState(false);
   
   // Track one-time auto-navigation to congratulations page
   const hasNavigatedToCongratulations = React.useRef(false);
@@ -143,6 +144,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         const draftData = JSON.parse(resumeDraftData);
         console.log('PGHostelMultiStepForm loading draft data:', draftData);
         console.log('PGHostelMultiStepForm draft data structure:', {
+          ownerInfo: draftData.ownerInfo,
+          propertyInfo: draftData.propertyInfo,
           roomTypes: draftData.roomTypes,
           roomDetails: draftData.roomDetails,
           localityDetails: draftData.localityDetails,
@@ -151,6 +154,29 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
           gallery: draftData.gallery,
           scheduleInfo: draftData.scheduleInfo
         });
+        
+        // Load owner info from draft
+        if (draftData.ownerInfo || (draftData.owner_name && draftData.owner_email)) {
+          const ownerData = draftData.ownerInfo || {
+            fullName: draftData.owner_name,
+            phoneNumber: draftData.owner_phone,
+            email: draftData.owner_email,
+            city: draftData.city || '',
+            whatsappUpdates: draftData.whatsapp_updates || false
+          };
+          console.log('PGHostelMultiStepForm setting ownerInfo:', ownerData);
+          setOwnerInfo(ownerData);
+        }
+        
+        // Load property info from draft
+        if (draftData.propertyInfo || draftData.apartment_name) {
+          const propertyData = draftData.propertyInfo || {
+            title: draftData.apartment_name || '',
+            propertyType: draftData.property_type || 'PG/Hostel'
+          };
+          console.log('PGHostelMultiStepForm setting propertyInfo:', propertyData);
+          setPropertyInfo(propertyData);
+        }
         
         // Load form data from draft
         if (draftData.roomTypes) {
@@ -161,9 +187,17 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
           console.log('PGHostelMultiStepForm setting roomDetails:', draftData.roomDetails);
           setRoomDetails(draftData.roomDetails);
         }
-        if (draftData.localityDetails) {
-          console.log('PGHostelMultiStepForm setting localityDetails:', draftData.localityDetails);
-          setLocalityDetails(draftData.localityDetails);
+        if (draftData.localityDetails || draftData.locality) {
+          const localityData = draftData.localityDetails || {
+            state: draftData.state || '',
+            city: draftData.city || '',
+            locality: draftData.locality || '',
+            pincode: draftData.pincode || '',
+            societyName: draftData.society_name || '',
+            landmark: draftData.landmark || ''
+          };
+          console.log('PGHostelMultiStepForm setting localityDetails:', localityData);
+          setLocalityDetails(localityData);
         }
         if (draftData.pgDetails) {
           console.log('PGHostelMultiStepForm setting pgDetails:', draftData.pgDetails);
@@ -177,9 +211,10 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
           console.log('PGHostelMultiStepForm setting gallery:', draftData.gallery);
           setGallery(draftData.gallery);
         }
-        if (draftData.scheduleInfo) {
-          console.log('PGHostelMultiStepForm setting scheduleInfo:', draftData.scheduleInfo);
-          setScheduleInfo(draftData.scheduleInfo);
+        if (draftData.scheduleInfo || draftData.schedule_info) {
+          const scheduleData = draftData.scheduleInfo || draftData.schedule_info;
+          console.log('PGHostelMultiStepForm setting scheduleInfo:', scheduleData);
+          setScheduleInfo(scheduleData);
         }
         
         // Set draft ID for saving
@@ -330,19 +365,50 @@ const [propertyInfo, setPropertyInfo] = useState({
     try {
       setIsSavingDraft(true);
       
-      if (!draftId) {
-        // Create new draft
-        const newDraft = await draftService.createDraft({
-          user_id: ownerInfo.email || 'anonymous',
-          property_type: 'PG/Hostel',
-          listing_type: 'Rent',
-          additional_info: {}
-        });
-        setDraftId(newDraft.id);
+      if (!draftId && !isCreatingDraft) {
+        // Prevent multiple draft creation
+        setIsCreatingDraft(true);
+        try {
+          // Create new draft
+          const newDraft = await draftService.createDraft({
+            user_id: ownerInfo.email || 'anonymous',
+            property_type: 'PG/Hostel',
+            listing_type: 'Rent',
+            owner_name: ownerInfo.fullName,
+            owner_email: ownerInfo.email,
+            owner_phone: ownerInfo.phoneNumber,
+            whatsapp_updates: ownerInfo.whatsappUpdates,
+            additional_info: {}
+          });
+          setDraftId(newDraft.id);
+          console.log('Created new PG/Hostel draft:', newDraft.id);
+        } finally {
+          setIsCreatingDraft(false);
+        }
+      }
+      
+      // Wait for draft ID to be set
+      const currentDraftId = draftId || await new Promise<string>((resolve) => {
+        const checkDraftId = setInterval(() => {
+          if (draftId) {
+            clearInterval(checkDraftId);
+            resolve(draftId);
+          }
+        }, 100);
+        
+        // Timeout after 5 seconds
+        setTimeout(() => {
+          clearInterval(checkDraftId);
+          resolve('');
+        }, 5000);
+      });
+      
+      if (!currentDraftId) {
+        throw new Error('Failed to create draft');
       }
       
       // Save form data
-      await draftService.saveFormData(draftId!, stepData, stepNumber, 'pg_hostel');
+      await draftService.saveFormData(currentDraftId, stepData, stepNumber, 'pg_hostel');
       
       // Update completed steps
       setCompletedSteps(prev => [...prev.filter(step => step !== stepNumber), stepNumber]);
