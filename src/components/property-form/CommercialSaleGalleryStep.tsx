@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { CommercialCategorizedImageUpload } from './CommercialCategorizedImageUpload';
@@ -55,6 +55,26 @@ export const CommercialSaleGalleryStep = ({
       video: initialData?.video
     }
   });
+
+  // Ensure form rehydrates when coming back to this step or when initialData changes
+  useEffect(() => {
+    const defaults = {
+      images: initialData?.categorizedImages ? {
+        frontView: processImageItems(initialData.categorizedImages.frontView || []),
+        interiorView: processImageItems(initialData.categorizedImages.interiorView || []),
+        others: processImageItems(
+          initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : [])
+        )
+      } : {
+        frontView: [],
+        interiorView: [],
+        others: Array.isArray(initialData?.images) ? processImageItems(initialData.images) : []
+      },
+      video: initialData?.video
+    } as any;
+    form.reset(defaults);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData]);
 
   const handleFormSubmit = (data: any) => {
     // Convert categorized images to flat array for backward compatibility

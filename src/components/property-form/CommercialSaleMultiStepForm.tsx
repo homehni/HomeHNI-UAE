@@ -296,6 +296,17 @@ export const CommercialSaleMultiStepForm = ({
       case 6:
         return (
           <CommercialSaleGalleryStep
+            key={`gallery-${draftId || 'new'}-${
+              gallery?.categorizedImages
+                ? [
+                    ...(gallery.categorizedImages.frontView || []),
+                    ...(gallery.categorizedImages.interiorView || []),
+                    ...(gallery.categorizedImages.others || [])
+                  ].length
+                : Array.isArray(gallery?.images)
+                ? (gallery?.images as any[]).length
+                : 0
+            }`}
             initialData={gallery}
             onNext={(data) => {
               console.log('Step 6 onNext called with data:', data);
