@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal, EyeOff, Star } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, Trash2, Search, MoreHorizontal, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { SecureDataMask } from './SecureDataMask';
@@ -72,7 +72,6 @@ interface PropertyTableProps {
   selectedProperties: string[];
   onSelectionChange: (selectedIds: string[]) => void;
   onBulkDelete: (selectedIds: string[]) => void;
-  onBulkAddToFeatured?: (selectedIds: string[]) => void;
   bulkActionLoading: boolean;
 }
 
@@ -102,7 +101,6 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
   selectedProperties,
   onSelectionChange,
   onBulkDelete,
-  onBulkAddToFeatured,
   bulkActionLoading,
 }) => {
   // Multi-select functionality
@@ -198,18 +196,6 @@ export const PropertyTable: React.FC<PropertyTableProps> = ({
               </span>
             </div>
             <div className="flex items-center space-x-2">
-              {onBulkAddToFeatured && (
-                <Button
-                  size="sm"
-                  variant="default"
-                  onClick={() => onBulkAddToFeatured(selectedProperties)}
-                  disabled={bulkActionLoading}
-                  className="h-8"
-                >
-                  <Star className="h-4 w-4 mr-2" />
-                  Add to Featured
-                </Button>
-              )}
               <Button
                 size="sm"
                 variant="destructive"
