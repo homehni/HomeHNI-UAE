@@ -843,6 +843,55 @@ const AdminProperties = () => {
     setBulkDeleteModalOpen(true);
   };
 
+  const handleBulkAddToFeatured = async (selectedIds: string[]) => {
+    if (selectedIds.length === 0) return;
+
+    setBulkActionLoading(true);
+    try {
+      // First, update the properties to set is_featured = true
+      const { error: updateError } = await supabase
+        .from('properties')
+        .update({ is_featured: true })
+        .in('id', selectedIds);
+
+      if (updateError) throw updateError;
+
+      // Then, insert into featured_properties table (with conflict handling)
+      const featuredRecords = selectedIds.map(propertyId => ({
+        property_id: propertyId,
+        is_active: true,
+        sort_order: 0
+      }));
+
+      const { error: insertError } = await supabase
+        .from('featured_properties')
+        .upsert(featuredRecords, { 
+          onConflict: 'property_id',
+          ignoreDuplicates: false 
+        });
+
+      if (insertError) throw insertError;
+
+      toast({
+        title: 'Success',
+        description: `${selectedIds.length} propert${selectedIds.length === 1 ? 'y' : 'ies'} added to featured`,
+      });
+
+      // Clear selection and refresh
+      setSelectedProperties([]);
+      await fetchProperties();
+    } catch (error) {
+      console.error('Error adding properties to featured:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to add properties to featured',
+        variant: 'destructive'
+      });
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
   const confirmBulkDelete = async () => {
     if (propertiesToBulkDelete.length === 0) return;
 
@@ -1137,6 +1186,7 @@ const AdminProperties = () => {
         selectedProperties={selectedProperties}
         onSelectionChange={setSelectedProperties}
         onBulkDelete={handleBulkDelete}
+        onBulkAddToFeatured={handleBulkAddToFeatured}
         bulkActionLoading={bulkActionLoading}
       />
 
