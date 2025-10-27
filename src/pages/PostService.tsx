@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAuth } from '@/contexts/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,6 +39,7 @@ interface FormData {
 
 const PostService = () => {
   const { user } = useAuth();
+  const { profile } = useProfile();
   const [statesData, setStatesData] = useState<any>(null);
   const [cities, setCities] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -107,6 +109,21 @@ const PostService = () => {
     }
     setFormData(prev => ({ ...prev, currency }));
   }, [formData.country]);
+
+  // Auto-fill form data when user is logged in
+  useEffect(() => {
+    if (user && profile) {
+      setFormData(prev => ({
+        ...prev,
+        name: profile.full_name || prev.name,
+        email: user.email || prev.email,
+        phone: profile.phone || prev.phone,
+        country: profile.location?.country || prev.country,
+        state: profile.location?.state || prev.state,
+        city: profile.location?.city || prev.city
+      }));
+    }
+  }, [user, profile]);
 
   const intentOptions = [
     { value: "Buy", label: "Buy" },
