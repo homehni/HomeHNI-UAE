@@ -101,7 +101,7 @@ interface LocalScheduleInfo {
 }
 
 interface PGHostelMultiStepFormProps {
-  onSubmit: (data: PGHostelFormData) => void;
+  onSubmit: (data: PGHostelFormData, submittedDraftId?: string | null) => void;
   isSubmitting: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number;
@@ -493,8 +493,8 @@ const [propertyInfo, setPropertyInfo] = useState({
     });
     
     try {
-      console.log('PGHostelMultiStepForm - About to call onSubmit');
-      await onSubmit(formData);
+      console.log('PGHostelMultiStepForm - About to call onSubmit with draftId:', draftId);
+      await onSubmit(formData, draftId);
       console.log('PG/Hostel submission completed successfully');
       setCurrentStep(8);
     } catch (error) {

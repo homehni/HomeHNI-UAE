@@ -1626,7 +1626,7 @@ export const PostProperty: React.FC = () => {
       case 'pg-hostel-form':
         return (
           <PGHostelMultiStepForm 
-            onSubmit={handleSubmit as (data: PGHostelFormData) => void}
+            onSubmit={handleSubmit as (data: PGHostelFormData, draftId?: string | null) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
