@@ -360,9 +360,10 @@ export const Dashboard: React.FC = () => {
       
       console.log('Loaded draft data:', draftData);
       
-      // Store draft ID and form data in sessionStorage for forms to access
+      // Store draft ID and full resume data in sessionStorage for forms to access
       sessionStorage.setItem('resumeDraftId', draftId);
-      sessionStorage.setItem('resumeDraftData', JSON.stringify(draftData.formData));
+      // Store the complete object (ownerInfo, formData, currentStep)
+      sessionStorage.setItem('resumeDraftData', JSON.stringify(draftData));
       
       // Navigate to post property page
       navigate('/post-property');

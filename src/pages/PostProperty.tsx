@@ -227,26 +227,36 @@ export const PostProperty: React.FC = () => {
     
     if (resumeDraftId && resumeDraftData) {
       try {
-        const draftData = JSON.parse(resumeDraftData);
-        console.log('Resuming draft from dashboard:', resumeDraftId, draftData);
+        const raw = JSON.parse(resumeDraftData);
+        // Support both legacy shape (formData only) and new shape ({ ownerInfo, formData, currentStep })
+        const ownerInfoFromDraft = raw.ownerInfo || {};
+        const formDataForChild = raw.formData || raw; // legacy fallback
+        const currentStepFromDraft: number | null = raw.currentStep || raw.current_step || null;
         
-        // Set owner info from draft
+        console.log('Resuming draft from dashboard:', resumeDraftId, { ownerInfoFromDraft, currentStepFromDraft });
+        
+        // Ensure child forms receive only the formData they expect
+        sessionStorage.setItem('resumeDraftData', JSON.stringify(formDataForChild));
+        
+        // Set owner info from draft (fallbacks preserved)
         const ownerData: OwnerInfo = {
-          fullName: draftData.ownerInfo?.fullName || '',
-          email: draftData.ownerInfo?.email || '',
-          phoneNumber: draftData.ownerInfo?.phoneNumber || '',
-          whatsappUpdates: draftData.ownerInfo?.whatsappUpdates || false,
-          propertyType: draftData.ownerInfo?.propertyType,
-          listingType: draftData.ownerInfo?.listingType
-        };
+          fullName: ownerInfoFromDraft.fullName || formDataForChild?.ownerInfo?.fullName || '',
+          email: ownerInfoFromDraft.email || formDataForChild?.ownerInfo?.email || '',
+          phoneNumber: ownerInfoFromDraft.phoneNumber || formDataForChild?.ownerInfo?.phoneNumber || '',
+          whatsappUpdates: ownerInfoFromDraft.whatsappUpdates ?? formDataForChild?.ownerInfo?.whatsappUpdates ?? false,
+          propertyType: ownerInfoFromDraft.propertyType || formDataForChild?.ownerInfo?.propertyType,
+          listingType: ownerInfoFromDraft.listingType || formDataForChild?.ownerInfo?.listingType
+        } as OwnerInfo;
         
         console.log('Owner data from dashboard resume:', ownerData);
         
         setOwnerInfo(ownerData);
         setInitialOwnerData(ownerData);
         
-        // Set targetStep to the actual step where user left off
-        setTargetStep(draftData.currentStep);
+        // Navigate to the actual saved step
+        if (currentStepFromDraft && currentStepFromDraft > 0) {
+          setTargetStep(currentStepFromDraft);
+        }
         
         // Route to appropriate form based on draft data
         console.log('Routing based on ownerData from dashboard:', { propertyType: ownerData.propertyType, listingType: ownerData.listingType });
@@ -282,11 +292,6 @@ export const PostProperty: React.FC = () => {
             setCurrentStep('rental-form');
           }
         }
-        
-        // Clear sessionStorage after loading
-        // Note: Don't clear here - let the forms handle it after they load the data
-        // sessionStorage.removeItem('resumeDraftId');
-        // sessionStorage.removeItem('resumeDraftData');
         
         console.log('Successfully resumed draft from dashboard');
       } catch (error) {
