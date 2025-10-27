@@ -71,6 +71,58 @@ export const CommercialSaleMultiStepForm = ({
     }
   }, [targetStep, goToStep]);
 
+  // Load draft data when resuming from Dashboard (prevents empty fields and duplicate drafts)
+  useEffect(() => {
+    const resumeDraftId = sessionStorage.getItem('resumeDraftId');
+    const resumeDraftData = sessionStorage.getItem('resumeDraftData');
+
+    if (resumeDraftId && resumeDraftData) {
+      try {
+        const draftData = JSON.parse(resumeDraftData);
+        console.log('Commercial Sale: loading resume draft data', { resumeDraftId, draftData });
+
+        if (draftData.propertyDetails) updatePropertyDetails(draftData.propertyDetails);
+        if (draftData.locationDetails) updateLocationDetails(draftData.locationDetails);
+        if (draftData.saleDetails) updateSaleDetails(draftData.saleDetails);
+        if (draftData.amenities) updateAmenities(draftData.amenities);
+        if (draftData.gallery) updateGallery(draftData.gallery);
+        if (draftData.additionalInfo) updateAdditionalInfo(draftData.additionalInfo);
+        if (draftData.scheduleInfo) updateScheduleInfo(draftData.scheduleInfo);
+
+        // Set draft ID so subsequent saves update the same draft (no duplicates)
+        setDraftId(resumeDraftId);
+
+        // Clear after successful load
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      } catch (err) {
+        console.error('Commercial Sale: failed to load resume draft data', err);
+        sessionStorage.removeItem('resumeDraftId');
+        sessionStorage.removeItem('resumeDraftData');
+      }
+    }
+  }, [updatePropertyDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo]);
+
+  // Auto-save current step index to the draft to improve resume accuracy
+  useEffect(() => {
+    if (draftId && currentStep >= 2) {
+      PropertyDraftService.updateDraft(draftId, {
+        current_step: currentStep,
+        updated_at: new Date().toISOString()
+      }).catch((e) => console.error('Commercial Sale: auto-save step failed', e));
+    }
+  }, [currentStep, draftId]);
+
+  // Save step once when draftId is first set
+  useEffect(() => {
+    if (draftId && currentStep >= 2) {
+      PropertyDraftService.updateDraft(draftId, {
+        current_step: currentStep,
+        updated_at: new Date().toISOString()
+      }).catch((e) => console.error('Commercial Sale: initial step save failed', e));
+    }
+  }, [draftId]);
+
   const completedSteps = useMemo(() => {
     const completed = [];
     for (let i = 2; i <= 7; i++) {
