@@ -79,10 +79,35 @@ export const CommercialSaleGalleryStep = ({
   const handleFormSubmit = (data: any) => {
     // Convert categorized images to flat array for backward compatibility
     const allImages = [...data.images.frontView, ...data.images.interiorView, ...data.images.others];
+
+    // Fallback to existing images from initialData when user didn't change anything
+    const initialCategorized = (initialData?.categorizedImages as any) || {};
+    const initialFlat = Array.isArray(initialData?.images) ? (initialData!.images as any[]) : [];
+    const initialAll = [
+      ...(initialCategorized.frontView || []),
+      ...(initialCategorized.interiorView || []),
+      ...(initialCategorized.others || []),
+      ...initialFlat
+    ];
+
+    const useInitial = allImages.length === 0 && initialAll.length > 0;
+
+    const finalCategorized = useInitial
+      ? {
+          frontView: processImageItems(initialCategorized.frontView || []),
+          interiorView: processImageItems(initialCategorized.interiorView || []),
+          others: processImageItems(initialCategorized.others || initialFlat)
+        }
+      : data.images;
+
+    const finalAllImages = useInitial
+      ? [...finalCategorized.frontView, ...finalCategorized.interiorView, ...finalCategorized.others]
+      : allImages;
+
     const propertyGalleryData: PropertyGallery = {
-      images: allImages,
+      images: finalAllImages,
       categorizedImages: {
-        ...data.images,
+        ...finalCategorized,
         // Set empty arrays for residential categories for compatibility
         bathroom: [],
         bedroom: [],
@@ -90,8 +115,9 @@ export const CommercialSaleGalleryStep = ({
         kitchen: [],
         balcony: []
       },
-      video: data.video
-    };
+      video: useInitial ? initialData?.video : data.video
+    } as any;
+
     onNext(propertyGalleryData);
   };
 
@@ -112,7 +138,7 @@ export const CommercialSaleGalleryStep = ({
                   <div className="space-y-6">
                     {/* Commercial Categorized Image Upload Component */}
                     <CommercialCategorizedImageUpload 
-                      images={field.value as any} 
+                      images={(field.value as any) || { frontView: [], interiorView: [], others: [] }} 
                       onImagesChange={field.onChange} 
                       maxImagesPerCategory={5} 
                     />
