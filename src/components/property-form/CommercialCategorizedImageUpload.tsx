@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 interface CommercialCategorizedImages {
-  frontView: File[];
-  interiorView: File[];
-  others: File[];
+  frontView: (File | string)[];
+  interiorView: (File | string)[];
+  others: (File | string)[];
 }
 
 interface CommercialCategorizedImageUploadProps {
@@ -64,7 +64,12 @@ export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedIma
     fileInputRefs.current[category]?.click();
   };
 
-  const getImagePreview = (file: File): string => {
+  const getImagePreview = (file: File | string): string => {
+    // If it's already a URL string (from resumed draft), return it
+    if (typeof file === 'string') {
+      return file;
+    }
+    // If it's a File object (new upload), create an object URL
     return URL.createObjectURL(file);
   };
 

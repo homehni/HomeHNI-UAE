@@ -33,23 +33,24 @@ export const CommercialSaleGalleryStep = ({
   currentStep,
   totalSteps
 }: CommercialSaleGalleryStepProps) => {
-  // Helper function to filter out non-File objects (URL strings from resumed drafts)
-  const filterValidFiles = (items: any[]): File[] => {
+  // Helper function to handle both File objects and URL strings from resumed drafts
+  const processImageItems = (items: any[]): any[] => {
     if (!Array.isArray(items)) return [];
-    return items.filter(item => item instanceof File);
+    // Keep both File objects (new uploads) and strings (URLs from resumed drafts)
+    return items.filter(item => item instanceof File || typeof item === 'string');
   };
 
   const form = useForm({
     resolver: zodResolver(commercialSaleGallerySchema),
     defaultValues: {
       images: initialData?.categorizedImages ? {
-        frontView: filterValidFiles(initialData.categorizedImages.frontView || []),
-        interiorView: filterValidFiles(initialData.categorizedImages.interiorView || []),
-        others: filterValidFiles(initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : []))
+        frontView: processImageItems(initialData.categorizedImages.frontView || []),
+        interiorView: processImageItems(initialData.categorizedImages.interiorView || []),
+        others: processImageItems(initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : []))
       } : {
         frontView: [],
         interiorView: [],
-        others: Array.isArray(initialData?.images) ? filterValidFiles(initialData.images) : []
+        others: Array.isArray(initialData?.images) ? processImageItems(initialData.images) : []
       },
       video: initialData?.video
     }

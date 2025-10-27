@@ -103,15 +103,15 @@ export const CommercialSaleMultiStepForm = ({
     }
   }, [updatePropertyDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo]);
 
-  // Auto-save current step index to the draft to improve resume accuracy
+  // Auto-save current step index only when navigating between steps manually (not during save operations)
   useEffect(() => {
-    if (draftId && currentStep >= 2) {
+    if (draftId && currentStep >= 2 && !isSavingDraft) {
       PropertyDraftService.updateDraft(draftId, {
         current_step: currentStep,
         updated_at: new Date().toISOString()
       }).catch((e) => console.error('Commercial Sale: auto-save step failed', e));
     }
-  }, [currentStep, draftId]);
+  }, [currentStep, draftId, isSavingDraft]);
 
   // Save step once when draftId is first set
   useEffect(() => {
