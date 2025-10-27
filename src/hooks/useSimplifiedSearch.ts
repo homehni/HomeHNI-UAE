@@ -244,8 +244,8 @@ export const useSimplifiedSearch = () => {
   const [hasMore, setHasMore] = useState(true);
   const [propertyCount, setPropertyCount] = useState(0);
 
-  // Batch size for loading properties - load in chunks for better performance
-  const BATCH_SIZE = 50;
+  // Load all properties at once - no batching needed
+  const LOAD_ALL_PROPERTIES = true;
 
   // Update budget range when active tab changes and clear irrelevant filters
   useEffect(() => {
@@ -465,22 +465,21 @@ export const useSimplifiedSearch = () => {
         setPropertyCount(count || 0);
 
         // Fetch only essential fields initially for better performance
-        // Load in batches to avoid overwhelming the browser
+        // Load ALL properties at once
         const { data: properties, error } = await supabase
           .from('properties')
           .select(SELECT_COLUMNS)
           .eq('is_visible', true)
           .eq('status', 'approved') // Only show approved properties
-          .order('created_at', { ascending: false })
-          .limit(BATCH_SIZE); // Load first batch only
+          .order('created_at', { ascending: false }); // No limit - load all
 
         if (error) throw error;
 
         const transformedProperties = (properties || []).map(transformProperty);
-        console.log('📊 Initial properties loaded:', transformedProperties.length, 'of', count);
+        console.log('📊 All properties loaded:', transformedProperties.length);
         
         setAllProperties(transformedProperties);
-        setHasMore((count || 0) > BATCH_SIZE);
+        setHasMore(false); // All properties loaded at once
       } catch (error) {
         console.error('Error loading properties:', error);
       } finally {
@@ -533,28 +532,9 @@ export const useSimplifiedSearch = () => {
   const loadMoreProperties = useCallback(async () => {
     if (!hasMore || isLoading) return;
 
-    setIsLoading(true);
-    try {
-      const { data: properties, error } = await supabase
-        .from('properties')
-        .select(SELECT_COLUMNS)
-        .eq('is_visible', true)
-        .eq('status', 'approved') // Only show approved properties
-        .order('created_at', { ascending: false })
-        .range(allProperties.length, allProperties.length + BATCH_SIZE - 1);
-
-      if (error) throw error;
-
-      const transformedProperties = (properties || []).map(transformProperty);
-      console.log('📊 Loaded more properties:', transformedProperties.length);
-      
-      setAllProperties(prev => [...prev, ...transformedProperties]);
-      setHasMore(allProperties.length + transformedProperties.length < propertyCount);
-    } catch (error) {
-      console.error('Error loading more properties:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    // All properties are already loaded at once, no need to load more
+    console.log('📊 All properties already loaded, no more to fetch');
+    return;
   }, [hasMore, isLoading, allProperties.length, propertyCount, transformProperty]);
 
   // Normalize location names to consolidate similar entries - Memoized constant
