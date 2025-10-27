@@ -70,28 +70,12 @@
             location.replace('https://' + COUNTRY_DOMAINS[upperCountry] + location.pathname + location.hash);
           }
         } else {
-          // 2. Check saved preference
+          // 2. Check saved preference only (let React component handle IP-based geo-redirection)
           const savedCountry = localStorage.getItem(PREF_KEY);
           if (savedCountry && COUNTRY_DOMAINS[savedCountry]) {
             location.replace('https://' + COUNTRY_DOMAINS[savedCountry] + location.pathname + location.hash);
-          } else {
-            // 3. Try navigator.language fallback
-            if (navigator.language) {
-              const lang = navigator.language.toLowerCase();
-              let detectedCountry = null;
-              
-              // Extract country from language codes like en-US, en-IN, etc.
-              if (lang.includes('-')) {
-                detectedCountry = lang.split('-')[1].toUpperCase();
-              } else if (lang.includes('_')) {
-                detectedCountry = lang.split('_')[1].toUpperCase();
-              }
-              
-              if (detectedCountry && COUNTRY_DOMAINS[detectedCountry]) {
-                location.replace('https://' + COUNTRY_DOMAINS[detectedCountry] + location.pathname + location.hash);
-              }
-            }
           }
+          // Otherwise, let the React GeolocationRedirect component handle IP-based redirection
         }
         
         // 4. Stay on global domain (no redirect needed)
