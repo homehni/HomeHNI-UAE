@@ -15,7 +15,7 @@ import { OwnerInfo } from '@/types/property';
 import { PropertyDraftService } from '@/services/propertyDraftService';
 
 interface CommercialSaleMultiStepFormProps {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any, draftId?: string | null) => void;
   isSubmitting: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
@@ -84,13 +84,13 @@ export const CommercialSaleMultiStepForm = ({
   const handleScheduleSubmit = (data: any) => {
     updateScheduleInfo(data);
     const formData = getFormData();
-    onSubmit(formData);
+    onSubmit(formData, draftId);
     setIsSubmitted(true);
   };
 
   const handleSubmit = () => {
     const formData = getFormData();
-    onSubmit(formData);
+    onSubmit(formData, draftId);
     setIsSubmitted(true);
   };
 
@@ -264,7 +264,7 @@ export const CommercialSaleMultiStepForm = ({
               updateScheduleInfo(data);
               // Directly submit the form instead of going to next step
               const formData = getFormData();
-              onSubmit(formData);
+              onSubmit(formData, draftId);
               setIsSubmitted(true);
               scrollToTop();
             }}

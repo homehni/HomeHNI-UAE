@@ -24,7 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Eye } from 'lucide-react';
 
 interface LandPlotMultiStepFormProps {
-  onSubmit: (data: LandPlotFormData) => void;
+  onSubmit: (data: LandPlotFormData, draftId?: string | null) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
@@ -423,7 +423,7 @@ export const LandPlotMultiStepForm: React.FC<LandPlotMultiStepFormProps> = ({
     
     console.log('Complete form data for submission:', formData);
     
-    await onSubmit(formData as LandPlotFormData);
+    await onSubmit(formData as LandPlotFormData, draftId);
     console.log('LandPlotMultiStepForm submission triggered. Going to Preview step (7)');
     goToStep(7);
     scrollToTop();

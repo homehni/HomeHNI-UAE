@@ -17,7 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Eye } from 'lucide-react';
 
 interface CommercialMultiStepFormProps {
-  onSubmit: (data: CommercialFormData) => void;
+  onSubmit: (data: CommercialFormData, draftId?: string | null) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
@@ -325,7 +325,7 @@ const handleScheduleSubmit = async (data: Partial<ScheduleInfo>) => {
   }
   
   const formData = getFormData();
-  onSubmit(formData as CommercialFormData);
+  onSubmit(formData as CommercialFormData, draftId);
   setIsSubmitted(true);
 };
 
@@ -347,7 +347,7 @@ const handleScheduleSubmit = async (data: Partial<ScheduleInfo>) => {
     }
     
     // No validation required - all fields are optional
-    onSubmit(formData as CommercialFormData);
+    onSubmit(formData as CommercialFormData, draftId);
   };
 
   const handleEdit = (step: number) => {

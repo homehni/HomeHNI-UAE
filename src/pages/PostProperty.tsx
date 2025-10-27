@@ -778,7 +778,7 @@ export const PostProperty: React.FC = () => {
     console.log('Set draftModalDismissed flag to prevent popup from showing again');
   };
 
-  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData | LandPlotFormData) => {
+  const handleSubmit = async (data: { ownerInfo: OwnerInfo; propertyInfo: PropertyInfo | SalePropertyInfo } | PGHostelFormData | FlattmatesFormData | CommercialFormData | CommercialSaleFormData | LandPlotFormData, submittedDraftId?: string | null) => {
     console.log('PostProperty handleSubmit called with data:', data);
     console.log('Data type check:', {
       hasOwnerInfo: 'ownerInfo' in data,
@@ -1394,6 +1394,18 @@ export const PostProperty: React.FC = () => {
 
       console.log('Property submission created successfully.');
 
+      // Delete the draft after successful submission
+      if (submittedDraftId) {
+        try {
+          console.log('🗑️ Deleting draft after successful submission:', submittedDraftId);
+          await PropertyDraftService.deleteDraft(submittedDraftId);
+          console.log('✅ Successfully deleted draft:', submittedDraftId);
+        } catch (draftDeleteError) {
+          console.error('⚠️ Failed to delete draft, but submission was successful:', draftDeleteError);
+          // Don't fail the submission if draft deletion fails
+        }
+      }
+
       // Send property listing live email
       try {
         const { sendListingLiveEmail } = await import('@/services/emailService');
@@ -1619,7 +1631,7 @@ export const PostProperty: React.FC = () => {
       case 'flatmates-form':
         return (
           <FlattmatesMultiStepForm 
-            onSubmit={handleSubmit as (data: FlattmatesFormData) => void}
+            onSubmit={handleSubmit as (data: FlattmatesFormData, draftId?: string | null) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
@@ -1629,7 +1641,7 @@ export const PostProperty: React.FC = () => {
       case 'commercial-rental-form':
         return (
           <CommercialMultiStepForm 
-            onSubmit={handleSubmit as (data: CommercialFormData) => void}
+            onSubmit={handleSubmit as (data: CommercialFormData, draftId?: string | null) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
@@ -1639,7 +1651,7 @@ export const PostProperty: React.FC = () => {
       case 'commercial-sale-form':
         return (
           <CommercialSaleMultiStepForm 
-            onSubmit={handleSubmit as (data: CommercialSaleFormData) => void}
+            onSubmit={handleSubmit as (data: CommercialSaleFormData, draftId?: string | null) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}
@@ -1650,7 +1662,7 @@ export const PostProperty: React.FC = () => {
         console.log('Rendering LandPlotMultiStepForm');
         return (
           <LandPlotMultiStepForm 
-            onSubmit={handleSubmit as (data: LandPlotFormData) => void}
+            onSubmit={handleSubmit as (data: LandPlotFormData, draftId?: string | null) => void}
             isSubmitting={isSubmitting}
             initialOwnerInfo={ownerInfo || {}}
             targetStep={targetStep}

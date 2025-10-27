@@ -21,7 +21,7 @@ import { PropertyDraftService } from '@/services/propertyDraftService';
 import { Eye } from 'lucide-react';
 
 interface FlattmatesMultiStepFormProps {
-  onSubmit: (data: FlattmatesFormData) => void;
+  onSubmit: (data: FlattmatesFormData, draftId?: string | null) => void;
   isSubmitting?: boolean;
   initialOwnerInfo?: Partial<OwnerInfo>;
   targetStep?: number | null;
@@ -520,7 +520,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
       console.log('Preparing final submission...');
       const formData = getFormData();
       console.log('FlattmatesMultiStepForm - Submitting at Schedule step with data:', formData);
-      onSubmit(formData);
+      onSubmit(formData, draftId);
       setCurrentStep(7);
       scrollToTop();
       console.log('=== handleScheduleNext COMPLETED ===');
@@ -669,7 +669,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
     
     const formData = getFormData();
     console.log('FlattmatesMultiStepForm - Complete form data:', formData);
-    onSubmit(formData);
+    onSubmit(formData, draftId);
     setIsSubmitted(true);
   };
 
