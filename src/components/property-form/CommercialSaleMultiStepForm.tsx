@@ -78,19 +78,44 @@ export const CommercialSaleMultiStepForm = ({
 
     if (resumeDraftId && resumeDraftData) {
       try {
-        const draftData = JSON.parse(resumeDraftData);
-        console.log('Commercial Sale: loading resume draft data', { resumeDraftId, draftData });
+        const parsed = JSON.parse(resumeDraftData);
+        // Support both legacy shape (flat fields) and new shape { ownerInfo, formData, currentStep }
+        const data = parsed?.formData ? parsed.formData : parsed;
+        console.log('Commercial Sale: loading resume draft data', { resumeDraftId, parsed, usedDataShape: Object.keys(data || {}) });
 
-        if (draftData.propertyDetails) updatePropertyDetails(draftData.propertyDetails);
-        if (draftData.locationDetails) updateLocationDetails(draftData.locationDetails);
-        if (draftData.saleDetails) updateSaleDetails(draftData.saleDetails);
-        if (draftData.amenities) updateAmenities(draftData.amenities);
-        if (draftData.gallery) updateGallery(draftData.gallery);
-        if (draftData.additionalInfo) updateAdditionalInfo(draftData.additionalInfo);
-        if (draftData.scheduleInfo) updateScheduleInfo(draftData.scheduleInfo);
+        // Owner info when available
+        if (parsed?.ownerInfo) updateOwnerInfo(parsed.ownerInfo);
+
+        if (data?.propertyDetails) updatePropertyDetails(data.propertyDetails);
+        if (data?.locationDetails) updateLocationDetails(data.locationDetails);
+        if (data?.saleDetails) updateSaleDetails(data.saleDetails);
+        if (data?.amenities) updateAmenities(data.amenities);
+
+        // Robust gallery hydration: accept camelCase, snake_case, or raw draft fields
+        if (data?.gallery) {
+          updateGallery({
+            images: data.gallery.images || [],
+            categorizedImages: data.gallery.categorizedImages || (data.gallery as any).categorized_images || {},
+            video: data.gallery.video
+          });
+        } else if (parsed?.images || parsed?.categorized_images) {
+          updateGallery({
+            images: parsed.images || [],
+            categorizedImages: parsed.categorized_images || {},
+            video: parsed.video
+          });
+        }
+
+        if (data?.additionalInfo) updateAdditionalInfo(data.additionalInfo);
+        if (data?.scheduleInfo) updateScheduleInfo(data.scheduleInfo);
 
         // Set draft ID so subsequent saves update the same draft (no duplicates)
         setDraftId(resumeDraftId);
+
+        // Optionally jump to stored step if present
+        if (parsed?.currentStep && typeof parsed.currentStep === 'number') {
+          goToStep(Math.min(Math.max(parsed.currentStep, 2), 8));
+        }
 
         // Clear after successful load
         sessionStorage.removeItem('resumeDraftId');
@@ -101,7 +126,7 @@ export const CommercialSaleMultiStepForm = ({
         sessionStorage.removeItem('resumeDraftData');
       }
     }
-  }, [updatePropertyDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo]);
+  }, [updateOwnerInfo, updatePropertyDetails, updateLocationDetails, updateSaleDetails, updateAmenities, updateGallery, updateAdditionalInfo, updateScheduleInfo, goToStep]);
 
   // Auto-save current step index only when navigating between steps manually (not during save operations)
   useEffect(() => {
