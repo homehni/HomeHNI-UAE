@@ -848,7 +848,7 @@ const AdminProperties = () => {
 
     setBulkActionLoading(true);
     try {
-      // First, update the properties to set is_featured = true
+      // Update properties table to set is_featured = true
       const { error: updateError } = await supabase
         .from('properties')
         .update({ is_featured: true })
@@ -856,7 +856,7 @@ const AdminProperties = () => {
 
       if (updateError) throw updateError;
 
-      // Then, insert into featured_properties table (with conflict handling)
+      // Insert into featured_properties table
       const featuredRecords = selectedIds.map(propertyId => ({
         property_id: propertyId,
         is_active: true,
@@ -880,11 +880,11 @@ const AdminProperties = () => {
       // Clear selection and refresh
       setSelectedProperties([]);
       await fetchProperties();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding properties to featured:', error);
       toast({
         title: 'Error',
-        description: 'Failed to add properties to featured',
+        description: error?.message || 'Failed to add properties to featured',
         variant: 'destructive'
       });
     } finally {
