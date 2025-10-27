@@ -131,8 +131,17 @@ export const CommercialSaleMultiStepForm = ({
   // Auto-save current step index only when navigating between steps manually (not during save operations)
   useEffect(() => {
     if (draftId && currentStep >= 2 && !isSavingDraft) {
+      // Map local step indices (2-7) to draft step numbers (1-6)
+      let mappedStep = currentStep;
+      if (currentStep === 2) mappedStep = 1; // Property Details
+      else if (currentStep === 3) mappedStep = 2; // Location Details
+      else if (currentStep === 4) mappedStep = 3; // Sale Details
+      else if (currentStep === 5) mappedStep = 4; // Amenities
+      else if (currentStep === 6) mappedStep = 5; // Gallery
+      else if (currentStep === 7) mappedStep = 6; // Schedule
+
       PropertyDraftService.updateDraft(draftId, {
-        current_step: currentStep,
+        current_step: mappedStep,
         updated_at: new Date().toISOString()
       }).catch((e) => console.error('Commercial Sale: auto-save step failed', e));
     }
@@ -141,8 +150,17 @@ export const CommercialSaleMultiStepForm = ({
   // Save step once when draftId is first set
   useEffect(() => {
     if (draftId && currentStep >= 2) {
+      // Map local step indices (2-7) to draft step numbers (1-6)
+      let mappedStep = currentStep;
+      if (currentStep === 2) mappedStep = 1; // Property Details
+      else if (currentStep === 3) mappedStep = 2; // Location Details
+      else if (currentStep === 4) mappedStep = 3; // Sale Details
+      else if (currentStep === 5) mappedStep = 4; // Amenities
+      else if (currentStep === 6) mappedStep = 5; // Gallery
+      else if (currentStep === 7) mappedStep = 6; // Schedule
+
       PropertyDraftService.updateDraft(draftId, {
-        current_step: currentStep,
+        current_step: mappedStep,
         updated_at: new Date().toISOString()
       }).catch((e) => console.error('Commercial Sale: initial step save failed', e));
     }
