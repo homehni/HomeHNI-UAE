@@ -40,18 +40,29 @@ export const CommercialSaleGalleryStep = ({
     return items.filter(item => item instanceof File || typeof item === 'string');
   };
 
+  // Derive images from initial data supporting both camelCase and snake_case
+  const deriveImagesFromInitial = (data: any) => {
+    const cat = data?.categorizedImages ?? (data as any)?.categorized_images;
+    if (cat) {
+      const front = cat.frontView ?? cat.front_view ?? [];
+      const interior = cat.interiorView ?? cat.interior_view ?? [];
+      const other = cat.others ?? [];
+      return {
+        frontView: processImageItems(front),
+        interiorView: processImageItems(interior),
+        others: processImageItems(other || (Array.isArray(data?.images) ? data.images : []))
+      };
+    }
+    return {
+      frontView: [],
+      interiorView: [],
+      others: Array.isArray(data?.images) ? processImageItems(data.images) : []
+    };
+  };
   const form = useForm({
     resolver: zodResolver(commercialSaleGallerySchema),
     defaultValues: {
-      images: initialData?.categorizedImages ? {
-        frontView: processImageItems(initialData.categorizedImages.frontView || []),
-        interiorView: processImageItems(initialData.categorizedImages.interiorView || []),
-        others: processImageItems(initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : []))
-      } : {
-        frontView: [],
-        interiorView: [],
-        others: Array.isArray(initialData?.images) ? processImageItems(initialData.images) : []
-      },
+      images: deriveImagesFromInitial(initialData),
       video: initialData?.video
     }
   });
@@ -59,17 +70,7 @@ export const CommercialSaleGalleryStep = ({
   // Ensure form rehydrates when coming back to this step or when initialData changes
   useEffect(() => {
     const defaults = {
-      images: initialData?.categorizedImages ? {
-        frontView: processImageItems(initialData.categorizedImages.frontView || []),
-        interiorView: processImageItems(initialData.categorizedImages.interiorView || []),
-        others: processImageItems(
-          initialData.categorizedImages.others || (Array.isArray(initialData.images) ? initialData.images : [])
-        )
-      } : {
-        frontView: [],
-        interiorView: [],
-        others: Array.isArray(initialData?.images) ? processImageItems(initialData.images) : []
-      },
+      images: deriveImagesFromInitial(initialData),
       video: initialData?.video
     } as any;
     form.reset(defaults);
@@ -81,7 +82,7 @@ export const CommercialSaleGalleryStep = ({
     const allImages = [...data.images.frontView, ...data.images.interiorView, ...data.images.others];
 
     // Fallback to existing images from initialData when user didn't change anything
-    const initialCategorized = (initialData?.categorizedImages as any) || {};
+    const initialCategorized = (initialData?.categorizedImages as any) || (initialData as any)?.categorized_images || {};
     const initialFlat = Array.isArray(initialData?.images) ? (initialData!.images as any[]) : [];
     const initialAll = [
       ...(initialCategorized.frontView || []),
