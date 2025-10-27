@@ -217,13 +217,22 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   useEffect(() => {
     console.log(`🔍 Auto-save check: currentStep=${currentStep}, draftId=${draftId}`);
     if (draftId && currentStep >= 2) {
-      console.log(`💾 Auto-saving current step: ${currentStep} for draft: ${draftId}`);
+      // Map local step indices (2-7) to draft step numbers (1-6)
+      let mappedStep = currentStep;
+      if (currentStep === 2) mappedStep = 1; // Property Details
+      else if (currentStep === 3) mappedStep = 2; // Location Details
+      else if (currentStep === 4) mappedStep = 3; // Rental Details
+      else if (currentStep === 5) mappedStep = 4; // Amenities
+      else if (currentStep === 6) mappedStep = 5; // Gallery
+      else if (currentStep === 7) mappedStep = 6; // Schedule
+
+      console.log(`💾 Auto-saving current step: ${currentStep} (mapped to ${mappedStep}) for draft: ${draftId}`);
       // Save the current step without changing form data
       PropertyDraftService.updateDraft(draftId, {
-        current_step: currentStep,
+        current_step: mappedStep,
         updated_at: new Date().toISOString()
       }).then(() => {
-        console.log(`✅ Successfully auto-saved current step: ${currentStep}`);
+        console.log(`✅ Successfully auto-saved current step: ${currentStep} (mapped to ${mappedStep})`);
       }).catch(error => {
         console.error('❌ Error auto-saving current step:', error);
       });
@@ -235,12 +244,21 @@ export const CommercialMultiStepForm: React.FC<CommercialMultiStepFormProps> = (
   // Also save current step when draftId is first set (for initial navigation)
   useEffect(() => {
     if (draftId && currentStep >= 2) {
-      console.log(`🎯 Draft ID set, saving current step: ${currentStep}`);
+      // Map local step indices (2-7) to draft step numbers (1-6)
+      let mappedStep = currentStep;
+      if (currentStep === 2) mappedStep = 1; // Property Details
+      else if (currentStep === 3) mappedStep = 2; // Location Details
+      else if (currentStep === 4) mappedStep = 3; // Rental Details
+      else if (currentStep === 5) mappedStep = 4; // Amenities
+      else if (currentStep === 6) mappedStep = 5; // Gallery
+      else if (currentStep === 7) mappedStep = 6; // Schedule
+
+      console.log(`🎯 Draft ID set, saving current step: ${currentStep} (mapped to ${mappedStep})`);
       PropertyDraftService.updateDraft(draftId, {
-        current_step: currentStep,
+        current_step: mappedStep,
         updated_at: new Date().toISOString()
       }).then(() => {
-        console.log(`✅ Successfully saved current step on draft ID set: ${currentStep}`);
+        console.log(`✅ Successfully saved current step on draft ID set: ${currentStep} (mapped to ${mappedStep})`);
       }).catch(error => {
         console.error('❌ Error saving current step on draft ID set:', error);
       });
