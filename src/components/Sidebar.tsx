@@ -136,16 +136,15 @@ const Sidebar = ({
       navigate('/painting-cleaning');
       onClose();
     }
+  }, {
+    id: 'packers-movers',
+    label: 'Packers and Movers',
+    hasSubmenu: false,
+    onClick: () => {
+      navigate('/packers-movers');
+      onClose();
+    }
   },
-  // {
-  //   id: 'packers-movers',
-  //   label: 'Packers and Movers',
-  //   hasSubmenu: false,
-  //   onClick: () => {
-  //     navigate('/packers-movers');
-  //     onClose();
-  //   }
-  // },
   // { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
   // { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
   // {
