@@ -93,6 +93,18 @@ export const useCommercialSalePropertyForm = () => {
     }
   }), [ownerInfo, propertyDetails, locationDetails, saleDetails, amenities, gallery, additionalInfo, scheduleInfo]);
 
+  const resetForm = useCallback(() => {
+    setCurrentStep(2);
+    setOwnerInfo({});
+    setPropertyDetails({ title: '' });
+    setLocationDetails({});
+    setSaleDetails({});
+    setAmenities({});
+    setGallery({ images: [] });
+    setAdditionalInfo({});
+    setScheduleInfo({ availability: 'everyday', availableAllDay: true });
+  }, []);
+
   const isStepValid = useCallback((step: number): boolean => {
     // All steps are optional now
     return true;
@@ -120,6 +132,7 @@ export const useCommercialSalePropertyForm = () => {
     updateAdditionalInfo,
     updateScheduleInfo,
     getFormData,
+    resetForm,
     isStepValid,
   };
 };

@@ -54,6 +54,7 @@ export const CommercialSaleMultiStepForm = ({
     updateAdditionalInfo,
     updateScheduleInfo,
     getFormData,
+    resetForm,
     isStepValid,
   } = useCommercialSalePropertyForm();
 
@@ -181,12 +182,26 @@ export const CommercialSaleMultiStepForm = ({
     const formData = getFormData();
     onSubmit(formData, draftId);
     setIsSubmitted(true);
+    
+    // Clear draft and form data after successful submission
+    if (draftId) {
+      PropertyDraftService.updateDraft(draftId, { is_completed: true }).catch(console.error);
+    }
+    sessionStorage.removeItem('resumeDraftId');
+    sessionStorage.removeItem('resumeDraftData');
   };
 
   const handleSubmit = () => {
     const formData = getFormData();
     onSubmit(formData, draftId);
     setIsSubmitted(true);
+    
+    // Clear draft and form data after successful submission
+    if (draftId) {
+      PropertyDraftService.updateDraft(draftId, { is_completed: true }).catch(console.error);
+    }
+    sessionStorage.removeItem('resumeDraftId');
+    sessionStorage.removeItem('resumeDraftData');
   };
 
   const handleEdit = (step: number) => {
@@ -269,7 +284,9 @@ export const CommercialSaleMultiStepForm = ({
             }
           }}
           onGoToDashboard={() => {
-            // Navigate to dashboard
+            // Clear form state and navigate to dashboard
+            resetForm();
+            setDraftId(null);
             window.location.href = '/dashboard';
           }}
           createdSubmissionId={createdSubmissionId}
