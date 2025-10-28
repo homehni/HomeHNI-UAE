@@ -45,8 +45,8 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   // Determine if current user is the property owner by checking against properties
   const [isOwner, setIsOwner] = React.useState(false);
@@ -93,10 +93,20 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    if (!dealRoom.id) return;
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        loadMessages();
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [dealRoom.id]);
+
   const scrollToBottom = () => {
     setTimeout(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      if (bottomRef.current) {
+        bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
     }, 100);
   };
@@ -208,6 +218,7 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
       if (error) throw error;
 
       setNewMessage('');
+      await loadMessages();
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -282,7 +293,7 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
       </CardHeader>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 p-4 bg-muted/20" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4 bg-muted/20">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -332,6 +343,7 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
             })}
           </div>
         )}
+        <div ref={bottomRef} />
       </ScrollArea>
 
       {/* Message Input */}
