@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
-import { supabase } from '@/integrations/supabase/client';
+import { useSettings } from '@/contexts/SettingsContext';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,10 @@ import { useFormSubmission } from "@/hooks/useFormSubmission";
 import { Loader2, CheckCircle } from "lucide-react";
 import Marquee from "@/components/Marquee";
 import Header from "@/components/Header";
+import { 
+  sendRequirementSubmissionAdminAlert, 
+  sendRequirementSubmissionConfirmation 
+} from "@/services/emailService";
 
 interface FormData {
   name: string;
@@ -37,6 +41,7 @@ interface FormData {
 const PostService = () => {
   const { user } = useAuth();
   const { profile } = useProfile();
+  const { settings } = useSettings();
   const [showSuccess, setShowSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState("");
   const [errors, setErrors] = useState<{[key: string]: string}>({});
@@ -195,8 +200,12 @@ const PostService = () => {
     setSubmitting(true);
     
     try {
-      // Submit form data to Supabase
-      updateProgress("Submitting your requirement...");
+      // Process requirement without storing in DB
+      updateProgress("Processing your requirement...");
+      
+      // Generate reference ID
+      const refId = `REQ${Date.now().toString().slice(-6)}`;
+      setReferenceId(refId);
       
       const submissionPayload = {
         name: formData.name,
@@ -212,29 +221,46 @@ const PostService = () => {
         },
         premiumSelected: formData.premiumSelected,
         notes: formData.notes,
+        referenceId: refId,
         submittedAt: new Date().toISOString()
       };
 
-      // Insert into property_submissions table with service-specific data
-      const { error } = await supabase
-        .from('property_submissions')
-        .insert({
-          user_id: user?.id,
-          title: `${formData.intent} Requirement - ${formData.serviceCategory || formData.propertyType}`,
-          status: 'new',
-          payload: submissionPayload
-        });
-
-      if (error) {
-        console.error('Submission error:', error);
-        throw error;
-      }
+      // Send confirmation email to user
+      updateProgress("Sending confirmation email...");
+      await sendRequirementSubmissionConfirmation(
+        formData.email,
+        formData.name,
+        {
+          intent: formData.intent,
+          propertyType: formData.propertyType,
+          serviceCategory: formData.serviceCategory,
+          budgetMin: formData.budgetRange[0],
+          budgetMax: formData.budgetRange[1],
+          currency: formData.currency,
+          referenceId: refId
+        }
+      );
       
-      // Generate reference ID
-      const refId = `REQ${Date.now().toString().slice(-6)}`;
-      setReferenceId(refId);
+      // Send admin notification email
+      const adminEmail = settings.admin_email || 'admin@homehni.com';
+      await sendRequirementSubmissionAdminAlert(
+        adminEmail,
+        {
+          userName: formData.name,
+          userEmail: formData.email,
+          userPhone: formData.phone,
+          intent: formData.intent,
+          propertyType: formData.propertyType,
+          serviceCategory: formData.serviceCategory,
+          budgetMin: formData.budgetRange[0],
+          budgetMax: formData.budgetRange[1],
+          currency: formData.currency,
+          notes: formData.notes,
+          referenceId: refId
+        }
+      );
+      
       setShowSuccess(true);
-      
       showSuccessToast("Success", "Your requirement has been posted successfully!");
 
     } catch (error) {

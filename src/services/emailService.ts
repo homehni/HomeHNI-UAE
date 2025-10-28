@@ -621,3 +621,82 @@ export async function sendUserRegistrationAdminAlert(
     userName: userName || 'New User'
   });
 }
+
+// Helper function to format budget amount
+const formatBudgetAmount = (amount: number, currency: string = 'INR'): string => {
+  const symbol = currency === 'INR' ? '₹' : currency === 'USD' ? '$' : currency;
+  if (amount >= 10000000) { // 1 crore or more
+    return `${symbol} ${(amount / 10000000).toFixed(1)} Cr`;
+  } else if (amount >= 100000) { // 1 lakh or more
+    return `${symbol} ${(amount / 100000).toFixed(1)} L`;
+  } else if (amount >= 1000) { // 1 thousand or more
+    return `${symbol} ${(amount / 1000).toFixed(0)}K`;
+  } else {
+    return `${symbol} ${amount.toLocaleString()}`;
+  }
+};
+
+// 26. Requirement Submission - Admin Notification - Notify admin when user posts a requirement
+export async function sendRequirementSubmissionAdminAlert(
+  adminEmail: string,
+  requirementData: {
+    userName: string;
+    userEmail: string;
+    userPhone: string;
+    intent: string;
+    propertyType?: string;
+    serviceCategory?: string;
+    budgetMin: number;
+    budgetMax: number;
+    currency: string;
+    notes?: string;
+    referenceId: string;
+  }
+) {
+  return sendEmail('/send-requirement-submission-admin-alert', {
+    adminEmail,
+    userName: requirementData.userName,
+    userEmail: requirementData.userEmail,
+    userPhone: requirementData.userPhone,
+    intent: requirementData.intent,
+    propertyType: requirementData.propertyType || '',
+    serviceCategory: requirementData.serviceCategory || '',
+    budgetMin: requirementData.budgetMin,
+    budgetMax: requirementData.budgetMax,
+    budgetMinFormatted: formatBudgetAmount(requirementData.budgetMin, requirementData.currency),
+    budgetMaxFormatted: formatBudgetAmount(requirementData.budgetMax, requirementData.currency),
+    currency: requirementData.currency,
+    notes: requirementData.notes || '',
+    referenceId: requirementData.referenceId
+  });
+}
+
+// 27. Requirement Submission - User Confirmation - Confirm to user that their requirement was posted
+export async function sendRequirementSubmissionConfirmation(
+  userEmail: string,
+  userName: string,
+  requirementData: {
+    intent: string;
+    propertyType?: string;
+    serviceCategory?: string;
+    budgetMin: number;
+    budgetMax: number;
+    currency: string;
+    referenceId: string;
+  }
+) {
+  return sendEmail('/send-requirement-submission-confirmation', {
+    to: userEmail,
+    userName: userName || 'there',
+    intent: requirementData.intent,
+    propertyType: requirementData.propertyType || '',
+    serviceCategory: requirementData.serviceCategory || '',
+    budgetMin: requirementData.budgetMin,
+    budgetMax: requirementData.budgetMax,
+    budgetMinFormatted: formatBudgetAmount(requirementData.budgetMin, requirementData.currency),
+    budgetMaxFormatted: formatBudgetAmount(requirementData.budgetMax, requirementData.currency),
+    currency: requirementData.currency,
+    referenceId: requirementData.referenceId,
+    supportUrl: 'https://homehni.com/contact'
+  });
+}
