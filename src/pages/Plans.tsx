@@ -103,16 +103,54 @@ const Plans = () => {
     </div>
   );
 
+  const getMetaTags = () => {
+    const metaTags: Record<string, { title: string; description: string; keywords: string }> = {
+      buyer: {
+        title: 'Property Buyer Plans - Zero Brokerage Home Buying | HomeHNI',
+        description: 'Exclusive buyer plans for finding your dream property with zero brokerage. Silver, Gold, Platinum & Diamond plans with dedicated support, site visits & legal assistance.',
+        keywords: 'buyer plans, property buying plans, zero brokerage, home buying, property search, buyer subscription, property deals'
+      },
+      seller: {
+        title: 'Property Seller Plans - List & Sell Properties Fast | HomeHNI',
+        description: 'Sell your property faster with seller plans. Premium listings, photography, virtual tours & dedicated relationship manager. Zero hassle property selling.',
+        keywords: 'seller plans, property selling, list property, sell home, property listing plans, selling subscription'
+      },
+      rental: {
+        title: 'Rental Plans - Owner & Tenant Plans for Rentals | HomeHNI',
+        description: 'Complete rental solutions for property owners & tenants. Get tenants quickly or find rental properties with zero brokerage. Plans for residential, commercial & more.',
+        keywords: 'rental plans, owner plans, tenant plans, rental property, find tenants, rental subscription, zero brokerage rent'
+      },
+      'commercial-buyer': {
+        title: 'Commercial Property Buyer Plans - Office, Shop & Warehouse | HomeHNI',
+        description: 'Specialized plans for buying commercial properties including offices, shops, warehouses & industrial spaces. Expert guidance & zero brokerage deals.',
+        keywords: 'commercial property plans, office space, shop buying, warehouse, commercial real estate, business property'
+      },
+      'builder-lifetime': {
+        title: 'Builder Lifetime Plans - Unlimited Property Listings | HomeHNI',
+        description: 'Exclusive lifetime plans for builders & developers. Unlimited property listings, premium exposure & dedicated support. Boost your project sales.',
+        keywords: 'builder plans, developer plans, lifetime subscription, builder membership, property listings, real estate marketing'
+      },
+      agent: {
+        title: 'Real Estate Agent Plans - Grow Your Property Business | HomeHNI',
+        description: 'Professional plans for real estate agents & brokers. Access verified leads, premium tools & grow your property business with HomeHNI agent plans.',
+        keywords: 'agent plans, real estate agent, broker plans, property agent, agent subscription, real estate business'
+      }
+    };
+    return metaTags[active] || metaTags.buyer;
+  };
+
+  const currentMeta = getMetaTags();
+
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Property Plans - Buyer, Seller, Rental & Commercial Plans | HomeHNI</title>
-        <meta name="description" content="Choose from buyer plans, seller plans, rental plans, commercial plans, builder plans & agent plans. Zero brokerage property solutions for all your real estate needs in India." />
-        <meta name="keywords" content="property plans, buyer plans, seller plans, rental plans, commercial property plans, builder plans, agent plans, zero brokerage, property subscription plans" />
-        <meta property="og:title" content="Property Plans - Buyer, Seller, Rental & Commercial Plans | HomeHNI" />
-        <meta property="og:description" content="Choose from buyer plans, seller plans, rental plans, commercial plans, builder plans & agent plans. Zero brokerage property solutions." />
+        <title>{currentMeta.title}</title>
+        <meta name="description" content={currentMeta.description} />
+        <meta name="keywords" content={currentMeta.keywords} />
+        <meta property="og:title" content={currentMeta.title} />
+        <meta property="og:description" content={currentMeta.description} />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href={`${window.location.origin}/plans`} />
+        <link rel="canonical" href={`${window.location.origin}/plans?tab=${active}`} />
       </Helmet>
       
       {/* Plan Recommendation Wizard - overlaid, non-disruptive */}

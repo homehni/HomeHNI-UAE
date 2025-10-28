@@ -98,16 +98,69 @@ const Services = () => {
     </div>
   );
 
+  const getMetaTags = () => {
+    const metaTags: Record<string, { title: string; description: string; keywords: string }> = {
+      loans: {
+        title: 'Home Loans & Property Financing Services in India | HomeHNI',
+        description: 'Get best home loan rates, instant approval & expert guidance for property financing. Compare loans from top banks. Quick processing & minimal documentation.',
+        keywords: 'home loans, property loans, home loan rates, mortgage loans, property financing, loan approval, home loan interest rates'
+      },
+      'home-security': {
+        title: 'Home Security Systems & Services in India | HomeHNI',
+        description: 'Professional home security solutions including CCTV, smart locks, alarm systems & 24/7 monitoring. Protect your property with trusted security services.',
+        keywords: 'home security, CCTV cameras, security systems, alarm systems, smart locks, home surveillance, security monitoring'
+      },
+      'packers-movers': {
+        title: 'Packers & Movers Services - Reliable Home Shifting | HomeHNI',
+        description: 'Professional packers & movers for hassle-free home shifting. Safe packing, timely delivery & affordable rates. Trusted relocation services across India.',
+        keywords: 'packers movers, home shifting, relocation services, moving services, household shifting, packing services'
+      },
+      'legal-services': {
+        title: 'Property Legal Services - Agreements, Verification & Documentation | HomeHNI',
+        description: 'Expert legal services for property including rental agreements, tenant verification, property registration & legal documentation. Hassle-free legal solutions.',
+        keywords: 'property legal services, rental agreement, tenant verification, property registration, legal documentation, property lawyers'
+      },
+      'handover-services': {
+        title: 'Property Handover Services - Inspection & Verification | HomeHNI',
+        description: 'Professional property handover services including inspection, documentation & verification. Ensure smooth property possession with expert assistance.',
+        keywords: 'property handover, property inspection, handover services, property verification, possession services'
+      },
+      'property-management': {
+        title: 'Property Management Services - Rent Collection & Maintenance | HomeHNI',
+        description: 'Complete property management solutions including rent collection, tenant management, maintenance & legal compliance. Hassle-free property ownership.',
+        keywords: 'property management, rent collection, tenant management, property maintenance, property services'
+      },
+      architects: {
+        title: 'Professional Architects & Architectural Design Services | HomeHNI',
+        description: 'Expert architects for residential & commercial projects. Custom architectural design, planning & consultation services. Transform your property vision.',
+        keywords: 'architects, architectural design, building design, home design, architectural services, property design'
+      },
+      'painting-cleaning': {
+        title: 'Painting & Cleaning Services for Homes & Properties | HomeHNI',
+        description: 'Professional painting & deep cleaning services for residential & commercial properties. Expert painters, quality materials & affordable rates.',
+        keywords: 'painting services, cleaning services, home painting, deep cleaning, property cleaning, professional painters'
+      },
+      'interior-design': {
+        title: 'Interior Designers & Home Interior Design Services | HomeHNI',
+        description: 'Expert interior designers for residential & commercial spaces. Custom interior design, modular kitchens, furniture & complete home makeovers.',
+        keywords: 'interior designers, interior design, home interiors, modular kitchen, furniture design, home decoration'
+      }
+    };
+    return metaTags[active] || metaTags.loans;
+  };
+
+  const currentMeta = getMetaTags();
+
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Home Services - Loans, Security, Legal, Packers & Property Management | HomeHNI</title>
-        <meta name="description" content="Get expert home services including home loans, security systems, packers & movers, legal services, handover services, property management, architects, painting & interior design. All-in-one property solutions." />
-        <meta name="keywords" content="home services, home loans, home security, packers movers, legal services, property management, architects, interior design, painting cleaning, handover services" />
-        <meta property="og:title" content="Home Services - Loans, Security, Legal & Property Management | HomeHNI" />
-        <meta property="og:description" content="Complete home services including loans, security, packers & movers, legal services, property management, and more." />
+        <title>{currentMeta.title}</title>
+        <meta name="description" content={currentMeta.description} />
+        <meta name="keywords" content={currentMeta.keywords} />
+        <meta property="og:title" content={currentMeta.title} />
+        <meta property="og:description" content={currentMeta.description} />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href={`${window.location.origin}/services`} />
+        <link rel="canonical" href={`${window.location.origin}/services?tab=${active}`} />
       </Helmet>
       
       <Marquee />
