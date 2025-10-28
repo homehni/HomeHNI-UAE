@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send, ArrowLeft, User, Home } from 'lucide-react';
+import { Send, ArrowLeft, UserCircle2, Home } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import type { RealtimeChannel } from '@supabase/supabase-js';
@@ -221,6 +221,14 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
     }
   };
 
+  const maskEmail = (email: string) => {
+    if (!email) return '';
+    const [username, domain] = email.split('@');
+    if (!domain) return email;
+    const maskedUsername = username.charAt(0) + '****';
+    return `${maskedUsername}@${domain}`;
+  };
+
   return (
     <Card className="h-full flex flex-col">
       {/* Header */}
@@ -245,18 +253,18 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
                 ? `${dealRoom.property_locality}, ${dealRoom.property_city}`
                 : 'Location not specified'}
             </p>
-            <div className="mt-1 flex items-center gap-1.5 text-xs">
-              <User className="h-3 w-3 text-muted-foreground flex-shrink-0" />
-              <span className="font-medium truncate">
+            <div className="mt-1.5 flex items-center gap-2 px-2 py-1.5 bg-primary/10 rounded-md border border-primary/20">
+              <UserCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+              <span className="font-medium text-sm truncate">
                 {isOwner ? (
                   <>
                     {dealRoom.interested_user_name}
-                    <span className="text-muted-foreground ml-1">({dealRoom.interested_user_email})</span>
+                    <span className="text-muted-foreground ml-1 text-xs">({maskEmail(dealRoom.interested_user_email)})</span>
                   </>
                 ) : ownerInfo ? (
                   <>
                     {ownerInfo.name}
-                    {ownerInfo.email && <span className="text-muted-foreground ml-1">({ownerInfo.email})</span>}
+                    {ownerInfo.email && <span className="text-muted-foreground ml-1 text-xs">({maskEmail(ownerInfo.email)})</span>}
                   </>
                 ) : (
                   <span className="text-muted-foreground">Loading contact...</span>
@@ -279,7 +287,7 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
         ) : messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-center">
             <div>
-              <User className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+              <UserCircle2 className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
               <p className="text-muted-foreground font-medium">No messages yet</p>
               <p className="text-sm text-muted-foreground mt-1">
                 Start the conversation by sending a message
