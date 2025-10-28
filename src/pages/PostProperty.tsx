@@ -217,7 +217,11 @@ export const PostProperty: React.FC = () => {
 
   // Check for incomplete drafts when component mounts
   useEffect(() => {
-    checkForIncompleteDrafts();
+    // Don't check if we're already resuming from dashboard
+    const isResumingFromDashboard = sessionStorage.getItem('resumeDraftId');
+    if (!isResumingFromDashboard) {
+      checkForIncompleteDrafts();
+    }
   }, [user, currentStep]);
 
   // Handle resume from dashboard
@@ -623,6 +627,7 @@ export const PostProperty: React.FC = () => {
       console.log('Owner data from draft:', ownerData);
       console.log('Owner listingType:', ownerData.listingType);
       console.log('Owner propertyType:', ownerData.propertyType);
+      console.log('Raw property_type from draft:', incompleteDraft.property_type);
       
       setOwnerInfo(ownerData);
       setInitialOwnerData(ownerData);
@@ -635,9 +640,15 @@ export const PostProperty: React.FC = () => {
       sessionStorage.setItem('resumeDraftData', JSON.stringify(draftData.formData));
       
       // Route to appropriate form based on draft data
-      console.log('Routing based on ownerData:', { propertyType: ownerData.propertyType, listingType: ownerData.listingType });
+      // Check raw property_type for PG/Hostel first
+      const rawPropertyType = incompleteDraft.property_type;
+      console.log('Routing based on draft data:', { rawPropertyType, propertyType: ownerData.propertyType, listingType: ownerData.listingType });
       
-      if (ownerData.propertyType === 'Commercial') {
+      // Special handling for PG/Hostel - check raw property_type first
+      if (rawPropertyType === 'PG/Hostel' || ownerData.listingType === 'PG/Hostel') {
+        console.log('Setting currentStep to pg-hostel-form from modal (PG/Hostel property type detected)');
+        setCurrentStep('pg-hostel-form');
+      } else if (ownerData.propertyType === 'Commercial') {
         console.log('Commercial property detected');
         if (ownerData.listingType === 'Rent') {
           console.log('Setting currentStep to commercial-rental-form');
@@ -650,11 +661,7 @@ export const PostProperty: React.FC = () => {
         console.log('Non-commercial property, checking listingType:', ownerData.listingType);
         console.log('Property type:', ownerData.propertyType);
         
-        // Special handling for PG/Hostel - check listing_type
-        if ((ownerData.listingType as string) === 'PG/Hostel') {
-          console.log('PG/Hostel property detected by listing_type, setting currentStep to pg-hostel-form');
-          setCurrentStep('pg-hostel-form');
-        } else if ((ownerData.listingType as string) === 'Land/Plot' || ownerData.propertyType === 'Land/Plot') {
+        if ((ownerData.listingType as string) === 'Land/Plot' || ownerData.propertyType === 'Land/Plot') {
           // Land/Plot properties - check listing_type for specific routing
           switch (ownerData.listingType) {
             case 'Industrial land':
@@ -686,14 +693,10 @@ export const PostProperty: React.FC = () => {
             case 'Commercial land':
               setCurrentStep('land-plot-form');
               break;
-            case 'PG/Hostel':
-              console.log('PG/Hostel case matched, setting currentStep to pg-hostel-form');
-              setCurrentStep('pg-hostel-form');
-              break;
             case 'Flatmates':
               setCurrentStep('flatmates-form');
               break;
-            default: // 'Rent'
+            default: // 'Rent' or other
               console.log('Default case matched (Rent), setting currentStep to rental-form');
               setCurrentStep('rental-form');
           }
