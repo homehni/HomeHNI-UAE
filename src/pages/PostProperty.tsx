@@ -259,9 +259,15 @@ export const PostProperty: React.FC = () => {
         }
         
         // Route to appropriate form based on draft data
-        console.log('Routing based on ownerData from dashboard:', { propertyType: ownerData.propertyType, listingType: ownerData.listingType });
+        // Check raw draft data for property_type since PG/Hostel may be stored there
+        const rawPropertyType = raw.property_type || ownerInfoFromDraft.propertyType;
+        console.log('Routing based on draft data:', { rawPropertyType, propertyType: ownerData.propertyType, listingType: ownerData.listingType });
         
-        if (ownerData.propertyType === 'Commercial') {
+        // Special handling for PG/Hostel - check raw property_type first
+        if (rawPropertyType === 'PG/Hostel' || ownerData.listingType === 'PG/Hostel') {
+          console.log('Setting currentStep to pg-hostel-form from dashboard (PG/Hostel property type detected)');
+          setCurrentStep('pg-hostel-form');
+        } else if (ownerData.propertyType === 'Commercial') {
           console.log('Commercial property detected from dashboard');
           if (ownerData.listingType === 'Rent') {
             console.log('Setting currentStep to commercial-rental-form from dashboard');
@@ -274,11 +280,7 @@ export const PostProperty: React.FC = () => {
           console.log('Non-commercial property from dashboard, checking listingType:', ownerData.listingType);
           console.log('Property type:', ownerData.propertyType);
           
-          // Special handling for PG/Hostel - check listing_type
-          if (ownerData.listingType === 'PG/Hostel') {
-            console.log('Setting currentStep to pg-hostel-form from dashboard');
-            setCurrentStep('pg-hostel-form');
-          } else if (ownerData.listingType === 'Flatmates') {
+          if (ownerData.listingType === 'Flatmates') {
             console.log('Setting currentStep to flatmates-form from dashboard');
             setCurrentStep('flatmates-form');
           } else if (ownerData.propertyType === 'Land/Plot') {
