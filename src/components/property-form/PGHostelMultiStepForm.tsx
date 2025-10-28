@@ -133,6 +133,8 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   }, [createdSubmissionId]);
   
   // Load draft data if resuming from a draft
+  const [isDraftLoaded, setIsDraftLoaded] = React.useState(false);
+  
   React.useEffect(() => {
     const resumeDraftId = sessionStorage.getItem('resumeDraftId');
     const resumeDraftData = sessionStorage.getItem('resumeDraftData');
@@ -221,6 +223,9 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         setDraftId(resumeDraftId);
         console.log('PGHostelMultiStepForm set draftId:', resumeDraftId);
         
+        // Mark draft as loaded
+        setIsDraftLoaded(true);
+        
         // Clear sessionStorage after loading
         sessionStorage.removeItem('resumeDraftId');
         sessionStorage.removeItem('resumeDraftData');
@@ -231,7 +236,10 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
         // Clear sessionStorage on error
         sessionStorage.removeItem('resumeDraftId');
         sessionStorage.removeItem('resumeDraftData');
+        setIsDraftLoaded(true); // Allow form to work even if loading fails
       }
+    } else {
+      setIsDraftLoaded(true); // No draft to load
     }
   }, []);
 
@@ -246,12 +254,12 @@ export const PGHostelMultiStepForm: React.FC<PGHostelMultiStepFormProps> = ({
   // Navigate to target step after draft data is loaded
   const hasNavigatedToTargetStep = React.useRef(false);
   React.useEffect(() => {
-    if (targetStep && targetStep > 0 && targetStep <= 8 && draftId && !hasNavigatedToTargetStep.current) {
+    if (targetStep && targetStep > 0 && targetStep <= 8 && isDraftLoaded && !hasNavigatedToTargetStep.current) {
       console.log('PG/Hostel navigating to target step after draft loaded:', targetStep);
       setCurrentStep(targetStep);
       hasNavigatedToTargetStep.current = true;
     }
-  }, [targetStep, draftId]);
+  }, [targetStep, isDraftLoaded]);
 
   // Skip owner info and property info - start from room details
   const [currentStep, setCurrentStep] = useState(1);
