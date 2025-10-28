@@ -451,7 +451,7 @@ const PostService = () => {
                     </div>
 
                     {/* Premium Service Toggle */}
-                    <div className="p-2 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
+                    {/* <div className="p-2 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
                       <div className="flex items-center justify-between">
                         <div>
                           <Label className="text-sm font-medium text-foreground">Premium Service</Label>
@@ -468,7 +468,7 @@ const PostService = () => {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
 
                     {/* Additional Notes */}
                     <div>
