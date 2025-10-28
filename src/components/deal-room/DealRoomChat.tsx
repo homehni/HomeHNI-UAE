@@ -50,18 +50,28 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
 
   // Determine if current user is the property owner by checking against properties
   const [isOwner, setIsOwner] = React.useState(false);
+  const [ownerInfo, setOwnerInfo] = React.useState<{ name: string; email: string } | null>(null);
 
   useEffect(() => {
     if (!user || !dealRoom.property_id) return;
     
-    // Check if current user owns this property
+    // Check if current user owns this property and fetch owner info
     supabase
       .from('properties')
-      .select('user_id')
+      .select('user_id, owner_name, owner_email')
       .eq('id', dealRoom.property_id)
       .single()
       .then(({ data }) => {
-        setIsOwner(data?.user_id === user.id);
+        const userIsOwner = data?.user_id === user.id;
+        setIsOwner(userIsOwner);
+        
+        // If current user is NOT the owner, store owner info to display
+        if (!userIsOwner && data) {
+          setOwnerInfo({
+            name: data.owner_name || 'Property Owner',
+            email: data.owner_email || ''
+          });
+        }
       });
   }, [user, dealRoom.property_id]);
 
@@ -235,6 +245,24 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
                 ? `${dealRoom.property_locality}, ${dealRoom.property_city}`
                 : 'Location not specified'}
             </p>
+            <div className="mt-1 flex items-center gap-1.5 text-xs">
+              <User className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+              <span className="font-medium truncate">
+                {isOwner ? (
+                  <>
+                    {dealRoom.interested_user_name}
+                    <span className="text-muted-foreground ml-1">({dealRoom.interested_user_email})</span>
+                  </>
+                ) : ownerInfo ? (
+                  <>
+                    {ownerInfo.name}
+                    {ownerInfo.email && <span className="text-muted-foreground ml-1">({ownerInfo.email})</span>}
+                  </>
+                ) : (
+                  <span className="text-muted-foreground">Loading contact...</span>
+                )}
+              </span>
+            </div>
           </div>
         </div>
       </CardHeader>
