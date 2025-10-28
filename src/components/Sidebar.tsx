@@ -190,38 +190,40 @@ const Sidebar = ({
       navigate('/about');
       onClose();
     }
-  }, {
-    id: 'commercial-plans',
-    label: 'Commercial Plans',
-    hasSubmenu: true,
-    submenu: [
-    // {
-    //   label: 'Commercial Tenant Plans',
-    //   onClick: () => {
-    //     navigate('/commercial-tenant-plans');
-    //     onClose();
-    //   }
-    // },
-    {
-      label: 'Corpoarate Commercial Owner Plans',
-      onClick: () => {
-        navigate('/plans?tab=commercial-owner');
-        onClose();
-      }
-    }, {
-      label: 'Corpoarate Commercial Buyer Plans',
-      onClick: () => {
-        navigate('/plans?tab=commercial-buyer');
-        onClose();
-      }
-    }, {
-      label: 'Corpoarate Commercial Seller Plans',
-      onClick: () => {
-        navigate('/plans?tab=seller&category=commercial');
-        onClose();
-      }
-    }]
-  }, {
+  },
+  // {
+  //   id: 'commercial-plans',
+  //   label: 'Commercial Plans',
+  //   hasSubmenu: true,
+  //   submenu: [
+  //   // {
+  //   //   label: 'Commercial Tenant Plans',
+  //   //   onClick: () => {
+  //   //     navigate('/commercial-tenant-plans');
+  //   //     onClose();
+  //   //   }
+  //   // },
+  //   {
+  //     label: 'Corpoarate Commercial Owner Plans',
+  //     onClick: () => {
+  //       navigate('/plans?tab=commercial-owner');
+  //       onClose();
+  //     }
+  //   }, {
+  //     label: 'Corpoarate Commercial Buyer Plans',
+  //     onClick: () => {
+  //       navigate('/plans?tab=commercial-buyer');
+  //       onClose();
+  //     }
+  //   }, {
+  //     label: 'Corpoarate Commercial Seller Plans',
+  //     onClick: () => {
+  //       navigate('/plans?tab=seller&category=commercial');
+  //       onClose();
+  //     }
+  //   }]
+  // },
+  {
     id: 'students',
     label: 'Students',
     hasSubmenu: false,
@@ -383,7 +385,7 @@ const Sidebar = ({
                               </svg>
                             </a>
                           </div>
-                        </div> : item.submenu?.map(subItem => <button key={typeof subItem === 'string' ? subItem : subItem.label} onClick={typeof subItem === 'string' ? undefined : subItem.onClick} className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors">
+                        </div> : (item as any).submenu?.map((subItem: any) => <button key={typeof subItem === 'string' ? subItem : subItem.label} onClick={typeof subItem === 'string' ? undefined : subItem.onClick} className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors">
                             {typeof subItem === 'string' ? subItem : subItem.label}
                           </button>)}
                     </div>}
