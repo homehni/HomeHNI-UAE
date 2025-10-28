@@ -253,9 +253,9 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
                 ? `${dealRoom.property_locality}, ${dealRoom.property_city}`
                 : 'Location not specified'}
             </p>
-            <div className="mt-1.5 flex items-center gap-2 px-2 py-1.5 bg-primary/10 rounded-md border border-primary/20">
+            <div className="mt-1.5 inline-flex items-center gap-2 px-2 py-1.5 bg-primary/10 rounded-md border border-primary/20">
               <UserCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-              <span className="font-medium text-sm truncate">
+              <span className="font-medium text-sm">
                 {isOwner ? (
                   <>
                     {dealRoom.interested_user_name}
