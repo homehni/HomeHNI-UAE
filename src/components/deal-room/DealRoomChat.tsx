@@ -94,9 +94,11 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   }, [messages]);
 
   const scrollToBottom = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
+    }, 100);
   };
 
   const loadMessages = async () => {
@@ -176,13 +178,22 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
           filter: `lead_id=eq.${dealRoom.id}`,
         },
         (payload) => {
+          console.log('📨 New message received via realtime:', payload.new);
           const newMsg = payload.new as Message;
-          setMessages((prev) => [...prev, newMsg]);
+          
+          setMessages((prev) => {
+            const updated = [...prev, newMsg];
+            console.log('✅ Messages updated, count:', updated.length);
+            return updated;
+          });
 
           // Mark as read if it's from the other party
           if (newMsg.sender_id !== user?.id) {
             markMessagesAsRead();
           }
+          
+          // Force scroll after state update
+          setTimeout(() => scrollToBottom(), 150);
         }
       )
       .subscribe((status) => {
