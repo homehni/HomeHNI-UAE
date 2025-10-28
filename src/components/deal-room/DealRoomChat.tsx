@@ -46,7 +46,6 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const channelRef = useRef<RealtimeChannel | null>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
 
   // Determine if current user is the property owner by checking against properties
   const [isOwner, setIsOwner] = React.useState(false);
@@ -90,10 +89,6 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   }, [dealRoom.id, user?.id]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
     if (!dealRoom.id) return;
     const interval = setInterval(() => {
       if (document.visibilityState === 'visible') {
@@ -102,14 +97,6 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
     }, 3000);
     return () => clearInterval(interval);
   }, [dealRoom.id]);
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      if (bottomRef.current) {
-        bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }
-    }, 100);
-  };
 
   const loadMessages = async () => {
     try {
@@ -343,7 +330,6 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
             })}
           </div>
         )}
-        <div ref={bottomRef} />
       </ScrollArea>
 
       {/* Message Input */}
