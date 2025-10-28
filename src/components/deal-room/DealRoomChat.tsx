@@ -76,15 +76,18 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   }, [user, dealRoom.property_id]);
 
   useEffect(() => {
+    if (!dealRoom.id || !user) return;
+
     loadMessages();
     setupRealtimeSubscription();
 
     return () => {
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
       }
     };
-  }, [dealRoom.id]);
+  }, [dealRoom.id, user?.id]);
 
   useEffect(() => {
     scrollToBottom();
@@ -156,6 +159,12 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
   };
 
   const setupRealtimeSubscription = () => {
+    // Ensure we don't have duplicate subscriptions
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+
     const channel = supabase
       .channel(`deal_room_${dealRoom.id}`)
       .on(
@@ -169,18 +178,19 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
         (payload) => {
           const newMsg = payload.new as Message;
           setMessages((prev) => [...prev, newMsg]);
-          
+
           // Mark as read if it's from the other party
           if (newMsg.sender_id !== user?.id) {
             markMessagesAsRead();
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Realtime status (deal room)', dealRoom.id, status);
+      });
 
     channelRef.current = channel;
   };
-
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !user || sending) return;
 
