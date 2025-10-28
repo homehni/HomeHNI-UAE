@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useCommercialSalePropertyForm } from '@/hooks/useCommercialSalePropertyForm';
 import { CommercialSaleSidebar } from './CommercialSaleSidebar';
@@ -32,6 +32,8 @@ export const CommercialSaleMultiStepForm = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [formSessionId, setFormSessionId] = useState<number>(() => Date.now());
+  const didInitResetRef = useRef(false);
   const {
     currentStep,
     ownerInfo,
@@ -64,6 +66,7 @@ export const CommercialSaleMultiStepForm = ({
     if (!hasResume) {
       resetForm();
       setDraftId(null);
+      setFormSessionId(Date.now()); // force remount of step forms so defaultValues reset
     }
   }, []);
 
@@ -72,6 +75,14 @@ export const CommercialSaleMultiStepForm = ({
       updateOwnerInfo(initialOwnerInfo);
     }
   }, [initialOwnerInfo, updateOwnerInfo]);
+
+  // Ensure new form session ID on mount
+  useEffect(() => {
+    if (!didInitResetRef.current) {
+      setFormSessionId(Date.now());
+      didInitResetRef.current = true;
+    }
+  }, []);
 
   // Navigate to target step if provided
   useEffect(() => {
@@ -310,6 +321,7 @@ export const CommercialSaleMultiStepForm = ({
       case 2:
         return (
           <CommercialSalePropertyDetailsStep
+            key={`session-${formSessionId}-step-2`}
             initialData={propertyDetails}
             onNext={(data) => {
               updatePropertyDetails(data);
@@ -323,6 +335,7 @@ export const CommercialSaleMultiStepForm = ({
       case 3:
         return (
           <CommercialSaleLocationDetailsStep
+            key={`session-${formSessionId}-step-3`}
             initialData={locationDetails}
             onNext={(data) => {
               console.log('Step 3 onNext called with data:', data);
@@ -337,6 +350,7 @@ export const CommercialSaleMultiStepForm = ({
       case 4:
         return (
           <CommercialSaleSaleDetailsStep
+            key={`session-${formSessionId}-step-4`}
             initialData={saleDetails}
             onNext={(data) => {
               console.log('Step 4 onNext called with data:', data);
@@ -351,6 +365,7 @@ export const CommercialSaleMultiStepForm = ({
       case 5:
         return (
           <CommercialSaleAmenitiesStep
+            key={`session-${formSessionId}-step-5`}
             initialData={amenities}
             onNext={(data) => {
               console.log('Step 5 onNext called with data:', data);
@@ -390,6 +405,7 @@ export const CommercialSaleMultiStepForm = ({
       case 7:
         return (
           <CommercialSaleScheduleStep
+            key={`session-${formSessionId}-step-7`}
             initialData={scheduleInfo}
             onNext={(data) => {
               console.log('Step 7 onNext called with data:', data);
