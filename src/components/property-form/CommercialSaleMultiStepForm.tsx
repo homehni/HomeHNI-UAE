@@ -58,6 +58,15 @@ export const CommercialSaleMultiStepForm = ({
     isStepValid,
   } = useCommercialSalePropertyForm();
 
+  // Reset form on fresh mount when not resuming a draft
+  useEffect(() => {
+    const hasResume = !!sessionStorage.getItem('resumeDraftId') || !!sessionStorage.getItem('resumeDraftData');
+    if (!hasResume) {
+      resetForm();
+      setDraftId(null);
+    }
+  }, []);
+
   useEffect(() => {
     if (initialOwnerInfo) {
       updateOwnerInfo(initialOwnerInfo);
