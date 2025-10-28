@@ -372,12 +372,16 @@ const [propertyInfo, setPropertyInfo] = useState({
   const saveDraftAndNext = async (stepNumber: number, stepData: any) => {
     try {
       setIsSavingDraft(true);
+      console.log(`PG/Hostel Step ${stepNumber}: Starting save with data:`, stepData);
       
-      if (!draftId && !isCreatingDraft) {
+      let currentDraftId = draftId;
+      
+      if (!currentDraftId && !isCreatingDraft) {
         // Prevent multiple draft creation
         setIsCreatingDraft(true);
         try {
           // Create new draft
+          console.log('Creating new PG/Hostel draft...');
           const newDraft = await draftService.createDraft({
             user_id: ownerInfo.email || 'anonymous',
             property_type: 'PG/Hostel',
@@ -388,51 +392,50 @@ const [propertyInfo, setPropertyInfo] = useState({
             whatsapp_updates: ownerInfo.whatsappUpdates,
             additional_info: {}
           });
-          setDraftId(newDraft.id);
-          console.log('Created new PG/Hostel draft:', newDraft.id);
+          currentDraftId = newDraft.id;
+          setDraftId(currentDraftId);
+          console.log('Created new PG/Hostel draft:', currentDraftId);
+        } catch (createError) {
+          console.error('Failed to create draft:', createError);
+          throw new Error(`Failed to create draft: ${createError instanceof Error ? createError.message : 'Unknown error'}`);
         } finally {
           setIsCreatingDraft(false);
         }
       }
       
-      // Wait for draft ID to be set
-      const currentDraftId = draftId || await new Promise<string>((resolve) => {
-        const checkDraftId = setInterval(() => {
-          if (draftId) {
-            clearInterval(checkDraftId);
-            resolve(draftId);
-          }
-        }, 100);
-        
-        // Timeout after 5 seconds
-        setTimeout(() => {
-          clearInterval(checkDraftId);
-          resolve('');
-        }, 5000);
-      });
-      
       if (!currentDraftId) {
-        throw new Error('Failed to create draft');
+        throw new Error('No draft ID available for saving');
       }
       
+      // Validate step data before saving
+      if (stepNumber === 2 && (!stepData.roomTypeDetails || Object.keys(stepData.roomTypeDetails).length === 0)) {
+        console.warn('Step 2: No room type details provided, skipping save');
+        return; // Don't fail, just skip saving empty data
+      }
+      
+      console.log(`PG/Hostel Step ${stepNumber}: Saving to draft ${currentDraftId}`);
+      
       // Save form data
-      await draftService.saveFormData(currentDraftId, stepData, stepNumber, 'pg_hostel');
+      try {
+        await draftService.saveFormData(currentDraftId, stepData, stepNumber, 'pg_hostel');
+        console.log(`PG/Hostel Step ${stepNumber}: Save successful`);
+      } catch (saveError) {
+        console.error(`PG/Hostel Step ${stepNumber}: Save failed:`, saveError);
+        throw new Error(`Failed to save step ${stepNumber}: ${saveError instanceof Error ? saveError.message : 'Unknown error'}`);
+      }
       
       // Update completed steps
       setCompletedSteps(prev => [...prev.filter(step => step !== stepNumber), stepNumber]);
       
-      // Toast notification disabled for PG/Hostel form
-      // toast({
-      //   title: "Progress Saved",
-      //   description: "Your progress has been saved successfully.",
-      // });
     } catch (error) {
-      console.error('Error saving draft:', error);
+      console.error('Error in saveDraftAndNext:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to save progress. Please try again.';
       toast({
         title: "Save Error",
-        description: "Failed to save progress. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
+      throw error; // Re-throw to prevent navigation
     } finally {
       setIsSavingDraft(false);
     }
@@ -447,15 +450,25 @@ const [propertyInfo, setPropertyInfo] = useState({
 
   // Step handlers
   const handleRoomTypesNext = async (data: any) => {
+    console.log('handleRoomTypesNext called with:', data);
     setRoomTypes(data);
-    await saveDraftAndNext(1, data);
-    nextStep();
+    try {
+      await saveDraftAndNext(1, data);
+      nextStep();
+    } catch (error) {
+      console.error('Failed to save room types, not advancing step');
+    }
   };
 
   const handleRoomDetailsNext = async (data: any) => {
+    console.log('handleRoomDetailsNext called with:', data);
     setRoomDetails(data);
-    await saveDraftAndNext(2, data);
-    nextStep();
+    try {
+      await saveDraftAndNext(2, data);
+      nextStep();
+    } catch (error) {
+      console.error('Failed to save room details, not advancing step');
+    }
   };
 
   const handleLocalityDetailsNext = async (data: any) => {
