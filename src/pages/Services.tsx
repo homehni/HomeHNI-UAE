@@ -101,10 +101,10 @@ const Services = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Home Services - Loans, Security, Legal, Packers & Property Management | NoBroker</title>
+        <title>Home Services - Loans, Security, Legal, Packers & Property Management | HomeHNI</title>
         <meta name="description" content="Get expert home services including home loans, security systems, packers & movers, legal services, handover services, property management, architects, painting & interior design. All-in-one property solutions." />
         <meta name="keywords" content="home services, home loans, home security, packers movers, legal services, property management, architects, interior design, painting cleaning, handover services" />
-        <meta property="og:title" content="Home Services - Loans, Security, Legal & Property Management | NoBroker" />
+        <meta property="og:title" content="Home Services - Loans, Security, Legal & Property Management | HomeHNI" />
         <meta property="og:description" content="Complete home services including loans, security, packers & movers, legal services, property management, and more." />
         <meta property="og:type" content="website" />
         <link rel="canonical" href={`${window.location.origin}/services`} />

@@ -106,10 +106,10 @@ const Plans = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Property Plans - Buyer, Seller, Rental & Commercial Plans | NoBroker</title>
+        <title>Property Plans - Buyer, Seller, Rental & Commercial Plans | HomeHNI</title>
         <meta name="description" content="Choose from buyer plans, seller plans, rental plans, commercial plans, builder plans & agent plans. Zero brokerage property solutions for all your real estate needs in India." />
         <meta name="keywords" content="property plans, buyer plans, seller plans, rental plans, commercial property plans, builder plans, agent plans, zero brokerage, property subscription plans" />
-        <meta property="og:title" content="Property Plans - Buyer, Seller, Rental & Commercial Plans | NoBroker" />
+        <meta property="og:title" content="Property Plans - Buyer, Seller, Rental & Commercial Plans | HomeHNI" />
         <meta property="og:description" content="Choose from buyer plans, seller plans, rental plans, commercial plans, builder plans & agent plans. Zero brokerage property solutions." />
         <meta property="og:type" content="website" />
         <link rel="canonical" href={`${window.location.origin}/plans`} />

@@ -368,10 +368,10 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
     <div className={embedded ? "" : "min-h-screen bg-background"}>
       {!embedded && (
         <Helmet>
-          <title>Owner Plans - Get Tenants Quickly & Save ₹50,000 on Brokerage | NoBroker</title>
+          <title>Owner Plans - Get Tenants Quickly & Save ₹50,000 on Brokerage | HomeHNI</title>
           <meta name="description" content="Choose owner plans for residential, commercial, industrial & agricultural properties. Get tenants quickly with zero brokerage. Silver, Gold, Platinum & Diamond plans starting FREE." />
           <meta name="keywords" content="owner plans, property owner plans, get tenants, zero brokerage, residential property plans, commercial property plans, industrial property plans, agricultural property plans" />
-          <meta property="og:title" content="Owner Plans - Get Tenants Quickly & Save on Brokerage | NoBroker" />
+          <meta property="og:title" content="Owner Plans - Get Tenants Quickly & Save on Brokerage | HomeHNI" />
           <meta property="og:description" content="Owner plans for all property types. Find tenants quickly with zero brokerage. Plans starting FREE." />
           <meta property="og:type" content="website" />
           <link rel="canonical" href={`${window.location.origin}/owner-plans`} />
