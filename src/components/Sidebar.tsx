@@ -136,42 +136,46 @@ const Sidebar = ({
       navigate('/painting-cleaning');
       onClose();
     }
-  }, {
-    id: 'packers-movers',
-    label: 'Packers and Movers',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/packers-movers');
-      onClose();
-    }
   },
+  // {
+  //   id: 'packers-movers',
+  //   label: 'Packers and Movers',
+  //   hasSubmenu: false,
+  //   onClick: () => {
+  //     navigate('/packers-movers');
+  //     onClose();
+  //   }
+  // },
   // { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
   // { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
+  // {
+  //   id: 'owner-plans',
+  //   label: 'Property Renting Owner Plans',
+  //   hasSubmenu: false,
+  //   onClick: () => {
+  //     navigate('/plans?tab=owner');
+  //     onClose();
+  //   }
+  // },
+  // {
+  //   id: 'buyer-plans',
+  //   label: 'Property Buyer Plans',
+  //   hasSubmenu: false,
+  //   onClick: () => {
+  //     navigate('/plans?tab=buyer');
+  //     onClose();
+  //   }
+  // },
+  // {
+  //   id: 'seller-plans',
+  //   label: 'Property Seller Plans',
+  //   hasSubmenu: false,
+  //   onClick: () => {
+  //     navigate('/plans?tab=seller');
+  //     onClose();
+  //   }
+  // },
   {
-    id: 'owner-plans',
-    label: 'Property Renting Owner Plans',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/plans?tab=owner');
-      onClose();
-    }
-  }, {
-    id: 'buyer-plans',
-    label: 'Property Buyer Plans',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/plans?tab=buyer');
-      onClose();
-    }
-  }, {
-    id: 'seller-plans',
-    label: 'Property Seller Plans',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/plans?tab=seller');
-      onClose();
-    }
-  }, {
     id: 'builder-dealer-plans',
     label: 'Builder Dealer Plans',
     hasSubmenu: false,
