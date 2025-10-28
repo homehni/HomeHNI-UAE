@@ -22,9 +22,6 @@ interface FormData {
   name: string;
   phone: string;
   email: string;
-  country: string;
-  state: string;
-  city: string;
   intent: string;
   propertyType: string;
   serviceCategory: string;
@@ -40,8 +37,6 @@ interface FormData {
 const PostService = () => {
   const { user } = useAuth();
   const { profile } = useProfile();
-  const [statesData, setStatesData] = useState<any>(null);
-  const [cities, setCities] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [referenceId, setReferenceId] = useState("");
   const [errors, setErrors] = useState<{[key: string]: string}>({});
@@ -50,9 +45,6 @@ const PostService = () => {
     name: "",
     phone: "",
     email: "",
-    country: "India",
-    state: "",
-    city: "",
     intent: "",
     propertyType: "",
     serviceCategory: "",
@@ -68,48 +60,6 @@ const PostService = () => {
   const { submissionState, setSubmitting, showSuccessToast, showErrorToast, updateProgress } = useFormSubmission();
   const { toast } = useToast();
 
-  // Load states and cities data
-  useEffect(() => {
-    const loadStatesData = async () => {
-      try {
-        const response = await fetch('/data/india_states_cities.json');
-        const data = await response.json();
-        setStatesData(data);
-      } catch (error) {
-        console.error('Failed to load states data:', error);
-      }
-    };
-    loadStatesData();
-  }, []);
-
-  // Update cities when state changes
-  useEffect(() => {
-    if (statesData && formData.state && formData.country === "India") {
-      const stateCities = statesData[formData.state];
-      setCities(stateCities || []);
-    } else {
-      setCities([]);
-    }
-  }, [formData.state, statesData, formData.country]);
-
-  // Update currency based on country
-  useEffect(() => {
-    let currency = "INR";
-    switch (formData.country) {
-      case "UAE":
-        currency = "AED";
-        break;
-      case "USA":
-        currency = "USD";
-        break;
-      case "India":
-      default:
-        currency = "INR";
-        break;
-    }
-    setFormData(prev => ({ ...prev, currency }));
-  }, [formData.country]);
-
   // Auto-fill form data when user is logged in
   useEffect(() => {
     if (user && profile) {
@@ -117,10 +67,7 @@ const PostService = () => {
         ...prev,
         name: profile.full_name || prev.name,
         email: user.email || prev.email,
-        phone: profile.phone || prev.phone,
-        country: profile.location?.country || prev.country,
-        state: profile.location?.state || prev.state,
-        city: profile.location?.city || prev.city
+        phone: profile.phone || prev.phone
       }));
     }
   }, [user, profile]);
@@ -174,14 +121,8 @@ const PostService = () => {
     "Others"
   ];
 
-  const countryOptions = [
-    { value: "India", label: "India", symbol: "₹" },
-    { value: "UAE", label: "UAE", symbol: "AED" },
-    { value: "USA", label: "USA", symbol: "$" }
-  ];
-
   const getCurrencySymbol = () => {
-    return countryOptions.find(c => c.value === formData.country)?.symbol || "₹";
+    return "₹"; // Default to Indian Rupee
   };
 
   const formatBudgetAmount = (amount: number) => {
@@ -209,9 +150,6 @@ const PostService = () => {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
-    if (!formData.country) newErrors.country = "Country is required";
-    if (!formData.state) newErrors.state = "State is required";
-    if (!formData.city) newErrors.city = "City is required";
     if (!formData.intent) newErrors.intent = "Please select what you want to do";
     
     if (["Buy", "Sell", "Lease"].includes(formData.intent) && !formData.propertyType) {
@@ -264,9 +202,6 @@ const PostService = () => {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
-        country: formData.country,
-        state: formData.state,
-        city: formData.city,
         intent: formData.intent,
         ...(["Buy", "Sell", "Lease"].includes(formData.intent) && { propertyType: formData.propertyType }),
         ...(formData.intent === "Service" && { serviceType: formData.serviceCategory }),
@@ -286,8 +221,6 @@ const PostService = () => {
         .insert({
           user_id: user?.id,
           title: `${formData.intent} Requirement - ${formData.serviceCategory || formData.propertyType}`,
-          city: formData.city,
-          state: formData.state,
           status: 'new',
           payload: submissionPayload
         });
@@ -350,7 +283,6 @@ const PostService = () => {
                   <h3 className="font-semibold mb-2">Submission Summary:</h3>
                   <p><strong>Reference ID:</strong> {referenceId}</p>
                   <p><strong>Name:</strong> {formData.name}</p>
-                  <p><strong>Location:</strong> {formData.city}, {formData.state}</p>
                   <p><strong>Intent:</strong> {formData.intent}</p>
                   {formData.budgetRange[0] > 0 && formData.budgetRange[1] > 0 && (
                     <p><strong>Budget:</strong> {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}</p>
@@ -435,76 +367,6 @@ const PostService = () => {
                           placeholder="your.email@example.com"
                         />
                         {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
-                      </div>
-
-                      <div>
-                        <Label className="text-sm font-medium">Country</Label>
-                        <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                          <SelectTrigger className="mt-1 h-10">
-                            <SelectValue placeholder="Select country" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {countryOptions.map(country => (
-                              <SelectItem key={country.value} value={country.value}>
-                                {country.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {errors.country && <p className="text-sm text-destructive mt-1">{errors.country}</p>}
-                      </div>
-                    </div>
-
-                    {/* Location Details */}
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div>
-                        <Label className="text-sm font-medium">State</Label>
-                        <Select 
-                          value={formData.state} 
-                          onValueChange={(value) => {
-                            handleInputChange("state", value);
-                            handleInputChange("city", ""); // Reset city when state changes
-                          }}
-                        >
-                          <SelectTrigger className="mt-1 h-10">
-                            <SelectValue placeholder="Select state" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {formData.country === "India" && statesData && Object.keys(statesData).map(state => (
-                              <SelectItem key={state} value={state}>{state}</SelectItem>
-                            ))}
-                            {formData.country === "UAE" && (
-                              <>
-                                <SelectItem value="Dubai">Dubai</SelectItem>
-                                <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
-                                <SelectItem value="Sharjah">Sharjah</SelectItem>
-                              </>
-                            )}
-                            {formData.country === "USA" && (
-                              <>
-                                <SelectItem value="California">California</SelectItem>
-                                <SelectItem value="Texas">Texas</SelectItem>
-                                <SelectItem value="New York">New York</SelectItem>
-                              </>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        {errors.state && <p className="text-sm text-destructive mt-1">{errors.state}</p>}
-                      </div>
-
-                      <div>
-                        <Label className="text-sm font-medium">City</Label>
-                        <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                          <SelectTrigger className="mt-1 h-10">
-                            <SelectValue placeholder="Select city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {cities.map(city => (
-                              <SelectItem key={city} value={city}>{city}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {errors.city && <p className="text-sm text-destructive mt-1">{errors.city}</p>}
                       </div>
                     </div>
 
