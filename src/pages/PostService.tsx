@@ -398,7 +398,7 @@ const PostService = () => {
                     {/* Personal Details */}
                     <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label htmlFor="name" className="text-sm font-medium">Name *</Label>
+                        <Label htmlFor="name" className="text-sm font-medium">Name</Label>
                         <Input
                           id="name"
                           value={formData.name}
@@ -410,7 +410,7 @@ const PostService = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="phone" className="text-sm font-medium">Phone Number *</Label>
+                        <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
                         <Input
                           id="phone"
                           type="tel"
@@ -425,7 +425,7 @@ const PostService = () => {
 
                     <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label htmlFor="email" className="text-sm font-medium">Email *</Label>
+                        <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                         <Input
                           id="email"
                           type="email"
@@ -438,7 +438,7 @@ const PostService = () => {
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium">Country *</Label>
+                        <Label className="text-sm font-medium">Country</Label>
                         <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
                           <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select country" />
@@ -458,7 +458,7 @@ const PostService = () => {
                     {/* Location Details */}
                     <div className="grid md:grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-sm font-medium">State *</Label>
+                        <Label className="text-sm font-medium">State</Label>
                         <Select 
                           value={formData.state} 
                           onValueChange={(value) => {
@@ -493,7 +493,7 @@ const PostService = () => {
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium">City *</Label>
+                        <Label className="text-sm font-medium">City</Label>
                         <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
                           <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select city" />
@@ -510,7 +510,7 @@ const PostService = () => {
 
                     {/* Intent Selection */}
                     <div>
-                      <Label className="text-sm font-medium">I want to *</Label>
+                      <Label className="text-sm font-medium">I want to</Label>
                       <Select value={formData.intent} onValueChange={(value) => handleInputChange("intent", value)}>
                         <SelectTrigger className="mt-1 h-10">
                           <SelectValue placeholder="Select what you want to do" />
@@ -529,7 +529,7 @@ const PostService = () => {
                     {/* Conditional Property Type / Service Category */}
                     {['Buy', 'Sell', 'Lease'].includes(formData.intent) && (
                       <div>
-                        <Label className="text-sm font-medium">Property Type *</Label>
+                        <Label className="text-sm font-medium">Property Type</Label>
                         <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
                           <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select property type" />
@@ -548,7 +548,7 @@ const PostService = () => {
 
                     {formData.intent === 'Service' && (
                       <div>
-                        <Label className="text-sm font-medium">Service Category *</Label>
+                        <Label className="text-sm font-medium">Service Category</Label>
                         <Select value={formData.serviceCategory} onValueChange={(value) => handleInputChange("serviceCategory", value)}>
                           <SelectTrigger className="mt-1 h-10">
                             <SelectValue placeholder="Select service category" />
