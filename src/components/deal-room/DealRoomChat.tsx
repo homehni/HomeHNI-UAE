@@ -172,28 +172,13 @@ export const DealRoomChat: React.FC<DealRoomChatProps> = ({ dealRoom, onBack }) 
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
           table: 'lead_messages',
           filter: `lead_id=eq.${dealRoom.id}`,
         },
-        (payload) => {
-          console.log('📨 New message received via realtime:', payload.new);
-          const newMsg = payload.new as Message;
-          
-          setMessages((prev) => {
-            const updated = [...prev, newMsg];
-            console.log('✅ Messages updated, count:', updated.length);
-            return updated;
-          });
-
-          // Mark as read if it's from the other party
-          if (newMsg.sender_id !== user?.id) {
-            markMessagesAsRead();
-          }
-          
-          // Force scroll after state update
-          setTimeout(() => scrollToBottom(), 150);
+        () => {
+          loadMessages();
         }
       )
       .subscribe((status) => {
