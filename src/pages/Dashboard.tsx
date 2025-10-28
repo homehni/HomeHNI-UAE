@@ -32,6 +32,7 @@ import { PropertyWatermark } from '@/components/property-details/PropertyWaterma
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { PropertyDraftService, type PropertyDraft } from '@/services/propertyDraftService';
+import { generatePropertyUrl } from '@/utils/propertyUrlGenerator';
 
 interface Property {
   id: string;
@@ -996,9 +997,15 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleViewProperty = (property: CombinedProperty) => {
-    // Navigate to the property's individual details page
-    // Both approved properties and submissions can be viewed
-    navigate(`/property/${property.id}`);
+    // Navigate to the property's individual details page with SEO-friendly URL
+    const propertyUrl = generatePropertyUrl(property.id, {
+      propertyType: property.property_type,
+      listingType: property.listing_type,
+      locality: property.locality,
+      city: property.city,
+      bhkType: property.bhk_type
+    });
+    navigate(propertyUrl);
   };
 
 
@@ -2214,9 +2221,17 @@ export const Dashboard: React.FC = () => {
                       
                        {/* Action Buttons */}
                        <div className="px-4 pb-4 space-y-2">
-                        <Button 
+                         <Button 
                           className="w-full"
-                          onClick={() => navigate(`/property/${lead.properties.id}`)}
+                          onClick={() => {
+                            const propertyUrl = generatePropertyUrl(lead.properties.id, {
+                              propertyType: lead.properties.property_type,
+                              listingType: lead.properties.listing_type,
+                              locality: lead.properties.locality,
+                              city: lead.properties.city
+                            });
+                            navigate(propertyUrl);
+                          }}
                         >
                           View Property
                         </Button>
@@ -2444,9 +2459,17 @@ export const Dashboard: React.FC = () => {
                       
                       {/* Action Button */}
                       <div className="px-4 pb-4">
-                        <Button 
+                         <Button 
                           className="w-full"
-                          onClick={() => navigate(`/property/${property.id}`)}
+                          onClick={() => {
+                            const propertyUrl = generatePropertyUrl(property.id, {
+                              propertyType: property.property_type,
+                              listingType: property.listing_type,
+                              locality: property.locality,
+                              city: property.city
+                            });
+                            navigate(propertyUrl);
+                          }}
                         >
                           View Property
                         </Button>

@@ -11,6 +11,7 @@ import { PropertyWatermark } from '@/components/property-details/PropertyWaterma
 import { supabase } from '@/integrations/supabase/client';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
+import { generatePropertyUrl } from '@/utils/propertyUrlGenerator';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
@@ -570,8 +571,22 @@ const PropertyCard = ({
         ? "border-amber-200 ring-2 ring-amber-300 hover:ring-4 hover:ring-amber-400 shadow-md"
         : "border-brand-red/30 hover:border-brand-red/60"
     )} onClick={() => {
+      // Generate SEO-friendly URL with slug
+      // Parse location to extract locality and city (format: "locality, city")
+      const locationParts = location.split(',').map(part => part.trim());
+      const locality = locationParts[0] || location;
+      const city = locationParts[1] || locationParts[0];
+      
+      const propertyUrl = generatePropertyUrl(id, {
+        propertyType,
+        listingType: listingType || (isPGHostel ? 'rent' : 'sale'),
+        locality,
+        city,
+        bhkType: bedrooms ? `${bedrooms}BHK` : undefined
+      });
+      
       sessionStorage.setItem(`property-${id}`, JSON.stringify(propertyForPage));
-      window.open(`/property/${id}`, '_blank');
+      window.open(propertyUrl, '_blank');
     }}>
       {/* Wrapper switches to horizontal layout on md+ when size is large */}
       <div className={cn(size === 'large' ? 'md:flex md:flex-row md:items-stretch' : '')}>

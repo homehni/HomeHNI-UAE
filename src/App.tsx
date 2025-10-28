@@ -234,6 +234,9 @@ const App: React.FC = () => {
             } />
             
             {/* Property Routes */}
+            {/* SEO-friendly URL format: /property/:slug/:id */}
+            <Route path="/property/:slug/:id" element={<PropertyPreviewPage />} />
+            {/* Backward compatibility: /property/:id */}
             <Route path="/property/:id" element={<PropertyPreviewPage />} />
             <Route path="/search" element={<PropertySearch />} />
             <Route path="/property-search" element={<PropertySearch />} />

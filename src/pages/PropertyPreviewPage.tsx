@@ -299,11 +299,12 @@ interface PropertyPreviewData {
 }
 
 export const PropertyPreviewPage: React.FC = () => {
-  const { draftId, id } = useParams<{ draftId?: string; id?: string }>();
+  const params = useParams<{ draftId?: string; id?: string; slug?: string }>();
   const navigate = useNavigate();
   
   // Use either draftId or id - both should work
-  const propertyId = draftId || id;
+  // Support both old format (/property/:id) and new format (/property/:slug/:id)
+  const propertyId = params.draftId || params.id;
   const [propertyData, setPropertyData] = useState<PropertyPreviewData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -321,11 +322,11 @@ export const PropertyPreviewPage: React.FC = () => {
       }
 
       console.log('PropertyPreviewPage: Starting fetch for propertyId:', propertyId);
-      console.log('PropertyPreviewPage: URL params - draftId:', draftId, 'id:', id);
+      console.log('PropertyPreviewPage: URL params - draftId:', params.draftId, 'id:', params.id, 'slug:', params.slug);
 
       try {
         console.log('🔍 SEARCHING FOR PROPERTY ID:', propertyId);
-        console.log('🔍 URL PARAMS:', { draftId, id, propertyId });
+        console.log('🔍 URL PARAMS:', { draftId: params.draftId, id: params.id, slug: params.slug, propertyId });
         // First try to fetch from property_drafts table (for drafts with complete data)
         const { data: draftData, error: draftError } = await supabase
           .from('property_drafts')
