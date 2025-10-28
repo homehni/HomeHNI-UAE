@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
@@ -32,7 +33,6 @@ const Services = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    document.title = 'Services – Loans, Security, Legal, Property Management & More';
     const params = new URLSearchParams(window.location.search);
     const tab = params.get('tab');
     console.log('Services URL tab parameter:', tab); // Debug log
@@ -100,6 +100,16 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>Home Services - Loans, Security, Legal, Packers & Property Management | NoBroker</title>
+        <meta name="description" content="Get expert home services including home loans, security systems, packers & movers, legal services, handover services, property management, architects, painting & interior design. All-in-one property solutions." />
+        <meta name="keywords" content="home services, home loans, home security, packers movers, legal services, property management, architects, interior design, painting cleaning, handover services" />
+        <meta property="og:title" content="Home Services - Loans, Security, Legal & Property Management | NoBroker" />
+        <meta property="og:description" content="Complete home services including loans, security, packers & movers, legal services, property management, and more." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href={`${window.location.origin}/services`} />
+      </Helmet>
+      
       <Marquee />
       <Header />
 

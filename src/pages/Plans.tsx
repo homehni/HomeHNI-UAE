@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
@@ -35,7 +36,6 @@ const Plans = () => {
   });
 
   useEffect(() => {
-    document.title = 'Plans – Buyer, Seller, Rental and Commercial Plans';
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
     const skipWizard = params.get('skipWizard');
@@ -105,6 +105,16 @@ const Plans = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>Property Plans - Buyer, Seller, Rental & Commercial Plans | NoBroker</title>
+        <meta name="description" content="Choose from buyer plans, seller plans, rental plans, commercial plans, builder plans & agent plans. Zero brokerage property solutions for all your real estate needs in India." />
+        <meta name="keywords" content="property plans, buyer plans, seller plans, rental plans, commercial property plans, builder plans, agent plans, zero brokerage, property subscription plans" />
+        <meta property="og:title" content="Property Plans - Buyer, Seller, Rental & Commercial Plans | NoBroker" />
+        <meta property="og:description" content="Choose from buyer plans, seller plans, rental plans, commercial plans, builder plans & agent plans. Zero brokerage property solutions." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href={`${window.location.origin}/plans`} />
+      </Helmet>
+      
       {/* Plan Recommendation Wizard - overlaid, non-disruptive */}
       {/* Only render the wizard if showWizard is true */}
       {showWizard && <PlanWizard open={showWizard} onOpenChange={setShowWizard} />}
