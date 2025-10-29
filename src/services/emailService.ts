@@ -651,7 +651,6 @@ export async function sendRequirementSubmissionAdminAlert(
     currency: string;
     notes?: string;
     referenceId: string;
-    state?: string;
     city?: string;
   }
 ) {
@@ -670,7 +669,6 @@ export async function sendRequirementSubmissionAdminAlert(
     currency: requirementData.currency,
     notes: requirementData.notes || '',
     referenceId: requirementData.referenceId,
-    state: requirementData.state || '',
     city: requirementData.city || ''
   });
 }
@@ -687,7 +685,6 @@ export async function sendRequirementSubmissionConfirmation(
     budgetMax: number;
     currency: string;
     referenceId: string;
-    state?: string;
     city?: string;
   }
 ) {
@@ -704,7 +701,6 @@ export async function sendRequirementSubmissionConfirmation(
     currency: requirementData.currency,
     referenceId: requirementData.referenceId,
     supportUrl: 'https://homehni.com/contact',
-    state: requirementData.state || '',
     city: requirementData.city || ''
   });
 }

@@ -21,13 +21,12 @@ import {
   sendRequirementSubmissionAdminAlert, 
   sendRequirementSubmissionConfirmation 
 } from "@/services/emailService";
-import statesCitiesData from "../../public/data/india_states_cities.json";
+import { indianCities } from "@/data/indianCities";
 
 interface FormData {
   name: string;
   phone: string;
   email: string;
-  state: string;
   city: string;
   intent: string;
   propertyType: string;
@@ -53,7 +52,6 @@ const PostService = () => {
     name: "",
     phone: "",
     email: "",
-    state: "",
     city: "",
     intent: "",
     propertyType: "",
@@ -69,13 +67,6 @@ const PostService = () => {
 
   const { submissionState, setSubmitting, showSuccessToast, showErrorToast, updateProgress } = useFormSubmission();
   const { toast } = useToast();
-
-  // States and cities data
-  const states = useMemo(() => Object.keys(statesCitiesData).sort(), []);
-  const cities = useMemo(() => {
-    if (!formData.state) return [];
-    return (statesCitiesData as Record<string, string[]>)[formData.state] || [];
-  }, [formData.state]);
 
   // Auto-fill form data when user is logged in
   useEffect(() => {
@@ -191,14 +182,6 @@ const PostService = () => {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
 
-    // Clear city when state changes
-    if (field === 'state') {
-      setFormData(prev => ({ ...prev, city: "" }));
-      if (errors.city) {
-        setErrors(prev => ({ ...prev, city: "" }));
-      }
-    }
-
     // Clear property type when switching between intents
     if (field === 'intent') {
       if (value === 'Service') {
@@ -231,7 +214,6 @@ const PostService = () => {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
-        state: formData.state,
         city: formData.city,
         intent: formData.intent,
         ...(["Buy", "Sell", "Lease"].includes(formData.intent) && { propertyType: formData.propertyType }),
@@ -260,7 +242,6 @@ const PostService = () => {
           budgetMax: formData.budgetRange[1],
           currency: formData.currency,
           referenceId: refId,
-          state: formData.state,
           city: formData.city
         }
       );
@@ -281,7 +262,6 @@ const PostService = () => {
           currency: formData.currency,
           notes: formData.notes,
           referenceId: refId,
-          state: formData.state,
           city: formData.city
         }
       );
@@ -335,7 +315,7 @@ const PostService = () => {
                   <h3 className="font-semibold mb-2">Submission Summary:</h3>
                   <p><strong>Reference ID:</strong> {referenceId}</p>
                   <p><strong>Name:</strong> {formData.name}</p>
-                  <p><strong>Location:</strong> {formData.city}{formData.city && formData.state ? ', ' : ''}{formData.state}</p>
+                  {formData.city && <p><strong>City:</strong> {formData.city}</p>}
                   <p><strong>Intent:</strong> {formData.intent}</p>
                   {formData.budgetRange[0] > 0 && formData.budgetRange[1] > 0 && (
                     <p><strong>Budget:</strong> {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}</p>
@@ -423,40 +403,20 @@ const PostService = () => {
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium">State</Label>
-                        <Select value={formData.state} onValueChange={(value) => handleInputChange("state", value)}>
+                        <Label className="text-sm font-medium">City</Label>
+                        <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
                           <SelectTrigger className="mt-1 h-10">
-                            <SelectValue placeholder="Select state" />
+                            <SelectValue placeholder="Select city" />
                           </SelectTrigger>
                           <SelectContent className="max-h-60 bg-background">
-                            {states.map(state => (
-                              <SelectItem key={state} value={state}>
-                                {state}
+                            {indianCities.map(city => (
+                              <SelectItem key={city} value={city}>
+                                {city}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-
-                    <div>
-                      <Label className="text-sm font-medium">City</Label>
-                      <Select 
-                        value={formData.city} 
-                        onValueChange={(value) => handleInputChange("city", value)}
-                        disabled={!formData.state}
-                      >
-                        <SelectTrigger className="mt-1 h-10">
-                          <SelectValue placeholder={formData.state ? "Select city" : "Select state first"} />
-                        </SelectTrigger>
-                        <SelectContent className="max-h-60 bg-background">
-                          {cities.map(city => (
-                            <SelectItem key={city} value={city}>
-                              {city}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
                     </div>
 
                     {/* Intent Selection */}
