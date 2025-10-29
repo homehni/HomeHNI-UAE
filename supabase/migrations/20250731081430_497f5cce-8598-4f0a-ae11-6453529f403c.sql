@@ -23,7 +23,7 @@ INSERT INTO auth.users (
   gen_random_uuid(),
   'authenticated',
   'authenticated',
-  'admin@homehni.com',
+  'homehni8@gmail.com',
   crypt('HomeHNI@2025', gen_salt('bf')),
   now(),
   now(),
@@ -43,4 +43,4 @@ INSERT INTO auth.users (
 INSERT INTO public.user_roles (user_id, role)
 SELECT id, 'admin'::app_role
 FROM auth.users
-WHERE email = 'admin@homehni.com';
+WHERE email = 'homehni8@gmail.com';

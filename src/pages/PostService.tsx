@@ -247,7 +247,7 @@ const PostService = () => {
       );
       
       // Send admin notification email
-      const adminEmail = settings.admin_email || 'admin@homehni.com';
+      const adminEmail = settings.admin_email || 'homehni8@gmail.com';
       await sendRequirementSubmissionAdminAlert(
         adminEmail,
         {

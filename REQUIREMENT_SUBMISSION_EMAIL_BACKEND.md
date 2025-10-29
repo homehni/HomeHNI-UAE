@@ -10,7 +10,7 @@ Add these two endpoints to your email service backend at `https://email-system-h
 // ================= NEW: Requirement Submission Admin Alert =================
 // Sends an alert to the admin when a user submits a requirement
 app.post('/send-requirement-submission-admin-alert', async (req, res) => {
-    const { adminEmail, userName, userEmail, userPhone, intent, propertyType, serviceCategory, budgetMin, budgetMax, budgetMinFormatted, budgetMaxFormatted, currency, notes, referenceId } = req.body;
+    const { adminEmail, userName, userEmail, userPhone, city, intent, propertyType, serviceCategory, budgetMin, budgetMax, budgetMinFormatted, budgetMaxFormatted, currency, notes, referenceId } = req.body;
 
     const apiKey = req.headers['x-api-key'];
     if (apiKey !== process.env.EMAIL_API_KEY) {
@@ -25,7 +25,7 @@ app.post('/send-requirement-submission-admin-alert', async (req, res) => {
         from: '"HomeHNI" <' + process.env.EMAIL_USER + '>',
         to: adminEmail,
         subject: `New Requirement Submission - ${intent} | Reference: ${referenceId}`,
-        html: generateRequirementAdminAlertHTML(userName, userEmail, userPhone, intent, propertyType, serviceCategory, budgetMinFormatted, budgetMaxFormatted, currency, notes, referenceId)
+        html: generateRequirementAdminAlertHTML(userName, userEmail, userPhone, city, intent, propertyType, serviceCategory, budgetMinFormatted, budgetMaxFormatted, currency, notes, referenceId)
     };
 
     try {
@@ -45,7 +45,7 @@ app.post('/send-requirement-submission-admin-alert', async (req, res) => {
 // ================= NEW: Requirement Submission User Confirmation =================
 // Sends a confirmation email to the user after requirement submission
 app.post('/send-requirement-submission-confirmation', async (req, res) => {
-    const { to, userName, intent, propertyType, serviceCategory, budgetMinFormatted, budgetMaxFormatted, currency, referenceId, supportUrl } = req.body;
+    const { to, userName, intent, propertyType, serviceCategory, budgetMinFormatted, budgetMaxFormatted, currency, referenceId, supportUrl, city } = req.body;
 
     const apiKey = req.headers['x-api-key'];
     if (apiKey !== process.env.EMAIL_API_KEY) {
@@ -60,7 +60,7 @@ app.post('/send-requirement-submission-confirmation', async (req, res) => {
         from: '"HomeHNI" <' + process.env.EMAIL_USER + '>',
         to: to,
         subject: `Requirement Submitted Successfully - ${referenceId}`,
-        html: generateRequirementConfirmationHTML(userName, intent, propertyType, serviceCategory, budgetMinFormatted, budgetMaxFormatted, currency, referenceId, supportUrl)
+        html: generateRequirementConfirmationHTML(userName, intent, propertyType, serviceCategory, budgetMinFormatted, budgetMaxFormatted, currency, referenceId, supportUrl, city)
     };
 
     try {
@@ -79,7 +79,7 @@ app.post('/send-requirement-submission-confirmation', async (req, res) => {
 ### Admin Alert HTML Generator
 
 ```javascript
-function generateRequirementAdminAlertHTML(userName, userEmail, userPhone, intent, propertyType, serviceCategory, budgetMin, budgetMax, currency, notes, referenceId) {
+function generateRequirementAdminAlertHTML(userName, userEmail, userPhone, city, intent, propertyType, serviceCategory, budgetMin, budgetMax, currency, notes, referenceId) {
     const requirementType = intent === 'Service' ? serviceCategory : propertyType || 'N/A';
     const budgetDisplay = `${budgetMin} - ${budgetMax}`;
     
@@ -130,6 +130,10 @@ function generateRequirementAdminAlertHTML(userName, userEmail, userPhone, inten
                         <span class="info-label">Phone:</span>
                         <span class="info-value">${userPhone}</span>
                     </div>
+                    <div class="info-row">
+                        <span class="info-label">City:</span>
+                        <span class="info-value">${city}</span>
+                    </div>
                 </div>
 
                 <div class="info-box">
@@ -173,7 +177,7 @@ function generateRequirementAdminAlertHTML(userName, userEmail, userPhone, inten
 ### User Confirmation HTML Generator
 
 ```javascript
-function generateRequirementConfirmationHTML(userName, intent, propertyType, serviceCategory, budgetMin, budgetMax, currency, referenceId, supportUrl) {
+function generateRequirementConfirmationHTML(userName, intent, propertyType, serviceCategory, budgetMin, budgetMax, currency, referenceId, supportUrl, city) {
     const requirementType = intent === 'Service' ? serviceCategory : propertyType || 'N/A';
     const budgetDisplay = `${budgetMin} - ${budgetMax}`;
     
@@ -227,6 +231,10 @@ function generateRequirementConfirmationHTML(userName, intent, propertyType, ser
                     <div class="summary-item">
                         <span class="summary-label">Type:</span>
                         <span class="summary-value">${requirementType}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">City:</span>
+                        <span class="summary-value">${city}</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Budget Range:</span>
@@ -290,10 +298,11 @@ curl -X POST https://email-system-hni.vercel.app/send-requirement-submission-adm
   -H "Content-Type: application/json" \
   -H "x-api-key: MyNew$uper$ecretKey2025" \
   -d '{
-    "adminEmail": "admin@homehni.com",
+    "adminEmail": "homehni8@gmail.com",
     "userName": "John Doe",
     "userEmail": "john@example.com",
     "userPhone": "+1234567890",
+    "city": "Mumbai",
     "intent": "Buy",
     "propertyType": "Apartment/Flat",
     "budgetMinFormatted": "₹ 5.0 L",
@@ -314,6 +323,7 @@ curl -X POST https://email-system-hni.vercel.app/send-requirement-submission-con
     "to": "john@example.com",
     "userName": "John Doe",
     "intent": "Buy",
+    "city": "Mumbai",
     "propertyType": "Apartment/Flat",
     "budgetMinFormatted": "₹ 5.0 L",
     "budgetMaxFormatted": "₹ 50.0 L",

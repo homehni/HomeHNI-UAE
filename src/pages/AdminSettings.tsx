@@ -61,7 +61,7 @@ const AdminSettings = () => {
     },
     general: {
       siteName: globalSettings.site_name || 'HomeHNI',
-      adminEmail: globalSettings.admin_email || 'admin@homehni.com',
+      adminEmail: globalSettings.admin_email || 'homehni8@gmail.com',
       maintenanceMode: Boolean(globalSettings.maintenance_mode),
       autoApproveProperties: Boolean(globalSettings.auto_approve_properties),
     },

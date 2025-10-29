@@ -89,7 +89,7 @@ Note: No data is stored in the database
 ### Admin Notification Email Payload
 ```typescript
 {
-  adminEmail: "admin@homehni.com",
+  adminEmail: "homehni8@gmail.com",
   userName: "John Doe",
   userEmail: "john@example.com",
   userPhone: "+1234567890",
@@ -109,7 +109,7 @@ Note: No data is stored in the database
 ## Configuration
 
 ### Admin Email
-- Default: `admin@homehni.com`
+- Default: `homehni8@gmail.com`
 - Can be configured in Admin Settings panel
 - Retrieved from `SettingsContext` or falls back to default
 
@@ -129,7 +129,7 @@ The email service backend needs to implement two endpoints:
 **Request Body:**
 ```json
 {
-  "adminEmail": "admin@homehni.com",
+  "adminEmail": "homehni8@gmail.com",
   "userName": "John Doe",
   "userEmail": "john@example.com",
   "userPhone": "+1234567890",
@@ -215,6 +215,6 @@ The email service backend needs to implement two endpoints:
 ## Support
 
 For issues or questions:
-- Email: admin@homehni.com
+- Email: homehni8@gmail.com
 - Reference ID: REQXXXXXX (shown in both emails)
 
