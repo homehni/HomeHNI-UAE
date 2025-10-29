@@ -58,18 +58,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
 
   // Reset form when initialData changes (for draft loading)
   React.useEffect(() => {
-    // Only reset form if we have meaningful draft data (not just default values)
-    // Check for user-entered values that wouldn't be in default state
-    if (initialData && Object.keys(initialData).length > 0 && 
-        (initialData.plotArea > 0 || initialData.plotLength > 0 || initialData.plotWidth > 0 || 
-         initialData.floorsAllowed > 0 || initialData.gatedProject === 'yes' || 
-         initialData.surveyNumber || initialData.subDivision || initialData.villageName ||
-         // Also check for boundary wall changes from default 'no'
-         (initialData.boundaryWall && initialData.boundaryWall !== 'no') ||
-         // Check for gated community changes from default false
-         initialData.gatedCommunity === true ||
-         // Check for plot area unit changes from default 'sq-ft'
-         (initialData.plotAreaUnit && initialData.plotAreaUnit !== 'sq-ft'))) {
+    if (initialData && Object.keys(initialData).length > 0) {
       setValue('plotArea', initialData.plotArea || undefined);
       setValue('plotAreaUnit', initialData.plotAreaUnit || 'sq-ft');
       setValue('plotLength', initialData.plotLength || undefined);
@@ -82,7 +71,7 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
       setValue('subDivision', initialData.subDivision || '');
       setValue('villageName', initialData.villageName || '');
     }
-  }, [initialData]);
+  }, [initialData, setValue]);
 
   const plotAreaUnit = watch('plotAreaUnit');
 
