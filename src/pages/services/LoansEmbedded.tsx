@@ -224,6 +224,35 @@ const LoansEmbedded = () => {
                 }
 
                 try {
+                  // Save to database first
+                  const { supabase } = await import('@/integrations/supabase/client');
+                  const phone = formData.get('phone') as string;
+                  const countryCode = formData.get('countryCode') as string;
+                  const city = formData.get('city') as string;
+                  const loanType = formData.get('loanType') as string;
+                  const amount = formData.get('amount') as string;
+
+                  const { error: dbError } = await supabase.from('services').insert({
+                    name,
+                    email,
+                    phone: `${countryCode} ${phone}`,
+                    service_type: 'loans',
+                    service_subtype: loanType,
+                    city,
+                    amount: parseFloat(amount),
+                    country: 'India'
+                  });
+
+                  if (dbError) {
+                    console.error('Database error:', dbError);
+                    toast({
+                      title: "Error",
+                      description: "Failed to submit your application. Please try again.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+
                   const requestBody = {
                     to: email,
                     userName: name || 'there',
@@ -250,6 +279,8 @@ const LoansEmbedded = () => {
                   
                   if (response.ok && result.success !== false) {
                     console.log('✅ Email sent successfully to:', email);
+                  }
+                  
                   toast({
                     title: "Application received",
                     description: "Our loan expert will contact you shortly.",
@@ -258,14 +289,6 @@ const LoansEmbedded = () => {
                       borderLeft: "12px solid hsl(120, 100%, 25%)",
                     },
                   });
-                  } else {
-                    console.error('❌ Email API returned error:', result);
-                    toast({
-                      title: "Error",
-                      description: "There was an issue processing your request. Please try again.",
-                      variant: "destructive"
-                    });
-                  }
                 } catch (error) {
                   console.error('❌ Failed to send loan enquiry email:', error);
                   toast({
@@ -381,6 +404,35 @@ const LoansEmbedded = () => {
                 }
 
                 try {
+                  // Save to database first
+                  const { supabase } = await import('@/integrations/supabase/client');
+                  const phone = formData.get('phone') as string;
+                  const countryCode = formData.get('countryCode') as string;
+                  const city = formData.get('city') as string;
+                  const loanType = formData.get('loanType') as string;
+                  const amount = formData.get('amount') as string;
+
+                  const { error: dbError } = await supabase.from('services').insert({
+                    name,
+                    email,
+                    phone: `${countryCode} ${phone}`,
+                    service_type: 'loans',
+                    service_subtype: loanType,
+                    city,
+                    amount: parseFloat(amount),
+                    country: 'India'
+                  });
+
+                  if (dbError) {
+                    console.error('Database error:', dbError);
+                    toast({
+                      title: "Error",
+                      description: "Failed to submit your application. Please try again.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+
                   const requestBody = {
                     to: email,
                     userName: name || 'there',
@@ -407,6 +459,8 @@ const LoansEmbedded = () => {
                   
                   if (response.ok && result.success !== false) {
                     console.log('✅ Email sent successfully to:', email);
+                  }
+                  
                   toast({
                     title: "Application received",
                     description: "Our loan expert will contact you shortly.",
@@ -415,16 +469,8 @@ const LoansEmbedded = () => {
                       borderLeft: "12px solid hsl(120, 100%, 25%)",
                     },
                   });
-                  } else {
-                    console.error('❌ Email API returned error:', result);
-                    toast({
-                      title: "Error",
-                      description: "There was an issue processing your request. Please try again.",
-                      variant: "destructive"
-                    });
-                  }
                 } catch (error) {
-                  console.error('❌ Failed to send loan enquiry email:', error);
+                  console.error('❌ Failed to process loan enquiry:', error);
                   toast({
                     title: "Network Error",
                     description: "Please check your internet connection and try again.",
