@@ -602,22 +602,24 @@ const ServiceSuite = () => {
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Why Home HNI Service Suite is Better
               </h2>
-              <div className="bg-card rounded-xl border overflow-x-auto">
-                <div className="min-w-[400px]">
-                  <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-4 bg-muted/50 font-semibold text-xs sm:text-sm">
-                    <div>Features</div>
-                    <div className="text-center">Home HNI</div>
-                    <div className="text-center">Others</div>
+              <div className="w-full overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+                <div className="bg-card rounded-xl border inline-block min-w-full">
+                  <div className="min-w-[320px]">
+                    <div className="grid grid-cols-3 gap-3 sm:gap-4 p-3 sm:p-4 bg-muted/50 font-semibold text-xs sm:text-sm">
+                      <div className="pr-2">Features</div>
+                      <div className="text-center">Home HNI</div>
+                      <div className="text-center">Others</div>
+                    </div>
+                    {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-3 sm:gap-4 p-3 sm:p-4 border-t text-xs sm:text-sm">
+                        <div className="text-foreground pr-2 break-words">{item.feature}</div>
+                        <div className="text-center flex items-center justify-center">
+                          {item.homeHNI ? <CheckCircle className="w-4 h-4 text-red-600 shrink-0" /> : <X className="w-4 h-4 text-red-500 shrink-0" />}
+                        </div>
+                        <div className="text-center flex items-center justify-center">
+                          {item.others ? <CheckCircle className="w-4 h-4 text-red-600 shrink-0" /> : <X className="w-4 h-4 text-red-500 shrink-0" />}
+                        </div>
+                      </div>)}
                   </div>
-                  {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-4 border-t text-xs sm:text-sm">
-                      <div className="text-foreground">{item.feature}</div>
-                      <div className="text-center">
-                        {item.homeHNI ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
-                      </div>
-                      <div className="text-center">
-                        {item.others ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
-                      </div>
-                    </div>)}
                 </div>
               </div>
             </div>
