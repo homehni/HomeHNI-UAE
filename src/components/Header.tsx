@@ -253,9 +253,7 @@ const Header = () => {
                   onClick={() => navigate('/post-service')}
                   className={`font-medium px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-sm transition-all duration-500 whitespace-nowrap min-w-[110px] xl:min-w-[140px] ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
                 >
-                  <Search className="mr-1 h-3 w-3 xl:h-4 xl:w-4 flex-shrink-0" />
-                  <span className="hidden xl:inline">Post Requirement</span>
-                  <span className="xl:hidden">Post Req</span>
+                  Post Requirement
                 </Button>
               </div>
 
