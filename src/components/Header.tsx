@@ -233,17 +233,6 @@ const Header = () => {
                   )}
                 </div>
 
-                {/* Post Requirement Button */}
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => navigate('/post-service')}
-                  className={`font-bold px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 uppercase ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
-                >
-                  <Search className="mr-1 h-3 w-3 xl:h-4 xl:w-4" />
-                  Post Requirement
-                </Button>
-
                 <a href="/service-suite" onClick={e => {
                   e.preventDefault();
                   navigate('/service-suite');
@@ -256,6 +245,19 @@ const Header = () => {
 
             {/* Desktop Right section - Buttons and Menu */}
             <div className="hidden lg:flex items-center space-x-2 flex-1 justify-end">
+              {/* Desktop: Post Requirement Button */}
+              <div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => navigate('/post-service')}
+                  className={`font-bold px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
+                >
+                  <Search className="mr-1 h-4 w-4" />
+                  Post Requirement
+                </Button>
+              </div>
+
               {/* Desktop: Post Property Button */}
               {location.pathname !== '/post-property' && (
                 <div>
