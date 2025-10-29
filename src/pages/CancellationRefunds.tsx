@@ -33,7 +33,7 @@ const CancellationRefunds = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/4d6f4fa5-6aeb-49da-b8f9-9fc73be1f4da.png')`,
+              backgroundImage: `url('/lovable-uploads/clean-hero-banner.jpg')`,
               backgroundPosition: 'center center'
             }}
           ></div>
