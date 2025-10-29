@@ -33,7 +33,7 @@ const LegalCompliance = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/94c2146b-79a1-4541-a959-f1f0c70611e0.png')`,
+              backgroundImage: `url('/lovable-uploads/4d6f4fa5-6aeb-49da-b8f9-9fc73be1f4da.png')`,
               backgroundPosition: 'center center'
             }}
           ></div>
