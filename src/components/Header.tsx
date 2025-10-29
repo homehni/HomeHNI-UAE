@@ -238,7 +238,7 @@ const Header = () => {
                   variant="outline" 
                   size="sm" 
                   onClick={() => navigate('/post-service')}
-                  className={`font-medium px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 uppercase ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
+                  className={`font-medium px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 uppercase ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
                 >
                   <Search className="mr-1 h-3 w-3 xl:h-4 xl:w-4" />
                   Post Requirement
