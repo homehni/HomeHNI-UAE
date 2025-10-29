@@ -1881,6 +1881,54 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          additional_data: Json | null
+          city: string | null
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string
+          service_type: string
+          status: string | null
+          updated_at: string
+          user_id: string | null
+          whatsapp_opted_in: boolean | null
+        }
+        Insert: {
+          additional_data?: Json | null
+          city?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone: string
+          service_type: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string | null
+          whatsapp_opted_in?: boolean | null
+        }
+        Update: {
+          additional_data?: Json | null
+          city?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string
+          service_type?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string | null
+          whatsapp_opted_in?: boolean | null
+        }
+        Relationships: []
+      }
       user_favorites: {
         Row: {
           created_at: string
