@@ -11,12 +11,14 @@ import GSTDisplay from '@/components/GSTDisplay';
 import { calculateTotalWithGST } from '@/utils/gstCalculator';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import CallbackRequestDialog from '@/components/CallbackRequestDialog';
 
 const BuilderDealerPlans = () => {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dealer'); // 'dealer' or 'builder'
   const [selectedService, setSelectedService] = useState(null);
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
+  const [isCallbackDialogOpen, setIsCallbackDialogOpen] = useState(false);
   const [pricingForm, setPricingForm] = useState({
     lookingTo: 'sell',
     propertyType: 'residential'
@@ -758,9 +760,8 @@ const BuilderDealerPlans = () => {
                   <Button 
                     className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
                     onClick={() => {
-                      // Handle callback request
-                      console.log('Callback requested for:', selectedService?.title);
                       setSelectedService(null);
+                      setIsCallbackDialogOpen(true);
                     }}
                   >
                     Get a callback
@@ -866,6 +867,12 @@ const BuilderDealerPlans = () => {
 
       {/* Footer */}
       <Footer />
+
+      {/* Callback Request Dialog */}
+      <CallbackRequestDialog 
+        isOpen={isCallbackDialogOpen} 
+        onClose={() => setIsCallbackDialogOpen(false)} 
+      />
     </div>
   );
 };
