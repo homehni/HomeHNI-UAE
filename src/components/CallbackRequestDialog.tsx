@@ -38,14 +38,7 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
       return;
     }
 
-    // Show success message
-    toast({
-      title: "Request Sent Successfully",
-      description: "We'll get back to you shortly!",
-      variant: "default"
-    });
-
-    // Reset form and close dialog
+    // Reset form and close dialog first
     setFormData({
       name: '',
       email: '',
@@ -54,6 +47,14 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
       class: ''
     });
     onClose();
+
+    // Show success toast after closing
+    setTimeout(() => {
+      toast({
+        title: "✓ Request Sent Successfully",
+        description: "We'll get back to you shortly!",
+      });
+    }, 100);
   };
 
   return (
