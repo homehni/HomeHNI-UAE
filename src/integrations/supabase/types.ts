@@ -1884,13 +1884,17 @@ export type Database = {
       services: {
         Row: {
           additional_data: Json | null
+          amount: number | null
           city: string | null
+          country: string | null
           created_at: string
+          details: string | null
           email: string
           id: string
           message: string | null
           name: string
           phone: string
+          service_subtype: string | null
           service_type: string
           status: string | null
           updated_at: string
@@ -1899,13 +1903,17 @@ export type Database = {
         }
         Insert: {
           additional_data?: Json | null
+          amount?: number | null
           city?: string | null
+          country?: string | null
           created_at?: string
+          details?: string | null
           email: string
           id?: string
           message?: string | null
           name: string
           phone: string
+          service_subtype?: string | null
           service_type: string
           status?: string | null
           updated_at?: string
@@ -1914,13 +1922,17 @@ export type Database = {
         }
         Update: {
           additional_data?: Json | null
+          amount?: number | null
           city?: string | null
+          country?: string | null
           created_at?: string
+          details?: string | null
           email?: string
           id?: string
           message?: string | null
           name?: string
           phone?: string
+          service_subtype?: string | null
           service_type?: string
           status?: string | null
           updated_at?: string
