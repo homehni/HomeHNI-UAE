@@ -49,6 +49,7 @@ interface FormData {
   serviceCategory: string;
   services: string[];
   otherService: string;
+  preferredProject: string;
   budgetRange: number[];
   currency: string;
   premiumSelected: boolean;
@@ -77,6 +78,7 @@ const PostService = () => {
     serviceCategory: "",
     services: [],
     otherService: "",
+    preferredProject: "",
     budgetRange: [0, 50000000],
     currency: "INR",
     premiumSelected: true,
@@ -300,7 +302,8 @@ const PostService = () => {
           currency: formData.currency,
           referenceId: refId,
           city: formData.city,
-          locality: formData.locality
+          locality: formData.locality,
+          preferredProject: formData.preferredProject
         }
       );
       
@@ -321,7 +324,8 @@ const PostService = () => {
           notes: formData.notes,
           referenceId: refId,
           city: formData.city,
-          locality: formData.locality
+          locality: formData.locality,
+          preferredProject: formData.preferredProject
         }
       );
       
@@ -547,6 +551,20 @@ const PostService = () => {
                         {errors.serviceCategory && <p className="text-sm text-destructive mt-1">{errors.serviceCategory}</p>}
                       </div>
                     )}
+
+                    {/* Preferred Project */}
+                    <div>
+                      <Label htmlFor="preferredProject" className="text-sm font-medium">
+                        Any Preferred Project
+                      </Label>
+                      <Input
+                        id="preferredProject"
+                        value={formData.preferredProject}
+                        onChange={(e) => handleInputChange("preferredProject", e.target.value)}
+                        placeholder="ex- aparna constructions/shobha builders, etc..."
+                        className="mt-1"
+                      />
+                    </div>
 
                     {/* Budget Range */}
                     <div>

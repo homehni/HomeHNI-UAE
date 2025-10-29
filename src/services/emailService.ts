@@ -657,6 +657,7 @@ export async function sendRequirementSubmissionAdminAlert(
     referenceId: string;
     city?: string;
     locality?: string;
+    preferredProject?: string;
   }
 ) {
   return sendEmail('/send-requirement-submission-admin-alert', {
@@ -675,7 +676,8 @@ export async function sendRequirementSubmissionAdminAlert(
     notes: requirementData.notes || '',
     referenceId: requirementData.referenceId,
     city: requirementData.city || '',
-    locality: requirementData.locality || ''
+    locality: requirementData.locality || '',
+    preferredProject: requirementData.preferredProject || ''
   });
 }
 
@@ -693,6 +695,7 @@ export async function sendRequirementSubmissionConfirmation(
     referenceId: string;
     city?: string;
     locality?: string;
+    preferredProject?: string;
   }
 ) {
   return sendEmail('/send-requirement-submission-confirmation', {
@@ -709,6 +712,7 @@ export async function sendRequirementSubmissionConfirmation(
     referenceId: requirementData.referenceId,
     supportUrl: 'https://homehni.com/contact',
     city: requirementData.city || '',
-    locality: requirementData.locality || ''
+    locality: requirementData.locality || '',
+    preferredProject: requirementData.preferredProject || ''
   });
 }
