@@ -342,27 +342,27 @@ const ServiceSuite = () => {
       </div>
 
       {/* Mobile Form - Static below hero */}
-      <section className="lg:hidden px-4 py-8 bg-background">
-        <div className="container mx-auto max-w-xl px-4">
-          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
-            <CardContent className="p-6">
-              <h3 className="text-xl font-bold text-foreground mb-2 text-uniform-center">Need Service Providers?</h3>
-              <p className="text-sm text-muted-foreground mb-6 text-uniform-center">Submit your requirements & get matched</p>
+      <section className="lg:hidden px-2 sm:px-4 py-8 bg-background">
+        <div className="w-full max-w-md mx-auto px-2 sm:px-0">
+          <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card overflow-hidden">
+            <CardContent className="p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 text-center">Need Service Providers?</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 text-center">Submit your requirements & get matched</p>
 
-              <form className="space-y-4" onSubmit={e => handleFormSubmit(e, true)} id="mobile-service-form" key={formResetKey}>
-                <Input name="companyName" type="text" placeholder="Company Name" className="h-12 text-base bg-background" required />
+              <form className="space-y-3 sm:space-y-4" onSubmit={e => handleFormSubmit(e, true)} id="mobile-service-form" key={formResetKey}>
+                <Input name="companyName" type="text" placeholder="Company Name" className="h-11 sm:h-12 text-sm sm:text-base bg-background w-full" required />
                 <Input 
                   name="email" 
                   type="email" 
                   placeholder="Email ID" 
                   defaultValue={autoFillData.email}
-                  className="h-12 text-base bg-background" 
+                  className="h-11 sm:h-12 text-sm sm:text-base bg-background w-full" 
                   required 
                 />
 
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3 w-full">
                   <Select defaultValue="+91" name="countryCode">
-                    <SelectTrigger className="w-32 h-12 bg-background">
+                    <SelectTrigger className="w-20 sm:w-24 h-11 sm:h-12 bg-background shrink-0">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg">
@@ -371,11 +371,11 @@ const ServiceSuite = () => {
                       <SelectItem value="+44">🇬🇧 +44</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-12 text-base bg-background" required />
+                  <Input name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-11 sm:h-12 text-sm sm:text-base bg-background min-w-0" required />
                 </div>
 
                 <Select name="serviceType" required>
-                  <SelectTrigger className="h-12 bg-background">
+                  <SelectTrigger className="h-11 sm:h-12 bg-background w-full">
                     <SelectValue placeholder="Select Service Type" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border shadow-lg">
@@ -392,11 +392,13 @@ const ServiceSuite = () => {
                   </SelectContent>
                 </Select>
 
-                <Input name="city" type="text" placeholder="City" className="h-12 text-base bg-background" required />
+                <Input name="city" type="text" placeholder="City" className="h-11 sm:h-12 text-sm sm:text-base bg-background w-full" required />
 
-                <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-3" />
+                <div className="w-full overflow-x-hidden">
+                  <CategorizedImageUpload images={serviceImages} onImagesChange={setServiceImages} className="mt-2 sm:mt-3" />
+                </div>
 
-                <Button type="submit" className="w-full h-11 text-sm font-semibold bg-red-800 hover:bg-red-900 text-white mt-4">
+                <Button type="submit" className="w-full h-11 text-sm sm:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-3 sm:mt-4">
                   Submit Requirements
                 </Button>
               </form>
