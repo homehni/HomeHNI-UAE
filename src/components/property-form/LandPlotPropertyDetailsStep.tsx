@@ -57,8 +57,12 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
   });
 
   // Reset form when initialData changes (for draft loading)
+  const initialDataRef = React.useRef(initialData);
+  
   React.useEffect(() => {
-    if (initialData && Object.keys(initialData).length > 0) {
+    // Only update if initialData actually changed (not on every render)
+    if (initialData !== initialDataRef.current && initialData && Object.keys(initialData).length > 0) {
+      initialDataRef.current = initialData;
       setValue('plotArea', initialData.plotArea || undefined);
       setValue('plotAreaUnit', initialData.plotAreaUnit || 'sq-ft');
       setValue('plotLength', initialData.plotLength || undefined);
