@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Marquee from '@/components/Marquee';
 import ChatBot from '@/components/ChatBot';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ExternalLink, ArrowRight, Menu, X } from 'lucide-react';
 import LoansEmbedded from './services/LoansEmbedded';
 import HomeSecurityEmbedded from './services/HomeSecurityEmbedded';
@@ -31,9 +31,10 @@ const sections = [
 const Services = () => {
   const [active, setActive] = useState<string>('loans');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
     console.log('Services URL tab parameter:', tab); // Debug log
     if (tab && sections.some((s) => s.id === tab)) {
@@ -44,7 +45,7 @@ const Services = () => {
       setActive('loans');
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [location.search]);
 
   const handleTabClick = (id: string) => {
     setActive(id);
