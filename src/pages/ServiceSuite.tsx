@@ -258,21 +258,21 @@ const ServiceSuite = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-28 md:pt-32 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
       backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
     }}>
         <div className="absolute inset-0 bg-red-900/80 pointer-events-none" />
 
-        <div className="relative z-10 container mx-auto">
+        <div className="relative z-10 container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
             {/* Left: Copy */}
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
                 Complete Service Suite
                 <br className="hidden md:block" />
                 <span className="block">for All Your Property Needs</span>
               </h1>
-              <p className="text-lg md:text-xl text-white/90 mb-6">
+              <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6">
                 From legal services to interior design, get access to verified professionals
                 for all your property requirements under one roof.
               </p>
@@ -408,20 +408,20 @@ const ServiceSuite = () => {
       </section>
 
       {/* What's in it for you Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-background">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
-            <div className="max-w-2xl pr-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+            <div className="max-w-2xl lg:pr-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Why choose our Service Suite?
               </h2>
               
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <Shield className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     Verified Professionals
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -429,11 +429,11 @@ const ServiceSuite = () => {
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <Clock className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     Quick Matching
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -441,11 +441,11 @@ const ServiceSuite = () => {
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <CheckCircle className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     Quality Assurance
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -453,11 +453,11 @@ const ServiceSuite = () => {
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <Users className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     End-to-End Support
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -465,11 +465,11 @@ const ServiceSuite = () => {
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <FileText className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     Digital Documentation
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -477,11 +477,11 @@ const ServiceSuite = () => {
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <Wrench className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground">
                     One-Stop Solution
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -498,14 +498,14 @@ const ServiceSuite = () => {
       </section>
 
       {/* Service Info Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Complete Property Service Ecosystem
               </h2>
-              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed text-justify">
+              <div className="text-muted-foreground space-y-4 text-sm leading-relaxed">
                 <p>
                   Whether you need legal documentation, interior design, architectural services, 
                   or reliable packers and movers, our Service Suite connects you with verified 
@@ -531,11 +531,11 @@ const ServiceSuite = () => {
       </section>
 
       {/* Our Services */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-background">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Our Service Categories
               </h2>
               <div className="grid gap-6">
@@ -561,29 +561,29 @@ const ServiceSuite = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Trusted by Thousands
               </h2>
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-2 gap-4 sm:gap-8">
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">5000+</div>
-                  <p className="text-muted-foreground">Projects Completed</p>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">5000+</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Projects Completed</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">800+</div>
-                  <p className="text-muted-foreground">Verified Service Providers</p>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">800+</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Verified Service Providers</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">24hrs</div>
-                  <p className="text-muted-foreground">Average Response Time</p>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">24hrs</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Average Response Time</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">99%</div>
-                  <p className="text-muted-foreground">Customer Satisfaction</p>
+                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-red-600 mb-2">99%</div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Customer Satisfaction</p>
                 </div>
               </div>
             </div>
@@ -595,28 +595,30 @@ const ServiceSuite = () => {
       </section>
 
       {/* Comparison Table */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-background">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Why Home HNI Service Suite is Better
               </h2>
-              <div className="bg-card rounded-xl border overflow-hidden">
-                <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 font-semibold text-sm">
-                  <div>Features</div>
-                  <div className="text-center">Home HNI</div>
-                  <div className="text-center">Others</div>
+              <div className="bg-card rounded-xl border overflow-x-auto">
+                <div className="min-w-[400px]">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-4 bg-muted/50 font-semibold text-xs sm:text-sm">
+                    <div>Features</div>
+                    <div className="text-center">Home HNI</div>
+                    <div className="text-center">Others</div>
+                  </div>
+                  {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-4 border-t text-xs sm:text-sm">
+                      <div className="text-foreground">{item.feature}</div>
+                      <div className="text-center">
+                        {item.homeHNI ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
+                      </div>
+                      <div className="text-center">
+                        {item.others ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
+                      </div>
+                    </div>)}
                 </div>
-                {comparisonData.map((item, index) => <div key={index} className="grid grid-cols-3 gap-4 p-4 border-t text-sm">
-                    <div className="text-foreground">{item.feature}</div>
-                    <div className="text-center">
-                      {item.homeHNI ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
-                    </div>
-                    <div className="text-center">
-                      {item.others ? <CheckCircle className="w-4 h-4 text-red-600 mx-auto" /> : <X className="w-4 h-4 text-red-500 mx-auto" />}
-                    </div>
-                  </div>)}
               </div>
             </div>
             
@@ -627,11 +629,11 @@ const ServiceSuite = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 What Our Customers Say
               </h2>
               <div className="space-y-6">
@@ -662,11 +664,11 @@ const ServiceSuite = () => {
       </section>
 
       {/* Target Audience */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-background">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Who We Serve
               </h2>
               <div className="grid gap-6">
@@ -692,11 +694,11 @@ const ServiceSuite = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8">
                 Frequently Asked Questions
               </h2>
               <Accordion type="single" collapsible className="space-y-4">
@@ -718,39 +720,39 @@ const ServiceSuite = () => {
       </section>
 
       {/* Service Tags Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
+      <section className="py-12 sm:py-16 px-4 bg-background">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div className="max-w-3xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-6 sm:mb-8">
                 Property Services
               </h2>
               
-              <div className="space-y-6 mb-8">
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Legal Services in Hyderabad</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Interior Design in Bangalore</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Architects in Mumbai</span>
+              <div className="space-y-3 sm:space-y-4 mb-8">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Legal Services in Hyderabad</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Interior Design in Bangalore</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Architects in Mumbai</span>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Packers Movers in Pune</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Management in Delhi</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Painting Services in Chennai</span>
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Packers Movers in Pune</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Property Management in Delhi</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Painting Services in Chennai</span>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Rental Agreement Services</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Home Interior Design</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Commercial Architecture</span>
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Rental Agreement Services</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Home Interior Design</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Commercial Architecture</span>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Residential Packers</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Deep Cleaning Services</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Property Maintenance</span>
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Residential Packers</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Deep Cleaning Services</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Property Maintenance</span>
                 </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Tenant Verification</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Office Interior</span>
-                  <span className="px-4 py-2 bg-muted rounded-full text-sm">Handover Services</span>
+                <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Tenant Verification</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Office Interior</span>
+                  <span className="px-3 sm:px-4 py-1.5 sm:py-2 bg-muted rounded-full text-xs sm:text-sm">Handover Services</span>
                 </div>
               </div>
 
