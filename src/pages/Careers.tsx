@@ -166,6 +166,8 @@ const Careers = () => {
                 userName: formData.get('name') as string,
                 phoneNumber: formData.get('phone') as string,
                 emailId: formData.get('email') as string,
+                collegeName: formData.get('collegeName') as string,
+                universityName: formData.get('universityName') as string,
                 state: formData.get('state') as string,
                 city: formData.get('city') as string,
                 positionOfInterest: formData.get('position') as string,
@@ -175,6 +177,8 @@ const Careers = () => {
               await sendCareerApplicationEmail(data.emailId, data.userName, {
                 phoneNumber: data.phoneNumber,
                 emailId: data.emailId,
+                collegeName: data.collegeName,
+                universityName: data.universityName,
                 state: data.state,
                 city: data.city,
                 positionOfInterest: data.positionOfInterest
@@ -203,6 +207,10 @@ const Careers = () => {
                 </div>
 
                 <Input id="career-email" name="email" type="email" placeholder="Email ID" required />
+
+                <Input id="career-college" name="collegeName" placeholder="College Name" required />
+                
+                <Input id="career-university" name="universityName" placeholder="University Name" required />
 
                 <div className="flex gap-2">
                   <Select name="state" value={selectedStateDesktop} onValueChange={setSelectedStateDesktop}>
@@ -306,6 +314,8 @@ const Careers = () => {
                   userName: formData.get('name') as string,
                   phoneNumber: formData.get('phone') as string,
                   emailId: formData.get('email') as string,
+                  collegeName: formData.get('collegeName') as string,
+                  universityName: formData.get('universityName') as string,
                   state: formData.get('state') as string,
                   city: formData.get('city') as string,
                   positionOfInterest: formData.get('position') as string,
@@ -315,6 +325,8 @@ const Careers = () => {
                 await sendCareerApplicationEmail(data.emailId, data.userName, {
                   phoneNumber: data.phoneNumber,
                   emailId: data.emailId,
+                  collegeName: data.collegeName,
+                  universityName: data.universityName,
                   state: data.state,
                   city: data.city,
                   positionOfInterest: data.positionOfInterest
@@ -345,6 +357,10 @@ const Careers = () => {
                   </div>
 
                   <Input id="career-email-mobile" name="email" type="email" placeholder="Email ID" className="h-12 text-base bg-background" required />
+
+                  <Input id="career-college-mobile" name="collegeName" placeholder="College Name" className="h-12 text-base bg-background" required />
+                  
+                  <Input id="career-university-mobile" name="universityName" placeholder="University Name" className="h-12 text-base bg-background" required />
 
                   <div className="flex gap-3">
                     <Select name="state" value={selectedState} onValueChange={setSelectedState}>
