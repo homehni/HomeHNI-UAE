@@ -169,7 +169,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {categories.map((category) => {
           const IconComponent = category.icon;
           const categoryImages = images[category.key];
