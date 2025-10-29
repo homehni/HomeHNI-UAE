@@ -209,6 +209,10 @@ export const CommercialSaleMultiStepForm = ({
     }
     sessionStorage.removeItem('resumeDraftId');
     sessionStorage.removeItem('resumeDraftData');
+    // Clear step-specific sessionStorage keys
+    sessionStorage.removeItem('commercialSalePropertyDetails');
+    sessionStorage.removeItem('commercialSaleLocationDetails');
+    sessionStorage.removeItem('commercialSaleSaleDetails');
   };
 
   const handleSubmit = () => {
@@ -222,6 +226,10 @@ export const CommercialSaleMultiStepForm = ({
     }
     sessionStorage.removeItem('resumeDraftId');
     sessionStorage.removeItem('resumeDraftData');
+    // Clear step-specific sessionStorage keys
+    sessionStorage.removeItem('commercialSalePropertyDetails');
+    sessionStorage.removeItem('commercialSaleLocationDetails');
+    sessionStorage.removeItem('commercialSaleSaleDetails');
   };
 
   const handleEdit = (step: number) => {

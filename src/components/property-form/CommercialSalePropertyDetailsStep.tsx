@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -79,24 +79,32 @@ export const CommercialSalePropertyDetailsStep = ({
     return () => subscription?.unsubscribe?.();
   }, [form]);
 
+  // Use ref to track actual initialData changes
+  const initialDataRef = React.useRef(initialData);
+  
   useEffect(() => {
     const savedRaw = typeof window !== 'undefined' ? sessionStorage.getItem(STORAGE_KEY) : null;
     const saved = savedRaw ? JSON.parse(savedRaw) : null;
 
-    const hasInitial = initialData && Object.values(initialData).some((v) => v !== undefined && v !== '');
+    // Deep-compare to avoid resetting while typing when parent passes new object refs
+    const prev = initialDataRef.current;
+    const hasMeaningfulData = !!initialData && Object.keys(initialData).length > 0 && Object.values(initialData).some((v) => v !== undefined && v !== null && v !== '');
+    const changed = JSON.stringify(initialData ?? {}) !== JSON.stringify(prev ?? {});
     
-    // Merge saved data with initialData, but only overwrite with initialData if values are actually present
-    let src: any = saved || {};
-    if (hasInitial && initialData) {
-      Object.keys(initialData).forEach((key) => {
-        const value = (initialData as any)[key];
-        if (value !== undefined && value !== null && value !== '') {
-          src[key] = value;
-        }
-      });
-    }
+    if (hasMeaningfulData && changed) {
+      initialDataRef.current = initialData;
+      
+      // Merge saved data with initialData, but only overwrite with initialData if values are actually present
+      let src: any = saved || {};
+      if (initialData) {
+        Object.keys(initialData).forEach((key) => {
+          const value = (initialData as any)[key];
+          if (value !== undefined && value !== null && value !== '') {
+            src[key] = value;
+          }
+        });
+      }
 
-    if (src && Object.keys(src).length > 0) {
       form.reset({
         title: src.title || '',
         propertyType: src.propertyType || 'Commercial',
@@ -116,7 +124,7 @@ export const CommercialSalePropertyDetailsStep = ({
       setCornerProperty(Boolean(src.cornerProperty));
       setLoadingFacility(Boolean(src.loadingFacility));
     }
-  }, [initialData]);
+  }, [initialData, form]);
 
   const onSubmit = (data: CommercialSalePropertyDetailsFormData) => {
     console.log('Form submission data:', data);
