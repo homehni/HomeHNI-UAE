@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useSettings } from '@/contexts/SettingsContext';
@@ -23,11 +23,19 @@ import {
 } from "@/services/emailService";
 import { indianCities } from "@/data/indianCities";
 
+// Declare Google Maps types
+declare global {
+  interface Window {
+    google: any;
+  }
+}
+
 interface FormData {
   name: string;
   phone: string;
   email: string;
   city: string;
+  locality: string;
   intent: string;
   propertyType: string;
   serviceCategory: string;
@@ -48,11 +56,14 @@ const PostService = () => {
   const [referenceId, setReferenceId] = useState("");
   const [errors, setErrors] = useState<{[key: string]: string}>({});
 
+  const localityInputRef = useRef<HTMLInputElement>(null);
+  
   const [formData, setFormData] = useState<FormData>({
     name: "",
     phone: "",
     email: "",
     city: "",
+    locality: "",
     intent: "",
     propertyType: "",
     serviceCategory: "",
@@ -79,6 +90,43 @@ const PostService = () => {
       }));
     }
   }, [user, profile]);
+
+  // Load Google Maps API and initialize autocomplete
+  useEffect(() => {
+    const loadGoogleMaps = () => {
+      if (window.google?.maps?.places) {
+        initAutocomplete();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBUVnSKQ99BwD-I_8i6ybpWHM3jKTgkYLw&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        initAutocomplete();
+      };
+      document.head.appendChild(script);
+    };
+
+    loadGoogleMaps();
+  }, []);
+
+  const initAutocomplete = () => {
+    if (!localityInputRef.current || !window.google?.maps?.places) return;
+
+    const autocomplete = new window.google.maps.places.Autocomplete(localityInputRef.current, {
+      types: ['locality', 'sublocality', 'neighborhood'],
+      componentRestrictions: { country: 'in' }
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (place.formatted_address) {
+        handleInputChange('locality', place.formatted_address);
+      }
+    });
+  };
 
   const intentOptions = [
     { value: "Buy", label: "Buy" },
@@ -215,6 +263,7 @@ const PostService = () => {
         phone: formData.phone,
         email: formData.email,
         city: formData.city,
+        locality: formData.locality,
         intent: formData.intent,
         ...(["Buy", "Sell", "Lease"].includes(formData.intent) && { propertyType: formData.propertyType }),
         ...(formData.intent === "Service" && { serviceType: formData.serviceCategory }),
@@ -242,7 +291,8 @@ const PostService = () => {
           budgetMax: formData.budgetRange[1],
           currency: formData.currency,
           referenceId: refId,
-          city: formData.city
+          city: formData.city,
+          locality: formData.locality
         }
       );
       
@@ -262,7 +312,8 @@ const PostService = () => {
           currency: formData.currency,
           notes: formData.notes,
           referenceId: refId,
-          city: formData.city
+          city: formData.city,
+          locality: formData.locality
         }
       );
       
@@ -316,6 +367,7 @@ const PostService = () => {
                   <p><strong>Reference ID:</strong> {referenceId}</p>
                   <p><strong>Name:</strong> {formData.name}</p>
                   {formData.city && <p><strong>City:</strong> {formData.city}</p>}
+                  {formData.locality && <p><strong>Locality:</strong> {formData.locality}</p>}
                   <p><strong>Intent:</strong> {formData.intent}</p>
                   {formData.budgetRange[0] > 0 && formData.budgetRange[1] > 0 && (
                     <p><strong>Budget:</strong> {formatBudgetAmount(formData.budgetRange[0])} - {formatBudgetAmount(formData.budgetRange[1])}</p>
@@ -417,6 +469,18 @@ const PostService = () => {
                           </SelectContent>
                         </Select>
                       </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="locality" className="text-sm font-medium">Locality</Label>
+                      <Input
+                        id="locality"
+                        ref={localityInputRef}
+                        value={formData.locality}
+                        onChange={(e) => handleInputChange("locality", e.target.value)}
+                        className="mt-1 h-10"
+                        placeholder="Enter locality (e.g., Koramangala, Indiranagar)"
+                      />
                     </div>
 
                     {/* Intent Selection */}
