@@ -439,23 +439,25 @@ const PostService = () => {
                       </div>
                     </div>
 
-                    {formData.state && (
-                      <div>
-                        <Label className="text-sm font-medium">City</Label>
-                        <Select value={formData.city} onValueChange={(value) => handleInputChange("city", value)}>
-                          <SelectTrigger className="mt-1 h-10">
-                            <SelectValue placeholder="Select city" />
-                          </SelectTrigger>
-                          <SelectContent className="max-h-60 bg-background">
-                            {cities.map(city => (
-                              <SelectItem key={city} value={city}>
-                                {city}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
+                    <div>
+                      <Label className="text-sm font-medium">City</Label>
+                      <Select 
+                        value={formData.city} 
+                        onValueChange={(value) => handleInputChange("city", value)}
+                        disabled={!formData.state}
+                      >
+                        <SelectTrigger className="mt-1 h-10">
+                          <SelectValue placeholder={formData.state ? "Select city" : "Select state first"} />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-60 bg-background">
+                          {cities.map(city => (
+                            <SelectItem key={city} value={city}>
+                              {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
                     {/* Intent Selection */}
                     <div>
