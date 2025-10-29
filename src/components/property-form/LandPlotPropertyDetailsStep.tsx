@@ -60,8 +60,11 @@ export const LandPlotPropertyDetailsStep: React.FC<LandPlotPropertyDetailsStepPr
   const initialDataRef = React.useRef(initialData);
   
   React.useEffect(() => {
-    // Only update if initialData actually changed (not on every render)
-    if (initialData !== initialDataRef.current && initialData && Object.keys(initialData).length > 0) {
+    // Deep-compare to avoid resetting while typing when parent passes new object refs
+    const prev = initialDataRef.current;
+    const hasMeaningfulData = !!initialData && Object.keys(initialData).length > 0 && Object.values(initialData).some((v) => v !== undefined && v !== null && v !== '');
+    const changed = JSON.stringify(initialData ?? {}) !== JSON.stringify(prev ?? {});
+    if (hasMeaningfulData && changed) {
       initialDataRef.current = initialData;
       setValue('plotArea', initialData.plotArea || undefined);
       setValue('plotAreaUnit', initialData.plotAreaUnit || 'sq-ft');
