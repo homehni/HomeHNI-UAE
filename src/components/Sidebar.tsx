@@ -109,7 +109,7 @@ const Sidebar = ({
     label: 'Legal Services',
     hasSubmenu: false,
     onClick: () => {
-      navigate('/legal-services');
+      navigate('/services?tab=legal-services');
       onClose();
     }
   }, {
@@ -117,7 +117,7 @@ const Sidebar = ({
     label: 'Handover Services',
     hasSubmenu: false,
     onClick: () => {
-      navigate('/handover-services');
+      navigate('/services?tab=handover-services');
       onClose();
     }
   }, {
@@ -125,7 +125,7 @@ const Sidebar = ({
     label: 'Property Management',
     hasSubmenu: false,
     onClick: () => {
-      navigate('/property-management');
+      navigate('/services?tab=property-management');
       onClose();
     }
   }, {
@@ -133,7 +133,7 @@ const Sidebar = ({
     label: 'Painting & Cleaning',
     hasSubmenu: false,
     onClick: () => {
-      navigate('/painting-cleaning');
+      navigate('/services?tab=painting-cleaning');
       onClose();
     }
   }, {
@@ -141,7 +141,7 @@ const Sidebar = ({
     label: 'Packers and Movers',
     hasSubmenu: false,
     onClick: () => {
-      navigate('/packers-movers');
+      navigate('/services?tab=packers-movers');
       onClose();
     }
   },
