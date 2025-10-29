@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { PaintBucket, Sparkles, Home, Building2, Clock, CheckCircle, Shield, Star, Users, Crown, Globe, Headphones, Paintbrush, Droplets, X } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
+import { submitServiceRequest } from "@/services/serviceSubmission";
 
 const PaintingCleaningEmbedded = () => {
   const { toast } = useToast();
@@ -190,9 +191,35 @@ const PaintingCleaningEmbedded = () => {
               const formData = new FormData(form);
               const name = formData.get('name') as string;
               const email = formData.get('email') as string;
+              const phone = formData.get('phone') as string;
+              const countryCode = formData.get('countryCode') as string;
+              const city = formData.get('city') as string;
+              const serviceType = formData.get('serviceType') as string;
               
               try {
+                // Save to database
+                const dbResult = await submitServiceRequest({
+                  name,
+                  email,
+                  phone: phone || '',
+                  countryCode: countryCode || '+91',
+                  city: city || 'Not specified',
+                  serviceType: 'painting-cleaning',
+                  serviceSubtype: serviceType
+                });
+
+                if (!dbResult.success) {
+                  toast({
+                    title: "Error",
+                    description: "Failed to submit your request. Please try again.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
+
+                // Send email notification
                 await sendServicesApplicationEmail(email || '', name, 'painting-cleaning');
+                
                 toast({
                   title: "Request received",
                   description: "Our team will contact you shortly with a quote.",
@@ -203,7 +230,7 @@ const PaintingCleaningEmbedded = () => {
                 });
                 form.reset();
               } catch (error) {
-                console.error('Error sending email:', error);
+                console.error('Error processing request:', error);
                 toast({
                   title: "Error",
                   description: "Failed to submit your request. Please try again.",

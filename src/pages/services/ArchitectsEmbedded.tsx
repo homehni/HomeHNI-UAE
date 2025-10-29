@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Building2, Users, Ruler, Palette, Home, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, PenTool, Compass, DraftingCompass } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
+import { submitServiceRequest } from "@/services/serviceSubmission";
 const ArchitectsEmbedded = () => {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -183,16 +184,38 @@ const ArchitectsEmbedded = () => {
               const formData = new FormData(form);
               const name = formData.get('name') as string;
               const email = formData.get('email') as string;
+              const phone = formData.get('phone') as string;
+              const countryCode = formData.get('countryCode') as string;
               
               try {
+                // Save to database
+                const dbResult = await submitServiceRequest({
+                  name,
+                  email,
+                  phone: phone || '',
+                  countryCode: countryCode || '+91',
+                  city: 'Not specified',
+                  serviceType: 'architects'
+                });
+
+                if (!dbResult.success) {
+                  setFormMessage({
+                    type: "error",
+                    text: "Failed to submit your request. Please try again."
+                  });
+                  return;
+                }
+
+                // Send email notification
                 await sendServicesApplicationEmail(email, name, 'architects');
+                
                 setFormMessage({
                   type: "success",
                   text: "Request submitted! Our architects will contact you within 24 hours."
                 });
                 form.reset();
               } catch (error) {
-                console.error('Error sending email:', error);
+                console.error('Error processing request:', error);
                 setFormMessage({
                   type: "error",
                   text: "Failed to submit your request. Please try again."

@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Palette, Lightbulb, Eye, Sofa, Wrench, Target, Users, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Crown, FileText, MapPin, DollarSign, PaintBucket, Home, Sparkles, Layers, Hammer } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
+import { submitServiceRequest } from "@/services/serviceSubmission";
 const InteriorDesignersEmbedded = () => {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -183,9 +184,35 @@ const InteriorDesignersEmbedded = () => {
               const formData = new FormData(form);
               const name = formData.get('name') as string;
               const email = formData.get('email') as string;
+              const phone = formData.get('phone') as string;
+              const countryCode = formData.get('countryCode') as string;
+              const city = formData.get('city') as string;
+              const projectType = formData.get('projectType') as string;
               
               try {
+                // Save to database
+                const dbResult = await submitServiceRequest({
+                  name,
+                  email,
+                  phone: phone || '',
+                  countryCode: countryCode || '+91',
+                  city: city || 'Not specified',
+                  serviceType: 'interior-design',
+                  serviceSubtype: projectType
+                });
+
+                if (!dbResult.success) {
+                  toast({
+                    title: "Error",
+                    description: "Failed to submit your request. Please try again.",
+                    variant: "destructive"
+                  });
+                  return;
+                }
+
+                // Send email notification
                 await sendServicesApplicationEmail(email, name, 'interior-design');
+                
                 toast({
                   title: "Request submitted",
                   description: "Our interior designers will contact you within 24 hours.",
@@ -196,7 +223,7 @@ const InteriorDesignersEmbedded = () => {
                 });
                 form.reset();
               } catch (error) {
-                console.error('Error sending email:', error);
+                console.error('Error processing request:', error);
                 toast({
                   title: "Error",
                   description: "Failed to submit your request. Please try again.",

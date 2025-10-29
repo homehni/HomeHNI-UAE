@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Truck, Package, Shield, Clock, CheckCircle, Star, Users, Building2, Home, Car, Award, Headphones, Globe, TrendingUp, FileText, X, Plus, Minus } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
+import { submitServiceRequest } from "@/services/serviceSubmission";
 
 const PackersMoversEmbedded = () => {
   const { toast } = useToast();
@@ -208,9 +209,35 @@ const PackersMoversEmbedded = () => {
                 const formData = new FormData(form);
                 const name = formData.get('name') as string;
                 const email = formData.get('email') as string;
+                const phone = formData.get('phone') as string;
+                const countryCode = formData.get('countryCode') as string;
+                const city = formData.get('city') as string;
+                const movingType = formData.get('movingType') as string;
                 
                 try {
+                  // Save to database
+                  const dbResult = await submitServiceRequest({
+                    name,
+                    email,
+                    phone,
+                    countryCode,
+                    city,
+                    serviceType: 'packers-movers',
+                    serviceSubtype: movingType
+                  });
+
+                  if (!dbResult.success) {
+                    toast({
+                      title: "Error",
+                      description: "Failed to submit your request. Please try again.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+
+                  // Send email notification
                   await sendServicesApplicationEmail(email, name, 'packers-movers');
+                  
                   toast({
                     title: "Request received",
                     description: "Our moving expert will contact you shortly.",
@@ -221,7 +248,7 @@ const PackersMoversEmbedded = () => {
                   });
                   form.reset();
                 } catch (error) {
-                  console.error('Error sending email:', error);
+                  console.error('Error processing request:', error);
                   toast({
                     title: "Error",
                     description: "Failed to submit your request. Please try again.",

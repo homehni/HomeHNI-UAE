@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Building2, Users, CreditCard, Calculator, TrendingUp, FileText, MapPin, Crown, Clock, CheckCircle, Shield, Star, X, Plus, Minus, Globe, Shield as ShieldCheck, Headphones, Smartphone, Download, Home, UserCheck, Settings, BarChart3, Wrench } from "lucide-react";
 import { sendServicesApplicationEmail } from "@/services/emailService";
+import { submitServiceRequest } from "@/services/serviceSubmission";
 
 const PropertyManagementEmbedded = () => {
   const { toast } = useToast();
@@ -207,9 +208,35 @@ const PropertyManagementEmbedded = () => {
                 const formData = new FormData(form);
                 const name = formData.get('name') as string;
                 const email = formData.get('email') as string;
+                const phone = formData.get('phone') as string;
+                const countryCode = formData.get('countryCode') as string;
+                const city = formData.get('city') as string;
+                const propertyType = formData.get('propertyType') as string;
                 
                 try {
+                  // Save to database
+                  const dbResult = await submitServiceRequest({
+                    name,
+                    email,
+                    phone,
+                    countryCode,
+                    city,
+                    serviceType: 'property-management',
+                    serviceSubtype: propertyType
+                  });
+
+                  if (!dbResult.success) {
+                    toast({
+                      title: "Error",
+                      description: "Failed to submit your request. Please try again.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+
+                  // Send email notification
                   await sendServicesApplicationEmail(email, name, 'property-management');
+                  
                   toast({
                     title: "Request received",
                     description: "Our property management expert will contact you shortly.",
@@ -220,7 +247,7 @@ const PropertyManagementEmbedded = () => {
                   });
                   form.reset();
                 } catch (error) {
-                  console.error('Error sending email:', error);
+                  console.error('Error processing request:', error);
                   toast({
                     title: "Error",
                     description: "Failed to submit your request. Please try again.",
