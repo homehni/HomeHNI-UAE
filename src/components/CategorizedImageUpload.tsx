@@ -184,16 +184,21 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
                   <h4 className="text-xs font-medium text-foreground">{category.label}</h4>
                 </div>
                 {categoryImages.length === 0 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleUploadClick(category.key)}
-                    className="h-7 text-xs px-2"
-                  >
-                    <Upload className="w-3 h-3 mr-1" />
-                    Upload
-                  </Button>
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleUploadClick(category.key)}
+                      className="h-7 text-xs px-2"
+                    >
+                      <Upload className="w-3 h-3 mr-1" />
+                      Upload
+                    </Button>
+                    <p className="text-[10px] text-muted-foreground text-center mt-1">
+                      Only accepts PDF/DOC • Max 5MB
+                    </p>
+                  </>
                 )}
               </div>
               
