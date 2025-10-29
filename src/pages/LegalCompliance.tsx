@@ -37,6 +37,16 @@ const LegalCompliance = () => {
               backgroundPosition: 'center center'
             }}
           ></div>
+          
+          {/* Red Overlay */}
+          <div className="absolute inset-0 bg-red-900/70"></div>
+          
+          {/* Title Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <h1 className="text-3xl md:text-5xl font-bold text-white text-center px-4">
+              LEGAL COMPLIANCE
+            </h1>
+          </div>
         </div>
 
         {/* Main Content */}
