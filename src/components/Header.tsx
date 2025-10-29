@@ -251,19 +251,21 @@ const Header = () => {
                   variant="outline" 
                   size="sm" 
                   onClick={() => navigate('/post-service')}
-                  className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
+                  className={`font-medium px-2 xl:px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 whitespace-nowrap ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
                 >
-                  <Search className="mr-1 h-4 w-4" />
-                  Post Requirement
+                  <Search className="mr-1 h-3 w-3 xl:h-4 xl:w-4" />
+                  <span className="hidden xl:inline">Post Requirement</span>
+                  <span className="xl:hidden">Post Req</span>
                 </Button>
               </div>
 
               {/* Desktop: Post Property Button */}
               {location.pathname !== '/post-property' && (
                 <div>
-                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
-                    <span>Post property</span>
-                    <span className="ml-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-medium">Free</span>
+                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 xl:px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 whitespace-nowrap ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                    <span className="hidden xl:inline">Post property</span>
+                    <span className="xl:hidden">Post</span>
+                    <span className="ml-1 bg-green-500 text-white text-[8px] xl:text-[10px] px-1 xl:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
               )}
@@ -277,10 +279,11 @@ const Header = () => {
                     variant="outline" 
                     size="sm" 
                     onClick={() => navigate('/auth')}
-                    className={`font-medium px-3 py-1.5 text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
+                    className={`font-medium px-2 xl:px-3 py-1.5 text-xs xl:text-sm transition-all duration-500 whitespace-nowrap ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
                   >
-                    <LogIn className="mr-1 h-4 w-4" />
-                    Login/Sign Up
+                    <LogIn className="mr-1 h-3 w-3 xl:h-4 xl:w-4" />
+                    <span className="hidden xl:inline">Login/Sign Up</span>
+                    <span className="xl:hidden">Login</span>
                   </Button>
                 </div>
               )}
