@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, MapPin, Calendar, Users, Award, Leaf, Star, Phone, Mail, Globe } from "lucide-react";
+import { Building2, MapPin, Calendar, Users, Award, Leaf, Star, Phone, Mail, Globe, ArrowRight } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -395,10 +395,12 @@ const DeveloperPage = () => {
                     {developer.keyProjects.map((project, index) => (
                       <div 
                         key={index} 
-                        className="group relative p-4 md:p-5 border-l-4 border-brand-red bg-gradient-to-r from-secondary/50 to-background rounded-r-xl hover:from-brand-red/5 hover:to-background transition-all duration-300 hover:shadow-md"
+                        className="group flex items-start gap-4 p-4 md:p-5 bg-gradient-to-r from-secondary/30 to-background rounded-xl hover:from-secondary/50 hover:to-background transition-all duration-300 hover:shadow-md border border-border/50 hover:border-brand-red/30"
                       >
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-red group-hover:w-1.5 transition-all"></div>
-                        <p className="font-medium text-sm md:text-base text-foreground leading-relaxed">{project}</p>
+                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red group-hover:scale-110 transition-all duration-300">
+                          <ArrowRight className="h-4 w-4 text-brand-red group-hover:text-white transition-colors" />
+                        </div>
+                        <p className="font-medium text-sm md:text-base text-foreground leading-relaxed pt-1">{project}</p>
                       </div>
                     ))}
                   </div>
