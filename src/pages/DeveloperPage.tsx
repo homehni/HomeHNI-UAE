@@ -346,14 +346,14 @@ const DeveloperPage = () => {
 
       {/* Company Info */}
       <section className="py-12 md:py-16 lg:py-20 px-4 bg-gradient-light">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid lg:grid-cols-[1fr_380px] gap-6 md:gap-8 lg:gap-10">
             
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="space-y-6 md:space-y-8">
               
               {/* About Section */}
-              <Card className="card-border-accent hover-lift border-2 backdrop-blur-sm animate-fade-in">
+              <Card className="hover-lift border backdrop-blur-sm animate-fade-in">
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-start gap-4 mb-6">
                     <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
@@ -378,7 +378,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Specializations */}
-              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+              <Card className="hover-lift border animate-fade-in">
                 <CardContent className="p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Our Specializations</h3>
                   <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
@@ -398,7 +398,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Key Projects */}
-              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+              <Card className="hover-lift border animate-fade-in">
                 <CardContent className="p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Key Projects</h3>
                   <div className="space-y-3 md:space-y-4">
@@ -418,7 +418,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Awards */}
-              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+              <Card className="hover-lift border animate-fade-in">
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
                     <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
@@ -447,10 +447,10 @@ const DeveloperPage = () => {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6 md:space-y-8 lg:sticky lg:top-24">
+            <div className="space-y-6 lg:sticky lg:top-24">
               
               {/* Company Details */}
-              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+              <Card className="hover-lift border animate-fade-in">
                 <CardContent className="p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Company Details</h3>
                   <div className="space-y-5 md:space-y-6">
@@ -478,7 +478,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Contact Information */}
-              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+              <Card className="hover-lift border animate-fade-in">
                 <CardContent className="p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Contact Information</h3>
                   <div className="space-y-5 md:space-y-6">
@@ -522,7 +522,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* CTA Section */}
-              <Card className="card-border-red shadow-2xl bg-gradient-to-br from-brand-red/5 via-brand-red/10 to-brand-maroon/10 backdrop-blur-sm overflow-hidden relative animate-fade-in">
+              <Card className="shadow-xl bg-gradient-to-br from-brand-red/5 via-brand-red/10 to-brand-maroon/10 backdrop-blur-sm overflow-hidden relative animate-fade-in border-brand-red/20">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-red/5 to-transparent"></div>
                 <CardContent className="p-6 md:p-8 text-center relative z-10">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
