@@ -224,31 +224,32 @@ const DeveloperPage = () => {
       logo: cannyForestEdgeLogo,
       rank: 7,
       founded: '2010',
-      headquarters: 'Bangalore, India',
-      highlights: 'A sensorial lifestyle, nature-inspired living spaces',
-      description: "Canny's Forest Edge brings a unique approach to real estate development, focusing on creating sensorial lifestyle experiences. Their projects seamlessly blend modern living with nature, offering residents an immersive experience in green, tranquil environments.",
+      headquarters: 'Bachupally, Hyderabad',
+      highlights: '2BHK Luxurious Residences - Ready to move in, 66% open area with 200 acres forest view',
+      description: "Canny's Forest Edge is a premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. The project offers 2BHK apartments of 1285 Sft with ready to move-in possession. TS RERA Approved (P02200003658). Experience luxurious living with 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
       specializations: [
-        'Nature-Inspired Design',
-        'Sensorial Living Spaces',
-        'Eco-Friendly Communities',
-        'Premium Amenities',
-        'Sustainable Architecture'
+        '2BHK - 1285 Sft Apartments',
+        'Ready to Move In',
+        '66% Open Area',
+        '200 Acres Forest View',
+        'TS RERA Approved (P02200003658)'
       ],
       keyProjects: [
-        "Canny's Forest Edge - Nature-themed residential complex",
-        'Green Valley Apartments - Eco-conscious living',
-        'Serenity Gardens - Luxury villas',
-        'Urban Forest - Mixed-use development'
+        '1.52 Acres with 197 Premium Flats',
+        'Wide Cantilever Balconies for Panoramic Views',
+        'Clubhouse with Swimming Pool & Fitness Center',
+        'Impeccably Landscaped Gardens & Recreational Areas',
+        '24/7 Security with Dedicated Concierge Services'
       ],
       awards: [
-        'Green Building Excellence',
-        'Innovative Design Award',
-        'Sustainable Development Recognition',
-        'Best Lifestyle Community'
+        'TS RERA Approved Project',
+        'Multiple Bank Financing Options',
+        'Premium Location - Bachupally',
+        'Forest View Living Experience'
       ],
       contact: {
         phone: '+91 80 4567 8900',
-        email: 'info@cannylifespacescom',
+        email: 'info@cannylifespaces.com',
         website: 'www.cannylifespaces.com'
       }
     },
