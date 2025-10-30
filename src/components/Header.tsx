@@ -104,10 +104,10 @@ const Header = () => {
               
               {/* Center: Post Property Button - Absolutely positioned for perfect centering */}
               {location.pathname !== '/post-property' && (
-                <div className="absolute left-1/2 -translate-x-1/2">
-                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 py-1 text-xs transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                <div className="absolute left-1/2 -translate-x-1/2 z-10">
+                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                     <span>Post property</span>
-                    <span className="ml-0.5 bg-green-500 text-white text-[8px] px-1 py-0.5 rounded-full font-medium">Free</span>
+                    <span className="ml-0.5 sm:ml-1 bg-green-500 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
               )}
