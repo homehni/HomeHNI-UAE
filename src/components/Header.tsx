@@ -96,15 +96,15 @@ const Header = () => {
           <div className="flex items-center h-14">
             
             {/* Mobile Layout: Logo - Center Button - Right Actions */}
-            <div className="lg:hidden flex items-center justify-between w-full">
+            <div className="lg:hidden flex items-center justify-between w-full relative">
               {/* Left: Logo */}
               <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
                 <Logo variant={isScrolled ? "scrolled" : "default"} />
               </div>
               
-              {/* Center: Post Property Button */}
+              {/* Center: Post Property Button - Absolutely positioned for perfect centering */}
               {location.pathname !== '/post-property' && (
-                <div className="flex-1 flex justify-center">
+                <div className="absolute left-1/2 -translate-x-1/2">
                   <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 py-1 text-xs transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
                     <span>Post property</span>
                     <span className="ml-0.5 bg-green-500 text-white text-[8px] px-1 py-0.5 rounded-full font-medium">Free</span>
@@ -113,7 +113,7 @@ const Header = () => {
               )}
               
               {/* Right: Profile and Menu */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 flex-shrink-0">
                 {/* Profile Avatar - Mobile */}
                 {user && (
                   <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
