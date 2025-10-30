@@ -365,9 +365,15 @@ const DeveloperPage = () => {
                       </h2>
                     </div>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed text-base md:text-lg">
-                    {developer.description}
-                  </p>
+                  <div className="space-y-4 text-muted-foreground leading-relaxed text-base md:text-lg">
+                    {developer.description.split('. ').map((sentence, index) => (
+                      sentence.trim() && (
+                        <p key={index} className="leading-relaxed">
+                          {sentence.trim()}{index < developer.description.split('. ').length - 1 ? '.' : ''}
+                        </p>
+                      )
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
 
