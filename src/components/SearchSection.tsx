@@ -1133,15 +1133,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     <div ref={desktopSearchRef} className="relative mb-4 overflow-visible">
                       <div
                         className="relative w-full overflow-visible"
-                        onClick={() => {
-                          if (inputRef.current) {
-                            inputRef.current.focus();
-                          }
-                        }}
                       >
                       {/* Search row with red border and button */}
                         <div className="flex items-center gap-2">
-                        <div className="relative px-4 pt-3 pb-2 pl-12 pr-4 flex-1 border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60 overflow-visible">
+                        <div className="relative px-4 pt-3 pb-2 pl-12 pr-4 flex-1 border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60 overflow-visible" onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
                           <MapPin className="absolute left-0 -ml-8 text-brand-red pointer-events-none flex-shrink-0" size={18} />
