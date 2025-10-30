@@ -345,8 +345,8 @@ const DeveloperPage = () => {
       </section>
 
       {/* Company Info */}
-      <section className="py-12 md:py-16 lg:py-20 md:px-6 bg-gradient-light">
-        <div className="md:container mx-auto max-w-7xl">
+      <section className="py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 bg-gradient-light">
+        <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-[1fr_380px] gap-6 md:gap-8 lg:gap-10">
             
             {/* Main Content */}
