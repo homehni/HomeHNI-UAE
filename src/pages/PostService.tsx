@@ -419,8 +419,8 @@ const PostService = () => {
       </section>
 
       {/* Main Content */}
-      <section className="py-6 px-0 sm:px-4">
-        <div className="mx-0 sm:container sm:mx-auto sm:max-w-3xl lg:max-w-4xl">
+      <section className="py-6 px-2 sm:px-4">
+        <div className="mx-2 sm:container sm:mx-auto sm:max-w-3xl lg:max-w-4xl">
           <Card className="shadow-none sm:shadow-xl rounded-none sm:rounded-lg">
             <CardContent className="p-4 sm:p-6">
               <form onSubmit={handleSubmit} className="space-y-3">
