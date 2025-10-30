@@ -317,7 +317,7 @@ const DeveloperPage = () => {
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-12">
             <div className="flex-shrink-0 animate-fade-in">
-              <div className="w-36 h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 bg-white rounded-3xl p-6 md:p-8 shadow-2xl hover-lift">
+              <div className="w-48 h-32 md:w-56 md:h-36 lg:w-64 lg:h-40 bg-white rounded-2xl p-6 md:p-8 shadow-2xl hover-lift">
                 <img 
                   src={developer.logo} 
                   alt={`${developer.name} logo`} 
