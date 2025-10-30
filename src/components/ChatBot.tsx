@@ -2804,7 +2804,7 @@ const serviceFAQs: Record<string, {question: string, answer: string}[]> = {
               }
             }
           }}
-          className="h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300"
+          className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-brand-red hover:bg-brand-maroon-dark shadow-lg hover:shadow-xl transition-all duration-300"
         >
           <Home size={24} className="text-white sm:w-7 sm:h-7" />
         </Button>
