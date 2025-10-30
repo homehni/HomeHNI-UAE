@@ -225,10 +225,11 @@ const DeveloperPage = () => {
       rank: 7,
       founded: '2010',
       headquarters: 'Bachupally, Hyderabad',
-      highlights: '2BHK Luxurious Residences - Ready to move in, 66% open area with 200 acres forest view',
-      description: "Canny's Forest Edge is a premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. The project offers 2BHK apartments of 1285 Sft with ready to move-in possession. TS RERA Approved (P02200003658). Experience luxurious living with 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
+      highlights: '2BHK & 3BHK Luxurious Residences - Ready to move in, 66% open area with 200 acres forest view',
+      description: "Canny's Forest Edge is a premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. The project offers 2BHK apartments of 1285 Sft and 3BHK apartments ranging from 1505 Sft to 2200 Sft with ready to move-in possession. TS RERA Approved (P02200003658). Experience luxurious living with 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
       specializations: [
         '2BHK - 1285 Sft Apartments',
+        '3BHK - 1505 Sft to 2200 Sft Apartments',
         'Ready to Move In',
         '66% Open Area',
         '200 Acres Forest View',
