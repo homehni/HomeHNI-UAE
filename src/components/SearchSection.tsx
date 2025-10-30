@@ -1459,6 +1459,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                       inputMode="numeric"
                                       className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
                                       value={budget[0]}
+                                      onClick={(e) => e.stopPropagation()}
+                                      onPointerDown={(e) => e.stopPropagation()}
                                       onChange={(e) => {
                                         const val = Math.max(0, Number(e.target.value) || 0);
                                         setBudget([val, budget[1]]);
@@ -1478,6 +1480,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                       inputMode="numeric"
                                       className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
                                       value={budget[1]}
+                                      onClick={(e) => e.stopPropagation()}
+                                      onPointerDown={(e) => e.stopPropagation()}
                                       onChange={(e) => {
                                         const maxAllowed = getBudgetSliderMaxHome(activeTab);
                                         const val = Math.min(maxAllowed, Math.max(0, Number(e.target.value) || 0));
