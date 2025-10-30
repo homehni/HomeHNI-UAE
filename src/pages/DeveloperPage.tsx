@@ -13,6 +13,8 @@ import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
 import brigadeGroupLogo from '@/assets/brigade-group-logo.jpg';
 import aparnaConstructionsLogo from '@/assets/aparna-constructions-logo.jpg';
 import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
+import cannyForestEdgeLogo from '@/assets/canny-forest-edge-logo.jpg';
+import alpineInfratechLogo from '@/assets/alpine-infratech-logo.png';
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
@@ -215,6 +217,72 @@ const DeveloperPage = () => {
         phone: '+91 40 2311 1111',
         email: 'info@aliensgroup.com',
         website: 'www.aliensgroup.com'
+      }
+    },
+    'canny-forest-edge': {
+      name: "Canny's Forest Edge",
+      logo: cannyForestEdgeLogo,
+      rank: 7,
+      founded: '2010',
+      headquarters: 'Bangalore, India',
+      highlights: 'A sensorial lifestyle, nature-inspired living spaces',
+      description: "Canny's Forest Edge brings a unique approach to real estate development, focusing on creating sensorial lifestyle experiences. Their projects seamlessly blend modern living with nature, offering residents an immersive experience in green, tranquil environments.",
+      specializations: [
+        'Nature-Inspired Design',
+        'Sensorial Living Spaces',
+        'Eco-Friendly Communities',
+        'Premium Amenities',
+        'Sustainable Architecture'
+      ],
+      keyProjects: [
+        "Canny's Forest Edge - Nature-themed residential complex",
+        'Green Valley Apartments - Eco-conscious living',
+        'Serenity Gardens - Luxury villas',
+        'Urban Forest - Mixed-use development'
+      ],
+      awards: [
+        'Green Building Excellence',
+        'Innovative Design Award',
+        'Sustainable Development Recognition',
+        'Best Lifestyle Community'
+      ],
+      contact: {
+        phone: '+91 80 4567 8900',
+        email: 'info@cannylifespacescom',
+        website: 'www.cannylifespaces.com'
+      }
+    },
+    'alpine-infratech': {
+      name: 'Alpine Infratech',
+      logo: alpineInfratechLogo,
+      rank: 8,
+      founded: '2008',
+      headquarters: 'Hyderabad, India',
+      highlights: 'Innovative infrastructure solutions, modern construction excellence',
+      description: 'Alpine Infratech is a leading infrastructure and construction company known for delivering cutting-edge projects with precision and quality. They specialize in modern construction techniques and innovative infrastructure solutions that set new standards in the industry.',
+      specializations: [
+        'Infrastructure Development',
+        'Modern Construction Techniques',
+        'Smart Building Technology',
+        'Quality Engineering',
+        'Project Management Excellence'
+      ],
+      keyProjects: [
+        'Alpine Heights - High-rise residential',
+        'Tech Park Infrastructure - IT corridor',
+        'Alpine Square - Commercial complex',
+        'Infrastructure Solutions Portfolio'
+      ],
+      awards: [
+        'Excellence in Infrastructure',
+        'Engineering Innovation Award',
+        'Quality Construction Recognition',
+        'Best Emerging Developer'
+      ],
+      contact: {
+        phone: '+91 40 4567 8900',
+        email: 'info@alpineinfratech.com',
+        website: 'www.alpineinfratech.com'
       }
     }
   };

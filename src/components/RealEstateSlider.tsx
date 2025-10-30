@@ -7,6 +7,8 @@ import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
 import brigadeGroupLogo from '@/assets/brigade-group-logo.jpg';
 import aparnaConstructionsLogo from '@/assets/aparna-constructions-logo.jpg';
 import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
+import cannyForestEdgeLogo from '@/assets/canny-forest-edge-logo.jpg';
+import alpineInfratechLogo from '@/assets/alpine-infratech-logo.png';
 const RealEstateSlider = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -54,6 +56,20 @@ const RealEstateSlider = () => {
       logo: aliensGroupLogo,
       rank: 6,
       highlights: 'Hyderabad-founded, iconic skyscraper projects, design awards'
+    },
+    {
+      id: 'canny-forest-edge',
+      name: "Canny's Forest Edge",
+      logo: cannyForestEdgeLogo,
+      rank: 7,
+      highlights: 'A sensorial lifestyle, nature-inspired living spaces'
+    },
+    {
+      id: 'alpine-infratech',
+      name: 'Alpine Infratech',
+      logo: alpineInfratechLogo,
+      rank: 8,
+      highlights: 'Innovative infrastructure solutions, modern construction excellence'
     }
   ];
 
