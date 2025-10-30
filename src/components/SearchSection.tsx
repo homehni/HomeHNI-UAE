@@ -1382,6 +1382,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                       value={budget[0]}
                                       onChange={(e) => {
                                         const val = Math.max(0, Number(e.target.value) || 0);
+                                        setBudget([val, budget[1]]);
+                                      }}
+                                      onBlur={(e) => {
+                                        const val = Math.max(0, Number(e.target.value) || 0);
                                         const next: [number, number] = [val, budget[1]];
                                         setBudget(snapBudget(activeTab, next));
                                       }}
@@ -1396,6 +1400,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                       className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
                                       value={budget[1]}
                                       onChange={(e) => {
+                                        const maxAllowed = getBudgetSliderMaxHome(activeTab);
+                                        const val = Math.min(maxAllowed, Math.max(0, Number(e.target.value) || 0));
+                                        setBudget([budget[0], val]);
+                                      }}
+                                      onBlur={(e) => {
                                         const maxAllowed = getBudgetSliderMaxHome(activeTab);
                                         const val = Math.min(maxAllowed, Math.max(0, Number(e.target.value) || 0));
                                         const next: [number, number] = [budget[0], val];
