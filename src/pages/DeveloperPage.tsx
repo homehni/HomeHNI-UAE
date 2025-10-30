@@ -353,7 +353,7 @@ const DeveloperPage = () => {
             <div className="space-y-6 md:space-y-8">
               
               {/* About Section */}
-              <Card className="hover-lift border backdrop-blur-sm animate-fade-in">
+              <Card className="hover-lift md:border backdrop-blur-sm animate-fade-in">
                 <CardContent className="p-5 sm:p-6 md:p-8">
                   <div className="flex items-start gap-4 mb-6">
                     <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
@@ -378,7 +378,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Specializations */}
-              <Card className="hover-lift border animate-fade-in">
+              <Card className="hover-lift md:border animate-fade-in">
                 <CardContent className="p-5 sm:p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Our Specializations</h3>
                   <div className="grid md:grid-cols-2 gap-4 md:gap-5">
@@ -398,7 +398,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Key Projects */}
-              <Card className="hover-lift border animate-fade-in">
+              <Card className="hover-lift md:border animate-fade-in">
                 <CardContent className="p-5 sm:p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Key Projects</h3>
                   <div className="space-y-3 md:space-y-4">
@@ -418,7 +418,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Awards */}
-              <Card className="hover-lift border animate-fade-in">
+              <Card className="hover-lift md:border animate-fade-in">
                 <CardContent className="p-5 sm:p-6 md:p-8">
                   <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
                     <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
@@ -450,7 +450,7 @@ const DeveloperPage = () => {
             <div className="space-y-6 lg:sticky lg:top-24">
               
               {/* Company Details */}
-              <Card className="hover-lift border animate-fade-in">
+              <Card className="hover-lift md:border animate-fade-in">
                 <CardContent className="p-5 sm:p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Company Details</h3>
                   <div className="space-y-5 md:space-y-6">
@@ -478,7 +478,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Contact Information */}
-              <Card className="hover-lift border animate-fade-in">
+              <Card className="hover-lift md:border animate-fade-in">
                 <CardContent className="p-5 sm:p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Contact Information</h3>
                   <div className="space-y-5 md:space-y-6">
@@ -522,7 +522,7 @@ const DeveloperPage = () => {
               </Card>
 
               {/* CTA Section */}
-              <Card className="shadow-xl bg-gradient-to-br from-brand-red/5 via-brand-red/10 to-brand-maroon/10 backdrop-blur-sm overflow-hidden relative animate-fade-in border-brand-red/20">
+              <Card className="shadow-xl bg-gradient-to-br from-brand-red/5 via-brand-red/10 to-brand-maroon/10 backdrop-blur-sm overflow-hidden relative animate-fade-in md:border-brand-red/20">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-red/5 to-transparent"></div>
                 <CardContent className="p-5 sm:p-6 md:p-8 text-center relative z-10">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
