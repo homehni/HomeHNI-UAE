@@ -4,6 +4,51 @@ Add these two endpoints to your email service backend at `https://email-system-h
 
 ## Endpoints to Add
 
+### 0. Callback Request Admin Alert (Builder/Dealer Plans)
+
+```javascript
+// Sends an alert to the admin when a user requests a callback from Builder/Dealer plans
+app.post('/send-callback-request-admin-alert', async (req, res) => {
+    const { adminEmail, name, email, phone, city, userClass, source } = req.body;
+
+    const apiKey = req.headers['x-api-key'];
+    if (apiKey !== process.env.EMAIL_API_KEY) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!adminEmail || !name || !email || !phone) {
+        return res.status(400).json({ error: 'adminEmail, name, email, phone are required' });
+    }
+
+    const mailOptions = {
+        from: '"HomeHNI" <' + process.env.EMAIL_USER + '>',
+        to: adminEmail,
+        subject: `Callback Request: ${name} (${userClass || 'N/A'})`,
+        html: `
+        <div style="font-family: Arial, sans-serif; line-height:1.6;">
+          <h2 style="margin:0 0 8px 0;">📞 New Callback Request</h2>
+          <p style="margin:0 0 12px 0; color:#666;">${source || 'Builder/Dealer Plans'}</p>
+          <div style="background:#f9f9f9; border-left:4px solid #DC2626; padding:12px 16px; border-radius:4px;">
+            <p style="margin:6px 0;"><strong>Name:</strong> ${name}</p>
+            <p style="margin:6px 0;"><strong>Email:</strong> ${email}</p>
+            <p style="margin:6px 0;"><strong>Phone:</strong> ${phone}</p>
+            <p style="margin:6px 0;"><strong>City:</strong> ${city || ''}</p>
+            <p style="margin:6px 0;"><strong>Class:</strong> ${userClass || ''}</p>
+          </div>
+        </div>`
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Callback request admin alert sent:', info.messageId);
+        res.json({ success: true, messageId: info.messageId });
+    } catch (error) {
+        console.error('Error sending callback request alert:', error);
+        res.status(500).json({ success: false, error: 'Failed to send email', details: error.message });
+    }
+});
+```
+
 ### 1. Admin Notification Endpoint
 
 ```javascript

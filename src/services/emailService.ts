@@ -716,3 +716,26 @@ export async function sendRequirementSubmissionConfirmation(
     preferredProject: requirementData.preferredProject || ''
   });
 }
+
+// 28. Callback Request - Admin Notification - Notify admin when user requests a callback from plans/services
+export async function sendCallbackRequestAdminAlert(
+  adminEmail: string,
+  data: {
+    name: string;
+    email: string;
+    phone: string;
+    city: string;
+    userClass: 'owner' | 'builder' | 'broker' | 'agent' | string;
+    source?: string; // optional context like which plan/service
+  }
+) {
+  return sendEmail('/send-callback-request-admin-alert', {
+    adminEmail,
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    city: data.city,
+    userClass: data.userClass,
+    source: data.source || 'Builder/Dealer Plans'
+  });
+}

@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useSettings } from '@/contexts/SettingsContext';
+import { sendCallbackRequestAdminAlert } from '@/services/emailService';
 
 interface CallbackRequestDialogProps {
   isOpen: boolean;
@@ -13,6 +15,7 @@ interface CallbackRequestDialogProps {
 }
 
 const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, onClose }) => {
+  const { settings } = useSettings();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,7 +28,7 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate required fields
@@ -38,7 +41,23 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
       return;
     }
 
-    // Reset form and close dialog first
+    // Send admin alert email
+    try {
+      const adminEmail = settings?.admin_email || 'homehni8@gmail.com';
+      await sendCallbackRequestAdminAlert(adminEmail, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.number,
+        city: formData.city,
+        userClass: formData.class,
+        source: 'BuilderDealerPlans - Get a callback'
+      });
+    } catch (err) {
+      // Non-blocking: still show success to user
+      console.error('Callback admin email failed', err);
+    }
+
+    // Reset form and close dialog
     setFormData({
       name: '',
       email: '',
@@ -48,7 +67,7 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
     });
     onClose();
 
-    // Show success toast after closing
+    // Show success toast
     setTimeout(() => {
       toast({
         title: "✓ Request Sent Successfully",
