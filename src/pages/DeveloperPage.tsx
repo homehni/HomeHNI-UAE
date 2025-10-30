@@ -345,7 +345,7 @@ const DeveloperPage = () => {
       </section>
 
       {/* Company Info */}
-      <section className="py-12 md:py-16 lg:py-20 px-4 bg-gradient-light">
+      <section className="py-12 md:py-16 lg:py-20 px-3 sm:px-4 md:px-6 bg-gradient-light">
         <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-[1fr_380px] gap-6 md:gap-8 lg:gap-10">
             
@@ -354,7 +354,7 @@ const DeveloperPage = () => {
               
               {/* About Section */}
               <Card className="hover-lift border backdrop-blur-sm animate-fade-in">
-                <CardContent className="p-6 md:p-8">
+                <CardContent className="p-5 sm:p-6 md:p-8">
                   <div className="flex items-start gap-4 mb-6">
                     <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
                       <Building2 className="h-6 w-6 md:h-7 md:w-7 text-white" />
@@ -379,7 +379,7 @@ const DeveloperPage = () => {
 
               {/* Specializations */}
               <Card className="hover-lift border animate-fade-in">
-                <CardContent className="p-6 md:p-8">
+                <CardContent className="p-5 sm:p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Our Specializations</h3>
                   <div className="grid md:grid-cols-2 gap-4 md:gap-5">
                     {developer.specializations.map((spec, index) => (
@@ -399,7 +399,7 @@ const DeveloperPage = () => {
 
               {/* Key Projects */}
               <Card className="hover-lift border animate-fade-in">
-                <CardContent className="p-6 md:p-8">
+                <CardContent className="p-5 sm:p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Key Projects</h3>
                   <div className="space-y-3 md:space-y-4">
                     {developer.keyProjects.map((project, index) => (
@@ -419,7 +419,7 @@ const DeveloperPage = () => {
 
               {/* Awards */}
               <Card className="hover-lift border animate-fade-in">
-                <CardContent className="p-6 md:p-8">
+                <CardContent className="p-5 sm:p-6 md:p-8">
                   <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
                     <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
                       <Award className="h-6 w-6 md:h-7 md:w-7 text-white" />
@@ -451,7 +451,7 @@ const DeveloperPage = () => {
               
               {/* Company Details */}
               <Card className="hover-lift border animate-fade-in">
-                <CardContent className="p-6">
+                <CardContent className="p-5 sm:p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Company Details</h3>
                   <div className="space-y-5 md:space-y-6">
                     <div className="flex items-start gap-4">
@@ -479,7 +479,7 @@ const DeveloperPage = () => {
 
               {/* Contact Information */}
               <Card className="hover-lift border animate-fade-in">
-                <CardContent className="p-6">
+                <CardContent className="p-5 sm:p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Contact Information</h3>
                   <div className="space-y-5 md:space-y-6">
                     <div className="flex items-start gap-4">
@@ -524,7 +524,7 @@ const DeveloperPage = () => {
               {/* CTA Section */}
               <Card className="shadow-xl bg-gradient-to-br from-brand-red/5 via-brand-red/10 to-brand-maroon/10 backdrop-blur-sm overflow-hidden relative animate-fade-in border-brand-red/20">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-red/5 to-transparent"></div>
-                <CardContent className="p-6 md:p-8 text-center relative z-10">
+                <CardContent className="p-5 sm:p-6 md:p-8 text-center relative z-10">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
                     <Building2 className="h-8 w-8 text-white" />
                   </div>
