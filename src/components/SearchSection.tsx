@@ -1370,21 +1370,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 </Button>
                               </PopoverTrigger>
                               <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[360px] sm:w-[480px] p-4">
-                                <h4 className="text-base font-semibold mb-3 text-foreground">Budget Range</h4>
-                                <div className="text-sm font-medium mb-3 text-foreground">
-                                  ₹{formatBudget(budget[0])} - ₹{activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
-                                </div>
-                                <Slider
-                                  value={budget}
-                                  onValueChange={(v) => {
-                                    const next = snapBudget(activeTab, v as [number, number]);
-                                    setBudget(next);
-                                  }}
-                                  min={0}
-                                  max={getBudgetSliderMaxHome(activeTab)}
-                                  step={getBudgetSliderStepHome(activeTab)}
-                                  className="mb-4"
-                                />
+                                <h4 className="text-base font-semibold mb-4 text-foreground">Budget Range</h4>
                                 {/* Precise inputs */}
                                 <div className="grid grid-cols-2 gap-3 mb-3">
                                   <div>
