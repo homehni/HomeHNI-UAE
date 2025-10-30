@@ -567,26 +567,38 @@ const PostService = () => {
                     </div>
 
                     {/* Budget Range */}
-                    <div>
-                      <Label className="text-sm font-medium">Budget Range</Label>
-                      <div className="mt-1">
-                        <Slider
-                          value={formData.budgetRange}
-                          onValueChange={(value) => handleInputChange("budgetRange", value)}
-                          max={50000000}
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="minBudget" className="text-sm font-medium">Minimum Budget</Label>
+                        <Input
+                          id="minBudget"
+                          type="number"
+                          value={formData.budgetRange[0]}
+                          onChange={(e) => handleInputChange("budgetRange", [Number(e.target.value), formData.budgetRange[1]])}
+                          className="mt-1 h-10"
+                          placeholder="Enter minimum budget"
                           min={0}
-                          step={100000}
-                          className="mb-1"
                         />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>{formatBudgetAmount(formData.budgetRange[0])}</span>
-                          <span>{formatBudgetAmount(formData.budgetRange[1])}</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Range: {formatBudgetAmount(formData.budgetRange[0])} – {formatBudgetAmount(formData.budgetRange[1])}
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {formatBudgetAmount(formData.budgetRange[0])}
                         </p>
                       </div>
-                      {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
+                      <div>
+                        <Label htmlFor="maxBudget" className="text-sm font-medium">Maximum Budget</Label>
+                        <Input
+                          id="maxBudget"
+                          type="number"
+                          value={formData.budgetRange[1]}
+                          onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], Number(e.target.value)])}
+                          className="mt-1 h-10"
+                          placeholder="Enter maximum budget"
+                          min={0}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {formatBudgetAmount(formData.budgetRange[1])}
+                        </p>
+                      </div>
+                      {errors.budget && <p className="text-sm text-destructive mt-1 col-span-2">{errors.budget}</p>}
                     </div>
 
                     {/* Premium Service Toggle */}
