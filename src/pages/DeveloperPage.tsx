@@ -259,27 +259,30 @@ const DeveloperPage = () => {
       logo: alpineInfratechLogo,
       rank: 8,
       founded: '2008',
-      headquarters: 'Hyderabad, India',
-      highlights: 'Innovative infrastructure solutions, modern construction excellence',
-      description: 'Alpine Infratech is a leading infrastructure and construction company known for delivering cutting-edge projects with precision and quality. They specialize in modern construction techniques and innovative infrastructure solutions that set new standards in the industry.',
+      headquarters: 'Kompally-Bollarum, Hyderabad',
+      highlights: 'GMR Springfield - Ready to move in 2BHK apartments @ ₹5200/Sft, 47% Open Area',
+      description: 'Alpine Infratech presents GMR Springfield - Live in Leisure, a premium residential project in Kompally-Bollarum, Hyderabad. Spread across 4 Acres with 4 Blocks (G+5) housing 370 Flats, this ready to move-in project offers 2BHK apartments of 1120 Sft. TS RERA Approved (P02200003938). The project features 47% open area with lavish landscaping and a massive 2420 Sqyd Party Lawn. Bank approved by SBI, HDFC, LIC, Bajaj Finance, and Sundaram Finance.',
       specializations: [
-        'Infrastructure Development',
-        'Modern Construction Techniques',
-        'Smart Building Technology',
-        'Quality Engineering',
-        'Project Management Excellence'
+        '2BHK - 1120 Sft Apartments',
+        'Ready to Move In',
+        '47% Open Area',
+        '2420 Sqyd Party Lawn',
+        'Bank Approved (SBI, HDFC, LIC, Bajaj, Sundaram)',
+        'Price @ ₹5200/Sft',
+        '1.5 km from Bolaraum MMTS Station',
+        '5 mins to D-Mart & Cineplanet'
       ],
       keyProjects: [
-        'Alpine Heights - High-rise residential',
-        'Tech Park Infrastructure - IT corridor',
-        'Alpine Square - Commercial complex',
-        'Infrastructure Solutions Portfolio'
+        'GMR Springfield - 4 Acres, 370 Flats, G+5 Blocks',
+        'Location: 1.5 km from Bolaraum MMTS Station',
+        '5 mins drive to D-Mart, Cineplanet, Shopping Malls',
+        'Easy connectivity to Banks, Schools, Hospitals'
       ],
       awards: [
-        'Excellence in Infrastructure',
-        'Engineering Innovation Award',
-        'Quality Construction Recognition',
-        'Best Emerging Developer'
+        'TS RERA Approved - P02200003938',
+        'Bank Approvals from SBI, HDFC, LIC',
+        'Bajaj Finance & Sundaram Finance Approved',
+        'Premium Location - Kompally-Bollarum'
       ],
       contact: {
         phone: '+91 40 4567 8900',
