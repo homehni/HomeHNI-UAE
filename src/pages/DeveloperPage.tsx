@@ -307,11 +307,17 @@ const DeveloperPage = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-red-600 to-red-800 text-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center gap-8 min-h-[180px] md:min-h-[200px]">
-            <div className="flex-shrink-0">
-              <div className="w-32 h-32 md:w-40 md:h-40 bg-white rounded-2xl p-6 shadow-2xl">
+      <section className="relative pt-32 pb-20 px-4 bg-gradient-to-br from-brand-red via-brand-maroon to-brand-maroon-dark text-white overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-12">
+            <div className="flex-shrink-0 animate-fade-in">
+              <div className="w-36 h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 bg-white rounded-3xl p-6 md:p-8 shadow-2xl hover-lift">
                 <img 
                   src={developer.logo} 
                   alt={`${developer.name} logo`} 
@@ -319,9 +325,14 @@ const DeveloperPage = () => {
                 />
               </div>
             </div>
-            <div className="flex-1 text-center md:text-left h-full flex flex-col justify-center">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4">{developer.name}</h1>
-              <p className="text-xl text-white/90 max-w-3xl">
+            <div className="flex-1 text-center md:text-left animate-fade-in">
+              <div className="inline-block mb-3 px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium">
+                Rank #{developer.rank} Developer
+              </div>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 leading-tight">
+                {developer.name}
+              </h1>
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 max-w-3xl leading-relaxed">
                 {developer.highlights}
               </p>
             </div>
@@ -330,35 +341,46 @@ const DeveloperPage = () => {
       </section>
 
       {/* Company Info */}
-      <section className="py-16 px-4">
+      <section className="py-12 md:py-16 lg:py-20 px-4 bg-gradient-light">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
             
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               
               {/* About Section */}
-              <Card className="border-2 border-border shadow-lg shadow-red-200/50">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold mb-6 flex items-center">
-                    <Building2 className="h-8 w-8 mr-3 text-red-600" />
-                    About {developer.name}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-lg">
+              <Card className="card-border-accent hover-lift border-2 backdrop-blur-sm animate-fade-in">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
+                      <Building2 className="h-6 w-6 md:h-7 md:w-7 text-white" />
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+                        About {developer.name}
+                      </h2>
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed text-base md:text-lg">
                     {developer.description}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Specializations */}
-              <Card className="border-2 border-border shadow-lg shadow-red-200/50">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6">Our Specializations</h3>
-                  <div className="grid sm:grid-cols-2 gap-4">
+              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+                <CardContent className="p-6 md:p-8">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Our Specializations</h3>
+                  <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
                     {developer.specializations.map((spec, index) => (
-                      <div key={index} className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg">
-                        <Star className="h-5 w-5 text-red-600 flex-shrink-0" />
-                        <span className="font-medium">{spec}</span>
+                      <div 
+                        key={index} 
+                        className="group flex items-center gap-3 p-4 bg-gradient-to-br from-secondary/50 to-background rounded-xl border border-border/50 hover:border-brand-red/30 transition-all duration-300 hover:shadow-md"
+                      >
+                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red/20 transition-colors">
+                          <Star className="h-4 w-4 text-brand-red" />
+                        </div>
+                        <span className="font-medium text-sm md:text-base text-foreground">{spec}</span>
                       </div>
                     ))}
                   </div>
@@ -366,13 +388,17 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Key Projects */}
-              <Card className="border-2 border-border shadow-lg shadow-red-200/50">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6">Key Projects</h3>
-                  <div className="space-y-4">
+              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+                <CardContent className="p-6 md:p-8">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Key Projects</h3>
+                  <div className="space-y-3 md:space-y-4">
                     {developer.keyProjects.map((project, index) => (
-                      <div key={index} className="p-4 border-l-4 border-red-600 bg-muted/30 rounded-r-lg">
-                        <p className="font-medium text-foreground">{project}</p>
+                      <div 
+                        key={index} 
+                        className="group relative p-4 md:p-5 border-l-4 border-brand-red bg-gradient-to-r from-secondary/50 to-background rounded-r-xl hover:from-brand-red/5 hover:to-background transition-all duration-300 hover:shadow-md"
+                      >
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-red group-hover:w-1.5 transition-all"></div>
+                        <p className="font-medium text-sm md:text-base text-foreground leading-relaxed">{project}</p>
                       </div>
                     ))}
                   </div>
@@ -380,17 +406,26 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Awards */}
-              <Card className="border-2 border-border shadow-lg shadow-red-200/50">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6 flex items-center">
-                    <Award className="h-6 w-6 mr-3 text-red-600" />
-                    Awards & Recognition
-                  </h3>
-                  <div className="grid sm:grid-cols-2 gap-4">
+              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                    <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
+                      <Award className="h-6 w-6 md:h-7 md:w-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+                      Awards & Recognition
+                    </h3>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
                     {developer.awards.map((award, index) => (
-                      <div key={index} className="flex items-center gap-3 p-4 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-lg">
-                        <Award className="h-5 w-5 text-red-600 flex-shrink-0" />
-                        <span className="font-medium">{award}</span>
+                      <div 
+                        key={index} 
+                        className="group flex items-start gap-3 p-4 bg-gradient-to-br from-brand-red/5 to-background border border-brand-red/20 rounded-xl hover:border-brand-red/40 hover:shadow-md transition-all duration-300"
+                      >
+                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red/20 transition-colors mt-0.5">
+                          <Award className="h-4 w-4 text-brand-red" />
+                        </div>
+                        <span className="font-medium text-sm md:text-base text-foreground leading-relaxed">{award}</span>
                       </div>
                     ))}
                   </div>
@@ -400,25 +435,30 @@ const DeveloperPage = () => {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
+            <div className="space-y-6 md:space-y-8 lg:sticky lg:top-24">
               
               {/* Company Details */}
-              <Card className="border-2 border-border shadow-lg shadow-red-200/50">
+              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-6">Company Details</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Calendar className="h-5 w-5 text-red-600" />
-                      <div>
-                        <div className="font-semibold">Founded</div>
-                        <div className="text-muted-foreground">{developer.founded}</div>
+                  <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Company Details</h3>
+                  <div className="space-y-5 md:space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                        <Calendar className="h-5 w-5 text-brand-red" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-foreground mb-1">Founded</div>
+                        <div className="text-muted-foreground text-sm">{developer.founded}</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-red-600" />
-                      <div>
-                        <div className="font-semibold">Headquarters</div>
-                        <div className="text-muted-foreground">{developer.headquarters}</div>
+                    <div className="h-px bg-border"></div>
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                        <MapPin className="h-5 w-5 text-brand-red" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-foreground mb-1">Headquarters</div>
+                        <div className="text-muted-foreground text-sm">{developer.headquarters}</div>
                       </div>
                     </div>
                   </div>
@@ -426,29 +466,43 @@ const DeveloperPage = () => {
               </Card>
 
               {/* Contact Information */}
-              <Card className="border-2 border-border shadow-lg shadow-red-200/50">
+              <Card className="card-border-accent hover-lift border-2 animate-fade-in">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-6">Contact Information</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-red-600" />
-                      <div>
-                        <div className="font-semibold">Phone</div>
-                        <div className="text-muted-foreground">{developer.contact.phone}</div>
+                  <h3 className="text-xl md:text-2xl font-bold mb-6 md:mb-8 text-foreground">Contact Information</h3>
+                  <div className="space-y-5 md:space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                        <Phone className="h-5 w-5 text-brand-red" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-foreground mb-1">Phone</div>
+                        <a href={`tel:${developer.contact.phone}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {developer.contact.phone}
+                        </a>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-red-600" />
-                      <div>
-                        <div className="font-semibold">Email</div>
-                        <div className="text-muted-foreground text-sm">{developer.contact.email}</div>
+                    <div className="h-px bg-border"></div>
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                        <Mail className="h-5 w-5 text-brand-red" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-foreground mb-1">Email</div>
+                        <a href={`mailto:${developer.contact.email}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {developer.contact.email}
+                        </a>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Globe className="h-5 w-5 text-red-600" />
-                      <div>
-                        <div className="font-semibold">Website</div>
-                        <div className="text-muted-foreground text-sm">{developer.contact.website}</div>
+                    <div className="h-px bg-border"></div>
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-brand-red/10 flex items-center justify-center">
+                        <Globe className="h-5 w-5 text-brand-red" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-foreground mb-1">Website</div>
+                        <a href={`https://${developer.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {developer.contact.website}
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -456,14 +510,19 @@ const DeveloperPage = () => {
               </Card>
 
               {/* CTA Section */}
-              <Card className="border-2 border-red-600 shadow-lg shadow-red-200/50 bg-gradient-to-br from-red-50 to-red-100">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-4 text-red-800">Interested in Their Projects?</h3>
-                  <p className="text-red-700 mb-6 text-sm">
+              <Card className="card-border-red shadow-2xl bg-gradient-to-br from-brand-red/5 via-brand-red/10 to-brand-maroon/10 backdrop-blur-sm overflow-hidden relative animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-red/5 to-transparent"></div>
+                <CardContent className="p-6 md:p-8 text-center relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-brand-red to-brand-maroon flex items-center justify-center shadow-lg">
+                    <Building2 className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-foreground">Interested in Their Projects?</h3>
+                  <p className="text-muted-foreground mb-6 text-sm md:text-base leading-relaxed max-w-sm mx-auto">
                     Get in touch with {developer.name} for investment opportunities and project details.
                   </p>
                   <Button 
-                    className="w-full bg-red-600 hover:bg-red-700"
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold"
                     onClick={() => setIsContactFormOpen(true)}
                   >
                     Contact Developer
