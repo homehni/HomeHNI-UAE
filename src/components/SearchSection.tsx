@@ -89,6 +89,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
+  const desktopSearchRef = useRef<HTMLDivElement>(null);
 
   // Detect mobile viewport
   useEffect(() => {
@@ -1129,7 +1130,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                   <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl">
                     {/* Unified Search Box with inline filters */}
-                    <div className="relative mb-4 overflow-visible">
+                    <div ref={desktopSearchRef} className="relative mb-4 overflow-visible">
                       <div
                         className="relative w-full overflow-visible"
                         onClick={() => {
@@ -1193,7 +1194,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           <div className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible filter-scroll-container">
                             <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-2 sm:gap-3 w-full min-w-max lg:min-w-0 pb-2">
                             {/* Property type: Property Type or Land/Space Type */}
-                            <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'propertyType' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('propertyType'); }}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1209,7 +1210,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 align="start" 
                                 avoidCollisions={false} 
                                 className="w-[300px] sm:w-[350px] p-4"
-                                onInteractOutside={() => setOpenDropdown(null)}
+                                onInteractOutside={(e) => {
+                                  const target = (e.target as Node) || null;
+                                  if (desktopSearchRef.current?.contains(target)) {
+                                    e.preventDefault();
+                                    return;
+                                  }
+                                  setOpenDropdown(null);
+                                }}
                               >
                                 <h4 className="text-base font-semibold mb-3 text-foreground">Select Property Type</h4>
                                 <div className="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto">
@@ -1232,7 +1240,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
                             {/* Bedroom (only for Buy/Rent) */}
                             {(activeTab === 'buy' || activeTab === 'rent') && (
-                            <Popover open={!isMobile && openDropdown === 'bedroom'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'bedroom' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'bedroom'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('bedroom'); }}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1248,7 +1256,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 align="start" 
                                 avoidCollisions={false} 
                                 className="w-[280px] sm:w-[320px] p-4"
-                                onInteractOutside={() => setOpenDropdown(null)}
+                                onInteractOutside={(e) => {
+                                  const target = (e.target as Node) || null;
+                                  if (desktopSearchRef.current?.contains(target)) {
+                                    e.preventDefault();
+                                    return;
+                                  }
+                                  setOpenDropdown(null);
+                                }}
                               >
                                 <h4 className="text-base font-semibold mb-3 text-foreground">Number of Bedrooms</h4>
                                 <div className="flex flex-wrap gap-2">
@@ -1273,7 +1288,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             {/* Availability for RENT; Property Status for others (not for land) */}
                             {activeTab !== 'land' && (
                               activeTab === 'rent' ? (
-                                <Popover open={!isMobile && openDropdown === 'availability'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'availability' : null)}>
+                                <Popover open={!isMobile && openDropdown === 'availability'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('availability'); }}>
                                   <PopoverTrigger asChild>
                                     <Button
                                       variant="outline"
@@ -1289,7 +1304,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     align="start" 
                                     avoidCollisions={false} 
                                     className="w-[280px] sm:w-[320px] p-4"
-                                    onInteractOutside={() => setOpenDropdown(null)}
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
                                   >
                                     <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -1310,7 +1332,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   </PopoverContent>
                                 </Popover>
                               ) : (
-                                <Popover open={!isMobile && openDropdown === 'construction'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'construction' : null)}>
+                                <Popover open={!isMobile && openDropdown === 'construction'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('construction'); }}>
                                   <PopoverTrigger asChild>
                                     <Button
                                       variant="outline"
@@ -1326,7 +1348,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     align="start" 
                                     avoidCollisions={false} 
                                     className="w-[250px] sm:w-[280px] p-4"
-                                    onInteractOutside={() => setOpenDropdown(null)}
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
                                   >
                                     <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
                                     <div className="flex flex-wrap gap-2">
@@ -1350,7 +1379,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             )}
 
                             {/* Furnishing */}
-                            <Popover open={!isMobile && openDropdown === 'furnishing'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'furnishing' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'furnishing'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('furnishing'); }}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1366,7 +1395,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 align="start" 
                                 avoidCollisions={false} 
                                 className="w-[220px] sm:w-[260px] p-4"
-                                onInteractOutside={() => setOpenDropdown(null)}
+                                onInteractOutside={(e) => {
+                                  const target = (e.target as Node) || null;
+                                  if (desktopSearchRef.current?.contains(target)) {
+                                    e.preventDefault();
+                                    return;
+                                  }
+                                  setOpenDropdown(null);
+                                }}
                               >
                                 <h4 className="text-base font-semibold mb-3 text-foreground">Furnishing</h4>
                                 <div className="flex flex-wrap gap-2">
@@ -1388,7 +1424,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             </Popover>
 
                             {/* Budget */}
-                            <Popover open={!isMobile && openDropdown === 'budget'} onOpenChange={(open) => !isMobile && setOpenDropdown(open ? 'budget' : null)}>
+                            <Popover open={!isMobile && openDropdown === 'budget'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('budget'); }}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
@@ -1404,7 +1440,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 align="start" 
                                 avoidCollisions={false} 
                                 className="w-[360px] sm:w-[480px] p-4"
-                                onInteractOutside={() => setOpenDropdown(null)}
+                                onInteractOutside={(e) => {
+                                  const target = (e.target as Node) || null;
+                                  if (desktopSearchRef.current?.contains(target)) {
+                                    e.preventDefault();
+                                    return;
+                                  }
+                                  setOpenDropdown(null);
+                                }}
                               >
                                 <h4 className="text-base font-semibold mb-4 text-foreground">Budget Range</h4>
                                 {/* Precise inputs */}
