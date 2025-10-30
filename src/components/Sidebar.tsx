@@ -224,14 +224,6 @@ const Sidebar = ({
   //   }]
   // },
   {
-    id: 'students',
-    label: 'Students',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/students');
-      onClose();
-    }
-  }, {
     id: 'blog',
     label: 'Blog',
     hasSubmenu: false,
