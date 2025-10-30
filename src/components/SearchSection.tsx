@@ -1204,7 +1204,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[300px] sm:w-[350px] p-4">
+                              <PopoverContent 
+                                side="bottom" 
+                                align="start" 
+                                avoidCollisions={false} 
+                                className="w-[300px] sm:w-[350px] p-4"
+                                onInteractOutside={() => setOpenDropdown(null)}
+                              >
                                 <h4 className="text-base font-semibold mb-3 text-foreground">Select Property Type</h4>
                                 <div className="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto">
                                   {getPropertyTypesForHomepage(activeTab).map(type => (
@@ -1237,7 +1243,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[280px] sm:w-[320px] p-4">
+                              <PopoverContent 
+                                side="bottom" 
+                                align="start" 
+                                avoidCollisions={false} 
+                                className="w-[280px] sm:w-[320px] p-4"
+                                onInteractOutside={() => setOpenDropdown(null)}
+                              >
                                 <h4 className="text-base font-semibold mb-3 text-foreground">Number of Bedrooms</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
@@ -1272,7 +1284,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                       <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
                                     </Button>
                                   </PopoverTrigger>
-                                  <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[280px] sm:w-[320px] p-4">
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[280px] sm:w-[320px] p-4"
+                                    onInteractOutside={() => setOpenDropdown(null)}
+                                  >
                                     <h4 className="text-base font-semibold mb-3 text-foreground">Availability</h4>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                       {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
@@ -1303,7 +1321,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                       <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
                                     </Button>
                                   </PopoverTrigger>
-                                  <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[250px] sm:w-[280px] p-4">
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[250px] sm:w-[280px] p-4"
+                                    onInteractOutside={() => setOpenDropdown(null)}
+                                  >
                                     <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
                                     <div className="flex flex-wrap gap-2">
                                       {['Under Construction', 'Ready'].map(status => (
@@ -1337,7 +1361,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[220px] sm:w-[260px] p-4">
+                              <PopoverContent 
+                                side="bottom" 
+                                align="start" 
+                                avoidCollisions={false} 
+                                className="w-[220px] sm:w-[260px] p-4"
+                                onInteractOutside={() => setOpenDropdown(null)}
+                              >
                                 <h4 className="text-base font-semibold mb-3 text-foreground">Furnishing</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {['Full', 'Semi', 'None'].map(level => (
@@ -1369,7 +1399,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent side="bottom" align="start" avoidCollisions={false} className="w-[360px] sm:w-[480px] p-4">
+                              <PopoverContent 
+                                side="bottom" 
+                                align="start" 
+                                avoidCollisions={false} 
+                                className="w-[360px] sm:w-[480px] p-4"
+                                onInteractOutside={() => setOpenDropdown(null)}
+                              >
                                 <h4 className="text-base font-semibold mb-4 text-foreground">Budget Range</h4>
                                 {/* Precise inputs */}
                                 <div className="grid grid-cols-2 gap-3 mb-3">
