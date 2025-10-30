@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
 import RealEstateSlider from '@/components/RealEstateSlider';
 import FeaturedProperties from '@/components/FeaturedProperties';
+import MobilePostPropertyBanner from '@/components/MobilePostPropertyBanner';
 
 // Lazy load heavy components
 import { 
@@ -58,6 +59,8 @@ const Index = () => {
           <SearchSection ref={searchSectionRef} />
           <DirectorySection />
         </div>
+        
+        <MobilePostPropertyBanner />
         
         <RealEstateSlider />
         
