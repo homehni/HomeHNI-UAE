@@ -432,7 +432,7 @@ const PostService = () => {
                           id="name"
                           value={formData.name}
                           onChange={(e) => handleInputChange("name", e.target.value)}
-                          className="mt-1 h-10"
+                          className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="Your full name"
                         />
                         {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
@@ -445,7 +445,7 @@ const PostService = () => {
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => handleInputChange("phone", e.target.value)}
-                          className="mt-1 h-10"
+                          className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="Your phone number"
                         />
                         {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
@@ -460,7 +460,7 @@ const PostService = () => {
                           type="email"
                           value={formData.email}
                           onChange={(e) => handleInputChange("email", e.target.value)}
-                          className="mt-1 h-10"
+                          className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="your.email@example.com"
                         />
                         {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
@@ -490,7 +490,7 @@ const PostService = () => {
                         ref={localityInputRef}
                         value={formData.locality}
                         onChange={(e) => handleInputChange("locality", e.target.value)}
-                        className="mt-1 h-10"
+                        className="mt-1 h-10 text-sm placeholder:text-xs"
                         placeholder="Enter locality (e.g., Koramangala, Indiranagar)"
                       />
                     </div>
@@ -562,7 +562,7 @@ const PostService = () => {
                         value={formData.preferredProject}
                         onChange={(e) => handleInputChange("preferredProject", e.target.value)}
                         placeholder="ex- aparna constructions/shobha builders, etc..."
-                        className="mt-1"
+                        className="mt-1 text-sm placeholder:text-xs"
                       />
                     </div>
 
@@ -575,7 +575,7 @@ const PostService = () => {
                           type="number"
                           value={formData.budgetRange[0]}
                           onChange={(e) => handleInputChange("budgetRange", [Number(e.target.value), formData.budgetRange[1]])}
-                          className="mt-1 h-10"
+                          className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="Enter minimum budget"
                           min={0}
                         />
@@ -590,7 +590,7 @@ const PostService = () => {
                           type="number"
                           value={formData.budgetRange[1]}
                           onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], Number(e.target.value)])}
-                          className="mt-1 h-10"
+                          className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="Enter maximum budget"
                           min={0}
                         />
@@ -628,7 +628,7 @@ const PostService = () => {
                         id="notes"
                         value={formData.notes}
                         onChange={(e) => handleInputChange("notes", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 text-sm placeholder:text-xs"
                         placeholder="Any specific requirements or additional details..."
                         rows={1}
                       />
