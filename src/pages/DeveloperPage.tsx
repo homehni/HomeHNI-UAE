@@ -381,7 +381,7 @@ const DeveloperPage = () => {
               <Card className="hover-lift border animate-fade-in">
                 <CardContent className="p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Our Specializations</h3>
-                  <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
+                  <div className="grid md:grid-cols-2 gap-4 md:gap-5">
                     {developer.specializations.map((spec, index) => (
                       <div 
                         key={index} 
@@ -428,7 +428,7 @@ const DeveloperPage = () => {
                       Awards & Recognition
                     </h3>
                   </div>
-                  <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
+                  <div className="grid md:grid-cols-2 gap-4 md:gap-5">
                     {developer.awards.map((award, index) => (
                       <div 
                         key={index} 
