@@ -155,6 +155,23 @@ const LoansEmbedded = () => {
 
   return (
     <div className="bg-background">
+      {/* Success Message Overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] animate-fade-in">
+          <div className="bg-background rounded-xl shadow-2xl p-8 max-w-md mx-4 animate-scale-in border-2 border-primary">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-10 h-10 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-2">Application Sent Successfully!</h3>
+              <p className="text-muted-foreground">
+                Your loan application has been received. Our expert will contact you shortly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
         backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
@@ -282,14 +299,14 @@ const LoansEmbedded = () => {
                     console.log('✅ Email sent successfully to:', email);
                   }
                   
-                  toast({
-                    title: "Application received",
-                    description: "Our loan expert will contact you shortly.",
-                    className: "bg-white border border-green-200 shadow-lg rounded-lg",
-                    style: {
-                      borderLeft: "12px solid hsl(120, 100%, 25%)",
-                    },
-                  });
+                  setShowSuccess(true);
+                  setTimeout(() => {
+                    setShowSuccess(false);
+                  }, 6000);
+                  
+                  setTimeout(() => {
+                    form.reset();
+                  }, 6500);
                 } catch (error) {
                   console.error('❌ Failed to send loan enquiry email:', error);
                   toast({
