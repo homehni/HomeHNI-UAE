@@ -220,16 +220,16 @@ const DeveloperPage = () => {
       }
     },
     'canny-forest-edge': {
-      name: "Canny's Forest Edge",
+      name: "Forest Edge",
       logo: cannyForestEdgeLogo,
       rank: 7,
       founded: '2010',
       headquarters: 'Bachupally, Hyderabad',
       highlights: '2BHK & 3BHK Luxurious Residences - Ready to move in, 66% open area with 200 acres forest view',
-      description: "Canny's Forest Edge is a premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. The project offers 2BHK apartments of 1285 Sft and 3BHK apartments ranging from 1505 Sft to 2200 Sft with ready to move-in possession. TS RERA Approved (P02200003658). Experience luxurious living with 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
+      description: "Forest Edge is a premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. The project offers 2BHK apartments of 1125 & 1285 Sft and 3BHK apartments ranging from 1505 Sft to 2200 Sft with ready to move-in possession. TS RERA Approved (P02200003658). Experience luxurious living with 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
       specializations: [
-        '2BHK - 1285 Sft Apartments',
-        '3BHK - 1505 Sft to 2200 Sft Apartments',
+        '2BHK - 1125 & 1285 Sft',
+        '3BHK - 1505, 1675, 1985 & 2200 Sft',
         'Ready to Move In',
         '66% Open Area',
         '200 Acres Forest View',
@@ -249,9 +249,48 @@ const DeveloperPage = () => {
         'Forest View Living Experience'
       ],
       contact: {
-        phone: '+91 80 4567 8900',
+        phone: '+91 9833662222',
         email: 'info@cannylifespaces.com',
         website: 'www.cannylifespaces.com'
+      },
+      // Property-specific details
+      propertyDetails: {
+        price: {
+          min: 66.36,
+          max: 129.78,
+          unit: 'Lacs',
+          perSqft: 5899
+        },
+        location: 'Sy. No. 369/A/2, Opp. Hamara Family Dhaba, Bachupally, Hyderabad',
+        locality: 'Bachupally',
+        city: 'Hyderabad',
+        configurations: [
+          { type: '2 BHK', sizes: ['1125 Sft', '1285 Sft'] },
+          { type: '3 BHK', sizes: ['1505 Sft', '1675 Sft', '1985 Sft', '2200 Sft'] }
+        ],
+        projectArea: '1.52 Acres',
+        totalUnits: 197,
+        status: 'Ready to Move In',
+        possession: 'Immediate',
+        rera: 'P02200003658',
+        amenities: [
+          'Clubhouse',
+          'Swimming Pool',
+          'Fitness Center',
+          'Kids Play Area',
+          'Landscaped Gardens',
+          '24/7 Security',
+          'CCTV Surveillance',
+          'Power Backup',
+          'Rainwater Harvesting',
+          'Sewage Treatment Plant'
+        ],
+        features: [
+          'Just 3 KM from Nigma Metro Junction',
+          'Well-Maintained Infrastructure',
+          'Just 3 KM from Nigma Metro Junction',
+          '66% Open Area with 200 Acres Forest View'
+        ]
       }
     },
     'alpine-infratech': {
@@ -305,6 +344,472 @@ const DeveloperPage = () => {
     );
   }
 
+  // Check if this is a property-detail style page
+  const isPropertyDetail = 'propertyDetails' in developer;
+
+  // Render property-detail layout for Forest Edge
+  if (isPropertyDetail && developer.propertyDetails) {
+    const pd = developer.propertyDetails;
+    
+    return (
+      <div className="min-h-screen bg-background">
+        <Marquee />
+        <Header />
+        
+        {/* Breadcrumb */}
+        <div className="container mx-auto max-w-7xl px-4 pt-24 pb-4">
+          <div className="text-sm text-muted-foreground">
+            Home / Hyderabad / Bachupally / <span className="text-foreground font-medium">{developer.name}</span>
+          </div>
+        </div>
+
+        {/* Hero Section with Image Gallery */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-[500px] bg-gradient-to-br from-brand-red/10 to-brand-maroon/10">
+            <img 
+              src={developer.logo} 
+              alt={developer.name}
+              className="w-full h-full object-cover"
+            />
+            <Button 
+              variant="secondary"
+              className="absolute top-4 right-4 bg-white/90 hover:bg-white"
+            >
+              📷 View All 13 Photos
+            </Button>
+            {pd.status === 'Ready to Move In' && (
+              <div className="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold">
+                ✓ RERA CERTIFIED
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Property Header */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left Column - Property Info */}
+            <div className="flex-1">
+              <div className="flex items-start gap-4 mb-6">
+                <img 
+                  src={developer.logo} 
+                  alt="Canny Life Spaces"
+                  className="w-16 h-16 rounded-lg object-contain bg-white p-2 shadow-md"
+                />
+                <div className="flex-1">
+                  <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">{developer.name}</h1>
+                  <p className="text-muted-foreground flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    {pd.locality}, {pd.city}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">By Canny Life Spaces Pvt Ltd</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-brand-red">
+                    ₹{pd.price.min} Cr - ₹{pd.price.max} Cr
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    @ ₹{pd.price.perSqft}/Sft
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Badge */}
+              <div className="flex items-center gap-4 mb-6 flex-wrap">
+                <div className="bg-green-100 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  {pd.status}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Possession in {pd.possession}
+                </div>
+              </div>
+
+              {/* Property Details Grid */}
+              <Card>
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">SIZE CONFIGURATION</div>
+                      <div className="font-semibold text-foreground">
+                        {pd.configurations.map(c => c.type).join(', ')}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">CARPET AREA</div>
+                      <div className="font-semibold text-foreground">
+                        {pd.configurations[0].sizes[0]} - {pd.configurations[pd.configurations.length - 1].sizes[pd.configurations[pd.configurations.length - 1].sizes.length - 1]}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">NO. OF UNITS</div>
+                      <div className="font-semibold text-foreground">{pd.totalUnits}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">PROJECT AREA</div>
+                      <div className="font-semibold text-foreground">{pd.projectArea}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Benefit Banner */}
+              <div className="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 flex items-center gap-4">
+                <div className="flex-shrink-0 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md">
+                  <Leaf className="h-8 w-8 text-brand-red" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-foreground mb-1">
+                    Get Benefits worth ₹2 Lacs*
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Free site visit • Post site-visit subsidy • Expert insights on locations & neighborhoods
+                  </p>
+                </div>
+                <Button className="bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark">
+                  Claim Now →
+                </Button>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-6 flex gap-4 flex-wrap">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 min-w-[200px]"
+                >
+                  ⬇ Download Brochure
+                </Button>
+                <Button 
+                  className="flex-1 min-w-[200px] bg-brand-red hover:bg-brand-maroon"
+                  onClick={() => setIsContactFormOpen(true)}
+                >
+                  Contact Builder →
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Sidebar - Contact Form */}
+            <div className="lg:w-96">
+              <Card className="sticky top-24">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-4">Why Search Alone?</h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Looking for your dream home?
+                  </p>
+                  <ul className="space-y-3 mb-6 text-sm">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
+                      <span>Free site visits to explore your options</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
+                      <span>Expert insights on locations & neighborhoods</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
+                      <span>Post a need & get properties viewed by you</span>
+                    </li>
+                  </ul>
+                  <div className="space-y-3 mb-4">
+                    <input
+                      type="text"
+                      placeholder="Padma"
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                    <input
+                      type="email"
+                      placeholder="navijayatha3126@gmail.com"
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="+91 9618630468"
+                      className="w-full px-4 py-2 border rounded-lg"
+                    />
+                  </div>
+                  <Button 
+                    className="w-full bg-brand-red hover:bg-brand-maroon mb-4"
+                    onClick={() => setIsContactFormOpen(true)}
+                  >
+                    Connect →
+                  </Button>
+                  <div className="text-center">
+                    <p className="text-sm text-brand-red font-medium mb-2">
+                      Ask a question about <span className="text-primary">the project</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Get a quick response & free Expert Advice now!
+                    </p>
+                    <textarea
+                      placeholder="Type a question..."
+                      className="w-full px-4 py-2 border rounded-lg mb-3 text-sm"
+                      rows={3}
+                    />
+                    <input
+                      type="text"
+                      placeholder="What is the possession date of this project?"
+                      className="w-full px-4 py-2 border rounded-lg mb-3 text-sm"
+                    />
+                    <Button 
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Ask Question
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Key Features */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-2xl font-bold mb-6">Key Features</h2>
+              <ul className="space-y-3">
+                {pd.features.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
+                    <span className="text-muted-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Floor Plans */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">{developer.name} Floor Plans</h2>
+                <Button variant="link" className="text-primary">View All →</Button>
+              </div>
+              <div className="flex gap-4 mb-6">
+                {pd.configurations.map((config, index) => (
+                  <Button 
+                    key={index}
+                    variant={index === 0 ? "default" : "outline"}
+                    className={index === 0 ? "bg-brand-red hover:bg-brand-maroon" : ""}
+                  >
+                    {config.type}
+                  </Button>
+                ))}
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {pd.configurations.slice(0, 2).map((config, index) => (
+                  <div key={index} className="border rounded-xl p-4">
+                    <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+                      <Building2 className="h-24 w-24 text-gray-400" />
+                    </div>
+                    <h3 className="font-bold mb-2">{config.type} Floor Plan</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Carpet Area : {config.sizes.join(', ')}
+                    </p>
+                    <Button variant="link" className="text-primary p-0">
+                      Request Price →
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Amenities */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">Amenities in {developer.name}</h2>
+                <Button variant="link" className="text-primary">View All →</Button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {pd.amenities.slice(0, 10).map((amenity, index) => (
+                  <div key={index} className="flex flex-col items-center gap-2 p-4 border rounded-lg hover:shadow-md transition-shadow">
+                    <Star className="h-8 w-8 text-brand-red" />
+                    <span className="text-sm text-center">{amenity}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* About the Project */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">About the {developer.name}</h2>
+                <Button variant="link" className="text-primary">View All →</Button>
+              </div>
+              <div className="text-muted-foreground leading-relaxed space-y-4">
+                {developer.description.split('. ').map((sentence, index) => (
+                  sentence.trim() && (
+                    <p key={index}>
+                      {sentence.trim()}{index < developer.description.split('. ').length - 1 ? '.' : ''}
+                    </p>
+                  )
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* About the Builder */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <Card className="bg-gradient-to-br from-blue-900 to-blue-950 text-white">
+            <CardContent className="p-8">
+              <div className="flex items-start gap-6 mb-6">
+                <img 
+                  src={developer.logo} 
+                  alt="Canny Life Spaces"
+                  className="w-20 h-20 rounded-lg object-contain bg-white p-2"
+                />
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold mb-2">About the Builder</h2>
+                  <h3 className="text-xl mb-4">Canny Life Spaces Pvt Ltd</h3>
+                  <p className="text-sm mb-1">Years in business: <span className="font-semibold">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span></p>
+                  <p className="text-white/90 leading-relaxed">
+                    Canny Life Spaces Pvt Ltd, has been one of the most premium real estate developer in India since its inception. 
+                    It has firmly established itself as a brand to reckon with in the real estate in India and abroad...
+                  </p>
+                </div>
+              </div>
+              <Button variant="secondary" className="bg-white text-blue-900 hover:bg-gray-100">
+                Show more ↓
+              </Button>
+              
+              {/* Projects Carousel */}
+              <div className="mt-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold">PROJECTS BY CANNY LIFE SPACES PVT LTD</h3>
+                  <Button variant="link" className="text-white">View All →</Button>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl overflow-hidden">
+                    <div className="aspect-video bg-white/20"></div>
+                    <div className="p-4">
+                      <h4 className="font-bold mb-2">Forest Edge</h4>
+                      <p className="text-sm text-white/80">2 BHK - 3 BHK</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Reviews */}
+        <section className="container mx-auto max-w-7xl px-4 pb-8">
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-2xl font-bold mb-6">Reviews of {developer.name}</h2>
+              <div className="mb-6">
+                <p className="text-sm text-muted-foreground mb-4">WRITE A REVIEW</p>
+                <div className="flex gap-2 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star key={star} className="h-6 w-6 text-gray-300 cursor-pointer hover:text-yellow-400" />
+                  ))}
+                </div>
+                <textarea
+                  placeholder="Write about the project"
+                  className="w-full px-4 py-3 border rounded-lg mb-4"
+                  rows={4}
+                />
+                <Button className="bg-brand-red hover:bg-brand-maroon">Post</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* RERA & Legal Certificates */}
+        <section className="container mx-auto max-w-7xl px-4 pb-12">
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-2xl font-bold mb-6">{developer.name} - RERA & Legal Certificates</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold mb-2">RERA Certificate</h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    The Real Estate (Regulation and Development) Act, 2016 is Act of the Parliament of India which seeks to 
+                    protect home-buyers as well as boost investments in the real estate industry. The Act came into force on 1 May 2016.
+                  </p>
+                  <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg">
+                    <div className="flex-1">
+                      <p className="text-xs text-muted-foreground">Telangana RERA</p>
+                      <p className="font-semibold">{pd.rera}</p>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      View Certificate
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="font-semibold mb-4">BENEFITS OF RERA</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <Users className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold mb-1">Timely Dispute Resolution</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Buyer can approach rera authorities within 60 days from date of problem identified
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <Building2 className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold mb-1">Quality Assurance</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Quality standards as set out by authorities must be followed by developers
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <Calendar className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold mb-1">Transparency & Tracking</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Allows buyers to track progress milestones and defects
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <Award className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold mb-1">Buyer Protection</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Buyers can get grievance redressed within project completion
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <Footer />
+
+        {/* Contact Form Modal */}
+        <DeveloperContactForm 
+          isOpen={isContactFormOpen}
+          onClose={() => setIsContactFormOpen(false)}
+          developerName={developer.name}
+        />
+      </div>
+    );
+  }
+
+  // Default developer page layout for other developers
   return (
     <div className="min-h-screen bg-background">
       <Marquee />
