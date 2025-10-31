@@ -136,7 +136,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
   };
 
   return (
-    <div className="bg-white border-b pt-0 sm:pt-24">
+    <div className="bg-white border-b pt-0 sm:pt-6">
       <div className="mx-auto max-w-7xl px-2 sm:px-4 py-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-4 hidden sm:flex items-center">
