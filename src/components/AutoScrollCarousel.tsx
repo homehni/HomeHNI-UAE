@@ -87,7 +87,7 @@ export const AutoScrollCarousel: React.FC<AutoScrollCarouselProps> = ({
                 <img
                   src={image}
                   alt={`Property view ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-in-out"
+                  className="w-full h-full object-contain transition-transform duration-700 ease-in-out bg-black/5"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
