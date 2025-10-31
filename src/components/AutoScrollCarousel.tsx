@@ -116,7 +116,7 @@ export const AutoScrollCarousel: React.FC<AutoScrollCarouselProps> = ({
         {/* View All Photos Button */}
         <Button
           variant="secondary"
-          className="absolute bottom-4 right-4 bg-white/90 hover:bg-white backdrop-blur-sm z-10"
+          className="absolute bottom-4 right-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm z-10 border border-white/20 text-white"
         >
           📷 View All {images.length} Photos
         </Button>
