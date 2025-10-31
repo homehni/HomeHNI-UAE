@@ -81,6 +81,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [selectedFurnishing, setSelectedFurnishing] = useState<string[]>([]);
   // Budget defaults to full range based on the active tab (5Cr for buy/commercial/land, 5L for rent)
   const [budget, setBudget] = useState<[number, number]>([0, getBudgetSliderMaxHome('buy')]);
+  
+  // Validation state for locality
+  const [isValidLocality, setIsValidLocality] = useState(false);
+  const [locationError, setLocationError] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
@@ -130,15 +134,25 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const addLocation = (location: string) => {
     const trimmed = location.trim();
     if (!trimmed) return;
-    // Allow any location to be added
+    
+    // Validate that locality is from Google Places autocomplete
+    if (!isValidLocality) {
+      setLocationError('Please select a valid locality');
+      return;
+    }
+    
+    // Clear error and add location
+    setLocationError('');
     // Only allow one location - replace any existing one
     setSelectedLocations([trimmed]);
     setSearchQuery('');
+    setIsValidLocality(false); // Reset validation after adding
   };
 
   const removeLocation = (location: string) => {
     const updated = selectedLocations.filter(loc => loc !== location);
     setSelectedLocations(updated);
+    setLocationError(''); // Clear error when removing location
     if (updated.length === 0) {
       setSelectedCity('');
       setCityBounds(null);
@@ -213,12 +227,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      // Allow any location to be added with Enter key
+      // Only add location on Enter, do NOT trigger search
       if (searchQuery.trim() && selectedLocations.length === 0) {
         addLocation(searchQuery);
-      } else {
-        handleSearch();
       }
+      // Search only happens via search button click
     }
   };
   const navigationTabs = [
@@ -284,6 +297,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
           console.log('🔍 Google Places - Place selected:', place);
+          
+          // Mark as valid selection from Google Places
+          setIsValidLocality(true);
+          setLocationError('');
           
           let value = place?.formatted_address || place?.name || '';
           console.log('🔍 Google Places - Initial value:', value);
@@ -800,7 +817,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   role="combobox"
                   placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
                   value={selectedLocations.length > 0 ? selectedLocations[0] : searchQuery}
-                  onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    if (!selectedLocations.length) {
+                      setSearchQuery(e.target.value);
+                      setIsValidLocality(false); // Reset validation when user types manually
+                      setLocationError('');
+                    }
+                  }}
                   onKeyPress={handleKeyPress}
                   onKeyDown={(e) => {
                     if (e.key === 'Backspace' && selectedLocations.length > 0) {
@@ -808,10 +831,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       removeLocation(selectedLocations[0]);
                     }
                   }}
-                  className="w-full pl-9 pr-12 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red text-base hide-clear-button"
+                  className={`w-full pl-9 pr-12 py-3 bg-white border rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 text-base hide-clear-button ${locationError ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 focus:ring-brand-red/20 focus:border-brand-red'}`}
                   autoComplete="off"
                   aria-autocomplete="both"
                 />
+                {/* Error message */}
+                {locationError && (
+                  <div className="absolute left-0 -bottom-6 text-red-600 text-xs font-medium">
+                    {locationError}
+                  </div>
+                )}
                 {selectedLocations.length > 0 ? (
                   <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
                     <button
@@ -1144,7 +1173,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             <input
                               ref={inputRef}
                               value={selectedLocations.length > 0 ? selectedLocations[0] : searchQuery}
-                              onChange={(e) => !selectedLocations.length && setSearchQuery(e.target.value)}
+                              onChange={(e) => {
+                                if (!selectedLocations.length) {
+                                  setSearchQuery(e.target.value);
+                                  setIsValidLocality(false); // Reset validation when user types manually
+                                  setLocationError('');
+                                }
+                              }}
                               onKeyPress={handleKeyPress}
                               onKeyDown={(e) => {
                                 if (e.key === 'Backspace' && selectedLocations.length > 0) {
@@ -1156,6 +1191,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-500 font-medium"
                               style={{ appearance: "none" }}
                             />
+                            {/* Error message for desktop */}
+                            {locationError && (
+                              <div className="absolute left-0 -bottom-5 text-red-600 text-xs font-medium">
+                                {locationError}
+                              </div>
+                            )}
                             {selectedLocations.length > 0 && (
                               <button
                                 onClick={(e) => {
