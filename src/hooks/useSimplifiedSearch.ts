@@ -652,6 +652,21 @@ export const useSimplifiedSearch = () => {
       if (MERGE_COMM_LAND_IN_BUY_RENT) {
         // Include residential rentals, PG/Hostel, and commercial rentals
         console.log('🔍 Applying RENT tab filter (merged mode)');
+        
+        // First, let's see how many commercial properties we have
+        const commercialProps = filtered.filter(p => {
+          const pt = p.propertyType.toLowerCase();
+          return pt.includes('commercial') || pt.includes('office');
+        });
+        console.log('🏢 Commercial properties before rent filter:', commercialProps.length);
+        if (commercialProps.length > 0 && commercialProps.length < 10) {
+          console.log('🏢 Sample commercial properties:', commercialProps.slice(0, 5).map(p => ({
+            title: p.title,
+            listingType: p.listingType,
+            propertyType: p.propertyType
+          })));
+        }
+        
         filtered = filtered.filter(property => {
           const listingType = property.listingType?.toLowerCase();
           const propertyType = property.propertyType.toLowerCase();
@@ -659,13 +674,14 @@ export const useSimplifiedSearch = () => {
           const isRent = listingType === 'rent';
           const isMatch = isRent || isPgHostel;
           
-          // Log commercial properties specifically
+          // Log ALL commercial properties specifically
           const isCommercial = propertyType.includes('commercial') || propertyType.includes('office');
           if (isCommercial) {
             console.log('🏢 Commercial property in rent filter:', {
               title: property.title,
-              listingType,
-              propertyType,
+              listingType: property.listingType,
+              listingTypeLower: listingType,
+              propertyType: property.propertyType,
               isRent,
               isPgHostel,
               passedFilter: isMatch
