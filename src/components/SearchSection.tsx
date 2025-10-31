@@ -164,7 +164,18 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     if (!hasLocality) {
       return; // Block search until a city/locality is provided
     }
-    // Allow search with any location
+    
+    // If there's text in searchQuery but no selected locations, validate it
+    if (searchQuery.trim() && selectedLocations.length === 0) {
+      if (!isValidLocality) {
+        setLocationError('Please select a valid locality');
+        return;
+      }
+    }
+    
+    // Clear any error
+    setLocationError('');
+    
     if (searchQuery.trim()) {
       // Only one location allowed - use the text input directly
       navigateToSearch([searchQuery.trim()]);
@@ -855,6 +866,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       type="button"
                       className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
                       aria-label="Search"
+                      disabled={selectedLocations.length === 0}
                       onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
                     >
                       <SearchIcon className="h-4 w-4" />
@@ -865,6 +877,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     type="button"
                     className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
                     aria-label="Search"
+                    disabled={selectedLocations.length === 0}
                     onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
                   >
                     <SearchIcon className="h-4 w-4" />
@@ -1134,6 +1147,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   setOpenDropdown(null);
                 }}
                 className="px-6"
+                disabled={selectedLocations.length === 0}
               >
                 Next
               </Button>
@@ -1218,7 +1232,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
                           aria-label="Search"
                           onClick={handleSearch}
-                          disabled={!(searchQuery.trim().length > 0 || selectedLocations.length > 0)}
+                          disabled={selectedLocations.length === 0}
                         >
                           <SearchIcon className="h-4 w-4" />
                         </button>
