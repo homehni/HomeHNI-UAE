@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 import { DeveloperContactForm } from "@/components/DeveloperContactForm";
+import { AutoScrollCarousel } from "@/components/AutoScrollCarousel";
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -15,6 +16,13 @@ import aparnaConstructionsLogo from '@/assets/aparna-constructions-logo.jpg';
 import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
 import cannyForestEdgeLogo from '@/assets/canny-forest-edge-logo.jpg';
 import alpineInfratechLogo from '@/assets/alpine-infratech-logo.png';
+import forestEdgeExterior from '@/assets/forest-edge-exterior.jpg';
+import forestEdgeLiving1 from '@/assets/forest-edge-living1.jpg';
+import forestEdgeLiving2 from '@/assets/forest-edge-living2.jpg';
+import forestEdgeBedroom1 from '@/assets/forest-edge-bedroom1.jpg';
+import forestEdgeKitchen from '@/assets/forest-edge-kitchen.jpg';
+import forestEdgeLiving3 from '@/assets/forest-edge-living3.jpg';
+import forestEdgeBedroom2 from '@/assets/forest-edge-bedroom2.jpg';
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
@@ -351,6 +359,17 @@ const DeveloperPage = () => {
   if (isPropertyDetail && developer.propertyDetails) {
     const pd = developer.propertyDetails;
     
+    // Forest Edge carousel images
+    const forestEdgeImages = [
+      forestEdgeExterior,
+      forestEdgeLiving1,
+      forestEdgeLiving2,
+      forestEdgeBedroom1,
+      forestEdgeKitchen,
+      forestEdgeLiving3,
+      forestEdgeBedroom2
+    ];
+    
     return (
       <div className="min-h-screen bg-background">
         <Marquee />
@@ -363,26 +382,13 @@ const DeveloperPage = () => {
           </div>
         </div>
 
-        {/* Hero Section with Image Gallery */}
+        {/* Hero Section with Auto-Scroll Carousel */}
         <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-[500px] bg-gradient-to-br from-brand-red/10 to-brand-maroon/10">
-            <img 
-              src={developer.logo} 
-              alt={developer.name}
-              className="w-full h-full object-cover"
-            />
-            <Button 
-              variant="secondary"
-              className="absolute top-4 right-4 bg-white/90 hover:bg-white"
-            >
-              📷 View All 13 Photos
-            </Button>
-            {pd.status === 'Ready to Move In' && (
-              <div className="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold">
-                ✓ RERA CERTIFIED
-              </div>
-            )}
-          </div>
+          <AutoScrollCarousel 
+            images={forestEdgeImages}
+            autoScrollInterval={4000}
+            className="h-[400px] md:h-[550px] shadow-2xl"
+          />
         </section>
 
         {/* Property Header */}
