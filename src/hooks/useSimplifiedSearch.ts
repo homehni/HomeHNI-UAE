@@ -465,19 +465,38 @@ export const useSimplifiedSearch = () => {
         setPropertyCount(count || 0);
 
         // Fetch only essential fields initially for better performance
-        // Load ALL properties - set high limit to override Supabase default of 1000
-        const { data: properties, error } = await supabase
-          .from('properties')
-          .select(SELECT_COLUMNS)
-          .eq('is_visible', true)
-          .eq('status', 'approved') // Only show approved properties
-          .order('created_at', { ascending: false })
-          .limit(10000); // Increase limit to load more properties (Supabase default is 1000)
+        // Load ALL properties using pagination to bypass any limits
+        const PAGE_SIZE = 1000;
+        let allPropertiesData: any[] = [];
+        let page = 0;
+        let hasMorePages = true;
+        
+        while (hasMorePages) {
+          const { data: pageData, error } = await supabase
+            .from('properties')
+            .select(SELECT_COLUMNS)
+            .eq('is_visible', true)
+            .eq('status', 'approved')
+            .order('created_at', { ascending: false })
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          
+          if (error) throw error;
+          
+          if (pageData && pageData.length > 0) {
+            allPropertiesData = [...allPropertiesData, ...pageData];
+            page++;
+            
+            // Stop if we got less than PAGE_SIZE (last page)
+            if (pageData.length < PAGE_SIZE) {
+              hasMorePages = false;
+            }
+          } else {
+            hasMorePages = false;
+          }
+        }
 
-        if (error) throw error;
-
-        const transformedProperties = (properties || []).map(transformProperty);
-        console.log('📊 All properties loaded:', transformedProperties.length);
+        const transformedProperties = allPropertiesData.map(transformProperty);
+        console.log('📊 All properties loaded:', transformedProperties.length, 'from', page, 'pages');
         
         setAllProperties(transformedProperties);
         setHasMore(false); // All properties loaded at once
