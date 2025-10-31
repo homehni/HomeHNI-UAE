@@ -1780,7 +1780,11 @@ export const PropertyPreviewPage: React.FC = () => {
                 
                 {/* Header Section - Mobile Only (Below Images) */}
                 <div className="block sm:hidden mt-6 overflow-hidden">
-                  <PropertyHeader property={property as any} />
+                  <PropertyHeader 
+                    property={property as any} 
+                    onContact={() => setShowContactModal(true)}
+                    onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                  />
                 </div>
               </div>
               

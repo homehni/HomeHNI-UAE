@@ -826,17 +826,11 @@ const PropertyDetails: React.FC = () => {
                 
                 {/* Header Section - Mobile Only (Below Images) */}
                 <div className="block sm:hidden mt-6 overflow-hidden">
-                  <PropertyHeader property={mergedProperty as any} />
-                  
-                  {/* Contact & Schedule Visit Buttons - Mobile Only (Right after price) */}
-                  <div className="mt-4 px-4">
-                    <PropertyActions
-                      onContact={() => setShowContactModal(true)}
-                      onScheduleVisit={() => setShowScheduleVisitModal(true)}
-                      property={mergedProperty as any}
-                      onPropertyStatusUpdate={handlePropertyStatusUpdate}
-                    />
-                  </div>
+                  <PropertyHeader 
+                    property={mergedProperty as any} 
+                    onContact={() => setShowContactModal(true)}
+                    onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                  />
                 </div>
               </div>
               

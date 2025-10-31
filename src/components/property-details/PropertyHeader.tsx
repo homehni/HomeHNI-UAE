@@ -34,9 +34,15 @@ interface PropertyHeaderProps {
       };
     };
   };
+  onContact?: () => void;
+  onScheduleVisit?: () => void;
 }
 
-export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
+export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ 
+  property, 
+  onContact, 
+  onScheduleVisit 
+}) => {
   const isPG = property.property_type?.toLowerCase().includes('pg') ||
                property.property_type?.toLowerCase().includes('hostel') ||
                property.property_type?.toLowerCase().includes('coliving');
@@ -200,6 +206,32 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 </div>
               )}
             </div>
+
+            {/* Contact & Schedule Visit Buttons - Mobile Only (Right after price) */}
+            {onContact && onScheduleVisit && (
+              <div className="px-3 sm:px-4 py-3 border-t border-gray-200">
+                <div className="space-y-3">
+                  <Button 
+                    onClick={onContact}
+                    className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg py-3 font-medium"
+                  >
+                    Contact
+                  </Button>
+                  <Button 
+                    onClick={onScheduleVisit}
+                    className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg py-3 font-medium"
+                  >
+                    Schedule Visit
+                  </Button>
+                  <div className="flex items-center justify-center gap-1 bg-black text-white text-xs px-2 py-1 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
+                      <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                    </svg>
+                    <span>Verified Availability</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Desktop Layout */}
