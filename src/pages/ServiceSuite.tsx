@@ -42,6 +42,7 @@ const ServiceSuite = () => {
     servicePortfolio: [] as File[]
   });
   const [formResetKey, setFormResetKey] = useState(0);
+  const [showSuccess, setShowSuccess] = useState(false);
   
   const services = [{
     icon: Scale,
@@ -234,12 +235,13 @@ const ServiceSuite = () => {
       city: data.city
     });
     
-    // Show success toast
-    toast({
-      title: "Requirements Submitted Successfully!",
-      description: "Our team will review your requirements and get back to you soon.",
-      variant: "success"
-    });
+    // Show success message
+    setShowSuccess(true);
+    
+    // Hide success message after 6 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 6000);
 
     // Reset form and images
     (e.currentTarget as HTMLFormElement).reset();
@@ -254,6 +256,27 @@ const ServiceSuite = () => {
     setFormResetKey((k) => k + 1); // force remount to reset Selects and custom inputs
   };
   return <div className="min-h-screen">
+      {/* Success Message Overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-lg shadow-2xl p-8 max-w-sm mx-4 animate-scale-in">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-gray-900">Requirements Submitted Successfully!</h3>
+                <p className="text-gray-600">
+                  Our team will review your requirements and get back to you soon.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <Marquee />
       <Header />
       

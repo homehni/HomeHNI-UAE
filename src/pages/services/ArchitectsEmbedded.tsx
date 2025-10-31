@@ -143,7 +143,29 @@ const ArchitectsEmbedded = () => {
     type: null,
     text: ''
   });
+  const [showSuccess, setShowSuccess] = useState(false);
   return <div className="bg-background">
+      {/* Success Message Overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-lg shadow-2xl p-8 max-w-sm mx-4 animate-scale-in">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-gray-900">Request Submitted Successfully!</h3>
+                <p className="text-gray-600">
+                  Our architects will contact you within 24 hours.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Hero Section */}
       <section className="relative pt-8 pb-20 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
       backgroundImage: "url('/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png')"
@@ -209,10 +231,14 @@ const ArchitectsEmbedded = () => {
                 // Send email notification
                 await sendServicesApplicationEmail(email, name, 'architects');
                 
-                setFormMessage({
-                  type: "success",
-                  text: "Request submitted! Our architects will contact you within 24 hours."
-                });
+                // Show success message
+                setShowSuccess(true);
+                
+                // Hide success message after 6 seconds
+                setTimeout(() => {
+                  setShowSuccess(false);
+                }, 6000);
+                
                 form.reset();
               } catch (error) {
                 console.error('Error processing request:', error);

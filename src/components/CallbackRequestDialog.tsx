@@ -23,6 +23,7 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
     city: '',
     class: ''
   });
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -65,20 +66,45 @@ const CallbackRequestDialog: React.FC<CallbackRequestDialogProps> = ({ isOpen, o
       city: '',
       class: ''
     });
-    onClose();
-
-    // Show success toast
+    
+    // Show success message
+    setShowSuccess(true);
+    
+    // Hide success message after 6 seconds
     setTimeout(() => {
-      toast({
-        title: "✓ Request Sent Successfully",
-        description: "We'll get back to you shortly!",
-      });
-    }, 100);
+      setShowSuccess(false);
+    }, 6000);
+    
+    // Close dialog after 6.5 seconds
+    setTimeout(() => {
+      onClose();
+    }, 6500);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px] bg-white">
+        {/* Success Message Overlay */}
+        {showSuccess && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-lg animate-fade-in">
+            <div className="bg-white rounded-lg shadow-2xl p-8 max-w-sm mx-4 animate-scale-in">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900">Request Sent Successfully!</h3>
+                  <p className="text-gray-600">
+                    We have received your callback request. Our team will get back to you shortly.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground z-50"
