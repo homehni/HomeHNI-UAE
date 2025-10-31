@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
+import { Button } from '@/components/ui/button';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
@@ -1792,13 +1793,15 @@ export const PropertyPreviewPage: React.FC = () => {
               <div className="space-y-6 min-w-0">
                 <PropertyInfoCards property={property as any} />
                 
-                {/* Action Buttons */}
-                <PropertyActions
-                  onContact={() => setShowContactModal(true)}
-                  onScheduleVisit={() => setShowScheduleVisitModal(true)}
-                  property={property as any}
-                  onPropertyStatusUpdate={() => {}}
-                />
+                {/* Action Buttons - Desktop Only */}
+                <div className="hidden sm:block">
+                  <PropertyActions
+                    onContact={() => setShowContactModal(true)}
+                    onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                    property={property as any}
+                    onPropertyStatusUpdate={() => {}}
+                  />
+                </div>
                 
                 {/* Report Section */}
                 <ReportSection />
@@ -1807,6 +1810,15 @@ export const PropertyPreviewPage: React.FC = () => {
 
             {/* Additional Details Sections */}
             <div className="space-y-6 overflow-x-hidden">
+              {/* Apply Loan Button - Mobile Only (Before Overview) */}
+              <div className="block sm:hidden px-4">
+                <Link to="/loans" className="block">
+                  <Button className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium w-full">
+                    Apply Loan
+                  </Button>
+                </Link>
+              </div>
+              
               {/* Overview */}
               <OverviewCard property={property as any} />
               

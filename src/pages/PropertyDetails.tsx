@@ -848,15 +848,6 @@ const PropertyDetails: React.FC = () => {
                   />
                 </div>
                 
-                {/* Apply Loan Button - Mobile Only (Before Overview) */}
-                <div className="block sm:hidden px-4">
-                  <Link to="/loans" className="block">
-                    <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium">
-                      Apply Loan
-                    </Button>
-                  </Link>
-                </div>
-                
                 {/* Report Section */}
                 <ReportSection />
               </div>
@@ -864,6 +855,15 @@ const PropertyDetails: React.FC = () => {
 
             {/* Additional Details Sections */}
             <div className="space-y-6 overflow-x-hidden">
+              {/* Apply Loan Button - Mobile Only (Before Overview) */}
+              <div className="block sm:hidden px-4">
+                <Link to="/loans" className="block">
+                  <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium">
+                    Apply Loan
+                  </Button>
+                </Link>
+              </div>
+              
               {/* Overview */}
               <OverviewCard property={mergedProperty as any} />
               
