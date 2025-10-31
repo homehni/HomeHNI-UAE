@@ -17,12 +17,13 @@ import aliensGroupLogo from '@/assets/aliens-group-logo.jpg';
 import cannyForestEdgeLogo from '@/assets/canny-forest-edge-logo.jpg';
 import alpineInfratechLogo from '@/assets/alpine-infratech-logo.png';
 import forestEdgeExterior from '@/assets/forest-edge-exterior.jpg';
-import forestEdgeLiving1 from '@/assets/forest-edge-living1.jpg';
-import forestEdgeLiving2 from '@/assets/forest-edge-living2.jpg';
-import forestEdgeBedroom1 from '@/assets/forest-edge-bedroom1.jpg';
-import forestEdgeKitchen from '@/assets/forest-edge-kitchen.jpg';
-import forestEdgeLiving3 from '@/assets/forest-edge-living3.jpg';
-import forestEdgeBedroom2 from '@/assets/forest-edge-bedroom2.jpg';
+import forestEdgeAmenities1 from '@/assets/forest-edge-amenities1.jpg';
+import forestEdgeAmenities2 from '@/assets/forest-edge-amenities2.jpg';
+import forestEdgePool from '@/assets/forest-edge-pool.jpg';
+import forestEdgeLawn from '@/assets/forest-edge-lawn.jpg';
+import forestEdgeAerial from '@/assets/forest-edge-aerial.jpg';
+import forestEdgeBalcony from '@/assets/forest-edge-balcony.jpg';
+import forestEdgeEvening from '@/assets/forest-edge-evening.jpg';
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
@@ -362,12 +363,13 @@ const DeveloperPage = () => {
     // Forest Edge carousel images
     const forestEdgeImages = [
       forestEdgeExterior,
-      forestEdgeLiving1,
-      forestEdgeLiving2,
-      forestEdgeBedroom1,
-      forestEdgeKitchen,
-      forestEdgeLiving3,
-      forestEdgeBedroom2
+      forestEdgeAmenities1,
+      forestEdgeAmenities2,
+      forestEdgePool,
+      forestEdgeLawn,
+      forestEdgeAerial,
+      forestEdgeBalcony,
+      forestEdgeEvening
     ];
     
     return (
