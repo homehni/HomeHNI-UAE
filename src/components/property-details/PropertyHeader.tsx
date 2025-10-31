@@ -200,15 +200,6 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({ property }) => {
                 </div>
               )}
             </div>
-
-            {/* Apply Loan Button - Mobile */}
-            <div className="px-3 sm:px-4 py-3 border-t border-gray-200">
-              <Link to="/loans" className="block">
-                <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">
-                  Apply Loan
-                </Button>
-              </Link>
-            </div>
           </div>
 
           {/* Desktop Layout */}

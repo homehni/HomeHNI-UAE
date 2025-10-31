@@ -6,7 +6,7 @@ import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
 import ChatBot from '@/components/ChatBot';
 import { Button } from '@/components/ui/button';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import { ContactOwnerModal } from '@/components/ContactOwnerModal';
 import { ScheduleVisitModal } from '@/components/ScheduleVisitModal';
 import EMICalculatorModal from '@/components/EMICalculatorModal';
@@ -841,6 +841,15 @@ const PropertyDetails: React.FC = () => {
                   property={mergedProperty as any}
                   onPropertyStatusUpdate={handlePropertyStatusUpdate}
                 />
+                
+                {/* Apply Loan Button - Mobile Only (After Action Buttons, Before Overview) */}
+                <div className="block sm:hidden">
+                  <Link to="/loans" className="block">
+                    <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium">
+                      Apply Loan
+                    </Button>
+                  </Link>
+                </div>
                 
                 {/* Report Section */}
                 <ReportSection />
