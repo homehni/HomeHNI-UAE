@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 import { DeveloperContactForm } from "@/components/DeveloperContactForm";
-import { AutoScrollCarousel } from "@/components/AutoScrollCarousel";
+import { PropertyGalleryCarousel } from "@/components/PropertyGalleryCarousel";
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -382,12 +382,12 @@ const DeveloperPage = () => {
           </div>
         </div>
 
-        {/* Hero Section with Auto-Scroll Carousel */}
+        {/* Hero Section with Mixed Gallery Layout */}
         <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <AutoScrollCarousel 
+          <PropertyGalleryCarousel 
             images={forestEdgeImages}
             autoScrollInterval={4000}
-            className="h-[400px] md:h-[550px] shadow-2xl"
+            className="shadow-2xl"
           />
         </section>
 
