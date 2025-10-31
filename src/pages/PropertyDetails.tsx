@@ -20,6 +20,7 @@ import { OverviewCard } from '@/components/property-details/OverviewCard';
 import { AmenitiesCard } from '@/components/property-details/AmenitiesCard';
 import { NeighborhoodCard } from '@/components/property-details/NeighborhoodCard';
 import { RelatedPropertiesCard } from '@/components/property-details/RelatedPropertiesCard';
+import { FloorPlansCard } from '@/components/property-details/FloorPlansCard';
 import { PropertyHeader } from '@/components/property-details/PropertyHeader';
 import { PropertyImageGallery } from '@/components/property-details/PropertyImageGallery';
 import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCards';
@@ -881,6 +882,8 @@ const PropertyDetails: React.FC = () => {
                 <PGRoomsCard property={mergedProperty as any} />
               )}
               
+              {/* Floor Plans & Layouts */}
+              <FloorPlansCard propertyType={property.property_type} />
               
               {/* Neighborhood */}
               <NeighborhoodCard property={property} />

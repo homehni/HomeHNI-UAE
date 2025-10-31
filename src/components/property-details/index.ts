@@ -8,6 +8,7 @@ export { AmenitiesCard } from './AmenitiesCard';
 export { NeighborhoodCard } from './NeighborhoodCard';
 export { RelatedPropertiesCard } from './RelatedPropertiesCard';
 export { MobileStickyCTA } from './MobileStickyCTA';
+export { FloorPlansCard } from './FloorPlansCard';
 
 // New components for redesigned layout
 export { PropertyHeader } from './PropertyHeader';
