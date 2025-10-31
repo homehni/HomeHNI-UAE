@@ -319,8 +319,7 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
                 Contact
               </Button>
               <Button className="flex-1 bg-red-600 hover:bg-red-700 text-white">
-                <CheckCircle className="w-4 h-4 mr-2" />
-                Verified Availability Schedule Visit
+                Schedule Visit
               </Button>
             </div>
 
