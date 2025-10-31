@@ -83,12 +83,10 @@ export const AutoScrollCarousel: React.FC<AutoScrollCarouselProps> = ({
         <CarouselContent className="-ml-0">
           {images.map((image, index) => (
             <CarouselItem key={index} className="pl-0 basis-full">
-              <div className="relative w-full h-full">
-                <img
-                  src={image}
-                  alt={`Property view ${index + 1}`}
-                  className="w-full h-full object-contain transition-transform duration-700 ease-in-out bg-black/5"
-                />
+              <div 
+                className="relative w-full h-full bg-cover bg-center transition-transform duration-700 ease-in-out"
+                style={{ backgroundImage: `url(${image})` }}
+              >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
             </CarouselItem>
