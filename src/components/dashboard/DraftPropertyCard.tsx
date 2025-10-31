@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Play, Trash2, Eye } from 'lucide-react';
 import { PropertyDraft } from '@/services/propertyDraftService';
+import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 
 interface DraftPropertyCardProps {
   draft: PropertyDraft;
@@ -28,6 +29,8 @@ export const DraftPropertyCard: React.FC<DraftPropertyCardProps> = ({
   onDelete,
   onPreview
 }) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-IN', {
@@ -164,7 +167,7 @@ export const DraftPropertyCard: React.FC<DraftPropertyCardProps> = ({
                 </Button>
               )}
               <Button
-                onClick={onDelete}
+                onClick={() => setIsDeleteModalOpen(true)}
                 size="sm"
                 variant="outline"
                 className="px-2 sm:px-3 text-xs h-7 sm:h-8 text-red-600 hover:text-red-700 hover:bg-red-50"
@@ -187,6 +190,17 @@ export const DraftPropertyCard: React.FC<DraftPropertyCardProps> = ({
           </div>
         </div>
       </CardContent>
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={() => {
+          onDelete();
+          setIsDeleteModalOpen(false);
+        }}
+        title="Delete Draft"
+        description="Are you sure you want to delete this draft? This action cannot be undone."
+      />
     </Card>
   );
 };
