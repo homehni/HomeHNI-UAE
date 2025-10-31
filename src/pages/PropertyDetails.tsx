@@ -812,7 +812,7 @@ const PropertyDetails: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <section className="pt-6 sm:pt-6 pb-6 overflow-x-hidden min-w-0">
+        <section className="pt-2 sm:pt-6 pb-6 overflow-x-hidden min-w-0">
           <div className="mx-auto max-w-7xl px-2 sm:px-4 overflow-x-hidden">
             {/* Property Gallery and Info Grid */}
             <div className="grid lg:grid-cols-3 gap-4 sm:gap-8 mb-8 min-w-0">

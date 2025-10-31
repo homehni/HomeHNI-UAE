@@ -1668,7 +1668,7 @@ export const PropertyPreviewPage: React.FC = () => {
       <div className="min-h-screen bg-white">
         <Marquee />
         <Header />
-        <div className="pt-6 sm:pt-6 pb-6">
+        <div className="pt-2 sm:pt-6 pb-6">
           <div className="mx-auto max-w-7xl px-2 sm:px-4">
             <div className="animate-pulse">
               <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
