@@ -600,8 +600,16 @@ export const useSimplifiedSearch = () => {
     let filtered = [...allProperties];
 
     // Filter by active tab (buy/rent/commercial) using listing_type
-    console.log('🔍 Filtering by activeTab:', activeTab);
-    console.log('📊 Total properties before filter:', filtered.length);
+    console.log('🔍 ============ STARTING FILTER ============');
+    console.log('🔍 Active tab:', activeTab);
+    console.log('📊 Total properties before any filter:', filtered.length);
+    console.log('🔍 Active filters:', {
+      propertyType: filters.propertyType,
+      location: filters.location,
+      bhkType: filters.bhkType,
+      budget: filters.budget,
+      budgetDirty: filters.budgetDirty
+    });
     
     if (activeTab === 'buy') {
       // Buy tab behaviour
@@ -642,12 +650,27 @@ export const useSimplifiedSearch = () => {
       // Rent tab behaviour
       if (MERGE_COMM_LAND_IN_BUY_RENT) {
         // Include residential rentals, PG/Hostel, and commercial rentals
+        console.log('🔍 Applying RENT tab filter (merged mode)');
         filtered = filtered.filter(property => {
           const listingType = property.listingType?.toLowerCase();
           const propertyType = property.propertyType.toLowerCase();
           const isPgHostel = listingType === 'pg/hostel' || propertyType.includes('pg') || propertyType.includes('hostel');
           const isRent = listingType === 'rent';
           const isMatch = isRent || isPgHostel;
+          
+          // Log commercial properties specifically
+          const isCommercial = propertyType.includes('commercial') || propertyType.includes('office');
+          if (isCommercial) {
+            console.log('🏢 Commercial property in rent filter:', {
+              title: property.title,
+              listingType,
+              propertyType,
+              isRent,
+              isPgHostel,
+              passedFilter: isMatch
+            });
+          }
+          
           if (!isMatch) {
             console.log('❌ Filtered out for rent (merged):', property.title, 'listing_type:', listingType, 'property_type:', propertyType);
           }
@@ -715,8 +738,11 @@ export const useSimplifiedSearch = () => {
 
     // Apply property type filter
     if (filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')) {
+      console.log('🔍 Applying property type filter:', filters.propertyType);
+      console.log('📊 Properties before type filter:', filtered.length);
+      
       filtered = filtered.filter(property => {
-        return filters.propertyType.some(filterType => {
+        const matchesAnyType = filters.propertyType.some(filterType => {
           const normalizedFilter = filterType.toLowerCase().replace(/\s+/g, '');
           // Use filterPropertyType for matching categories (which maps Penthouse->Apartment, Duplex->Villa)
           // but use propertyType for display purposes
@@ -788,7 +814,15 @@ export const useSimplifiedSearch = () => {
             return normalizedProperty.includes('coworking') || normalizedProperty.includes('co-working') || titleLower.includes('coworking') || titleLower.includes('co-working');
           }
           if (normalizedFilter.includes('office')) {
-            return normalizedProperty.includes('office') || /\boffice\b/.test(titleLower);
+            const matches = normalizedProperty.includes('office') || /\boffice\b/.test(titleLower);
+            console.log('🏢 Office filter check:', {
+              property: property.title,
+              normalizedProperty,
+              normalizedFilter,
+              titleLower,
+              matches
+            });
+            return matches;
           }
           if (normalizedFilter.includes('retail')) {
             // Treat 'retail' as retail/shop/store
@@ -812,7 +846,23 @@ export const useSimplifiedSearch = () => {
           // Fallback to partial match
           return normalizedProperty.includes(normalizedFilter);
         });
+        
+        // Log commercial properties specifically
+        const isCommercial = property.propertyType.toLowerCase().includes('commercial') || 
+                            property.propertyType.toLowerCase().includes('office');
+        if (isCommercial) {
+          console.log('🏢 Commercial property type filter result:', {
+            title: property.title,
+            propertyType: property.propertyType,
+            filterPropertyType: property.filterPropertyType,
+            filters: filters.propertyType,
+            passedFilter: matchesAnyType
+          });
+        }
+        
+        return matchesAnyType;
       });
+      console.log('📊 Properties after type filter:', filtered.length);
     }
 
     // Apply budget filter only if user/URL changed it
