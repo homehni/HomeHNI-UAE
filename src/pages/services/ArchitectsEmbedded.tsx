@@ -263,6 +263,33 @@ const ArchitectsEmbedded = () => {
                   <Input id="arch-phone-mobile" name="phone" type="tel" placeholder="Phone Number" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" required />
                 </div>
                 <Input id="arch-email-mobile" name="email" type="email" placeholder="Email ID" defaultValue={autoFillData.email} className="h-10 md:h-12 text-sm md:text-base bg-background" required />
+                
+                <div className="flex gap-2 md:gap-3">
+                  <Select name="projectType" required>
+                    <SelectTrigger id="arch-project-type-mobile" className="flex-1 h-10 md:h-12 bg-background">
+                      <SelectValue placeholder="Project Type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="residential">Residential Design</SelectItem>
+                      <SelectItem value="commercial">Commercial Architecture</SelectItem>
+                      <SelectItem value="renovation">Renovation & Remodeling</SelectItem>
+                      <SelectItem value="interior">Interior Design</SelectItem>
+                      <SelectItem value="3d-visualization">3D Visualization</SelectItem>
+                      <SelectItem value="project-management">Project Management</SelectItem>
+                      <SelectItem value="other">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input id="arch-location-mobile" name="location" placeholder="Project Location" className="flex-1 h-10 md:h-12 text-sm md:text-base bg-background" />
+                </div>
+
+                <Select name="city">
+                  <SelectTrigger id="arch-city-mobile" className="h-10 md:h-12 bg-background">
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    {majorCities.map(city => <SelectItem key={city} value={city.toLowerCase()}>{city}</SelectItem>)}
+                  </SelectContent>
+                </Select>
                 <Button type="submit" className="w-full h-10 md:h-12 text-sm md:text-base font-semibold bg-red-800 hover:bg-red-900 text-white mt-4 md:mt-6">
                   Get Free Consultation!
                 </Button>
