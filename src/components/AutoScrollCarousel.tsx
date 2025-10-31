@@ -140,7 +140,7 @@ export const AutoScrollCarousel: React.FC<AutoScrollCarouselProps> = ({
       </Carousel>
 
       {/* RERA Badge */}
-      <div className="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold shadow-lg z-10 flex items-center gap-2">
+      <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-lg font-semibold shadow-lg z-10 flex items-center gap-2 border border-white/20">
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
           <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
