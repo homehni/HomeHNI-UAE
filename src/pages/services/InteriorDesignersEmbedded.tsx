@@ -476,11 +476,11 @@ const InteriorDesignersEmbedded = () => {
               
               try {
                 await sendServicesApplicationEmail(email, name, 'interior-design');
-                setFormMessage({
-                  type: "success",
-                  text: "Request submitted! Our interior designers will contact you within 24 hours."
-                });
-                form.reset();
+                setShowSuccess(true);
+                setTimeout(() => setShowSuccess(false), 6000);
+                setTimeout(() => {
+                  form.reset();
+                }, 6500);
               } catch (error) {
                 console.error('Error sending email:', error);
                 setFormMessage({
@@ -531,10 +531,12 @@ const InteriorDesignersEmbedded = () => {
 
                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Get Free Consultation!</Button>
                
-               {/* Inline message */}
-               {formMessage.type && <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
+               {/* Inline message (fallback) */}
+               {formMessage.type && !showSuccess && (
+                 <div className={`mt-2 p-3 rounded-lg text-sm ${formMessage.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
                    {formMessage.text}
-                 </div>}
+                 </div>
+               )}
             </form>
           </CardContent>
         </Card>
