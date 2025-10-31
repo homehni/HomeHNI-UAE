@@ -465,13 +465,14 @@ export const useSimplifiedSearch = () => {
         setPropertyCount(count || 0);
 
         // Fetch only essential fields initially for better performance
-        // Load ALL properties at once
+        // Load ALL properties - set high limit to override Supabase default of 1000
         const { data: properties, error } = await supabase
           .from('properties')
           .select(SELECT_COLUMNS)
           .eq('is_visible', true)
           .eq('status', 'approved') // Only show approved properties
-          .order('created_at', { ascending: false }); // No limit - load all
+          .order('created_at', { ascending: false })
+          .limit(10000); // Increase limit to load more properties (Supabase default is 1000)
 
         if (error) throw error;
 
