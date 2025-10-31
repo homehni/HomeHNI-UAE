@@ -39,6 +39,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [canContact, setCanContact] = useState(true);
   const [remainingUses, setRemainingUses] = useState(50);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -198,30 +199,29 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           : "Contact sent! You've used all free contacts. Subscribe to continue contacting more properties.";
       }
       
-      toast({
-        title: "Interest Registered Successfully!",
-        description: successMessage,
-        className: "bg-white border border-green-200 shadow-lg rounded-lg",
-        style: {
-          borderLeft: "8px solid hsl(120, 100%, 25%)",
-        },
-      });
+      // Show in-page success message
+      setShowSuccess(true);
+      
+      // Hide success message after 6 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 6000);
 
       // Reset form
       setFormData({ name: '', email: '', phone: '', message: '' });
       
-      // Close modal first
-      onClose();
-      
-      // Trigger a custom event to notify Dashboard to refresh
-      console.log('ContactOwnerModal: Dispatching contactCreated event for property:', propertyId);
-      window.dispatchEvent(new CustomEvent('contactCreated', { 
-        detail: { propertyId, timestamp: Date.now() } 
-      }));
-      console.log('ContactOwnerModal: Event dispatched successfully');
-      
-      // Redirect logic based on user state and remaining uses
+      // Close modal and redirect after 6.5 seconds (after success message disappears)
       setTimeout(() => {
+        onClose();
+        
+        // Trigger a custom event to notify Dashboard to refresh
+        console.log('ContactOwnerModal: Dispatching contactCreated event for property:', propertyId);
+        window.dispatchEvent(new CustomEvent('contactCreated', { 
+          detail: { propertyId, timestamp: Date.now() } 
+        }));
+        console.log('ContactOwnerModal: Event dispatched successfully');
+        
+        // Redirect logic based on user state and remaining uses
         if (!user) {
           // Non-logged-in users - redirect to auth page
           console.log('ContactOwnerModal: Non-logged-in user, redirecting to auth');
@@ -241,7 +241,7 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
             navigate('/plans?tab=rental');
           }
         }
-      }, 1000);
+      }, 6500);
     } catch (error) {
       console.error('Error creating lead:', error);
         toast({
@@ -285,6 +285,27 @@ export const ContactOwnerModal: React.FC<ContactOwnerModalProps> = ({
           e?.detail?.originalEvent?.stopPropagation?.();
         }}
       >
+        {/* Success Message Overlay */}
+        {showSuccess && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-lg animate-fade-in">
+            <div className="bg-white rounded-lg shadow-2xl p-8 max-w-sm mx-4 animate-scale-in">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900">Message Sent Successfully!</h3>
+                  <p className="text-gray-600">
+                    Your message has been sent to the property owner. They will contact you soon.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <DialogHeader>
           <DialogTitle>Contact Property Owner</DialogTitle>
         </DialogHeader>
