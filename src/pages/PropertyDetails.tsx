@@ -812,13 +812,13 @@ const PropertyDetails: React.FC = () => {
         </div>
 
         {/* Main Content */}
-        <section className="pt-12 sm:pt-6 pb-6 overflow-x-hidden min-w-0">
+        <section className="pt-6 sm:pt-6 pb-6 overflow-x-hidden min-w-0">
           <div className="mx-auto max-w-7xl px-2 sm:px-4 overflow-x-hidden">
             {/* Property Gallery and Info Grid */}
             <div className="grid lg:grid-cols-3 gap-4 sm:gap-8 mb-8 min-w-0">
               {/* Left - Image Gallery */}
               <div className="lg:col-span-2 min-w-0">
-                <div className="mt-3 sm:mt-0 overflow-hidden">
+                <div className="mt-0 sm:mt-0 overflow-hidden">
                   <PropertyWatermark status={mergedProperty?.status === 'rejected' ? 'rejected' : (mergedProperty?.rental_status || 'available')}>
                     <PropertyImageGallery property={mergedProperty as any} />
                   </PropertyWatermark>
