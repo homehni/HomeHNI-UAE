@@ -1668,7 +1668,7 @@ export const PropertyPreviewPage: React.FC = () => {
       <div className="min-h-screen bg-white">
         <Marquee />
         <Header />
-        <div className="pt-24 sm:pt-6 pb-6">
+        <div className="pt-12 sm:pt-6 pb-6">
           <div className="mx-auto max-w-7xl px-2 sm:px-4">
             <div className="animate-pulse">
               <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
@@ -1695,7 +1695,7 @@ export const PropertyPreviewPage: React.FC = () => {
       <div className="min-h-screen bg-white">
         <Marquee />
         <Header />
-        <div className="pt-24 sm:pt-6 pb-6">
+        <div className="pt-12 sm:pt-6 pb-6">
           <div className="mx-auto max-w-7xl px-2 sm:px-4">
             <div className="text-center py-12">
               <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
@@ -1773,7 +1773,7 @@ export const PropertyPreviewPage: React.FC = () => {
             <div className="grid lg:grid-cols-3 gap-4 sm:gap-8 mb-8 min-w-0">
               {/* Left - Image Gallery */}
               <div className="lg:col-span-2 min-w-0">
-                <div className="mt-6 sm:mt-0 overflow-hidden">
+                <div className="mt-3 sm:mt-0 overflow-hidden">
                   <PropertyWatermark status={propertyData?.status === 'draft' ? 'draft' : 'available' as any}>
                     <PropertyImageGallery property={property as any} />
                   </PropertyWatermark>
