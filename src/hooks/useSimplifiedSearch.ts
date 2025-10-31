@@ -735,6 +735,16 @@ export const useSimplifiedSearch = () => {
     }
     
     console.log('📊 Properties after tab filter:', filtered.length);
+    
+    // Log what properties passed the tab filter
+    if (filtered.length > 0 && filtered.length < 20) {
+      console.log('✅ Properties that PASSED rent tab filter:', filtered.map(p => ({
+        title: p.title,
+        propertyType: p.propertyType,
+        filterPropertyType: p.filterPropertyType,
+        listingType: p.listingType
+      })));
+    }
 
     // Apply property type filter
     if (filters.propertyType.length > 0 && !filters.propertyType.includes('ALL')) {
