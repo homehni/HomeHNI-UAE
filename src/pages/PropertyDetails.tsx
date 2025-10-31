@@ -827,6 +827,16 @@ const PropertyDetails: React.FC = () => {
                 {/* Header Section - Mobile Only (Below Images) */}
                 <div className="block sm:hidden mt-6 overflow-hidden">
                   <PropertyHeader property={mergedProperty as any} />
+                  
+                  {/* Contact & Schedule Visit Buttons - Mobile Only (Right after price) */}
+                  <div className="mt-4 px-4">
+                    <PropertyActions
+                      onContact={() => setShowContactModal(true)}
+                      onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                      property={mergedProperty as any}
+                      onPropertyStatusUpdate={handlePropertyStatusUpdate}
+                    />
+                  </div>
                 </div>
               </div>
               
@@ -834,16 +844,18 @@ const PropertyDetails: React.FC = () => {
               <div className="space-y-6 min-w-0">
                 <PropertyInfoCards property={mergedProperty as any} />
                 
-                {/* Action Buttons */}
-                <PropertyActions
-                  onContact={() => setShowContactModal(true)}
-                  onScheduleVisit={() => setShowScheduleVisitModal(true)}
-                  property={mergedProperty as any}
-                  onPropertyStatusUpdate={handlePropertyStatusUpdate}
-                />
+                {/* Action Buttons - Desktop Only */}
+                <div className="hidden sm:block">
+                  <PropertyActions
+                    onContact={() => setShowContactModal(true)}
+                    onScheduleVisit={() => setShowScheduleVisitModal(true)}
+                    property={mergedProperty as any}
+                    onPropertyStatusUpdate={handlePropertyStatusUpdate}
+                  />
+                </div>
                 
-                {/* Apply Loan Button - Mobile Only (After Action Buttons, Before Overview) */}
-                <div className="block sm:hidden">
+                {/* Apply Loan Button - Mobile Only (Before Overview) */}
+                <div className="block sm:hidden px-4">
                   <Link to="/loans" className="block">
                     <Button className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium">
                       Apply Loan
