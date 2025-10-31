@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
+import { normalizeLocation } from '@/services/locationService';
 import './search-input.css';
 export interface SearchSectionRef {
   focusSearchInput: () => void;
@@ -177,11 +178,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     setLocationError('');
     
     if (searchQuery.trim()) {
-      // Only one location allowed - use the text input directly
-      navigateToSearch([searchQuery.trim()]);
+      // Normalize location before navigating (e.g., "bengaluru" -> "Bangalore")
+      const normalizedLocation = normalizeLocation(searchQuery.trim());
+      navigateToSearch([normalizedLocation]);
       return;
     }
-    navigateToSearch(selectedLocations);
+    // Normalize all selected locations
+    const normalizedLocations = selectedLocations.map(loc => normalizeLocation(loc));
+    navigateToSearch(normalizedLocations);
   };
 
   const navigateToSearch = (locations: string[]) => {
