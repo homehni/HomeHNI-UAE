@@ -8,6 +8,7 @@ import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 import { DeveloperContactForm } from "@/components/DeveloperContactForm";
 import { AutoScrollCarousel } from "@/components/AutoScrollCarousel";
+import { useDeveloperPage } from "@/hooks/useDeveloperPages";
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -39,10 +40,13 @@ import floorPlan1 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_21
 import floorPlan2 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215035_.jpeg';
 import floorPlan3 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215041_.jpeg';
 const DeveloperPage = () => {
-  const {
-    developerId
-  } = useParams();
+  const { developerId } = useParams();
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  
+  // Fetch developer data from database
+  const { data: developerData, isLoading, error } = useDeveloperPage(developerId || '');
+  
+  // Keep legacy hardcoded data as fallback
   const developers = {
     'prestige-group': {
       name: 'Prestige Group',
@@ -318,14 +322,65 @@ const DeveloperPage = () => {
       }
     }
   };
-  const developer = developers[developerId as keyof typeof developers];
-  if (!developer) {
-    return <div className="min-h-screen flex items-center justify-center">
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading developer information...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Try database first, fallback to hardcoded
+  const developer = developerData 
+    ? {
+        name: developerData.company_name,
+        logo: developerData.logo_url || '',
+        rank: developerData.display_order || 0,
+        founded: developerData.founded_year || '',
+        headquarters: developerData.headquarters || '',
+        highlights: developerData.highlights || developerData.tagline || '',
+        description: developerData.description || '',
+        specializations: Array.isArray(developerData.specializations) ? developerData.specializations : [],
+        keyProjects: Array.isArray(developerData.key_projects) ? developerData.key_projects : [],
+        awards: Array.isArray(developerData.awards) ? developerData.awards : [],
+        contact: {
+          phone: developerData.contact_phone || '',
+          email: developerData.contact_email || '',
+          website: developerData.contact_website || ''
+        },
+        propertyDetails: {
+          price: { min: 75, max: 150, unit: 'Lacs', perSqft: 5500 },
+          location: developerData.headquarters || '',
+          locality: '',
+          city: developerData.headquarters?.split(',')[0] || '',
+          configurations: [{ type: '2 BHK', sizes: ['1200 Sft'] }, { type: '3 BHK', sizes: ['1600 Sft'] }],
+          projectArea: '10 Acres',
+          totalUnits: 500,
+          status: 'Under Construction',
+          possession: 'Dec 2025',
+          rera: 'RERA123456',
+          brochureLink: '#',
+          mapLink: developerData.location_map_url || 'https://maps.google.com',
+          amenities: Array.isArray(developerData.amenities) ? developerData.amenities : [],
+          features: []
+        }
+      }
+    : developers[developerId as keyof typeof developers];
+  
+  if (!developer && !developerData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">Developer Not Found</h1>
           <p className="text-muted-foreground">The developer you're looking for doesn't exist.</p>
         </div>
-      </div>;
+      </div>
+    );
   }
 
   // Check if this is a property-detail style page
