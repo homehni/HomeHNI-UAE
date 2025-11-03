@@ -656,7 +656,7 @@ const DeveloperPage = () => {
               </div>
 
               {/* Interest Indicator */}
-              <div className="flex items-center justify-center gap-2 text-[11px] text-white/90 bg-orange-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-orange-400/30 mb-4">
+              <div className="hidden md:flex items-center justify-center gap-2 text-[11px] text-white/90 bg-orange-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-orange-400/30 mb-4">
                 <span>🔥</span>
                 <span className="font-medium">36 families showed interest yesterday</span>
               </div>
