@@ -252,6 +252,13 @@ const DeveloperPage = () => {
   const safeKeyProjects = developer.keyProjects || [];
   const safeAwards = developer.awards || [];
   const safeDescription = developer.description || '';
+  
+  // Handle both database (flat fields) and hardcoded (nested object) contact structures
+  const safeContact = {
+    phone: developer.contact?.phone || developer.contact_phone || '',
+    email: developer.contact?.email || developer.contact_email || '',
+    website: developer.contact?.website || developer.contact_website || ''
+  };
 
   // Check if this is a property-detail style page
   const isPropertyDetail = 'propertyDetails' in developer;
@@ -1508,8 +1515,8 @@ const DeveloperPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-foreground mb-1">Phone</div>
-                        <a href={`tel:${developer.contact.phone}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
-                          {developer.contact.phone}
+                        <a href={`tel:${safeContact.phone}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {safeContact.phone}
                         </a>
                       </div>
                     </div>
@@ -1520,8 +1527,8 @@ const DeveloperPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-foreground mb-1">Email</div>
-                        <a href={`mailto:${developer.contact.email}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
-                          {developer.contact.email}
+                        <a href={`mailto:${safeContact.email}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {safeContact.email}
                         </a>
                       </div>
                     </div>
@@ -1532,8 +1539,8 @@ const DeveloperPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-foreground mb-1">Website</div>
-                        <a href={`https://${developer.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
-                          {developer.contact.website}
+                        <a href={`https://${safeContact.website}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {safeContact.website}
                         </a>
                       </div>
                     </div>
