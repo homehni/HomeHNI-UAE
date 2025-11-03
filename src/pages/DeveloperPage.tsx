@@ -572,39 +572,39 @@ const DeveloperPage = () => {
               <div className="bg-black/50 backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 mb-6">
                 {/* Configuration & Price */}
                 <div className="space-y-2">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white">
+                  <h2 className="text-lg sm:text-xl font-bold text-white">
                     {pd.configurations.map(c => c.type).join(', ')} Apartment
                   </h2>
-                  <p className="text-lg sm:text-xl font-semibold text-emerald-300">
+                  <p className="text-base sm:text-lg font-semibold text-emerald-300">
                     ₹ {pd.price.min} {pd.price.unit} Onwards*
                   </p>
                 </div>
                 
                 {/* Location */}
                 <div className="flex items-center gap-2 text-white/95">
-                  <MapPin className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-                  <span className="text-sm font-medium">{pd.locality}, {pd.city}</span>
+                  <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+                  <span className="text-xs font-medium">{pd.locality}, {pd.city}</span>
                 </div>
                 
                 {/* Status Tags */}
                 <div className="flex items-center gap-3 flex-wrap">
                   <div className="flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5">
-                    <Calendar className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-xs font-medium">{pd.possession}</span>
+                    <Calendar className="h-3 w-3 text-emerald-400" />
+                    <span className="text-[11px] font-medium">{pd.possession}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-xs font-medium">RERA Approved</span>
+                    <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                    <span className="text-[11px] font-medium">RERA Approved</span>
                   </div>
                 </div>
 
                 {/* NEW LAUNCH Badge */}
                 <div className="flex items-center gap-3 pt-1">
                   <div className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 border border-yellow-400/30">
-                    <Sparkles className="h-4 w-4 text-yellow-400" />
-                    <span className="text-xs font-bold text-white">NEW LAUNCH Project</span>
+                    <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
+                    <span className="text-[11px] font-bold text-white">NEW LAUNCH Project</span>
                   </div>
-                  <a href="#" className="text-xs text-emerald-300 hover:text-emerald-200 underline font-medium">Learn more</a>
+                  <a href="#" className="text-[11px] text-emerald-300 hover:text-emerald-200 underline font-medium">Learn more</a>
                 </div>
               </div>
 
@@ -615,8 +615,8 @@ const DeveloperPage = () => {
                     <Building2 className="h-5 w-5 text-white" />
                   </div>
                   <div className="text-center">
-                    <p className="text-xs font-bold text-white">{pd.projectArea}</p>
-                    <p className="text-[10px] text-white/80">{pd.totalUnits} Flats</p>
+                    <p className="text-[11px] font-bold text-white">{pd.projectArea}</p>
+                    <p className="text-[9px] text-white/80">{pd.totalUnits} Flats</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
@@ -624,8 +624,8 @@ const DeveloperPage = () => {
                     <Home className="h-5 w-5 text-white" />
                   </div>
                   <div className="text-center">
-                    <p className="text-xs font-bold text-white">{pd.configurations[0].type}</p>
-                    <p className="text-[10px] text-white/80">{pd.configurations[0].sizes[0]}</p>
+                    <p className="text-[11px] font-bold text-white">{pd.configurations[0].type}</p>
+                    <p className="text-[9px] text-white/80">{pd.configurations[0].sizes[0]}</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
@@ -633,32 +633,32 @@ const DeveloperPage = () => {
                     <Award className="h-5 w-5 text-white" />
                   </div>
                   <div className="text-center">
-                    <p className="text-xs font-bold text-white">RERA</p>
-                    <p className="text-[10px] text-white/80">Certified</p>
+                    <p className="text-[11px] font-bold text-white">RERA</p>
+                    <p className="text-[9px] text-white/80">Certified</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-3 mb-4">
-                <Button size="lg" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-bold shadow-lg" onClick={() => setIsContactFormOpen(true)}>
+                <Button size="default" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-bold shadow-lg text-sm" onClick={() => setIsContactFormOpen(true)}>
                   View Number
                 </Button>
-                {pd.brochureLink && <Button variant="outline" size="lg" className="flex-1 bg-white/10 text-white hover:bg-white/20 border-2 border-white/40 font-bold backdrop-blur-md shadow-lg" onClick={() => window.open(pd.brochureLink, '_blank')}>
-                    <Download className="mr-2 h-4 w-4" />
+                {pd.brochureLink && <Button variant="outline" size="default" className="flex-1 bg-white/10 text-white hover:bg-white/20 border-2 border-white/40 font-bold backdrop-blur-md shadow-lg text-sm" onClick={() => window.open(pd.brochureLink, '_blank')}>
+                    <Download className="mr-2 h-3.5 w-3.5" />
                     Brochure
                   </Button>}
               </div>
 
               {/* Interest Indicator */}
-              <div className="flex items-center justify-center gap-2 text-xs text-white/90 bg-orange-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-orange-400/30 mb-4">
+              <div className="flex items-center justify-center gap-2 text-[11px] text-white/90 bg-orange-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-orange-400/30 mb-4">
                 <span>🔥</span>
                 <span className="font-medium">36 families showed interest yesterday</span>
               </div>
 
               {/* Bottom Bar - Key Highlights */}
               <div className="mt-auto bg-black/70 backdrop-blur-md rounded-xl px-5 py-3 flex items-center justify-between border border-white/20">
-                <span className="text-white font-semibold text-sm">Key Highlights</span>
+                <span className="text-white font-semibold text-xs">Key Highlights</span>
                 <ChevronRight className="h-4 w-4 text-white rotate-90" />
               </div>
             </div>
