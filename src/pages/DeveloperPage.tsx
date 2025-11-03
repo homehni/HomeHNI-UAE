@@ -680,9 +680,6 @@ const DeveloperPage = () => {
             <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               {/* Content Container */}
               <div className="relative z-10">
-                {/* Subtle texture overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-                
                 <div className="relative flex gap-0">
                   {/* Left Column - ~60% width */}
                   <div className="w-[60%] relative z-10">
