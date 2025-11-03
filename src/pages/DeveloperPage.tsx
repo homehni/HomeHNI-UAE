@@ -8,7 +8,6 @@ import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 import { DeveloperContactForm } from "@/components/DeveloperContactForm";
 import { AutoScrollCarousel } from "@/components/AutoScrollCarousel";
-import { developerPagesService } from "@/services/developerPagesService";
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -40,24 +39,10 @@ import floorPlan1 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_21
 import floorPlan2 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215035_.jpeg';
 import floorPlan3 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215041_.jpeg';
 const DeveloperPage = () => {
-  const { developerId } = useParams();
+  const {
+    developerId
+  } = useParams();
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
-  const [pageData, setPageData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch page data from database
-  useEffect(() => {
-    const fetchPageData = async () => {
-      if (!developerId) return;
-      
-      setIsLoading(true);
-      const data = await developerPagesService.getDeveloperPageBySlug(developerId);
-      setPageData(data);
-      setIsLoading(false);
-    };
-
-    fetchPageData();
-  }, [developerId]);
   const developers = {
     'prestige-group': {
       name: 'Prestige Group',
@@ -221,44 +206,15 @@ const DeveloperPage = () => {
       }
     }
   };
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Try database first, fall back to hardcoded data for backward compatibility
-  const developer = pageData || developers[developerId as keyof typeof developers];
-  
+  const developer = developers[developerId as keyof typeof developers];
   if (!developer) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
+    return <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">Developer Not Found</h1>
-          <p className="text-muted-foreground">The developer page you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground">The developer you're looking for doesn't exist.</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  // Ensure arrays have default values for database pages
-  const safeSpecializations = developer.specializations || [];
-  const safeKeyProjects = developer.keyProjects || [];
-  const safeAwards = developer.awards || [];
-  const safeDescription = developer.description || '';
-  
-  // Handle both database (flat fields) and hardcoded (nested object) contact structures
-  const safeContact = {
-    phone: developer.contact?.phone || developer.contact_phone || '',
-    email: developer.contact?.email || developer.contact_email || '',
-    website: developer.contact?.website || developer.contact_website || ''
-  };
 
   // Check if this is a property-detail style page
   const isPropertyDetail = 'propertyDetails' in developer;
@@ -266,12 +222,6 @@ const DeveloperPage = () => {
   // Render property-detail layout for Forest Edge
   if (isPropertyDetail && developer.propertyDetails) {
     const pd = developer.propertyDetails;
-    
-    // Safe defaults for property detail arrays
-    const safeConfigurations = pd.configurations || [];
-    const safeFeatures = pd.features || [];
-    const safeAmenities = pd.amenities || [];
-    
     const sectionRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const heroVideoRef = useRef<HTMLVideoElement>(null);
@@ -624,7 +574,7 @@ const DeveloperPage = () => {
             {/* Background Video */}
             <div className="absolute inset-0 w-full h-full">
               <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                <source src={developer.hero_video_url || forestEdgeHeroVideo} type="video/mp4" />
+                <source src={forestEdgeHeroVideo} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               {/* Dark overlay for better text readability */}
@@ -651,7 +601,7 @@ const DeveloperPage = () => {
                 {/* Configuration & Price */}
                 <div className="space-y-2">
                   <h2 className="text-lg sm:text-xl font-bold text-white">
-                    {safeConfigurations.map(c => c.type).join(', ')} Apartment
+                    {pd.configurations.map(c => c.type).join(', ')} Apartment
                   </h2>
                   <p className="text-base sm:text-lg font-semibold text-emerald-300">
                     ₹ {pd.price.min} {pd.price.unit} Onwards*
@@ -760,7 +710,7 @@ const DeveloperPage = () => {
                       
                       {/* Main Info */}
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{safeConfigurations.map(c => c.type).join(', ')} Apartment</span>
+                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
                         <span className="text-slate-400">|</span>
                         <span className="text-xl lg:text-2xl font-bold text-slate-900">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
                         <span className="text-slate-400">|</span>
@@ -822,7 +772,7 @@ const DeveloperPage = () => {
                     <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
                       <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
                         <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                          <source src={developer.hero_video_url || forestEdgeHeroVideo} type="video/mp4" />
+                          <source src={forestEdgeHeroVideo} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
 
@@ -855,7 +805,7 @@ const DeveloperPage = () => {
             <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
           </div>
           <div className="grid gap-5 md:grid-cols-2 md:gap-6">
-                {safeFeatures.map((feature, index) => <div key={index} className="group flex items-start gap-4 p-5 sm:p-6 bg-white rounded-xl border border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all duration-300">
+                {pd.features.map((feature, index) => <div key={index} className="group flex items-start gap-4 p-5 sm:p-6 bg-white rounded-xl border border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all duration-300">
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <CheckCircle2 className="h-6 w-6 text-brand-red" />
                 </div>
@@ -874,7 +824,7 @@ const DeveloperPage = () => {
             <CardContent className="p-0">
               <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900 group cursor-pointer">
                 <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
-                  <source src={developer.video_url || cannyForestEdgeVideo} type="video/mp4" />
+                  <source src={cannyForestEdgeVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 {/* Gradient overlay for better visual integration */}
@@ -976,7 +926,7 @@ const DeveloperPage = () => {
           
           {/* Configuration Filter Tabs */}
           <div className="flex gap-3 mb-8 flex-wrap justify-center sm:justify-start">
-                {safeConfigurations.map((config, index) => <Button key={index} variant={index === 0 ? "default" : "outline"} size="lg" className={index === 0 ? "bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark text-white shadow-lg font-semibold" : "border-2 hover:border-brand-red hover:text-brand-red font-semibold"}>
+                {pd.configurations.map((config, index) => <Button key={index} variant={index === 0 ? "default" : "outline"} size="lg" className={index === 0 ? "bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark text-white shadow-lg font-semibold" : "border-2 hover:border-brand-red hover:text-brand-red font-semibold"}>
                     {config.type}
                   </Button>)}
               </div>
@@ -1039,7 +989,7 @@ const DeveloperPage = () => {
               </Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-              {safeAmenities.map((amenity, index) => <div key={index} className="group flex flex-col items-center gap-3 p-4 sm:p-6 bg-white rounded-xl border-2 border-neutral-200 hover:border-brand-red hover:shadow-xl transition-all duration-300 cursor-pointer">
+              {pd.amenities.map((amenity, index) => <div key={index} className="group flex flex-col items-center gap-3 p-4 sm:p-6 bg-white rounded-xl border-2 border-neutral-200 hover:border-brand-red hover:shadow-xl transition-all duration-300 cursor-pointer">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-brand-red/20 group-hover:to-brand-maroon/20 transition-all">
                     {amenityIcons[amenity] || <Star className="h-7 w-7 sm:h-8 sm:w-8 text-brand-red" />}
                   </div>
@@ -1059,8 +1009,8 @@ const DeveloperPage = () => {
               </div>
               <div className="prose prose-lg max-w-none">
                 <div className="text-muted-foreground leading-relaxed space-y-6 text-base md:text-lg">
-                {safeDescription.split('. ').map((sentence, index) => sentence.trim() && <p key={index} className="mb-0">
-                      {sentence.trim()}{index < safeDescription.split('. ').length - 1 ? '.' : ''}
+                {developer.description.split('. ').map((sentence, index) => sentence.trim() && <p key={index} className="mb-0">
+                      {sentence.trim()}{index < developer.description.split('. ').length - 1 ? '.' : ''}
                     </p>)}
                 </div>
               </div>
@@ -1412,8 +1362,8 @@ const DeveloperPage = () => {
                     </div>
                   </div>
                   <div className="space-y-4 text-muted-foreground leading-relaxed text-base md:text-lg">
-                    {safeDescription.split('. ').map((sentence, index) => sentence.trim() && <p key={index} className="leading-relaxed">
-                          {sentence.trim()}{index < safeDescription.split('. ').length - 1 ? '.' : ''}
+                    {developer.description.split('. ').map((sentence, index) => sentence.trim() && <p key={index} className="leading-relaxed">
+                          {sentence.trim()}{index < developer.description.split('. ').length - 1 ? '.' : ''}
                         </p>)}
                   </div>
                 </CardContent>
@@ -1424,7 +1374,7 @@ const DeveloperPage = () => {
                 <CardContent className="p-5 sm:p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Our Specializations</h3>
                   <div className="grid md:grid-cols-2 gap-4 md:gap-5">
-                    {safeSpecializations.map((spec, index) => <div key={index} className="group flex items-center gap-3 p-4 bg-gradient-to-br from-secondary/50 to-background rounded-xl border-0 md:border md:border-border/50 md:hover:border-brand-red/30 transition-all duration-300 hover:shadow-md">
+                    {developer.specializations.map((spec, index) => <div key={index} className="group flex items-center gap-3 p-4 bg-gradient-to-br from-secondary/50 to-background rounded-xl border-0 md:border md:border-border/50 md:hover:border-brand-red/30 transition-all duration-300 hover:shadow-md">
                         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red/20 transition-colors">
                           <Star className="h-4 w-4 text-brand-red" />
                         </div>
@@ -1439,7 +1389,7 @@ const DeveloperPage = () => {
                 <CardContent className="p-5 sm:p-6 md:p-8">
                   <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-foreground">Key Projects</h3>
                   <div className="space-y-3 md:space-y-4">
-                    {safeKeyProjects.map((project, index) => <div key={index} className="group flex items-start gap-4 p-4 md:p-5 bg-gradient-to-r from-secondary/30 to-background rounded-xl hover:from-secondary/50 hover:to-background transition-all duration-300 hover:shadow-md border-0 md:border md:border-border/50 md:hover:border-brand-red/30">
+                    {developer.keyProjects.map((project, index) => <div key={index} className="group flex items-start gap-4 p-4 md:p-5 bg-gradient-to-r from-secondary/30 to-background rounded-xl hover:from-secondary/50 hover:to-background transition-all duration-300 hover:shadow-md border-0 md:border md:border-border/50 md:hover:border-brand-red/30">
                         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red group-hover:scale-110 transition-all duration-300">
                           <ArrowRight className="h-4 w-4 text-brand-red group-hover:text-white transition-colors" />
                         </div>
@@ -1461,7 +1411,7 @@ const DeveloperPage = () => {
                     </h3>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4 md:gap-5">
-                    {safeAwards.map((award, index) => <div key={index} className="group flex items-start gap-3 p-4 bg-gradient-to-br from-brand-red/5 to-background border-0 md:border md:border-brand-red/20 md:hover:border-brand-red/40 hover:shadow-md transition-all duration-300">
+                    {developer.awards.map((award, index) => <div key={index} className="group flex items-start gap-3 p-4 bg-gradient-to-br from-brand-red/5 to-background border-0 md:border md:border-brand-red/20 md:hover:border-brand-red/40 hover:shadow-md transition-all duration-300">
                         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-brand-red/10 flex items-center justify-center group-hover:bg-brand-red/20 transition-colors mt-0.5">
                           <Award className="h-4 w-4 text-brand-red" />
                         </div>
@@ -1515,8 +1465,8 @@ const DeveloperPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-foreground mb-1">Phone</div>
-                        <a href={`tel:${safeContact.phone}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
-                          {safeContact.phone}
+                        <a href={`tel:${developer.contact.phone}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {developer.contact.phone}
                         </a>
                       </div>
                     </div>
@@ -1527,8 +1477,8 @@ const DeveloperPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-foreground mb-1">Email</div>
-                        <a href={`mailto:${safeContact.email}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
-                          {safeContact.email}
+                        <a href={`mailto:${developer.contact.email}`} className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {developer.contact.email}
                         </a>
                       </div>
                     </div>
@@ -1539,8 +1489,8 @@ const DeveloperPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-foreground mb-1">Website</div>
-                        <a href={`https://${safeContact.website}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
-                          {safeContact.website}
+                        <a href={`https://${developer.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground text-sm hover:text-brand-red transition-colors break-all">
+                          {developer.contact.website}
                         </a>
                       </div>
                     </div>
