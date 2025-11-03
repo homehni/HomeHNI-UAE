@@ -776,26 +776,26 @@ const DeveloperPage = () => {
         </section>
 
         {/* Key Features - Modern grid layout */}
-        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-16 scroll-animate relative z-0">
-          <div className="mb-8">
+        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-12 pb-16 scroll-animate relative z-0">
+          <div className="mb-8 text-center sm:text-left">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Key Features</h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
           </div>
-          <div className="grid md:grid-cols-2 gap-6">
-                {pd.features.map((feature, index) => <div key={index} className="group flex items-start gap-4 p-6 bg-white rounded-xl border border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all duration-300">
+          <div className="grid gap-5 md:grid-cols-2 md:gap-6">
+                {pd.features.map((feature, index) => <div key={index} className="group flex items-start gap-4 p-5 sm:p-6 bg-white rounded-xl border border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all duration-300">
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <CheckCircle2 className="h-6 w-6 text-brand-red" />
                 </div>
-                <p className="text-foreground font-medium leading-relaxed pt-1">{feature}</p>
+                <p className="text-foreground font-medium leading-relaxed pt-1 text-sm sm:text-base">{feature}</p>
               </div>)}
           </div>
         </section>
 
         {/* Video Section - Responsive with lazy loading and auto-play */}
-        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 scroll-animate">
-          <div className="mb-8">
+        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-16 scroll-animate">
+          <div className="mb-8 text-center sm:text-left">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
           </div>
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
             <CardContent className="p-0">
@@ -829,10 +829,10 @@ const DeveloperPage = () => {
         </section>
 
         {/* Apartment Interiors - 3D Carousel Gallery */}
-        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-animate">
-          <div className="mb-8">
+        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16 scroll-animate">
+          <div className="mb-8 text-center sm:text-left">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Apartment Interiors</h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
               </div>
           
           {/* Smooth Swipe Carousel Container - Static black background with scrolling images inside */}
@@ -890,11 +890,11 @@ const DeveloperPage = () => {
         </section>
 
         {/* Floor Plans - Premium showcase */}
-        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 scroll-animate">
-          <div className="mb-8 flex items-center justify-between">
-            <div>
+        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-16 scroll-animate">
+          <div className="mb-8 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4">
+            <div className="text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Floor Plans</h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
             </div>
             <Button variant="ghost" className="text-brand-red hover:text-brand-maroon font-semibold">
               View All <ArrowRight className="ml-2 h-4 w-4" />
@@ -902,7 +902,7 @@ const DeveloperPage = () => {
           </div>
           
           {/* Configuration Filter Tabs */}
-          <div className="flex gap-3 mb-8 flex-wrap">
+          <div className="flex gap-3 mb-8 flex-wrap justify-center sm:justify-start">
                 {pd.configurations.map((config, index) => <Button key={index} variant={index === 0 ? "default" : "outline"} size="lg" className={index === 0 ? "bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark text-white shadow-lg font-semibold" : "border-2 hover:border-brand-red hover:text-brand-red font-semibold"}>
                     {config.type}
                   </Button>)}
@@ -955,34 +955,34 @@ const DeveloperPage = () => {
 
         {/* Amenities - Premium grid with icons */}
         <section className="bg-gradient-to-b from-neutral-50 to-white py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-8 flex items-center justify-between">
-              <div>
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
                 <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Amenities</h2>
-                <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+                <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
               </div>
               <Button variant="ghost" className="text-brand-red hover:text-brand-maroon font-semibold">
                 View All <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-              {pd.amenities.map((amenity, index) => <div key={index} className="group flex flex-col items-center gap-3 p-6 bg-white rounded-xl border-2 border-neutral-200 hover:border-brand-red hover:shadow-xl transition-all duration-300 cursor-pointer">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-brand-red/20 group-hover:to-brand-maroon/20 transition-all">
-                    {amenityIcons[amenity] || <Star className="h-8 w-8 text-brand-red" />}
+              {pd.amenities.map((amenity, index) => <div key={index} className="group flex flex-col items-center gap-3 p-4 sm:p-6 bg-white rounded-xl border-2 border-neutral-200 hover:border-brand-red hover:shadow-xl transition-all duration-300 cursor-pointer">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-brand-red/20 group-hover:to-brand-maroon/20 transition-all">
+                    {amenityIcons[amenity] || <Star className="h-7 w-7 sm:h-8 sm:w-8 text-brand-red" />}
                   </div>
-                  <span className="text-sm font-medium text-center text-foreground leading-tight">{amenity}</span>
+                  <span className="text-xs sm:text-sm font-medium text-center text-foreground leading-tight">{amenity}</span>
                   </div>)}
               </div>
           </div>
         </section>
 
         {/* About the Project - Rich content section */}
-        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-animate">
+        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16 scroll-animate">
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-8 md:p-12">
-              <div className="mb-8">
+            <CardContent className="p-6 sm:p-8 md:p-12">
+              <div className="mb-8 text-center sm:text-left">
                 <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">About {developer.name}</h2>
-                <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+                <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
               </div>
               <div className="prose prose-lg max-w-none">
                 <div className="text-muted-foreground leading-relaxed space-y-6 text-base md:text-lg">
@@ -997,10 +997,10 @@ const DeveloperPage = () => {
 
         {/* Location & Map */}
         <section className="bg-gradient-to-br from-gray-50 to-white py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+            <div className="mb-8 text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Location & Neighbourhood</h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
               <iframe
@@ -1036,20 +1036,20 @@ const DeveloperPage = () => {
 
         {/* About the Builder - Premium dark section */}
         <section className="bg-neutral-800 py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="p-8 md:p-12">
-              <div className="flex flex-col md:flex-row items-start gap-8 mb-8">
-                <div className="relative">
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+            <div className="p-6 sm:p-8 md:p-12">
+              <div className="flex flex-col items-center md:items-start md:flex-row gap-8 mb-8">
+                <div className="relative flex-shrink-0">
               <img src={developer.logo} alt="Canny Life Spaces" className="w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-2xl object-contain bg-white p-3 shadow-xl border-2 border-white/20" />
                 </div>
-                <div className="flex-1 text-white">
+                <div className="flex-1 text-white text-center md:text-left">
                   <h2 className="text-2xl md:text-3xl font-semibold mb-3">About the Builder</h2>
                   <h3 className="text-xl md:text-2xl mb-4 text-white/90">Canny Life Spaces Pvt Ltd</h3>
                   <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
                     <Calendar className="h-4 w-4" />
                     Years in business: <span className="text-white">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span>
                   </div>
-                  <p className="text-white/80 leading-relaxed text-base md:text-lg">
+                  <p className="text-white/80 leading-relaxed text-sm sm:text-base md:text-lg">
                     Canny Life Spaces Pvt Ltd has been one of the most premium real estate developers in India since its inception. 
                     It has firmly established itself as a brand to reckon with in the real estate industry in India and abroad, 
                     delivering excellence in every project.
@@ -1084,10 +1084,10 @@ const DeveloperPage = () => {
 
         {/* Similar Projects - Horizontal scrollable carousel */}
         <section className="bg-white py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+            <div className="mb-8 text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Similar Projects</h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
                 </div>
 
             {/* Scrollable Projects Carousel */}
@@ -1202,35 +1202,35 @@ const DeveloperPage = () => {
 
         {/* RERA & Legal Certificates - Trust section */}
         <section className="bg-gradient-to-b from-white to-neutral-50 py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
             <Card className="border-0 shadow-xl bg-white">
-              <CardContent className="p-8 md:p-12">
-                <div className="mb-8">
+              <CardContent className="p-6 sm:p-8 md:p-12">
+                <div className="mb-8 text-center sm:text-left">
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">RERA & Legal Certificates</h2>
-                  <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+                  <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
                 </div>
                 
                 <div className="space-y-8">
                   {/* RERA Certificate Card */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 md:p-8 border-2 border-blue-100">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-blue-100">
+                    <div className="flex flex-col sm:flex-row items-start gap-4 mb-6">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center mx-auto sm:mx-0">
                         <Shield className="h-6 w-6 text-white" />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-foreground mb-2">RERA Certificate</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                      <div className="flex-1 text-center sm:text-left">
+                        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2">RERA Certificate</h3>
+                        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                           The Real Estate (Regulation and Development) Act, 2016 is an Act of the Parliament of India which seeks to 
                     protect home-buyers as well as boost investments in the real estate industry. The Act came into force on 1 May 2016.
                   </p>
                       </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white rounded-xl p-6 border border-blue-200">
-                    <div className="flex-1">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 bg-white rounded-xl p-5 sm:p-6 border border-blue-200">
+                    <div className="flex-1 text-center sm:text-left">
                         <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wider">Telangana RERA</p>
-                        <p className="text-xl font-semibold text-foreground">{pd.rera}</p>
+                        <p className="text-lg sm:text-xl font-semibold text-foreground break-all">{pd.rera}</p>
                     </div>
-                      <Button variant="outline" size="lg" className="border-2 hover:bg-blue-50 font-semibold">
+                      <Button variant="outline" size="lg" className="border-2 hover:bg-blue-50 font-semibold w-full sm:w-auto">
                         View Certificate <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
@@ -1238,31 +1238,31 @@ const DeveloperPage = () => {
 
                   {/* RERA Benefits Grid */}
                       <div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6">Benefits of RERA</h3>
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground mb-6 text-center sm:text-left">Benefits of RERA</h3>
+                    <div className="grid gap-5 md:grid-cols-2 md:gap-6">
                       {[{
-                      icon: <Users className="h-6 w-6" />,
+                      icon: <Users className="h-5 w-5 sm:h-6 sm:w-6" />,
                       title: 'Timely Dispute Resolution',
                       desc: 'Buyer can approach RERA authorities within 60 days from date of problem identified'
                     }, {
-                      icon: <Building2 className="h-6 w-6" />,
+                      icon: <Building2 className="h-5 w-5 sm:h-6 sm:w-6" />,
                       title: 'Quality Assurance',
                       desc: 'Quality standards as set out by authorities must be followed by developers'
                     }, {
-                      icon: <Calendar className="h-6 w-6" />,
+                      icon: <Calendar className="h-5 w-5 sm:h-6 sm:w-6" />,
                       title: 'Transparency & Tracking',
                       desc: 'Allows buyers to track progress milestones and defects'
                     }, {
-                      icon: <Award className="h-6 w-6" />,
+                      icon: <Award className="h-5 w-5 sm:h-6 sm:w-6" />,
                       title: 'Buyer Protection',
                       desc: 'Buyers can get grievance redressed within project completion'
-                    }].map((benefit, idx) => <div key={idx} className="group flex gap-4 p-6 bg-gradient-to-br from-neutral-50 to-white rounded-xl border-2 border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all">
-                          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    }].map((benefit, idx) => <div key={idx} className="group flex gap-4 p-5 sm:p-6 bg-gradient-to-br from-neutral-50 to-white rounded-xl border-2 border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all">
+                          <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                             <div className="text-brand-red">{benefit.icon}</div>
                       </div>
                       <div>
-                            <h4 className="font-bold text-foreground mb-2">{benefit.title}</h4>
-                            <p className="text-sm text-muted-foreground leading-relaxed">
+                            <h4 className="font-bold text-foreground mb-2 text-sm sm:text-base">{benefit.title}</h4>
+                            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                               {benefit.desc}
                         </p>
                       </div>
