@@ -569,7 +569,7 @@ const DeveloperPage = () => {
               </div>
 
               {/* Middle Section - Main Property Info */}
-              <div className="bg-black/50 backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 mb-6">
+              <div className="bg-transparent backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 mb-6">
                 {/* Configuration & Price */}
                 <div className="space-y-2">
                   <h2 className="text-lg sm:text-xl font-bold text-white">
