@@ -474,7 +474,7 @@ const Footer = ({
 
           {/* Mortgease Partnership Section - UAE Only */}
           {true && (
-            <div className="mb-6 p-6 md:p-8 bg-gradient-to-br from-indigo-50 to-amber-50 rounded-xl border border-indigo-200">
+            <div className="mb-6 p-6 md:p-8 rounded-xl">
               <div className="flex flex-col items-center justify-center gap-6">
                 <div className="flex-shrink-0">
                   <img 
