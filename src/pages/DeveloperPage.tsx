@@ -730,7 +730,7 @@ const DeveloperPage = () => {
 
                     {/* Action Buttons - Professional Style */}
                     <div className="flex gap-4 mb-6">
-                      <Button size="lg" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base py-6" onClick={() => setIsContactFormOpen(true)}>
+                      <Button size="lg" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base py-6 rounded-xl" onClick={() => setIsContactFormOpen(true)}>
                         View Number
                       </Button>
                       {pd.brochureLink && <Button variant="outline" size="lg" className="flex-1 bg-white/80 backdrop-blur-lg text-slate-900 hover:bg-white/90 border-2 border-slate-300 hover:border-slate-400 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6" onClick={() => window.open(pd.brochureLink, '_blank')}>
