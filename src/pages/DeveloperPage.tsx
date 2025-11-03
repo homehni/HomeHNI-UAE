@@ -8,6 +8,7 @@ import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 import { DeveloperContactForm } from "@/components/DeveloperContactForm";
 import { AutoScrollCarousel } from "@/components/AutoScrollCarousel";
+import { developerPagesService } from "@/services/developerPagesService";
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -39,10 +40,24 @@ import floorPlan1 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_21
 import floorPlan2 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215035_.jpeg';
 import floorPlan3 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215041_.jpeg';
 const DeveloperPage = () => {
-  const {
-    developerId
-  } = useParams();
+  const { developerId } = useParams();
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [pageData, setPageData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch page data from database
+  useEffect(() => {
+    const fetchPageData = async () => {
+      if (!developerId) return;
+      
+      setIsLoading(true);
+      const data = await developerPagesService.getDeveloperPageBySlug(developerId);
+      setPageData(data);
+      setIsLoading(false);
+    };
+
+    fetchPageData();
+  }, [developerId]);
   const developers = {
     'prestige-group': {
       name: 'Prestige Group',
@@ -206,14 +221,30 @@ const DeveloperPage = () => {
       }
     }
   };
-  const developer = developers[developerId as keyof typeof developers];
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Try database first, fall back to hardcoded data for backward compatibility
+  const developer = pageData || developers[developerId as keyof typeof developers];
+  
   if (!developer) {
-    return <div className="min-h-screen flex items-center justify-center">
+    return (
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">Developer Not Found</h1>
-          <p className="text-muted-foreground">The developer you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground">The developer page you're looking for doesn't exist.</p>
         </div>
-      </div>;
+      </div>
+    );
   }
 
   // Check if this is a property-detail style page
@@ -574,7 +605,7 @@ const DeveloperPage = () => {
             {/* Background Video */}
             <div className="absolute inset-0 w-full h-full">
               <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                <source src={forestEdgeHeroVideo} type="video/mp4" />
+                <source src={developer.hero_video_url || forestEdgeHeroVideo} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               {/* Dark overlay for better text readability */}
@@ -772,7 +803,7 @@ const DeveloperPage = () => {
                     <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
                       <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
                         <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                          <source src={forestEdgeHeroVideo} type="video/mp4" />
+                          <source src={developer.hero_video_url || forestEdgeHeroVideo} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
 
@@ -824,7 +855,7 @@ const DeveloperPage = () => {
             <CardContent className="p-0">
               <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900 group cursor-pointer">
                 <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
-                  <source src={cannyForestEdgeVideo} type="video/mp4" />
+                  <source src={developer.video_url || cannyForestEdgeVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 {/* Gradient overlay for better visual integration */}
