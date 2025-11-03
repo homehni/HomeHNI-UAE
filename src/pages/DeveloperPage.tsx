@@ -566,13 +566,6 @@ const DeveloperPage = () => {
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
                   <img src={developer.logo} alt="Canny Life Spaces" className="w-36 h-24 sm:w-44 sm:h-28 object-contain" />
                 </div>
-                
-                {/* Project Area Badge - Clean Design */}
-                <div className="bg-blue-500/95 backdrop-blur-sm rounded-full px-5 py-2.5 shadow-lg">
-                  <p className="text-white font-bold text-sm">
-                    Spread Over {pd.projectArea}
-                  </p>
-                </div>
               </div>
 
               {/* Middle Section - Main Property Info */}
