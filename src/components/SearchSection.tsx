@@ -1612,7 +1612,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       </div>
 
       {/* Mortgease Partnership Badge - UAE Only */}
-      {true && (
+      {(window.location.hostname === 'homehni.ae' || window.location.hostname === 'www.homehni.ae') && (
         <div className="py-6 md:py-4 mt-20 sm:mt-0">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center justify-center gap-4">
