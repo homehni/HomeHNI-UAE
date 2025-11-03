@@ -797,9 +797,9 @@ const DeveloperPage = () => {
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
             <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
           </div>
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden max-w-sm mx-auto">
             <CardContent className="p-0">
-              <div className="relative w-full aspect-video bg-neutral-900 group cursor-pointer">
+              <div className="relative w-full aspect-[9/16] bg-neutral-900 group cursor-pointer">
                 <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
                   <source src={cannyForestEdgeVideo} type="video/mp4" />
                   Your browser does not support the video tag.
