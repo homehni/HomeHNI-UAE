@@ -544,7 +544,7 @@ const DeveloperPage = () => {
         <Header />
         
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
-        <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-[#001F3F] lg:via-[#0A2A43] lg:to-[#001829] pt-20">
+        <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-emerald-50 lg:via-green-50 lg:to-teal-50 pt-20">
           {/* Mobile View - Clean & Elegant Layout */}
           <div className="lg:hidden relative w-full min-h-[700px] mb-12">
             {/* Background Video */}
@@ -682,25 +682,25 @@ const DeveloperPage = () => {
                       <img src={developer.logo} alt="Canny Life Spaces" className="w-48 h-28 lg:w-56 lg:h-32 object-contain flex-shrink-0" />
                       
                       {/* Divider */}
-                      <div className="h-16 w-px bg-white/20"></div>
+                      <div className="h-16 w-px bg-slate-300"></div>
                       
                       {/* Main Info */}
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-xl lg:text-2xl font-bold text-white">{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
-                        <span className="text-white/40">|</span>
-                        <span className="text-xl lg:text-2xl font-bold text-white">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
-                        <span className="text-white/40">|</span>
-                        <div className="flex items-center gap-2 text-white/90">
-                          <MapPin className="h-5 w-5 text-white" />
+                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
+                        <span className="text-slate-400">|</span>
+                        <span className="text-xl lg:text-2xl font-bold text-slate-900">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
+                        <span className="text-slate-400">|</span>
+                        <div className="flex items-center gap-2 text-slate-700">
+                          <MapPin className="h-5 w-5 text-slate-700" />
                           <span className="text-base font-medium">{pd.locality}, {pd.city}</span>
                         </div>
-                        <span className="text-white/40">|</span>
+                        <span className="text-slate-400">|</span>
                         <div className="bg-slate-900/90 backdrop-blur-sm rounded-full px-4 py-1.5 flex items-center gap-2">
                           <Sparkles className="h-4 w-4 text-yellow-400" />
                           <span className="text-xs font-semibold text-white tracking-wide">NEW LAUNCH</span>
                         </div>
-                        <div className="flex items-center gap-2 text-white/90">
-                          <CheckCircle2 className="h-4 w-4 text-white" />
+                        <div className="flex items-center gap-2 text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 text-slate-700" />
                           <span className="text-xs font-medium">RERA</span>
                         </div>
                       </div>
@@ -708,23 +708,23 @@ const DeveloperPage = () => {
 
                     {/* Property Details - Dark Containers */}
                     <div className="grid grid-cols-3 gap-3 mb-8">
-                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/80 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/90 transition-all duration-300 border border-slate-200 aspect-square justify-center">
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-                          <Building2 className="h-5 w-5 text-white" />
+                          <Building2 className="h-5 w-5 text-slate-700" />
                         </div>
-                        <span className="text-xs font-semibold text-center text-white leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
+                        <span className="text-xs font-semibold text-center text-slate-900 leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
                       </div>
-                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/80 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/90 transition-all duration-300 border border-slate-200 aspect-square justify-center">
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-                          <Home className="h-5 w-5 text-white" />
+                          <Home className="h-5 w-5 text-slate-700" />
                         </div>
-                        <span className="text-xs font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
+                        <span className="text-xs font-semibold text-center text-slate-900 leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
                       </div>
-                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/80 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/90 transition-all duration-300 border border-slate-200 aspect-square justify-center">
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center">
-                          <Award className="h-5 w-5 text-white" />
+                          <Award className="h-5 w-5 text-slate-700" />
                         </div>
-                        <span className="text-xs font-semibold text-center text-white leading-tight">RERA<br />Certified</span>
+                        <span className="text-xs font-semibold text-center text-slate-900 leading-tight">RERA<br />Certified</span>
                       </div>
                     </div>
 
@@ -733,7 +733,7 @@ const DeveloperPage = () => {
                       <Button size="lg" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base py-6" onClick={() => setIsContactFormOpen(true)}>
                         View Number
                       </Button>
-                      {pd.brochureLink && <Button variant="outline" size="lg" className="flex-1 bg-white/5 backdrop-blur-lg text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6" onClick={() => window.open(pd.brochureLink, '_blank')}>
+                      {pd.brochureLink && <Button variant="outline" size="lg" className="flex-1 bg-white/80 backdrop-blur-lg text-slate-900 hover:bg-white/90 border-2 border-slate-300 hover:border-slate-400 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6" onClick={() => window.open(pd.brochureLink, '_blank')}>
                           <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
                           Brochure
                         </Button>}
