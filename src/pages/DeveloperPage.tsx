@@ -686,7 +686,7 @@ const DeveloperPage = () => {
                     {/* Single Line Layout - Logo and All Info */}
                     <div className="flex items-center gap-6 mb-8 flex-wrap">
                       {/* Logo */}
-                      <img src={developer.logo} alt="Canny Life Spaces" className="w-32 h-20 lg:w-40 lg:h-24 object-contain flex-shrink-0" />
+                      <img src={developer.logo} alt="Canny Life Spaces" className="w-48 h-28 lg:w-56 lg:h-32 object-contain flex-shrink-0" />
                       
                       {/* Divider */}
                       <div className="h-16 w-px bg-white/20"></div>
@@ -714,24 +714,24 @@ const DeveloperPage = () => {
                     </div>
 
                     {/* Property Details - Dark Containers */}
-                    <div className="grid grid-cols-3 gap-4 mb-8">
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-                          <Building2 className="h-6 w-6 text-white" />
+                    <div className="grid grid-cols-3 gap-3 mb-8">
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Building2 className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-sm font-semibold text-center text-white leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
+                        <span className="text-xs font-semibold text-center text-white leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
                       </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-                          <Home className="h-6 w-6 text-white" />
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Home className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-sm font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
+                        <span className="text-xs font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
                       </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-                          <Award className="h-6 w-6 text-white" />
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Award className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-sm font-semibold text-center text-white leading-tight">RERA<br />Certified</span>
+                        <span className="text-xs font-semibold text-center text-white leading-tight">RERA<br />Certified</span>
                       </div>
                     </div>
 
