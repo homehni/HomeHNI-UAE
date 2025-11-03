@@ -558,7 +558,7 @@ const DeveloperPage = () => {
           </div>
 
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
-        <section className="relative mb-12 scroll-animate overflow-hidden">
+        <section className="relative mb-12 scroll-animate overflow-hidden bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829]">
           {/* Mobile View - Full Width Background Video with Overlay */}
           <div className="lg:hidden relative w-full h-[600px] md:h-[700px] mb-12">
             {/* Background Video */}
@@ -676,10 +676,10 @@ const DeveloperPage = () => {
           </div>
 
           {/* PC View - Split Layout (60/40) - Bold Color Style */}
-          <div className="hidden lg:block px-4 sm:px-6 lg:px-8 pb-16">
-            <div className="container mx-auto max-w-7xl">
-              {/* Bold Forest Green Background - Full Color */}
-              <div className="bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] p-10 lg:p-12 mb-12 relative z-10 overflow-hidden">
+          <div className="hidden lg:block py-16">
+            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              {/* Content Container */}
+              <div className="relative z-10">
                 {/* Subtle texture overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
                 
