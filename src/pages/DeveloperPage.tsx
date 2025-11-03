@@ -800,7 +800,7 @@ const DeveloperPage = () => {
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden max-w-sm mx-auto md:max-w-full">
             <CardContent className="p-0">
               <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900 group cursor-pointer">
-                <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
+                <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
                   <source src={cannyForestEdgeVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
