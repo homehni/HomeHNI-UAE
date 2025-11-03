@@ -998,50 +998,48 @@ const DeveloperPage = () => {
         {/* About the Builder - Premium dark section */}
         <section className="bg-neutral-800 py-16 scroll-animate">
           <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Card className="border-0 bg-transparent shadow-2xl">
-              <CardContent className="p-8 md:p-12">
-                <div className="flex flex-col md:flex-row items-start gap-8 mb-8">
-                  <div className="relative">
-                <img src={developer.logo} alt="Canny Life Spaces" className="w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-2xl object-contain bg-white p-3 shadow-xl border-2 border-white/20" />
+            <div className="p-8 md:p-12">
+              <div className="flex flex-col md:flex-row items-start gap-8 mb-8">
+                <div className="relative">
+              <img src={developer.logo} alt="Canny Life Spaces" className="w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-2xl object-contain bg-white p-3 shadow-xl border-2 border-white/20" />
+                </div>
+                <div className="flex-1 text-white">
+                  <h2 className="text-2xl md:text-3xl font-semibold mb-3">About the Builder</h2>
+                  <h3 className="text-xl md:text-2xl mb-4 text-white/90">Canny Life Spaces Pvt Ltd</h3>
+                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                    <Calendar className="h-4 w-4" />
+                    Years in business: <span className="text-white">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span>
                   </div>
-                  <div className="flex-1 text-white">
-                    <h2 className="text-2xl md:text-3xl font-semibold mb-3">About the Builder</h2>
-                    <h3 className="text-xl md:text-2xl mb-4 text-white/90">Canny Life Spaces Pvt Ltd</h3>
-                    <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                      <Calendar className="h-4 w-4" />
-                      Years in business: <span className="text-white">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span>
-                    </div>
-                    <p className="text-white/80 leading-relaxed text-base md:text-lg">
-                      Canny Life Spaces Pvt Ltd has been one of the most premium real estate developers in India since its inception. 
-                      It has firmly established itself as a brand to reckon with in the real estate industry in India and abroad, 
-                      delivering excellence in every project.
-                  </p>
-                </div>
+                  <p className="text-white/80 leading-relaxed text-base md:text-lg">
+                    Canny Life Spaces Pvt Ltd has been one of the most premium real estate developers in India since its inception. 
+                    It has firmly established itself as a brand to reckon with in the real estate industry in India and abroad, 
+                    delivering excellence in every project.
+                </p>
               </div>
-                
-                {/* Projects by Builder */}
-                <div className="mt-10 pt-10 border-t border-white/10">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl md:text-2xl font-semibold text-white">Projects by Canny Life Spaces</h3>
-                    <Button variant="ghost" className="text-white hover:bg-white/10 font-semibold">
-                      View All <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="group bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition-all cursor-pointer">
-                      <div className="aspect-video relative overflow-hidden">
-                        <img src={forestEdgeProjectImage} alt={developer.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
-                      <div className="p-6">
-                        <h4 className="font-bold text-xl text-white mb-2">{developer.name}</h4>
-                        <p className="text-sm text-white/70">2 BHK Luxurious Residences</p>
+            </div>
+              
+              {/* Projects by Builder */}
+              <div className="mt-10 pt-10 border-t border-white/10">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl md:text-2xl font-semibold text-white">Projects by Canny Life Spaces</h3>
+                  <Button variant="ghost" className="text-white hover:bg-white/10 font-semibold">
+                    View All <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+              </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="group bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition-all cursor-pointer">
+                    <div className="aspect-video relative overflow-hidden">
+                      <img src={forestEdgeProjectImage} alt={developer.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
+                    <div className="p-6">
+                      <h4 className="font-bold text-xl text-white mb-2">{developer.name}</h4>
+                      <p className="text-sm text-white/70">2 BHK Luxurious Residences</p>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            </div>
           </div>
         </section>
 
