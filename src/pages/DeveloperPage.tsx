@@ -1004,7 +1004,7 @@ const DeveloperPage = () => {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.2068936489704!2d80.2338!3d13.0827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266b7c7a1e1e1%3A0x1e1e1e1e1e1e1e1e!2sLandons%20Rd%2C%20Kilpauk%2C%20Chennai%2C%20Tamil%20Nadu%20600010!5e0!3m2!1sen!2sin!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3803.4647684917937!2d78.37623!3d17.5456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb8e4e6f5a5b5b%3A0x1e1e1e1e1e1e1e1e!2sCanny%20Forest%20Edge%2C%20Bachupally%2C%20Hyderabad!5e0!3m2!1sen!2sin!4v1234567890"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
@@ -1018,8 +1018,8 @@ const DeveloperPage = () => {
             <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-md border border-gray-100">
               <MapPin className="h-6 w-6 text-brand-red flex-shrink-0" />
               <div className="flex-1">
-                <p className="font-semibold text-foreground text-lg">Landons Rd</p>
-                <p className="text-muted-foreground">Kilpauk, Chennai, Tamil Nadu 600010</p>
+                <p className="font-semibold text-foreground text-lg">Canny Forest Edge</p>
+                <p className="text-muted-foreground">Bachupally, Hyderabad, Telangana</p>
               </div>
               <a
                 href="https://maps.app.goo.gl/N3mxUGCu1mu7ux5J7"
