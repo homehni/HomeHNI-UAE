@@ -866,7 +866,7 @@ const DeveloperPage = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      className="flex-1 bg-black/40 text-white hover:bg-black/60 border border-white/30 font-semibold text-xs sm:text-sm backdrop-blur-sm"
+                      className="flex-1 bg-white/5 text-white hover:bg-white/10 border border-white/30 font-semibold text-xs sm:text-sm backdrop-blur-sm"
                       onClick={() => window.open(pd.brochureLink, '_blank')}
                     >
                       <Download className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
@@ -981,7 +981,7 @@ const DeveloperPage = () => {
                         <Button 
                           variant="outline" 
                           size="lg"
-                          className="flex-1 bg-slate-900/50 backdrop-blur-lg text-white hover:bg-slate-900/60 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6"
+                          className="flex-1 bg-white/5 backdrop-blur-lg text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6"
                           onClick={() => window.open(pd.brochureLink, '_blank')}
                         >
                           <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
