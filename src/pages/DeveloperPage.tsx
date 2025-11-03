@@ -890,88 +890,89 @@ const DeveloperPage = () => {
             </div>
           </div>
 
-          {/* PC View - Split Layout (60/40) - Professional & Subtle */}
+          {/* PC View - Split Layout (60/40) - Bold Color Style */}
           <div className="hidden lg:block px-4 sm:px-6 lg:px-8 pb-16">
             <div className="container mx-auto max-w-7xl">
-              {/* Subtle Forest Green Background */}
-              <div className="gradient-forest-radial rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] p-10 lg:p-12 mb-12 relative z-10 overflow-hidden">
-                {/* Very subtle decorative elements */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-emerald-200/10 to-transparent rounded-full blur-3xl -z-10"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-green-200/10 to-transparent rounded-full blur-3xl -z-10"></div>
+              {/* Bold Forest Green Background - Full Color */}
+              <div className="bg-gradient-to-br from-emerald-700 via-green-700 to-teal-700 rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] p-10 lg:p-12 mb-12 relative z-10 overflow-hidden">
+                {/* Subtle texture overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
                 
                 <div className="relative flex gap-0">
                   {/* Left Column - ~60% width */}
                   <div className="w-[60%] relative z-10">
-                    {/* Logo - Clean Presentation */}
+                    {/* Logo - Dark Container */}
                     <div className="mb-8 flex items-center justify-center">
-                      <img 
-                        src={developer.logo} 
-                        alt="Canny Life Spaces"
-                        className="w-48 h-32 lg:w-56 lg:h-40 object-contain drop-shadow-md"
-                      />
+                      <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-xl">
+                        <img 
+                          src={developer.logo} 
+                          alt="Canny Life Spaces"
+                          className="w-48 h-32 lg:w-56 lg:h-40 object-contain"
+                        />
+                      </div>
                     </div>
 
                     {/* Basic Project Information */}
                     <div className="space-y-5 mb-8">
-                      <div className="flex items-center gap-4 text-2xl font-bold text-slate-900">
+                      <div className="flex items-center gap-4 text-2xl font-bold text-white">
                         <span>{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
-                        <span className="text-slate-300">|</span>
-                        <span className="text-slate-900">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
+                        <span className="text-white/40">|</span>
+                        <span>₹ {pd.price.min} {pd.price.unit} Onwards*</span>
                       </div>
                       
-                      <div className="flex items-center gap-3 text-slate-700">
-                        <MapPin className="h-5 w-5 text-emerald-600" />
+                      <div className="flex items-center gap-3 text-white/90">
+                        <MapPin className="h-5 w-5 text-white" />
                         <span className="text-lg font-medium">{pd.locality}, {pd.city}</span>
                       </div>
                       
                       <div className="flex items-center gap-6 flex-wrap">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-5 w-5 text-emerald-600" />
-                          <span className="text-sm font-medium text-slate-700">{pd.possession}</span>
+                        <div className="flex items-center gap-2 text-white/90">
+                          <Calendar className="h-5 w-5 text-white" />
+                          <span className="text-sm font-medium">{pd.possession}</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                          <span className="text-sm font-medium text-slate-700">RERA Certified</span>
+                        <div className="flex items-center gap-2 text-white/90">
+                          <CheckCircle2 className="h-5 w-5 text-white" />
+                          <span className="text-sm font-medium">RERA Certified</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* NEW LAUNCH Project Badge - Subtle */}
+                    {/* NEW LAUNCH Project Badge */}
                     <div className="mb-8 flex items-center gap-4">
-                      <div className="bg-slate-900/95 backdrop-blur-lg rounded-full px-5 py-2.5 flex items-center gap-2 shadow-lg border border-white/10">
+                      <div className="bg-slate-900/90 backdrop-blur-sm rounded-full px-5 py-2.5 flex items-center gap-2 shadow-lg">
                         <Sparkles className="h-5 w-5 text-yellow-400" />
                         <span className="text-sm font-semibold text-white tracking-wide">NEW LAUNCH PROJECT</span>
                       </div>
-                      <a href="#" className="text-sm text-slate-700 hover:text-slate-900 font-medium underline underline-offset-4 transition-all duration-300">Learn more</a>
+                      <a href="#" className="text-sm text-white hover:text-white/80 font-medium underline underline-offset-4 transition-all duration-300">Learn more</a>
                     </div>
 
-                    {/* Key Highlights/Benefits - Clean Cards */}
+                    {/* Key Highlights/Benefits - Dark Containers */}
                     <div className="grid grid-cols-3 gap-4 mb-8">
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/70 backdrop-blur-xl rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 border border-white/40">
-                        <div className="w-12 h-12 rounded-lg bg-slate-900/90 backdrop-blur-sm flex items-center justify-center">
+                      <div className="flex flex-col items-center gap-3 p-4 bg-slate-900/40 backdrop-blur-md rounded-xl shadow-lg hover:bg-slate-900/50 transition-all duration-300">
+                        <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
                           <TrendingUp className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-sm font-semibold text-center text-slate-800 leading-tight">High price<br/>appreciation</span>
+                        <span className="text-sm font-semibold text-center text-white leading-tight">High price<br/>appreciation</span>
                       </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/70 backdrop-blur-xl rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 border border-white/40">
-                        <div className="w-12 h-12 rounded-lg bg-slate-900/90 backdrop-blur-sm flex items-center justify-center">
+                      <div className="flex flex-col items-center gap-3 p-4 bg-slate-900/40 backdrop-blur-md rounded-xl shadow-lg hover:bg-slate-900/50 transition-all duration-300">
+                        <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
                           <Heart className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-sm font-semibold text-center text-slate-800 leading-tight">Units of<br/>choice</span>
+                        <span className="text-sm font-semibold text-center text-white leading-tight">Units of<br/>choice</span>
                       </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/70 backdrop-blur-xl rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 border border-white/40">
-                        <div className="w-12 h-12 rounded-lg bg-slate-900/90 backdrop-blur-sm flex items-center justify-center">
+                      <div className="flex flex-col items-center gap-3 p-4 bg-slate-900/40 backdrop-blur-md rounded-xl shadow-lg hover:bg-slate-900/50 transition-all duration-300">
+                        <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
                           <IndianRupee className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-sm font-semibold text-center text-slate-800 leading-tight">Easy Payment<br/>plans</span>
+                        <span className="text-sm font-semibold text-center text-white leading-tight">Easy Payment<br/>plans</span>
                       </div>
                     </div>
 
-                    {/* Action Buttons - Professional Glassy Black */}
+                    {/* Action Buttons - Professional Style */}
                     <div className="flex gap-4 mb-6">
                       <Button 
                         size="lg"
-                        className="flex-1 bg-slate-900/95 backdrop-blur-lg text-white hover:bg-slate-800/95 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base py-6 border border-white/10"
+                        className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base py-6"
                         onClick={() => setIsContactFormOpen(true)}
                       >
                         View Number
@@ -980,7 +981,7 @@ const DeveloperPage = () => {
                         <Button 
                           variant="outline" 
                           size="lg"
-                          className="flex-1 bg-white/80 backdrop-blur-lg text-slate-900 hover:bg-white/90 border-2 border-slate-900/20 hover:border-slate-900/30 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6"
+                          className="flex-1 bg-slate-900/50 backdrop-blur-lg text-white hover:bg-slate-900/60 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6"
                           onClick={() => window.open(pd.brochureLink, '_blank')}
                         >
                           <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
@@ -990,9 +991,9 @@ const DeveloperPage = () => {
                     </div>
 
                     {/* Interest Indicator */}
-                    <div className="flex items-center gap-3 text-sm bg-white/60 backdrop-blur-lg rounded-xl px-4 py-3 shadow-sm border border-white/40">
+                    <div className="flex items-center gap-3 text-sm bg-white/10 backdrop-blur-lg rounded-xl px-4 py-3 shadow-sm border border-white/20">
                       <span className="text-xl">🔥</span>
-                      <span className="font-medium text-slate-700">36 families showed interest yesterday.</span>
+                      <span className="font-medium text-white">36 families showed interest yesterday.</span>
                     </div>
                   </div>
 
