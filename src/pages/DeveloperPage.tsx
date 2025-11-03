@@ -569,7 +569,12 @@ const DeveloperPage = () => {
               </div>
 
               {/* Middle Section - Main Property Info */}
-              <div className="bg-transparent backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 mb-6">
+              <div className="relative bg-transparent backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 mb-6">
+                {/* NEW LAUNCH Badge - Mobile Top Right */}
+                <div className="absolute top-3 right-3 sm:hidden">
+                  <span className="text-[10px] font-bold text-yellow-400">NEW LAUNCH</span>
+                </div>
+
                 {/* Configuration & Price */}
                 <div className="space-y-2">
                   <h2 className="text-lg sm:text-xl font-bold text-white">
@@ -598,8 +603,8 @@ const DeveloperPage = () => {
                   </div>
                 </div>
 
-                {/* NEW LAUNCH Badge */}
-                <div className="flex items-center gap-3 pt-1">
+                {/* NEW LAUNCH Badge - Desktop */}
+                <div className="hidden sm:flex items-center gap-3 pt-1">
                   <div className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 border border-yellow-400/30">
                     <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
                     <span className="text-[11px] font-bold text-white">NEW LAUNCH Project</span>
