@@ -689,7 +689,7 @@ const DeveloperPage = () => {
                       <img src={developer.logo} alt="Canny Life Spaces" className="w-32 h-20 lg:w-40 lg:h-24 object-contain flex-shrink-0" />
                       
                       {/* Divider */}
-                      
+                      <div className="h-16 w-px bg-white/20"></div>
                       
                       {/* Main Info */}
                       <div className="flex items-center gap-4 flex-wrap">
