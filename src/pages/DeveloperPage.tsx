@@ -1035,7 +1035,7 @@ const DeveloperPage = () => {
         </section>
 
         {/* About the Builder - Premium dark section */}
-        <section className="bg-neutral-800 py-16 scroll-animate">
+        <section className="bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] py-16 scroll-animate">
           <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
             <div className="p-6 sm:p-8 md:p-12">
               <div className="flex flex-col items-center md:items-start md:flex-row gap-8 mb-8">
