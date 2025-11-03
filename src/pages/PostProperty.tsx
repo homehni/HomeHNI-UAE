@@ -33,12 +33,18 @@ import WhyPostSection from '@/components/WhyPostSection';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import PropertyFAQSection from '@/components/PropertyFAQSection';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
+  const [showUserTypeDialog, setShowUserTypeDialog] = useState(true);
+  const [userType, setUserType] = useState<'Owner' | 'Agent' | null>(null);
   
   // Track currentStep changes
   React.useEffect(() => {
@@ -1705,6 +1711,51 @@ export const PostProperty: React.FC = () => {
           draftData={incompleteDraft}
         />
       )}
+      
+      {/* User Type Selection Dialog */}
+      <Dialog open={showUserTypeDialog && currentStep === 'property-selection' && !userType}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">Welcome!</DialogTitle>
+            <DialogDescription className="text-center text-base pt-2">
+              Please select your role to continue
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-6">
+            <RadioGroup
+              value={userType || ''}
+              onValueChange={(value) => setUserType(value as 'Owner' | 'Agent')}
+              className="gap-4"
+            >
+              <div className="flex items-center space-x-3 border-2 border-muted rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+                <RadioGroupItem value="Owner" id="owner" />
+                <Label htmlFor="owner" className="flex-1 cursor-pointer text-base font-medium">
+                  I am a Property Owner
+                </Label>
+              </div>
+              <div className="flex items-center space-x-3 border-2 border-muted rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
+                <RadioGroupItem value="Agent" id="agent" />
+                <Label htmlFor="agent" className="flex-1 cursor-pointer text-base font-medium">
+                  I am an Agent
+                </Label>
+              </div>
+            </RadioGroup>
+            <Button 
+              onClick={() => {
+                if (userType) {
+                  setShowUserTypeDialog(false);
+                  console.log('User selected type:', userType);
+                }
+              }}
+              disabled={!userType}
+              className="w-full mt-4"
+              size="lg"
+            >
+              Continue
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
