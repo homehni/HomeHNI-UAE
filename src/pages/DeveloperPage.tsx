@@ -679,7 +679,7 @@ const DeveloperPage = () => {
           <div className="hidden lg:block px-4 sm:px-6 lg:px-8 pb-16">
             <div className="container mx-auto max-w-7xl">
               {/* Bold Forest Green Background - Full Color */}
-              <div className="bg-gradient-to-br from-emerald-700 via-green-700 to-teal-700 rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] p-10 lg:p-12 mb-12 relative z-10 overflow-hidden">
+              <div className="bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] p-10 lg:p-12 mb-12 relative z-10 overflow-hidden">
                 {/* Subtle texture overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
                 
