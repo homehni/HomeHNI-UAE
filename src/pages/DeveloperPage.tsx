@@ -1015,7 +1015,7 @@ const DeveloperPage = () => {
                 className="w-full"
               ></iframe>
             </div>
-            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-md border border-gray-100">
+            <div className="hidden mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-md border border-gray-100">
               <MapPin className="h-6 w-6 text-brand-red flex-shrink-0" />
               <div className="flex-1">
                 <p className="font-semibold text-foreground text-lg">Canny Forest Edge</p>
