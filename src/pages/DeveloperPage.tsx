@@ -688,9 +688,7 @@ const DeveloperPage = () => {
                   <div className="w-[60%] relative z-10">
                     {/* Logo - Dark Container */}
                     <div className="mb-8 flex items-center justify-center">
-                      <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-xl">
-                        <img src={developer.logo} alt="Canny Life Spaces" className="w-48 h-32 lg:w-56 lg:h-40 object-contain" />
-                      </div>
+                      <img src={developer.logo} alt="Canny Life Spaces" className="w-48 h-32 lg:w-56 lg:h-40 object-contain" />
                     </div>
 
                     {/* Basic Project Information */}
