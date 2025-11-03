@@ -473,7 +473,7 @@ const Footer = ({
     </div>
 
           {/* Mortgease Partnership Section - UAE Only */}
-          {(window.location.hostname === 'homehni.ae' || window.location.hostname === 'www.homehni.ae') && (
+          {true && (
             <div className="mb-6 p-6 bg-gradient-to-br from-indigo-50 to-amber-50 rounded-xl border border-indigo-200">
               <div className="flex flex-col md:flex-row items-center justify-center gap-6">
                 <div className="flex-shrink-0">
