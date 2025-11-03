@@ -33,10 +33,8 @@ import WhyPostSection from '@/components/WhyPostSection';
 import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import PropertyFAQSection from '@/components/PropertyFAQSection';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { User, Briefcase } from 'lucide-react';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
@@ -1714,45 +1712,33 @@ export const PostProperty: React.FC = () => {
       
       {/* User Type Selection Dialog */}
       <Dialog open={showUserTypeDialog && currentStep === 'property-selection' && !userType}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">Welcome!</DialogTitle>
-            <DialogDescription className="text-center text-base pt-2">
-              Please select your role to continue
-            </DialogDescription>
+            <DialogTitle className="text-center text-lg font-medium">Are you a:</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-4 py-6">
-            <RadioGroup
-              value={userType || ''}
-              onValueChange={(value) => setUserType(value as 'Owner' | 'Agent')}
-              className="gap-4"
-            >
-              <div className="flex items-center space-x-3 border-2 border-muted rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
-                <RadioGroupItem value="Owner" id="owner" />
-                <Label htmlFor="owner" className="flex-1 cursor-pointer text-base font-medium">
-                  I am a Property Owner
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3 border-2 border-muted rounded-lg p-4 hover:border-primary transition-colors cursor-pointer">
-                <RadioGroupItem value="Agent" id="agent" />
-                <Label htmlFor="agent" className="flex-1 cursor-pointer text-base font-medium">
-                  I am an Agent
-                </Label>
-              </div>
-            </RadioGroup>
-            <Button 
+          <div className="grid grid-cols-2 gap-4 py-6">
+            <div
               onClick={() => {
-                if (userType) {
-                  setShowUserTypeDialog(false);
-                  console.log('User selected type:', userType);
-                }
+                setUserType('Owner');
+                setShowUserTypeDialog(false);
+                console.log('User selected type: Owner');
               }}
-              disabled={!userType}
-              className="w-full mt-4"
-              size="lg"
+              className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-muted rounded-lg hover:border-primary hover:bg-accent/50 transition-all cursor-pointer group"
             >
-              Continue
-            </Button>
+              <User className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="text-base font-medium">Owner</span>
+            </div>
+            <div
+              onClick={() => {
+                setUserType('Agent');
+                setShowUserTypeDialog(false);
+                console.log('User selected type: Agent');
+              }}
+              className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-muted rounded-lg hover:border-primary hover:bg-accent/50 transition-all cursor-pointer group"
+            >
+              <Briefcase className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="text-base font-medium">Agent</span>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
