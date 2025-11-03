@@ -545,7 +545,7 @@ const DeveloperPage = () => {
         <Header />
         
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
-        <section className="relative mb-12 scroll-animate overflow-hidden bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] pt-20">
+        <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-[#001F3F] lg:via-[#0A2A43] lg:to-[#001829] pt-20">
           {/* Mobile View - Clean & Elegant Layout */}
           <div className="lg:hidden relative w-full min-h-[700px] mb-12">
             {/* Background Video */}
