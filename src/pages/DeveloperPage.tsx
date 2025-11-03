@@ -686,79 +686,76 @@ const DeveloperPage = () => {
                 <div className="relative flex gap-0">
                   {/* Left Column - ~60% width */}
                   <div className="w-[60%] relative z-10">
-                    {/* Logo - Dark Container */}
-                    <div className="mb-8 flex items-center justify-center">
-                      <img src={developer.logo} alt="Canny Life Spaces" className="w-48 h-32 lg:w-56 lg:h-40 object-contain" />
-                    </div>
-
-                    {/* Basic Project Information */}
-                    <div className="space-y-5 mb-8">
-                      <div className="flex items-center gap-4 text-2xl font-bold text-white">
+                    {/* Logo and First Line Info */}
+                    <div className="flex items-center gap-6 mb-6">
+                      <img src={developer.logo} alt="Canny Life Spaces" className="w-32 h-24 lg:w-36 lg:h-28 object-contain flex-shrink-0" />
+                      <div className="flex items-center gap-4 text-xl lg:text-2xl font-bold text-white">
                         <span>{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
                         <span className="text-white/40">|</span>
                         <span>₹ {pd.price.min} {pd.price.unit} Onwards*</span>
                       </div>
-                      
-                      <div className="flex items-center gap-3 text-white/90">
-                        <MapPin className="h-5 w-5 text-white" />
-                        <span className="text-lg font-medium">{pd.locality}, {pd.city}</span>
+                    </div>
+
+                    {/* Location and Status - Compact */}
+                    <div className="flex items-center gap-6 flex-wrap mb-5 text-white/90">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-white" />
+                        <span className="text-base font-medium">{pd.locality}, {pd.city}</span>
                       </div>
-                      
-                      <div className="flex items-center gap-6 flex-wrap">
-                        <div className="flex items-center gap-2 text-white/90">
-                          <Calendar className="h-5 w-5 text-white" />
-                          <span className="text-sm font-medium">{pd.possession}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-white/90">
-                          <CheckCircle2 className="h-5 w-5 text-white" />
-                          <span className="text-sm font-medium">RERA Certified</span>
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-white" />
+                        <span className="text-sm font-medium">{pd.possession}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-white" />
+                        <span className="text-sm font-medium">RERA</span>
                       </div>
                     </div>
 
-                    {/* NEW LAUNCH Project Badge */}
-                    <div className="mb-8 flex items-center gap-4">
-                      <div className="bg-slate-900/90 backdrop-blur-sm rounded-full px-5 py-2.5 flex items-center gap-2 shadow-lg">
-                        <Sparkles className="h-5 w-5 text-yellow-400" />
-                        <span className="text-sm font-semibold text-white tracking-wide">NEW LAUNCH PROJECT</span>
-                      </div>
-                      <a href="#" className="text-sm text-white hover:text-white/80 font-medium underline underline-offset-4 transition-all duration-300">Learn more</a>
-                    </div>
-
-                    {/* Property Details - Dark Containers */}
-                    <div className="grid grid-cols-3 gap-4 mb-8">
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-                          <Building2 className="h-6 w-6 text-white" />
-                        </div>
-                        <span className="text-sm font-semibold text-center text-white leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-                          <Home className="h-6 w-6 text-white" />
-                        </div>
-                        <span className="text-sm font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
-                        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-                          <Award className="h-6 w-6 text-white" />
-                        </div>
-                        <span className="text-sm font-semibold text-center text-white leading-tight">RERA<br />Certified</span>
+                    {/* NEW LAUNCH Badge and Features */}
+                    <div className="mb-6">
+                      <div className="bg-slate-900/90 backdrop-blur-sm rounded-full px-5 py-2 inline-flex items-center gap-2 shadow-lg">
+                        <Sparkles className="h-4 w-4 text-yellow-400" />
+                        <span className="text-sm font-semibold text-white tracking-wide">NEW LAUNCH Project</span>
+                        <a href="#" className="text-sm text-white/70 hover:text-white/90 font-medium underline underline-offset-2 transition-all duration-300 ml-2">Learn more</a>
                       </div>
                     </div>
 
-                    {/* Action Buttons - Professional Style */}
-                    <div className="flex gap-4 mb-6">
-                      <Button size="lg" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base py-6" onClick={() => setIsContactFormOpen(true)}>
+                    {/* Key Features - Horizontal Pills */}
+                    <div className="flex items-center gap-3 mb-8 flex-wrap">
+                      <div className="bg-slate-900/60 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-emerald-400" />
+                        <span className="text-sm text-white font-medium">High price appreciation</span>
+                      </div>
+                      <div className="bg-slate-900/60 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2">
+                        <Heart className="h-4 w-4 text-rose-400" />
+                        <span className="text-sm text-white font-medium">Units of choice</span>
+                      </div>
+                      <div className="bg-slate-900/60 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2">
+                        <IndianRupee className="h-4 w-4 text-blue-400" />
+                        <span className="text-sm text-white font-medium">Easy Payment plans</span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons - Compact */}
+                    <div className="flex gap-3 mb-6">
+                      <Button size="lg" className="bg-white text-slate-900 hover:bg-white/90 font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 text-base px-8 py-5" onClick={() => setIsContactFormOpen(true)}>
                         View Number
                       </Button>
-                      {pd.brochureLink && <Button variant="outline" size="lg" className="flex-1 bg-white/5 backdrop-blur-lg text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base py-6" onClick={() => window.open(pd.brochureLink, '_blank')}>
-                          <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                      {pd.brochureLink && <Button variant="outline" size="lg" className="bg-white/5 backdrop-blur-lg text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl group transition-all duration-300 text-base px-8 py-5" onClick={() => window.open(pd.brochureLink, '_blank')}>
+                          <Download className="mr-2 h-4 w-4 group-hover:animate-bounce" />
                           Brochure
                         </Button>}
+                      <Button variant="outline" size="lg" className="bg-white/5 backdrop-blur-lg text-white hover:bg-white/10 border-2 border-white/30 hover:border-white/40 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 px-5 py-5">
+                        <Heart className="h-5 w-5" />
+                      </Button>
                     </div>
 
                     {/* Interest Indicator */}
+                    <div className="flex items-center gap-2 text-white/90 text-sm">
+                      <span className="text-orange-400">🔥</span>
+                      <span>32 families showed interest yesterday.</span>
+                    </div>
                     
                   </div>
 
