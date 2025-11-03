@@ -754,17 +754,6 @@ const DeveloperPage = () => {
                           <source src={forestEdgeHeroVideo} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
-                        
-                        {/* Light Blue Speech Bubble Overlay */}
-                        <div className="absolute top-6 left-4 right-4 bg-blue-400/95 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl">
-                          <div className="relative">
-                            <p className="text-white font-bold text-base leading-tight">
-                              Spread Over {pd.projectArea}
-                            </p>
-                            {/* Speech bubble tail */}
-                            <div className="absolute -bottom-2 left-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-blue-400/95"></div>
-                          </div>
-                        </div>
 
                         {/* Bottom Bar - Key Highlights */}
                         <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between">
