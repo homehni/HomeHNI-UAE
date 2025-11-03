@@ -837,7 +837,7 @@ const DeveloperPage = () => {
           
           {/* Smooth Swipe Carousel Container - Static black background with scrolling images inside */}
           <div className="relative">
-            <Card className="border-0 shadow-2xl bg-black overflow-hidden h-[500px] md:h-[600px] relative">
+            <Card className="border-0 shadow-2xl bg-black overflow-hidden h-[500px] md:h-[600px] relative md:bg-black sm:bg-transparent">
               <div ref={interiorCarouselRef} className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar h-full relative" style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
@@ -853,7 +853,7 @@ const DeveloperPage = () => {
                 const blurAmount = absOffset < 0.1 ? 0 : Math.min(absOffset * 8, 15); // Max 15px blur when not in focus
                 // Calculate opacity for smooth fade in/out
                 const opacity = absOffset < 0.5 ? 1 : Math.max(0.2, 1 - absOffset * 0.5);
-                return <div key={index} className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-4" style={{
+                return <div key={index} className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-0 md:p-4" style={{
                   position: 'absolute',
                   top: 0,
                   left: `${index * 100}%`,
@@ -865,7 +865,7 @@ const DeveloperPage = () => {
                   willChange: 'opacity, filter',
                   pointerEvents: absOffset < 0.5 ? 'auto' : 'none'
                 }}>
-                      <img src={image} alt={`Apartment Interior ${index + 1}`} className="w-auto h-auto max-w-full max-h-full object-contain" style={{
+                      <img src={image} alt={`Apartment Interior ${index + 1}`} className="w-full h-full md:w-auto md:h-auto max-w-full max-h-full object-cover md:object-contain" style={{
                     maxWidth: 'calc(100% - 2rem)',
                     maxHeight: 'calc(100% - 2rem)'
                   }} />
