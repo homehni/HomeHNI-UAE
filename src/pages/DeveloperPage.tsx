@@ -399,340 +399,280 @@ const DeveloperPage = () => {
 
   // Check if this is a property-detail style page
   const isPropertyDetail = developer && 'propertyDetails' in developer;
+  const pd = developer?.propertyDetails;
 
-  // Render property-detail layout for Forest Edge
-  if (isPropertyDetail && developer.propertyDetails) {
-    const pd = developer.propertyDetails;
+  // Forest Edge carousel images
+  const forestEdgeImages = [forestEdgeExterior, forestEdgeAmenities1, forestEdgeAmenities2, forestEdgePool, forestEdgeLawn, forestEdgeAerial, forestEdgeBalcony, forestEdgeEvening];
 
-    // Forest Edge carousel images
-    const forestEdgeImages = [forestEdgeExterior, forestEdgeAmenities1, forestEdgeAmenities2, forestEdgePool, forestEdgeLawn, forestEdgeAerial, forestEdgeBalcony, forestEdgeEvening];
+  // Interior images array - apartment interior photos
+  const interiorImages = [interior1, interior2, interior3, interior4, interior5, interior6, interior7, interior8];
 
-    // Interior images array - apartment interior photos
-    const interiorImages = [interior1, interior2, interior3, interior4, interior5, interior6, interior7, interior8];
+  // Floor plan images array
+  const floorPlanImages = [floorPlan1, floorPlan2, floorPlan3];
 
-    // Floor plan images array
-    const floorPlanImages = [floorPlan1, floorPlan2, floorPlan3];
-
-    // Scroll animation hook - observes when sections enter viewport
-    useEffect(() => {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-          }
-        });
-      }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+  // ALL HOOKS MUST RUN UNCONDITIONALLY - Scroll animation hook
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in-up');
+        }
       });
-      const sections = document.querySelectorAll('.scroll-animate');
-      sections.forEach(section => observer.observe(section));
-      return () => {
-        sections.forEach(section => observer.unobserve(section));
-      };
-    }, []);
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    const sections = document.querySelectorAll('.scroll-animate');
+    sections.forEach(section => observer.observe(section));
+    return () => {
+      sections.forEach(section => observer.unobserve(section));
+    };
+  }, [isPropertyDetail]);
 
-    // Auto-scroll and smooth scroll tracking for interior carousel
-    useEffect(() => {
-      const carousel = interiorCarouselRef.current;
+  // Auto-scroll and smooth scroll tracking for interior carousel
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    
+    const carousel = interiorCarouselRef.current;
+    if (!carousel) return;
+    let rafId: number | null = null;
+    let isRunning = false;
+    let autoScrollInterval: NodeJS.Timeout | null = null;
+    let isPaused = false;
+    const updateScrollProgress = () => {
       if (!carousel) return;
-      let rafId: number | null = null;
-      let isRunning = false;
-      let autoScrollInterval: NodeJS.Timeout | null = null;
-      let isPaused = false;
-      const updateScrollProgress = () => {
-        if (!carousel) return;
-        const scrollLeft = carousel.scrollLeft;
-        const itemWidth = carousel.clientWidth;
-        if (itemWidth === 0) return;
-        const progress = scrollLeft / itemWidth;
-        setScrollProgress(progress);
-        const index = Math.round(progress);
-        if (index >= 0 && index < interiorImages.length) {
-          setCurrentInteriorIndex(prevIndex => {
-            if (prevIndex !== index) return index;
-            return prevIndex;
-          });
-        }
-        isRunning = false;
-        rafId = null;
-      };
-      const handleScroll = () => {
-        if (!isRunning) {
-          isRunning = true;
-          rafId = requestAnimationFrame(updateScrollProgress);
-        }
-      };
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.clientWidth;
+      if (itemWidth === 0) return;
+      const progress = scrollLeft / itemWidth;
+      setScrollProgress(progress);
+      const index = Math.round(progress);
+      if (index >= 0 && index < interiorImages.length) {
+        setCurrentInteriorIndex(prevIndex => {
+          if (prevIndex !== index) return index;
+          return prevIndex;
+        });
+      }
+      isRunning = false;
+      rafId = null;
+    };
+    const handleScroll = () => {
+      if (!isRunning) {
+        isRunning = true;
+        rafId = requestAnimationFrame(updateScrollProgress);
+      }
+    };
 
-      // Auto-scroll function
-      const autoScroll = () => {
-        if (!carousel || isPaused) return;
-        const itemWidth = carousel.clientWidth;
-        const scrollLeft = carousel.scrollLeft;
-        const maxScroll = carousel.scrollWidth - itemWidth;
-        if (scrollLeft >= maxScroll - 1) {
-          // Reached end, scroll back to start
-          carousel.scrollTo({
-            left: 0,
-            behavior: 'smooth'
-          });
-        } else {
-          // Scroll to next image with smooth transition
-          const nextPosition = Math.ceil(scrollLeft / itemWidth) * itemWidth + itemWidth;
-          carousel.scrollTo({
-            left: nextPosition,
-            behavior: 'smooth'
-          });
-        }
-      };
+    // Auto-scroll function
+    const autoScroll = () => {
+      if (!carousel || isPaused) return;
+      const itemWidth = carousel.clientWidth;
+      const scrollLeft = carousel.scrollLeft;
+      const maxScroll = carousel.scrollWidth - itemWidth;
+      if (scrollLeft >= maxScroll - 1) {
+        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const nextPosition = Math.ceil(scrollLeft / itemWidth) * itemWidth + itemWidth;
+        carousel.scrollTo({ left: nextPosition, behavior: 'smooth' });
+      }
+    };
 
-      // Start auto-scrolling
-      const startAutoScroll = () => {
-        if (autoScrollInterval) clearInterval(autoScrollInterval);
-        autoScrollInterval = setInterval(autoScroll, 5000); // Change image every 5 seconds
-      };
+    const startAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+      autoScrollInterval = setInterval(autoScroll, 5000);
+    };
 
-      // Pause on mouse enter/touch start
-      const handlePause = () => {
-        isPaused = true;
-        if (autoScrollInterval) {
-          clearInterval(autoScrollInterval);
-          autoScrollInterval = null;
-        }
-      };
+    const handlePause = () => {
+      isPaused = true;
+      if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+      }
+    };
 
-      // Resume on mouse leave/touch end
-      const handleResume = () => {
-        isPaused = false;
-        startAutoScroll();
-      };
-      carousel.addEventListener('scroll', handleScroll, {
-        passive: true
-      });
-      carousel.addEventListener('mouseenter', handlePause);
-      carousel.addEventListener('mouseleave', handleResume);
-      carousel.addEventListener('touchstart', handlePause, {
-        passive: true
-      });
-      carousel.addEventListener('touchend', () => {
-        setTimeout(handleResume, 2000); // Resume after 2 seconds of no touch
-      }, {
-        passive: true
-      });
-
-      // Initial update and start auto-scroll
-      updateScrollProgress();
+    const handleResume = () => {
+      isPaused = false;
       startAutoScroll();
-      return () => {
-        carousel.removeEventListener('scroll', handleScroll);
-        carousel.removeEventListener('mouseenter', handlePause);
-        carousel.removeEventListener('mouseleave', handleResume);
-        carousel.removeEventListener('touchstart', handlePause);
-        carousel.removeEventListener('touchend', handleResume);
-        if (rafId !== null) {
-          cancelAnimationFrame(rafId);
-        }
-        if (autoScrollInterval) {
-          clearInterval(autoScrollInterval);
-        }
-      };
-    }, [interiorImages.length]);
+    };
+    carousel.addEventListener('scroll', handleScroll, { passive: true });
+    carousel.addEventListener('mouseenter', handlePause);
+    carousel.addEventListener('mouseleave', handleResume);
+    carousel.addEventListener('touchstart', handlePause, { passive: true });
+    carousel.addEventListener('touchend', () => {
+      setTimeout(handleResume, 2000);
+    }, { passive: true });
 
-    // Similar Projects scroll tracking - show/hide arrows based on scroll position
-    useEffect(() => {
-      const carousel = similarProjectsRef.current;
-      if (!carousel) return;
-      const updateScrollButtons = () => {
-        const {
-          scrollLeft,
-          scrollWidth,
-          clientWidth
-        } = carousel;
-        setCanScrollLeft(scrollLeft > 0);
-        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
-      };
+    updateScrollProgress();
+    startAutoScroll();
+    return () => {
+      carousel.removeEventListener('scroll', handleScroll);
+      carousel.removeEventListener('mouseenter', handlePause);
+      carousel.removeEventListener('mouseleave', handleResume);
+      carousel.removeEventListener('touchstart', handlePause);
+      carousel.removeEventListener('touchend', handleResume);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+  }, [isPropertyDetail, interiorImages.length]);
 
-      // Initial check
-      updateScrollButtons();
+  // Similar Projects scroll tracking
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    const carousel = similarProjectsRef.current;
+    if (!carousel) return;
+    const updateScrollButtons = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = carousel;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    };
 
-      // Update on scroll
-      carousel.addEventListener('scroll', updateScrollButtons, {
-        passive: true
-      });
+    updateScrollButtons();
+    carousel.addEventListener('scroll', updateScrollButtons, { passive: true });
+    window.addEventListener('resize', updateScrollButtons);
+    return () => {
+      carousel.removeEventListener('scroll', updateScrollButtons);
+      window.removeEventListener('resize', updateScrollButtons);
+    };
+  }, [isPropertyDetail]);
 
-      // Update on resize
-      window.addEventListener('resize', updateScrollButtons);
-      return () => {
-        carousel.removeEventListener('scroll', updateScrollButtons);
-        window.removeEventListener('resize', updateScrollButtons);
-      };
-    }, []);
-
-    // Video auto-play/pause hook - plays when in viewport, pauses when out
-    useEffect(() => {
-      const video = videoRef.current;
-      if (!video) return;
-      const videoObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Video is in viewport - play it
-            video.play().catch(error => {
-              // Auto-play might be blocked by browser, which is fine
-              console.log('Video auto-play prevented:', error);
-            });
-          } else {
-            // Video is out of viewport - pause it
-            video.pause();
-          }
-        });
-      }, {
-        threshold: 0.5,
-        rootMargin: '0px'
-      });
-      videoObserver.observe(video);
-      return () => {
-        videoObserver.unobserve(video);
-      };
-    }, []);
-
-    // Video pause/play when tab/window loses/gains focus
-    useEffect(() => {
-      const video = videoRef.current;
-      if (!video) return;
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          // Tab/window lost focus - pause video
+  // Video auto-play/pause hook
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    const video = videoRef.current;
+    if (!video) return;
+    const videoObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(error => console.log('Video auto-play prevented:', error));
+        } else {
           video.pause();
-        } else {
-          // Tab/window gained focus - resume playing
-          video.play().catch(error => {
-            console.log('Video resume prevented:', error);
-          });
         }
-      };
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-      return () => {
-        document.removeEventListener('visibilitychange', handleVisibilityChange);
-      };
-    }, []);
-
-    // Video play/pause toggle handler
-    const handleVideoClick = () => {
-      const video = videoRef.current;
-      if (!video) return;
-      if (video.paused) {
-        video.play().catch(error => {
-          console.log('Video play prevented:', error);
-        });
-      } else {
-        video.pause();
-      }
-    };
-
-    // Hero video auto-play/pause hook
-    useEffect(() => {
-      const video = heroVideoRef.current;
-      if (!video) return;
-      const videoObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            video.play().catch(error => {
-              console.log('Hero video auto-play prevented:', error);
-            });
-          } else {
-            video.pause();
-          }
-        });
-      }, {
-        threshold: 0.5,
-        rootMargin: '0px'
       });
-      videoObserver.observe(video);
-      return () => {
-        videoObserver.unobserve(video);
-      };
-    }, []);
+    }, { threshold: 0.5, rootMargin: '0px' });
+    videoObserver.observe(video);
+    return () => videoObserver.unobserve(video);
+  }, [isPropertyDetail]);
 
-    // Hero video pause/play when tab/window loses/gains focus
-    useEffect(() => {
-      const video = heroVideoRef.current;
-      if (!video) return;
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          video.pause();
-        } else {
-          // Only play if video is in viewport
-          const rect = video.getBoundingClientRect();
-          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-          if (isInViewport) {
-            video.play().catch(error => {
-              console.log('Hero video resume prevented:', error);
-            });
-          }
-        }
-      };
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-      return () => {
-        document.removeEventListener('visibilitychange', handleVisibilityChange);
-      };
-    }, []);
-
-    // Hero video click handler
-    const handleHeroVideoClick = () => {
-      const video = heroVideoRef.current;
-      if (!video) return;
-      if (video.paused) {
-        video.play().catch(error => {
-          console.log('Hero video play prevented:', error);
-        });
-      } else {
+  // Video pause/play when tab/window loses/gains focus
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    const video = videoRef.current;
+    if (!video) return;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
         video.pause();
+      } else {
+        video.play().catch(error => console.log('Video resume prevented:', error));
       }
     };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isPropertyDetail]);
 
-    // Video fullscreen handler
-    const handleFullscreen = async () => {
-      const video = videoRef.current;
-      if (!video) return;
-      try {
-        if (!document.fullscreenElement) {
-          // Enter fullscreen
-          if (video.requestFullscreen) {
-            await video.requestFullscreen();
-          } else if ((video as any).webkitRequestFullscreen) {
-            // Safari
-            await (video as any).webkitRequestFullscreen();
-          } else if ((video as any).msRequestFullscreen) {
-            // IE/Edge
-            await (video as any).msRequestFullscreen();
-          }
+  // Hero video auto-play/pause hook
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    const video = heroVideoRef.current;
+    if (!video) return;
+    const videoObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(error => console.log('Hero video auto-play prevented:', error));
         } else {
-          // Exit fullscreen
-          if (document.exitFullscreen) {
-            await document.exitFullscreen();
-          } else if ((document as any).webkitExitFullscreen) {
-            await (document as any).webkitExitFullscreen();
-          } else if ((document as any).msExitFullscreen) {
-            await (document as any).msExitFullscreen();
-          }
+          video.pause();
         }
-      } catch (error) {
-        console.log('Fullscreen error:', error);
+      });
+    }, { threshold: 0.5, rootMargin: '0px' });
+    videoObserver.observe(video);
+    return () => videoObserver.unobserve(video);
+  }, [isPropertyDetail]);
+
+  // Hero video pause/play when tab/window loses/gains focus
+  useEffect(() => {
+    if (!isPropertyDetail) return;
+    const video = heroVideoRef.current;
+    if (!video) return;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        video.pause();
+      } else {
+        const rect = video.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isInViewport) {
+          video.play().catch(error => console.log('Hero video resume prevented:', error));
+        }
       }
     };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isPropertyDetail]);
 
-    // Amenity icons mapping for better visual representation
-    const amenityIcons: Record<string, React.ReactNode> = {
-      'Clubhouse': <Home className="h-6 w-6" />,
-      'Swimming Pool': <Droplets className="h-6 w-6" />,
-      'Fitness Center': <Dumbbell className="h-6 w-6" />,
-      'Kids Play Area': <Users className="h-6 w-6" />,
-      'Landscaped Gardens': <Trees className="h-6 w-6" />,
-      '24/7 Security': <Shield className="h-6 w-6" />,
-      'CCTV Surveillance': <Camera className="h-6 w-6" />,
-      'Multi-utility block': <Building2 className="h-6 w-6" />,
-      'Recreational Areas': <Star className="h-6 w-6" />
-    };
+  // Hero video click handler
+  const handleHeroVideoClick = () => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play().catch(error => console.log('Hero video play prevented:', error));
+    } else {
+      video.pause();
+    }
+  };
+
+  // Video fullscreen handler
+  const handleFullscreen = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+    try {
+      if (!document.fullscreenElement) {
+        if (video.requestFullscreen) {
+          await video.requestFullscreen();
+        } else if ((video as any).webkitRequestFullscreen) {
+          await (video as any).webkitRequestFullscreen();
+        } else if ((video as any).msRequestFullscreen) {
+          await (video as any).msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          await (document as any).webkitExitFullscreen();
+        } else if ((document as any).msExitFullscreen) {
+          await (document as any).msExitFullscreen();
+        }
+      }
+    } catch (error) {
+      console.log('Fullscreen error:', error);
+    }
+  };
+
+  // Video play/pause toggle handler
+  const handleVideoClick = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play().catch(error => console.log('Video play prevented:', error));
+    } else {
+      video.pause();
+    }
+  };
+
+  // Amenity icons mapping for better visual representation
+  const amenityIcons: Record<string, React.ReactNode> = {
+    'Clubhouse': <Home className="h-6 w-6" />,
+    'Swimming Pool': <Droplets className="h-6 w-6" />,
+    'Fitness Center': <Dumbbell className="h-6 w-6" />,
+    'Kids Play Area': <Users className="h-6 w-6" />,
+    'Landscaped Gardens': <Trees className="h-6 w-6" />,
+    '24/7 Security': <Shield className="h-6 w-6" />,
+    'CCTV Surveillance': <Camera className="h-6 w-6" />,
+    'Multi-utility block': <Building2 className="h-6 w-6" />,
+    'Recreational Areas': <Star className="h-6 w-6" />
+  };
+  
+  // Render property-detail layout for Forest Edge
+  if (isPropertyDetail && pd) {
     return <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-50" ref={sectionRef}>
         <Marquee />
         <Header />
