@@ -753,9 +753,9 @@ const DeveloperPage = () => {
                     
                   </div>
 
-                  {/* Right Column - ~40% width, slightly overlapping - Mobile Portrait Video */}
-                  <div className="w-[45%] -ml-[5%] relative z-20 flex items-center">
-                    <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px] mx-auto">
+                  {/* Right Column - ~40% width, Right Aligned - Mobile Portrait Video */}
+                  <div className="w-[40%] ml-auto relative z-20 flex items-center justify-end pl-8">
+                    <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
                       <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
                         <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
                           <source src={forestEdgeHeroVideo} type="video/mp4" />
