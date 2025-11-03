@@ -995,6 +995,45 @@ const DeveloperPage = () => {
           </Card>
         </section>
 
+        {/* Location & Map */}
+        <section className="bg-gradient-to-br from-gray-50 to-white py-16 scroll-animate">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Location & Neighbourhood</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.2068936489704!2d80.2338!3d13.0827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266b7c7a1e1e1%3A0x1e1e1e1e1e1e1e1e!2sLandons%20Rd%2C%20Kilpauk%2C%20Chennai%2C%20Tamil%20Nadu%20600010!5e0!3m2!1sen!2sin!4v1234567890"
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Forest Edge Location Map"
+                className="w-full"
+              ></iframe>
+            </div>
+            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-6 rounded-xl shadow-md border border-gray-100">
+              <MapPin className="h-6 w-6 text-brand-red flex-shrink-0" />
+              <div className="flex-1">
+                <p className="font-semibold text-foreground text-lg">Landons Rd</p>
+                <p className="text-muted-foreground">Kilpauk, Chennai, Tamil Nadu 600010</p>
+              </div>
+              <a
+                href="https://maps.app.goo.gl/N3mxUGCu1mu7ux5J7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-brand-red text-white rounded-lg hover:bg-brand-maroon transition-colors font-semibold shadow-md hover:shadow-lg"
+              >
+                Get Directions
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* About the Builder - Premium dark section */}
         <section className="bg-neutral-800 py-16 scroll-animate">
           <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
