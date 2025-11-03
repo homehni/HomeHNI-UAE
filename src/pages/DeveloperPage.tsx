@@ -339,11 +339,12 @@ const DeveloperPage = () => {
   
   // Loading state handled within UI sections to keep hooks order consistent
   
-  // Try database first, fallback to hardcoded
+  // Try database first, but use hardcoded logos (imported assets)
+  const hardcodedDev = developers[developerId as keyof typeof developers];
   const developer = developerData 
     ? {
         name: developerData.company_name,
-        logo: developerData.logo_url || '',
+        logo: hardcodedDev?.logo || developerData.logo_url || '',
         rank: developerData.display_order || 0,
         founded: developerData.founded_year || '',
         headquarters: developerData.headquarters || '',
@@ -357,7 +358,7 @@ const DeveloperPage = () => {
           email: developerData.contact_email || '',
           website: developerData.contact_website || ''
         },
-        propertyDetails: {
+        propertyDetails: hardcodedDev?.propertyDetails || {
           price: { min: 75, max: 150, unit: 'Lacs', perSqft: 5500 },
           location: developerData.headquarters || '',
           locality: '',
@@ -374,7 +375,7 @@ const DeveloperPage = () => {
           features: []
         }
       }
-    : developers[developerId as keyof typeof developers];
+    : hardcodedDev;
   
   const developerNotFound = !developer && !developerData;
 
