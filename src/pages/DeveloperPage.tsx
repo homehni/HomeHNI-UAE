@@ -833,19 +833,19 @@ const DeveloperPage = () => {
               <div className="space-y-4 pb-4">
                 {/* Property Details Cards */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="flex flex-col items-center gap-1.5 p-2 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                  <div className="flex flex-col items-center gap-1.5 p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                       <Building2 className="h-4 w-4 text-white" />
                     </div>
                     <span className="text-[10px] font-medium text-center text-white/90 leading-tight">{pd.projectArea}<br/>{pd.totalUnits} Flats</span>
                   </div>
-                  <div className="flex flex-col items-center gap-1.5 p-2 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                  <div className="flex flex-col items-center gap-1.5 p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                       <Home className="h-4 w-4 text-white" />
                     </div>
                     <span className="text-[10px] font-medium text-center text-white/90 leading-tight">{pd.configurations[0].type}<br/>{pd.configurations[0].sizes[0]}</span>
                   </div>
-                  <div className="flex flex-col items-center gap-1.5 p-2 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                  <div className="flex flex-col items-center gap-1.5 p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                       <Award className="h-4 w-4 text-white" />
                     </div>
@@ -948,19 +948,19 @@ const DeveloperPage = () => {
 
                     {/* Property Details - Dark Containers */}
                     <div className="grid grid-cols-3 gap-4 mb-8">
-                      <div className="flex flex-col items-center gap-3 p-4 bg-slate-900/40 backdrop-blur-md rounded-xl shadow-lg hover:bg-slate-900/50 transition-all duration-300">
+                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
                         <div className="w-12 h-12 rounded-lg flex items-center justify-center">
                           <Building2 className="h-6 w-6 text-white" />
                         </div>
                         <span className="text-sm font-semibold text-center text-white leading-tight">{pd.projectArea}<br/>{pd.totalUnits} Flats</span>
                       </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-slate-900/40 backdrop-blur-md rounded-xl shadow-lg hover:bg-slate-900/50 transition-all duration-300">
+                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
                         <div className="w-12 h-12 rounded-lg flex items-center justify-center">
                           <Home className="h-6 w-6 text-white" />
                         </div>
                         <span className="text-sm font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br/>{pd.configurations[0].sizes[0]}</span>
                       </div>
-                      <div className="flex flex-col items-center gap-3 p-4 bg-slate-900/40 backdrop-blur-md rounded-xl shadow-lg hover:bg-slate-900/50 transition-all duration-300">
+                      <div className="flex flex-col items-center gap-3 p-4 bg-white/5 backdrop-blur-md rounded-xl shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10">
                         <div className="w-12 h-12 rounded-lg flex items-center justify-center">
                           <Award className="h-6 w-6 text-white" />
                         </div>
