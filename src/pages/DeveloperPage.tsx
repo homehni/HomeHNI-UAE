@@ -898,9 +898,9 @@ const DeveloperPage = () => {
                 {/* Subtle texture overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
                 
-                <div className="relative flex gap-6 items-stretch">
-                  {/* Left Column - ~55% width */}
-                  <div className="w-[55%] relative z-10 flex flex-col justify-center">
+                <div className="relative flex gap-0">
+                  {/* Left Column - ~60% width */}
+                  <div className="w-[60%] relative z-10">
                     {/* Logo - Dark Container */}
                     <div className="mb-8 flex items-center justify-center">
                       <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-xl">
@@ -997,9 +997,9 @@ const DeveloperPage = () => {
                     </div>
                   </div>
 
-                  {/* Right Column - ~45% width - Mobile Portrait Video */}
-                  <div className="w-[45%] relative z-20 flex items-center justify-center">
-                    <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
+                  {/* Right Column - ~40% width, slightly overlapping - Mobile Portrait Video */}
+                  <div className="w-[45%] -ml-[5%] relative z-20 flex items-center">
+                    <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px] mx-auto">
                       <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
                         <video
                           ref={heroVideoRef}
