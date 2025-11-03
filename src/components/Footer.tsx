@@ -474,30 +474,30 @@ const Footer = ({
 
           {/* Mortgease Partnership Section - UAE Only */}
           {true && (
-            <div className="mb-6 p-6 bg-gradient-to-br from-indigo-50 to-amber-50 rounded-xl border border-indigo-200">
-              <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <div className="mb-6 p-6 md:p-8 bg-gradient-to-br from-indigo-50 to-amber-50 rounded-xl border border-indigo-200">
+              <div className="flex flex-col items-center justify-center gap-6">
                 <div className="flex-shrink-0">
                   <img 
                     src={mortgeaseLogo} 
                     alt="Mortgease - Official Home Finance Partner" 
-                    className="h-16 md:h-20 object-contain"
+                    className="h-20 md:h-24 lg:h-28 object-contain"
                   />
                 </div>
-                <div className="text-center md:text-left">
-                  <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1">
+                <div className="text-center">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
                     Official Channel Partner for Home Finance
                   </h3>
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-sm md:text-base text-gray-600 mb-3">
                     Making your home ownership dreams a reality in the UAE
                   </p>
                   <a 
                     href="https://www.mortgease.ae" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-semibold transition-colors text-base md:text-lg"
                   >
                     <span>Explore Mortgease Services</span>
-                    <ChevronRight size={16} />
+                    <ChevronRight size={18} />
                   </a>
                 </div>
               </div>

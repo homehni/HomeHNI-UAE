@@ -1613,24 +1613,24 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
       {/* Mortgease Partnership Badge - UAE Only */}
       {true && (
-        <div className="bg-gradient-to-r from-indigo-50 to-amber-50 py-4 border-t border-indigo-100">
+        <div className="bg-gradient-to-r from-indigo-50 to-amber-50 py-6 md:py-4 border-t border-indigo-100">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
-              <div className="flex items-center gap-3">
-                <img src={mortgeaseLogo} alt="Mortgease" className="h-8 md:h-10 object-contain" />
-                <div className="h-8 w-px bg-indigo-300 hidden md:block" />
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div className="flex items-center justify-center">
+                <img src={mortgeaseLogo} alt="Mortgease" className="h-14 md:h-16 lg:h-20 object-contain" />
               </div>
-              <div className="text-center md:text-left">
-                <p className="text-sm md:text-base font-semibold text-gray-800">
+              <div className="text-center">
+                <p className="text-base md:text-lg font-bold text-gray-800 mb-1">
                   Official Channel Partner for Home Finance
                 </p>
                 <a 
                   href="https://www.mortgease.ae" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-xs md:text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                  className="text-sm md:text-base text-indigo-600 hover:text-indigo-800 font-semibold transition-colors inline-flex items-center gap-1"
                 >
-                  Visit mortgease.ae →
+                  Visit mortgease.ae 
+                  <ChevronRight size={16} className="inline" />
                 </a>
               </div>
             </div>
