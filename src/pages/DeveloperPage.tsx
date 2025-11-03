@@ -837,7 +837,7 @@ const DeveloperPage = () => {
           
           {/* Smooth Swipe Carousel Container - Static black background with scrolling images inside */}
           <div className="relative">
-            <Card className="border-0 shadow-2xl bg-black overflow-hidden h-[500px] md:h-[600px] relative md:bg-black sm:bg-transparent">
+            <Card className="border-0 shadow-2xl bg-transparent md:bg-black overflow-hidden h-[500px] md:h-[600px] relative">
               <div ref={interiorCarouselRef} className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar h-full relative" style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
