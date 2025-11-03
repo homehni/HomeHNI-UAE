@@ -1613,7 +1613,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
 
       {/* Mortgease Partnership Badge - UAE Only */}
       {true && (
-        <div className="bg-gradient-to-r from-indigo-50 to-amber-50 py-6 md:py-4 border-t border-indigo-100 mt-20 sm:mt-0">
+        <div className="py-6 md:py-4 border-t border-gray-200 mt-20 sm:mt-0">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center justify-center gap-4">
               <div className="flex items-center justify-center">
