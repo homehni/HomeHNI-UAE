@@ -41,7 +41,21 @@ import floorPlan2 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_21
 import floorPlan3 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215041_.jpeg';
 const DeveloperPage = () => {
   const { developerId } = useParams();
+  
+  // ALL HOOKS MUST BE AT THE TOP - React Rules of Hooks
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [currentInteriorIndex, setCurrentInteriorIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [selectedFloorPlanIndex, setSelectedFloorPlanIndex] = useState<number | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const interiorCarouselRef = useRef<HTMLDivElement>(null);
+  const similarProjectsRef = useRef<HTMLDivElement>(null);
   
   // Fetch developer data from database
   const { data: developerData, isLoading, error } = useDeveloperPage(developerId || '');
@@ -384,22 +398,11 @@ const DeveloperPage = () => {
   }
 
   // Check if this is a property-detail style page
-  const isPropertyDetail = 'propertyDetails' in developer;
+  const isPropertyDetail = developer && 'propertyDetails' in developer;
 
   // Render property-detail layout for Forest Edge
   if (isPropertyDetail && developer.propertyDetails) {
     const pd = developer.propertyDetails;
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const heroVideoRef = useRef<HTMLVideoElement>(null);
-    const interiorCarouselRef = useRef<HTMLDivElement>(null);
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const [currentInteriorIndex, setCurrentInteriorIndex] = useState(0);
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const [selectedFloorPlanIndex, setSelectedFloorPlanIndex] = useState<number | null>(null);
-    const similarProjectsRef = useRef<HTMLDivElement>(null);
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(true);
 
     // Forest Edge carousel images
     const forestEdgeImages = [forestEdgeExterior, forestEdgeAmenities1, forestEdgeAmenities2, forestEdgePool, forestEdgeLawn, forestEdgeAerial, forestEdgeBalcony, forestEdgeEvening];
