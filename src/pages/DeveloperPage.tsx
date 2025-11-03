@@ -714,24 +714,24 @@ const DeveloperPage = () => {
                     </div>
 
                     {/* Property Details - Dark Containers */}
-                    <div className="grid grid-cols-3 gap-1.5 mb-8">
-                      <div className="flex flex-col items-center gap-1 p-1.5 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
-                        <div className="w-6 h-6 rounded-lg flex items-center justify-center">
-                          <Building2 className="h-3 w-3 text-white" />
+                    <div className="grid grid-cols-3 gap-3 mb-8">
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Building2 className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-[9px] font-semibold text-center text-white leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
+                        <span className="text-xs font-semibold text-center text-white leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
                       </div>
-                      <div className="flex flex-col items-center gap-1 p-1.5 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
-                        <div className="w-6 h-6 rounded-lg flex items-center justify-center">
-                          <Home className="h-3 w-3 text-white" />
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Home className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-[9px] font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
+                        <span className="text-xs font-semibold text-center text-white leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
                       </div>
-                      <div className="flex flex-col items-center gap-1 p-1.5 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
-                        <div className="w-6 h-6 rounded-lg flex items-center justify-center">
-                          <Award className="h-3 w-3 text-white" />
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/5 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/10 transition-all duration-300 border border-white/10 aspect-square justify-center">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                          <Award className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-[9px] font-semibold text-center text-white leading-tight">RERA<br />Certified</span>
+                        <span className="text-xs font-semibold text-center text-white leading-tight">RERA<br />Certified</span>
                       </div>
                     </div>
 
