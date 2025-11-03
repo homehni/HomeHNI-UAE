@@ -996,9 +996,9 @@ const DeveloperPage = () => {
         </section>
 
         {/* About the Builder - Premium dark section */}
-        <section className="bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 py-16 scroll-animate">
+        <section className="bg-neutral-800 py-16 scroll-animate">
           <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Card className="border-0 bg-white/5 backdrop-blur-md shadow-2xl">
+            <Card className="border-0 bg-transparent shadow-2xl">
               <CardContent className="p-8 md:p-12">
                 <div className="flex flex-col md:flex-row items-start gap-8 mb-8">
                   <div className="relative">
