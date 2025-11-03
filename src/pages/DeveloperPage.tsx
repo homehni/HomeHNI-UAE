@@ -1004,14 +1004,14 @@ const DeveloperPage = () => {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
               <iframe
-                src="https://maps.google.com/maps?q=Canny+Forest+Edge,+Bachupally,+Hyderabad,+Telangana&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?ll=17.5428399,78.4060426&q=17.5428399,78.4060426&z=16&output=embed"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Forest Edge Location Map"
+                title="Canny Forest Edge, Bachupally - Location Map"
                 className="w-full"
               ></iframe>
             </div>
@@ -1022,7 +1022,7 @@ const DeveloperPage = () => {
                 <p className="text-muted-foreground">Bachupally, Hyderabad, Telangana</p>
               </div>
               <a
-                href="https://maps.app.goo.gl/N3mxUGCu1mu7ux5J7"
+                href="https://www.google.com/maps/place/Canny+Forest+Edge/@17.5428399,78.4038539,17z/data=!3m1!4b1!4m5!3m4!1s0x3bcb8fc6acafcec1:0xa65b820b460d291a!8m2!3d17.5428399!4d78.4060426"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-brand-red text-white rounded-lg hover:bg-brand-maroon transition-colors font-semibold shadow-md hover:shadow-lg"
