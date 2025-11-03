@@ -483,6 +483,30 @@ const DeveloperPage = () => {
       };
     }, []);
 
+    // Hero video pause/play when tab/window loses/gains focus
+    useEffect(() => {
+      const video = heroVideoRef.current;
+      if (!video) return;
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          video.pause();
+        } else {
+          // Only play if video is in viewport
+          const rect = video.getBoundingClientRect();
+          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+          if (isInViewport) {
+            video.play().catch(error => {
+              console.log('Hero video resume prevented:', error);
+            });
+          }
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
+    }, []);
+
     // Hero video click handler
     const handleHeroVideoClick = () => {
       const video = heroVideoRef.current;
