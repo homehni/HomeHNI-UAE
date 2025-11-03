@@ -544,21 +544,8 @@ const DeveloperPage = () => {
         <Marquee />
         <Header />
         
-        {/* Breadcrumb - Modern, minimal design */}
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-6">
-          <nav className="text-sm text-muted-foreground font-medium">
-            <span className="hover:text-foreground transition-colors cursor-pointer">Home</span>
-            <span className="mx-2">/</span>
-            <span className="hover:text-foreground transition-colors cursor-pointer">Hyderabad</span>
-            <span className="mx-2">/</span>
-            <span className="hover:text-foreground transition-colors cursor-pointer">Bachupally</span>
-            <span className="mx-2">/</span>
-            <span className="text-foreground font-semibold">{developer.name}</span>
-          </nav>
-          </div>
-
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
-        <section className="relative mb-12 scroll-animate overflow-hidden bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829]">
+        <section className="relative mb-12 scroll-animate overflow-hidden bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] pt-20">
           {/* Mobile View - Full Width Background Video with Overlay */}
           <div className="lg:hidden relative w-full h-[600px] md:h-[700px] mb-12">
             {/* Background Video */}
