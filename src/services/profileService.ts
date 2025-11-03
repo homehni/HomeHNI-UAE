@@ -23,7 +23,7 @@ export interface UserProfile {
   verification_status: 'unverified' | 'pending' | 'verified';
   whatsapp_opted_in: boolean;
   email_notifications: boolean;
-  role: 'admin' | 'buyer' | 'seller' | 'consultant' | 'user';
+  role: 'admin' | 'buyer' | 'seller' | 'consultant' | 'user' | 'owner' | 'agent';
   created_at: string;
   updated_at: string;
 }
@@ -81,7 +81,7 @@ export const updateUserProfile = async (updates: UpdateProfileData) => {
 };
 
 // Update user role
-export const updateUserRole = async (userId: string, newRole: 'buyer' | 'seller' | 'consultant' | 'admin' | 'user') => {
+export const updateUserRole = async (userId: string, newRole: 'buyer' | 'seller' | 'consultant' | 'admin' | 'user' | 'owner' | 'agent') => {
   const { error } = await supabase
     .rpc('update_user_role', {
       _user_id: userId,
@@ -134,7 +134,7 @@ export const getUserProfileById = async (userId: string): Promise<UserProfile | 
 };
 
 // Check if user has specific role
-export const hasUserRole = async (role: 'admin' | 'buyer' | 'seller' | 'consultant' | 'user'): Promise<boolean> => {
+export const hasUserRole = async (role: 'admin' | 'buyer' | 'seller' | 'consultant' | 'user' | 'owner' | 'agent'): Promise<boolean> => {
   const { data, error } = await supabase
     .rpc('has_current_user_role', { _role: role });
 

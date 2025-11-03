@@ -1724,7 +1724,7 @@ export const PostProperty: React.FC = () => {
                   setUserType('Owner');
                   const { data: { user } } = await supabase.auth.getUser();
                   if (user) {
-                    await updateUserRole(user.id, 'seller');
+                    await updateUserRole(user.id, 'owner');
                   }
                   setShowUserTypeDialog(false);
                   console.log('User selected type: Owner');
@@ -1748,7 +1748,7 @@ export const PostProperty: React.FC = () => {
                   setUserType('Agent');
                   const { data: { user } } = await supabase.auth.getUser();
                   if (user) {
-                    await updateUserRole(user.id, 'seller');
+                    await updateUserRole(user.id, 'agent');
                   }
                   setShowUserTypeDialog(false);
                   console.log('User selected type: Agent');
