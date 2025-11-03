@@ -1212,7 +1212,7 @@ const DeveloperPage = () => {
                 
                 <div className="space-y-8">
                   {/* RERA Certificate Card */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-blue-100">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-blue-100 max-w-xl mx-auto w-full">
                     <div className="flex flex-col sm:flex-row items-start gap-4 mb-6">
                       <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center mx-auto sm:mx-0">
                         <Shield className="h-6 w-6 text-white" />
@@ -1225,12 +1225,12 @@ const DeveloperPage = () => {
                   </p>
                       </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 bg-white rounded-xl p-5 sm:p-6 border border-blue-200">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 bg-white rounded-xl p-5 sm:p-6 border border-blue-200 w-full">
                     <div className="flex-1 text-center sm:text-left">
                         <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wider">Telangana RERA</p>
                         <p className="text-lg sm:text-xl font-semibold text-foreground break-all">{pd.rera}</p>
                     </div>
-                      <Button variant="outline" size="lg" className="border-2 hover:bg-blue-50 font-semibold w-full sm:w-auto">
+                      <Button variant="outline" size="lg" className="w-full sm:w-auto justify-center rounded-lg shadow-none border-2 border-blue-300 hover:bg-blue-50 font-semibold">
                         View Certificate <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
