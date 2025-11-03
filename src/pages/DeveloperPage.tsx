@@ -890,84 +890,95 @@ const DeveloperPage = () => {
             </div>
           </div>
 
-          {/* PC View - Split Layout (60/40) with Unified Light Green Background */}
+          {/* PC View - Split Layout (60/40) with Enhanced Forest Theme */}
           <div className="hidden lg:block px-4 sm:px-6 lg:px-8 pb-16">
             <div className="container mx-auto max-w-7xl">
-              {/* Unified Light Green Background Card for Entire Hero Section */}
-              <div className="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 rounded-2xl shadow-2xl p-8 lg:p-10 mb-12 relative z-10">
+              {/* Modern Forest-Themed Hero Section */}
+              <div className="gradient-forest-radial rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-10 lg:p-12 mb-12 relative z-10 overflow-hidden border border-green-100/50">
+                {/* Decorative elements */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-green-300/20 to-transparent rounded-full blur-3xl -z-10"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-emerald-300/20 to-transparent rounded-full blur-3xl -z-10"></div>
+                
                 <div className="relative flex gap-0">
                   {/* Left Column - ~60% width */}
                   <div className="w-[60%] relative z-10">
-                    {/* Logo - Elegant and Bigger, No Background */}
-                    <div className="mb-6 flex items-center justify-center">
-                      <img 
-                        src={developer.logo} 
-                        alt="Canny Life Spaces"
-                        className="w-48 h-32 lg:w-56 lg:h-40 object-contain"
-                      />
+                    {/* Logo - Modern Presentation */}
+                    <div className="mb-8 flex items-center justify-center group">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-2xl transform rotate-1 group-hover:rotate-2 transition-transform duration-300"></div>
+                        <img 
+                          src={developer.logo} 
+                          alt="Canny Life Spaces"
+                          className="relative w-48 h-32 lg:w-56 lg:h-40 object-contain p-4 drop-shadow-lg"
+                        />
+                      </div>
                     </div>
 
                     {/* Basic Project Information */}
-                    <div className="space-y-4 mb-6">
-                      <div className="flex items-center gap-3 text-xl font-semibold text-slate-800">
-                        <span>{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
-                        <span className="text-slate-400">|</span>
-                        <span className="text-emerald-700">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
+                    <div className="space-y-5 mb-8">
+                      <div className="flex items-center gap-4 text-2xl font-bold bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-md border border-green-200/50">
+                        <span className="bg-gradient-to-r from-green-800 to-emerald-700 bg-clip-text text-transparent">
+                          {pd.configurations.map(c => c.type).join(', ')} Apartment
+                        </span>
+                        <span className="text-green-300">|</span>
+                        <span className="gradient-forest bg-clip-text text-transparent">
+                          ₹ {pd.price.min} {pd.price.unit} Onwards*
+                        </span>
                       </div>
                       
-                      <div className="flex items-center gap-2 text-slate-700">
-                        <MapPin className="h-5 w-5 text-emerald-600" />
-                        <span>{pd.locality}, {pd.city}</span>
+                      <div className="flex items-center gap-3 text-slate-700 bg-white/60 backdrop-blur-sm rounded-xl p-3 shadow-sm">
+                        <MapPin className="h-6 w-6 text-green-700" />
+                        <span className="text-lg font-medium">{pd.locality}, {pd.city}</span>
                       </div>
                       
-                      <div className="flex items-center gap-4 flex-wrap">
-                        <div className="flex items-center gap-2 text-slate-600">
-                          <Calendar className="h-4 w-4 text-emerald-600" />
-                          <span className="text-sm">{pd.possession}</span>
+                      <div className="flex items-center gap-6 flex-wrap">
+                        <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm">
+                          <Calendar className="h-5 w-5 text-green-700" />
+                          <span className="text-sm font-medium text-slate-700">{pd.possession}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-slate-600">
-                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                          <span className="text-sm">RERA</span>
+                        <div className="flex items-center gap-3 bg-white/60 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm">
+                          <CheckCircle2 className="h-5 w-5 text-green-700" />
+                          <span className="text-sm font-medium text-slate-700">RERA Certified</span>
                         </div>
                       </div>
                     </div>
 
                     {/* NEW LAUNCH Project Badge */}
-                    <div className="mb-6 flex items-center gap-3">
-                      <div className="bg-slate-800/90 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 border border-slate-700/50 shadow-md">
-                        <Sparkles className="h-4 w-4 text-yellow-400" />
-                        <span className="text-sm font-semibold text-white">NEW LAUNCH Project</span>
+                    <div className="mb-8 flex items-center gap-4">
+                      <div className="gradient-forest backdrop-blur-sm rounded-full px-5 py-2.5 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                        <Sparkles className="h-5 w-5 text-yellow-300 animate-pulse" />
+                        <span className="text-sm font-bold text-white tracking-wide">NEW LAUNCH PROJECT</span>
                       </div>
-                      <a href="#" className="text-sm text-emerald-700 hover:text-emerald-800 font-medium underline">Learn more</a>
+                      <a href="#" className="text-sm text-green-800 hover:text-green-900 font-semibold underline underline-offset-4 hover:underline-offset-8 transition-all duration-300">Learn more</a>
                     </div>
 
-                    {/* Key Highlights/Benefits */}
-                    <div className="grid grid-cols-3 gap-3 mb-6">
-                      <div className="flex flex-col items-center gap-2 p-3 bg-white/70 backdrop-blur-sm rounded-lg border border-emerald-200/50 shadow-sm">
-                        <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                          <TrendingUp className="h-5 w-5 text-emerald-700" />
+                    {/* Key Highlights/Benefits - Enhanced Cards */}
+                    <div className="grid grid-cols-3 gap-4 mb-8">
+                      <div className="group flex flex-col items-center gap-3 p-4 bg-white/90 backdrop-blur-md rounded-2xl border-2 border-green-200/60 shadow-lg hover:shadow-2xl hover:border-green-400/80 transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-xl gradient-forest flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                          <TrendingUp className="h-7 w-7 text-white" />
                         </div>
-                        <span className="text-xs font-medium text-center text-slate-700">High price appreciation</span>
+                        <span className="text-sm font-semibold text-center text-slate-800 leading-tight">High price<br/>appreciation</span>
                       </div>
-                      <div className="flex flex-col items-center gap-2 p-3 bg-white/70 backdrop-blur-sm rounded-lg border border-emerald-200/50 shadow-sm">
-                        <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                          <Heart className="h-5 w-5 text-emerald-700" />
+                      <div className="group flex flex-col items-center gap-3 p-4 bg-white/90 backdrop-blur-md rounded-2xl border-2 border-green-200/60 shadow-lg hover:shadow-2xl hover:border-green-400/80 transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-xl gradient-forest flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                          <Heart className="h-7 w-7 text-white" />
                         </div>
-                        <span className="text-xs font-medium text-center text-slate-700">Units of choice</span>
+                        <span className="text-sm font-semibold text-center text-slate-800 leading-tight">Units of<br/>choice</span>
                       </div>
-                      <div className="flex flex-col items-center gap-2 p-3 bg-white/70 backdrop-blur-sm rounded-lg border border-emerald-200/50 shadow-sm">
-                        <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                          <IndianRupee className="h-5 w-5 text-emerald-700" />
+                      <div className="group flex flex-col items-center gap-3 p-4 bg-white/90 backdrop-blur-md rounded-2xl border-2 border-green-200/60 shadow-lg hover:shadow-2xl hover:border-green-400/80 transition-all duration-300 hover:-translate-y-1">
+                        <div className="w-14 h-14 rounded-xl gradient-forest flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md">
+                          <IndianRupee className="h-7 w-7 text-white" />
                         </div>
-                        <span className="text-xs font-medium text-center text-slate-700">Easy Payment plans</span>
+                        <span className="text-sm font-semibold text-center text-slate-800 leading-tight">Easy Payment<br/>plans</span>
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-3 mb-4">
+                    {/* Action Buttons - Enhanced */}
+                    <div className="flex gap-4 mb-6">
                       <Button 
                         size="lg"
-                        className="flex-1 bg-slate-900 text-white hover:bg-slate-800 font-semibold shadow-lg"
+                        className="flex-1 gradient-forest text-white hover:opacity-90 font-bold shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 text-base py-6"
                         onClick={() => setIsContactFormOpen(true)}
                       >
                         View Number
@@ -976,7 +987,7 @@ const DeveloperPage = () => {
                         <Button 
                           variant="outline" 
                           size="lg"
-                          className="flex-1 bg-white/80 text-slate-800 hover:bg-white border-2 border-emerald-600 font-semibold shadow-sm group"
+                          className="flex-1 bg-white text-green-800 hover:bg-green-50 border-3 border-green-600 hover:border-green-700 font-bold shadow-lg hover:shadow-xl group transition-all duration-300 hover:scale-105 text-base py-6"
                           onClick={() => window.open(pd.brochureLink, '_blank')}
                         >
                           <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
@@ -985,10 +996,10 @@ const DeveloperPage = () => {
                       )}
                     </div>
 
-                    {/* Interest Indicator */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <span className="text-orange-500">🔥</span>
-                      <span>36 families showed interest yesterday.</span>
+                    {/* Interest Indicator - Enhanced */}
+                    <div className="flex items-center gap-3 text-sm bg-orange-50/80 backdrop-blur-sm rounded-xl px-4 py-3 shadow-sm border border-orange-200/50">
+                      <span className="text-xl">🔥</span>
+                      <span className="font-semibold text-orange-800">36 families showed interest yesterday.</span>
                     </div>
                   </div>
 
