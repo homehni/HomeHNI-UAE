@@ -35,6 +35,7 @@ import HowItWorksSection from '@/components/HowItWorksSection';
 import PropertyFAQSection from '@/components/PropertyFAQSection';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { User, Briefcase } from 'lucide-react';
+import { updateUserRole } from '@/services/profileService';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
@@ -1718,10 +1719,23 @@ export const PostProperty: React.FC = () => {
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-6">
             <div
-              onClick={() => {
-                setUserType('Owner');
-                setShowUserTypeDialog(false);
-                console.log('User selected type: Owner');
+              onClick={async () => {
+                try {
+                  setUserType('Owner');
+                  const { data: { user } } = await supabase.auth.getUser();
+                  if (user) {
+                    await updateUserRole(user.id, 'seller');
+                  }
+                  setShowUserTypeDialog(false);
+                  console.log('User selected type: Owner');
+                } catch (error) {
+                  console.error('Error updating user role:', error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to update role",
+                    variant: "destructive"
+                  });
+                }
               }}
               className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-muted rounded-lg hover:border-primary hover:bg-accent/50 transition-all cursor-pointer group"
             >
@@ -1729,10 +1743,23 @@ export const PostProperty: React.FC = () => {
               <span className="text-base font-medium">Owner</span>
             </div>
             <div
-              onClick={() => {
-                setUserType('Agent');
-                setShowUserTypeDialog(false);
-                console.log('User selected type: Agent');
+              onClick={async () => {
+                try {
+                  setUserType('Agent');
+                  const { data: { user } } = await supabase.auth.getUser();
+                  if (user) {
+                    await updateUserRole(user.id, 'seller');
+                  }
+                  setShowUserTypeDialog(false);
+                  console.log('User selected type: Agent');
+                } catch (error) {
+                  console.error('Error updating user role:', error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to update role",
+                    variant: "destructive"
+                  });
+                }
               }}
               className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-muted rounded-lg hover:border-primary hover:bg-accent/50 transition-all cursor-pointer group"
             >
