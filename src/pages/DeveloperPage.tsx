@@ -546,8 +546,8 @@ const DeveloperPage = () => {
         
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
         <section className="relative mb-12 scroll-animate overflow-hidden bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] pt-20">
-          {/* Mobile View - Full Width Background Video with Overlay */}
-          <div className="lg:hidden relative w-full h-[600px] md:h-[700px] mb-12">
+          {/* Mobile View - Clean & Elegant Layout */}
+          <div className="lg:hidden relative w-full min-h-[700px] mb-12">
             {/* Background Video */}
             <div className="absolute inset-0 w-full h-full">
               <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
@@ -555,110 +555,119 @@ const DeveloperPage = () => {
                 Your browser does not support the video tag.
               </video>
               {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
             </div>
 
-            {/* Content Overlay */}
-            <div className="relative z-10 h-full flex flex-col justify-between p-4 sm:p-6 text-white">
-              {/* Top Content */}
-              <div className="space-y-4">
-                {/* Logo - Elegant and Bigger, No Background */}
-                <div className="flex items-center justify-center p-4">
-                  <img src={developer.logo} alt="Canny Life Spaces" className="w-40 h-28 sm:w-48 sm:h-32 object-contain" />
+            {/* Content Overlay - Structured Layout */}
+            <div className="relative z-10 h-full flex flex-col p-5 sm:p-6 text-white">
+              {/* Top Section - Logo & Project Area Badge */}
+              <div className="flex flex-col items-center gap-4 mb-6 pt-4">
+                {/* Logo - Centered */}
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                  <img src={developer.logo} alt="Canny Life Spaces" className="w-36 h-24 sm:w-44 sm:h-28 object-contain" />
+                </div>
+                
+                {/* Project Area Badge - Clean Design */}
+                <div className="bg-blue-500/95 backdrop-blur-sm rounded-full px-5 py-2.5 shadow-lg">
+                  <p className="text-white font-bold text-sm">
+                    Spread Over {pd.projectArea}
+                  </p>
+                </div>
+              </div>
+
+              {/* Middle Section - Main Property Info */}
+              <div className="bg-black/50 backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 mb-6">
+                {/* Configuration & Price */}
+                <div className="space-y-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">
+                    {pd.configurations.map(c => c.type).join(', ')} Apartment
+                  </h2>
+                  <p className="text-lg sm:text-xl font-semibold text-emerald-300">
+                    ₹ {pd.price.min} {pd.price.unit} Onwards*
+                  </p>
+                </div>
+                
+                {/* Location */}
+                <div className="flex items-center gap-2 text-white/95">
+                  <MapPin className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+                  <span className="text-sm font-medium">{pd.locality}, {pd.city}</span>
+                </div>
+                
+                {/* Status Tags */}
+                <div className="flex items-center gap-3 flex-wrap">
+                  <div className="flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5">
+                    <Calendar className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-xs font-medium">{pd.possession}</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-xs font-medium">RERA Approved</span>
+                  </div>
                 </div>
 
-                {/* Project Info */}
-                <div className="bg-black/40 backdrop-blur-sm rounded-xl p-4 border border-white/20 space-y-3">
-                  <div className="flex items-center gap-2 text-base sm:text-lg font-semibold flex-wrap">
-                    <span>{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
-                    <span className="text-white/50">|</span>
-                    <span className="text-emerald-300">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
+                {/* NEW LAUNCH Badge */}
+                <div className="flex items-center gap-3 pt-1">
+                  <div className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 border border-yellow-400/30">
+                    <Sparkles className="h-4 w-4 text-yellow-400" />
+                    <span className="text-xs font-bold text-white">NEW LAUNCH Project</span>
                   </div>
-                  
-                  <div className="flex items-center gap-2 text-white/90 text-sm">
-                    <MapPin className="h-4 w-4 text-emerald-400" />
-                    <span>{pd.locality}, {pd.city}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 flex-wrap text-xs sm:text-sm text-white/80">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-3 w-3 text-emerald-400" />
-                      <span>{pd.possession}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-3 w-3 text-emerald-400" />
-                      <span>RERA</span>
-                    </div>
-                  </div>
+                  <a href="#" className="text-xs text-emerald-300 hover:text-emerald-200 underline font-medium">Learn more</a>
+                </div>
+              </div>
 
-                  {/* NEW LAUNCH Badge */}
-                  <div className="flex items-center gap-3 pt-2">
-                    <div className="bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-2 border border-white/20">
-                      <Sparkles className="h-3 w-3 text-yellow-400" />
-                      <span className="text-xs font-semibold">NEW LAUNCH Project</span>
-                    </div>
-                    <a href="#" className="text-xs text-emerald-300 hover:text-emerald-200 underline">Learn more</a>
+              {/* Property Details Cards - Compact & Clean */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="flex flex-col items-center gap-2 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <Building2 className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs font-bold text-white">{pd.projectArea}</p>
+                    <p className="text-[10px] text-white/80">{pd.totalUnits} Flats</p>
                   </div>
                 </div>
-
-                {/* Speech Bubble Overlay */}
-                <div className="absolute top-24 right-4 sm:right-8 bg-blue-400/90 backdrop-blur-sm rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-xl max-w-[200px] sm:max-w-[250px]">
-                  <div className="relative">
-                    <p className="text-white font-bold text-sm sm:text-base">
-                      Spread Over {pd.projectArea}
-                    </p>
-                    <div className="absolute -bottom-2 left-6 sm:left-8 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-blue-400/90"></div>
+                <div className="flex flex-col items-center gap-2 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <Home className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs font-bold text-white">{pd.configurations[0].type}</p>
+                    <p className="text-[10px] text-white/80">{pd.configurations[0].sizes[0]}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center gap-2 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <Award className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs font-bold text-white">RERA</p>
+                    <p className="text-[10px] text-white/80">Certified</p>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Content - Buttons and Features */}
-              <div className="space-y-4 pb-4">
-                {/* Property Details Cards */}
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="flex flex-col items-center gap-1.5 p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center">
-                      <Building2 className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="text-[10px] font-medium text-center text-white/90 leading-tight">{pd.projectArea}<br />{pd.totalUnits} Flats</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1.5 p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center">
-                      <Home className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="text-[10px] font-medium text-center text-white/90 leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1.5 p-2 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center">
-                      <Award className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="text-[10px] font-medium text-center text-white/90 leading-tight">RERA<br />Certified</span>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-2">
-                  <Button size="sm" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold text-xs sm:text-sm" onClick={() => setIsContactFormOpen(true)}>
-                    View Number
-                  </Button>
-                  {pd.brochureLink && <Button variant="outline" size="sm" className="flex-1 bg-white/5 text-white hover:bg-white/10 border border-white/30 font-semibold text-xs sm:text-sm backdrop-blur-sm" onClick={() => window.open(pd.brochureLink, '_blank')}>
-                      <Download className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                      Brochure
-                    </Button>}
-                </div>
-
-                {/* Interest Indicator */}
-                <div className="flex items-center gap-2 text-xs text-white/80">
-                  <span>🔥</span>
-                  <span>36 families showed interest yesterday.</span>
-                </div>
+              {/* Action Buttons */}
+              <div className="flex gap-3 mb-4">
+                <Button size="lg" className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-bold shadow-lg" onClick={() => setIsContactFormOpen(true)}>
+                  View Number
+                </Button>
+                {pd.brochureLink && <Button variant="outline" size="lg" className="flex-1 bg-white/10 text-white hover:bg-white/20 border-2 border-white/40 font-bold backdrop-blur-md shadow-lg" onClick={() => window.open(pd.brochureLink, '_blank')}>
+                    <Download className="mr-2 h-4 w-4" />
+                    Brochure
+                  </Button>}
               </div>
-            </div>
 
-            {/* Bottom Bar - Key Highlights */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between z-20">
-              <span className="text-white font-semibold text-sm">Key Highlights</span>
-              <ChevronRight className="h-4 w-4 text-white rotate-90" />
+              {/* Interest Indicator */}
+              <div className="flex items-center justify-center gap-2 text-xs text-white/90 bg-orange-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-orange-400/30 mb-4">
+                <span>🔥</span>
+                <span className="font-medium">36 families showed interest yesterday</span>
+              </div>
+
+              {/* Bottom Bar - Key Highlights */}
+              <div className="mt-auto bg-black/70 backdrop-blur-md rounded-xl px-5 py-3 flex items-center justify-between border border-white/20">
+                <span className="text-white font-semibold text-sm">Key Highlights</span>
+                <ChevronRight className="h-4 w-4 text-white rotate-90" />
+              </div>
             </div>
           </div>
 
