@@ -425,7 +425,7 @@ const DeveloperPage = () => {
       };
     }, []);
 
-    // Video pause when tab/window loses focus
+    // Video pause/play when tab/window loses/gains focus
     useEffect(() => {
       const video = videoRef.current;
       if (!video) return;
@@ -433,17 +433,16 @@ const DeveloperPage = () => {
         if (document.hidden) {
           // Tab/window lost focus - pause video
           video.pause();
+        } else {
+          // Tab/window gained focus - resume playing
+          video.play().catch(error => {
+            console.log('Video resume prevented:', error);
+          });
         }
       };
-      const handleBlur = () => {
-        // Window lost focus - pause video
-        video.pause();
-      };
       document.addEventListener('visibilitychange', handleVisibilityChange);
-      window.addEventListener('blur', handleBlur);
       return () => {
         document.removeEventListener('visibilitychange', handleVisibilityChange);
-        window.removeEventListener('blur', handleBlur);
       };
     }, []);
 
