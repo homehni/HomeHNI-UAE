@@ -337,17 +337,7 @@ const DeveloperPage = () => {
     }
   };
   
-  // Show loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading developer information...</p>
-        </div>
-      </div>
-    );
-  }
+  // Loading state handled within UI sections to keep hooks order consistent
   
   // Try database first, fallback to hardcoded
   const developer = developerData 
@@ -386,16 +376,7 @@ const DeveloperPage = () => {
       }
     : developers[developerId as keyof typeof developers];
   
-  if (!developer && !developerData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Developer Not Found</h1>
-          <p className="text-muted-foreground">The developer you're looking for doesn't exist.</p>
-        </div>
-      </div>
-    );
-  }
+  const developerNotFound = !developer && !developerData;
 
   // Check if this is a property-detail style page
   const isPropertyDetail = developer && 'propertyDetails' in developer;
