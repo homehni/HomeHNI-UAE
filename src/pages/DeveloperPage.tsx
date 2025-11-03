@@ -560,6 +560,13 @@ const DeveloperPage = () => {
 
             {/* Content Overlay - Structured Layout */}
             <div className="relative z-10 h-full flex flex-col p-5 sm:p-6 text-white">
+              {/* NEW LAUNCH Badge - Top Right */}
+              <div className="absolute top-4 right-4">
+                <span className="bg-yellow-400/30 backdrop-blur-sm rounded-full px-3 py-1 text-[10px] font-bold text-white border border-yellow-400/50">
+                  NEW LAUNCH
+                </span>
+              </div>
+
               {/* Top Section - Logo & Project Area Badge */}
               <div className="flex flex-col items-center gap-4 mb-6 pt-4">
                 {/* Logo - Centered */}
@@ -596,15 +603,6 @@ const DeveloperPage = () => {
                     <CheckCircle2 className="h-3 w-3 text-emerald-400" />
                     <span className="text-[11px] font-medium">RERA Approved</span>
                   </div>
-                </div>
-
-                {/* NEW LAUNCH Badge */}
-                <div className="flex items-center gap-3 pt-1">
-                  <div className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 border border-yellow-400/30">
-                    <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
-                    <span className="text-[11px] font-bold text-white">NEW LAUNCH Project</span>
-                  </div>
-                  <a href="#" className="text-[11px] text-emerald-300 hover:text-emerald-200 underline font-medium">Learn more</a>
                 </div>
               </div>
 
