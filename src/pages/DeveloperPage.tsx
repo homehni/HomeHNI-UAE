@@ -59,6 +59,22 @@ const DeveloperPage = () => {
         phone: '+91 80 4655 5555',
         email: 'info@prestigeconstructions.com',
         website: 'www.prestigeconstructions.com'
+      },
+      propertyDetails: {
+        price: { min: 75, max: 150, unit: 'Lacs', perSqft: 5500 },
+        location: 'Bangalore, India',
+        locality: 'Whitefield',
+        city: 'Bangalore',
+        configurations: [{ type: '2 BHK', sizes: ['1200 Sft'] }, { type: '3 BHK', sizes: ['1600 Sft'] }],
+        projectArea: '10 Acres',
+        totalUnits: 500,
+        status: 'Under Construction',
+        possession: 'Dec 2025',
+        rera: 'PRM/KA/RERA/1251/446/PR/171120/002345',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Clubhouse', 'Swimming Pool', 'Fitness Center', 'Kids Play Area', 'Landscaped Gardens', '24/7 Security'],
+        features: ['Premium location in Bangalore', 'Modern architecture and design', 'World-class amenities', 'Excellent connectivity']
       }
     },
     'godrej-properties': {
@@ -76,6 +92,22 @@ const DeveloperPage = () => {
         phone: '+91 22 2518 8010',
         email: 'marketing@godrejproperties.com',
         website: 'www.godrejproperties.com'
+      },
+      propertyDetails: {
+        price: { min: 90, max: 180, unit: 'Lacs', perSqft: 6200 },
+        location: 'Mumbai, India',
+        locality: 'Vikhroli',
+        city: 'Mumbai',
+        configurations: [{ type: '2 BHK', sizes: ['1100 Sft'] }, { type: '3 BHK', sizes: ['1500 Sft'] }],
+        projectArea: '15 Acres',
+        totalUnits: 650,
+        status: 'Ready to Move',
+        possession: 'Ready to move',
+        rera: 'P51800000001',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Clubhouse', 'Swimming Pool', 'Fitness Center', 'Kids Play Area', 'Landscaped Gardens', '24/7 Security'],
+        features: ['Sustainable green buildings', 'Smart home technology', 'Premium finishes', 'Strategic location']
       }
     },
     'ramky-group': {
@@ -93,6 +125,22 @@ const DeveloperPage = () => {
         phone: '+91 40 4033 4000',
         email: 'info@ramkygroup.com',
         website: 'www.ramkygroup.com'
+      },
+      propertyDetails: {
+        price: { min: 65, max: 140, unit: 'Lacs', perSqft: 5800 },
+        location: 'Hyderabad, India',
+        locality: 'Kokapet',
+        city: 'Hyderabad',
+        configurations: [{ type: '2 BHK', sizes: ['1150 Sft'] }, { type: '3 BHK', sizes: ['1550 Sft'] }],
+        projectArea: '12 Acres',
+        totalUnits: 480,
+        status: 'Under Construction',
+        possession: 'Jun 2026',
+        rera: 'P02200004567',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Clubhouse', 'Swimming Pool', 'Fitness Center', 'Kids Play Area', 'Landscaped Gardens', '24/7 Security'],
+        features: ['Sustainable infrastructure', 'Modern urban planning', 'Green building practices', 'Prime Hyderabad location']
       }
     },
     'brigade-group': {
@@ -110,6 +158,22 @@ const DeveloperPage = () => {
         phone: '+91 80 4137 4000',
         email: 'info@brigadegroup.com',
         website: 'www.brigadegroup.com'
+      },
+      propertyDetails: {
+        price: { min: 80, max: 160, unit: 'Lacs', perSqft: 6000 },
+        location: 'Bangalore, India',
+        locality: 'Koramangala',
+        city: 'Bangalore',
+        configurations: [{ type: '2 BHK', sizes: ['1250 Sft'] }, { type: '3 BHK', sizes: ['1700 Sft'] }],
+        projectArea: '8 Acres',
+        totalUnits: 380,
+        status: 'Ready to Move',
+        possession: 'Ready to move',
+        rera: 'PRM/KA/RERA/1251/446/PR/171120/003456',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Clubhouse', 'Swimming Pool', 'Fitness Center', 'Kids Play Area', 'Landscaped Gardens', '24/7 Security'],
+        features: ['Award-winning architecture', 'Prime location', 'Luxury amenities', 'Proven track record']
       }
     },
     'aparna-constructions': {
@@ -127,6 +191,22 @@ const DeveloperPage = () => {
         phone: '+91 40 4020 4040',
         email: 'info@aparnaconstructions.com',
         website: 'www.aparnaconstructions.com'
+      },
+      propertyDetails: {
+        price: { min: 70, max: 135, unit: 'Lacs', perSqft: 5600 },
+        location: 'Hyderabad, India',
+        locality: 'Gachibowli',
+        city: 'Hyderabad',
+        configurations: [{ type: '2 BHK', sizes: ['1180 Sft'] }, { type: '3 BHK', sizes: ['1580 Sft'] }],
+        projectArea: '9 Acres',
+        totalUnits: 420,
+        status: 'Under Construction',
+        possession: 'Mar 2026',
+        rera: 'P02200005678',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Clubhouse', 'Swimming Pool', 'Fitness Center', 'Kids Play Area', 'Landscaped Gardens', '24/7 Security'],
+        features: ['Tech-enabled smart homes', 'Eco-friendly construction', 'Quality assured', 'Modern design']
       }
     },
     'aliens-group': {
@@ -144,6 +224,22 @@ const DeveloperPage = () => {
         phone: '+91 40 2311 1111',
         email: 'info@aliensgroup.com',
         website: 'www.aliensgroup.com'
+      },
+      propertyDetails: {
+        price: { min: 95, max: 175, unit: 'Lacs', perSqft: 6500 },
+        location: 'Hyderabad, India',
+        locality: 'Tellapur',
+        city: 'Hyderabad',
+        configurations: [{ type: '2 BHK', sizes: ['1300 Sft'] }, { type: '3 BHK', sizes: ['1650 Sft'] }],
+        projectArea: '20 Acres',
+        totalUnits: 750,
+        status: 'Under Construction',
+        possession: 'Dec 2026',
+        rera: 'P02200006789',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Clubhouse', 'Swimming Pool', 'Fitness Center', 'Kids Play Area', 'Landscaped Gardens', '24/7 Security'],
+        features: ['Iconic architectural design', 'Skyscraper living', 'Contemporary interiors', 'Landmark project']
       }
     },
     'canny-forest-edge': {
@@ -203,6 +299,22 @@ const DeveloperPage = () => {
         phone: '+91 40 4567 8900',
         email: 'info@alpineinfratech.com',
         website: 'www.alpineinfratech.com'
+      },
+      propertyDetails: {
+        price: { min: 58, max: 58, unit: 'Lacs', perSqft: 5200 },
+        location: 'Kompally-Bollarum, Hyderabad',
+        locality: 'Kompally',
+        city: 'Hyderabad',
+        configurations: [{ type: '2 BHK', sizes: ['1120 Sft'] }],
+        projectArea: '4 Acres',
+        totalUnits: 370,
+        status: 'Ready to Move',
+        possession: 'Ready to move',
+        rera: 'P02200003938',
+        brochureLink: '#',
+        mapLink: 'https://maps.google.com',
+        amenities: ['Party Lawn 2420 Sqyd', 'Clubhouse', 'Landscaped Gardens', '24/7 Security', 'Kids Play Area', 'Fitness Center'],
+        features: ['47% Open Area with lavish landscaping', 'Bank Approved - SBI, HDFC, LIC, Bajaj, Sundaram', '1.5 km from Bolaraum MMTS Station', '5 mins to D-Mart, Cineplanet, Shopping Malls', '4 Blocks (G+5) with 370 premium flats', 'Ready to move in possession']
       }
     }
   };
