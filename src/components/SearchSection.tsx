@@ -8,6 +8,7 @@ import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 import { normalizeLocation } from '@/services/locationService';
+import mortgeaseLogo from '@/assets/mortgease-logo.jpg';
 import './search-input.css';
 export interface SearchSectionRef {
   focusSearchInput: () => void;
@@ -1609,6 +1610,33 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           {/* This space allows the search section to overlap properly */}
         </div>
       </div>
+
+      {/* Mortgease Partnership Badge - UAE Only */}
+      {(window.location.hostname === 'homehni.ae' || window.location.hostname === 'www.homehni.ae') && (
+        <div className="bg-gradient-to-r from-indigo-50 to-amber-50 py-4 border-t border-indigo-100">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+              <div className="flex items-center gap-3">
+                <img src={mortgeaseLogo} alt="Mortgease" className="h-8 md:h-10 object-contain" />
+                <div className="h-8 w-px bg-indigo-300 hidden md:block" />
+              </div>
+              <div className="text-center md:text-left">
+                <p className="text-sm md:text-base font-semibold text-gray-800">
+                  Official Channel Partner for Home Finance
+                </p>
+                <a 
+                  href="https://www.mortgease.ae" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-xs md:text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                >
+                  Visit mortgease.ae →
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>;
 
   // Helper: property types per tab for homepage UI (UI only)

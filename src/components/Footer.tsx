@@ -1,8 +1,9 @@
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { useCMSContent } from '@/hooks/useCMSContent';
+import mortgeaseLogo from '@/assets/mortgease-logo.jpg';
 interface FooterProps {
   searchSectionRef?: React.RefObject<{
     focusSearchInput: () => void;
@@ -470,6 +471,38 @@ const Footer = ({
         <Linkedin className="w-5 h-5 text-brand-red group-hover:text-white" />
       </a>
     </div>
+
+          {/* Mortgease Partnership Section - UAE Only */}
+          {(window.location.hostname === 'homehni.ae' || window.location.hostname === 'www.homehni.ae') && (
+            <div className="mb-6 p-6 bg-gradient-to-br from-indigo-50 to-amber-50 rounded-xl border border-indigo-200">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                <div className="flex-shrink-0">
+                  <img 
+                    src={mortgeaseLogo} 
+                    alt="Mortgease - Official Home Finance Partner" 
+                    className="h-16 md:h-20 object-contain"
+                  />
+                </div>
+                <div className="text-center md:text-left">
+                  <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1">
+                    Official Channel Partner for Home Finance
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Making your home ownership dreams a reality in the UAE
+                  </p>
+                  <a 
+                    href="https://www.mortgease.ae" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-semibold transition-colors"
+                  >
+                    <span>Explore Mortgease Services</span>
+                    <ChevronRight size={16} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Copyright */}
         {/* Copyright & Credit */}
