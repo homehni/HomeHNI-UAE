@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Building2, MapPin, Calendar, Users, Award, Leaf, Star, Phone, Mail, Globe, ArrowRight } from "lucide-react";
+import React, { useState, useEffect, useRef } from 'react';
+import { Building2, MapPin, Calendar, Users, Award, Leaf, Star, Phone, Mail, Globe, ArrowRight, Download, CheckCircle2, Home, Trees, Droplets, Dumbbell, Shield, Camera, Maximize2, ChevronRight, ChevronLeft, X, MessageCircle, TrendingUp, Heart, IndianRupee, Sparkles } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +24,20 @@ import forestEdgeLawn from '@/assets/forest-edge-lawn.jpg';
 import forestEdgeAerial from '@/assets/forest-edge-aerial.jpg';
 import forestEdgeBalcony from '@/assets/forest-edge-balcony.jpg';
 import forestEdgeEvening from '@/assets/forest-edge-evening.jpg';
+import cannyForestEdgeVideo from '@/videos/2 and 3 BHK flats for sale Bachupally, Hyderabad ｜ Canny Forest Edge ｜ Canny Life Spaces.mp4';
+import forestEdgeHeroVideo from '@/videos/WhatsApp Video 2025-10-29 at 17.06.17_b8cc3ca2.mp4';
+import interior1 from '@/images/forest-edge/IMG-20251029-WA0022.jpg';
+import interior2 from '@/images/forest-edge/IMG-20251029-WA0023.jpg';
+import interior3 from '@/images/forest-edge/IMG-20251029-WA0024.jpg';
+import interior4 from '@/images/forest-edge/IMG-20251029-WA0025.jpg';
+import interior5 from '@/images/forest-edge/IMG-20251029-WA0026.jpg';
+import interior6 from '@/images/forest-edge/IMG-20251029-WA0027.jpg';
+import interior7 from '@/images/forest-edge/IMG-20251029-WA0028.jpg';
+import interior8 from '@/images/forest-edge/WhatsApp Image 2025-10-29 at 17.06.17_18668968.jpg';
+import forestEdgeProjectImage from '@/images/forest-edge/WhatsApp Image 2025-10-29 at 17.06.17_9380ae6d.jpg';
+import floorPlan1 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215024_.jpeg';
+import floorPlan2 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215035_.jpeg';
+import floorPlan3 from '@/images/forest-edge/floor-plan/Screenshot_31-10-2025_215041_.jpeg';
 
 const DeveloperPage = () => {
   const { developerId } = useParams();
@@ -234,15 +248,15 @@ const DeveloperPage = () => {
       rank: 7,
       founded: '2010',
       headquarters: 'Bachupally, Hyderabad',
-      highlights: '2BHK & 3BHK Luxurious Residences - Ready to move in, 66% open area with 200 acres forest view',
-      description: "Forest Edge is a premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. The project offers 2BHK apartments of 1125 & 1285 Sft and 3BHK apartments ranging from 1505 Sft to 2200 Sft with ready to move-in possession. TS RERA Approved (P02200003658). Experience luxurious living with 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
+      highlights: '2BHK Luxurious residences designed to create an oasis of comfort and tranquility',
+      description: "Experience a gated community inspired by Nature and the forests neighbourhood. Canny's Forest Edge - 2BHK Luxurious residences designed to create an oasis of comfort and tranquility. A premium residential project spread across 1.52 acres with 197 flats in Bachupally, Hyderabad. Ready to move-in possession with TS RERA Approved (P02200003658). Experience luxurious living with more than 66% open area and breathtaking 200 acres of forest view, featuring wide cantilever balconies and impeccably landscaped surroundings.",
       specializations: [
-        '2BHK - 1125 & 1285 Sft',
-        '3BHK - 1505, 1675, 1985 & 2200 Sft',
-        'Ready to Move In',
-        '66% Open Area',
+        '2BHK - 1285 Sft',
+        'Ready to Move',
+        'More than 66% Open Area',
         '200 Acres Forest View',
-        'TS RERA Approved (P02200003658)'
+        'TS RERA Approved (P02200003658)',
+        'Gated Community Inspired by Nature'
       ],
       keyProjects: [
         '1.52 Acres with 197 Premium Flats',
@@ -265,23 +279,24 @@ const DeveloperPage = () => {
       // Property-specific details
       propertyDetails: {
         price: {
-          min: 66.36,
-          max: 129.78,
+          min: 82,
+          max: 82,
           unit: 'Lacs',
-          perSqft: 5899
+          perSqft: 6381
         },
-        location: 'Sy. No. 369/A/2, Opp. Hamara Family Dhaba, Bachupally, Hyderabad',
+        location: 'Bachupally, Hyderabad',
         locality: 'Bachupally',
         city: 'Hyderabad',
         configurations: [
-          { type: '2 BHK', sizes: ['1125 Sft', '1285 Sft'] },
-          { type: '3 BHK', sizes: ['1505 Sft', '1675 Sft', '1985 Sft', '2200 Sft'] }
+          { type: '2 BHK', sizes: ['1285 Sft'] }
         ],
         projectArea: '1.52 Acres',
         totalUnits: 197,
-        status: 'Ready to Move In',
-        possession: 'Immediate',
+        status: 'Ready to Move',
+        possession: 'Ready to move',
         rera: 'P02200003658',
+        brochureLink: 'https://drive.google.com/file/d/1oBZpf4hXld-JX8ppSwOdC0psS3UlSEp9/view',
+        mapLink: 'https://www.google.com/maps/place/Canny+Forest+Edge/@17.5428399,78.4038539,17z/data=!3m1!4b1!4m5!3m4!1s0x3bcb8fc6acafcec1:0xa65b820b460d291a!8m2!3d17.5428399!4d78.4060426?shorturl=1',
         amenities: [
           'Clubhouse',
           'Swimming Pool',
@@ -290,15 +305,17 @@ const DeveloperPage = () => {
           'Landscaped Gardens',
           '24/7 Security',
           'CCTV Surveillance',
-          'Power Backup',
-          'Rainwater Harvesting',
-          'Sewage Treatment Plant'
+          'Multi-utility block',
+          'Recreational Areas'
         ],
         features: [
-          'Just 3 KM from Nigma Metro Junction',
-          'Well-Maintained Infrastructure',
-          'Just 3 KM from Nigma Metro Junction',
-          '66% Open Area with 200 Acres Forest View'
+          '1.52 Acres - 197 Flats',
+          'Grand Clubhouse & Multi-utility block',
+          'More than 66% of Open Area with 200 Acres Forest View',
+          'Wide cantilever balconies for a better feel',
+          'Clubhouse, swimming pool, fitness center, and recreational areas for a well-rounded lifestyle',
+          'Impeccably landscaped surroundings, offering a serene environment',
+          '24/7 security and dedicated concierge services to ensure your peace of mind'
         ]
       }
     },
@@ -359,6 +376,17 @@ const DeveloperPage = () => {
   // Render property-detail layout for Forest Edge
   if (isPropertyDetail && developer.propertyDetails) {
     const pd = developer.propertyDetails;
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const heroVideoRef = useRef<HTMLVideoElement>(null);
+    const interiorCarouselRef = useRef<HTMLDivElement>(null);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [currentInteriorIndex, setCurrentInteriorIndex] = useState(0);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const [selectedFloorPlanIndex, setSelectedFloorPlanIndex] = useState<number | null>(null);
+    const similarProjectsRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
     
     // Forest Edge carousel images
     const forestEdgeImages = [
@@ -371,438 +399,1241 @@ const DeveloperPage = () => {
       forestEdgeBalcony,
       forestEdgeEvening
     ];
+
+    // Interior images array - apartment interior photos
+    const interiorImages = [
+      interior1,
+      interior2,
+      interior3,
+      interior4,
+      interior5,
+      interior6,
+      interior7,
+      interior8,
+    ];
+
+    // Floor plan images array
+    const floorPlanImages = [
+      floorPlan1,
+      floorPlan2,
+      floorPlan3,
+    ];
+
+    // Scroll animation hook - observes when sections enter viewport
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animate-fade-in-up');
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      );
+
+      const sections = document.querySelectorAll('.scroll-animate');
+      sections.forEach((section) => observer.observe(section));
+
+      return () => {
+        sections.forEach((section) => observer.unobserve(section));
+      };
+    }, []);
+
+    // Auto-scroll and smooth scroll tracking for interior carousel
+    useEffect(() => {
+      const carousel = interiorCarouselRef.current;
+      if (!carousel) return;
+
+      let rafId: number | null = null;
+      let isRunning = false;
+      let autoScrollInterval: NodeJS.Timeout | null = null;
+      let isPaused = false;
+
+      const updateScrollProgress = () => {
+        if (!carousel) return;
+        
+        const scrollLeft = carousel.scrollLeft;
+        const itemWidth = carousel.clientWidth;
+        if (itemWidth === 0) return;
+        
+        const progress = scrollLeft / itemWidth;
+        setScrollProgress(progress);
+        
+        const index = Math.round(progress);
+        if (index >= 0 && index < interiorImages.length) {
+          setCurrentInteriorIndex((prevIndex) => {
+            if (prevIndex !== index) return index;
+            return prevIndex;
+          });
+        }
+
+        isRunning = false;
+        rafId = null;
+      };
+
+      const handleScroll = () => {
+        if (!isRunning) {
+          isRunning = true;
+          rafId = requestAnimationFrame(updateScrollProgress);
+        }
+      };
+
+      // Auto-scroll function
+      const autoScroll = () => {
+        if (!carousel || isPaused) return;
+        
+        const itemWidth = carousel.clientWidth;
+        const scrollLeft = carousel.scrollLeft;
+        const maxScroll = carousel.scrollWidth - itemWidth;
+        
+        if (scrollLeft >= maxScroll - 1) {
+          // Reached end, scroll back to start
+          carousel.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          // Scroll to next image with smooth transition
+          const nextPosition = Math.ceil(scrollLeft / itemWidth) * itemWidth + itemWidth;
+          carousel.scrollTo({ 
+            left: nextPosition, 
+            behavior: 'smooth' 
+          });
+        }
+      };
+
+      // Start auto-scrolling
+      const startAutoScroll = () => {
+        if (autoScrollInterval) clearInterval(autoScrollInterval);
+        autoScrollInterval = setInterval(autoScroll, 5000); // Change image every 5 seconds
+      };
+
+      // Pause on mouse enter/touch start
+      const handlePause = () => {
+        isPaused = true;
+        if (autoScrollInterval) {
+          clearInterval(autoScrollInterval);
+          autoScrollInterval = null;
+        }
+      };
+
+      // Resume on mouse leave/touch end
+      const handleResume = () => {
+        isPaused = false;
+        startAutoScroll();
+      };
+
+      carousel.addEventListener('scroll', handleScroll, { passive: true });
+      carousel.addEventListener('mouseenter', handlePause);
+      carousel.addEventListener('mouseleave', handleResume);
+      carousel.addEventListener('touchstart', handlePause, { passive: true });
+      carousel.addEventListener('touchend', () => {
+        setTimeout(handleResume, 2000); // Resume after 2 seconds of no touch
+      }, { passive: true });
+      
+      // Initial update and start auto-scroll
+      updateScrollProgress();
+      startAutoScroll();
+
+      return () => {
+        carousel.removeEventListener('scroll', handleScroll);
+        carousel.removeEventListener('mouseenter', handlePause);
+        carousel.removeEventListener('mouseleave', handleResume);
+        carousel.removeEventListener('touchstart', handlePause);
+        carousel.removeEventListener('touchend', handleResume);
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+        }
+        if (autoScrollInterval) {
+          clearInterval(autoScrollInterval);
+        }
+      };
+    }, [interiorImages.length]);
+
+    // Similar Projects scroll tracking - show/hide arrows based on scroll position
+    useEffect(() => {
+      const carousel = similarProjectsRef.current;
+      if (!carousel) return;
+
+      const updateScrollButtons = () => {
+        const { scrollLeft, scrollWidth, clientWidth } = carousel;
+        setCanScrollLeft(scrollLeft > 0);
+        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+      };
+
+      // Initial check
+      updateScrollButtons();
+
+      // Update on scroll
+      carousel.addEventListener('scroll', updateScrollButtons, { passive: true });
+      
+      // Update on resize
+      window.addEventListener('resize', updateScrollButtons);
+
+      return () => {
+        carousel.removeEventListener('scroll', updateScrollButtons);
+        window.removeEventListener('resize', updateScrollButtons);
+      };
+    }, []);
+
+    // Video auto-play/pause hook - plays when in viewport, pauses when out
+    useEffect(() => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      const videoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Video is in viewport - play it
+              video.play().catch((error) => {
+                // Auto-play might be blocked by browser, which is fine
+                console.log('Video auto-play prevented:', error);
+              });
+            } else {
+              // Video is out of viewport - pause it
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.5, rootMargin: '0px' }
+      );
+
+      videoObserver.observe(video);
+
+      return () => {
+        videoObserver.unobserve(video);
+      };
+    }, []);
+
+    // Video pause when tab/window loses focus
+    useEffect(() => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          // Tab/window lost focus - pause video
+          video.pause();
+        }
+      };
+
+      const handleBlur = () => {
+        // Window lost focus - pause video
+        video.pause();
+      };
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      window.addEventListener('blur', handleBlur);
+
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('blur', handleBlur);
+      };
+    }, []);
+
+    // Video play/pause toggle handler
+    const handleVideoClick = () => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      if (video.paused) {
+        video.play().catch((error) => {
+          console.log('Video play prevented:', error);
+        });
+      } else {
+        video.pause();
+      }
+    };
+
+    // Hero video auto-play/pause hook
+    useEffect(() => {
+      const video = heroVideoRef.current;
+      if (!video) return;
+
+      const videoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              video.play().catch((error) => {
+                console.log('Hero video auto-play prevented:', error);
+              });
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.5, rootMargin: '0px' }
+      );
+
+      videoObserver.observe(video);
+
+      return () => {
+        videoObserver.unobserve(video);
+      };
+    }, []);
+
+    // Hero video click handler
+    const handleHeroVideoClick = () => {
+      const video = heroVideoRef.current;
+      if (!video) return;
+
+      if (video.paused) {
+        video.play().catch((error) => {
+          console.log('Hero video play prevented:', error);
+        });
+      } else {
+        video.pause();
+      }
+    };
+
+    // Video fullscreen handler
+    const handleFullscreen = async () => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      try {
+        if (!document.fullscreenElement) {
+          // Enter fullscreen
+          if (video.requestFullscreen) {
+            await video.requestFullscreen();
+          } else if ((video as any).webkitRequestFullscreen) {
+            // Safari
+            await (video as any).webkitRequestFullscreen();
+          } else if ((video as any).msRequestFullscreen) {
+            // IE/Edge
+            await (video as any).msRequestFullscreen();
+          }
+        } else {
+          // Exit fullscreen
+          if (document.exitFullscreen) {
+            await document.exitFullscreen();
+          } else if ((document as any).webkitExitFullscreen) {
+            await (document as any).webkitExitFullscreen();
+          } else if ((document as any).msExitFullscreen) {
+            await (document as any).msExitFullscreen();
+          }
+        }
+      } catch (error) {
+        console.log('Fullscreen error:', error);
+      }
+    };
+
+    // Amenity icons mapping for better visual representation
+    const amenityIcons: Record<string, React.ReactNode> = {
+      'Clubhouse': <Home className="h-6 w-6" />,
+      'Swimming Pool': <Droplets className="h-6 w-6" />,
+      'Fitness Center': <Dumbbell className="h-6 w-6" />,
+      'Kids Play Area': <Users className="h-6 w-6" />,
+      'Landscaped Gardens': <Trees className="h-6 w-6" />,
+      '24/7 Security': <Shield className="h-6 w-6" />,
+      'CCTV Surveillance': <Camera className="h-6 w-6" />,
+      'Multi-utility block': <Building2 className="h-6 w-6" />,
+      'Recreational Areas': <Star className="h-6 w-6" />,
+    };
     
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-50" ref={sectionRef}>
         <Marquee />
         <Header />
         
-        {/* Breadcrumb */}
-        <div className="container mx-auto max-w-7xl px-4 pt-24 pb-4">
-          <div className="text-sm text-muted-foreground">
-            Home / Hyderabad / Bachupally / <span className="text-foreground font-medium">{developer.name}</span>
+        {/* Breadcrumb - Modern, minimal design */}
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-6">
+          <nav className="text-sm text-muted-foreground font-medium">
+            <span className="hover:text-foreground transition-colors cursor-pointer">Home</span>
+            <span className="mx-2">/</span>
+            <span className="hover:text-foreground transition-colors cursor-pointer">Hyderabad</span>
+            <span className="mx-2">/</span>
+            <span className="hover:text-foreground transition-colors cursor-pointer">Bachupally</span>
+            <span className="mx-2">/</span>
+            <span className="text-foreground font-semibold">{developer.name}</span>
+          </nav>
           </div>
-        </div>
 
-        {/* Hero Section with Auto-Scroll Carousel */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <AutoScrollCarousel 
-            images={forestEdgeImages}
-            autoScrollInterval={4000}
-            className="h-[400px] md:h-[550px] shadow-2xl"
-          />
-        </section>
-
-        {/* Property Header */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Left Column - Property Info */}
-            <div className="flex-1">
-              <div className="flex items-start gap-4 mb-6">
-                <img 
-                  src={developer.logo} 
-                  alt="Canny Life Spaces"
-                  className="w-16 h-16 rounded-lg object-contain bg-white p-2 shadow-md"
-                />
-                <div className="flex-1">
-                  <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">{developer.name}</h1>
-                  <p className="text-muted-foreground flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
-                    {pd.locality}, {pd.city}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-1">By Canny Life Spaces Pvt Ltd</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-brand-red">
-                    ₹{pd.price.min} Cr - ₹{pd.price.max} Cr
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    @ ₹{pd.price.perSqft}/Sft
-                  </div>
-                </div>
-              </div>
-
-              {/* Status Badge */}
-              <div className="flex items-center gap-4 mb-6 flex-wrap">
-                <div className="bg-green-100 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  {pd.status}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  Possession in {pd.possession}
-                </div>
-              </div>
-
-              {/* Property Details Grid */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div>
-                      <div className="text-xs text-muted-foreground mb-1">SIZE CONFIGURATION</div>
-                      <div className="font-semibold text-foreground">
-                        {pd.configurations.map(c => c.type).join(', ')}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-muted-foreground mb-1">CARPET AREA</div>
-                      <div className="font-semibold text-foreground">
-                        {pd.configurations[0].sizes[0]} - {pd.configurations[pd.configurations.length - 1].sizes[pd.configurations[pd.configurations.length - 1].sizes.length - 1]}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-muted-foreground mb-1">NO. OF UNITS</div>
-                      <div className="font-semibold text-foreground">{pd.totalUnits}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-muted-foreground mb-1">PROJECT AREA</div>
-                      <div className="font-semibold text-foreground">{pd.projectArea}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Benefit Banner */}
-              <div className="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 flex items-center gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md">
-                  <Leaf className="h-8 w-8 text-brand-red" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-foreground mb-1">
-                    Get Benefits worth ₹2 Lacs*
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Free site visit • Post site-visit subsidy • Expert insights on locations & neighborhoods
-                  </p>
-                </div>
-                <Button className="bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark">
-                  Claim Now →
-                </Button>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="mt-6 flex gap-4 flex-wrap">
-                <Button 
-                  variant="outline" 
-                  className="flex-1 min-w-[200px]"
-                >
-                  ⬇ Download Brochure
-                </Button>
-                <Button 
-                  className="flex-1 min-w-[200px] bg-brand-red hover:bg-brand-maroon"
-                  onClick={() => setIsContactFormOpen(true)}
-                >
-                  Contact Builder →
-                </Button>
-              </div>
+        {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
+        <section className="relative mb-12 scroll-animate overflow-hidden">
+          {/* Mobile View - Full Width Background Video with Overlay */}
+          <div className="lg:hidden relative w-full h-[600px] md:h-[700px] mb-12">
+            {/* Background Video */}
+            <div className="absolute inset-0 w-full h-full">
+              <video
+                ref={heroVideoRef}
+                className="w-full h-full object-cover"
+                playsInline
+                loop
+                preload="metadata"
+                muted
+                autoPlay
+                onClick={handleHeroVideoClick}
+              >
+                <source src={forestEdgeHeroVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              {/* Dark overlay for better text readability */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
             </div>
 
-            {/* Right Sidebar - Contact Form */}
-            <div className="lg:w-96">
-              <Card className="sticky top-24">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-4">Why Search Alone?</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    Looking for your dream home?
-                  </p>
-                  <ul className="space-y-3 mb-6 text-sm">
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
-                      <span>Free site visits to explore your options</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
-                      <span>Expert insights on locations & neighborhoods</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
-                      <span>Post a need & get properties viewed by you</span>
-                    </li>
-                  </ul>
-                  <div className="space-y-3 mb-4">
-                    <input
-                      type="text"
-                      placeholder="Padma"
-                      className="w-full px-4 py-2 border rounded-lg"
-                    />
-                    <input
-                      type="email"
-                      placeholder="navijayatha3126@gmail.com"
-                      className="w-full px-4 py-2 border rounded-lg"
-                    />
-                    <input
-                      type="tel"
-                      placeholder="+91 9618630468"
-                      className="w-full px-4 py-2 border rounded-lg"
-                    />
+            {/* Content Overlay */}
+            <div className="relative z-10 h-full flex flex-col justify-between p-4 sm:p-6 text-white">
+              {/* Top Content */}
+              <div className="space-y-4">
+                {/* Logo - Elegant and Bigger, No Background */}
+                <div className="flex items-center justify-center p-4">
+                  <img 
+                    src={developer.logo} 
+                    alt="Canny Life Spaces"
+                    className="w-40 h-28 sm:w-48 sm:h-32 object-contain"
+                  />
+                </div>
+
+                {/* Project Info */}
+                <div className="bg-black/40 backdrop-blur-sm rounded-xl p-4 border border-white/20 space-y-3">
+                  <div className="flex items-center gap-2 text-base sm:text-lg font-semibold flex-wrap">
+                    <span>{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
+                    <span className="text-white/50">|</span>
+                    <span className="text-emerald-300">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
                   </div>
+                  
+                  <div className="flex items-center gap-2 text-white/90 text-sm">
+                    <MapPin className="h-4 w-4 text-emerald-400" />
+                    <span>{pd.locality}, {pd.city}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 flex-wrap text-xs sm:text-sm text-white/80">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-3 w-3 text-emerald-400" />
+                      <span>{pd.possession}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                      <span>RERA</span>
+                    </div>
+                  </div>
+
+                  {/* NEW LAUNCH Badge */}
+                  <div className="flex items-center gap-3 pt-2">
+                    <div className="bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-2 border border-white/20">
+                      <Sparkles className="h-3 w-3 text-yellow-400" />
+                      <span className="text-xs font-semibold">NEW LAUNCH Project</span>
+                    </div>
+                    <a href="#" className="text-xs text-emerald-300 hover:text-emerald-200 underline">Learn more</a>
+                  </div>
+                </div>
+
+                {/* Speech Bubble Overlay */}
+                <div className="absolute top-24 right-4 sm:right-8 bg-blue-400/90 backdrop-blur-sm rounded-2xl px-4 sm:px-6 py-3 sm:py-4 shadow-xl max-w-[200px] sm:max-w-[250px]">
+                  <div className="relative">
+                    <p className="text-white font-bold text-sm sm:text-base">
+                      Spread Over {pd.projectArea}
+                    </p>
+                    <div className="absolute -bottom-2 left-6 sm:left-8 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-blue-400/90"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Content - Buttons and Features */}
+              <div className="space-y-4 pb-4">
+                {/* Feature Cards */}
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="flex flex-col items-center gap-1.5 p-2 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                    <div className="w-8 h-8 rounded-lg bg-teal-700/50 flex items-center justify-center">
+                      <TrendingUp className="h-4 w-4 text-emerald-300" />
+                    </div>
+                    <span className="text-[10px] font-medium text-center text-white/90 leading-tight">High price appreciation</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 p-2 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                    <div className="w-8 h-8 rounded-lg bg-teal-700/50 flex items-center justify-center">
+                      <Heart className="h-4 w-4 text-emerald-300" />
+                    </div>
+                    <span className="text-[10px] font-medium text-center text-white/90 leading-tight">Units of choice</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 p-2 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                    <div className="w-8 h-8 rounded-lg bg-teal-700/50 flex items-center justify-center">
+                      <IndianRupee className="h-4 w-4 text-emerald-300" />
+                    </div>
+                    <span className="text-[10px] font-medium text-center text-white/90 leading-tight">Easy Payment plans</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2">
                   <Button 
-                    className="w-full bg-brand-red hover:bg-brand-maroon mb-4"
+                    size="sm"
+                    className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold text-xs sm:text-sm"
                     onClick={() => setIsContactFormOpen(true)}
                   >
-                    Connect →
+                    View Number
                   </Button>
-                  <div className="text-center">
-                    <p className="text-sm text-brand-red font-medium mb-2">
-                      Ask a question about <span className="text-primary">the project</span>
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Get a quick response & free Expert Advice now!
-                    </p>
-                    <textarea
-                      placeholder="Type a question..."
-                      className="w-full px-4 py-2 border rounded-lg mb-3 text-sm"
-                      rows={3}
-                    />
-                    <input
-                      type="text"
-                      placeholder="What is the possession date of this project?"
-                      className="w-full px-4 py-2 border rounded-lg mb-3 text-sm"
-                    />
+                  {pd.brochureLink && (
                     <Button 
-                      variant="outline"
-                      className="w-full"
+                      variant="outline" 
+                      size="sm"
+                      className="flex-1 bg-black/40 text-white hover:bg-black/60 border border-white/30 font-semibold text-xs sm:text-sm backdrop-blur-sm"
+                      onClick={() => window.open(pd.brochureLink, '_blank')}
                     >
-                      Ask Question
+                      <Download className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                      Brochure
                     </Button>
+                  )}
+                </div>
+
+                {/* Interest Indicator */}
+                <div className="flex items-center gap-2 text-xs text-white/80">
+                  <span>🔥</span>
+                  <span>36 families showed interest yesterday.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Bar - Key Highlights */}
+            <div className="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-md px-4 sm:px-6 py-3 flex items-center justify-between z-20">
+              <span className="text-white font-semibold text-sm">Key Highlights</span>
+              <ChevronRight className="h-4 w-4 text-white rotate-90" />
+            </div>
+          </div>
+
+          {/* PC View - Split Layout (60/40) with Unified Light Green Background */}
+          <div className="hidden lg:block px-4 sm:px-6 lg:px-8 pb-16">
+            <div className="container mx-auto max-w-7xl">
+              {/* Unified Light Green Background Card for Entire Hero Section */}
+              <div className="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 rounded-2xl shadow-2xl p-8 lg:p-10 mb-12 relative z-10">
+                <div className="relative flex gap-0">
+                  {/* Left Column - ~60% width */}
+                  <div className="w-[60%] relative z-10">
+                    {/* Logo - Elegant and Bigger, No Background */}
+                    <div className="mb-6 flex items-center justify-center">
+                      <img 
+                        src={developer.logo} 
+                        alt="Canny Life Spaces"
+                        className="w-48 h-32 lg:w-56 lg:h-40 object-contain"
+                      />
+                    </div>
+
+                    {/* Basic Project Information */}
+                    <div className="space-y-4 mb-6">
+                      <div className="flex items-center gap-3 text-xl font-semibold text-slate-800">
+                        <span>{pd.configurations.map(c => c.type).join(', ')} Apartment</span>
+                        <span className="text-slate-400">|</span>
+                        <span className="text-emerald-700">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 text-slate-700">
+                        <MapPin className="h-5 w-5 text-emerald-600" />
+                        <span>{pd.locality}, {pd.city}</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <Calendar className="h-4 w-4 text-emerald-600" />
+                          <span className="text-sm">{pd.possession}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                          <span className="text-sm">RERA</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* NEW LAUNCH Project Badge */}
+                    <div className="mb-6 flex items-center gap-3">
+                      <div className="bg-slate-800/90 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-2 border border-slate-700/50 shadow-md">
+                        <Sparkles className="h-4 w-4 text-yellow-400" />
+                        <span className="text-sm font-semibold text-white">NEW LAUNCH Project</span>
+                      </div>
+                      <a href="#" className="text-sm text-emerald-700 hover:text-emerald-800 font-medium underline">Learn more</a>
+                    </div>
+
+                    {/* Key Highlights/Benefits */}
+                    <div className="grid grid-cols-3 gap-3 mb-6">
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/70 backdrop-blur-sm rounded-lg border border-emerald-200/50 shadow-sm">
+                        <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                          <TrendingUp className="h-5 w-5 text-emerald-700" />
+                        </div>
+                        <span className="text-xs font-medium text-center text-slate-700">High price appreciation</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/70 backdrop-blur-sm rounded-lg border border-emerald-200/50 shadow-sm">
+                        <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                          <Heart className="h-5 w-5 text-emerald-700" />
+                        </div>
+                        <span className="text-xs font-medium text-center text-slate-700">Units of choice</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-2 p-3 bg-white/70 backdrop-blur-sm rounded-lg border border-emerald-200/50 shadow-sm">
+                        <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                          <IndianRupee className="h-5 w-5 text-emerald-700" />
+                        </div>
+                        <span className="text-xs font-medium text-center text-slate-700">Easy Payment plans</span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3 mb-4">
+                      <Button 
+                        size="lg"
+                        className="flex-1 bg-slate-900 text-white hover:bg-slate-800 font-semibold shadow-lg"
+                        onClick={() => setIsContactFormOpen(true)}
+                      >
+                        View Number
+                      </Button>
+                      {pd.brochureLink && (
+                        <Button 
+                          variant="outline" 
+                          size="lg"
+                          className="flex-1 bg-white/80 text-slate-800 hover:bg-white border-2 border-emerald-600 font-semibold shadow-sm group"
+                          onClick={() => window.open(pd.brochureLink, '_blank')}
+                        >
+                          <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                          Brochure
+                        </Button>
+                      )}
+                    </div>
+
+                    {/* Interest Indicator */}
+                    <div className="flex items-center gap-2 text-sm text-slate-600">
+                      <span className="text-orange-500">🔥</span>
+                      <span>36 families showed interest yesterday.</span>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+
+                  {/* Right Column - ~40% width, slightly overlapping - Mobile Portrait Video */}
+                  <div className="w-[45%] -ml-[5%] relative z-20 flex items-center">
+                    <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px] mx-auto">
+                      <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
+                        <video
+                          ref={heroVideoRef}
+                          className="w-full h-full object-cover rounded-2xl"
+                          playsInline
+                          loop
+                          preload="metadata"
+                          muted
+                          autoPlay
+                          onClick={handleHeroVideoClick}
+                        >
+                          <source src={forestEdgeHeroVideo} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                        
+                        {/* Light Blue Speech Bubble Overlay */}
+                        <div className="absolute top-6 left-4 right-4 bg-blue-400/95 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl">
+                          <div className="relative">
+                            <p className="text-white font-bold text-base leading-tight">
+                              Spread Over {pd.projectArea}
+                            </p>
+                            {/* Speech bubble tail */}
+                            <div className="absolute -bottom-2 left-6 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-blue-400/95"></div>
+                          </div>
+                        </div>
+
+                        {/* Bottom Bar - Key Highlights */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between">
+                          <span className="text-white font-semibold text-sm">Key Highlights</span>
+                          <ChevronRight className="h-4 w-4 text-white rotate-90" />
+                        </div>
+
+                        {/* Navigation Arrows */}
+                        <button
+                          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10"
+                          aria-label="Previous"
+                        >
+                          <ChevronLeft className="h-5 w-5 text-white" />
+                        </button>
+                        <button
+                          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10"
+                          aria-label="Next"
+                        >
+                          <ChevronRight className="h-5 w-5 text-white" />
+                        </button>
+                      </div>
+                    </Card>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Key Features */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Key Features</h2>
-              <ul className="space-y-3">
+        {/* Key Features - Modern grid layout */}
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-16 scroll-animate relative z-0">
+          <div className="mb-8">
+            <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Key Features</h2>
+            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
                 {pd.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 bg-brand-red rounded-full mt-2"></div>
-                    <span className="text-muted-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              <div 
+                key={index} 
+                className="group flex items-start gap-4 p-6 bg-white rounded-xl border border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <CheckCircle2 className="h-6 w-6 text-brand-red" />
+                </div>
+                <p className="text-foreground font-medium leading-relaxed pt-1">{feature}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Video Section - Responsive with lazy loading and auto-play */}
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 scroll-animate">
+          <div className="mb-8">
+            <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
+            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+          </div>
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+            <CardContent className="p-0">
+              <div className="relative w-full aspect-video bg-neutral-900 group cursor-pointer">
+                <video
+                  ref={videoRef}
+                  className="w-full h-full object-cover"
+                  playsInline
+                  loop
+                  preload="metadata"
+                  poster=""
+                  onClick={handleVideoClick}
+                  onDoubleClick={handleFullscreen}
+                >
+                  <source src={cannyForestEdgeVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                {/* Gradient overlay for better visual integration */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+                
+                {/* Fullscreen button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleFullscreen();
+                  }}
+                  className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 backdrop-blur-sm p-3 rounded-full transition-all opacity-0 group-hover:opacity-100 hover:scale-110 z-10"
+                  aria-label="Toggle fullscreen"
+                >
+                  <Maximize2 className="h-5 w-5 text-white" />
+                </button>
+
+                {/* Click to play/pause indicator */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="opacity-0 group-hover:opacity-30 transition-opacity duration-300">
+                    <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-4 border-white/30">
+                      <div className="w-0 h-0 border-l-[20px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-1"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </section>
 
-        {/* Floor Plans */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">{developer.name} Floor Plans</h2>
-                <Button variant="link" className="text-primary">View All →</Button>
+        {/* Apartment Interiors - 3D Carousel Gallery */}
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-animate">
+          <div className="mb-8">
+            <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Apartment Interiors</h2>
+            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
               </div>
-              <div className="flex gap-4 mb-6">
+          
+          {/* Smooth Swipe Carousel Container - Static black background with scrolling images inside */}
+          <div className="relative">
+            <Card className="border-0 shadow-2xl bg-black overflow-hidden h-[500px] md:h-[600px] relative">
+              <div 
+                ref={interiorCarouselRef}
+                className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar h-full relative"
+                style={{ 
+                  scrollbarWidth: 'none', 
+                  msOverflowStyle: 'none',
+                  scrollBehavior: 'smooth',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                {interiorImages.map((image, index) => {
+                  // Use scrollProgress for blur transition effect
+                  const offset = index - scrollProgress;
+                  const absOffset = Math.abs(offset);
+                  
+                  // Calculate blur based on distance from center - more aggressive blur
+                  const blurAmount = absOffset < 0.1 ? 0 : Math.min(absOffset * 8, 15); // Max 15px blur when not in focus
+                  // Calculate opacity for smooth fade in/out
+                  const opacity = absOffset < 0.5 ? 1 : Math.max(0.2, 1 - absOffset * 0.5);
+                  
+                  return (
+                    <div
+                      key={index}
+                      className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-4"
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: `${index * 100}%`,
+                        width: '100%',
+                        height: '100%',
+                        opacity: opacity,
+                        filter: `blur(${blurAmount}px)`,
+                        transition: 'opacity 1.2s ease-in-out, filter 1.2s ease-in-out',
+                        willChange: 'opacity, filter',
+                        pointerEvents: absOffset < 0.5 ? 'auto' : 'none'
+                      }}
+                    >
+                      <img
+                        src={image}
+                        alt={`Apartment Interior ${index + 1}`}
+                        className="w-auto h-auto max-w-full max-h-full object-contain"
+                        style={{ 
+                          maxWidth: 'calc(100% - 2rem)',
+                          maxHeight: 'calc(100% - 2rem)'
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+                {/* Spacer divs to maintain scroll width */}
+                {interiorImages.map((_, index) => (
+                  <div key={`spacer-${index}`} className="flex-shrink-0 w-full h-full" aria-hidden="true" />
+                ))}
+              </div>
+            </Card>
+          </div>
+
+          {/* Custom styles for 3D carousel */}
+          <style>{`
+            .hide-scrollbar::-webkit-scrollbar {
+              display: none;
+            }
+            .hide-scrollbar {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `}</style>
+        </section>
+
+        {/* Floor Plans - Premium showcase */}
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 scroll-animate">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Floor Plans</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+            </div>
+            <Button variant="ghost" className="text-brand-red hover:text-brand-maroon font-semibold">
+              View All <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+          
+          {/* Configuration Filter Tabs */}
+          <div className="flex gap-3 mb-8 flex-wrap">
                 {pd.configurations.map((config, index) => (
                   <Button 
                     key={index}
                     variant={index === 0 ? "default" : "outline"}
-                    className={index === 0 ? "bg-brand-red hover:bg-brand-maroon" : ""}
+                size="lg"
+                className={index === 0 
+                  ? "bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-maroon-dark text-white shadow-lg font-semibold" 
+                  : "border-2 hover:border-brand-red hover:text-brand-red font-semibold"
+                }
                   >
                     {config.type}
                   </Button>
                 ))}
               </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                {pd.configurations.slice(0, 2).map((config, index) => (
-                  <div key={index} className="border rounded-xl p-4">
-                    <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
-                      <Building2 className="h-24 w-24 text-gray-400" />
+
+          {/* Floor Plan Cards - Modern grid with actual images */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {floorPlanImages.map((floorPlan, index) => (
+              <Card 
+                key={index} 
+                className="group border-2 border-neutral-200 hover:border-brand-red/50 hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer"
+                onClick={() => setSelectedFloorPlanIndex(index)}
+              >
+                <div className="relative aspect-square bg-white rounded-t-xl overflow-hidden">
+                  <img 
+                    src={floorPlan} 
+                    alt={`Floor Plan ${index + 1}`}
+                    className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
-                    <h3 className="font-bold mb-2">{config.type} Floor Plan</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Carpet Area : {config.sizes.join(', ')}
-                    </p>
-                    <Button variant="link" className="text-primary p-0">
-                      Request Price →
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-6">Floor Plan {index + 1}</h3>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-2 hover:bg-brand-red hover:text-white hover:border-brand-red transition-all font-semibold group"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsContactFormOpen(true);
+                    }}
+                  >
+                    Request Price <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
+            </CardContent>
+          </Card>
+            ))}
+          </div>
+          
+          {/* Floor Plan Modal - Full size image viewer */}
+          {selectedFloorPlanIndex !== null && (
+            <div 
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+              onClick={() => setSelectedFloorPlanIndex(null)}
+            >
+              <div className="relative max-w-7xl max-h-full w-full h-full flex items-center justify-center">
+                <img 
+                  src={floorPlanImages[selectedFloorPlanIndex]} 
+                  alt={`Floor Plan ${selectedFloorPlanIndex + 1}`}
+                  className="max-w-full max-h-full object-contain"
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <button
+                  onClick={() => setSelectedFloorPlanIndex(null)}
+                  className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-full transition-all hover:scale-110"
+                  aria-label="Close"
+                >
+                  <X className="h-6 w-6 text-white" />
+                </button>
+                {/* Navigation arrows */}
+                {floorPlanImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFloorPlanIndex((selectedFloorPlanIndex - 1 + floorPlanImages.length) % floorPlanImages.length);
+                      }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-full transition-all hover:scale-110"
+                      aria-label="Previous"
+                    >
+                      <ChevronLeft className="h-6 w-6 text-white" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFloorPlanIndex((selectedFloorPlanIndex + 1) % floorPlanImages.length);
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-full transition-all hover:scale-110"
+                      aria-label="Next"
+                    >
+                      <ChevronRight className="h-6 w-6 text-white" />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Amenities - Premium grid with icons */}
+        <section className="bg-gradient-to-b from-neutral-50 to-white py-16 scroll-animate">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Amenities</h2>
+                <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+              </div>
+              <Button variant="ghost" className="text-brand-red hover:text-brand-maroon font-semibold">
+                View All <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+              {pd.amenities.map((amenity, index) => (
+                <div 
+                  key={index} 
+                  className="group flex flex-col items-center gap-3 p-6 bg-white rounded-xl border-2 border-neutral-200 hover:border-brand-red hover:shadow-xl transition-all duration-300 cursor-pointer"
+                >
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-brand-red/20 group-hover:to-brand-maroon/20 transition-all">
+                    {amenityIcons[amenity] || <Star className="h-8 w-8 text-brand-red" />}
+                  </div>
+                  <span className="text-sm font-medium text-center text-foreground leading-tight">{amenity}</span>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
-        {/* Amenities */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Amenities in {developer.name}</h2>
-                <Button variant="link" className="text-primary">View All →</Button>
+        {/* About the Project - Rich content section */}
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-animate">
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-8 md:p-12">
+              <div className="mb-8">
+                <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">About {developer.name}</h2>
+                <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {pd.amenities.slice(0, 10).map((amenity, index) => (
-                  <div key={index} className="flex flex-col items-center gap-2 p-4 border rounded-lg hover:shadow-md transition-shadow">
-                    <Star className="h-8 w-8 text-brand-red" />
-                    <span className="text-sm text-center">{amenity}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* About the Project */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">About the {developer.name}</h2>
-                <Button variant="link" className="text-primary">View All →</Button>
-              </div>
-              <div className="text-muted-foreground leading-relaxed space-y-4">
+              <div className="prose prose-lg max-w-none">
+                <div className="text-muted-foreground leading-relaxed space-y-6 text-base md:text-lg">
                 {developer.description.split('. ').map((sentence, index) => (
                   sentence.trim() && (
-                    <p key={index}>
+                      <p key={index} className="mb-0">
                       {sentence.trim()}{index < developer.description.split('. ').length - 1 ? '.' : ''}
                     </p>
                   )
                 ))}
+                </div>
               </div>
             </CardContent>
           </Card>
         </section>
 
-        {/* About the Builder */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <Card className="bg-gradient-to-br from-blue-900 to-blue-950 text-white">
-            <CardContent className="p-8">
-              <div className="flex items-start gap-6 mb-6">
+        {/* About the Builder - Premium dark section */}
+        <section className="bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 py-16 scroll-animate">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Card className="border-0 bg-white/5 backdrop-blur-md shadow-2xl">
+              <CardContent className="p-8 md:p-12">
+                <div className="flex flex-col md:flex-row items-start gap-8 mb-8">
+                  <div className="relative">
                 <img 
                   src={developer.logo} 
                   alt="Canny Life Spaces"
-                  className="w-20 h-20 rounded-lg object-contain bg-white p-2"
-                />
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-2">About the Builder</h2>
-                  <h3 className="text-xl mb-4">Canny Life Spaces Pvt Ltd</h3>
-                  <p className="text-sm mb-1">Years in business: <span className="font-semibold">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span></p>
-                  <p className="text-white/90 leading-relaxed">
-                    Canny Life Spaces Pvt Ltd, has been one of the most premium real estate developer in India since its inception. 
-                    It has firmly established itself as a brand to reckon with in the real estate in India and abroad...
+                      className="w-32 h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 rounded-2xl object-contain bg-white p-3 shadow-xl border-2 border-white/20"
+                    />
+                  </div>
+                  <div className="flex-1 text-white">
+                    <h2 className="text-2xl md:text-3xl font-semibold mb-3">About the Builder</h2>
+                    <h3 className="text-xl md:text-2xl mb-4 text-white/90">Canny Life Spaces Pvt Ltd</h3>
+                    <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                      <Calendar className="h-4 w-4" />
+                      Years in business: <span className="text-white">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span>
+                    </div>
+                    <p className="text-white/80 leading-relaxed text-base md:text-lg">
+                      Canny Life Spaces Pvt Ltd has been one of the most premium real estate developers in India since its inception. 
+                      It has firmly established itself as a brand to reckon with in the real estate industry in India and abroad, 
+                      delivering excellence in every project.
                   </p>
                 </div>
               </div>
-              <Button variant="secondary" className="bg-white text-blue-900 hover:bg-gray-100">
-                Show more ↓
-              </Button>
-              
-              {/* Projects Carousel */}
-              <div className="mt-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold">PROJECTS BY CANNY LIFE SPACES PVT LTD</h3>
-                  <Button variant="link" className="text-white">View All →</Button>
+                
+                {/* Projects by Builder */}
+                <div className="mt-10 pt-10 border-t border-white/10">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl md:text-2xl font-semibold text-white">Projects by Canny Life Spaces</h3>
+                    <Button variant="ghost" className="text-white hover:bg-white/10 font-semibold">
+                      View All <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl overflow-hidden">
-                    <div className="aspect-video bg-white/20"></div>
-                    <div className="p-4">
-                      <h4 className="font-bold mb-2">Forest Edge</h4>
-                      <p className="text-sm text-white/80">2 BHK - 3 BHK</p>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="group bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition-all cursor-pointer">
+                      <div className="aspect-video relative overflow-hidden">
+                        <img 
+                          src={forestEdgeProjectImage} 
+                          alt={developer.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      </div>
+                      <div className="p-6">
+                        <h4 className="font-bold text-xl text-white mb-2">{developer.name}</h4>
+                        <p className="text-sm text-white/70">2 BHK Luxurious Residences</p>
                     </div>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
+          </div>
         </section>
 
-        {/* Reviews */}
-        <section className="container mx-auto max-w-7xl px-4 pb-8">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Reviews of {developer.name}</h2>
-              <div className="mb-6">
-                <p className="text-sm text-muted-foreground mb-4">WRITE A REVIEW</p>
-                <div className="flex gap-2 mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-6 w-6 text-gray-300 cursor-pointer hover:text-yellow-400" />
-                  ))}
+        {/* Similar Projects - Horizontal scrollable carousel */}
+        <section className="bg-white py-16 scroll-animate">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Similar Projects</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
                 </div>
-                <textarea
-                  placeholder="Write about the project"
-                  className="w-full px-4 py-3 border rounded-lg mb-4"
-                  rows={4}
-                />
-                <Button className="bg-brand-red hover:bg-brand-maroon">Post</Button>
+
+            {/* Scrollable Projects Carousel */}
+            <div className="relative">
+              {/* Left Scroll Arrow */}
+              {canScrollLeft && (
+                <button
+                  onClick={() => {
+                    if (similarProjectsRef.current) {
+                      similarProjectsRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+                    }
+                  }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-3 rounded-full transition-all hover:scale-110 z-10"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft className="h-6 w-6 text-foreground" />
+                </button>
+              )}
+              
+              <div 
+                ref={similarProjectsRef}
+                className="flex gap-6 overflow-x-auto pb-6 scroll-smooth hide-scrollbar"
+                style={{ 
+                  scrollbarWidth: 'none', 
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch',
+                  scrollBehavior: 'smooth'
+                }}
+              >
+                {/* Similar Project Cards */}
+                {[
+                  {
+                    image: forestEdgeExterior,
+                    price: '₹82 L onwards',
+                    bhk: '2 BHK',
+                    name: 'Modern Spaaces Engrace Phase 2',
+                    location: 'Opp to Bricks & Milestone Felicit...',
+                    url: '#'
+                  },
+                  {
+                    image: forestEdgeAerial,
+                    price: '₹2.18 Crs - ₹2.52 Crs',
+                    bhk: '3 BHK',
+                    name: 'Assetz Trees And Tandem',
+                    location: 'Near Bouncers Cricket Club, Cho...',
+                    url: '#'
+                  },
+                  {
+                    image: forestEdgeAmenities1,
+                    price: '₹1.5 Crs - ₹2.2 Crs',
+                    bhk: '2, 3 BHK',
+                    name: 'Navanaami Courtyard Of Life',
+                    location: 'Gachibowli, Hyderabad',
+                    url: '#'
+                  },
+                  {
+                    image: forestEdgePool,
+                    price: '₹95 L onwards',
+                    bhk: '2 BHK',
+                    name: 'Prestige High Fields',
+                    location: 'Nallagandla, Hyderabad',
+                    url: '#'
+                  },
+                  {
+                    image: forestEdgeLawn,
+                    price: '₹1.8 Crs - ₹2.5 Crs',
+                    bhk: '3 BHK',
+                    name: 'Lodha Upper Thane',
+                    location: 'Thane, Mumbai',
+                    url: '#'
+                  }
+                ].map((project, index) => (
+                  <Card 
+                    key={index} 
+                    className="flex-shrink-0 w-[320px] sm:w-[360px] border-2 border-neutral-200 hover:border-brand-red/50 hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                  >
+                    {/* Project Image */}
+                    <div className="relative aspect-video overflow-hidden bg-neutral-100">
+                      <img 
+                        src={project.image} 
+                        alt={project.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+                    </div>
+                    
+                    <CardContent className="p-5">
+                      {/* Price and BHK */}
+                      <div className="flex items-baseline justify-between mb-2">
+                        <div className="text-xl font-bold text-foreground">{project.price}</div>
+                        <div className="text-sm text-muted-foreground">{project.bhk}</div>
+                      </div>
+                      
+                      {/* Project Name */}
+                      <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-1">{project.name}</h3>
+                      
+                      {/* Location */}
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+                        <MapPin className="h-4 w-4 flex-shrink-0" />
+                        <span className="line-clamp-1">{project.location}</span>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-3">
+                        <Button 
+                          className="flex-1 bg-brand-red hover:bg-brand-maroon text-white font-semibold"
+                          onClick={() => window.open(project.url, '_blank')}
+                        >
+                          View Project
+                        </Button>
+                        <button
+                          onClick={() => {
+                            const whatsappUrl = `https://wa.me/919833662222?text=Hi, I'm interested in ${encodeURIComponent(project.name)}`;
+                            window.open(whatsappUrl, '_blank');
+                          }}
+                          className="flex-shrink-0 w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-colors shadow-lg hover:shadow-xl"
+                          aria-label="Contact via WhatsApp"
+                        >
+                          <MessageCircle className="h-5 w-5 text-white" />
+                        </button>
               </div>
             </CardContent>
           </Card>
+                ))}
+              </div>
+              
+              {/* Right Scroll Arrow */}
+              {canScrollRight && (
+                <button
+                  onClick={() => {
+                    if (similarProjectsRef.current) {
+                      similarProjectsRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+                    }
+                  }}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white shadow-lg p-3 rounded-full transition-all hover:scale-110 z-10"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight className="h-6 w-6 text-foreground" />
+                </button>
+              )}
+            </div>
+          </div>
         </section>
 
-        {/* RERA & Legal Certificates */}
-        <section className="container mx-auto max-w-7xl px-4 pb-12">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6">{developer.name} - RERA & Legal Certificates</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2">RERA Certificate</h3>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    The Real Estate (Regulation and Development) Act, 2016 is Act of the Parliament of India which seeks to 
+        {/* RERA & Legal Certificates - Trust section */}
+        <section className="bg-gradient-to-b from-white to-neutral-50 py-16 scroll-animate">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Card className="border-0 shadow-xl bg-white">
+              <CardContent className="p-8 md:p-12">
+                <div className="mb-8">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">RERA & Legal Certificates</h2>
+                  <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full"></div>
+                </div>
+                
+                <div className="space-y-8">
+                  {/* RERA Certificate Card */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 md:p-8 border-2 border-blue-100">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center">
+                        <Shield className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-foreground mb-2">RERA Certificate</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          The Real Estate (Regulation and Development) Act, 2016 is an Act of the Parliament of India which seeks to 
                     protect home-buyers as well as boost investments in the real estate industry. The Act came into force on 1 May 2016.
                   </p>
-                  <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg">
-                    <div className="flex-1">
-                      <p className="text-xs text-muted-foreground">Telangana RERA</p>
-                      <p className="font-semibold">{pd.rera}</p>
+                      </div>
                     </div>
-                    <Button variant="outline" size="sm">
-                      View Certificate
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white rounded-xl p-6 border border-blue-200">
+                    <div className="flex-1">
+                        <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wider">Telangana RERA</p>
+                        <p className="text-xl font-semibold text-foreground">{pd.rera}</p>
+                    </div>
+                      <Button variant="outline" size="lg" className="border-2 hover:bg-blue-50 font-semibold">
+                        View Certificate <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <h3 className="font-semibold mb-4">BENEFITS OF RERA</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
-                      <Users className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                  {/* RERA Benefits Grid */}
                       <div>
-                        <h4 className="font-semibold mb-1">Timely Dispute Resolution</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Buyer can approach rera authorities within 60 days from date of problem identified
+                    <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6">Benefits of RERA</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {[
+                        { icon: <Users className="h-6 w-6" />, title: 'Timely Dispute Resolution', desc: 'Buyer can approach RERA authorities within 60 days from date of problem identified' },
+                        { icon: <Building2 className="h-6 w-6" />, title: 'Quality Assurance', desc: 'Quality standards as set out by authorities must be followed by developers' },
+                        { icon: <Calendar className="h-6 w-6" />, title: 'Transparency & Tracking', desc: 'Allows buyers to track progress milestones and defects' },
+                        { icon: <Award className="h-6 w-6" />, title: 'Buyer Protection', desc: 'Buyers can get grievance redressed within project completion' }
+                      ].map((benefit, idx) => (
+                        <div key={idx} className="group flex gap-4 p-6 bg-gradient-to-br from-neutral-50 to-white rounded-xl border-2 border-neutral-200 hover:border-brand-red/50 hover:shadow-lg transition-all">
+                          <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-red/10 to-brand-maroon/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <div className="text-brand-red">{benefit.icon}</div>
+                      </div>
+                      <div>
+                            <h4 className="font-bold text-foreground mb-2">{benefit.title}</h4>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {benefit.desc}
                         </p>
                       </div>
                     </div>
-                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
-                      <Building2 className="h-6 w-6 text-blue-600 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold mb-1">Quality Assurance</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Quality standards as set out by authorities must be followed by developers
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
-                      <Calendar className="h-6 w-6 text-blue-600 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold mb-1">Transparency & Tracking</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Allows buyers to track progress milestones and defects
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-3 p-4 bg-blue-50 rounded-lg">
-                      <Award className="h-6 w-6 text-blue-600 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold mb-1">Buyer Protection</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Buyers can get grievance redressed within project completion
-                        </p>
-                      </div>
-                    </div>
+                      ))}
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
+          </div>
         </section>
 
         <Footer />
