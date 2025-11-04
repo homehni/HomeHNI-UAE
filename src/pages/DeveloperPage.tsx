@@ -662,16 +662,17 @@ const DeveloperPage = () => {
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
         <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-emerald-50 lg:via-green-50 lg:to-teal-50 pt-20">
           {/* Mobile View - Clean & Elegant Layout */}
-          <div className="lg:hidden relative w-full min-h-[700px] mb-12">
-            {/* Background Video */}
-            <div className="absolute inset-0 w-full h-full">
-              <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                <source src={forestEdgeHeroVideo} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
-            </div>
+          {developerId === 'canny-forest-edge' && (
+            <div className="lg:hidden relative w-full min-h-[700px] mb-12">
+              {/* Background Video */}
+              <div className="absolute inset-0 w-full h-full">
+                <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
+                  <source src={forestEdgeHeroVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                {/* Dark overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
+              </div>
 
             {/* Content Overlay - Structured Layout */}
             <div className="relative z-10 h-full flex flex-col p-5 sm:p-6 text-white">
@@ -783,6 +784,7 @@ const DeveloperPage = () => {
               </div>
             </div>
           </div>
+          )}
 
           {/* PC View - Split Layout (60/40) - Bold Color Style */}
           <div className="hidden lg:block py-16">
@@ -860,30 +862,32 @@ const DeveloperPage = () => {
                   </div>
 
                   {/* Right Column - ~40% width, Right Aligned - Mobile Portrait Video */}
-                  <div className="w-[40%] ml-auto relative z-20 flex items-center justify-end pl-8">
-                    <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
-                      <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
-                        <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                          <source src={forestEdgeHeroVideo} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
+                  {developerId === 'canny-forest-edge' && (
+                    <div className="w-[40%] ml-auto relative z-20 flex items-center justify-end pl-8">
+                      <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
+                        <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
+                          <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
+                            <source src={forestEdgeHeroVideo} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
 
-                        {/* Bottom Bar - Key Highlights */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between">
-                          <span className="text-white font-semibold text-sm">Key Highlights</span>
-                          <ChevronRight className="h-4 w-4 text-white rotate-90" />
+                          {/* Bottom Bar - Key Highlights */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between">
+                            <span className="text-white font-semibold text-sm">Key Highlights</span>
+                            <ChevronRight className="h-4 w-4 text-white rotate-90" />
+                          </div>
+
+                          {/* Navigation Arrows */}
+                          <button className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10" aria-label="Previous">
+                            <ChevronLeft className="h-5 w-5 text-white" />
+                          </button>
+                          <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10" aria-label="Next">
+                            <ChevronRight className="h-5 w-5 text-white" />
+                          </button>
                         </div>
-
-                        {/* Navigation Arrows */}
-                        <button className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10" aria-label="Previous">
-                          <ChevronLeft className="h-5 w-5 text-white" />
-                        </button>
-                        <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10" aria-label="Next">
-                          <ChevronRight className="h-5 w-5 text-white" />
-                        </button>
-                      </div>
-                    </Card>
-                  </div>
+                      </Card>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -907,18 +911,19 @@ const DeveloperPage = () => {
         </section>
 
         {/* Video Section - Responsive with lazy loading and auto-play */}
-        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-16 scroll-animate">
-          <div className="mb-8 text-center sm:text-left">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
-          </div>
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden max-w-sm mx-auto md:max-w-full">
-            <CardContent className="p-0">
-              <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900 group cursor-pointer">
-                <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
-                  <source src={cannyForestEdgeVideo} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+        {developerId === 'canny-forest-edge' && (
+          <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-16 scroll-animate">
+            <div className="mb-8 text-center sm:text-left">
+              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
+            </div>
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden max-w-sm mx-auto md:max-w-full">
+              <CardContent className="p-0">
+                <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900 group cursor-pointer">
+                  <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
+                    <source src={cannyForestEdgeVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 {/* Gradient overlay for better visual integration */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
                 
@@ -942,6 +947,7 @@ const DeveloperPage = () => {
             </CardContent>
           </Card>
         </section>
+        )}
 
         {/* Apartment Interiors - 3D Carousel Gallery */}
         <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16 scroll-animate">
