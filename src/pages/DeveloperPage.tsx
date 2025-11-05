@@ -1235,16 +1235,6 @@ const DeveloperPage = () => {
             </CardContent>
           </Card>
           
-          {/* Project Video Button */}
-          <Button 
-            size="lg" 
-            variant="default"
-            className="w-full bg-black hover:bg-gray-900 text-white font-semibold shadow-md"
-            onClick={handleHeroVideoClick}
-          >
-            Project Video ↑
-          </Button>
-          
         </aside>
         {/* End CTA Sidebar (30%) */}
         
