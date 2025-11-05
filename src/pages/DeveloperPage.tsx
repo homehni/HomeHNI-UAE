@@ -1125,7 +1125,7 @@ const DeveloperPage = () => {
         </section>
 
         {/* Location & Map */}
-        <section className="bg-gradient-to-br from-gray-50 to-white py-16 scroll-animate">
+        <section className="bg-gradient-to-br from-gray-50 to-white py-16 pb-32 scroll-animate">
           <div className="px-5 sm:px-6">
             <div className="mb-8 text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Location & Neighbourhood</h2>
