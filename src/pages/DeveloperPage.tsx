@@ -661,12 +661,6 @@ const DeveloperPage = () => {
         <Marquee />
         <Header />
         
-        {/* 70/30 Split Layout Wrapper - Desktop Only */}
-        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-6 lg:max-w-[1600px] lg:mx-auto lg:px-6 lg:pt-6">
-          
-          {/* Main Content - 70% */}
-          <div className="lg:min-h-screen"  style={{ gridColumn: '1' }}>
-        
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
         <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-emerald-50 lg:via-green-50 lg:to-teal-50 pt-20">
           {/* Mobile View - Clean & Elegant Layout */}
@@ -901,6 +895,12 @@ const DeveloperPage = () => {
             </div>
           </div>
         </section>
+
+        {/* 70/30 Split Layout Wrapper - Starts from Key Features */}
+        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-6 lg:max-w-[1600px] lg:mx-auto lg:px-6">
+          
+          {/* Main Content - 70% */}
+          <div className="lg:min-h-screen" style={{ gridColumn: '1' }}>
 
         {/* Key Features - Modern grid layout */}
         <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-12 pb-16 scroll-animate relative z-0">
