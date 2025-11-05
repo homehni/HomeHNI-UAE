@@ -1756,7 +1756,15 @@ export const PostProperty: React.FC = () => {
                   setUserType('Owner');
                   const { data: { user } } = await supabase.auth.getUser();
                   if (user) {
-                    await updateUserRole(user.id, 'owner');
+                    try {
+                      await updateUserRole(user.id, 'owner');
+                    } catch (roleError: any) {
+                      // If role already exists (duplicate key error), treat as success
+                      if (roleError?.code !== '23505') {
+                        throw roleError;
+                      }
+                      console.log('Role already set to owner');
+                    }
                   }
                   setShowUserTypeDialog(false);
                   console.log('User selected type: Owner');
@@ -1780,7 +1788,15 @@ export const PostProperty: React.FC = () => {
                   setUserType('Agent');
                   const { data: { user } } = await supabase.auth.getUser();
                   if (user) {
-                    await updateUserRole(user.id, 'agent');
+                    try {
+                      await updateUserRole(user.id, 'agent');
+                    } catch (roleError: any) {
+                      // If role already exists (duplicate key error), treat as success
+                      if (roleError?.code !== '23505') {
+                        throw roleError;
+                      }
+                      console.log('Role already set to agent');
+                    }
                   }
                   setShowUserTypeDialog(false);
                   console.log('User selected type: Agent');
