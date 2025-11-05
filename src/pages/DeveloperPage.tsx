@@ -806,7 +806,7 @@ const DeveloperPage = () => {
                       
                       {/* Main Info */}
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{developerData?.hero_title || developer.name}</span>
+                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{developerData?.hero_title || developer.name} | {pd.configurations.map(c => c.type).join(', ')} Apartments</span>
                         <span className="text-slate-400">|</span>
                         <span className="text-xl lg:text-2xl font-bold text-slate-900">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
                         <span className="text-slate-400">|</span>
