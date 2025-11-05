@@ -1713,7 +1713,7 @@ export const PostProperty: React.FC = () => {
       
       {/* User Type Selection Dialog */}
       <Dialog open={showUserTypeDialog && currentStep === 'property-selection' && !userType}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg" hideCloseButton>
           <DialogHeader>
             <DialogTitle className="text-center text-lg font-medium">Are you a:</DialogTitle>
           </DialogHeader>
