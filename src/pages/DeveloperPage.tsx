@@ -903,7 +903,7 @@ const DeveloperPage = () => {
           <div className="lg:min-h-screen" style={{ gridColumn: '1' }}>
 
         {/* Key Features - Modern grid layout */}
-        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pt-12 pb-16 scroll-animate relative z-0">
+        <section className="px-5 sm:px-6 pt-12 pb-16 scroll-animate relative z-0">
           <div className="mb-8 text-center sm:text-left">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Key Features</h2>
             <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
@@ -920,7 +920,7 @@ const DeveloperPage = () => {
 
         {/* Video Section - Responsive with lazy loading and auto-play */}
         {developerId === 'canny-forest-edge' && (
-          <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-16 scroll-animate">
+          <section className="px-5 sm:px-6 pb-16 scroll-animate">
             <div className="mb-8 text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
               <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
@@ -957,12 +957,12 @@ const DeveloperPage = () => {
         </section>
         )}
 
-        {/* Apartment Interiors - 3D Carousel Gallery */}
-        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16 scroll-animate">
-          <div className="mb-8 text-center sm:text-left">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Apartment Interiors</h2>
-            <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
-              </div>
+         {/* Apartment Interiors - 3D Carousel Gallery */}
+         <section className="px-5 sm:px-6 py-16 scroll-animate">
+           <div className="mb-8 text-center sm:text-left">
+             <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Apartment Interiors</h2>
+             <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
+               </div>
           
           {/* Smooth Swipe Carousel Container - Static black background with scrolling images inside */}
           <div className="relative">
@@ -1018,13 +1018,13 @@ const DeveloperPage = () => {
           `}</style>
         </section>
 
-        {/* Floor Plans - Premium showcase */}
-        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-16 scroll-animate">
-          <div className="mb-8 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4">
-            <div className="text-center sm:text-left">
-              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Floor Plans</h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
-            </div>
+         {/* Floor Plans - Premium showcase */}
+         <section className="px-5 sm:px-6 pb-16 scroll-animate">
+           <div className="mb-8 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4">
+             <div className="text-center sm:text-left">
+               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Floor Plans</h2>
+               <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
+             </div>
             <Button variant="ghost" className="text-brand-red hover:text-brand-maroon font-semibold">
               View All <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -1084,7 +1084,7 @@ const DeveloperPage = () => {
 
         {/* Amenities - Premium grid with icons */}
         <section className="bg-gradient-to-b from-neutral-50 to-white py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="px-5 sm:px-6">
             <div className="mb-8 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4">
               <div className="text-center sm:text-left">
                 <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Amenities</h2>
@@ -1106,7 +1106,7 @@ const DeveloperPage = () => {
         </section>
 
         {/* About the Project - Rich content section */}
-        <section className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-16 scroll-animate">
+        <section className="px-5 sm:px-6 py-16 scroll-animate">
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardContent className="p-6 sm:p-8 md:p-12">
               <div className="mb-8 text-center sm:text-left">
@@ -1126,7 +1126,7 @@ const DeveloperPage = () => {
 
         {/* Location & Map */}
         <section className="bg-gradient-to-br from-gray-50 to-white py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="px-5 sm:px-6">
             <div className="mb-8 text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Location & Neighbourhood</h2>
               <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
@@ -1165,7 +1165,7 @@ const DeveloperPage = () => {
 
         {/* About the Builder - Premium dark section */}
         <section className="bg-gradient-to-br from-[#001F3F] via-[#0A2A43] to-[#001829] py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="px-5 sm:px-6">
             <div className="p-6 sm:p-8 md:p-12">
               <div className="flex flex-col items-center md:items-start md:flex-row gap-8 mb-8">
                 <div className="relative flex-shrink-0">
@@ -1213,7 +1213,7 @@ const DeveloperPage = () => {
 
         {/* Similar Projects - Horizontal scrollable carousel */}
         <section className="bg-white py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="px-5 sm:px-6">
             <div className="mb-8 text-center sm:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Similar Projects</h2>
               <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
@@ -1331,7 +1331,7 @@ const DeveloperPage = () => {
 
         {/* RERA & Legal Certificates - Trust section */}
         <section className="bg-gradient-to-b from-white to-neutral-50 py-16 scroll-animate">
-          <div className="container mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="px-5 sm:px-6">
             <Card className="border-0 shadow-xl bg-white">
               <CardContent className="p-6 sm:p-8 md:p-12">
                 <div className="mb-8 text-center sm:text-left">
