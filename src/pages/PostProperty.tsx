@@ -23,7 +23,7 @@ import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapFurnishing } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
-import { updateUserProfile, hasUserRole } from '@/services/profileService';
+import { updateUserProfile } from '@/services/profileService';
 import { PropertyDraftService } from '@/services/propertyDraftService';
 import { DraftResumeModal } from '@/components/property-form/DraftResumeModal';
 import Header from '@/components/Header';
@@ -42,7 +42,7 @@ type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-fo
 export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
-  const [showUserTypeDialog, setShowUserTypeDialog] = useState(true);
+  const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
   const [userType, setUserType] = useState<'Owner' | 'Agent' | null>(null);
   
   // Track currentStep changes
@@ -75,31 +75,28 @@ export const PostProperty: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  // Check if user already has a role on mount - if so, skip the dialog
+  // Decide whether to show the role dialog based on a persistent flag
   useEffect(() => {
-    const checkExistingRole = async () => {
-      if (!user) return;
+    if (!user) return;
+    const key = `pp_role_confirmed_${user.id}`;
+    const confirmed = localStorage.getItem(key) === 'true';
 
-      try {
-        const isOwner = await hasUserRole('owner');
-        const isAgent = await hasUserRole('agent');
+    if (currentStep === 'property-selection' && !showDraftResumeModal) {
+      setShowUserTypeDialog(!confirmed && !userType);
+    } else {
+      setShowUserTypeDialog(false);
+    }
+  }, [user, currentStep, showDraftResumeModal, userType]);
 
-        if (isOwner) {
-          console.log('User already has owner role, skipping dialog');
-          setUserType('Owner');
-          setShowUserTypeDialog(false);
-        } else if (isAgent) {
-          console.log('User already has agent role, skipping dialog');
-          setUserType('Agent');
-          setShowUserTypeDialog(false);
-        }
-      } catch (error) {
-        console.error('Error checking user role:', error);
-      }
-    };
-
-    checkExistingRole();
-  }, [user]);
+  // When the user leaves the selection step after choosing a role, persist confirmation
+  useEffect(() => {
+    if (!user || !userType) return;
+    if (currentStep !== 'property-selection') {
+      const key = `pp_role_confirmed_${user.id}`;
+      localStorage.setItem(key, 'true');
+      setShowUserTypeDialog(false);
+    }
+  }, [currentStep, user, userType]);
 
   // Handle browser back button to reset user type selection
   useEffect(() => {
@@ -815,10 +812,15 @@ export const PostProperty: React.FC = () => {
       // Clear any stored draft ID from sessionStorage
       sessionStorage.removeItem('resumeDraftId');
       
-      // Set flag to prevent modal from showing again in this session
+      // Set flag to prevent draft popup from showing again in this session
       sessionStorage.setItem('draftModalDismissed', 'true');
       console.log('✅ Set draftModalDismissed flag to prevent popup from showing again');
-      
+
+      // If the user has already selected a role previously, keep the role dialog hidden
+      if (user) {
+        localStorage.setItem(`pp_role_confirmed_${user.id}`, 'true');
+      }
+
       // Set force proceed to allow immediate form submission
       setForceProceed(true);
       
@@ -1774,7 +1776,7 @@ export const PostProperty: React.FC = () => {
       )}
       
       {/* User Type Selection Dialog */}
-      <Dialog open={showUserTypeDialog && currentStep === 'property-selection' && !userType}>
+      <Dialog open={showUserTypeDialog && currentStep === 'property-selection' && !userType && !showDraftResumeModal}>
         <DialogContent className="sm:max-w-lg" hideCloseButton>
           <DialogHeader>
             <DialogTitle className="text-center text-lg font-medium">Are you a:</DialogTitle>
