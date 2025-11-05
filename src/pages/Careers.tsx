@@ -154,7 +154,7 @@ const Careers = () => {
         </div>
 
         {/* Sticky Form Container for Large Screens */}
-        <div className="hidden lg:block fixed top-32 right-4 z-50 w-[420px]">
+        <div className="hidden md:block fixed top-32 right-4 z-50 w-[380px] lg:w-[420px]">
           <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
             <CardContent className="p-4">
               <h3 className="text-xl font-semibold text-foreground mb-1 text-uniform-center">Apply for Sales Intern Position</h3>
@@ -301,7 +301,7 @@ const Careers = () => {
         </div>
 
         {/* Mobile Form - Static below hero */}
-        <section className="lg:hidden px-4 py-8 bg-background">
+        <section className="md:hidden px-4 py-8 bg-background">
         <div className="container mx-auto max-w-xl px-4">
           <Card className="w-full rounded-2xl shadow-xl border-2 border-primary bg-card">
             <CardContent className="p-6">
@@ -464,8 +464,8 @@ const Careers = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 pt-4 pb-8">
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
-            <div className="w-full lg:w-2/3 lg:pr-8 flex flex-col items-center">{/* Content centered */}
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            <div className="w-full md:w-2/3 md:pr-4 lg:pr-8 flex flex-col items-center">{/* Content centered */}
             
             {/* Header Section */}
             <section className="mb-12 pt-12">
@@ -540,7 +540,7 @@ const Careers = () => {
                 <h2 className="text-2xl font-bold text-gray-900">Why Choose Our Sales Internship?</h2>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              <div className="grid sm:grid-cols-2 gap-6 max-w-5xl mx-auto">
                 <div className="card-border-accent hover-lift p-6 bg-blue-50">
                   <h3 className="font-semibold text-blue-800 mb-3 text-center">Real Sales Experience</h3>
                   <p className="text-blue-700 text-center">
