@@ -47,6 +47,7 @@ const DeveloperPage = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [currentInteriorIndex, setCurrentInteriorIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [selectedFloorPlanIndex, setSelectedFloorPlanIndex] = useState<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -918,43 +919,102 @@ const DeveloperPage = () => {
           </div>
         </section>
 
-        {/* Video Section - Responsive with lazy loading and auto-play */}
+        {/* Video Section - Carousel with navigation */}
         {developerId === 'canny-forest-edge' && (
           <section className="px-5 sm:px-6 pb-16 scroll-animate">
             <div className="mb-8 text-center sm:text-left">
-              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Video</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">Project Videos</h2>
               <div className="h-1 w-20 bg-gradient-to-r from-brand-red to-brand-maroon rounded-full mx-auto sm:mx-0"></div>
             </div>
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden max-w-sm mx-auto md:max-w-full">
-              <CardContent className="p-0">
-                <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900 group cursor-pointer">
-                  <video ref={videoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay poster="" onClick={handleVideoClick} onDoubleClick={handleFullscreen}>
-                    <source src={cannyForestEdgeVideo} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                {/* Gradient overlay for better visual integration */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
-                
-                {/* Fullscreen button */}
-                <button onClick={e => {
-                e.stopPropagation();
-                handleFullscreen();
-              }} className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 backdrop-blur-sm p-3 rounded-full transition-all opacity-0 group-hover:opacity-100 hover:scale-110 z-10" aria-label="Toggle fullscreen">
-                  <Maximize2 className="h-5 w-5 text-white" />
-                </button>
-
-                {/* Click to play/pause indicator */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="opacity-0 group-hover:opacity-30 transition-opacity duration-300">
-                    <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-4 border-white/30">
-                      <div className="w-0 h-0 border-l-[20px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-1"></div>
+            
+            {/* Video Carousel Container */}
+            <div className="relative">
+              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden max-w-sm mx-auto md:max-w-full">
+                <CardContent className="p-0">
+                  <div className="relative w-full aspect-[9/16] md:aspect-video bg-neutral-900">
+                    {/* Video slides */}
+                    <div className="relative w-full h-full overflow-hidden">
+                      {[
+                        { title: 'Project Overview', video: cannyForestEdgeVideo },
+                        { title: 'Amenities Tour', video: forestEdgeHeroVideo },
+                        { title: 'Apartment Walkthrough', video: cannyForestEdgeVideo },
+                        { title: 'Neighbourhood View', video: forestEdgeHeroVideo }
+                      ].map((segment, index) => (
+                        <div
+                          key={index}
+                          className={`absolute inset-0 transition-all duration-500 ${
+                            index === currentVideoIndex 
+                              ? 'opacity-100 translate-x-0' 
+                              : index < currentVideoIndex 
+                                ? 'opacity-0 -translate-x-full' 
+                                : 'opacity-0 translate-x-full'
+                          }`}
+                        >
+                          <video 
+                            className="w-full h-full object-cover" 
+                            playsInline 
+                            loop 
+                            preload="metadata" 
+                            muted 
+                            autoPlay={index === currentVideoIndex}
+                            onClick={handleVideoClick}
+                          >
+                            <source src={segment.video} type="video/mp4" />
+                          </video>
+                          
+                          {/* Video Title Overlay */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                            <h3 className="text-white font-semibold text-lg md:text-xl">{segment.title}</h3>
+                            <div className="flex gap-1 mt-2">
+                              {[0, 1, 2, 3].map((dot) => (
+                                <div
+                                  key={dot}
+                                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                                    dot === currentVideoIndex 
+                                      ? 'w-8 bg-white' 
+                                      : 'w-1.5 bg-white/50'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+
+                    {/* Navigation Arrows */}
+                    <button
+                      onClick={() => setCurrentVideoIndex((prev) => (prev === 0 ? 3 : prev - 1))}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 backdrop-blur-sm p-3 rounded-full transition-all hover:scale-110 z-20"
+                      aria-label="Previous video"
+                    >
+                      <ChevronLeft className="h-6 w-6 text-white" />
+                    </button>
+                    
+                    <button
+                      onClick={() => setCurrentVideoIndex((prev) => (prev === 3 ? 0 : prev + 1))}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 backdrop-blur-sm p-3 rounded-full transition-all hover:scale-110 z-20"
+                      aria-label="Next video"
+                    >
+                      <ChevronRight className="h-6 w-6 text-white" />
+                    </button>
+
+                    {/* Fullscreen button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleFullscreen();
+                      }}
+                      className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 backdrop-blur-sm p-3 rounded-full transition-all hover:scale-110 z-20"
+                      aria-label="Toggle fullscreen"
+                    >
+                      <Maximize2 className="h-5 w-5 text-white" />
+                    </button>
                   </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
         )}
 
          {/* Apartment Interiors - 3D Carousel Gallery */}
