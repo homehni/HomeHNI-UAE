@@ -68,7 +68,7 @@ const Index = () => {
           <LazyHomeServices />
         </Suspense>
         
-        <FeaturedProperties />
+        {/* <FeaturedProperties /> */}
         
         <Services />
         <WhyUseSection />
