@@ -897,12 +897,11 @@ const DeveloperPage = () => {
         </section>
 
         {/* 70/30 Split Layout Wrapper - Starts from Key Features */}
-        <div className="w-full overflow-hidden">
+        <div className="w-full">
         <div className="lg:grid lg:grid-cols-[1fr_340px] lg:gap-4 lg:max-w-[1400px] lg:mx-auto lg:px-4">
           
           {/* Main Content - 70% */}
-          <div className="w-full overflow-hidden" style={{ gridColumn: '1' }}>
-
+          <div className="w-full" style={{ gridColumn: '1' }}>
         {/* Key Features - Modern grid layout */}
         <section className="px-5 sm:px-6 pt-12 pb-16 scroll-animate relative z-0">
           <div className="mb-8 text-center sm:text-left">
