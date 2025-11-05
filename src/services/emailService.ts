@@ -505,6 +505,8 @@ export async function sendCareerApplicationEmail(
     state: string;
     city: string;
     positionOfInterest: string;
+    qualification: string;
+    certifications: string;
   }
 ) {
   return sendEmail('/send-career-application-email', {
@@ -516,7 +518,9 @@ export async function sendCareerApplicationEmail(
     universityName: careerData.universityName,
     state: careerData.state,
     city: careerData.city,
-    positionOfInterest: careerData.positionOfInterest
+    positionOfInterest: careerData.positionOfInterest,
+    qualification: careerData.qualification,
+    certifications: careerData.certifications
   });
 }
 

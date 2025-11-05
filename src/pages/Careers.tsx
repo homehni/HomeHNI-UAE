@@ -171,6 +171,8 @@ const Careers = () => {
                 state: formData.get('state') as string,
                 city: formData.get('city') as string,
                 positionOfInterest: formData.get('position') as string,
+                qualification: formData.get('qualification') as string,
+                certifications: formData.get('certifications') as string,
               };
               
               // Send email
@@ -181,7 +183,9 @@ const Careers = () => {
                 universityName: data.universityName,
                 state: data.state,
                 city: data.city,
-                positionOfInterest: data.positionOfInterest
+                positionOfInterest: data.positionOfInterest,
+                qualification: data.qualification,
+                certifications: data.certifications
               });
               
               toast({
@@ -246,6 +250,21 @@ const Careers = () => {
                     <SelectItem value="other">Other Position</SelectItem>
                   </SelectContent>
                 </Select>
+
+                <Select name="qualification" required>
+                  <SelectTrigger><SelectValue placeholder="Qualification" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high-school">High School</SelectItem>
+                    <SelectItem value="undergraduate">Undergraduate</SelectItem>
+                    <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
+                    <SelectItem value="masters">Master's Degree</SelectItem>
+                    <SelectItem value="phd">PhD/Doctorate</SelectItem>
+                    <SelectItem value="diploma">Diploma</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Input id="career-certifications" name="certifications" placeholder="Certifications (if any)" />
 
                 {/* Resume Upload */}
                 <div className="space-y-2">
@@ -319,6 +338,8 @@ const Careers = () => {
                   state: formData.get('state') as string,
                   city: formData.get('city') as string,
                   positionOfInterest: formData.get('position') as string,
+                  qualification: formData.get('qualification') as string,
+                  certifications: formData.get('certifications') as string,
                 };
                 
                 // Send email
@@ -329,7 +350,9 @@ const Careers = () => {
                   universityName: data.universityName,
                   state: data.state,
                   city: data.city,
-                  positionOfInterest: data.positionOfInterest
+                  positionOfInterest: data.positionOfInterest,
+                  qualification: data.qualification,
+                  certifications: data.certifications
                 });
                 
                 toast({
@@ -402,6 +425,23 @@ const Careers = () => {
                       <SelectItem value="other">Other Position</SelectItem>
                     </SelectContent>
                   </Select>
+
+                  <Select name="qualification" required>
+                    <SelectTrigger className="h-12 bg-background">
+                      <SelectValue placeholder="Qualification" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg">
+                      <SelectItem value="high-school">High School</SelectItem>
+                      <SelectItem value="undergraduate">Undergraduate</SelectItem>
+                      <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
+                      <SelectItem value="masters">Master's Degree</SelectItem>
+                      <SelectItem value="phd">PhD/Doctorate</SelectItem>
+                      <SelectItem value="diploma">Diploma</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Input id="career-certifications-mobile" name="certifications" placeholder="Certifications (if any)" className="h-12 text-base bg-background" />
 
                   <Input id="career-experience-mobile" name="experience" placeholder="Years of Experience" className="h-12 text-base bg-background" />
 
