@@ -25,8 +25,9 @@ import forestEdgeLawn from '@/assets/forest-edge-lawn.jpg';
 import forestEdgeAerial from '@/assets/forest-edge-aerial.jpg';
 import forestEdgeBalcony from '@/assets/forest-edge-balcony.jpg';
 import forestEdgeEvening from '@/assets/forest-edge-evening.jpg';
-import cannyForestEdgeVideo from '@/videos/2 and 3 BHK flats for sale Bachupally, Hyderabad ｜ Canny Forest Edge ｜ Canny Life Spaces.mp4';
-import forestEdgeHeroVideo from '@/videos/WhatsApp Video 2025-10-29 at 17.06.17_b8cc3ca2.mp4';
+// Video URLs from Supabase Storage
+const cannyForestEdgeVideo = 'https://geenmplkdgmlovvgwzai.supabase.co/storage/v1/object/public/property-media/developer-videos/canny-forest-edge-main.mp4';
+const forestEdgeHeroVideo = 'https://geenmplkdgmlovvgwzai.supabase.co/storage/v1/object/public/property-media/developer-videos/forest-edge-hero.mp4';
 import interior1 from '@/images/forest-edge/IMG-20251029-WA0022.jpg';
 import interior2 from '@/images/forest-edge/IMG-20251029-WA0023.jpg';
 import interior3 from '@/images/forest-edge/IMG-20251029-WA0024.jpg';
