@@ -1224,14 +1224,6 @@ const DeveloperPage = () => {
                   Shortlist
                 </Button>
               </div>
-              
-              {/* Interest Badge */}
-              <div className="mt-6 pt-6 border-t border-border">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <TrendingUp className="h-4 w-4 text-orange-500" />
-                  <span className="font-medium">37 families showed interest yesterday</span>
-                </div>
-              </div>
             </CardContent>
           </Card>
           
