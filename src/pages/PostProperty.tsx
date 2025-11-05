@@ -75,6 +75,38 @@ export const PostProperty: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
 
+  // Handle browser back button to reset user type selection
+  useEffect(() => {
+    // Push initial state when dialog is shown
+    if (showUserTypeDialog && !userType && currentStep === 'property-selection') {
+      window.history.pushState({ showUserTypeDialog: true }, '');
+    }
+
+    // Listen for popstate (back button)
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state?.showUserTypeDialog || (!event.state && userType && currentStep === 'property-selection')) {
+        // User clicked back - reset user type and show dialog again
+        setUserType(null);
+        setShowUserTypeDialog(true);
+        // Push state again so user can go back from dialog
+        window.history.pushState({ showUserTypeDialog: true }, '');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [showUserTypeDialog, userType, currentStep]);
+
+  // Push state when user selects a type
+  useEffect(() => {
+    if (userType && !showUserTypeDialog && currentStep === 'property-selection') {
+      window.history.pushState({ userTypeSelected: true, userType }, '');
+    }
+  }, [userType, showUserTypeDialog, currentStep]);
+
   // Auto-save user profile data after property submission
   const autoSaveUserProfile = async (ownerInfo: OwnerInfo) => {
     if (!user) return;
