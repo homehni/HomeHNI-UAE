@@ -156,10 +156,10 @@ const Careers = () => {
         {/* Sticky Form Container for Large Screens */}
         <div className="hidden md:block fixed top-32 right-4 z-50 w-[380px] lg:w-[420px]">
           <Card className="w-full rounded-xl shadow-2xl bg-background border-2 border-primary">
-            <CardContent className="p-4">
-              <h3 className="text-xl font-semibold text-foreground mb-1 text-uniform-center">Apply for Sales Intern Position</h3>
+            <CardContent className="p-3">
+              <h3 className="text-lg font-semibold text-foreground mb-1 text-uniform-center">Apply for Sales Intern Position</h3>
 
-              <form className="space-y-3" onSubmit={async e => {
+              <form className="space-y-2" onSubmit={async e => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget as HTMLFormElement);
               const data = {
@@ -263,8 +263,8 @@ const Careers = () => {
                 <Input id="career-certifications" name="certifications" placeholder="Certifications (if any)" />
 
                 {/* Resume Upload */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Resume/CV</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-gray-700">Resume/CV</label>
                   {!resumeFile ? (
                     <div className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
                       <input
@@ -279,7 +279,7 @@ const Careers = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => document.getElementById('resume-upload')?.click()}
-                        className="flex items-center gap-1 text-xs h-8"
+                        className="flex items-center gap-1 text-xs h-7"
                       >
                         <Upload className="h-3 w-3" />
                         Choose File
@@ -287,11 +287,11 @@ const Careers = () => {
                       <span className="text-xs text-gray-500">PDF, DOC, DOCX (Max 5MB)</span>
                     </div>
                   ) : (
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <FileText className="h-5 w-5 text-gray-400" />
+                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <FileText className="h-4 w-4 text-gray-400" />
                         <div>
-                          <p className="text-sm font-medium text-gray-700">{resumeFile.name}</p>
+                          <p className="text-xs font-medium text-gray-700">{resumeFile.name}</p>
                           <p className="text-xs text-gray-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
                         </div>
                       </div>
@@ -300,7 +300,7 @@ const Careers = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => removeResume()}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 hover:text-red-700 h-7"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -309,7 +309,7 @@ const Careers = () => {
                 </div>
 
 
-                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white">Submit Application</Button>
+                <Button type="submit" className="w-full bg-red-800 hover:bg-red-900 text-white h-9">Submit Application</Button>
               </form>
             </CardContent>
           </Card>
