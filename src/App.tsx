@@ -107,6 +107,7 @@ import PropertySearch from "./pages/PropertySearch";
 import PagePreview from "./pages/PagePreview";
 import DynamicPage from "./pages/DynamicPage";
 import DeveloperPage from "./pages/DeveloperPage";
+import CreateDeveloperPage from "./pages/CreateDeveloperPage";
 import PaymentSuccess from "./pages/payments/Success";
 import PaymentFailed from "./pages/payments/Failed";
 import PostService from "./pages/PostService";
@@ -246,6 +247,11 @@ const App: React.FC = () => {
             
             {/* Developer Routes */}
             <Route path="/developer/:developerId" element={<DeveloperPage />} />
+            <Route path="/create-developer" element={
+              <ProtectedRoute>
+                <CreateDeveloperPage />
+              </ProtectedRoute>
+            } />
             
             {/* Preview Routes */}
             <Route path="/preview/:slug" element={<PagePreview />} />
