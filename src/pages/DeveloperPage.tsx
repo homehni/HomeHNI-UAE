@@ -1182,10 +1182,6 @@ const DeveloperPage = () => {
               
               {/* Benefits List */}
               <div className="space-y-3 mb-6">
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-muted-foreground">Best Prices • Unit of Choice • Easy Payment Plans</span>
-                </div>
                 {developer.specializations?.slice(0, 4).map((spec, idx) => (
                   <div key={idx} className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
