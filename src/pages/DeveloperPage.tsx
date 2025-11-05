@@ -48,6 +48,7 @@ const DeveloperPage = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [currentInteriorIndex, setCurrentInteriorIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentHeroVideoIndex, setCurrentHeroVideoIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [selectedFloorPlanIndex, setSelectedFloorPlanIndex] = useState<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -58,6 +59,14 @@ const DeveloperPage = () => {
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const interiorCarouselRef = useRef<HTMLDivElement>(null);
   const similarProjectsRef = useRef<HTMLDivElement>(null);
+  
+  // Hero video segments
+  const heroVideoSegments = [
+    { title: 'Exterior Views', videoUrl: forestEdgeHeroVideo },
+    { title: 'Amenities Overview', videoUrl: forestEdgeHeroVideo },
+    { title: 'Apartment Interiors', videoUrl: forestEdgeHeroVideo },
+    { title: 'Forest View', videoUrl: forestEdgeHeroVideo },
+  ];
   
   // Fetch developer data from database
   const { data: developerData, isLoading, error } = useDeveloperPage(developerId || '');
@@ -667,18 +676,73 @@ const DeveloperPage = () => {
           {/* Mobile View - Clean & Elegant Layout */}
           {developerId === 'canny-forest-edge' && (
             <div className="lg:hidden relative w-full min-h-[700px] mb-12">
-              {/* Background Video */}
+              {/* Background Video Carousel */}
               <div className="absolute inset-0 w-full h-full">
-                <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                  <source src={forestEdgeHeroVideo} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                {heroVideoSegments.map((segment, index) => (
+                  <video
+                    key={index}
+                    ref={index === currentHeroVideoIndex ? heroVideoRef : null}
+                    className={`w-full h-full object-cover absolute inset-0 transition-opacity duration-500 ${
+                      index === currentHeroVideoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                    }`}
+                    playsInline
+                    loop
+                    preload="metadata"
+                    muted
+                    autoPlay={index === currentHeroVideoIndex}
+                    onClick={handleHeroVideoClick}
+                  >
+                    <source src={segment.videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ))}
                 {/* Dark overlay for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-20"></div>
+                
+                {/* Navigation Arrows */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentHeroVideoIndex((prev) => (prev === 0 ? heroVideoSegments.length - 1 : prev - 1));
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full p-3 transition-all duration-200"
+                >
+                  <ChevronLeft className="h-6 w-6 text-white" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentHeroVideoIndex((prev) => (prev === heroVideoSegments.length - 1 ? 0 : prev + 1));
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-full p-3 transition-all duration-200"
+                >
+                  <ChevronRight className="h-6 w-6 text-white" />
+                </button>
+                
+                {/* Progress Dots */}
+                <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+                  {heroVideoSegments.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentHeroVideoIndex(index);
+                      }}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        index === currentHeroVideoIndex ? 'w-8 bg-white' : 'w-2 bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+                
+                {/* Video Title */}
+                <div className="absolute top-24 left-1/2 -translate-x-1/2 z-30 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full">
+                  <span className="text-white text-sm font-medium">{heroVideoSegments[currentHeroVideoIndex].title}</span>
+                </div>
               </div>
 
             {/* Content Overlay - Structured Layout */}
-            <div className="relative z-10 h-full flex flex-col p-5 sm:p-6 text-white">
+            <div className="relative z-30 h-full flex flex-col p-5 sm:p-6 text-white">
               {/* Top Section - Logo & Project Area Badge */}
               <div className="flex flex-col items-center gap-4 mb-6 pt-4">
                 {/* Logo - Centered */}
@@ -864,29 +928,79 @@ const DeveloperPage = () => {
                     
                   </div>
 
-                  {/* Right Column - ~40% width, Right Aligned - Mobile Portrait Video */}
+                  {/* Right Column - ~40% width, Right Aligned - Mobile Portrait Video Carousel */}
                   {developerId === 'canny-forest-edge' && (
                     <div className="w-[40%] ml-auto relative z-20 flex items-center justify-end pl-8">
                       <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
                         <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
-                          <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                            <source src={forestEdgeHeroVideo} type="video/mp4" />
-                            Your browser does not support the video tag.
-                          </video>
+                          {/* Video Carousel */}
+                          {heroVideoSegments.map((segment, index) => (
+                            <video
+                              key={index}
+                              ref={index === currentHeroVideoIndex ? heroVideoRef : null}
+                              className={`w-full h-full object-cover rounded-2xl absolute inset-0 transition-opacity duration-500 ${
+                                index === currentHeroVideoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                              }`}
+                              playsInline
+                              loop
+                              preload="metadata"
+                              muted
+                              autoPlay={index === currentHeroVideoIndex}
+                              onClick={handleHeroVideoClick}
+                            >
+                              <source src={segment.videoUrl} type="video/mp4" />
+                              Your browser does not support the video tag.
+                            </video>
+                          ))}
+
+                          {/* Video Title */}
+                          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full">
+                            <span className="text-white text-xs font-medium">{heroVideoSegments[currentHeroVideoIndex].title}</span>
+                          </div>
 
                           {/* Bottom Bar - Key Highlights */}
-                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between">
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md px-4 py-3 flex items-center justify-between z-20">
                             <span className="text-white font-semibold text-sm">Key Highlights</span>
                             <ChevronRight className="h-4 w-4 text-white rotate-90" />
                           </div>
 
                           {/* Navigation Arrows */}
-                          <button className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10" aria-label="Previous">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentHeroVideoIndex((prev) => (prev === 0 ? heroVideoSegments.length - 1 : prev - 1));
+                            }}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-30"
+                            aria-label="Previous"
+                          >
                             <ChevronLeft className="h-5 w-5 text-white" />
                           </button>
-                          <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-10" aria-label="Next">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentHeroVideoIndex((prev) => (prev === heroVideoSegments.length - 1 ? 0 : prev + 1));
+                            }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-2 rounded-full transition-all z-30"
+                            aria-label="Next"
+                          >
                             <ChevronRight className="h-5 w-5 text-white" />
                           </button>
+                          
+                          {/* Progress Dots */}
+                          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
+                            {heroVideoSegments.map((_, index) => (
+                              <button
+                                key={index}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCurrentHeroVideoIndex(index);
+                                }}
+                                className={`h-1.5 rounded-full transition-all duration-300 ${
+                                  index === currentHeroVideoIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/50'
+                                }`}
+                              />
+                            ))}
+                          </div>
                         </div>
                       </Card>
                     </div>
