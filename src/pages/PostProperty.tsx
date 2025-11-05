@@ -23,7 +23,7 @@ import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapFurnishing } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
-import { updateUserProfile, hasUserRole } from '@/services/profileService';
+import { updateUserProfile } from '@/services/profileService';
 import { PropertyDraftService } from '@/services/propertyDraftService';
 import { DraftResumeModal } from '@/components/property-form/DraftResumeModal';
 import Header from '@/components/Header';
@@ -75,34 +75,8 @@ export const PostProperty: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  // Check if user already has a role on mount
-  useEffect(() => {
-    const checkExistingRole = async () => {
-      if (!user) return;
-
-      try {
-        const isOwner = await hasUserRole('owner');
-        const isAgent = await hasUserRole('agent');
-
-        if (isOwner) {
-          setUserType('Owner');
-          setShowUserTypeDialog(false);
-        } else if (isAgent) {
-          setUserType('Agent');
-          setShowUserTypeDialog(false);
-        }
-      } catch (error) {
-        console.error('Error checking user role:', error);
-      }
-    };
-
-    checkExistingRole();
-  }, [user]);
-
   // Handle browser back button to reset user type selection
   useEffect(() => {
-    // Only handle back button if user hasn't permanently selected a role
-    // (i.e., they're still in the selection phase)
     
     // Push initial state when dialog is shown
     if (showUserTypeDialog && !userType && currentStep === 'property-selection') {
