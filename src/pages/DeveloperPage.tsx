@@ -1167,8 +1167,8 @@ const DeveloperPage = () => {
         </div>
         {/* End Main Content (70%) */}
         
-        {/* CTA Sidebar - 30% (Desktop Only, Sticky) */}
-        <aside className="hidden lg:block space-y-6 sticky top-24 h-fit" style={{ gridColumn: '2', maxWidth: '340px' }}>
+        {/* CTA Sidebar - 30% (Desktop Only, Sticky - scrolls until Location section) */}
+        <aside className="hidden lg:block space-y-6 lg:sticky lg:top-6 lg:self-start h-fit" style={{ gridColumn: '2', maxWidth: '340px' }}>
           
           {/* Property Highlights Card */}
           <Card className="shadow-lg border-2 border-emerald-100 bg-gradient-to-br from-white to-emerald-50/30">
