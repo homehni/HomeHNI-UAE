@@ -661,6 +661,12 @@ const DeveloperPage = () => {
         <Marquee />
         <Header />
         
+        {/* 70/30 Split Layout Wrapper - Desktop Only */}
+        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-6 lg:max-w-[1600px] lg:mx-auto lg:px-6 lg:pt-6">
+          
+          {/* Main Content - 70% */}
+          <div className="lg:min-h-screen"  style={{ gridColumn: '1' }}>
+        
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
         <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-emerald-50 lg:via-green-50 lg:to-teal-50 pt-20">
           {/* Mobile View - Clean & Elegant Layout */}
@@ -1397,6 +1403,94 @@ const DeveloperPage = () => {
           </Card>
           </div>
         </section>
+
+        </div>
+        {/* End Main Content (70%) */}
+        
+        {/* CTA Sidebar - 30% (Desktop Only, Sticky) */}
+        <aside className="hidden lg:block space-y-6 sticky top-24 h-fit" style={{ gridColumn: '2' }}>
+          
+          {/* Property Highlights Card */}
+          <Card className="shadow-lg border-2 border-emerald-100 bg-gradient-to-br from-white to-emerald-50/30">
+            <CardContent className="p-6">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-foreground mb-2 flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-emerald-600" />
+                  Why you should buy
+                </h3>
+                <p className="text-lg font-bold text-foreground">{developer.name}?</p>
+              </div>
+              
+              {/* Benefits List */}
+              <div className="space-y-3 mb-6">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-muted-foreground">Best Prices • Unit of Choice • Easy Payment Plans</span>
+                </div>
+                {developer.specializations?.slice(0, 4).map((spec, idx) => (
+                  <div key={idx} className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm text-muted-foreground">{spec}</span>
+                  </div>
+                ))}
+              </div>
+              
+              {/* CTA Buttons */}
+              <div className="space-y-3">
+                <Button 
+                  size="lg" 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md hover:shadow-lg transition-all"
+                  onClick={() => setIsContactFormOpen(true)}
+                >
+                  View Number
+                </Button>
+                
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold"
+                  onClick={() => setIsContactFormOpen(true)}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Brochure
+                </Button>
+                
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold"
+                  onClick={() => setIsContactFormOpen(true)}
+                >
+                  <Heart className="mr-2 h-4 w-4" />
+                  Shortlist
+                </Button>
+              </div>
+              
+              {/* Interest Badge */}
+              <div className="mt-6 pt-6 border-t border-border">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <TrendingUp className="h-4 w-4 text-orange-500" />
+                  <span className="font-medium">37 families showed interest yesterday</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Project Video Button */}
+          <Button 
+            size="lg" 
+            variant="default"
+            className="w-full bg-black hover:bg-gray-900 text-white font-semibold shadow-md"
+            onClick={handleHeroVideoClick}
+          >
+            Project Video ↑
+          </Button>
+          
+        </aside>
+        {/* End CTA Sidebar (30%) */}
+        
+        </div>
+        {/* End 70/30 Grid Wrapper */}
 
         <Footer />
 
