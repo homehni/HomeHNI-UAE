@@ -528,12 +528,13 @@ const DeveloperPage = () => {
     const videoObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          video.play().catch(error => console.log('Video auto-play prevented:', error));
-        } else {
-          video.pause();
+          if (video.paused) {
+            video.play().catch(error => console.log('Video auto-play prevented:', error));
+          }
         }
+        // Avoid immediate pause on slight scroll to prevent AbortError race
       });
-    }, { threshold: 0.5, rootMargin: '0px' });
+    }, { threshold: 0.2, rootMargin: '0px 0px -20% 0px' });
     videoObserver.observe(video);
     return () => videoObserver.unobserve(video);
   }, [isPropertyDetail]);
@@ -562,12 +563,12 @@ const DeveloperPage = () => {
     const videoObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          video.play().catch(error => console.log('Hero video auto-play prevented:', error));
-        } else {
-          video.pause();
+          if (video.paused) {
+            video.play().catch(error => console.log('Hero video auto-play prevented:', error));
+          }
         }
       });
-    }, { threshold: 0.5, rootMargin: '0px' });
+    }, { threshold: 0.2, rootMargin: '0px 0px -20% 0px' });
     videoObserver.observe(video);
     return () => videoObserver.unobserve(video);
   }, [isPropertyDetail]);
