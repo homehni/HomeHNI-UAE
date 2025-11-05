@@ -1194,10 +1194,12 @@ const DeveloperPage = () => {
               <div className="mb-6 p-4 bg-emerald-50/50 rounded-lg border border-emerald-100">
                 <h4 className="text-sm font-bold text-foreground mb-3">Property Highlights</h4>
                 <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground leading-relaxed">✓ Premium 2 BHK apartments with 1285 sq.ft super built-up area</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">✓ Ready to move-in possession with RERA approval (P02200003658)</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">✓ Surrounded by 200 acres of lush forest with 66% open area</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">✓ Wide cantilever balconies offering breathtaking forest views</p>
+                  {(developerData?.location_highlights && Array.isArray(developerData.location_highlights) 
+                    ? developerData.location_highlights 
+                    : pd?.features || []
+                  ).slice(0, 4).map((highlight, idx) => (
+                    <p key={idx} className="text-xs text-muted-foreground leading-relaxed">✓ {highlight}</p>
+                  ))}
                 </div>
               </div>
               
