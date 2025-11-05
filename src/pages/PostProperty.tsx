@@ -23,7 +23,7 @@ import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapFurnishing } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
-import { updateUserProfile } from '@/services/profileService';
+import { updateUserProfile, hasUserRole } from '@/services/profileService';
 import { PropertyDraftService } from '@/services/propertyDraftService';
 import { DraftResumeModal } from '@/components/property-form/DraftResumeModal';
 import Header from '@/components/Header';
@@ -74,6 +74,32 @@ export const PostProperty: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  // Check if user already has a role on mount - if so, skip the dialog
+  useEffect(() => {
+    const checkExistingRole = async () => {
+      if (!user) return;
+
+      try {
+        const isOwner = await hasUserRole('owner');
+        const isAgent = await hasUserRole('agent');
+
+        if (isOwner) {
+          console.log('User already has owner role, skipping dialog');
+          setUserType('Owner');
+          setShowUserTypeDialog(false);
+        } else if (isAgent) {
+          console.log('User already has agent role, skipping dialog');
+          setUserType('Agent');
+          setShowUserTypeDialog(false);
+        }
+      } catch (error) {
+        console.error('Error checking user role:', error);
+      }
+    };
+
+    checkExistingRole();
+  }, [user]);
 
   // Handle browser back button to reset user type selection
   useEffect(() => {
