@@ -501,7 +501,6 @@ export async function sendCareerApplicationEmail(
     phoneNumber: string;
     emailId: string;
     collegeName: string;
-    universityName: string;
     state: string;
     city: string;
     positionOfInterest: string;
@@ -515,7 +514,6 @@ export async function sendCareerApplicationEmail(
     phoneNumber: careerData.phoneNumber,
     emailId: careerData.emailId,
     collegeName: careerData.collegeName,
-    universityName: careerData.universityName,
     state: careerData.state,
     city: careerData.city,
     positionOfInterest: careerData.positionOfInterest,
