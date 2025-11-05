@@ -897,10 +897,11 @@ const DeveloperPage = () => {
         </section>
 
         {/* 70/30 Split Layout Wrapper - Starts from Key Features */}
-        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-6 lg:max-w-[1600px] lg:mx-auto lg:px-6">
+        <div className="w-full overflow-hidden">
+        <div className="lg:grid lg:grid-cols-[1fr_340px] lg:gap-4 lg:max-w-[1400px] lg:mx-auto lg:px-4">
           
           {/* Main Content - 70% */}
-          <div className="lg:min-h-screen" style={{ gridColumn: '1' }}>
+          <div className="w-full overflow-hidden" style={{ gridColumn: '1' }}>
 
         {/* Key Features - Modern grid layout */}
         <section className="px-5 sm:px-6 pt-12 pb-16 scroll-animate relative z-0">
@@ -1408,7 +1409,7 @@ const DeveloperPage = () => {
         {/* End Main Content (70%) */}
         
         {/* CTA Sidebar - 30% (Desktop Only, Sticky) */}
-        <aside className="hidden lg:block space-y-6 sticky top-24 h-fit" style={{ gridColumn: '2' }}>
+        <aside className="hidden lg:block space-y-6 sticky top-24 h-fit" style={{ gridColumn: '2', maxWidth: '340px' }}>
           
           {/* Property Highlights Card */}
           <Card className="shadow-lg border-2 border-emerald-100 bg-gradient-to-br from-white to-emerald-50/30">
@@ -1491,6 +1492,8 @@ const DeveloperPage = () => {
         
         </div>
         {/* End 70/30 Grid Wrapper */}
+        </div>
+        {/* End overflow wrapper */}
 
         <Footer />
 
