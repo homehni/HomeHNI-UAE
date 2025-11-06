@@ -430,6 +430,7 @@ export type Database = {
           meta_description: string | null
           meta_keywords: string[] | null
           meta_title: string | null
+          primary_project: Json | null
           slug: string
           specializations: Json | null
           stats: Json | null
@@ -477,6 +478,7 @@ export type Database = {
           meta_description?: string | null
           meta_keywords?: string[] | null
           meta_title?: string | null
+          primary_project?: Json | null
           slug: string
           specializations?: Json | null
           stats?: Json | null
@@ -524,6 +526,7 @@ export type Database = {
           meta_description?: string | null
           meta_keywords?: string[] | null
           meta_title?: string | null
+          primary_project?: Json | null
           slug?: string
           specializations?: Json | null
           stats?: Json | null

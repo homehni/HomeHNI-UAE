@@ -97,6 +97,33 @@ export default function CreateDeveloperPage() {
       const baseSlug = slugify(formData.companyName || 'developer');
       const slug = await ensureUniqueSlug(baseSlug);
 
+      // Build primary_project object if any property fields are provided
+      const primaryProject: any = {};
+      if (formData.priceMin || formData.priceMax) {
+        primaryProject.price = {
+          min: parseFloat(formData.priceMin) || 0,
+          max: parseFloat(formData.priceMax) || 0,
+          unit: formData.priceUnit || 'Lacs',
+          perSqft: parseFloat(formData.pricePerSqft) || 0
+        };
+      }
+      if (formData.configurations && formData.configurations.length > 0) {
+        primaryProject.configurations = formData.configurations;
+      }
+      if (formData.projectArea) primaryProject.projectArea = formData.projectArea;
+      if (formData.totalUnits) primaryProject.totalUnits = parseInt(formData.totalUnits) || 0;
+      if (formData.status) primaryProject.status = formData.status;
+      if (formData.possession) primaryProject.possession = formData.possession;
+      if (formData.rera) primaryProject.rera = formData.rera;
+      if (formData.brochureLink) primaryProject.brochureLink = formData.brochureLink;
+      if (formData.locationMapUrl) primaryProject.mapLink = formData.locationMapUrl;
+      if (formData.features && formData.features.length > 0) {
+        primaryProject.features = formData.features;
+      }
+      if (formData.amenities && formData.amenities.length > 0) {
+        primaryProject.amenities = formData.amenities;
+      }
+
       // Insert developer page with retry on duplicate slug
       let finalSlug = slug;
       const maxRetries = 5;
@@ -146,6 +173,7 @@ export default function CreateDeveloperPage() {
             meta_title: formData.metaTitle,
             meta_description: formData.metaDescription,
             meta_keywords: formData.metaKeywords,
+            primary_project: Object.keys(primaryProject).length > 0 ? primaryProject : null,
             is_published: formData.isPublished !== false, // Default to true unless explicitly set to false
             created_by: user.id
           })

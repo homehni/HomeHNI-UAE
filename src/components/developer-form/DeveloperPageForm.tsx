@@ -33,9 +33,9 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
       foundedYear: "",
       heroTitle: "",
       heroSubtitle: "",
-      heroCTAText: "Contact Us",
+      heroCTAText: "",
       highlights: "",
-      aboutTitle: "About Us",
+      aboutTitle: "",
       aboutContent: "",
       videoSectionTitle: "",
       videoSectionSubtitle: "",
@@ -56,13 +56,38 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
       metaTitle: "",
       metaDescription: "",
       metaKeywords: "",
-      isPublished: true
+      isPublished: true,
+      // Property-specific fields
+      priceMin: "",
+      priceMax: "",
+      priceUnit: "Lacs",
+      pricePerSqft: "",
+      configurations: "",
+      projectArea: "",
+      totalUnits: "",
+      status: "",
+      possession: "",
+      rera: "",
+      brochureLink: "",
+      features: ""
     }
   });
 
   const handleFormSubmit = (data: any) => {
     // Parse multi-line text fields into arrays
     const parseLines = (text: string) => text?.split('\n').filter(line => line.trim()) || [];
+    
+    // Parse configurations (e.g., "2 BHK - 1200 Sft" becomes {type: "2 BHK", sizes: ["1200 Sft"]})
+    const parseConfigurations = (text: string) => {
+      if (!text) return [];
+      return text.split('\n').filter(line => line.trim()).map(line => {
+        const parts = line.split('-').map(p => p.trim());
+        return {
+          type: parts[0] || '',
+          sizes: parts[1] ? [parts[1]] : []
+        };
+      });
+    };
     
     onSubmit({
       ...data,
@@ -75,6 +100,8 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
       locationHighlights: parseLines(data.locationHighlights),
       floorPlans: parseLines(data.floorPlans),
       metaKeywords: parseLines(data.metaKeywords),
+      features: parseLines(data.features),
+      configurations: parseConfigurations(data.configurations),
       logo: logo,
       heroImage: heroImage,
       heroVideo: heroVideo,
@@ -689,6 +716,196 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                   <FormLabel>Address</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Full office address" rows={3} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Property Details Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5" />
+              Property Details (Optional)
+            </CardTitle>
+            <CardDescription>Add property-specific information if this is a property showcase page</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="priceMin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price Min</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 75" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="priceMax"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price Max</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 150" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="priceUnit"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price Unit</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Lacs" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="pricePerSqft"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price Per Sq Ft</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 6381" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="configurations"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Configurations</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="One per line, format: Type - Size&#10;e.g.,&#10;2 BHK - 1285 Sft&#10;3 BHK - 1650 Sft" 
+                      rows={4} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="projectArea"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project Area</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 1.52 Acres" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="totalUnits"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Total Units</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 197" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project Status</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Ready to Move" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="possession"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Possession</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Ready to move" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="rera"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>RERA Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., P02200003658" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="brochureLink"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brochure Link</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="features"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Key Features</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="One per line&#10;e.g.,&#10;Premium location&#10;Modern architecture" 
+                      rows={4} 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

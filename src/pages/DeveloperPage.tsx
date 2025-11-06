@@ -341,11 +341,11 @@ const DeveloperPage = () => {
   // Loading/error handled after hooks for consistent hooks order
 
 
-  // Try database first, but use hardcoded logos (imported assets)
+  // Try database first, but use hardcoded logos (imported assets) for legacy support
   const hardcodedDev = developers[developerId as keyof typeof developers];
   const developer = developerData 
     ? {
-        name: developerData.company_name,
+        name: developerData.company_name || '',
         logo: hardcodedDev?.logo || developerData.logo_url || '',
         rank: developerData.display_order || 0,
         founded: developerData.founded_year || '',
@@ -360,22 +360,7 @@ const DeveloperPage = () => {
           email: developerData.contact_email || '',
           website: developerData.contact_website || ''
         },
-        propertyDetails: hardcodedDev?.propertyDetails || {
-          price: { min: 75, max: 150, unit: 'Lacs', perSqft: 5500 },
-          location: developerData.headquarters || '',
-          locality: '',
-          city: developerData.headquarters?.split(',')[0] || '',
-          configurations: [{ type: '2 BHK', sizes: ['1200 Sft'] }, { type: '3 BHK', sizes: ['1600 Sft'] }],
-          projectArea: '10 Acres',
-          totalUnits: 500,
-          status: 'Under Construction',
-          possession: 'Dec 2025',
-          rera: 'RERA123456',
-          brochureLink: '#',
-          mapLink: developerData.location_map_url || 'https://maps.google.com',
-          amenities: Array.isArray(developerData.amenities) ? developerData.amenities : [],
-          features: []
-        }
+        propertyDetails: (developerData as any).primary_project || (hardcodedDev?.propertyDetails || null)
       }
     : hardcodedDev;
   
