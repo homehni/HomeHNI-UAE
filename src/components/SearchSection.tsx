@@ -1620,17 +1620,17 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <img src={mortgeaseLogo} alt="Mortgease" className="h-20 md:h-24 lg:h-28 object-contain" />
               </div>
               <div className="text-center">
-                <p className="text-base md:text-lg font-bold text-gray-800 mb-1">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
                   Official Channel Partner for Home Finance
-                </p>
+                </h3>
                 <a 
                   href="https://www.mortgease.ae" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-sm md:text-base text-indigo-600 hover:text-indigo-800 font-semibold transition-colors inline-flex items-center gap-1"
+                  className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-semibold transition-colors text-base md:text-lg"
                 >
-                  Visit mortgease.ae 
-                  <ChevronRight size={16} className="inline" />
+                  <span>Explore Mortgease Services</span>
+                  <ChevronRight size={18} />
                 </a>
               </div>
             </div>
