@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useDeveloperPages } from '@/hooks/useDeveloperPages';
 import prestigeGroupLogo from '@/assets/prestige-group-logo.jpg';
 import godrejPropertiesLogo from '@/assets/godrej-properties-logo.jpg';
 import ramkyGroupLogo from '@/assets/ramky-group-logo.jpg';
@@ -13,8 +14,9 @@ const RealEstateSlider = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
+  const { data: developerPages } = useDeveloperPages();
 
-  const companies = [
+  const staticCompanies = [
     {
       id: 'prestige-group',
       name: 'Prestige Group',
@@ -72,6 +74,16 @@ const RealEstateSlider = () => {
       highlights: 'Innovative infrastructure solutions, modern construction excellence'
     }
   ];
+
+  const apiCompanies = (developerPages ?? []).map((d) => ({
+    id: d.slug,
+    name: d.company_name,
+    logo: (d.logo_url as string) || '',
+    rank: d.display_order ?? 0,
+    highlights: d.tagline || ''
+  }));
+
+  const companies = apiCompanies.length ? apiCompanies : staticCompanies;
 
   // Create infinite loop by duplicating companies
   const infiniteCompanies = [...companies, ...companies];
