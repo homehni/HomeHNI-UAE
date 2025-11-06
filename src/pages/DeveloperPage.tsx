@@ -343,40 +343,59 @@ const DeveloperPage = () => {
 
   // Try database first, but use hardcoded logos (imported assets) for legacy support
   const hardcodedDev = developers[developerId as keyof typeof developers];
-  const developer = developerData 
-    ? {
-        name: developerData.company_name || '',
-        logo: hardcodedDev?.logo || developerData.logo_url || '',
-        rank: developerData.display_order || 0,
-        founded: developerData.founded_year || '',
-        headquarters: developerData.headquarters || '',
-        highlights: developerData.highlights || developerData.tagline || '',
-        description: developerData.description || '',
-        specializations: Array.isArray(developerData.specializations) ? developerData.specializations : [],
-        keyProjects: Array.isArray(developerData.key_projects) ? developerData.key_projects : [],
-        awards: Array.isArray(developerData.awards) ? developerData.awards : [],
-        contact: {
-          phone: developerData.contact_phone || '',
-          email: developerData.contact_email || '',
-          website: developerData.contact_website || ''
-        },
-        propertyDetails: (developerData as any).primary_project || (hardcodedDev?.propertyDetails || null)
-      }
-    : hardcodedDev || {
-        // Fallback developer object with empty arrays to prevent undefined errors
-        name: '',
-        logo: '',
-        rank: 0,
-        founded: '',
-        headquarters: '',
-        highlights: '',
-        description: '',
-        specializations: [],
-        keyProjects: [],
-        awards: [],
-        contact: { phone: '', email: '', website: '' },
-        propertyDetails: null
+  
+  // Safely construct developer object with all required arrays
+  let developer;
+  if (developerData) {
+    developer = {
+      name: developerData.company_name || '',
+      logo: hardcodedDev?.logo || developerData.logo_url || '',
+      rank: developerData.display_order || 0,
+      founded: developerData.founded_year || '',
+      headquarters: developerData.headquarters || '',
+      highlights: developerData.highlights || developerData.tagline || '',
+      description: developerData.description || '',
+      specializations: Array.isArray(developerData.specializations) ? developerData.specializations : [],
+      keyProjects: Array.isArray(developerData.key_projects) ? developerData.key_projects : [],
+      awards: Array.isArray(developerData.awards) ? developerData.awards : [],
+      contact: {
+        phone: developerData.contact_phone || '',
+        email: developerData.contact_email || '',
+        website: developerData.contact_website || ''
+      },
+      propertyDetails: null
+    };
+    
+    // Safely handle propertyDetails
+    const primaryProject = (developerData as any).primary_project;
+    if (primaryProject) {
+      developer.propertyDetails = {
+        ...primaryProject,
+        configurations: Array.isArray(primaryProject.configurations) ? primaryProject.configurations : [],
+        features: Array.isArray(primaryProject.features) ? primaryProject.features : [],
+        amenities: Array.isArray(primaryProject.amenities) ? primaryProject.amenities : []
       };
+    } else if (hardcodedDev?.propertyDetails) {
+      developer.propertyDetails = hardcodedDev.propertyDetails;
+    }
+  } else if (hardcodedDev) {
+    developer = hardcodedDev;
+  } else {
+    developer = {
+      name: '',
+      logo: '',
+      rank: 0,
+      founded: '',
+      headquarters: '',
+      highlights: '',
+      description: '',
+      specializations: [],
+      keyProjects: [],
+      awards: [],
+      contact: { phone: '', email: '', website: '' },
+      propertyDetails: null
+    };
+  }
   
   // Not-found handled after hooks for consistent hooks order
 
