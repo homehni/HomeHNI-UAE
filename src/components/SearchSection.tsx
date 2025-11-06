@@ -1620,7 +1620,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <img src={mortgeaseLogo} alt="Mortgease" className="h-20 md:h-24 lg:h-28 object-contain" />
               </div>
               <div className="text-center">
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 mb-2">
                   Official Channel Partner for Home Finance
                 </h3>
                 <a 
