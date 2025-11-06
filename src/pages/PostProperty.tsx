@@ -1776,8 +1776,16 @@ export const PostProperty: React.FC = () => {
       )}
       
       {/* User Type Selection Dialog */}
-      <Dialog open={showUserTypeDialog && currentStep === 'property-selection' && !userType && !showDraftResumeModal}>
-        <DialogContent className="sm:max-w-lg" hideCloseButton>
+      <Dialog 
+        open={showUserTypeDialog && currentStep === 'property-selection' && !userType && !showDraftResumeModal}
+        onOpenChange={(open) => {
+          if (!open) {
+            // User clicked close button - redirect to homepage
+            navigate('/');
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-center text-lg font-medium">Are you a:</DialogTitle>
           </DialogHeader>
