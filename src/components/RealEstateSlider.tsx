@@ -75,13 +75,32 @@ const RealEstateSlider = () => {
     }
   ];
 
-  const apiCompanies = (developerPages ?? []).map((d) => ({
-    id: d.slug,
-    name: d.company_name,
-    logo: (d.logo_url as string) || '',
-    rank: d.display_order ?? 0,
-    highlights: d.tagline || ''
-  }));
+  // Logo mapping for fallback
+  const logoMap: Record<string, string> = {
+    'prestige-group': prestigeGroupLogo,
+    'godrej-properties': godrejPropertiesLogo,
+    'ramky-group': ramkyGroupLogo,
+    'brigade-group': brigadeGroupLogo,
+    'aparna-constructions': aparnaConstructionsLogo,
+    'aliens-group': aliensGroupLogo,
+    'canny-forest-edge': cannyForestEdgeLogo,
+    'alpine-infratech': alpineInfratechLogo,
+  };
+
+  const apiCompanies = (developerPages ?? []).map((d) => {
+    // Use database logo if it's a full URL (http/https), otherwise use mapped logo
+    const logoUrl = d.logo_url && (d.logo_url.startsWith('http://') || d.logo_url.startsWith('https://'))
+      ? d.logo_url
+      : logoMap[d.slug] || d.logo_url || '';
+    
+    return {
+      id: d.slug,
+      name: d.company_name,
+      logo: logoUrl,
+      rank: d.display_order ?? 0,
+      highlights: d.tagline || ''
+    };
+  });
 
   const companies = apiCompanies.length ? apiCompanies : staticCompanies;
 
