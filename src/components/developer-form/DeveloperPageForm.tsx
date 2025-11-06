@@ -69,9 +69,19 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
       possession: "",
       rera: "",
       brochureLink: "",
-      features: ""
+      features: "",
+      // New fields for dynamic content
+      locationLat: "",
+      locationLng: "",
+      builderTitle: "",
+      builderDescription: "",
+      builderYearsInBusiness: ""
     }
   });
+  
+  const [interiorImages, setInteriorImages] = useState<File[]>([]);
+  const [floorPlanImages, setFloorPlanImages] = useState<File[]>([]);
+  const [builderImages, setBuilderImages] = useState<File[]>([]);
 
   const handleFormSubmit = (data: any) => {
     // Parse multi-line text fields into arrays
@@ -108,7 +118,10 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
       aboutImages: aboutImages,
       galleryImages: galleryImages,
       video: video,
-      videoThumbnail: videoThumbnail
+      videoThumbnail: videoThumbnail,
+      interiorImages: interiorImages,
+      floorPlanImages: floorPlanImages,
+      builderImages: builderImages
     });
   };
 
@@ -638,6 +651,41 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               )}
             />
 
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="locationLat"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Latitude</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 17.5428" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="locationLng"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Longitude</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 78.4060" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <p className="text-sm text-muted-foreground">
+              Tip: Open <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" className="text-primary underline">Google Maps</a>, 
+              right-click on your location, and copy the coordinates.
+            </p>
+
             <FormField
               control={form.control}
               name="locationMapUrl"
@@ -651,6 +699,87 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                 </FormItem>
               )}
             />
+          </CardContent>
+        </Card>
+
+        {/* Interior Images */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ImageIcon className="h-5 w-5" />
+              Interior Images
+            </CardTitle>
+            <CardDescription>Upload apartment/interior images for the carousel</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ImageUpload images={interiorImages} onImagesChange={setInteriorImages} maxImages={20} />
+          </CardContent>
+        </Card>
+
+        {/* Floor Plans */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Floor Plans</CardTitle>
+            <CardDescription>Upload floor plan images</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ImageUpload images={floorPlanImages} onImagesChange={setFloorPlanImages} maxImages={10} />
+          </CardContent>
+        </Card>
+
+        {/* About the Builder */}
+        <Card>
+          <CardHeader>
+            <CardTitle>About the Builder</CardTitle>
+            <CardDescription>Separate from "About" section - focuses on the building company</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="builderTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Builder Company Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., Canny Life Spaces Pvt Ltd" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="builderYearsInBusiness"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Years in Business</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 25 Years" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="builderDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Builder Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Company history and credentials" rows={6} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div>
+              <FormLabel>Builder Images</FormLabel>
+              <ImageUpload images={builderImages} onImagesChange={setBuilderImages} maxImages={5} />
+            </div>
           </CardContent>
         </Card>
 

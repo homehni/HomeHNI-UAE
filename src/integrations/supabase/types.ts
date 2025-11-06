@@ -399,6 +399,10 @@ export type Database = {
           about_title: string | null
           amenities: Json | null
           awards: Json | null
+          builder_description: string | null
+          builder_images: string[] | null
+          builder_title: string | null
+          builder_years_in_business: string | null
           company_name: string
           contact_address: string | null
           contact_email: string | null
@@ -408,6 +412,7 @@ export type Database = {
           created_by: string | null
           description: string | null
           display_order: number | null
+          floor_plan_images: string[] | null
           floor_plans: Json | null
           founded_year: string | null
           gallery_images: Json | null
@@ -419,11 +424,14 @@ export type Database = {
           hero_video_url: string | null
           highlights: string | null
           id: string
+          interior_images: string[] | null
           is_featured: boolean | null
           is_published: boolean | null
           key_projects: Json | null
           location_description: string | null
           location_highlights: Json | null
+          location_lat: number | null
+          location_lng: number | null
           location_map_url: string | null
           location_title: string | null
           logo_url: string | null
@@ -447,6 +455,10 @@ export type Database = {
           about_title?: string | null
           amenities?: Json | null
           awards?: Json | null
+          builder_description?: string | null
+          builder_images?: string[] | null
+          builder_title?: string | null
+          builder_years_in_business?: string | null
           company_name: string
           contact_address?: string | null
           contact_email?: string | null
@@ -456,6 +468,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           display_order?: number | null
+          floor_plan_images?: string[] | null
           floor_plans?: Json | null
           founded_year?: string | null
           gallery_images?: Json | null
@@ -467,11 +480,14 @@ export type Database = {
           hero_video_url?: string | null
           highlights?: string | null
           id?: string
+          interior_images?: string[] | null
           is_featured?: boolean | null
           is_published?: boolean | null
           key_projects?: Json | null
           location_description?: string | null
           location_highlights?: Json | null
+          location_lat?: number | null
+          location_lng?: number | null
           location_map_url?: string | null
           location_title?: string | null
           logo_url?: string | null
@@ -495,6 +511,10 @@ export type Database = {
           about_title?: string | null
           amenities?: Json | null
           awards?: Json | null
+          builder_description?: string | null
+          builder_images?: string[] | null
+          builder_title?: string | null
+          builder_years_in_business?: string | null
           company_name?: string
           contact_address?: string | null
           contact_email?: string | null
@@ -504,6 +524,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           display_order?: number | null
+          floor_plan_images?: string[] | null
           floor_plans?: Json | null
           founded_year?: string | null
           gallery_images?: Json | null
@@ -515,11 +536,14 @@ export type Database = {
           hero_video_url?: string | null
           highlights?: string | null
           id?: string
+          interior_images?: string[] | null
           is_featured?: boolean | null
           is_published?: boolean | null
           key_projects?: Json | null
           location_description?: string | null
           location_highlights?: Json | null
+          location_lat?: number | null
+          location_lng?: number | null
           location_map_url?: string | null
           location_title?: string | null
           logo_url?: string | null

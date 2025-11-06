@@ -34,6 +34,15 @@ export interface DeveloperPage {
   location_description: string | null;
   location_map_url: string | null;
   location_highlights: any | null;
+  location_lat: number | null;
+  location_lng: number | null;
+  interior_images: string[] | null;
+  floor_plan_images: string[] | null;
+  builder_title: string | null;
+  builder_description: string | null;
+  builder_years_in_business: string | null;
+  builder_images: string[] | null;
+  primary_project: any | null;
   contact_phone: string | null;
   contact_email: string | null;
   contact_website: string | null;

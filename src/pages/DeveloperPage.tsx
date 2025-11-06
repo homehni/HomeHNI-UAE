@@ -370,15 +370,21 @@ const DeveloperPage = () => {
   // Check if this is a property-detail style page
   const isPropertyDetail = developer && 'propertyDetails' in developer;
   const pd = developer?.propertyDetails;
+  const propertyDetails = (developerData as any)?.primary_project;
 
   // Forest Edge carousel images
   const forestEdgeImages = [forestEdgeExterior, forestEdgeAmenities1, forestEdgeAmenities2, forestEdgePool, forestEdgeLawn, forestEdgeAerial, forestEdgeBalcony, forestEdgeEvening];
 
-  // Interior images array - apartment interior photos
-  const interiorImages = [interior1, interior2, interior3, interior4, interior5, interior6, interior7, interior8];
+  // Use database images or fallback to hardcoded for legacy
+  const interiorImages = developerData?.interior_images && developerData.interior_images.length > 0 
+    ? developerData.interior_images 
+    : [interior1, interior2, interior3, interior4, interior5, interior6, interior7, interior8];
 
-  // Floor plan images array
-  const floorPlanImages = [floorPlan1, floorPlan2, floorPlan3];
+  const floorPlanImages = developerData?.floor_plan_images && developerData.floor_plan_images.length > 0
+    ? developerData.floor_plan_images
+    : [floorPlan1, floorPlan2, floorPlan3];
+  
+  const heroVideoUrl = developerData?.hero_video_url || (developerId === 'canny-forest-edge' ? forestEdgeHeroVideo : null);
 
   // ALL HOOKS MUST RUN UNCONDITIONALLY - Scroll animation hook
   useEffect(() => {
@@ -687,12 +693,12 @@ const DeveloperPage = () => {
         {/* Hero Section - Responsive Layout: PC Split View / Mobile Background Video */}
         <section className="relative mb-12 scroll-animate overflow-hidden lg:bg-gradient-to-br lg:from-emerald-50 lg:via-green-50 lg:to-teal-50 pt-20">
           {/* Mobile View - Clean & Elegant Layout */}
-          {developerId === 'canny-forest-edge' && (
+          {heroVideoUrl && (
             <div className="lg:hidden relative w-full min-h-[700px] mb-12">
               {/* Background Video */}
               <div className="absolute inset-0 w-full h-full">
                 <video ref={heroVideoRef} className="w-full h-full object-cover" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                  <source src={forestEdgeHeroVideo} type="video/mp4" />
+                  <source src={heroVideoUrl} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 {/* Dark overlay for better text readability */}
@@ -887,12 +893,12 @@ const DeveloperPage = () => {
                   </div>
 
                   {/* Right Column - ~40% width, Right Aligned - Mobile Portrait Video */}
-                  {developerId === 'canny-forest-edge' && (
+                  {heroVideoUrl && (
                     <div className="w-[40%] ml-auto relative z-20 flex items-center justify-end pl-8">
                       <Card className="border-0 shadow-2xl overflow-hidden w-full max-w-[320px]">
                         <div className="relative aspect-[9/16] bg-black group cursor-pointer rounded-2xl">
                           <video ref={heroVideoRef} className="w-full h-full object-cover rounded-2xl" playsInline loop preload="metadata" muted autoPlay onClick={handleHeroVideoClick}>
-                            <source src={forestEdgeHeroVideo} type="video/mp4" />
+                            <source src={heroVideoUrl} type="video/mp4" />
                             Your browser does not support the video tag.
                           </video>
 
@@ -1156,14 +1162,16 @@ const DeveloperPage = () => {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
               <iframe
-                src="https://maps.google.com/maps?ll=17.5428399,78.4060426&q=17.5428399,78.4060426&z=16&output=embed"
+                src={developerData?.location_lat && developerData?.location_lng 
+                  ? `https://maps.google.com/maps?ll=${developerData.location_lat},${developerData.location_lng}&q=${developerData.location_lat},${developerData.location_lng}&z=16&output=embed`
+                  : "https://maps.google.com/maps?ll=17.5428399,78.4060426&q=17.5428399,78.4060426&z=16&output=embed"}
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Canny Forest Edge, Bachupally - Location Map"
+                title={`${developer.name} - Location Map`}
                 className="w-full"
               ></iframe>
             </div>
@@ -1279,15 +1287,15 @@ const DeveloperPage = () => {
                 </div>
                 <div className="flex-1 text-white text-center md:text-left">
                   <h2 className="text-2xl md:text-3xl font-semibold mb-3">About the Builder</h2>
-                  <h3 className="text-xl md:text-2xl mb-4 text-white/90">Canny Life Spaces Pvt Ltd</h3>
-                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                    <Calendar className="h-4 w-4" />
-                    Years in business: <span className="text-white">{parseInt(new Date().getFullYear().toString()) - parseInt(developer.founded)} Years</span>
-                  </div>
+                  <h3 className="text-xl md:text-2xl mb-4 text-white/90">{developerData?.builder_title || developer.name}</h3>
+                  {developerData?.builder_years_in_business && (
+                    <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                      <Calendar className="h-4 w-4" />
+                      Years in business: <span className="text-white">{developerData.builder_years_in_business}</span>
+                    </div>
+                  )}
                   <p className="text-white/80 leading-relaxed text-sm sm:text-base md:text-lg">
-                    Canny Life Spaces Pvt Ltd has been one of the most premium real estate developers in India since its inception. 
-                    It has firmly established itself as a brand to reckon with in the real estate industry in India and abroad, 
-                    delivering excellence in every project.
+                    {developerData?.builder_description || developer.description}
                 </p>
               </div>
             </div>
@@ -1295,7 +1303,7 @@ const DeveloperPage = () => {
               {/* Projects by Builder */}
               <div className="mt-10 pt-10 border-t border-white/10">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl md:text-2xl font-semibold text-white">Projects by Canny Life Spaces</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold text-white">Projects by {developerData?.builder_title || developer.name}</h3>
                   <Button variant="ghost" className="text-white hover:bg-white/10 font-semibold">
                     View All <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

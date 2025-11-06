@@ -93,6 +93,21 @@ export default function CreateDeveloperPage() {
         videoThumbnailUrl = uploaded.url;
       }
 
+      // Upload interior images
+      const interiorImages = formData.interiorImages && formData.interiorImages.length > 0
+        ? await uploadFilesToStorage(formData.interiorImages, 'developer-interiors', user.id)
+        : [];
+
+      // Upload floor plan images
+      const floorPlanImages = formData.floorPlanImages && formData.floorPlanImages.length > 0
+        ? await uploadFilesToStorage(formData.floorPlanImages, 'developer-floorplans', user.id)
+        : [];
+
+      // Upload builder images
+      const builderImages = formData.builderImages && formData.builderImages.length > 0
+        ? await uploadFilesToStorage(formData.builderImages, 'developer-builder', user.id)
+        : [];
+
       // Create unique slug from company name
       const baseSlug = slugify(formData.companyName || 'developer');
       const slug = await ensureUniqueSlug(baseSlug);
@@ -174,6 +189,14 @@ export default function CreateDeveloperPage() {
             meta_description: formData.metaDescription,
             meta_keywords: formData.metaKeywords,
             primary_project: Object.keys(primaryProject).length > 0 ? primaryProject : null,
+            location_lat: formData.locationLat ? parseFloat(formData.locationLat) : null,
+            location_lng: formData.locationLng ? parseFloat(formData.locationLng) : null,
+            interior_images: interiorImages.map(img => img.url),
+            floor_plan_images: floorPlanImages.map(img => img.url),
+            builder_title: formData.builderTitle,
+            builder_description: formData.builderDescription,
+            builder_years_in_business: formData.builderYearsInBusiness,
+            builder_images: builderImages.map(img => img.url),
             is_published: formData.isPublished !== false, // Default to true unless explicitly set to false
             created_by: user.id
           })
