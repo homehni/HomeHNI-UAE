@@ -146,7 +146,7 @@ export default function CreateDeveloperPage() {
             meta_title: formData.metaTitle,
             meta_description: formData.metaDescription,
             meta_keywords: formData.metaKeywords,
-            is_published: formData.isPublished || false,
+            is_published: formData.isPublished !== false, // Default to true unless explicitly set to false
             created_by: user.id
           })
           .select()

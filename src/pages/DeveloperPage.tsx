@@ -340,6 +340,31 @@ const DeveloperPage = () => {
   
   // Loading state handled within UI sections to keep hooks order consistent
   
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading developer page...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <h1 className="text-2xl font-bold mb-4">Error Loading Page</h1>
+          <p className="text-muted-foreground mb-4">Unable to load this developer page. Please try again later.</p>
+          <Button onClick={() => window.location.href = '/'}>Go to Homepage</Button>
+        </div>
+      </div>
+    );
+  }
+
   // Try database first, but use hardcoded logos (imported assets)
   const hardcodedDev = developers[developerId as keyof typeof developers];
   const developer = developerData 
@@ -378,7 +403,18 @@ const DeveloperPage = () => {
       }
     : hardcodedDev;
   
-  const developerNotFound = !developer && !developerData;
+  // Show not found state if neither database nor hardcoded data exists
+  if (!developer) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <h1 className="text-2xl font-bold mb-4">Developer Not Found</h1>
+          <p className="text-muted-foreground mb-4">The developer page you're looking for doesn't exist or hasn't been published yet.</p>
+          <Button onClick={() => window.location.href = '/'}>Go to Homepage</Button>
+        </div>
+      </div>
+    );
+  }
 
   // Check if this is a property-detail style page
   const isPropertyDetail = developer && 'propertyDetails' in developer;

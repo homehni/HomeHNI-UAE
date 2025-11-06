@@ -73,10 +73,10 @@ export const useDeveloperPage = (slug: string) => {
         .select("*")
         .eq("slug", slug)
         .eq("is_published", true)
-        .single();
+        .maybeSingle(); // Use maybeSingle to avoid throwing on no results
 
       if (error) throw error;
-      return data as DeveloperPage;
+      return data as DeveloperPage | null;
     },
     enabled: !!slug,
   });
