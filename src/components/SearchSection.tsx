@@ -1617,7 +1617,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center justify-center gap-4">
               <div className="flex items-center justify-center">
-                <img src={mortgeaseLogo} alt="Mortgease" className="h-24 md:h-28 lg:h-32 object-contain" />
+                <img src={mortgeaseLogo} alt="Mortgease" className="h-20 md:h-24 lg:h-28 object-contain" />
               </div>
               <div className="text-center">
                 <p className="text-base md:text-lg font-bold text-gray-800 mb-1">
