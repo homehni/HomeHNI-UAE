@@ -10,6 +10,30 @@ export default function CreateDeveloperPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Generate URL-friendly slug and ensure uniqueness
+  const slugify = (str: string) => str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const ensureUniqueSlug = async (base: string) => {
+    let candidate = base;
+    let counter = 1;
+    // Keep trying until no record with this slug exists
+    // Using maybeSingle() so we don't throw when not found
+    while (true) {
+      const { data, error } = await supabase
+        .from('developer_pages')
+        .select('id')
+        .eq('slug', candidate)
+        .maybeSingle();
+
+      if (!data) return candidate; // slug is free
+      counter += 1;
+      candidate = `${base}-${counter}`;
+    }
+  };
+
   const handleSubmit = async (formData: any) => {
     setIsSubmitting(true);
     try {
@@ -69,11 +93,9 @@ export default function CreateDeveloperPage() {
         videoThumbnailUrl = uploaded.url;
       }
 
-      // Create slug from company name
-      const slug = formData.companyName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+      // Create unique slug from company name
+      const baseSlug = slugify(formData.companyName || 'developer');
+      const slug = await ensureUniqueSlug(baseSlug);
 
       // Insert developer page
       const { data, error } = await supabase
