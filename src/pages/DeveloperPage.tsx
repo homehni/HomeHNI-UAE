@@ -362,7 +362,21 @@ const DeveloperPage = () => {
         },
         propertyDetails: (developerData as any).primary_project || (hardcodedDev?.propertyDetails || null)
       }
-    : hardcodedDev;
+    : hardcodedDev || {
+        // Fallback developer object with empty arrays to prevent undefined errors
+        name: '',
+        logo: '',
+        rank: 0,
+        founded: '',
+        headquarters: '',
+        highlights: '',
+        description: '',
+        specializations: [],
+        keyProjects: [],
+        awards: [],
+        contact: { phone: '', email: '', website: '' },
+        propertyDetails: null
+      };
   
   // Not-found handled after hooks for consistent hooks order
 
