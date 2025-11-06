@@ -157,7 +157,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             description: `Maximum ${maxPerCategory} images per category`,
             variant: "destructive"
           });
-          return;
+          continue; // Changed from return to continue
         }
 
         const newCategoryImages = [...currentCategoryImages, processedFile].slice(0, maxPerCategory);
@@ -454,8 +454,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                   type="file"
                   accept="image/*"
                   multiple
+                  capture="environment"
                   onChange={(e) => handleCategorizedFileSelect(e, category.key)}
                   className="hidden"
+                  key={categoryImages.length}
                 />
               </CardContent>
             </Card>
