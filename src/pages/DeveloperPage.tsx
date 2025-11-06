@@ -371,6 +371,12 @@ const DeveloperPage = () => {
     if (primaryProject) {
       developer.propertyDetails = {
         ...primaryProject,
+        price: primaryProject.price ? {
+          min: primaryProject.price.min || 0,
+          max: primaryProject.price.max || 0,
+          unit: primaryProject.price.unit || 'Lacs',
+          perSqft: primaryProject.price.perSqft || 0
+        } : { min: 0, max: 0, unit: 'Lacs', perSqft: 0 },
         configurations: Array.isArray(primaryProject.configurations) ? primaryProject.configurations : [],
         features: Array.isArray(primaryProject.features) ? primaryProject.features : [],
         amenities: Array.isArray(primaryProject.amenities) ? primaryProject.amenities : []
