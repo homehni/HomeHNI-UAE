@@ -411,6 +411,11 @@ const DeveloperPage = () => {
   const pd = developer?.propertyDetails;
   const propertyDetails = (developerData as any)?.primary_project;
 
+  // Safe helpers
+  const cfg = Array.isArray(pd?.configurations) ? pd!.configurations : [];
+  const price = pd?.price ?? { min: 0, max: 0, unit: 'Lacs', perSqft: 0 };
+  const priceLabel = (price.min ?? 0) > 0 && price.unit ? `₹ ${price.min} ${price.unit} Onwards*` : 'Price on request';
+
   // Forest Edge carousel images
   const forestEdgeImages = [forestEdgeExterior, forestEdgeAmenities1, forestEdgeAmenities2, forestEdgePool, forestEdgeLawn, forestEdgeAerial, forestEdgeBalcony, forestEdgeEvening];
 
@@ -764,10 +769,10 @@ const DeveloperPage = () => {
                 {/* Configuration & Price */}
                 <div className="space-y-2">
                   <h2 className="text-lg sm:text-xl font-bold text-white">
-                    {pd.configurations.map(c => c.type).join(', ')} Apartment
+                    {cfg.map(c => c.type).join(', ')} Apartment
                   </h2>
                   <p className="text-base sm:text-lg font-semibold text-emerald-300">
-                    ₹ {pd.price.min} {pd.price.unit} Onwards*
+                    {priceLabel}
                   </p>
                 </div>
                 
@@ -815,8 +820,8 @@ const DeveloperPage = () => {
                     <Home className="h-5 w-5 text-white" />
                   </div>
                   <div className="text-center">
-                    <p className="text-[11px] font-bold text-white">{pd.configurations[0].type}</p>
-                    <p className="text-[9px] text-white/80">{pd.configurations[0].sizes[0]}</p>
+                    <p className="text-[11px] font-bold text-white">{cfg[0]?.type || ""}</p>
+                    <p className="text-[9px] text-white/80">{cfg[0]?.sizes?.[0] || ""}</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2 p-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
@@ -874,9 +879,9 @@ const DeveloperPage = () => {
                       
                       {/* Main Info */}
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{developerData?.hero_title || developer.name} | {pd.configurations.map(c => c.type).join(', ')} Apartments</span>
+                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{developerData?.hero_title || developer.name} | {cfg.map(c => c.type).join(', ')} Apartments</span>
                         <span className="text-slate-400">|</span>
-                        <span className="text-xl lg:text-2xl font-bold text-slate-900">₹ {pd.price.min} {pd.price.unit} Onwards*</span>
+                        <span className="text-xl lg:text-2xl font-bold text-slate-900">{priceLabel}</span>
                         <span className="text-slate-400">|</span>
                         <div className="flex items-center gap-2 text-slate-700">
                           <MapPin className="h-5 w-5 text-slate-700" />
@@ -906,7 +911,7 @@ const DeveloperPage = () => {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center">
                           <Home className="h-5 w-5 text-slate-700" />
                         </div>
-                        <span className="text-xs font-semibold text-center text-slate-900 leading-tight">{pd.configurations[0].type}<br />{pd.configurations[0].sizes[0]}</span>
+                        <span className="text-xs font-semibold text-center text-slate-900 leading-tight">{cfg[0]?.type || ""}<br />{cfg[0]?.sizes?.[0] || ""}</span>
                       </div>
                       <div className="flex flex-col items-center gap-2 p-3 bg-white/80 backdrop-blur-md rounded-lg shadow-lg hover:bg-white/90 transition-all duration-300 border border-slate-200 aspect-square justify-center">
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center">
