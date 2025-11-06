@@ -39,30 +39,42 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
       aboutContent: "",
       videoSectionTitle: "",
       videoSectionSubtitle: "",
-      stats: [],
-      specializations: [],
-      keyProjects: [],
-      awards: [],
-      floorPlans: [],
-      amenities: [],
+      stats: "",
+      specializations: "",
+      keyProjects: "",
+      awards: "",
+      floorPlans: "",
+      amenities: "",
       locationTitle: "",
       locationDescription: "",
       locationMapUrl: "",
-      locationHighlights: [],
+      locationHighlights: "",
       contactPhone: "",
       contactEmail: "",
       contactWebsite: "",
       contactAddress: "",
       metaTitle: "",
       metaDescription: "",
-      metaKeywords: [],
-      isPublished: false
+      metaKeywords: "",
+      isPublished: true
     }
   });
 
   const handleFormSubmit = (data: any) => {
+    // Parse multi-line text fields into arrays
+    const parseLines = (text: string) => text?.split('\n').filter(line => line.trim()) || [];
+    
     onSubmit({
       ...data,
+      highlights: parseLines(data.highlights),
+      stats: parseLines(data.stats),
+      specializations: parseLines(data.specializations),
+      keyProjects: parseLines(data.keyProjects),
+      awards: parseLines(data.awards),
+      amenities: parseLines(data.amenities),
+      locationHighlights: parseLines(data.locationHighlights),
+      floorPlans: parseLines(data.floorPlans),
+      metaKeywords: parseLines(data.metaKeywords),
       logo: logo,
       heroImage: heroImage,
       heroVideo: heroVideo,
@@ -76,6 +88,16 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+        {/* Instructions */}
+        <Card className="bg-muted/50">
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground">
+              Fill in the sections below to create your developer showcase page. Each section corresponds to a part of the final page layout. 
+              Fields marked with <span className="font-semibold">(Optional)</span> can be left empty if not needed.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Basic Information */}
         <Card>
           <CardHeader>
@@ -258,6 +280,36 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
           </CardContent>
         </Card>
 
+        {/* Stats Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Award className="h-5 w-5" />
+              Company Stats
+            </CardTitle>
+            <CardDescription>Key numbers and achievements (one per line, e.g., "280+ Projects Delivered")</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="stats"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Statistics</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="280+ Projects Delivered&#10;140M+ Sq Ft Developed&#10;35+ Years of Excellence&#10;50,000+ Happy Families" 
+                      rows={6} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
         {/* About Section */}
         <Card>
           <CardHeader>
@@ -265,6 +317,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               <Info className="h-5 w-5" />
               About Section
             </CardTitle>
+            <CardDescription>Tell your company story</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -296,9 +349,93 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
             />
 
             <div>
-              <FormLabel>About Images</FormLabel>
+              <FormLabel>About Images (Optional)</FormLabel>
               <ImageUpload images={aboutImages} onImagesChange={setAboutImages} maxImages={10} />
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Specializations */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Specializations</CardTitle>
+            <CardDescription>Areas of expertise (one per line)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="specializations"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Specializations</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Premium Residential Projects&#10;Commercial Complexes&#10;Mixed-use Developments&#10;Hospitality Projects" 
+                      rows={6} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Key Projects */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Key Projects</CardTitle>
+            <CardDescription>Major projects and developments (one per line)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="keyProjects"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Key Projects</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Project Name - Description&#10;Luxury Apartments - Premium residential complex&#10;Tech Park - IT park and commercial space" 
+                      rows={6} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Awards */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Award className="h-5 w-5" />
+              Awards & Recognition
+            </CardTitle>
+            <CardDescription>Awards and certifications (one per line)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="awards"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Awards</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Best Developer Award 2024&#10;Excellence in Architecture&#10;Green Building Certification&#10;Customer Satisfaction Award" 
+                      rows={6} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -361,11 +498,60 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <ImageIcon className="h-5 w-5" />
-              Gallery
+              Gallery & Floor Plans
             </CardTitle>
+            <CardDescription>Project images and floor plan details</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <FormLabel>Gallery Images (Optional)</FormLabel>
+              <ImageUpload images={galleryImages} onImagesChange={setGalleryImages} maxImages={20} />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="floorPlans"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Floor Plans (URLs, one per line)</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="https://example.com/floorplan1.jpg&#10;https://example.com/floorplan2.jpg" 
+                      rows={4} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Amenities */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Amenities</CardTitle>
+            <CardDescription>Property amenities (one per line)</CardDescription>
           </CardHeader>
           <CardContent>
-            <ImageUpload images={galleryImages} onImagesChange={setGalleryImages} maxImages={20} />
+            <FormField
+              control={form.control}
+              name="amenities"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amenities</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Clubhouse&#10;Swimming Pool&#10;Fitness Center&#10;Kids Play Area&#10;Landscaped Gardens&#10;24/7 Security" 
+                      rows={8} 
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -376,6 +562,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               <MapPin className="h-5 w-5" />
               Location Information
             </CardTitle>
+            <CardDescription>Property location and nearby highlights</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -385,7 +572,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                 <FormItem>
                   <FormLabel>Location Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Prime Location" {...field} />
+                    <Input placeholder="e.g., Prime Location in Hyderabad" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -399,7 +586,25 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                 <FormItem>
                   <FormLabel>Location Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Location details" rows={3} {...field} />
+                    <Textarea placeholder="Detailed location information" rows={3} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="locationHighlights"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location Highlights (one per line)</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="5 mins to Airport&#10;Near IT Hub&#10;Close to Shopping Malls&#10;Schools nearby" 
+                      rows={5} 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -411,7 +616,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               name="locationMapUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Map URL</FormLabel>
+                  <FormLabel>Map URL (Optional)</FormLabel>
                   <FormControl>
                     <Input placeholder="Google Maps embed URL" {...field} />
                   </FormControl>
@@ -429,6 +634,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               <Phone className="h-5 w-5" />
               Contact Information
             </CardTitle>
+            <CardDescription>How customers can reach you</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -439,7 +645,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <FormControl>
-                      <Input placeholder="+91 XXXXXXXXXX" {...field} />
+                      <Input placeholder="+91 9876543210" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -468,7 +674,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                 <FormItem>
                   <FormLabel>Website</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://www.company.com" {...field} />
+                    <Input placeholder="www.company.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -482,7 +688,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Full address" rows={3} {...field} />
+                    <Textarea placeholder="Full office address" rows={3} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -495,6 +701,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
         <Card>
           <CardHeader>
             <CardTitle>SEO & Publishing</CardTitle>
+            <CardDescription>Search engine optimization and visibility settings</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -502,9 +709,9 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               name="metaTitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Meta Title</FormLabel>
+                  <FormLabel>Meta Title (Optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Page title for SEO" {...field} />
+                    <Input placeholder="Page title for search engines" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -516,9 +723,23 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
               name="metaDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Meta Description</FormLabel>
+                  <FormLabel>Meta Description (Optional)</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Page description for SEO" rows={2} {...field} />
+                    <Textarea placeholder="Brief description for search results" rows={2} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="metaKeywords"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Keywords (Optional, one per line)</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="real estate&#10;property developer&#10;luxury apartments" rows={3} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -532,7 +753,7 @@ export const DeveloperPageForm = ({ onSubmit, isSubmitting }: DeveloperPageFormP
                 <FormItem className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Publish Page</FormLabel>
-                    <div className="text-sm text-muted-foreground">Make this page visible to the public</div>
+                    <div className="text-sm text-muted-foreground">Make this page visible to the public (enabled by default)</div>
                   </div>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />

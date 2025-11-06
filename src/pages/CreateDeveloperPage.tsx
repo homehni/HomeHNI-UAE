@@ -193,8 +193,13 @@ export default function CreateDeveloperPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Create Developer Page</h1>
-          <p className="text-muted-foreground mb-8">Fill in the details to create your developer showcase page</p>
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold mb-2">Create Developer Showcase Page</h1>
+            <p className="text-muted-foreground">
+              Create a comprehensive showcase page for your real estate development company. 
+              This page will display your projects, achievements, and contact information in a professional layout.
+            </p>
+          </div>
           <DeveloperPageForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
         </div>
       </div>
