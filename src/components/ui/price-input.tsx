@@ -6,10 +6,11 @@ export interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInpu
   value?: number | string
   onChange?: (value: number | undefined) => void
   showFormatted?: boolean
+  currencySymbol?: string
 }
 
 const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
-  ({ className, value, onChange, showFormatted = true, onKeyDown: userOnKeyDown, onPaste: userOnPaste, ...props }, ref) => {
+  ({ className, value, onChange, showFormatted = true, currencySymbol = '₹', onKeyDown: userOnKeyDown, onPaste: userOnPaste, ...props }, ref) => {
     const displayValue = typeof value === 'number' ? value.toString() : value || ''
     const formattedPrice = showFormatted ? formatExactPriceDisplay(value || 0) : ''
 
@@ -37,7 +38,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
 
     return (
       <div className="relative">
-        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">₹</span>
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">{currencySymbol}</span>
         <input
           type="text"
           inputMode="numeric"
@@ -55,7 +56,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
         />
         {showFormatted && formattedPrice && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground font-medium">
-            {formattedPrice.replace('₹ ', '')}
+            {formattedPrice.replace(/^[₹AED]\s*/, '')}
           </div>
         )}
       </div>

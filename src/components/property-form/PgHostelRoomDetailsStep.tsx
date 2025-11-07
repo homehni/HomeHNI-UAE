@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Bed, ShowerHead, Tv, Wind, Shirt, ShoppingBag, DollarSign } from 'lucide-react';
 import { formatExactPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface PgHostelRoomDetails {
   roomTypeDetails: {
@@ -46,6 +47,9 @@ export function PgHostelRoomDetailsStep({
   currentStep, 
   totalSteps 
 }: PgHostelRoomDetailsStepProps) {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const [formData, setFormData] = useState<PgHostelRoomDetails>({
     roomTypeDetails: initialData?.roomTypeDetails || {},
     roomAmenities: {
@@ -186,6 +190,7 @@ export function PgHostelRoomDetailsStep({
                       onChange={(value) => handleRoomTypePriceChange(roomType, 'expectedRent', value)}
                       placeholder="Enter Amount"
                       className={`h-12 text-lg ${errors[roomType]?.expectedRent ? 'border-red-500' : ''}`}
+                      currencySymbol={currencySymbol}
                     />
                     {errors[roomType]?.expectedRent && (
                       <p className="text-sm text-red-500 mt-1">{errors[roomType].expectedRent}</p>
@@ -209,6 +214,7 @@ export function PgHostelRoomDetailsStep({
                       onChange={(value) => handleRoomTypePriceChange(roomType, 'expectedDeposit', value)}
                       placeholder="Enter Amount"
                       className={`h-12 text-lg ${errors[roomType]?.expectedDeposit ? 'border-red-500' : ''}`}
+                      currencySymbol={currencySymbol}
                     />
                     {errors[roomType]?.expectedDeposit && (
                       <p className="text-sm text-red-500 mt-1">{errors[roomType].expectedDeposit}</p>

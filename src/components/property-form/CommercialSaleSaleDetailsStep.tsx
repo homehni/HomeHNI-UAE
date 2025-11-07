@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { CommercialSaleDetails } from '@/types/commercialSaleProperty';
 import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 const commercialSaleSaleDetailsSchema = z.object({
   listingType: z.literal('Sale').optional(),
@@ -48,6 +49,9 @@ export const CommercialSaleSaleDetailsStep = ({
   currentStep,
   totalSteps
 }: CommercialSaleSaleDetailsStepProps) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   
   const form = useForm<CommercialSaleSaleDetailsForm>({
@@ -85,10 +89,10 @@ export const CommercialSaleSaleDetailsStep = ({
               name="expectedPrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-900">Expected Price (₹)</FormLabel>
+                  <FormLabel className="text-sm font-medium text-gray-900">Expected Price ({currencySymbol})</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                      <span className="absolute left-3 top-3 text-gray-500">{currencySymbol}</span>
                       <Input 
                         placeholder="Enter Amount"
                         className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"

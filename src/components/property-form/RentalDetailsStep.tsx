@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { RentalDetails } from '@/types/property';
 import { formatExactPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 const rentalDetailsSchema = z.object({
   propertyAvailableFor: z.string().optional(),
@@ -50,6 +51,9 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   currentStep,
   totalSteps
 }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const form = useForm<RentalDetailsForm>({
     resolver: zodResolver(rentalDetailsSchema),
     defaultValues: {
@@ -150,7 +154,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium text-gray-900">Expected Rent</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
@@ -205,7 +209,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-3 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
                           className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
@@ -243,7 +247,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
                     <FormLabel className="text-sm font-medium text-gray-900">Expected Lease Amount</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-3 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
                           className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"

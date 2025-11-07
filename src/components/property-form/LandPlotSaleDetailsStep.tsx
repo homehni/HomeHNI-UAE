@@ -17,6 +17,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
 import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 const saleDetailsSchema = z.object({
   expectedPrice: z.number().optional().or(z.nan()).transform(val => isNaN(val) ? undefined : val),
@@ -41,6 +42,9 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
   onNext,
   onBack,
 }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<SaleDetailsForm>({
     resolver: zodResolver(saleDetailsSchema),
     defaultValues: {
@@ -108,6 +112,7 @@ export const LandPlotSaleDetailsStep: React.FC<LandPlotSaleDetailsStepProps> = (
                     placeholder="Enter Amount"
                     value={watch('expectedPrice')}
                     onChange={(value) => setValue('expectedPrice', value)}
+                    currencySymbol={currencySymbol}
                   />
                   {/* Price in words display */}
                   {watch('expectedPrice') && watch('expectedPrice')! > 0 && (

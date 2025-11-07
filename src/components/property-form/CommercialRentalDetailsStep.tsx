@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { CommercialRentalDetails } from '@/types/property';
 import { formatExactPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 const commercialRentalDetailsSchema = z.object({
   listingType: z.enum(['Rent']).optional(),
@@ -53,6 +54,9 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
   currentStep,
   totalSteps
 }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const [customBusinessType, setCustomBusinessType] = useState('');
   const [selectedBusinessTypes, setSelectedBusinessTypes] = useState<string[]>(initialData.businessType || []);
   const [customRestriction, setCustomRestriction] = useState('');
@@ -171,7 +175,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                     <FormLabel className="text-sm font-medium text-gray-900">Expected Rent</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
@@ -226,7 +230,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                     <FormLabel className="text-sm font-medium text-gray-900">Expected Deposit</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
                           className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
@@ -341,7 +345,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                     <FormLabel className="text-sm font-medium text-gray-900">Maintenance Amount</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
                           className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"

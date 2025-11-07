@@ -18,6 +18,7 @@ import { format, addMonths } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { SaleDetails } from '@/types/saleProperty';
 import { formatPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 // Helper function to convert number to words
 const numberToWords = (num: number): string => {
@@ -107,6 +108,9 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   onBack,
   formId
 }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(initialData.possessionDate ? new Date(initialData.possessionDate) : undefined);
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
@@ -153,17 +157,23 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">
-                    Sale Price (₹) <span className="text-muted-foreground">(Optional)</span>
+                    Sale Price ({currencySymbol}) <span className="text-muted-foreground">(Optional)</span>
                   </FormLabel>
                   <FormControl>
-                    <PriceInput placeholder="Enter Amount" value={field.value} onChange={field.onChange} className="h-10" />
+                    <PriceInput 
+                      placeholder="Enter Amount" 
+                      value={field.value} 
+                      onChange={field.onChange} 
+                      className="h-10"
+                      currencySymbol={currencySymbol}
+                    />
                   </FormControl>
                   {/* Price in words display */}
                   {field.value && field.value > 0 && <div className="mt-2">
                       <p className="text-sm text-black">
-                        ₹ {numberToWords(field.value)}
+                        {currencySymbol} {numberToWords(field.value)}
                         {propertyDetails?.superBuiltUpArea && <span className="text-gray-600">
-                            {' '}(₹ {formatPricePerSqFt(field.value, propertyDetails.superBuiltUpArea)} per sq.ft)
+                            {' '}({currencySymbol} {formatPricePerSqFt(field.value, propertyDetails.superBuiltUpArea)} per sq.ft)
                           </span>}
                       </p>
                     </div>}
@@ -174,7 +184,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
             field
           }) => <FormItem>
                   <FormLabel className="text-sm font-medium">
-                    Price per Sq.Ft (₹) <span className="text-muted-foreground">(Optional)</span>
+                    Price per Sq.Ft ({currencySymbol}) <span className="text-muted-foreground">(Optional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="e.g. 4500" min="1" value={watchedValues.expectedPrice && propertyDetails?.superBuiltUpArea ? Math.round(watchedValues.expectedPrice / propertyDetails.superBuiltUpArea) : field.value || ''} onKeyDown={e => {

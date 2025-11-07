@@ -13,6 +13,7 @@ import { CalendarIcon } from 'lucide-react';
 import { format, addMonths } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { formatExactPriceDisplay } from '@/utils/priceFormatter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface FlattmatesRentalDetails {
   expectedRent: number;
@@ -42,6 +43,9 @@ export function FlattmatesRentalDetailsStep({
   completedSteps,
   formId
 }: FlattmatesRentalDetailsStepProps) {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const [formData, setFormData] = useState<FlattmatesRentalDetails>({
     expectedRent: 0,
     expectedDeposit: 0,
@@ -115,6 +119,7 @@ export function FlattmatesRentalDetailsStep({
                         onChange={(value) => setFormData({ ...formData, expectedRent: value || 0 })}
                         placeholder="Enter Amount"
                         className="h-12"
+                        currencySymbol={currencySymbol}
                       />
                       {/* Rent Negotiable Checkbox */}
                       <div className="flex items-center space-x-2 mt-2">
@@ -137,6 +142,7 @@ export function FlattmatesRentalDetailsStep({
                       onChange={(value) => setFormData({ ...formData, expectedDeposit: value || 0 })}
                       placeholder="Enter Amount"
                       className="h-12"
+                      currencySymbol={currencySymbol}
                     />
                   </div>
                 </div>
