@@ -2106,6 +2106,74 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule_visit: {
+        Row: {
+          agreed_to_terms: boolean | null
+          created_at: string | null
+          id: string
+          interested_in_home_loan: boolean | null
+          interested_in_site_visits: boolean | null
+          is_property_dealer: boolean | null
+          need_immediate_visit: boolean | null
+          property_id: string | null
+          property_owner_id: string | null
+          property_title: string
+          status: string | null
+          updated_at: string | null
+          visit_date: string | null
+          visit_time: string | null
+          visitor_email: string
+          visitor_name: string
+          visitor_phone: string
+        }
+        Insert: {
+          agreed_to_terms?: boolean | null
+          created_at?: string | null
+          id?: string
+          interested_in_home_loan?: boolean | null
+          interested_in_site_visits?: boolean | null
+          is_property_dealer?: boolean | null
+          need_immediate_visit?: boolean | null
+          property_id?: string | null
+          property_owner_id?: string | null
+          property_title: string
+          status?: string | null
+          updated_at?: string | null
+          visit_date?: string | null
+          visit_time?: string | null
+          visitor_email: string
+          visitor_name: string
+          visitor_phone: string
+        }
+        Update: {
+          agreed_to_terms?: boolean | null
+          created_at?: string | null
+          id?: string
+          interested_in_home_loan?: boolean | null
+          interested_in_site_visits?: boolean | null
+          is_property_dealer?: boolean | null
+          need_immediate_visit?: boolean | null
+          property_id?: string | null
+          property_owner_id?: string | null
+          property_title?: string
+          status?: string | null
+          updated_at?: string | null
+          visit_date?: string | null
+          visit_time?: string | null
+          visitor_email?: string
+          visitor_name?: string
+          visitor_phone?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedule_visit_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       services: {
         Row: {
           additional_data: Json | null
@@ -2615,6 +2683,7 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
       }
+      has_lead_access: { Args: { user_uuid: string }; Returns: boolean }
       has_permission: {
         Args: {
           action_param: Database["public"]["Enums"]["permission_action"]

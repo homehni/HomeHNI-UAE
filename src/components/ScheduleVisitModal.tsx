@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 import { format, startOfToday } from "date-fns";
 import { cn } from "@/lib/utils";
+import { supabase } from '@/integrations/supabase/client';
 
 interface ScheduleVisitModalProps {
   isOpen: boolean;
@@ -118,17 +119,50 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
     setIsSubmitting(true);
     
     try {
-      // Future: Send schedule visit request to backend
-      // For now, just show success message
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      
+      // Get property owner ID
+      const { data: propertyData, error: propertyError } = await supabase
+        .from('properties')
+        .select('user_id')
+        .eq('id', propertyId)
+        .single();
+
+      if (propertyError) throw propertyError;
+
+      // Save schedule visit to database
+      const { error: insertError } = await supabase
+        .from('schedule_visit')
+        .insert({
+          property_id: propertyId,
+          property_title: propertyTitle,
+          visitor_name: formData.name.trim(),
+          visitor_email: formData.email.trim().toLowerCase(),
+          visitor_phone: formData.phone.trim(),
+          visit_date: formData.visitDate ? format(formData.visitDate, 'yyyy-MM-dd') : null,
+          visit_time: formData.visitTime,
+          is_property_dealer: formData.isPropertyDealer === 'yes',
+          need_immediate_visit: formData.immediateVisit,
+          interested_in_home_loan: formData.interestedInHomeLoan,
+          interested_in_site_visits: formData.interestedInSiteVisit,
+          agreed_to_terms: formData.agreeToTerms,
+          property_owner_id: propertyData?.user_id || null,
+          status: 'pending'
+        });
+
+      if (insertError) throw insertError;
+
       // Format the booked date and time
       const formattedDateTime = formData.visitDate ? 
         `${format(formData.visitDate, "EEE, do MMMM")} at ${formData.visitTime}` : '';
       setBookedDateTime(formattedDateTime);
       setShowSuccess(true);
+
+      toast({
+        title: "Visit scheduled successfully",
+        description: "You will receive a confirmation shortly.",
+      });
       
     } catch (error) {
+      console.error('Error scheduling visit:', error);
       toast({
         title: "Error scheduling visit",
         description: "Something went wrong. Please try again later.",
