@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface DescriptionCardProps {
   property: {
@@ -37,13 +38,16 @@ interface DescriptionCardProps {
 }
 
 export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   const isPGHostel = property?.property_type?.toLowerCase().includes('pg') || 
                     property?.property_type?.toLowerCase().includes('hostel') ||
                     property?.property_type?.toLowerCase().includes('coliving');
 
   const formatPrice = (price?: number) => {
     if (!price) return 'Price on request';
-    return `₹${price.toLocaleString('en-IN')}${isPGHostel ? '/month' : ''}`;
+    return `${currencySymbol}${price.toLocaleString('en-IN')}${isPGHostel ? '/month' : ''}`;
   };
 
   const formatArea = (area?: number) => {
@@ -176,7 +180,7 @@ export const DescriptionCard: React.FC<DescriptionCardProps> = ({ property }) =>
 
       // Add security deposit information
       if (property?.expected_deposit) {
-        description += `Security deposit is ₹${property.expected_deposit.toLocaleString('en-IN')}. `;
+        description += `Security deposit is ${currencySymbol}${property.expected_deposit.toLocaleString('en-IN')}. `;
       }
     } else {
       // Regular property description with overview details

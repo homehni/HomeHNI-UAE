@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { SecureContactForm } from './SecureContactForm';
 import propertyPlaceholder from '@/assets/property-placeholder.png';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface Property {
   id: string;
@@ -47,11 +48,14 @@ interface PropertyDetailModalProps {
   onClose: () => void;
 }
 
-export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
-  property,
-  isOpen,
-  onClose
+export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({ 
+  property, 
+  isOpen, 
+  onClose 
 }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   if (!property) return null;
 
   return (

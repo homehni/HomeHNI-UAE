@@ -25,13 +25,14 @@ export const calculateTotalWithGST = (basePriceInPaise: number): number => {
 /**
  * Format amount in paise to readable currency string
  * @param amountInPaise - Amount in paise
+ * @param currency - Currency code (default: 'INR')
  * @returns Formatted currency string (e.g., "₹1,180")
  */
-export const formatCurrency = (amountInPaise: number): string => {
+export const formatCurrency = (amountInPaise: number, currency: string = 'INR'): string => {
   const amountInRupees = Math.round(amountInPaise / 100);
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'INR',
+    currency: currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amountInRupees);
@@ -40,13 +41,14 @@ export const formatCurrency = (amountInPaise: number): string => {
 /**
  * Format amount in paise to detailed currency string with decimals
  * @param amountInPaise - Amount in paise
+ * @param currency - Currency code (default: 'INR')
  * @returns Formatted currency string (e.g., "₹1,180.00")
  */
-export const formatCurrencyDetailed = (amountInPaise: number): string => {
+export const formatCurrencyDetailed = (amountInPaise: number, currency: string = 'INR'): string => {
   const amountInRupees = amountInPaise / 100;
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'INR',
+    currency: currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amountInRupees);

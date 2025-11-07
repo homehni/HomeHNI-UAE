@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2 } from 'lucide-react';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 // Utility function to convert 24-hour format to 12-hour format
 const convertTo12HourFormat = (time24: string): string => {
@@ -122,6 +123,9 @@ interface PropertyDetailsCardProps {
 }
 
 export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ property }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   console.log('DEBUG: PropertyDetailsCard received property:', JSON.stringify({
     property_type: property.property_type,
     plot_area: property.plot_area,
@@ -144,7 +148,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   }
   const formatMaintenance = (charges?: number) => {
     if (!charges) return 'Not specified';
-    return `₹${charges.toLocaleString()}/month`;
+    return `${currencySymbol}${charges.toLocaleString()}/month`;
   };
 
   const formatOwnership = (role?: string) => {
@@ -215,7 +219,7 @@ export const PropertyDetailsCard: React.FC<PropertyDetailsCardProps> = ({ proper
   // Helper functions for PG/Hostel properties
   const formatCurrency = (amount?: number) => {
     if (!amount) return 'Not specified';
-    return `₹${amount.toLocaleString()}`;
+    return `${currencySymbol}${amount.toLocaleString()}`;
   };
 
   const formatDate = (dateStr?: string) => {

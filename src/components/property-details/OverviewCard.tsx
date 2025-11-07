@@ -21,6 +21,7 @@ import {
   Dumbbell
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface OverviewCardProps {
   property: {
@@ -70,6 +71,9 @@ interface OverviewCardProps {
 }
 
 export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   console.log('OverviewCard - Property data:', {
     property_type: property.property_type,
     available_services: property.available_services,
@@ -84,7 +88,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
 
   const formatMaintenance = (charges?: number) => {
     if (!charges) return 'Not specified';
-    return `₹${charges.toLocaleString()}/month`;
+    return `${currencySymbol}${charges.toLocaleString()}/month`;
   };
 
   const formatOwnership = (role?: string) => {
@@ -145,12 +149,12 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({ property }) => {
 
   const formatPrice = (price?: number) => {
     if (!price) return 'Not specified';
-    return `₹${price.toLocaleString()}`;
+    return `${currencySymbol}${price.toLocaleString()}`;
   };
 
   const formatBookingAmount = (amount?: number) => {
     if (!amount) return 'Not specified';
-    return `₹${amount.toLocaleString()}`;
+    return `${currencySymbol}${amount.toLocaleString()}`;
   };
 
   // Check if property is a plot/land
