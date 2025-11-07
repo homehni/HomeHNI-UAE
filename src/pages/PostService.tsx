@@ -141,12 +141,18 @@ const PostService = () => {
     });
   };
 
-  const intentOptions = [
+  const allIntentOptions = [
     { value: "Buy", label: "Buy" },
     { value: "Sell", label: "Sell" },
     { value: "Lease", label: "Lease" },
     { value: "Service", label: "Service" }
   ];
+
+  // Filter out Service option for UAE domain
+  const isUAE = getCurrentCountryConfig().code === 'AE';
+  const intentOptions = allIntentOptions.filter(option => 
+    isUAE ? option.value !== 'Service' : true
+  );
 
   // Property types based on intent (same for Buy/Sell/Lease)
   const propertyTypes = [
