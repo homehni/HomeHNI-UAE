@@ -185,7 +185,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
               {/* Rent Section */}
               <div className="text-center px-2 sm:px-3 py-3 border-r border-gray-200">
                 <div className="text-base sm:text-lg font-bold text-gray-900">
-                  {price ? `${currencySymbol}${price.toLocaleString('en-IN')}` : 'Not specified'}
+                  {price ? `${currencySymbol} ${price.toLocaleString('en-IN')}` : 'Not specified'}
                 </div>
                 <div className="text-xs text-gray-600">{property.listing_type === 'sale' ? 'Price' : 'Rent'}</div>
               </div>
@@ -204,7 +204,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
               {showDeposit && (
                 <div className="text-center px-2 sm:px-3 py-3">
                   <div className="text-base sm:text-lg font-bold text-gray-900">
-                    {typeof deposit === 'number' ? `${currencySymbol}${deposit.toLocaleString('en-IN')}` : 'Not specified'}
+                    {typeof deposit === 'number' ? `${currencySymbol} ${deposit.toLocaleString('en-IN')}` : 'Not specified'}
                   </div>
                   <div className="text-xs text-gray-600">Deposit</div>
                 </div>
@@ -265,11 +265,11 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
             {/* Price Section */}
             <div className="text-center px-6 py-4 border-r border-gray-200">
               <div className="text-xl font-bold text-gray-900 whitespace-nowrap">
-                {price ? `${currencySymbol}${price.toLocaleString('en-IN')}` : 'Not specified'}
+                {price ? `${currencySymbol} ${price.toLocaleString('en-IN')}` : 'Not specified'}
               </div>
               {showDeposit && typeof deposit === 'number' && deposit > 0 && (
                 <div className="text-sm font-normal text-gray-500 mt-1">
-                  Deposit: {currencySymbol}{deposit.toLocaleString('en-IN')}
+                  Deposit: {currencySymbol} {deposit.toLocaleString('en-IN')}
                 </div>
               )}
             </div>
@@ -288,7 +288,7 @@ export const PropertyHeader: React.FC<PropertyHeaderProps> = ({
             {showDeposit && (
               <div className="text-center px-6 py-4 border-r border-gray-200">
                 <div className="text-xl font-bold text-gray-900">
-                  {typeof deposit === 'number' ? `${currencySymbol}${deposit.toLocaleString('en-IN')}` : 'Not specified'}
+                  {typeof deposit === 'number' ? `${currencySymbol} ${deposit.toLocaleString('en-IN')}` : 'Not specified'}
                 </div>
                 <div className="text-sm text-gray-600">Deposit</div>
               </div>
