@@ -13,6 +13,7 @@ import Sidebar from './Sidebar';
 import LegalServicesForm from './LegalServicesForm';
 import CountrySwitcher from './CountrySwitcher';
 import Marquee from './Marquee';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -27,6 +28,9 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  // Check if current domain is UAE to hide services
+  const isUAE = getCurrentCountryConfig().code === 'AE';
 
   // Fetch CMS content for header navigation
   const { content: headerNavContent } = useCMSContent('header_nav');
@@ -190,48 +194,52 @@ const Header = () => {
                   SELL
                 </button>
 
-                {/* Services Dropdown */}
-                {/* Dropdown content uses z-[100]; ensure other overlapping elements (e.g., homepage search) have lower z-index. */}
-                <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-                  <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-                    SERVICES
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </button>
-                  
-                  {isServicesDropdownOpen && (
-                    <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
-                      <div className="py-2">
-                        <button onClick={() => navigate('/services?tab=loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Loans
-                        </button>
-                        <button onClick={() => navigate('/services?tab=home-security')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Home Security Services
-                        </button>
-                        <button onClick={() => navigate('/services?tab=packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Packers & Movers
-                        </button>
-                        <button onClick={() => navigate('/services?tab=legal-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Legal Services
-                        </button>
-                        <button onClick={() => navigate('/services?tab=handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Handover Services
-                        </button>
-                        <button onClick={() => navigate('/services?tab=property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Property Management
-                        </button>
-                        <button onClick={() => navigate('/services?tab=architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Architects
-                        </button>
-                        <button onClick={() => navigate('/services?tab=painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Painting & Cleaning
-                        </button>
-                        <button onClick={() => navigate('/services?tab=interior-design')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-                          Interior Designers
-                        </button>
-                      </div>
+                {/* Services Dropdown - Hidden for UAE */}
+                {!isUAE && (
+                  <>
+                    {/* Dropdown content uses z-[100]; ensure other overlapping elements (e.g., homepage search) have lower z-index. */}
+                    <div className="relative" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+                      <button className={`flex items-center hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                        SERVICES
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      </button>
+                      
+                      {isServicesDropdownOpen && (
+                        <div className="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[100] mt-2" onMouseEnter={handleServicesHover} onMouseLeave={handleServicesLeave}>
+                          <div className="py-2">
+                            <button onClick={() => navigate('/services?tab=loans')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Loans
+                            </button>
+                            <button onClick={() => navigate('/services?tab=home-security')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Home Security Services
+                            </button>
+                            <button onClick={() => navigate('/services?tab=packers-movers')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Packers & Movers
+                            </button>
+                            <button onClick={() => navigate('/services?tab=legal-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Legal Services
+                            </button>
+                            <button onClick={() => navigate('/services?tab=handover-services')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Handover Services
+                            </button>
+                            <button onClick={() => navigate('/services?tab=property-management')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Property Management
+                            </button>
+                            <button onClick={() => navigate('/services?tab=architects')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Architects
+                            </button>
+                            <button onClick={() => navigate('/services?tab=painting-cleaning')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Painting & Cleaning
+                            </button>
+                            <button onClick={() => navigate('/services?tab=interior-design')} className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                              Interior Designers
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </>
+                )}
 
                 <a href="/service-suite" onClick={e => {
                   e.preventDefault();
