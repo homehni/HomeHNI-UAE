@@ -594,21 +594,23 @@ export class PropertyDraftService {
             directions_tip: stepData.directionsTip,
             bathrooms: stepData.bathrooms,
             balconies: stepData.balconies,
-            // Store Flatmates-specific amenities in additional_info JSONB field
+            // Store amenities and additional info in additional_info JSONB field
             additional_info: {
               ...updateData.additional_info,
               // Room Details
               attachedBathroom: stepData.attachedBathroom,
               bathrooms: stepData.bathrooms,
               balconies: stepData.balconies,
-              // Flatmate Preferences
+              // Boolean amenities that need to be preserved
+              petAllowed: stepData.petAllowed,
               nonVegAllowed: stepData.nonVegAllowed,
+              moreSimilarUnits: stepData.moreSimilarUnits,
+              // Flatmate Preferences
               smokingAllowed: stepData.smokingAllowed,
               drinkingAllowed: stepData.drinkingAllowed,
               // Additional Details
               whoWillShow: stepData.whoWillShow,
               secondaryNumber: stepData.secondaryNumber,
-              moreSimilarUnits: stepData.moreSimilarUnits,
               // Amenities
               waterStorageFacility: stepData.waterStorageFacility,
               wifi: stepData.wifi
@@ -1209,8 +1211,13 @@ export class PropertyDraftService {
             lift: draft.lift || '',
             waterSupply: draft.water_supply || '',
             security: draft.security || '',
-            gym: draft.gym || '',
-            gatedSecurity: draft.gated_security || '',
+            gym: draft.gym ?? false,
+            gatedSecurity: draft.gated_security ?? false,
+            petAllowed: draft.additional_info?.petAllowed ?? false,
+            nonVegAllowed: draft.additional_info?.nonVegAllowed ?? false,
+            moreSimilarUnits: draft.additional_info?.moreSimilarUnits ?? false,
+            whoWillShow: draft.additional_info?.whoWillShow || '',
+            secondaryNumber: draft.additional_info?.secondaryNumber || '',
             currentPropertyCondition: draft.current_property_condition || '',
             directionsTip: draft.directions_tip || '',
             bathrooms: draft.bathrooms || 0,
