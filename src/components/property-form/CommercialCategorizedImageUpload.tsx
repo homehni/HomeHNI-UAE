@@ -196,7 +196,11 @@ export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedIma
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={(e) => handleFileSelect(e, category.key)}
+                  onChange={(e) => {
+                    handleFileSelect(e, category.key);
+                    // Reset to allow picking the same file again on mobile
+                    e.currentTarget.value = '';
+                  }}
                   className="hidden"
                 />
               </CardContent>
