@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check, ShoppingCart, CreditCard, Briefcase, Mail, Loader2 } from 'lucide-react';
+import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check, ShoppingCart, CreditCard, Briefcase, Mail, Loader2, Users } from 'lucide-react';
 import PaymentsSection from '@/components/PaymentsSection';
 import PayButton from '@/components/PayButton';
 import { checkLeadAccess, fetchAvailableLeads, sendLeadFollowUp, type PostRequirementLead, type LeadAccessStatus } from '@/services/leadAccessService';
@@ -212,6 +212,7 @@ export const Dashboard: React.FC = () => {
   const [availableLeads, setAvailableLeads] = useState<PostRequirementLead[]>([]);
   const [leadsLoading, setLeadsLoading] = useState(false);
   const [sendingFollowUp, setSendingFollowUp] = useState<string | null>(null);
+  const [showPremiumUpgrade, setShowPremiumUpgrade] = useState(false);
   
   // Contact lead modal state
   const [contactLeadModal, setContactLeadModal] = useState<{
@@ -320,6 +321,7 @@ export const Dashboard: React.FC = () => {
       // Refresh lead access and leads after payment
       setTimeout(() => {
         checkAndFetchLeads();
+        setShowPremiumUpgrade(false); // Close upgrade modal after successful payment
       }, 2000);
     };
 
@@ -1743,8 +1745,8 @@ export const Dashboard: React.FC = () => {
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <ShoppingCart className="h-4 w-4" />
-                  Buy Leads
+                  <Users className="h-4 w-4" />
+                  LEADS
                 </div>
               </div>
             </nav>
@@ -2682,7 +2684,7 @@ export const Dashboard: React.FC = () => {
           {activeSidebarItem === 'buyleads' && (
             <div className="space-y-6 max-w-full">
               <div className="mb-6">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">Buy Leads</h1>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">LEADS</h1>
                 <p className="text-sm sm:text-base text-gray-600 mt-1">
                   {leadAccess.accessType !== 'none' 
                     ? `You have ${leadAccess.hasPremiumAccess ? 'Premium' : 'Basic'} access to leads`
@@ -2694,6 +2696,30 @@ export const Dashboard: React.FC = () => {
               {/* Show leads if user has access */}
               {leadAccess.accessType !== 'none' ? (
                 <div className="space-y-4">
+                  {/* Go Premium Banner for Basic Users */}
+                  {leadAccess.hasBasicAccess && !leadAccess.hasPremiumAccess && (
+                    <Card className="bg-gradient-to-r from-red-50 to-orange-50 border-red-200">
+                      <CardContent className="py-4">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                          <div className="flex-1">
+                            <h3 className="text-base font-semibold text-gray-900 mb-1">Unlock Premium Features</h3>
+                            <p className="text-sm text-gray-700">
+                              Upgrade to Premium Leads to get automated follow-up emails and priority access to high-quality leads.
+                            </p>
+                          </div>
+                          <Button
+                            onClick={() => setShowPremiumUpgrade(true)}
+                            className="bg-red-600 hover:bg-red-700 text-white whitespace-nowrap"
+                            size="sm"
+                          >
+                            <TrendingUp className="h-4 w-4 mr-2" />
+                            Go Premium
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
                   {leadsLoading ? (
                     <div className="text-center py-12">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
@@ -2943,6 +2969,78 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Premium Upgrade Dialog Modal */}
+      <Dialog open={showPremiumUpgrade && leadAccess.hasBasicAccess && !leadAccess.hasPremiumAccess} onOpenChange={setShowPremiumUpgrade}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Badge className="bg-red-600 text-white">
+                Premium
+              </Badge>
+              <span>Upgrade to Premium Leads</span>
+            </DialogTitle>
+            <DialogDescription>
+              Get premium quality leads with enhanced features
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-gray-900">₹4,999</span>
+                <span className="text-sm text-gray-500">+ GST</span>
+              </div>
+              <p className="text-sm text-gray-600">
+                One-time payment for premium lead access
+              </p>
+            </div>
+            
+            <div className="space-y-2 pt-4 border-t">
+              <div className="flex items-start gap-2">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-700">All basic lead features</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-700">Priority verified premium leads</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-700">Enhanced lead insights & analytics</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-700">Automated follow-up email feature</span>
+              </div>
+            </div>
+            
+            <div className="pt-4 space-y-2">
+              <PayButton
+                label="Upgrade to Premium Leads"
+                amountPaise={499900}
+                planName="Premium Leads Package"
+                notes={{
+                  lead_type: 'premium',
+                  package_name: 'Premium Leads'
+                }}
+                prefill={{
+                  name: profileName || user?.email?.split('@')[0] || '',
+                  email: user?.email || '',
+                  contact: profilePhone || ''
+                }}
+                className="w-full bg-red-600 hover:bg-red-700 text-white"
+              />
+              <Button
+                variant="outline"
+                onClick={() => setShowPremiumUpgrade(false)}
+                className="w-full"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
