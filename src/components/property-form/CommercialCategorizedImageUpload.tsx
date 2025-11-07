@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 interface CommercialCategorizedImages {
   frontView: (File | string)[];
@@ -28,6 +29,7 @@ export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedIma
   onImagesChange,
   maxImagesPerCategory = 5
 }) => {
+  const { toast } = useToast();
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   // Cache object URLs to avoid memory leaks on mobile; revoke on cleanup
   const objectUrlMapRef = useRef<Map<File, string>>(new Map());
@@ -63,7 +65,29 @@ export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedIma
     });
 
     const currentCategoryImages = images[category];
-    const newCategoryImages = [...currentCategoryImages, ...validFiles].slice(0, maxImagesPerCategory);
+    
+    // Check for duplicates based on file name and size
+    const uniqueFiles = validFiles.filter(newFile => {
+      const isDuplicate = currentCategoryImages.some(existingFile => {
+        const existingFileName = typeof existingFile === 'string' ? existingFile : existingFile.name;
+        const existingFileSize = typeof existingFile === 'string' ? 0 : existingFile.size;
+        return existingFileName === newFile.name && existingFileSize === newFile.size;
+      });
+      if (isDuplicate) {
+        toast({
+          title: "Duplicate Image",
+          description: "This image has already been uploaded. Please choose a different image.",
+          variant: "destructive",
+        });
+      }
+      return !isDuplicate;
+    });
+
+    if (uniqueFiles.length === 0 && validFiles.length > 0) {
+      return; // All files were duplicates
+    }
+
+    const newCategoryImages = [...currentCategoryImages, ...uniqueFiles].slice(0, maxImagesPerCategory);
     
     onImagesChange({
       ...images,

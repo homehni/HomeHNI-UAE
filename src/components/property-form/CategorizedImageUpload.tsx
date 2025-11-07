@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 interface CategorizedImages {
   bathroom: File[];
@@ -36,6 +37,7 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   onImagesChange,
   maxImagesPerCategory = 5
 }) => {
+  const { toast } = useToast();
   console.log('📸 CategorizedImageUpload rendered with images:', images);
   console.log('📸 CategorizedImageUpload images type check:', {
     bathroom: Array.isArray(images.bathroom),
@@ -83,7 +85,27 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
     });
 
     const currentCategoryImages = images[category];
-    const newCategoryImages = [...currentCategoryImages, ...validFiles].slice(0, maxImagesPerCategory);
+    
+    // Check for duplicates based on file name and size
+    const uniqueFiles = validFiles.filter(newFile => {
+      const isDuplicate = currentCategoryImages.some(existingFile => 
+        existingFile.name === newFile.name && existingFile.size === newFile.size
+      );
+      if (isDuplicate) {
+        toast({
+          title: "Duplicate Image",
+          description: "This image has already been uploaded. Please choose a different image.",
+          variant: "destructive",
+        });
+      }
+      return !isDuplicate;
+    });
+
+    if (uniqueFiles.length === 0 && validFiles.length > 0) {
+      return; // All files were duplicates
+    }
+
+    const newCategoryImages = [...currentCategoryImages, ...uniqueFiles].slice(0, maxImagesPerCategory);
     
     onImagesChange({
       ...images,
