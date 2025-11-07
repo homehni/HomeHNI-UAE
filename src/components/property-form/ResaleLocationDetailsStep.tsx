@@ -147,11 +147,13 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
   const initAutocomplete = () => {
     const google = (window as any).google;
     if (!google?.maps?.places) return;
+    
+    const countryConfig = getCurrentCountryConfig();
     const options = {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
       componentRestrictions: {
-        country: 'in' as const
+        country: countryConfig.code.toLowerCase()
       }
     };
     const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {

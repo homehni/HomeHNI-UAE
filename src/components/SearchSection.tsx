@@ -8,6 +8,7 @@ import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 import { normalizeLocation } from '@/services/locationService';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 import mortgeaseLogo from '@/assets/mortgease-logo.jpg';
 import './search-input.css';
 export interface SearchSectionRef {
@@ -397,10 +398,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 setSelectedCity(cityName);
                 // Geocode the city to get proper city-level bounds
                 const geocoder = new w.google!.maps!.Geocoder();
+                const countryConfig = getCurrentCountryConfig();
                 geocoder.geocode(
                   { 
-                    address: `${cityName}, India`,
-                    componentRestrictions: { country: 'IN' }
+                    address: `${cityName}, ${countryConfig.name}`,
+                    componentRestrictions: { country: countryConfig.code }
                   },
                   (results, status) => {
                     if (status === 'OK' && results && results[0]?.geometry?.viewport) {
@@ -522,10 +524,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     const shouldReinit = cityBounds && selectedCity;
     if (mobileAcInitRef.current && !shouldReinit) return;
 
+    const countryConfig = getCurrentCountryConfig();
     const options = {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
-      componentRestrictions: { country: 'in' as const },
+      componentRestrictions: { country: countryConfig.code.toLowerCase() },
       ...(cityBounds && selectedCity && { 
         bounds: cityBounds, 
         strictBounds: true 
@@ -585,10 +588,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             setSelectedCity(cityName);
             // Geocode the city to get proper city-level bounds
             const geocoder = new (window as WindowWithGoogle).google!.maps!.Geocoder();
+            const countryConfig = getCurrentCountryConfig();
             geocoder.geocode(
               { 
-                address: `${cityName}, India`,
-                componentRestrictions: { country: 'IN' }
+                address: `${cityName}, ${countryConfig.name}`,
+                componentRestrictions: { country: countryConfig.code }
               },
               (results, status) => {
                 if (status === 'OK' && results && results[0]?.geometry?.viewport) {
