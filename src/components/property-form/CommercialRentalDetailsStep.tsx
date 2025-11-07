@@ -178,7 +178,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
-                          className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                          className="h-12 pl-14 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                           type="number"
                           min="1"
                           inputMode="numeric"
@@ -195,7 +195,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                      {field.value && field.value > 0 && (
                        <div className="mt-2">
                          <p className="text-sm text-gray-600">
-                           {formatExactPriceDisplay(field.value)}
+                           {formatExactPriceDisplay(field.value, currencySymbol)}
                          </p>
                        </div>
                      )}
@@ -233,7 +233,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
-                          className="h-12 pl-8 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                          className="h-12 pl-14 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                           type="number"
                           min="1"
                           inputMode="numeric"
@@ -249,7 +249,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                     {field.value && field.value > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatExactPriceDisplay(field.value)}
+                          {formatExactPriceDisplay(field.value, currencySymbol)}
                         </p>
                       </div>
                     )}
@@ -348,7 +348,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{currencySymbol}</span>
                         <Input 
                           placeholder="Enter Amount"
-                          className="h-12 pl-8 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                          className="h-12 pl-14 pr-20 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                           type="number"
                           min="1"
                           inputMode="numeric"
@@ -365,7 +365,7 @@ export const CommercialRentalDetailsStep: React.FC<CommercialRentalDetailsStepPr
                     {field.value && field.value > 0 && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatExactPriceDisplay(field.value)}
+                          {formatExactPriceDisplay(field.value, currencySymbol)}
                         </p>
                       </div>
                     )}

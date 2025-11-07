@@ -199,7 +199,7 @@ export function PgHostelRoomDetailsStep({
                     {roomDetails.expectedRent && roomDetails.expectedRent > 0 && !errors[roomType]?.expectedRent && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatExactPriceDisplay(roomDetails.expectedRent)}
+                          {formatExactPriceDisplay(roomDetails.expectedRent, currencySymbol)}
                         </p>
                       </div>
                     )}
@@ -223,7 +223,7 @@ export function PgHostelRoomDetailsStep({
                     {roomDetails.expectedDeposit && roomDetails.expectedDeposit > 0 && !errors[roomType]?.expectedDeposit && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600">
-                          {formatExactPriceDisplay(roomDetails.expectedDeposit)}
+                          {formatExactPriceDisplay(roomDetails.expectedDeposit, currencySymbol)}
                         </p>
                       </div>
                     )}
