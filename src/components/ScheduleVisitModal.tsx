@@ -209,26 +209,6 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
           You will get all details regarding this visit on your registered number directly.
         </p>
       </div>
-      
-      <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex items-center gap-2"
-          onClick={() => window.open(`tel:${formData.phone}`, '_self')}
-        >
-          <Phone className="w-4 h-4" />
-          Call
-        </Button>
-        <Button
-          size="sm"
-          className="flex items-center gap-2"
-          onClick={handleClose}
-        >
-          <Eye className="w-4 h-4" />
-          View All Visits
-        </Button>
-      </div>
     </div>
   );
 
