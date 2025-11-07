@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, Home, MapPin } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
+
 const resaleLocationSchema = z.object({
   city: z.string().optional(),
   locality: z.string().min(1, "Locality/Area is required"),
@@ -86,7 +88,8 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
         return;
       }
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
+      const countryConfig = getCurrentCountryConfig();
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=${countryConfig.code}&language=${countryConfig.language}`;
       script.async = true;
       script.defer = true;
       script.setAttribute('data-gmaps', 'true');
@@ -161,12 +164,12 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     };
     // Attach autocomplete to city field
     if (cityInputRef.current) {
-      const cityOptions = {
-        fields: ['address_components', 'name'],
-        types: ['(cities)'],
-        componentRestrictions: { country: 'in' as const }
-      };
-      const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
+        const cityOptions = {
+          fields: ['address_components', 'name'],
+          types: ['(cities)'],
+          componentRestrictions: { country: getCurrentCountryConfig().code.toLowerCase() }
+        };
+        const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
       cityAc.addListener('place_changed', () => {
         const place = cityAc.getPlace();
         if (place?.address_components) {

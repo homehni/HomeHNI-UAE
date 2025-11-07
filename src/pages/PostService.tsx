@@ -23,6 +23,8 @@ import {
 } from "@/services/emailService";
 import { supabase } from "@/integrations/supabase/client";
 
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
+
 // Declare Google Maps types
 declare global {
   interface Window {
@@ -128,7 +130,7 @@ const PostService = () => {
 
     const autocomplete = new window.google.maps.places.Autocomplete(localityInputRef.current, {
       types: ['locality', 'sublocality', 'neighborhood'],
-      componentRestrictions: { country: 'in' }
+      componentRestrictions: { country: getCurrentCountryConfig().code.toLowerCase() }
     });
 
     autocomplete.addListener('place_changed', () => {

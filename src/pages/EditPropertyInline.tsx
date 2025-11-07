@@ -17,6 +17,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Loader2, Save, X, Upload, MapPin, MoveUp, Wifi, AirVent, MessageCircle, Users, Waves, Flame, Car, Building2, Droplets, Trees, Sparkles, PersonStanding, Zap, ShieldCheck, ShoppingCart, Accessibility, PawPrint, Dumbbell, UtensilsCrossed } from 'lucide-react';
 
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
+
 interface Property {
   id: string;
   user_id: string;
@@ -230,7 +232,8 @@ export const EditPropertyInline: React.FC = () => {
         }
 
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY&libraries=places`;
+        const countryConfig = getCurrentCountryConfig();
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY&libraries=places&region=${countryConfig.code}&language=${countryConfig.language}`;
         script.async = true;
         script.defer = true;
         script.onload = () => resolve((window as any).google);
@@ -280,7 +283,7 @@ export const EditPropertyInline: React.FC = () => {
       const options = {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
-        componentRestrictions: { country: 'in' as const },
+        componentRestrictions: { country: getCurrentCountryConfig().code.toLowerCase() },
       };
 
       const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {

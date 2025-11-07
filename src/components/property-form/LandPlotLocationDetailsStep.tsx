@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LocationDetails } from '@/types/property';
 import { ArrowLeft, ArrowRight, MapPin, X } from 'lucide-react';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 const landPlotLocationSchema = z.object({
   city: z.string().optional(),
@@ -112,7 +113,8 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
         return;
       }
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
+      const countryConfig = getCurrentCountryConfig();
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=${countryConfig.code}&language=${countryConfig.language}`;
       script.async = true;
       script.defer = true;
       script.setAttribute('data-gmaps', 'true');
@@ -172,11 +174,12 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
   const initAutocomplete = useCallback(() => {
     const google = (window as any).google;
     if (!google?.maps?.places) return;
+    const countryConfig = getCurrentCountryConfig();
     const options = {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
       componentRestrictions: {
-        country: 'in' as const
+        country: countryConfig.code.toLowerCase()
       }
     };
     const attach = (el: HTMLInputElement | null, onPlace: (place: any, el: HTMLInputElement) => void) => {
@@ -192,7 +195,7 @@ export const LandPlotLocationDetailsStep: React.FC<LandPlotLocationDetailsStepPr
       const cityOptions = {
         fields: ['address_components', 'name'],
         types: ['(cities)'],
-        componentRestrictions: { country: 'in' as const }
+        componentRestrictions: { country: countryConfig.code.toLowerCase() }
       };
       const cityAc = new google.maps.places.Autocomplete(cityInputRef.current, cityOptions);
       cityAc.addListener('place_changed', () => {
