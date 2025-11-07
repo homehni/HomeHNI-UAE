@@ -2680,10 +2680,10 @@ export const Dashboard: React.FC = () => {
 
           {/* Buy Leads Content */}
           {activeSidebarItem === 'buyleads' && (
-            <div className="space-y-6">
+            <div className="space-y-6 max-w-full">
               <div className="mb-6">
-                <h1 className="text-2xl font-semibold text-gray-900">Buy Leads</h1>
-                <p className="text-gray-600 mt-1">
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">Buy Leads</h1>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">
                   {leadAccess.accessType !== 'none' 
                     ? `You have ${leadAccess.hasPremiumAccess ? 'Premium' : 'Basic'} access to leads`
                     : 'Purchase quality leads from HomeHNI to grow your business'
@@ -2700,7 +2700,7 @@ export const Dashboard: React.FC = () => {
                       <p className="text-gray-600">Loading leads...</p>
                     </div>
                   ) : availableLeads.length === 0 ? (
-                    <Card>
+                    <Card className="max-w-full">
                       <CardContent className="text-center py-12">
                         <ShoppingCart className="h-16 w-16 mx-auto text-gray-400 mb-4" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -2712,39 +2712,39 @@ export const Dashboard: React.FC = () => {
                       </CardContent>
                     </Card>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                       {availableLeads.map((lead) => (
-                        <Card key={lead.id} className="hover:shadow-lg transition-shadow">
-                          <CardHeader>
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <CardTitle className="text-lg">{lead.name}</CardTitle>
-                                <CardDescription className="mt-1">
+                        <Card key={lead.id} className="hover:shadow-lg transition-shadow overflow-hidden max-w-full">
+                          <CardHeader className="pb-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0 flex-1">
+                                <CardTitle className="text-base sm:text-lg truncate">{lead.name}</CardTitle>
+                                <CardDescription className="mt-1 text-xs sm:text-sm line-clamp-1">
                                   {lead.intent} • {lead.city}{lead.locality ? `, ${lead.locality}` : ''}
                                 </CardDescription>
                               </div>
-                              <Badge variant="outline" className="ml-2">
+                              <Badge variant="outline" className="text-xs flex-shrink-0">
                                 {lead.intent}
                               </Badge>
                             </div>
                           </CardHeader>
-                          <CardContent className="space-y-4">
+                          <CardContent className="space-y-3 sm:space-y-4">
                             {/* Contact Information */}
                             <div className="space-y-2">
-                              <div className="flex items-center gap-2 text-sm">
-                                <Mail className="h-4 w-4 text-gray-500" />
-                                <span className="text-gray-700 break-all">{lead.email}</span>
+                              <div className="flex items-start gap-2 text-sm min-w-0">
+                                <Mail className="h-4 w-4 text-gray-500 flex-shrink-0 mt-0.5" />
+                                <span className="text-gray-700 break-all text-xs sm:text-sm min-w-0">{lead.email}</span>
                               </div>
                               <div className="flex items-center gap-2 text-sm">
-                                <Phone className="h-4 w-4 text-gray-500" />
-                                <span className="text-gray-700">{lead.phone}</span>
+                                <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                                <span className="text-gray-700 text-xs sm:text-sm">{lead.phone}</span>
                               </div>
                             </div>
 
                             {/* Property Types */}
                             {lead.property_types && lead.property_types.length > 0 && (
                               <div>
-                                <p className="text-xs font-medium text-gray-500 mb-1">Property Types</p>
+                                <p className="text-xs font-medium text-gray-500 mb-1.5">Property Types</p>
                                 <div className="flex flex-wrap gap-1">
                                   {lead.property_types.map((type, idx) => (
                                     <Badge key={idx} variant="secondary" className="text-xs">
@@ -2759,7 +2759,7 @@ export const Dashboard: React.FC = () => {
                             {(lead.budget_min || lead.budget_max) && (
                               <div>
                                 <p className="text-xs font-medium text-gray-500 mb-1">Budget</p>
-                                <p className="text-sm text-gray-700">{formatBudget(lead.budget_min, lead.budget_max)}</p>
+                                <p className="text-xs sm:text-sm text-gray-700">{formatBudget(lead.budget_min, lead.budget_max)}</p>
                               </div>
                             )}
 
@@ -2767,13 +2767,13 @@ export const Dashboard: React.FC = () => {
                             {lead.notes && (
                               <div>
                                 <p className="text-xs font-medium text-gray-500 mb-1">Additional Requirements</p>
-                                <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">{lead.notes}</p>
+                                <p className="text-xs sm:text-sm text-gray-700 whitespace-pre-wrap break-words line-clamp-3">{lead.notes}</p>
                               </div>
                             )}
 
                             {/* Reference ID */}
                             <div className="pt-2 border-t">
-                              <p className="text-xs text-gray-500">Reference: {lead.reference_id}</p>
+                              <p className="text-xs text-gray-500 truncate">Reference: {lead.reference_id}</p>
                               <p className="text-xs text-gray-500 mt-1">
                                 Posted: {new Date(lead.created_at).toLocaleDateString()}
                               </p>
@@ -2785,7 +2785,7 @@ export const Dashboard: React.FC = () => {
                                 <Button
                                   onClick={() => handleFollowUp(lead)}
                                   disabled={sendingFollowUp === lead.id}
-                                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                                  className="w-full bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm"
                                   size="sm"
                                 >
                                   {sendingFollowUp === lead.id ? (
@@ -2810,7 +2810,7 @@ export const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 /* Show payment options if no access */
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 max-w-full">
                   {/* Basic Leads Card */}
                   <Card className="hover:shadow-lg transition-shadow flex flex-col">
                     <CardHeader>
