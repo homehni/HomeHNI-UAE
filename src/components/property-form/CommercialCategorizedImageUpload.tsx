@@ -29,12 +29,31 @@ export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedIma
   maxImagesPerCategory = 5
 }) => {
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  // Cache object URLs to avoid memory leaks on mobile; revoke on cleanup
+  const objectUrlMapRef = useRef<Map<File, string>>(new Map());
   const [activeCategory, setActiveCategory] = useState<keyof CommercialCategorizedImages | null>(null);
-
   const getTotalImages = () => {
     return Object.values(images).reduce((total, categoryImages) => total + categoryImages.length, 0);
   };
 
+  // Revoke object URLs for files that were removed to prevent memory leaks
+  React.useEffect(() => {
+    const currentFiles = new Set<File>(
+      Object.values(images).flat().filter((f): f is File => typeof f !== 'string')
+    );
+    for (const [file, url] of objectUrlMapRef.current.entries()) {
+      if (!currentFiles.has(file)) {
+        URL.revokeObjectURL(url);
+        objectUrlMapRef.current.delete(file);
+      }
+    }
+    return () => {
+      for (const [, url] of objectUrlMapRef.current.entries()) {
+        URL.revokeObjectURL(url);
+      }
+      objectUrlMapRef.current.clear();
+    };
+  }, [images]);
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, category: keyof CommercialCategorizedImages) => {
     const files = Array.from(event.target.files || []);
     const validFiles = files.filter(file => {
@@ -53,26 +72,33 @@ export const CommercialCategorizedImageUpload: React.FC<CommercialCategorizedIma
   };
 
   const removeImage = (category: keyof CommercialCategorizedImages, index: number) => {
+    const fileToRemove = images[category][index];
+    if (fileToRemove instanceof File) {
+      const cachedUrl = objectUrlMapRef.current.get(fileToRemove);
+      if (cachedUrl) {
+        URL.revokeObjectURL(cachedUrl);
+        objectUrlMapRef.current.delete(fileToRemove);
+      }
+    }
     const newCategoryImages = images[category].filter((_, i) => i !== index);
     onImagesChange({
       ...images,
       [category]: newCategoryImages
     });
   };
-
   const handleUploadClick = (category: keyof CommercialCategorizedImages) => {
     fileInputRefs.current[category]?.click();
   };
 
   const getImagePreview = (file: File | string): string => {
-    // If it's already a URL string (from resumed draft), return it
-    if (typeof file === 'string') {
-      return file;
+    if (typeof file === 'string') return file;
+    let url = objectUrlMapRef.current.get(file);
+    if (!url) {
+      url = URL.createObjectURL(file);
+      objectUrlMapRef.current.set(file, url);
     }
-    // If it's a File object (new upload), create an object URL
-    return URL.createObjectURL(file);
+    return url;
   };
-
   return (
     <div className="space-y-6">
 

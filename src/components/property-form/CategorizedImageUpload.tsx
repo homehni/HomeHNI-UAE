@@ -49,12 +49,31 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   console.log('📸 CategorizedImageUpload bathroom content:', images.bathroom);
   console.log('📸 CategorizedImageUpload bathroom item type:', typeof images.bathroom[0]);
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  // Cache object URLs to avoid memory leaks on mobile; revoke on cleanup
+  const objectUrlMapRef = useRef<Map<File, string>>(new Map());
   const [activeCategory, setActiveCategory] = useState<keyof CategorizedImages | null>(null);
-
   const getTotalImages = () => {
     return Object.values(images).reduce((total, categoryImages) => total + categoryImages.length, 0);
   };
 
+  // Revoke object URLs for files that were removed to prevent memory leaks
+  React.useEffect(() => {
+    const currentFiles = new Set<File>(
+      Object.values(images).flat()
+    );
+    for (const [file, url] of objectUrlMapRef.current.entries()) {
+      if (!currentFiles.has(file)) {
+        URL.revokeObjectURL(url);
+        objectUrlMapRef.current.delete(file);
+      }
+    }
+    return () => {
+      for (const [, url] of objectUrlMapRef.current.entries()) {
+        URL.revokeObjectURL(url);
+      }
+      objectUrlMapRef.current.clear();
+    };
+  }, [images]);
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, category: keyof CategorizedImages) => {
     const files = Array.from(event.target.files || []);
     const validFiles = files.filter(file => {
@@ -73,21 +92,31 @@ export const CategorizedImageUpload: React.FC<CategorizedImageUploadProps> = ({
   };
 
   const removeImage = (category: keyof CategorizedImages, index: number) => {
+    const fileToRemove = images[category][index];
+    // Revoke any cached object URL for this file
+    const cachedUrl = objectUrlMapRef.current.get(fileToRemove);
+    if (cachedUrl) {
+      URL.revokeObjectURL(cachedUrl);
+      objectUrlMapRef.current.delete(fileToRemove);
+    }
     const newCategoryImages = images[category].filter((_, i) => i !== index);
     onImagesChange({
       ...images,
       [category]: newCategoryImages
     });
   };
-
   const handleUploadClick = (category: keyof CategorizedImages) => {
     fileInputRefs.current[category]?.click();
   };
 
   const getImagePreview = (file: File): string => {
-    return URL.createObjectURL(file);
+    let url = objectUrlMapRef.current.get(file);
+    if (!url) {
+      url = URL.createObjectURL(file);
+      objectUrlMapRef.current.set(file, url);
+    }
+    return url;
   };
-
   return (
     <div className="space-y-6">
 
