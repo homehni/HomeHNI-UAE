@@ -306,6 +306,10 @@ export default function PayButton({
             
             // Redirect to success page or dashboard
             setTimeout(() => {
+              // Trigger payment success event for lead access refresh
+              window.dispatchEvent(new CustomEvent('paymentSuccess', { 
+                detail: { planName, paymentId: response.razorpay_payment_id } 
+              }));
               window.location.href = `/payment/success?payment_id=${response.razorpay_payment_id || ""}`;
             }, 2000);
           } catch (error) {

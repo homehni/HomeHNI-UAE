@@ -7,8 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check, ShoppingCart, CreditCard, Briefcase } from 'lucide-react';
+import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check, ShoppingCart, CreditCard, Briefcase, Mail, Loader2 } from 'lucide-react';
 import PaymentsSection from '@/components/PaymentsSection';
+import PayButton from '@/components/PayButton';
+import { checkLeadAccess, fetchAvailableLeads, sendLeadFollowUp, type PostRequirementLead, type LeadAccessStatus } from '@/services/leadAccessService';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -205,6 +207,12 @@ export const Dashboard: React.FC = () => {
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
   
+  // Buy Leads state
+  const [leadAccess, setLeadAccess] = useState<LeadAccessStatus>({ hasBasicAccess: false, hasPremiumAccess: false, accessType: 'none' });
+  const [availableLeads, setAvailableLeads] = useState<PostRequirementLead[]>([]);
+  const [leadsLoading, setLeadsLoading] = useState(false);
+  const [sendingFollowUp, setSendingFollowUp] = useState<string | null>(null);
+  
   // Contact lead modal state
   const [contactLeadModal, setContactLeadModal] = useState<{
     isOpen: boolean;
@@ -254,9 +262,90 @@ export const Dashboard: React.FC = () => {
       fetchPropertyRequirements();
       fetchFavorites();
       fetchContactedOwnersData();
+      checkAndFetchLeads();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  // Handle follow-up email for premium leads
+  const handleFollowUp = async (lead: PostRequirementLead) => {
+    if (!leadAccess.hasPremiumAccess) {
+      toast({
+        title: "Premium Feature",
+        description: "Follow-up emails are only available for Premium Leads subscribers.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSendingFollowUp(lead.id);
+    try {
+      const result = await sendLeadFollowUp(lead.id, lead.email, lead.name);
+      
+      if (result.success) {
+        toast({
+          title: "Follow-up Sent",
+          description: `An automated email has been sent to ${lead.name} expressing your interest in their requirement.`,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to send follow-up email. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error sending follow-up:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send follow-up email. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingFollowUp(null);
+    }
+  };
+
+  // Format budget range
+  const formatBudget = (min: number | null, max: number | null): string => {
+    if (!min && !max) return 'Not specified';
+    if (!min) return `Up to ₹${(max! / 100000).toFixed(1)} L`;
+    if (!max) return `₹${(min / 100000).toFixed(1)} L+`;
+    return `₹${(min / 100000).toFixed(1)} L - ₹${(max / 100000).toFixed(1)} L`;
+  };
+
+  // Refresh leads after payment success
+  useEffect(() => {
+    const handlePaymentSuccess = () => {
+      // Refresh lead access and leads after payment
+      setTimeout(() => {
+        checkAndFetchLeads();
+      }, 2000);
+    };
+
+    window.addEventListener('paymentSuccess', handlePaymentSuccess);
+    return () => window.removeEventListener('paymentSuccess', handlePaymentSuccess);
+  }, []);
+
+  // Check lead access and fetch leads
+  const checkAndFetchLeads = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const access = await checkLeadAccess(user.id);
+      setLeadAccess(access);
+      
+      if (access.accessType !== 'none') {
+        setLeadsLoading(true);
+        const leads = await fetchAvailableLeads();
+        setAvailableLeads(leads);
+      }
+    } catch (error) {
+      console.error('Error checking lead access:', error);
+    } finally {
+      setLeadsLoading(false);
+    }
+  };
   
   // Listen for contact creation events from ContactOwnerModal
   useEffect(() => {
@@ -2595,35 +2684,260 @@ export const Dashboard: React.FC = () => {
               <div className="mb-6">
                 <h1 className="text-2xl font-semibold text-gray-900">Buy Leads</h1>
                 <p className="text-gray-600 mt-1">
-                  Purchase quality leads from HomeHNI to grow your business
+                  {leadAccess.accessType !== 'none' 
+                    ? `You have ${leadAccess.hasPremiumAccess ? 'Premium' : 'Basic'} access to leads`
+                    : 'Purchase quality leads from HomeHNI to grow your business'
+                  }
                 </p>
               </div>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ShoppingCart className="h-5 w-5" />
-                    Available Leads
-                  </CardTitle>
-                  <CardDescription>
-                    Browse and purchase leads that match your business needs
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-12">
-                    <ShoppingCart className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Lead Marketplace Coming Soon
-                    </h3>
-                    <p className="text-gray-600 mb-6">
-                      We're building a comprehensive lead marketplace where you can browse and purchase quality leads.
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      This feature will be available soon. Check back later for updates.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+
+              {/* Show leads if user has access */}
+              {leadAccess.accessType !== 'none' ? (
+                <div className="space-y-4">
+                  {leadsLoading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+                      <p className="text-gray-600">Loading leads...</p>
+                    </div>
+                  ) : availableLeads.length === 0 ? (
+                    <Card>
+                      <CardContent className="text-center py-12">
+                        <ShoppingCart className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          No Leads Available
+                        </h3>
+                        <p className="text-gray-600">
+                          There are currently no leads available. Check back later for new leads.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {availableLeads.map((lead) => (
+                        <Card key={lead.id} className="hover:shadow-lg transition-shadow">
+                          <CardHeader>
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <CardTitle className="text-lg">{lead.name}</CardTitle>
+                                <CardDescription className="mt-1">
+                                  {lead.intent} • {lead.city}{lead.locality ? `, ${lead.locality}` : ''}
+                                </CardDescription>
+                              </div>
+                              <Badge variant="outline" className="ml-2">
+                                {lead.intent}
+                              </Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            {/* Contact Information */}
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 text-sm">
+                                <Mail className="h-4 w-4 text-gray-500" />
+                                <span className="text-gray-700 break-all">{lead.email}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <Phone className="h-4 w-4 text-gray-500" />
+                                <span className="text-gray-700">{lead.phone}</span>
+                              </div>
+                            </div>
+
+                            {/* Property Types */}
+                            {lead.property_types && lead.property_types.length > 0 && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-500 mb-1">Property Types</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {lead.property_types.map((type, idx) => (
+                                    <Badge key={idx} variant="secondary" className="text-xs">
+                                      {type}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Budget */}
+                            {(lead.budget_min || lead.budget_max) && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-500 mb-1">Budget</p>
+                                <p className="text-sm text-gray-700">{formatBudget(lead.budget_min, lead.budget_max)}</p>
+                              </div>
+                            )}
+
+                            {/* Notes/Preferences */}
+                            {lead.notes && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-500 mb-1">Additional Requirements</p>
+                                <p className="text-sm text-gray-700 whitespace-pre-wrap break-words">{lead.notes}</p>
+                              </div>
+                            )}
+
+                            {/* Reference ID */}
+                            <div className="pt-2 border-t">
+                              <p className="text-xs text-gray-500">Reference: {lead.reference_id}</p>
+                              <p className="text-xs text-gray-500 mt-1">
+                                Posted: {new Date(lead.created_at).toLocaleDateString()}
+                              </p>
+                            </div>
+
+                            {/* Follow-up Button (Premium only) */}
+                            {leadAccess.hasPremiumAccess && (
+                              <div className="pt-2">
+                                <Button
+                                  onClick={() => handleFollowUp(lead)}
+                                  disabled={sendingFollowUp === lead.id}
+                                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                                  size="sm"
+                                >
+                                  {sendingFollowUp === lead.id ? (
+                                    <>
+                                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                      Sending...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Mail className="h-4 w-4 mr-2" />
+                                      Send Follow-up Email
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* Show payment options if no access */
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Basic Leads Card */}
+                  <Card className="hover:shadow-lg transition-shadow flex flex-col">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          Basic
+                        </Badge>
+                        <span>Basic Leads</span>
+                      </CardTitle>
+                      <CardDescription>
+                        Access quality leads to expand your business reach
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4 flex-1 flex flex-col">
+                      <div className="space-y-2">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-bold text-gray-900">₹1,999</span>
+                          <span className="text-sm text-gray-500">+ GST</span>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          One-time payment for basic lead access
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2 pt-4 border-t flex-1">
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Access to verified basic leads</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Contact information included</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Lead details and preferences</span>
+                        </div>
+                        <div className="flex items-start gap-2 opacity-0">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Placeholder for alignment</span>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4">
+                        <PayButton
+                          label="Buy Basic Leads"
+                          amountPaise={199900}
+                          planName="Basic Leads Package"
+                          notes={{
+                            lead_type: 'basic',
+                            package_name: 'Basic Leads'
+                          }}
+                          prefill={{
+                            name: profileName || user?.email?.split('@')[0] || '',
+                            email: user?.email || '',
+                            contact: profilePhone || ''
+                          }}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Premium Leads Card */}
+                  <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 flex flex-col">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Badge className="bg-red-600 text-white">
+                          Premium
+                        </Badge>
+                        <span>Premium Leads</span>
+                      </CardTitle>
+                      <CardDescription>
+                        Get premium quality leads with enhanced features
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4 flex-1 flex flex-col">
+                      <div className="space-y-2">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-bold text-gray-900">₹4,999</span>
+                          <span className="text-sm text-gray-500">+ GST</span>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          One-time payment for premium lead access
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2 pt-4 border-t flex-1">
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">All basic lead features</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Priority verified premium leads</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Enhanced lead insights & analytics</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Automated follow-up email feature</span>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4">
+                        <PayButton
+                          label="Buy Premium Leads"
+                          amountPaise={499900}
+                          planName="Premium Leads Package"
+                          notes={{
+                            lead_type: 'premium',
+                            package_name: 'Premium Leads'
+                          }}
+                          prefill={{
+                            name: profileName || user?.email?.split('@')[0] || '',
+                            email: user?.email || '',
+                            contact: profilePhone || ''
+                          }}
+                          className="w-full bg-red-600 hover:bg-red-700 text-white"
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </div>
           )}
         </div>
