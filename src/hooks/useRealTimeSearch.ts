@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface Property {
   id: string;
@@ -331,6 +332,7 @@ export const useRealTimeSearch = () => {
         return mapping[type] || type.toLowerCase();
       };
 
+      const countryConfig = getCurrentCountryConfig();
       const searchBody = {
         intent: activeTab,
         // Send both single and multiple types for backward compatibility
@@ -338,7 +340,7 @@ export const useRealTimeSearch = () => {
           ? mapPropertyTypeToDb(filters.propertyType[0])
           : '',
         propertyTypes: filters.propertyType.map(mapPropertyTypeToDb),
-        country: 'India',
+        country: countryConfig.name,
         state: '', // Let the backend handle state detection
         city: debouncedLocation || '',
         budgetMin: filters.budget[0].toString(),

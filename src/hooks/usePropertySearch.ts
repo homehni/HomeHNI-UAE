@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RentalStatusService } from '@/services/rentalStatusService';
 import { mapPropertyType } from '@/utils/propertyMappings';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 export interface PropertySearchQuery {
   intent: 'buy' | 'sell' | 'lease' | 'rent' | 'new-launch' | 'pg' | 'commercial' | 'plots' | 'projects' | '';
@@ -92,6 +93,25 @@ export const usePropertySearch = () => {
         throw new Error(prError.message);
       }
 
+      // Filter properties by country based on domain
+      const countryConfig = getCurrentCountryConfig();
+      const UAE_STATES = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Fujairah', 'Ras Al Khaimah', 'Umm Al Quwain'];
+      
+      const filteredByCountry = (prRows || []).filter((row: any) => {
+        const propertyState = row.state || '';
+        const isUAEProperty = UAE_STATES.some(uaeState => 
+          propertyState.toLowerCase().includes(uaeState.toLowerCase())
+        );
+        
+        // If domain is UAE (.ae), show only UAE properties
+        // If domain is India (.in or .com), show only non-UAE properties
+        if (countryConfig.code === 'AE') {
+          return isUAEProperty;
+        } else {
+          return !isUAEProperty;
+        }
+      });
+
       type AnyRow = {
         id?: string;
         title?: string;
@@ -115,7 +135,7 @@ export const usePropertySearch = () => {
       };
 
       let propertiesPool: any[] = [];
-      (prRows as AnyRow[] | null)?.forEach((row) => {
+      (filteredByCountry as AnyRow[] | null)?.forEach((row) => {
         const images = toArray(row.images);
 
         propertiesPool.push({
