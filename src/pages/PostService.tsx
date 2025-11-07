@@ -21,6 +21,7 @@ import {
   sendRequirementSubmissionAdminAlert, 
   sendRequirementSubmissionConfirmation 
 } from "@/services/emailService";
+import { supabase } from "@/integrations/supabase/client";
 
 // Declare Google Maps types
 declare global {
@@ -261,32 +262,31 @@ const PostService = () => {
     setSubmitting(true);
     
     try {
-      // Process requirement without storing in DB
-      updateProgress("Processing your requirement...");
-      
       // Generate reference ID
       const refId = `REQ${Date.now().toString().slice(-6)}`;
       setReferenceId(refId);
       
-      const submissionPayload = {
+      // Save to database
+      updateProgress("Saving your requirement...");
+      const { error: dbError } = await supabase.from('post_requirement').insert({
         name: formData.name,
-        phone: formData.phone,
         email: formData.email,
+        phone: formData.phone,
         city: formData.city,
-        locality: formData.locality,
+        locality: formData.locality || null,
         intent: formData.intent,
-        ...(["Buy", "Sell", "Lease"].includes(formData.intent) && { propertyType: formData.propertyType }),
-        ...(formData.intent === "Service" && { serviceType: formData.serviceCategory }),
-        budget: {
-          min: formData.budgetRange[0],
-          max: formData.budgetRange[1],
-          currency: formData.currency
-        },
-        premiumSelected: formData.premiumSelected,
-        notes: formData.notes,
-        referenceId: refId,
-        submittedAt: new Date().toISOString()
-      };
+        property_types: formData.propertyType ? [formData.propertyType] : [],
+        service_category: formData.serviceCategory || formData.intent,
+        budget_min: formData.budgetRange[0],
+        budget_max: formData.budgetRange[1],
+        notes: formData.notes || null,
+        reference_id: refId
+      });
+
+      if (dbError) {
+        console.error('Database error:', dbError);
+        throw new Error('Failed to save requirement');
+      }
 
       // Send confirmation email to user
       updateProgress("Sending confirmation email...");
@@ -333,6 +333,7 @@ const PostService = () => {
       showSuccessToast("Success", "Your requirement has been posted successfully!");
 
     } catch (error) {
+      console.error('Submission error:', error);
       showErrorToast("Submission Failed", "Please try again or contact support");
     } finally {
       setSubmitting(false);

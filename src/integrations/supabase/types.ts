@@ -1132,6 +1132,60 @@ export type Database = {
         }
         Relationships: []
       }
+      post_requirement: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          city: string
+          created_at: string
+          email: string
+          id: string
+          intent: string
+          locality: string | null
+          name: string
+          notes: string | null
+          phone: string
+          property_types: string[]
+          reference_id: string
+          service_category: string
+          updated_at: string
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          city: string
+          created_at?: string
+          email: string
+          id?: string
+          intent: string
+          locality?: string | null
+          name: string
+          notes?: string | null
+          phone: string
+          property_types: string[]
+          reference_id: string
+          service_category: string
+          updated_at?: string
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          city?: string
+          created_at?: string
+          email?: string
+          id?: string
+          intent?: string
+          locality?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string
+          property_types?: string[]
+          reference_id?: string
+          service_category?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
