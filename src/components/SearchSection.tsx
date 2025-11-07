@@ -280,8 +280,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         existing.addEventListener('load', () => resolve());
         return;
       }
+      const countryConfig = getCurrentCountryConfig();
+      const region = countryConfig.code || 'IN';
+      const language = countryConfig.language ? `${countryConfig.language}-${region}` : 'en';
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=IN&language=en-IN`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=${region}&language=${language}`;
       script.async = true;
       script.defer = true;
       script.setAttribute('data-gmaps', 'true');
@@ -299,7 +302,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         fields: ['formatted_address', 'geometry', 'name', 'address_components'],
         types: ['geocode'],
         componentRestrictions: {
-          country: 'in' as const
+          country: getCurrentCountryConfig().code.toLowerCase()
         },
         ...(cityBounds && selectedCity && { 
           bounds: cityBounds, 
@@ -452,7 +455,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
       componentRestrictions: {
-        country: 'in' as const
+        country: getCurrentCountryConfig().code.toLowerCase()
       },
       bounds: cityBounds,
       strictBounds: true
