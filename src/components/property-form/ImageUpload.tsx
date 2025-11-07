@@ -454,10 +454,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                   type="file"
                   accept="image/*"
                   multiple
-                  capture="environment"
-                  onChange={(e) => handleCategorizedFileSelect(e, category.key)}
+                  onChange={(e) => {
+                    handleCategorizedFileSelect(e, category.key);
+                    // Reset input value to allow selecting the same file again if needed
+                    e.target.value = '';
+                  }}
                   className="hidden"
-                  key={categoryImages.length}
                 />
               </CardContent>
             </Card>
