@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check } from 'lucide-react';
+import { Building, MessageSquare, MessageCircle, User, LogOut, Plus, Eye, Edit, Trash, FileText, Shield, MapPin, Home, Medal, Heart, Search, Filter, ArrowUpDown, Phone, TrendingUp, Menu, X, Check, ShoppingCart, CreditCard, Briefcase } from 'lucide-react';
 import PaymentsSection from '@/components/PaymentsSection';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -33,6 +33,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from '@/components/ui/textarea';
 import { PropertyDraftService, type PropertyDraft } from '@/services/propertyDraftService';
 import { generatePropertyUrl } from '@/utils/propertyUrlGenerator';
+import { getCurrentUserProfile } from '@/services/profileService';
 
 interface Property {
   id: string;
@@ -141,6 +142,7 @@ export const Dashboard: React.FC = () => {
       case 'interested': return 'interested';
       case 'chats': return 'chats';
       case 'dealroom': return 'dealroom';
+      case 'buyleads': return 'buyleads';
       default: return 'properties';
     }
   };
@@ -196,6 +198,7 @@ export const Dashboard: React.FC = () => {
   const [originalProfileName, setOriginalProfileName] = useState('');
   const [profilePhone, setProfilePhone] = useState('');
   const [originalProfilePhone, setOriginalProfilePhone] = useState('');
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileSaveMessage, setProfileSaveMessage] = useState<{ type: 'error' | 'success' | null; text: string }>({ type: null, text: '' });
@@ -302,12 +305,28 @@ export const Dashboard: React.FC = () => {
     };
   }, [user?.email, fetchContactedOwnersData]);
 
+  // Helper function to format role display name
+  const getRoleDisplayName = (role: string | null): string => {
+    if (!role) return 'User';
+    const roleMap: Record<string, string> = {
+      'buyer': 'Property Seeker',
+      'seller': 'Property Owner',
+      'owner': 'Owner',
+      'agent': 'Agent',
+      'consultant': 'Consultant',
+      'admin': 'Administrator',
+      'user': 'User'
+    };
+    return roleMap[role.toLowerCase()] || role.charAt(0).toUpperCase() + role.slice(1);
+  };
+
   // Load profile name from Supabase profiles when user changes
   useEffect(() => {
     const loadProfileData = async () => {
       if (!user) return;
       console.log('Loading profile data for user:', user.id);
       
+      // Fetch basic profile data
       const { data, error } = await supabase
         .from('profiles')
         .select('full_name, phone, whatsapp_opted_in')
@@ -326,6 +345,17 @@ export const Dashboard: React.FC = () => {
           setOriginalProfilePhone(data.phone);
         }
         setWhatsappOptIn(!!data.whatsapp_opted_in);
+      }
+
+      // Fetch user role using the profile service
+      try {
+        const userProfile = await getCurrentUserProfile();
+        if (userProfile?.role) {
+          setUserRole(userProfile.role);
+          console.log('User role loaded:', userProfile.role);
+        }
+      } catch (error) {
+        console.error('Error loading user role:', error);
       }
     };
     loadProfileData();
@@ -1495,7 +1525,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Basic Profile
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Basic Profile
+                </div>
                   </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1508,7 +1541,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Your Shortlists
+                <div className="flex items-center gap-2">
+                  <Heart className="h-4 w-4" />
+                  Your Shortlists
+                </div>
                 </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1521,7 +1557,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                People Showing Interest
+                <div className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" />
+                  People Showing Interest
+                </div>
           </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1534,7 +1573,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Your Payments
+                <div className="flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  Your Payments
+                </div>
               </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1547,7 +1589,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                My Chats
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  My Chats
+                </div>
               </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1560,7 +1605,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Deal Room 💼
+                <div className="flex items-center gap-2">
+                  <Briefcase className="h-4 w-4" />
+                  Deal Room
+                </div>
               </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1573,7 +1621,10 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Your Properties
+                <div className="flex items-center gap-2">
+                  <Home className="h-4 w-4" />
+                  Your Properties
+                </div>
           </div>
               <div 
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
@@ -1586,7 +1637,26 @@ export const Dashboard: React.FC = () => {
                   setIsMobileMenuOpen(false);
                 }}
               >
-                Owners you contacted
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  Owners you contacted
+                </div>
+              </div>
+              <div 
+                className={`px-3 py-2 text-sm cursor-pointer transition-colors ${
+                  activeSidebarItem === 'buyleads' 
+                    ? 'font-medium text-gray-900 bg-gray-100 rounded-md' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => {
+                  handleSidebarNavigation('buyleads');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <ShoppingCart className="h-4 w-4" />
+                  Buy Leads
+                </div>
               </div>
             </nav>
           </div>
@@ -2260,6 +2330,32 @@ export const Dashboard: React.FC = () => {
               <CardHeader>
               </CardHeader>
               <CardContent className="space-y-5">
+                {/* Account Role Badge */}
+                {userRole && (
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-gray-700">Account Type</label>
+                      <Badge 
+                        variant="default" 
+                        className={`text-sm px-3 py-1 ${
+                          userRole === 'owner' || userRole === 'agent' 
+                            ? 'bg-red-600 hover:bg-red-700' 
+                            : userRole === 'seller'
+                            ? 'bg-green-600 hover:bg-green-700'
+                            : userRole === 'buyer'
+                            ? 'bg-purple-600 hover:bg-purple-700'
+                            : 'bg-gray-600 hover:bg-gray-700'
+                        } text-white`}
+                      >
+                        {getRoleDisplayName(userRole)}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Your account type determines how you interact with properties on HomeHNI
+                    </p>
+                  </div>
+                )}
+
                 {/* Name */}
                 <div>
                   <label className="text-sm font-medium text-gray-700">Name</label>
@@ -2490,6 +2586,44 @@ export const Dashboard: React.FC = () => {
           {activeSidebarItem === 'dealroom' && (
             <div className="h-full">
               <DealRoomLayout />
+            </div>
+          )}
+
+          {/* Buy Leads Content */}
+          {activeSidebarItem === 'buyleads' && (
+            <div className="space-y-6">
+              <div className="mb-6">
+                <h1 className="text-2xl font-semibold text-gray-900">Buy Leads</h1>
+                <p className="text-gray-600 mt-1">
+                  Purchase quality leads from HomeHNI to grow your business
+                </p>
+              </div>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShoppingCart className="h-5 w-5" />
+                    Available Leads
+                  </CardTitle>
+                  <CardDescription>
+                    Browse and purchase leads that match your business needs
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-12">
+                    <ShoppingCart className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Lead Marketplace Coming Soon
+                    </h3>
+                    <p className="text-gray-600 mb-6">
+                      We're building a comprehensive lead marketplace where you can browse and purchase quality leads.
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      This feature will be available soon. Check back later for updates.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>
