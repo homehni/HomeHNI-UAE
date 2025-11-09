@@ -82,7 +82,7 @@ const PostService = () => {
     services: [],
     otherService: "",
     preferredProject: "",
-    budgetRange: [0, 50000000],
+    budgetRange: [0, 0],
     currency: "INR",
     premiumSelected: true,
     paymentMethod: "",
@@ -583,7 +583,7 @@ const PostService = () => {
                           <Input
                             id="minBudget"
                             type="number"
-                            value={formData.budgetRange[0] || ''}
+                            value={formData.budgetRange[0] === 0 ? '' : formData.budgetRange[0]}
                             onChange={(e) => handleInputChange("budgetRange", [e.target.value === '' ? 0 : Number(e.target.value), formData.budgetRange[1]])}
                             className="mt-1 h-10 text-sm placeholder:text-xs"
                             placeholder="Enter minimum budget"
@@ -598,7 +598,7 @@ const PostService = () => {
                           <Input
                             id="maxBudget"
                             type="number"
-                            value={formData.budgetRange[1] || ''}
+                            value={formData.budgetRange[1] === 0 ? '' : formData.budgetRange[1]}
                             onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], e.target.value === '' ? 0 : Number(e.target.value)])}
                             className="mt-1 h-10 text-sm placeholder:text-xs"
                             placeholder="Enter maximum budget"
@@ -618,7 +618,7 @@ const PostService = () => {
                         <Input
                           id="maxBudget"
                           type="number"
-                          value={formData.budgetRange[1] || ''}
+                          value={formData.budgetRange[1] === 0 ? '' : formData.budgetRange[1]}
                           onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], e.target.value === '' ? 0 : Number(e.target.value)])}
                           className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="Enter maximum budget"
