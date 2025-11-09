@@ -575,23 +575,44 @@ const PostService = () => {
                       />
                     </div>
 
-                    {/* Budget Range */}
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor="minBudget" className="text-sm font-medium">Minimum Budget</Label>
-                        <Input
-                          id="minBudget"
-                          type="number"
-                          value={formData.budgetRange[0]}
-                          onChange={(e) => handleInputChange("budgetRange", [Number(e.target.value), formData.budgetRange[1]])}
-                          className="mt-1 h-10 text-sm placeholder:text-xs"
-                          placeholder="Enter minimum budget"
-                          min={0}
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {formatBudgetAmount(formData.budgetRange[0])}
-                        </p>
+                    {/* Budget Range - Show for Buy and Sell only */}
+                    {formData.intent === 'Buy' && (
+                      <div className="grid md:grid-cols-2 gap-3">
+                        <div>
+                          <Label htmlFor="minBudget" className="text-sm font-medium">Minimum Budget</Label>
+                          <Input
+                            id="minBudget"
+                            type="number"
+                            value={formData.budgetRange[0]}
+                            onChange={(e) => handleInputChange("budgetRange", [Number(e.target.value), formData.budgetRange[1]])}
+                            className="mt-1 h-10 text-sm placeholder:text-xs"
+                            placeholder="Enter minimum budget"
+                            min={0}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {formatBudgetAmount(formData.budgetRange[0])}
+                          </p>
+                        </div>
+                        <div>
+                          <Label htmlFor="maxBudget" className="text-sm font-medium">Maximum Budget</Label>
+                          <Input
+                            id="maxBudget"
+                            type="number"
+                            value={formData.budgetRange[1]}
+                            onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], Number(e.target.value)])}
+                            className="mt-1 h-10 text-sm placeholder:text-xs"
+                            placeholder="Enter maximum budget"
+                            min={0}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {formatBudgetAmount(formData.budgetRange[1])}
+                          </p>
+                        </div>
+                        {errors.budget && <p className="text-sm text-destructive mt-1 col-span-2">{errors.budget}</p>}
                       </div>
+                    )}
+
+                    {formData.intent === 'Sell' && (
                       <div>
                         <Label htmlFor="maxBudget" className="text-sm font-medium">Maximum Budget</Label>
                         <Input
@@ -606,9 +627,9 @@ const PostService = () => {
                         <p className="text-xs text-muted-foreground mt-1">
                           {formatBudgetAmount(formData.budgetRange[1])}
                         </p>
+                        {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
                       </div>
-                      {errors.budget && <p className="text-sm text-destructive mt-1 col-span-2">{errors.budget}</p>}
-                    </div>
+                    )}
 
                     {/* Premium Service Toggle */}
                     {/* <div className="p-2 border rounded-lg bg-gradient-to-r from-primary/5 to-primary/10">
