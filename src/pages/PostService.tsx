@@ -583,14 +583,14 @@ const PostService = () => {
                           <Input
                             id="minBudget"
                             type="number"
-                            value={formData.budgetRange[0]}
-                            onChange={(e) => handleInputChange("budgetRange", [Number(e.target.value), formData.budgetRange[1]])}
+                            value={formData.budgetRange[0] || ''}
+                            onChange={(e) => handleInputChange("budgetRange", [e.target.value === '' ? 0 : Number(e.target.value), formData.budgetRange[1]])}
                             className="mt-1 h-10 text-sm placeholder:text-xs"
                             placeholder="Enter minimum budget"
                             min={0}
                           />
                           <p className="text-xs text-muted-foreground mt-1">
-                            {formatBudgetAmount(formData.budgetRange[0])}
+                            {formData.budgetRange[0] > 0 ? formatBudgetAmount(formData.budgetRange[0]) : '₹ 0'}
                           </p>
                         </div>
                         <div>
@@ -598,14 +598,14 @@ const PostService = () => {
                           <Input
                             id="maxBudget"
                             type="number"
-                            value={formData.budgetRange[1]}
-                            onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], Number(e.target.value)])}
+                            value={formData.budgetRange[1] || ''}
+                            onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], e.target.value === '' ? 0 : Number(e.target.value)])}
                             className="mt-1 h-10 text-sm placeholder:text-xs"
                             placeholder="Enter maximum budget"
                             min={0}
                           />
                           <p className="text-xs text-muted-foreground mt-1">
-                            {formatBudgetAmount(formData.budgetRange[1])}
+                            {formData.budgetRange[1] > 0 ? formatBudgetAmount(formData.budgetRange[1]) : '₹ 0'}
                           </p>
                         </div>
                         {errors.budget && <p className="text-sm text-destructive mt-1 col-span-2">{errors.budget}</p>}
@@ -618,14 +618,14 @@ const PostService = () => {
                         <Input
                           id="maxBudget"
                           type="number"
-                          value={formData.budgetRange[1]}
-                          onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], Number(e.target.value)])}
+                          value={formData.budgetRange[1] || ''}
+                          onChange={(e) => handleInputChange("budgetRange", [formData.budgetRange[0], e.target.value === '' ? 0 : Number(e.target.value)])}
                           className="mt-1 h-10 text-sm placeholder:text-xs"
                           placeholder="Enter maximum budget"
                           min={0}
                         />
                         <p className="text-xs text-muted-foreground mt-1">
-                          {formatBudgetAmount(formData.budgetRange[1])}
+                          {formData.budgetRange[1] > 0 ? formatBudgetAmount(formData.budgetRange[1]) : '₹ 0'}
                         </p>
                         {errors.budget && <p className="text-sm text-destructive mt-1">{errors.budget}</p>}
                       </div>
