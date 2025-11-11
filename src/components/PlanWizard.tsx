@@ -4,9 +4,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Check, ChevronLeft, ChevronRight, User, Building2, Home, Factory, Sprout, Users, Hammer, Briefcase } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, User, Building2, Home, Factory, Sprout, Users, Briefcase } from 'lucide-react';
 
-type UserRole = 'buyer' | 'seller' | 'owner' | 'tenant' | 'commercial-buyer' | 'builder-lifetime' | 'agent';
+type UserRole = 'buyer' | 'seller' | 'owner' | 'tenant' | 'agent';
 type Category = 'residential' | 'commercial' | 'industrial' | 'agricultural';
 
 interface PlanWizardProps {
@@ -19,7 +19,6 @@ const roleOptions: Array<{ id: UserRole; label: string; icon: React.ReactNode; h
   { id: 'seller', label: 'Seller', icon: <Briefcase className="w-5 h-5" />, tab: 'seller' },
   { id: 'owner', label: 'Owner (Rental)', icon: <Home className="w-5 h-5" />, tab: 'rental' },
   { id: 'tenant', label: 'Tenant', icon: <Users className="w-5 h-5" />, tab: 'rental' },
-  { id: 'builder-lifetime', label: 'Builder', icon: <Hammer className="w-5 h-5" />, tab: 'builder-lifetime' },
   { id: 'agent', label: 'Agent', icon: <Briefcase className="w-5 h-5" />, tab: 'agent' },
 ];
 
@@ -89,9 +88,6 @@ export default function PlanWizard({ open, onOpenChange }: PlanWizardProps) {
         tab = 'rental';
         query.rentalRole = 'tenant';
         if (selectedCategory) query.category = selectedCategory;
-        break;
-      case 'builder-lifetime':
-        tab = 'builder-lifetime';
         break;
       case 'agent':
         tab = 'agent';

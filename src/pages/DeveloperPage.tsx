@@ -26,8 +26,8 @@ import forestEdgeAerial from '@/assets/forest-edge-aerial.jpg';
 import forestEdgeBalcony from '@/assets/forest-edge-balcony.jpg';
 import forestEdgeEvening from '@/assets/forest-edge-evening.jpg';
 // Video URLs from Supabase Storage (developer-media bucket)
-const cannyForestEdgeVideo = 'https://geenmplkdgmlovvgwzai.supabase.co/storage/v1/object/public/developer-media/videos/canny-forest-edge-main.mp4';
-const forestEdgeHeroVideo = 'https://geenmplkdgmlovvgwzai.supabase.co/storage/v1/object/public/developer-media/videos/forest-edge-hero.mp4';
+const cannyForestEdgeVideo = 'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/developer-media/videos/canny-forest-edge-main.mp4';
+const forestEdgeHeroVideo = 'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/developer-media/videos/forest-edge-hero.mp4';
 import interior1 from '@/images/forest-edge/IMG-20251029-WA0022.jpg';
 import interior2 from '@/images/forest-edge/IMG-20251029-WA0023.jpg';
 import interior3 from '@/images/forest-edge/IMG-20251029-WA0024.jpg';

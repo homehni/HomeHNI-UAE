@@ -152,7 +152,7 @@ export const LandPlotSuccessStep = ({
           </Button>
           <Button
             onClick={onPreviewListing}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-[#22c55e] hover:bg-[#16a34a] text-white"
           >
             Preview Listing
           </Button>

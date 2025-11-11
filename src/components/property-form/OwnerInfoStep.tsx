@@ -169,11 +169,12 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
             <div className="space-y-2">
               <Label htmlFor="phoneNumber">Mobile Number *</Label>
               <div className="flex">
-                <Select defaultValue="+91">
+                <Select defaultValue="+971">
                   <SelectTrigger className="w-20 rounded-r-none border-r-0">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="+971">+971</SelectItem>
                     <SelectItem value="+91">+91</SelectItem>
                     <SelectItem value="+1">+1</SelectItem>
                     <SelectItem value="+44">+44</SelectItem>
@@ -183,7 +184,9 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                   id="phoneNumber"
                   type="tel"
                   {...register('phoneNumber')}
-                  placeholder="Enter your mobile number"
+                  placeholder="50 123 4567"
+                  maxLength={9}
+                  pattern="[0-9]{9}"
                   className={`flex-1 rounded-l-none ${errors.phoneNumber && touchedFields.phoneNumber ? 'border-destructive' : ''}`}
                   onBlur={handleBlur}
                   onInput={handleBlur}
@@ -193,6 +196,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
               {errors.phoneNumber && touchedFields.phoneNumber && (
                 <p className="text-sm text-destructive">{errors.phoneNumber.message}</p>
               )}
+              <p className="text-xs text-muted-foreground">Enter 9-digit UAE mobile number (e.g., 50 123 4567)</p>
             </div>
 
             {/* WhatsApp Updates Toggle */}
@@ -306,7 +310,7 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-brand-red mt-1">•</span>
-                              <span>Property must comply with all local laws, building codes, and RERA regulations (where applicable).</span>
+                              <span>Property must comply with all local laws, building codes, and Dubai Land Department regulations (where applicable).</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-brand-red mt-1">•</span>
@@ -482,11 +486,11 @@ export const OwnerInfoStep: React.FC<OwnerInfoStepProps> = ({
                           <ul className="space-y-2 text-sm leading-relaxed">
                             <li className="flex items-start gap-2">
                               <span className="text-brand-red mt-1">•</span>
-                              <span>These Terms are governed by the laws of India.</span>
+                              <span>These Terms are governed by the laws of the United Arab Emirates.</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="text-brand-red mt-1">•</span>
-                              <span>Disputes shall be subject to the courts of Hyderabad.</span>
+                              <span>Disputes shall be subject to the courts of Dubai, United Arab Emirates.</span>
                             </li>
                           </ul>
                         </div>

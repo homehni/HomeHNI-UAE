@@ -84,11 +84,11 @@ const CountrySwitcher: React.FC = () => {
     const savedCountry = localStorage.getItem(PREF_KEY);
     
     if (hostname === 'homehni.com') {
-      setCurrentCountry(savedCountry || 'IN'); // Default to India
+      setCurrentCountry(savedCountry || 'AE'); // Default to UAE
     } else {
       // Find country by domain
       const country = allCountries.find(c => c.domain === hostname);
-      setCurrentCountry(country?.code || 'IN');
+      setCurrentCountry(country?.code || 'AE');
     }
   }, []);
 
@@ -105,7 +105,7 @@ const CountrySwitcher: React.FC = () => {
   };
 
   const getCurrentCountry = () => {
-    return allCountries.find(c => c.code === currentCountry) || allCountries.find(c => c.code === 'IN');
+    return allCountries.find(c => c.code === currentCountry) || allCountries.find(c => c.code === 'AE');
   };
 
   const currentCountryData = getCurrentCountry();

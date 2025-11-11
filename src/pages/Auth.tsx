@@ -81,7 +81,7 @@ export const Auth: React.FC = () => {
           console.log('Starting email verification for:', email);
           
           // Try the confirm-user edge function
-          const response = await fetch('https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/confirm-user', {
+          const response = await fetch('https://smyojibmvrhfbwodvobw.supabase.co/functions/v1/confirm-user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email.trim().toLowerCase() })

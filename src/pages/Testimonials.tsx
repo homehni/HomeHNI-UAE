@@ -80,9 +80,9 @@ const Testimonials = () => {
       {/* Main content */}
       <div className="pt-8">
         {/* Hero Banner Section */}
-        <div className="relative h-96 bg-gradient-to-r from-brand-red to-brand-maroon overflow-hidden">
+        <div className="relative h-96 bg-gradient-to-r from-[#22c55e] to-[#16a34a] overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
-          backgroundImage: `url(/lovable-uploads/3c634b9e-a35d-4208-b4f1-3e4985081321.png)`,
+          backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           filter: 'brightness(0.7)'
         }} />
           <div className="absolute inset-0 bg-black/20" />

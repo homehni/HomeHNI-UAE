@@ -11,7 +11,7 @@ const Safety = () => {
       <main className="pt-20">
         {/* Hero Section */}
         <section className="relative h-96 bg-cover bg-center bg-no-repeat text-white" style={{
-        backgroundImage: "url('/lovable-uploads/02059b14-d0f2-4231-af62-ec450cb13e82.png')"
+        backgroundImage: "url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')"
       }}>
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="container mx-auto px-4 relative z-10">

@@ -351,13 +351,6 @@ const PAGE_ELEMENT_KEYS: Record<string, string[]> = {
     'seller_plans_features',
     'seller_plans_contact'
   ],
-  'service-suite': [
-    'service_suite_hero',
-    'service_suite_overview',
-    'service_suite_services',
-    'service_suite_features',
-    'service_suite_contact'
-  ],
   'careers': [
     'careers_hero',
     'careers_overview',
@@ -807,17 +800,6 @@ export const VisualPageBuilder: React.FC = () => {
               {"label": "Buy", "link": "/search?type=buy", "active": true},
               {"label": "Rent", "link": "/search?type=rent", "active": true}, 
               {"label": "Sell", "link": "/post-property", "active": true},
-              {"label": "Services", "submenu": [
-                {"label": "Loans", "link": "/loans"},
-                {"label": "Home Security Services", "link": "/home-security-services"},
-                {"label": "Packers & Movers", "link": "/packers-movers"},
-                {"label": "Legal Services", "link": "/legal-services"},
-                {"label": "Handover Services", "link": "/handover-services"},
-                {"label": "Property Management", "link": "/property-management"},
-                {"label": "Architects", "link": "/architects"},
-                {"label": "Painting & Cleaning", "link": "/painting-cleaning"},
-                {"label": "Interior Designers", "link": "/interior"}
-              ]},
               {"label": "Plans", "submenu": [
                 {"label": "Agent Plans", "link": "/agent-plans"},
                 {"label": "Builder's Lifetime Plan", "link": "/builder-lifetime-plans"},
@@ -825,7 +807,6 @@ export const VisualPageBuilder: React.FC = () => {
                 {"label": "Property Seller Plans", "link": "/buyer-plans"},
                 {"label": "Property Owner Plans", "link": "/seller-plans"}
               ]},
-              {"label": "Service Provider", "link": "/service-suite", "active": true},
               {"label": "Jobs", "link": "/careers", "active": true}
             ]
           },
@@ -869,7 +850,6 @@ export const VisualPageBuilder: React.FC = () => {
               {"label": "Buy Property", "link": "/search?type=buy"},
               {"label": "Rent Property", "link": "/search?type=rent"},
               {"label": "Sell Property", "link": "/post-property"},
-              {"label": "Property Management", "link": "/property-management"}
             ]
           },
           page_location: 'homepage',
@@ -1638,7 +1618,6 @@ export const VisualPageBuilder: React.FC = () => {
                   <option value="painting-cleaning">Painting & Cleaning</option>
                   <option value="interior">Interior Design</option>
                   <option value="architects">Architects</option>
-                  <option value="service-suite">Service Suite</option>
                 </optgroup>
                 
                 <optgroup label="Plans">

@@ -56,8 +56,8 @@ const MobileAppSection = () => {
             {/* Buttons — cherry red */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <button onClick={handleDownloadClick} aria-label="Download on Google Play" className="min-w-[200px] inline-flex items-center justify-center gap-3 rounded-lg px-6 py-3
-                           bg-[#d21404] text-white hover:bg-[#b80f03] transition-colors
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404]
+                           bg-[#22c55e] text-white hover:bg-[#16a34a] transition-colors
+                           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#22c55e]
                            shadow-md">
                 <Download className="w-5 h-5" />
                 <span className="text-left">
@@ -67,8 +67,8 @@ const MobileAppSection = () => {
               </button>
 
               <button onClick={handleDownloadClick} aria-label="Download on the App Store" className="min-w-[200px] inline-flex items-center justify-center gap-3 rounded-lg px-6 py-3
-                           bg-[#d21404] text-white hover:bg-[#b80f03] transition-colors
-                           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404]
+                           bg-[#22c55e] text-white hover:bg-[#16a34a] transition-colors
+                           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#22c55e]
                            shadow-md">
                 <Download className="w-5 h-5" />
                 <span className="text-left">
@@ -80,7 +80,7 @@ const MobileAppSection = () => {
 
             {/* Coming Soon indicator */}
             <div className="mt-8 text-center lg:text-left">
-              <p className="text-sm font-bold text-[#d21404]">🚀 Coming Soon!</p>
+              <p className="text-sm font-bold text-[#22c55e]">🚀 Coming Soon!</p>
               <p className="text-xs text-gray-600">{getComingSoon()}</p>
             </div>
 

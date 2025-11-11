@@ -75,7 +75,7 @@ const Header = () => {
   return (
     <>
       <Marquee />
-      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-red-800 to-red-700'}`}>
+      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-gradient-to-r from-[#059669] via-[#047857] to-[#065f46]'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex items-center h-14">
             
@@ -89,7 +89,7 @@ const Header = () => {
               {/* Center: Post Property Button - Absolutely positioned for perfect centering */}
               {location.pathname !== '/post-property' && (
                 <div className="absolute left-1/2 -translate-x-1/2 z-10">
-                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     <span>Post property</span>
                     <span className="ml-0.5 sm:ml-1 bg-green-500 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
@@ -180,22 +180,10 @@ const Header = () => {
 
             {/* Desktop Right section - Buttons and Menu */}
             <div className="hidden lg:flex items-center space-x-1.5 xl:space-x-2 flex-1 justify-end">
-              {/* Desktop: Post Requirement Button */}
-              <div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => navigate('/post-service')}
-                  className={`font-medium px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-sm transition-all duration-500 whitespace-nowrap min-w-[110px] xl:min-w-[140px] ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}
-                >
-                  Post Requirement
-                </Button>
-              </div>
-
               {/* Desktop: Post Property Button */}
               {location.pathname !== '/post-property' && (
                 <div>
-                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-sm transition-all duration-500 whitespace-nowrap min-w-[75px] xl:min-w-[130px] ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white text-brand-red border-white/50 hover:bg-white/90'}`}>
+                  <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-sm transition-all duration-500 whitespace-nowrap min-w-[75px] xl:min-w-[130px] ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     Post property
                     <span className="ml-1 bg-green-500 text-white text-[8px] xl:text-[10px] px-1 xl:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>

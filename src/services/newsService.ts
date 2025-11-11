@@ -28,7 +28,7 @@ export const fetchRealEstateNews = async (): Promise<string[]> => {
       body: JSON.stringify({
         contents: [{
           parts: [{
-            text: `Generate 3 short, single-line headlines about the latest real estate market trends in India. 
+            text: `Generate 3 short, single-line headlines about the latest real estate market trends in the United Arab Emirates (UAE). 
             Each headline should be factual, concise (under 120 characters), and include a specific data point or trend.
             Format as a JSON array of strings only, with no additional text or explanation.
             Example format: ["Headline 1", "Headline 2", "Headline 3"]`
@@ -62,9 +62,9 @@ export const fetchRealEstateNews = async (): Promise<string[]> => {
     } catch (parseError) {
       console.error('Failed to parse headlines JSON:', parseError);
       return [
-        '📈 India housing market sees 15% growth in Q2 2024, driven by strong demand in tier-2 cities',
-        '📈 Average home loan interest rates stabilize at 8.5%, boosting affordable housing segment',
-        '📈 Commercial real estate in Bengaluru records 40% increase in leasing activity year-over-year'
+        '📈 UAE real estate market sees strong growth in Q2 2024, with Dubai and Abu Dhabi leading property investments',
+        '📈 Average property prices in Dubai stabilize, boosting confidence in the UAE housing market',
+        '📈 Commercial real estate in Dubai records significant increase in leasing activity year-over-year'
       ];
     }
   } catch (error: any) {
@@ -76,9 +76,9 @@ export const fetchRealEstateNews = async (): Promise<string[]> => {
     }
     // Return fallback headlines if API call fails
     return [
-      '📈 India housing market sees 15% growth in Q2 2024, driven by strong demand in tier-2 cities',
-      '📈 Average home loan interest rates stabilize at 8.5%, boosting affordable housing segment',
-      '📈 Commercial real estate in Bengaluru records 40% increase in leasing activity year-over-year'
+      '📈 UAE real estate market sees strong growth in Q2 2024, with Dubai and Abu Dhabi leading property investments',
+      '📈 Average property prices in Dubai stabilize, boosting confidence in the UAE housing market',
+      '📈 Commercial real estate in Dubai records significant increase in leasing activity year-over-year'
     ];
   }
 };

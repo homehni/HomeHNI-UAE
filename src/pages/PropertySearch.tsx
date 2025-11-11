@@ -27,6 +27,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useSearchTrigger } from '@/hooks/useSearchTrigger';
 import { AreaUnit } from '@/utils/areaConverter';
 import { LandAreaFilter } from '@/components/LandAreaFilter';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 // Import feature flags with the same values as in SearchSection
 const MERGE_COMM_LAND_IN_BUY_RENT = true; // Keep true for new behavior
@@ -365,13 +366,19 @@ const PropertySearch = () => {
             />
           </div>
           <div className="flex justify-between text-sm font-medium text-foreground">
-            <span>₹{(() => {
+            <span>{(() => {
+              const countryConfig = getCurrentCountryConfig();
+              const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
               const validBudget = getValidBudgetValue(uiBudget, activeTab);
-              return validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L';
+              const value = validBudget[0] === 0 ? '0' : validBudget[0] >= 10000000 ? (validBudget[0] / 10000000).toFixed(validBudget[0] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[0] / 100000).toFixed(validBudget[0] % 100000 === 0 ? 0 : 1) + ' L';
+              return `${currencySymbol} ${value}`;
             })()}</span>
-            <span>₹{(() => {
+            <span>{(() => {
+              const countryConfig = getCurrentCountryConfig();
+              const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
               const validBudget = getValidBudgetValue(uiBudget, activeTab);
-              return validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '5Cr +') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L';
+              const value = validBudget[1] >= getBudgetSliderMax(activeTab) ? (activeTab === 'rent' ? '5L +' : '5Cr +') : validBudget[1] >= 10000000 ? (validBudget[1] / 10000000).toFixed(validBudget[1] % 10000000 === 0 ? 0 : 1) + ' Cr' : (validBudget[1] / 100000).toFixed(validBudget[1] % 100000 === 0 ? 0 : 1) + ' L';
+              return `${currencySymbol} ${value}`;
             })()}</span>
           </div>
           {/* Manual Budget Input Fields */}
@@ -1375,8 +1382,13 @@ const PropertySearch = () => {
                 
                 {/* Budget filter badge */}
                 {filters.budgetDirty && <Badge variant="secondary" className="flex items-center gap-1">
-                    ₹{filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(0) + 'L'} - 
-                    ₹{filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(0) + 'L'}
+                    {(() => {
+                      const countryConfig = getCurrentCountryConfig();
+                      const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+                      const minValue = filters.budget[0] === 0 ? '0' : (filters.budget[0] / 100000).toFixed(0) + 'L';
+                      const maxValue = filters.budget[1] >= 10000000 ? (filters.budget[1] / 10000000).toFixed(1) + 'Cr' : (filters.budget[1] / 100000).toFixed(0) + 'L';
+                      return `${currencySymbol} ${minValue} - ${currencySymbol} ${maxValue}`;
+                    })()}
                     <button onClick={() => updateFilter('budget', [0, getBudgetSliderMax(activeTab)])} className="ml-1 hover:bg-gray-300 rounded-full p-0.5">
                       <X size={12} />
                     </button>

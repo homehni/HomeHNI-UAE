@@ -136,7 +136,7 @@ export const FlattmatesPreviewStep: React.FC<FlattmatesPreviewStepProps> = ({
                   Edit Property
                 </Button>
                 <Button 
-                  className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
+                  className="bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto"
                   onClick={handlePreviewListing}
                 >
                   Preview Listing

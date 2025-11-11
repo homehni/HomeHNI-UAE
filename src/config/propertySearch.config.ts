@@ -4,6 +4,7 @@
  */
 
 import { BudgetConfig, ListingTab } from '@/types/propertySearch.types';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 // API Configuration
 export const API_CONFIG = {
@@ -145,16 +146,19 @@ export function getBudgetConfigForTab(tab: ListingTab): BudgetConfig {
 
 // Helper function to format currency
 export function formatCurrency(amount: number): string {
+  const countryConfig = getCurrentCountryConfig();
+  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
+  
   if (amount >= PRICE_FORMAT.CRORE_THRESHOLD) {
     const crores = amount / 10000000;
-    return `₹${crores.toFixed(crores % 1 === 0 ? 0 : 1)} Cr`;
+    return `${currencySymbol}${crores.toFixed(crores % 1 === 0 ? 0 : 1)} Cr`;
   } else if (amount >= PRICE_FORMAT.LAKH_THRESHOLD) {
     const lakhs = amount / 100000;
-    return `₹${lakhs.toFixed(lakhs % 1 === 0 ? 0 : 1)} L`;
+    return `${currencySymbol}${lakhs.toFixed(lakhs % 1 === 0 ? 0 : 1)} L`;
   } else if (amount >= PRICE_FORMAT.THOUSAND_THRESHOLD) {
-    return `₹${(amount / 1000).toFixed(0)} K`;
+    return `${currencySymbol}${(amount / 1000).toFixed(0)} K`;
   } else {
-    return `₹${amount.toLocaleString()}`;
+    return `${currencySymbol}${amount.toLocaleString()}`;
   }
 }
 

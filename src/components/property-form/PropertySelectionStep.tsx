@@ -10,7 +10,7 @@ import { MessageCircle } from 'lucide-react';
 import { TermsModal } from '@/components/TermsModal';
 import { useProfile } from '@/hooks/useProfile';
 import { useAuth } from '@/contexts/AuthContext';
-import { indianCities } from '@/data/indianCities';
+import { uaeCities } from '@/data/uaeCities';
 
 interface PropertySelectionData {
   name: string;
@@ -171,17 +171,23 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <div className="space-y-1">
               <Label htmlFor="mobile" className="text-sm font-medium text-gray-700">Mobile Number *</Label>
               <div className="flex">
-                <Select defaultValue="+91">
+                <Select defaultValue="+971">
                   <SelectTrigger className="w-16 rounded-r-none border-r-0 h-9 text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="+971">+971</SelectItem>
                     <SelectItem value="+91">+91</SelectItem>
+                    <SelectItem value="+1">+1</SelectItem>
+                    <SelectItem value="+44">+44</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input
                   id="mobile"
-                  placeholder="Enter your mobile number"
+                  type="tel"
+                  placeholder="50 123 4567"
+                  maxLength={9}
+                  pattern="[0-9]{9}"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="flex-1 rounded-l-none h-9 text-sm"
@@ -197,7 +203,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   <SelectValue placeholder="Select city (optional)" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {indianCities.map((cityName) => (
+                  {uaeCities.map((cityName) => (
                     <SelectItem key={cityName} value={cityName}>
                       {cityName}
                     </SelectItem>
@@ -219,7 +225,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <Switch
               checked={whatsappUpdates}
               onCheckedChange={setWhatsappUpdates}
-              className="data-[state=checked]:bg-red-500"
+              className="data-[state=checked]:bg-[#22c55e]"
             />
           </div>
 
@@ -233,7 +239,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   onClick={() => handlePropertyTypeChange(type as 'Residential' | 'Commercial' | 'Land/Plot')}
                   className={`flex-1 py-2 px-2 text-sm font-medium transition-colors relative ${
                     selectedPropertyType === type
-                      ? 'text-red-600 border-b-2 border-red-600'
+                      ? 'text-[#22c55e] border-b-2 border-[#22c55e]'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
@@ -261,7 +267,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   }}
                   className={`py-2 px-3 rounded-md text-sm font-medium transition-colors border ${
                     selectedListingType === type
-                      ? 'bg-red-600 text-white border-red-600'
+                      ? 'bg-[#22c55e] text-white border-[#22c55e]'
                       : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                   }`}
                 >
@@ -276,7 +282,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <Button
               onClick={handleSubmit}
               disabled={!isFormValid}
-              className="w-full h-11 bg-red-500 hover:bg-red-600 text-white text-base font-semibold rounded-md"
+              className="w-full h-11 bg-[#22c55e] hover:bg-[#16a34a] text-white text-base font-semibold rounded-md"
             >
               Start Posting Your Ad For FREE
             </Button>
@@ -287,7 +293,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span 
-                className="text-red-600 underline cursor-pointer"
+                className="text-[#22c55e] underline cursor-pointer"
                 onClick={() => setShowTermsModal(true)}
               >
                 Terms & Conditions

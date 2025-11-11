@@ -50,37 +50,30 @@ const Footer = ({
   const propertyListings = [{
     title: "Properties & Flats for Sale",
     cityData: {
-      "Flats for Sale in Bangalore": ["Flats for Sale in Koramangala", "Flats for Sale in Marathahalli", "Flats for Sale in HSR Layout", "Flats for Sale in Whitefield", "Flats for Sale in Indira Nagar", "Flats for Sale in Bellandur", "Flats for Sale in Chandra Layout", "Flats for Sale in J.P Nagar", "Flats for Sale in BTM Layout", "Flats for Sale in Jayanagar", "Flats for Sale Below 30 Lakhs in Bangalore", "Flats for Sale Between 50-90 Lakhs", "Flats for Sale Between 90 Lakhs-1 Crore", "Flats for Sale Below 50 Lakhs in Bangalore", "Properties for Sale in Bangalore"],
-      "Flats for Sale in Mumbai": ["Flats for Sale in Andheri West", "Flats for Sale in Andheri East", "Flats for Sale in Malad West", "Flats for Sale in Navi Mumbai", "Flats for Sale in Powai", "Flats for Sale in Vashi", "Flats for Sale in Mira Road East", "Flats for Sale in Bhayander", "Flats for Sale in Kandivali", "Flats for Sale in Borivali West", "Flats for Sale Below 1 Cr in Mumbai", "Flats for Sale in Thane", "Flats for Sale Below 2 Cr in Mumbai", "Properties for Sale in Mumbai"],
-      "Flats for Sale in Hyderabad": ["Flats for Sale in Banjara Hills", "Flats for Sale in Jubilee Hills", "Flats for Sale in Madhapur", "Flats for Sale in Kukatpally", "Flats for Sale in Gachibowli", "Flats for Sale in Secunderabad", "Flats for Sale in Miyapur", "Flats for Sale in Himayatnagar", "Flats for Sale in Ameerpet", "Flats for Sale Below 65 Lakhs in Hyderabad", "Flats for Sale Below 50 Lakhs in Hyderabad", "Properties for Sale in Hyderabad"]
+      "Properties for Sale in Dubai": ["Apartments for Sale in Dubai Marina", "Villas for Sale in Palm Jumeirah", "Properties for Sale in Downtown Dubai", "Apartments for Sale in Business Bay", "Villas for Sale in Arabian Ranches", "Properties for Sale in Jumeirah", "Apartments for Sale in Dubai Hills", "Properties for Sale in Dubai Creek", "Luxury Properties in Dubai", "Properties Below 1M AED in Dubai"],
+      "Properties for Sale in Abu Dhabi": ["Apartments for Sale in Yas Island", "Villas for Sale in Saadiyat Island", "Properties for Sale in Al Reem Island", "Apartments for Sale in Corniche", "Villas for Sale in Al Raha", "Properties for Sale in Khalifa City", "Luxury Properties in Abu Dhabi", "Properties Below 800K AED in Abu Dhabi"],
+      "Properties for Sale in Sharjah": ["Apartments for Sale in Al Qasimia", "Villas for Sale in Al Khan", "Properties for Sale in Al Majaz", "Apartments for Sale in Al Nahda", "Properties for Sale in Sharjah", "Properties Below 500K AED in Sharjah"]
     }
   }, {
     title: "Flats for Rent",
     cityData: {
-      "Flats for Rent in Bangalore": ["Flats for Rent in Koramangala", "Flats for Rent in Marathahalli", "Flats for Rent in HSR Layout", "Flats for Rent in Whitefield", "Flats for Rent in Indira Nagar", "Flats for Rent in Bellandur", "Flats for Rent in Electronic City", "Flats for Rent in BTM Layout", "Flats for Rent in Jayanagar", "1 BHK for Rent in Bangalore", "2 BHK for Rent in Bangalore", "3 BHK for Rent in Bangalore"],
-      "Flats for Rent in Mumbai": ["Flats for Rent in Andheri West", "Flats for Rent in Andheri East", "Flats for Rent in Malad West", "Flats for Rent in Navi Mumbai", "Flats for Rent in Powai", "Flats for Rent in Vashi", "Flats for Rent in Kandivali", "Flats for Rent in Borivali", "1 BHK for Rent in Mumbai", "2 BHK for Rent in Mumbai", "3 BHK for Rent in Mumbai"],
-      "Flats for Rent in Hyderabad": ["Flats for Rent in Banjara Hills", "Flats for Rent in Jubilee Hills", "Flats for Rent in Madhapur", "Flats for Rent in Kukatpally", "Flats for Rent in Gachibowli", "Flats for Rent in Secunderabad", "Flats for Rent in Miyapur", "1 BHK for Rent in Hyderabad", "2 BHK for Rent in Hyderabad", "3 BHK for Rent in Hyderabad"]
+      "Properties for Rent in Dubai": ["Apartments for Rent in Dubai Marina", "Villas for Rent in Palm Jumeirah", "Properties for Rent in Downtown Dubai", "Apartments for Rent in Business Bay", "1 BHK for Rent in Dubai", "2 BHK for Rent in Dubai", "3 BHK for Rent in Dubai", "Studio Apartments in Dubai"],
+      "Properties for Rent in Abu Dhabi": ["Apartments for Rent in Yas Island", "Villas for Rent in Saadiyat Island", "Properties for Rent in Al Reem Island", "1 BHK for Rent in Abu Dhabi", "2 BHK for Rent in Abu Dhabi", "3 BHK for Rent in Abu Dhabi"],
+      "Properties for Rent in Sharjah": ["Apartments for Rent in Al Qasimia", "Villas for Rent in Al Khan", "1 BHK for Rent in Sharjah", "2 BHK for Rent in Sharjah", "3 BHK for Rent in Sharjah"]
     }
   }, {
-    title: "PG / Hostels",
+    title: "Commercial Properties",
     cityData: {
-      "PG in Bangalore": ["PG for Boys in Koramangala", "PG for Girls in Marathahalli", "PG near HSR Layout", "PG near Whitefield", "PG near Electronic City", "PG near BTM Layout", "PG near Jayanagar", "Shared PG in Bangalore", "Single Room PG in Bangalore", "Double Sharing PG in Bangalore"],
-      "PG in Mumbai": ["PG for Boys in Andheri", "PG for Girls in Malad", "PG near Powai", "PG near Vashi", "PG near Kandivali", "PG near Borivali", "Shared PG in Mumbai", "Single Room PG in Mumbai", "Double Sharing PG in Mumbai"],
-      "PG in Hyderabad": ["PG for Boys in Madhapur", "PG for Girls in Gachibowli", "PG near Kukatpally", "PG near Secunderabad", "PG near Miyapur", "Shared PG in Hyderabad", "Single Room PG in Hyderabad", "Double Sharing PG in Hyderabad"]
+      "Commercial in Dubai": ["Office Space for Rent in Dubai", "Retail Space for Sale in Dubai", "Warehouse for Rent in Dubai", "Co-working Spaces in Dubai", "Business Centers in Dubai"],
+      "Commercial in Abu Dhabi": ["Office Space for Rent in Abu Dhabi", "Retail Space for Sale in Abu Dhabi", "Warehouse for Rent in Abu Dhabi"],
+      "Commercial in Sharjah": ["Office Space for Rent in Sharjah", "Retail Space for Sale in Sharjah"]
     }
   }, {
-    title: "Flatmates",
+    title: "Luxury Properties",
     cityData: {
-      "Flatmates in Bangalore": ["Flatmates in Koramangala", "Flatmates in Marathahalli", "Flatmates in HSR Layout", "Flatmates in Whitefield", "Flatmates in Electronic City", "Flatmates in BTM Layout", "Male Roommates in Bangalore", "Female Roommates in Bangalore", "Working Professional Roommates"],
-      "Flatmates in Mumbai": ["Flatmates in Andheri", "Flatmates in Malad", "Flatmates in Powai", "Flatmates in Vashi", "Flatmates in Kandivali", "Male Roommates in Mumbai", "Female Roommates in Mumbai", "Working Professional Roommates Mumbai"],
-      "Flatmates in Hyderabad": ["Flatmates in Madhapur", "Flatmates in Gachibowli", "Flatmates in Kukatpally", "Flatmates in Secunderabad", "Male Roommates in Hyderabad", "Female Roommates in Hyderabad", "Working Professional Roommates Hyderabad"]
-    }
-  }, {
-    title: "Miscellaneous",
-    cityData: {
-      "Commercial Properties": ["Office Space for Rent in Bangalore", "Office Space for Sale in Mumbai", "Retail Space in Hyderabad", "Warehouse for Rent", "Co-working Spaces", "Business Centers", "Industrial Plots", "Commercial Land"],
-      "Investment Properties": ["Investment Properties in Bangalore", "Investment Properties in Mumbai", "Investment Properties in Hyderabad", "High ROI Properties", "Pre-launch Projects", "Under Construction Properties"],
-      "Luxury Properties": ["Luxury Villas in Bangalore", "Luxury Apartments in Mumbai", "Premium Properties in Hyderabad", "Penthouses", "Villa Communities", "Gated Communities"]
+      "Luxury in Dubai": ["Luxury Villas in Dubai", "Premium Apartments in Dubai", "Penthouses in Dubai", "Waterfront Properties in Dubai", "Gated Communities in Dubai"],
+      "Luxury in Abu Dhabi": ["Luxury Villas in Abu Dhabi", "Premium Apartments in Abu Dhabi", "Penthouses in Abu Dhabi"],
+      "Investment Properties": ["Investment Properties in Dubai", "Investment Properties in Abu Dhabi", "High ROI Properties in UAE", "Pre-launch Projects in UAE"]
     }
   }];
 
@@ -91,61 +84,24 @@ const Footer = ({
     return activeSection ? activeSection.cityData : {};
   };
   const cityListings = [{
-    title: "Flats for Sale in Bangalore",
-    links: ["Properties for Sale in Koramangala", "Properties for Sale in Whitefield", "Independent Floor for Sale in Bangalore"]
+    title: "Properties for Sale in Dubai",
+    links: ["Apartments for Sale in Dubai Marina", "Villas for Sale in Palm Jumeirah", "Properties for Sale in Downtown Dubai", "Luxury Properties in Dubai"]
   }, {
-    title: "Bank Auction Properties for Sale in Bangalore",
-    links: ["Properties for Sale in Kharghar", "Properties for Sale in Bandra", "Independent Floor for Sale in Mumbai"]
+    title: "Properties for Sale in Abu Dhabi",
+    links: ["Apartments for Sale in Yas Island", "Villas for Sale in Saadiyat Island", "Properties for Sale in Al Reem Island", "Luxury Properties in Abu Dhabi"]
   }, {
-    title: "Bank Auction Properties for Sale in Mumbai",
-    links: ["Properties for Sale in Guttahalli High", "Properties for Sale in Yelahanka", "Independent Floor for Sale in Chennai"]
+    title: "Properties for Sale in Sharjah",
+    links: ["Apartments for Sale in Al Qasimia", "Villas for Sale in Al Khan", "Properties for Sale in Al Majaz"]
   }, {
-    title: "Bank Auction Properties for Sale in Chennai",
-    links: ["Properties for Sale in Hadapsar", "Properties for Sale in Kothrud", "Independent Floor for Sale in Pune"]
-  }, {
-    title: "Bank Auction Properties for Sale in Pune",
-    links: []
+    title: "Properties for Rent in UAE",
+    links: ["Properties for Rent in Dubai", "Properties for Rent in Abu Dhabi", "Properties for Rent in Sharjah", "Properties for Rent in Ajman"]
   }];
   const handleLinkClick = (linkText: string) => {
     // Check for services with dedicated pages first
     const serviceRoutes = {
-      'Property Legal Services': '/legal-services',
-      'Interiors': '/interior',
       'Rental Agreement': '/rental-agreement',
-      'Packers and Movers': '/packers-movers',
-      'Property Management in India': '/property-management',
-      'Painting and Cleaning': '/painting-cleaning',
       'Refer and Earn': '/refer-earn',
       'Pay Rent': '/rent-receipts',
-      'Sale Agreement': '/legal-services',
-      'Apply Home Loan': '/loans',
-      'Home Loan Eligibility Calculator': '/loans',
-      'Compare Home Loan Interest': '/loans',
-      'Home Loan Guide': '/loans',
-      'Home Loan Queries': '/loans',
-      'Personal Loan Guide': '/loans',
-      'Personal Loan Queries': '/loans',
-      'Loan against Mutual fund': '/loans',
-      'Loan Liability Balance Transfer': '/loans',
-      'Interior Design Tips': '/interior',
-      'Interior Design Queries': '/interior',
-      'Home Renovation Guide': '/interior',
-      'Home Renovation Queries': '/interior',
-      'Readinsite Vastu Guide': '/architects',
-      'Packers and Movers Guide': '/packers-movers',
-      'Packers and Movers queries': '/packers-movers',
-      'Painting Services': '/painting-cleaning',
-      'Home Painting Guide': '/painting-cleaning',
-      'Home Painting Queries': '/painting-cleaning',
-      'Cleaning Services': '/painting-cleaning',
-      'Kitchen Cleaning Services': '/painting-cleaning',
-      'Sofa Cleaning Services': '/painting-cleaning',
-      'Bathroom Cleaning Services': '/painting-cleaning',
-      'Full House Cleaning Services': '/painting-cleaning',
-      'Home Cleaning Guide': '/painting-cleaning',
-      'Home Services': '/service-suite',
-      'Home Services Queries': '/service-suite',
-      'Home HNI For NRI\'s': '/nri-services',
       'New Builder Project': '/new-projects',
       'Property Buyers Forum': '/buyers-forum',
       'Property Buyers Guide': '/buyers-guide',
@@ -201,18 +157,18 @@ const Footer = ({
   };
   
   const additionalCities = [{
-    title: "Flats for Sale in Hyderabad",
-    links: ["Flats for Sale in Banjara Hills", "Flats for Sale in Jubilee Hills", "Flats for Sale in Madhapur", "Flats for Sale in Kukatpally Housing Board Colony", "Flats for Sale in Gachibowli", "Flats for Sale in Secrbowl", "Flats for Sale in Kukatpally", "Flats for Sale in Miyapur", "Flats for Sale in Himaya Nagar", "Flats for Sale in Ameerpet", "Flats for Sale in Hyderabad Below 65 Lakhs", "Flats for Sale in Hyderabad Below 50 Lakhs", "Flats for Sale Below 50 Lakhs in Hyderabad", "Flats for Sale Below 70 Lakhs in Hyderabad", "Flats for Sale Below 80 Lakhs in Hyderabad", "Flats for Sale Below 90 Lakhs in Hyderabad", "Properties for Sale in Hyderabad"]
+    title: "Properties for Sale in Ajman",
+    links: ["Apartments for Sale in Ajman", "Villas for Sale in Ajman", "Properties for Sale in Al Nuaimiya", "Properties for Sale in Al Rashidiya", "Properties Below 400K AED in Ajman"]
   }, {
-    title: "Flats for Sale in Delhi",
-    links: ["Flats for Sale in Vasant Vihar", "Flats for Sale in Safdarjung Enclave", "Flats for Sale in Maya Puri", "Flats for Sale in Greater Kailash", "Flats for Sale in Connaught Place", "Flats for Sale in Laxmi Nagar", "Flats for Sale in Green Park Extension", "Flats for Sale in East of Kailash", "Flats for Sale in Pitampura Park", "Flats for Sale in Lajpat Nagar I", "Flats for Sale in Delhi Below 65 Lakhs", "Flats for Sale in Delhi Below 50 Lakhs", "Flats for Sale Below 80 Lakhs in Delhi", "Flats for Sale Below 70 Lakhs in Delhi", "Flats for Sale Below 80 Lakhs in Delhi", "Flats for Sale Below 90 Lakhs in Delhi", "Properties for Sale in Delhi"]
+    title: "Properties for Sale in Ras Al Khaimah",
+    links: ["Apartments for Sale in RAK", "Villas for Sale in RAK", "Properties for Sale in Al Marjan Island", "Properties for Sale in Al Hamra", "Luxury Properties in RAK"]
   }, {
-    title: "Flats for Sale in Noida",
-    links: ["Flats for Sale in Noida Sector 62", "Flats for Sale in Noida Sector 50", "Flats for Sale in Sector 137 Noida", "Flats for Sale in Sector 75 Noida", "Flats for Sale in Sector 76 Noida", "Flats for Sale in Kandilya Vihar Sector 51 Noida", "Flats for Sale in Noida Sector 18", "Flats for Sale in Sector 467 Noida", "Flats for Sale in Sector 168 Noida", "Flats for Sale in Sector 150 Noida", "Flats for Sale in Greater Noida", "Flats for Sale in Gamdia 70 Lakhs in Noida", "Flats for Sale Below 80 Lakhs in Noida", "Flats for Sale Below 80 Lakhs in Noida", "Properties for Sale in Noida"]
+    title: "Properties for Sale in Fujairah",
+    links: ["Apartments for Sale in Fujairah", "Villas for Sale in Fujairah", "Properties for Sale in Fujairah", "Properties Below 300K AED in Fujairah"]
   }];
   const services = {
     buy: ["Property Legal Services", "Interiors", "Sale Agreement", "Home HNI For NRI's", "New Builder Project", "Loan against Mutual fund", "Loan Liability Balance Transfer", "Home Loan Eligibility Calculator", "Apply Home Loan", "Compare Home Loan Interest", "Property Buyers Forum", "Property Buyers Guide", "Property Seller Guide", "Home Loan Guide", "Home Loan Queries", "Home Renovation Guide", "Home Renovation Queries", "Interior Design Tips", "Interior Design Queries", "NRI Real Estate Guide", "NRI Real Estate Queries", "Readinsite Vastu Guide", "Personal Loan Guide", "Personal Loan Queries"],
-    rent: ["Rental Agreement", "Pay Rent", "Refer and Earn", "Packers and Movers", "Property Management in India", "Painting and Cleaning", "Rental Questions", "Rent Calculator", "Property Rental Guide", "Landlord Guide", "Tenant Guide", "Packers and Movers Guide", "Packers and Movers queries", "Home Services", "Home Services Queries", "Painting Services", "Home Painting Guide", "Home Painting Queries", "Cleaning Services", "Kitchen Cleaning Services", "Sofa Cleaning Services", "Bathroom Cleaning Services", "Full House Cleaning Services", "Home Cleaning Guide"]
+    rent: ["Rental Agreement", "Pay Rent", "Refer and Earn", "Packers and Movers", "Property Management in India", "Painting and Cleaning", "Rental Questions", "Rent Calculator", "Property Rental Guide", "Landlord Guide", "Tenant Guide", "Packers and Movers Guide", "Packers and Movers queries", "Painting Services", "Home Painting Guide", "Home Painting Queries", "Cleaning Services", "Kitchen Cleaning Services", "Sofa Cleaning Services", "Bathroom Cleaning Services", "Full House Cleaning Services", "Home Cleaning Guide"]
   };
   const loanServices = {
     loanServices: ["Home Loans in Hyderabad", "Home Loans in Bangalore", "Home Loans in Mumbai", "Home Loans in Pune", "Home Loans in Delhi", "Home Loans in Chennai", "Loan Against Property", "Business Loans", "Construction Loans", "Balance Transfer Loans", "Top-up Loans", "Quick Loan Approval", "Low Interest Rate Loans"],

@@ -51,9 +51,6 @@ const PropertyTools = () => {
       case 'budget-calculator':
         setBudgetModalOpen(true);
         break;
-      case 'loan-eligibility':
-        navigate('/loans');
-        break;
       case 'area-converter':
         setAreaModalOpen(true);
         break;

@@ -24,7 +24,6 @@ import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCar
 import { PropertyActions } from '@/components/property-details/PropertyActions';
 import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { ReportSection } from '@/components/property-details/ReportSection';
-import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { PGRoomsCard } from '@/components/property-details/PGRoomsCard';
 import { Badge } from '@/components/ui/badge';
@@ -1848,9 +1847,6 @@ export const PropertyPreviewPage: React.FC = () => {
               
               {/* Neighborhood */}
               <NeighborhoodCard property={property as any} />
-              
-              {/* Services */}
-              <ServicesCard />
               
               {/* Related Properties */}
               <RelatedPropertiesCard property={property as any} />

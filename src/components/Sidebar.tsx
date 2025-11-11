@@ -7,7 +7,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useToast } from '@/hooks/use-toast';
 import LegalServicesForm from './LegalServicesForm';
-import { getCurrentCountryConfig } from '@/services/domainCountryService';
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -91,8 +90,6 @@ const Sidebar = ({
     onClose();
   };
 
-  // Check if current domain is UAE to hide services
-  const isUAE = getCurrentCountryConfig().code === 'AE';
 
   const menuItems = [{
     id: 'post-property',
@@ -108,51 +105,6 @@ const Sidebar = ({
       onClose();
     }
   },
-  // { id: 'rental-agreement', label: 'Rental Agreement', hasSubmenu: false, onClick: () => { navigate('/rental-agreement'); onClose(); } },
-  // Hide services menu items for UAE
-  ...(!isUAE ? [
-    {
-      id: 'legal-services',
-      label: 'Legal Services',
-      hasSubmenu: false,
-      onClick: () => {
-        navigate('/services?tab=legal-services');
-        onClose();
-      }
-    }, {
-      id: 'handover-services',
-      label: 'Handover Services',
-      hasSubmenu: false,
-      onClick: () => {
-        navigate('/services?tab=handover-services');
-        onClose();
-      }
-    }, {
-      id: 'property-management',
-      label: 'Property Management',
-      hasSubmenu: false,
-      onClick: () => {
-        navigate('/services?tab=property-management');
-        onClose();
-      }
-    }, {
-      id: 'painting-cleaning',
-      label: 'Painting & Cleaning',
-      hasSubmenu: false,
-      onClick: () => {
-        navigate('/services?tab=painting-cleaning');
-        onClose();
-      }
-    }, {
-      id: 'packers-movers',
-      label: 'Packers and Movers',
-      hasSubmenu: false,
-      onClick: () => {
-        navigate('/services?tab=packers-movers');
-        onClose();
-      }
-    }
-  ] : []),
   // { id: 'refer-earn', label: 'Refer & Earn', hasSubmenu: false, onClick: () => { navigate('/refer-earn'); onClose(); } },
   // { id: 'rent-receipts', label: 'Rent Receipts', hasSubmenu: false, onClick: () => { navigate('/rent-receipts'); onClose(); } },
   // {
@@ -188,14 +140,6 @@ const Sidebar = ({
     hasSubmenu: false,
     onClick: () => {
       navigate('/builder-dealer-plans');
-      onClose();
-    }
-  }, {
-    id: 'students',
-    label: 'Students',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/students');
       onClose();
     }
   }, {
@@ -245,14 +189,6 @@ const Sidebar = ({
     hasSubmenu: false,
     onClick: () => {
       navigate('/blog');
-      onClose();
-    }
-  }, {
-    id: 'corporate-enquiry',
-    label: 'Corporate Enquiry',
-    hasSubmenu: false,
-    onClick: () => {
-      navigate('/corporate-enquiry');
       onClose();
     }
   }, {

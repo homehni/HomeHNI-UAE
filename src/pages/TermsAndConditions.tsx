@@ -34,10 +34,18 @@ const TermsAndConditions = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/94c2146b-79a1-4541-a959-f1f0c70611e0.png')`,
+              backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
               backgroundPosition: 'center center'
             }}
           ></div>
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+          {/* Title Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+              Terms and Conditions
+            </h1>
+          </div>
         </div>
 
         {/* Main Content */}
@@ -173,11 +181,11 @@ const TermsAndConditions = () => {
               <div className="bg-green-50 p-6 rounded-lg">
                 <h3 className="font-semibold text-green-800 mb-3">Payment Methods</h3>
                 <ul className="space-y-2 text-green-700">
-                  <li>• Credit/Debit Cards (Visa, MasterCard, RuPay)</li>
-                  <li>• Net Banking</li>
-                  <li>• UPI Payments</li>
+                  <li>• Credit/Debit Cards (Visa, MasterCard, American Express)</li>
+                  <li>• Bank Transfer</li>
                   <li>• Digital Wallets</li>
-                  <li>• EMI Options (where applicable)</li>
+                  <li>• Cash on Delivery (where applicable)</li>
+                  <li>• Installment Plans (where applicable)</li>
                 </ul>
               </div>
               <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg mt-4">
@@ -221,7 +229,7 @@ const TermsAndConditions = () => {
                 <h2 className="text-2xl font-bold text-gray-900"> 11. Governing Law</h2>
               </div>
               <p className="text-gray-700 mb-4 leading-relaxed">
-                These terms and conditions are governed by and construed in accordance with the laws of India and you irrevocably submit to the exclusive jurisdiction of the courts in that state or location.
+                These terms and conditions are governed by and construed in accordance with the laws of the United Arab Emirates and you irrevocably submit to the exclusive jurisdiction of the courts of Dubai, United Arab Emirates.
               </p>
             </section>
 
@@ -242,12 +250,12 @@ const TermsAndConditions = () => {
                   <div className="text-center">
                     <Phone className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Phone</p>
-                    <p className="text-gray-600">+91 80740 17388</p>
+                    <p className="text-gray-600">+971 XX XXX XXXX</p>
                   </div>
                   <div className="text-center">
                     <Building className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600">HOMEHNI PRIVATE LIMITED<br />ΗΝΟ.5.5.558 ABHYUDAYA, NAGAR SAHEB NAGAR, Vanastalipuram, Hayathnagar, Hyderabad- 500070, Telangana</p>
+                    <p className="text-gray-600">HomeHNI UAE<br />Dubai, United Arab Emirates</p>
                   </div>
                 </div>
               </div>

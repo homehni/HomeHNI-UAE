@@ -45,7 +45,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             <div>
               <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>3. Compliance</h3>
               <ul className="list-disc pl-5 space-y-1">
-                <li>Listings must follow Indian laws, including RERA (where applicable), the IT Act, 2000, and local regulations.</li>
+                <li>Listings must follow UAE laws, including Dubai Land Department regulations, UAE Federal Law, and local emirate regulations.</li>
                 <li>Disputed, illegal, or non-compliant properties cannot be listed.</li>
               </ul>
             </div>
@@ -59,7 +59,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({
               <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>5. Payments (if applicable)</h3>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Fees for premium listings are non-refundable.</li>
-                <li>GST or other taxes may apply.</li>
+                <li>VAT (Value Added Tax) or other applicable taxes may apply as per UAE regulations.</li>
               </ul>
             </div>
 
@@ -82,8 +82,8 @@ export const TermsModal: React.FC<TermsModalProps> = ({
             <div>
               <h3 className="font-semibold text-base mb-1" style={{ color: '#a30d05' }}>8. Governing Law</h3>
               <ul className="list-disc pl-5 space-y-1">
-                <li>These Terms are governed by the laws of India.</li>
-                <li>Disputes will fall under the exclusive jurisdiction of the courts in Hyderabad, Telangana.</li>
+                <li>These Terms are governed by the laws of the United Arab Emirates.</li>
+                <li>Disputes will fall under the exclusive jurisdiction of the courts of Dubai, United Arab Emirates.</li>
               </ul>
             </div>
           </div>

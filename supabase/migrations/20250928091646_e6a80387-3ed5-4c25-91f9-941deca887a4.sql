@@ -83,7 +83,7 @@ BEGIN
   IF owner_contact_info.owner_email IS NOT NULL THEN
     BEGIN
       PERFORM net.http_post(
-        url := 'https://geenmplkdgmlovvgwzai.supabase.co/functions/v1/send-lead-notification',
+        url := 'https://smyojibmvrhfbwodvobw.supabase.co/functions/v1/send-lead-notification',
         headers := jsonb_build_object(
           'Content-Type', 'application/json',
           'Authorization', 'Bearer ' || current_setting('app.settings.service_role_key', true)

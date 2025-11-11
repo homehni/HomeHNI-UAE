@@ -140,7 +140,7 @@ export const DraftResumeModal: React.FC<DraftResumeModalProps> = ({
           <div className="space-y-3">
             <Button
               onClick={onContinue}
-              className="w-full bg-red-600 hover:bg-red-700 text-white"
+              className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white"
             >
               Continue Previous Posting
             </Button>

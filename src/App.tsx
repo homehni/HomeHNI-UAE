@@ -21,27 +21,17 @@ import FAQ from "./pages/FAQ";
 import GrievanceRedressal from "./pages/GrievanceRedressal";
 import ReportProblem from "./pages/ReportProblem";
 import SummonsNotices from "./pages/SummonsNotices";
-import PaintingCleaning from "./pages/PaintingCleaning";
 import ReferEarn from "./pages/ReferEarn";
-import PackersMovers from "./pages/PackersMovers";
 import RentalAgreement from "./pages/RentalAgreement";
 import RentReceipts from "./pages/RentReceipts";
-import LegalServices from "./pages/LegalServices";
-import HandoverServices from "./pages/HandoverServices";
-import PropertyManagement from "./pages/PropertyManagement";
-import PropManagement from "./pages/PropManagement";
 import RobotsTxt from "./pages/RobotsTxt";
 import Sitemap from "./pages/Sitemap";
 import OwnerPlans from "./pages/OwnerPlans";
 import BuyerPlans from "./pages/BuyerPlans";
 import SellerPlans from "./pages/SellerPlans";
 import AgentPlans from "./pages/AgentPlans";
-import BuilderLifetimePlans from "@/pages/BuilderLifetimePlans";
 import BuilderDealerPlans from "@/pages/BuilderDealerPlans";
-import ServiceSuite from "@/pages/ServiceSuite";
-import CorporateEnquiry from "./pages/CorporateEnquiry";
 import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
-import CommercialBuyerPlan from "./pages/CommercialBuyerPlan";
 import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -82,12 +72,7 @@ import GeolocationRedirect from "./components/GeolocationRedirect";
 import { SettingsProvider } from '@/contexts/SettingsContext';
 import MaintenanceGate from '@/components/MaintenanceGate';
 
-import Architecture from "./pages/Architects";
-import Interior from "./pages/Interior";
-import Loans from "./pages/Loans";
-import HomeSecurityServices from "./pages/HomeSecurityServices";
 import AboutSidebar from "./pages/AboutSidebar";
-import NRIServices from "./pages/NRIServices";
 import NewProjects from "./pages/NewProjects";
 import BuyersForum from "./pages/BuyersForum";
 import BuyersGuide from "./pages/BuyersGuide";
@@ -157,7 +142,6 @@ const App: React.FC = () => {
             <Route path="/cancellation-refunds" element={<CancellationRefunds />} />
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/legal-compliance" element={<LegalCompliance />} />
-            <Route path="/students" element={<Careers />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/testimonials" element={<Testimonials />} />
             <Route path="/safety" element={<Safety />} />
@@ -165,41 +149,25 @@ const App: React.FC = () => {
             <Route path="/grievance-redressal" element={<GrievanceRedressal />} />
             <Route path="/report-problem" element={<ReportProblem />} />
             <Route path="/summons-notices" element={<SummonsNotices />} />
-            <Route path="/painting-cleaning" element={<PaintingCleaning />} />
             <Route path="/refer-earn" element={<ReferEarn />} />
-            <Route path="/packers-movers" element={<PackersMovers />} />
             <Route path="/rental-agreement" element={<RentalAgreement />} />
             <Route path="/rent-receipts" element={<RentReceipts />} />
-            <Route path="/legal-services" element={<LegalServices />} />
-            <Route path="/handover-services" element={<HandoverServices />} />
-            <Route path="/property-management" element={<PropertyManagement />} />
-            <Route path="/prop-management" element={<PropManagement />} />
             <Route path="/owner-plans" element={<OwnerPlans />} />
             <Route path="/buyer-plans" element={<BuyerPlans />} />
             <Route path="/seller-plans" element={<SellerPlans />} />
         <Route path="/agent-plans" element={<AgentPlans />} />
-        <Route path="/builder-lifetime-plans" element={<BuilderLifetimePlans />} />
         <Route path="/builder-dealer-plans" element={<BuilderDealerPlans />} />
-        <Route path="/service-suite" element={<ServiceSuite />} />
             <Route path="/commercial-owner-plans" element={<CommercialOwnerPlans />} />
-          <Route path="/commercial-buyer-plan" element={<CommercialBuyerPlan />} />
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
-            <Route path="/corporate-enquiry" element={<CorporateEnquiry />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             
-            <Route path="/architects" element={<Architecture />} />
-            <Route path="/interior" element={<Interior />} />
-            <Route path="/loans" element={<Loans />} />
-            <Route path="/home-security-services" element={<HomeSecurityServices />} />
             <Route path="/post-service" element={
               <ProtectedRoute>
                 <PostService />
               </ProtectedRoute>
             } />
             
-            {/* Service Pages */}
-            <Route path="/nri-services" element={<NRIServices />} />
             <Route path="/new-projects" element={<NewProjects />} />
             <Route path="/buyers-forum" element={<BuyersForum />} />
             <Route path="/buyers-guide" element={<BuyersGuide />} />

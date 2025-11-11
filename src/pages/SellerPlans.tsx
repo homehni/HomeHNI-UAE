@@ -325,7 +325,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
     <section 
       className="py-20 md:py-28 relative bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/lovable-uploads/b29385fc-1962-44ff-aab9-781b07f0458b.png')`
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`
       }}
     >
   <div className="container mx-auto px-4 text-center max-w-4xl">

@@ -1,4 +1,3 @@
-
 const Logo = ({ 
   size = "default", 
   variant = "default" 
@@ -16,7 +15,7 @@ const Logo = ({
   const logoSrc = "/lovable-uploads/main-logo-final.png";
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center space-x-2">
       <img 
         src={logoSrc}
         alt="Home HNI Logo - Header" 

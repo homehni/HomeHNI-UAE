@@ -27,7 +27,6 @@ import { PropertyInfoCards } from '@/components/property-details/PropertyInfoCar
 import { PropertyActions } from '@/components/property-details/PropertyActions';
 import { PropertyWatermark } from '@/components/property-details/PropertyWatermark';
 import { ReportSection } from '@/components/property-details/ReportSection';
-import { ServicesCard } from '@/components/property-details/ServicesCard';
 import { DescriptionCard } from '@/components/property-details/DescriptionCard';
 import { PGRoomsCard } from '@/components/property-details/PGRoomsCard';
 import { RentalStatusService } from '@/services/rentalStatusService';
@@ -867,9 +866,6 @@ const PropertyDetails: React.FC = () => {
               
               {/* Overview */}
               <OverviewCard property={mergedProperty as any} />
-              
-              {/* Services Card */}
-              <ServicesCard />
               
               {/* Description Section */}
               <DescriptionCard property={mergedProperty as any} />

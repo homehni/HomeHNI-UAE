@@ -4,14 +4,15 @@ import { fetchRealEstateNews } from '../services/newsService';
 const Marquee = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [headlines, setHeadlines] = useState([
-    '🏠 Stay Safe with Home HNI - Your trusted partner for secure real estate transactions • Verify all documents before payment',
-    '📈 Latest Trend: India\'s real estate market sees steady growth with home prices projected to rise by 6% in 2025',
-    '✨ New Feature: Virtual Property Tours now available - Experience properties from the comfort of your home'
+    '🇦🇪 Welcome to Home HNI UAE - Your trusted partner for secure real estate transactions in the United Arab Emirates',
+    '📈 Latest Trend: UAE real estate market shows strong growth with Dubai and Abu Dhabi leading property investments',
+    '✨ New Feature: Virtual Property Tours now available - Experience properties from the comfort of your home',
+    '🏙️ Explore premium properties in Dubai, Abu Dhabi, Sharjah, and across the UAE'
   ]);
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   // Static headlines that don't change often
-  const safetyHeadline = '🏠 Stay Safe with Home HNI - Your trusted partner for secure real estate transactions • Verify all documents before payment';
+  const safetyHeadline = '🇦🇪 Welcome to Home HNI UAE - Your trusted partner for secure real estate transactions in the United Arab Emirates • Verify all documents before payment';
   const featureHeadline = '✨ New Feature: Virtual Property Tours now available - Experience properties from the comfort of your home';
 
   // Fetch real estate news from Gemini API
@@ -44,7 +45,7 @@ const Marquee = () => {
 
   return (
     <div 
-      className="hidden md:block fixed top-0 left-0 right-0 bg-[#0545a3] text-white py-2 overflow-hidden whitespace-nowrap z-50"
+      className="hidden md:block fixed top-0 left-0 right-0 bg-black text-white py-2 overflow-hidden whitespace-nowrap z-50"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >

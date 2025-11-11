@@ -529,7 +529,7 @@ export const MultiStepForm: React.FC<MultiStepFormProps> = ({
                   
                   scrollToTop();
                 }}
-                className="h-12 sm:h-10 px-6 sm:px-6 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto order-1 sm:order-3 font-semibold"
+                className="h-12 sm:h-10 px-6 sm:px-6 bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto order-1 sm:order-3 font-semibold"
               >
                 {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
               </Button>

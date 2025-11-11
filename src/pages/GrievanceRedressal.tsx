@@ -116,7 +116,7 @@ const GrievanceRedressal = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/54cb297c-1297-488d-8355-5a5ea64f70d6.png')`,
+              backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
               backgroundPosition: 'center center'
             }}
           ></div>

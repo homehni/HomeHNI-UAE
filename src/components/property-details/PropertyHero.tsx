@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapPin, ShieldCheck, Share2, Heart, Image, Phone, CalendarClock, BadgeIndianRupee, Edit, Eye } from 'lucide-react';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 import { Button } from '@/components/ui/button';
 import { PropertyImageModal } from '@/components/PropertyImageModal';
 import { useAuth } from '@/contexts/AuthContext';
@@ -269,11 +270,13 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
             <div className="text-center mb-4 sm:mb-6">
               <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
                 {(() => {
+                  const countryConfig = getCurrentCountryConfig();
+                  const currencySymbol = countryConfig.currency === 'AED' ? 'AED' : '₹';
                   const isPG = property.property_type?.toLowerCase().includes('pg') ||
                                property.property_type?.toLowerCase().includes('hostel') ||
                                property.property_type?.toLowerCase().includes('coliving');
                   const price = isPG ? property.expected_rent : property.expected_price;
-                  return price ? `₹${price.toLocaleString()}` : '—';
+                  return price ? `${currencySymbol}${price.toLocaleString()}` : '—';
                 })()}
               </div>
               <div className="text-xs sm:text-sm text-gray-600">
@@ -314,13 +317,6 @@ export const PropertyHero: React.FC<PropertyHeroProps> = ({
                   <span className="hidden sm:inline">EMI Calculator</span>
                   <span className="sm:hidden">EMI</span>
                 </Button>
-                <Link 
-                  to="/legal-services"
-                  className="flex-1 text-[#d21404] hover:underline text-xs sm:text-sm text-center py-2"
-                >
-                  <span className="hidden sm:inline">Legal Check</span>
-                  <span className="sm:hidden">Legal</span>
-                </Link>
               </div>
             </div>
 

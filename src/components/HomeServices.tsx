@@ -20,58 +20,15 @@ const HomeServices = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const services = [
-    {
-      image: loansImage,
-      title: 'Loans',
-      onClick: () => navigate('/loans')
-    },
-    {
-      image: homeSecurityImage,
-      title: 'Home Security Services',
-      onClick: () => navigate('/home-security-services')
-    },
-    {
-      image: legalServicesImage,
-      title: 'Legal Services',
-      onClick: () => navigate('/legal-services')
-    },
-    {
-      image: handoverServicesImage,
-      title: 'Handover Services',
-      onClick: () => navigate('/handover-services')
-    },
-    {
-      image: propertyManagementImage,
-      title: 'Property Management',
-      onClick: () => navigate('/property-management')
-    },
-    {
-      image: architectsImage,
-      title: 'Architects',
-      onClick: () => navigate('/architects')
-    },
-    {
-      image: interiorDesignImage,
-      title: 'Interior Designers',
-      onClick: () => navigate('/interior')
-    },
-    {
-      image: packersMoversImage,
-      title: 'Packers & Movers',
-      onClick: () => navigate('/packers-movers')
-    },
-    {
-      image: paintingCleaningImage,
-      title: 'Painting & Cleaning',
-      badge: 'FLAT 25% OFF',
-      badgeColor: 'bg-amber-400',
-      onClick: () => navigate('/painting-cleaning')
-    }
-  ];
+  const services: any[] = [];
 
   // Create infinite scroll by duplicating services
   const infiniteServices = [...services, ...services, ...services];
+  
+  // Don't render if no services
+  if (services.length === 0) {
+    return null;
+  }
 
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;

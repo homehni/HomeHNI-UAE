@@ -15,7 +15,7 @@ const WhyPostSection: React.FC = () => {
     },
     {
       icon: Users,
-      title: "10 lac tenants/buyers connections",
+      title: "1 Million+ tenants/buyers connections",
       description: "Vast network of verified users"
     }
   ];
@@ -23,18 +23,18 @@ const WhyPostSection: React.FC = () => {
   const testimonials = [
     {
       text: "HomeHNI made selling my property incredibly smooth and stress-free. Their team provided excellent guidance throughout the process and helped me find qualified buyers quickly. The platform's user-friendly interface and professional support made all the difference in achieving the best price for my property.",
-      name: "Rajesh Kumar",
-      city: "Mumbai"
+      name: "Ahmed Al Mansoori",
+      city: "Dubai"
     },
     {
       text: "I was amazed by how quickly I found the perfect tenant through HomeHNI. The verification process gave me confidence, and the zero brokerage policy saved me thousands. Highly recommend to all property owners!",
-      name: "Priya Sharma",
-      city: "Bangalore"
+      name: "Fatima Al Zaabi",
+      city: "Abu Dhabi"
     },
     {
       text: "As a first-time property seller, I was nervous about the process. HomeHNI's team guided me at every step and helped me get the best market price. The entire experience was transparent and hassle-free.",
-      name: "Amit Patel",
-      city: "Delhi"
+      name: "Mohammed Al Shamsi",
+      city: "Sharjah"
     }
   ];
 
@@ -73,7 +73,7 @@ const WhyPostSection: React.FC = () => {
         {/* Testimonial section - positioned to align with button */}
         <div className="rounded-xl p-4 text-gray-800 shadow-xl mt-6" style={{ background: 'linear-gradient(to right, #F5F5F5, #E5E5E5)' }}>
           <div className="mb-3">
-            <h3 className="font-bold text-base text-gray-800 mb-2">30 Lac+ Home Owners Trust Us</h3>
+            <h3 className="font-bold text-base text-gray-800 mb-2">3 Million+ Home Owners Trust Us</h3>
           </div>
           
           <div className="relative">

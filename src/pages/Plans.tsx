@@ -8,8 +8,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import BuyerPlans from './BuyerPlans';
 import SellerPlans from './SellerPlans';
-import CommercialBuyerPlan from './CommercialBuyerPlan';
-import BuilderLifetimePlans from './BuilderLifetimePlans';
 import AgentPlans from './AgentPlans';
 import RentalPlans from './RentalPlans';
 import PlanWizard from '@/components/PlanWizard';
@@ -18,8 +16,6 @@ const sections = [
   { id: 'buyer', label: 'Buyer Plans' },
   { id: 'seller', label: 'Seller Plans' },
   { id: 'rental', label: 'Rental Plans' },
-  { id: 'commercial-buyer', label: 'Commercial Buyer Plans' },
-  { id: 'builder-lifetime', label: 'Builder Lifetime Plans' },
   { id: 'agent', label: 'Agent Plans' },
 ];
 
@@ -120,16 +116,6 @@ const Plans = () => {
         description: 'Complete rental solutions for property owners & tenants. Get tenants quickly or find rental properties with zero brokerage. Plans for residential, commercial & more.',
         keywords: 'rental plans, owner plans, tenant plans, rental property, find tenants, rental subscription, zero brokerage rent'
       },
-      'commercial-buyer': {
-        title: 'Commercial Property Buyer Plans - Office, Shop & Warehouse | HomeHNI',
-        description: 'Specialized plans for buying commercial properties including offices, shops, warehouses & industrial spaces. Expert guidance & zero brokerage deals.',
-        keywords: 'commercial property plans, office space, shop buying, warehouse, commercial real estate, business property'
-      },
-      'builder-lifetime': {
-        title: 'Builder Lifetime Plans - Unlimited Property Listings | HomeHNI',
-        description: 'Exclusive lifetime plans for builders & developers. Unlimited property listings, premium exposure & dedicated support. Boost your project sales.',
-        keywords: 'builder plans, developer plans, lifetime subscription, builder membership, property listings, real estate marketing'
-      },
       agent: {
         title: 'Real Estate Agent Plans - Grow Your Property Business | HomeHNI',
         description: 'Professional plans for real estate agents & brokers. Access verified leads, premium tools & grow your property business with HomeHNI agent plans.',
@@ -221,20 +207,6 @@ const Plans = () => {
                   <>
                     
                     <RentalPlans embedded />
-                  </>
-                )}
-
-                {active === 'commercial-buyer' && (
-                  <>
-                    
-                    <CommercialBuyerPlan />
-                  </>
-                )}
-
-                {active === 'builder-lifetime' && (
-                  <>
-                    
-                    <BuilderLifetimePlans />
                   </>
                 )}
 

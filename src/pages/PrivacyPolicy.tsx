@@ -34,10 +34,18 @@ const PrivacyPolicy = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/4d6f4fa5-6aeb-49da-b8f9-9fc73be1f4da.png')`,
+              backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
               backgroundPosition: 'center center'
             }}
           ></div>
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+          {/* Title Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+              Privacy Policy
+            </h1>
+          </div>
         </div>
 
         {/* Main Content */}
@@ -350,12 +358,12 @@ const PrivacyPolicy = () => {
                   <div className="text-center">
                     <Phone className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Phone</p>
-                    <p className="text-gray-600">+91 80740 17388</p>
+                    <p className="text-gray-600">+971 XX XXX XXXX</p>
                   </div>
                   <div className="text-center">
                     <Building className="w-8 h-8 mx-auto mb-2 text-primary" />
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600">HOMEHNI PRIVATE LIMITED<br />ΗΝΟ.5.5.558 ABHYUDAYA, NAGAR SAHEB NAGAR, Vanastalipuram, Hayathnagar, Hyderabad- 500070, Telangana</p>
+                    <p className="text-gray-600">HomeHNI UAE<br />Dubai, United Arab Emirates</p>
                   </div>
                 </div>
               </div>

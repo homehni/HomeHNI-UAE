@@ -153,7 +153,7 @@ export const CommercialSalePropertyDetailsStep = ({
   };
   return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="text-left mb-8">
-        <h1 className="text-2xl font-semibold text-red-600 mb-2 pt-6 sm:pt-6">Commercial Property Details</h1>
+        <h1 className="text-2xl font-semibold text-[#22c55e] mb-2 pt-6 sm:pt-6">Commercial Property Details</h1>
       </div>
 
       <Form {...form}>

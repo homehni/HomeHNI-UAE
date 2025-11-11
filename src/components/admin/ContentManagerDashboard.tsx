@@ -195,17 +195,6 @@ export const ContentManagerDashboard: React.FC = () => {
               {"label": "Buy", "link": "/search?type=buy", "active": true},
               {"label": "Rent", "link": "/search?type=rent", "active": true}, 
               {"label": "Sell", "link": "/post-property", "active": true},
-              {"label": "Services", "submenu": [
-                {"label": "Loans", "link": "/loans"},
-                {"label": "Home Security Services", "link": "/home-security-services"},
-                {"label": "Packers & Movers", "link": "/packers-movers"},
-                {"label": "Legal Services", "link": "/legal-services"},
-                {"label": "Handover Services", "link": "/handover-services"},
-                {"label": "Property Management", "link": "/property-management"},
-                {"label": "Architects", "link": "/architects"},
-                {"label": "Painting & Cleaning", "link": "/painting-cleaning"},
-                {"label": "Interior Designers", "link": "/interior"}
-              ]},
               {"label": "Plans", "submenu": [
                 {"label": "Agent Plans", "link": "/agent-plans"},
                 {"label": "Builder's Lifetime Plan", "link": "/builder-lifetime-plans"},
@@ -213,7 +202,6 @@ export const ContentManagerDashboard: React.FC = () => {
                 {"label": "Property Seller Plans", "link": "/buyer-plans"},
                 {"label": "Property Owner Plans", "link": "/seller-plans"}
               ]},
-              {"label": "Service Provider", "link": "/service-suite", "active": true},
               {"label": "Jobs", "link": "/careers", "active": true}
             ]
           },
@@ -256,7 +244,6 @@ export const ContentManagerDashboard: React.FC = () => {
               {"label": "Buy Property", "link": "/search?type=buy"},
               {"label": "Rent Property", "link": "/search?type=rent"},
               {"label": "Sell Property", "link": "/post-property"},
-              {"label": "Property Management", "link": "/property-management"}
             ],
             contact: {
               phone: "+91-XXXXX-XXXXX",
@@ -310,12 +297,7 @@ export const ContentManagerDashboard: React.FC = () => {
           title: 'Home Services',
           content: {
             title: 'Home Services',
-            services: [
-              {"name": "Home Security Services", "description": "Professional security solutions for your property"},
-              {"name": "Legal Services", "description": "Expert legal assistance for property transactions"},
-              {"name": "Handover Services", "description": "Smooth property handover and documentation"},
-              {"name": "Property Management", "description": "Complete property management solutions"}
-            ]
+            services: []
           },
           page_location: 'homepage',
           section_location: 'services',

@@ -146,7 +146,7 @@ export const SaleDetailsStep: React.FC<SaleDetailsStepProps> = ({
   };
   return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="text-left pt-4 md:pt-0">
-        <h2 className="text-2xl text-red-600 mb-6 font-semibold">Sale details</h2>
+        <h2 className="text-2xl text-[#22c55e] mb-6 font-semibold">Sale details</h2>
       </div>
 
       <Form {...form}>

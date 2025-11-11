@@ -69,14 +69,14 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom brand colors - Updated to use #9e0e05 (candy red)
+				// Custom brand colors - Updated to leaf green for UAE theme
 				brand: {
-					red: 'hsl(3, 94%, 33%)',
-					'red-light': 'hsl(3, 94%, 43%)',
-					'red-dark': 'hsl(3, 94%, 28%)',
-					maroon: 'hsl(3, 94%, 28%)',
-					'maroon-light': 'hsl(3, 94%, 33%)',
-					'maroon-dark': 'hsl(3, 94%, 23%)',
+					red: 'hsl(142, 71%, 45%)',        // Leaf green #22c55e (keeping 'red' name for compatibility)
+					'red-light': 'hsl(142, 71%, 55%)', // Lighter leaf green
+					'red-dark': 'hsl(142, 76%, 40%)',  // Darker leaf green #16a34a
+					maroon: 'hsl(142, 76%, 40%)',      // Medium leaf green
+					'maroon-light': 'hsl(142, 71%, 45%)', // Leaf green
+					'maroon-dark': 'hsl(142, 76%, 35%)',  // Dark leaf green
 				}
 			},
 			borderRadius: {

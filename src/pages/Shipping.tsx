@@ -33,13 +33,13 @@ const Shipping = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/clean-hero-banner.jpg')`,
+              backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
               backgroundPosition: 'center center'
             }}
           ></div>
           
-          {/* Red Overlay */}
-          <div className="absolute inset-0 bg-red-900/70"></div>
+          {/* Leaf Green Overlay */}
+          <div className="absolute inset-0 bg-[#22c55e]/70"></div>
           
           {/* Title Overlay */}
           <div className="absolute inset-0 flex items-center justify-center z-10">

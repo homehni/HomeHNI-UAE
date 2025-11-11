@@ -74,7 +74,7 @@ const ReportProblem = () => {
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url('/lovable-uploads/831fcaf0-10e4-4ba4-b3da-c403bbe972bc.png')`,
+              backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
               backgroundPosition: 'center center'
             }}
           >

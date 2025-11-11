@@ -281,7 +281,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         return;
       }
       const countryConfig = getCurrentCountryConfig();
-      const region = countryConfig.code || 'IN';
+      const region = countryConfig.code || 'AE';
       const language = countryConfig.language ? `${countryConfig.language}-${region}` : 'en';
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=${region}&language=${language}`;
@@ -664,11 +664,16 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       {openDropdown && (
         <div className="fixed inset-0 z-40" onMouseDown={() => setOpenDropdown(null)} />
       )}
-      {/* Hero Image Background - mobile responsive */}
-      <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px]" style={{
-      backgroundImage: `url(${cmsContent?.content?.heroImage || '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png'})`,
-      backgroundPosition: 'center calc(50% + 10%)'
+      {/* Hero Image Background - mobile responsive with UAE theme */}
+      <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-hidden" style={{
+      backgroundImage: `url(${cmsContent?.content?.heroImage || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'})`,
+      backgroundPosition: 'center center',
+      position: 'relative'
     }}>
+      {/* Subtle leaf green overlay for UAE theme - very light */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#22c55e]/10 to-[#16a34a]/10" />
+      {/* Additional depth overlay for better text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent" />
     {/* Mobile Search Section - opens full-screen overlay */}
   <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50" ref={mobileSearchContainerRef}>
           <div className="bg-white rounded-lg shadow-xl border border-gray-100">
@@ -1072,7 +1077,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   {openDropdown === 'budget' && (
                     <div>
                       <div className="text-xs text-gray-600 mb-3">
-                        ₹{formatBudget(budget[0])} - ₹{activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
+                        AED {formatBudget(budget[0])} - AED {activeTab === 'rent' && budget[1] >= 500000 ? '5L +' : formatBudget(budget[1])}
                       </div>
                       <Slider
                         value={budget}
@@ -1099,7 +1104,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               setBudget(snapBudget(activeTab, next));
                             }}
                           />
-                          <div className="text-[11px] text-gray-400 mt-0.5">₹ in Rupees</div>
+                          <div className="text-[11px] text-gray-400 mt-0.5">AED (UAE Dirham)</div>
                         </div>
                         <div>
                           <label className="block text-[11px] text-gray-500 mb-1">Max</label>
@@ -1115,7 +1120,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               setBudget(snapBudget(activeTab, next));
                             }}
                           />
-                          <div className="text-[11px] text-gray-400 mt-0.5">₹ in Rupees</div>
+                          <div className="text-[11px] text-gray-400 mt-0.5">AED (UAE Dirham)</div>
                         </div>
                       </div>
                       {/* Quick presets */}
@@ -1533,7 +1538,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                         setBudget(snapBudget(activeTab, next));
                                       }}
                                     />
-                                    <div className="text-xs text-muted-foreground mt-1">₹ in Rupees</div>
+                                    <div className="text-xs text-muted-foreground mt-1">AED (UAE Dirham)</div>
                                   </div>
                                   <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1.5">Max Budget</label>
@@ -1556,7 +1561,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                         setBudget(snapBudget(activeTab, next));
                                       }}
                                     />
-                                    <div className="text-xs text-muted-foreground mt-1">₹ in Rupees</div>
+                                    <div className="text-xs text-muted-foreground mt-1">AED (UAE Dirham)</div>
                                   </div>
                                 </div>
                                 {/* Quick presets */}

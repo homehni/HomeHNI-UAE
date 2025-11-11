@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { formatExactPriceDisplay } from "@/utils/priceFormatter"
+import { getCurrentCountryConfig } from "@/services/domainCountryService"
 
 export interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value?: number | string
@@ -10,9 +11,12 @@ export interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInpu
 }
 
 const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
-  ({ className, value, onChange, showFormatted = true, currencySymbol = '₹', onKeyDown: userOnKeyDown, onPaste: userOnPaste, ...props }, ref) => {
+  ({ className, value, onChange, showFormatted = true, currencySymbol, onKeyDown: userOnKeyDown, onPaste: userOnPaste, ...props }, ref) => {
+    const countryConfig = getCurrentCountryConfig();
+    const defaultCurrency = countryConfig.currency === 'AED' ? 'AED' : '₹';
+    const symbol = currencySymbol || defaultCurrency;
     const displayValue = typeof value === 'number' ? value.toString() : value || ''
-    const formattedPrice = showFormatted ? formatExactPriceDisplay(value || 0) : ''
+    const formattedPrice = showFormatted ? formatExactPriceDisplay(value || 0, symbol) : ''
 
     const blockInvalidChars = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (['-', '+', 'e', 'E', '.'].includes(e.key)) {
@@ -38,7 +42,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
 
     return (
       <div className="relative">
-        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">{currencySymbol}</span>
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10">{symbol}</span>
         <input
           type="text"
           inputMode="numeric"
@@ -56,7 +60,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
         />
         {showFormatted && formattedPrice && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground font-medium">
-            {formattedPrice.replace(/^[₹AED]\s*/, '')}
+            {formattedPrice.replace(/^(AED|₹)\s*/, '')}
           </div>
         )}
       </div>

@@ -6,6 +6,18 @@ interface CountryConfig {
 }
 
 const DOMAIN_COUNTRY_MAP: { [domain: string]: CountryConfig } = {
+  'localhost': {
+    code: 'AE',
+    name: 'United Arab Emirates',
+    language: 'en',
+    currency: 'AED'
+  },
+  '127.0.0.1': {
+    code: 'AE',
+    name: 'United Arab Emirates',
+    language: 'en',
+    currency: 'AED'
+  },
   'homehni.ae': {
     code: 'AE',
     name: 'United Arab Emirates',
@@ -31,22 +43,22 @@ const DOMAIN_COUNTRY_MAP: { [domain: string]: CountryConfig } = {
     currency: 'INR'
   },
   'homehni.com': {
-    code: 'IN',
-    name: 'India',
+    code: 'AE',
+    name: 'United Arab Emirates',
     language: 'en',
-    currency: 'INR'
+    currency: 'AED'
   },
   'www.homehni.com': {
-    code: 'IN',
-    name: 'India',
+    code: 'AE',
+    name: 'United Arab Emirates',
     language: 'en',
-    currency: 'INR'
+    currency: 'AED'
   }
 };
 
 export const getCurrentCountryConfig = (): CountryConfig => {
   const hostname = window.location.hostname;
-  return DOMAIN_COUNTRY_MAP[hostname] || DOMAIN_COUNTRY_MAP['homehni.com'];
+  return DOMAIN_COUNTRY_MAP[hostname] || DOMAIN_COUNTRY_MAP['homehni.ae'];
 };
 
 export const getCurrentCountryCode = (): string => {

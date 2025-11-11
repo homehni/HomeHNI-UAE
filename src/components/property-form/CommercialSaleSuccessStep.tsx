@@ -133,7 +133,7 @@ export const CommercialSaleSuccessStep = ({
           </Button>
           <Button
             onClick={onPreviewListing}
-            className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
+            className="bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto"
           >
             Preview Listing
           </Button>

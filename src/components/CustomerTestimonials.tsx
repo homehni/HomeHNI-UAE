@@ -9,7 +9,7 @@ import { useCMSContent } from '@/hooks/useCMSContent';
  * Example: https://raw.githubusercontent.com/your/repo/branch/public/videos/testimonials.mp4
  */
 const VIDEO_SRC = "/lovable-uploads/Property Listing.mp4";
-const VIDEO_POSTER = "/lovable-uploads/fbb0d72f-782e-49f5-bbe1-8afc1314b5f7.png"; // optional fallback image
+const VIDEO_POSTER = "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"; // UAE/Dubai modern real estate image
 
 // Enhanced testimonials data with more variety
 const testimonials = [
@@ -145,10 +145,10 @@ export function VideoTile({
           <button
             type="button"
             onClick={togglePlay}
-            className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#d21404] rounded-2xl"
+            className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#22c55e] rounded-2xl"
             aria-label="Play video"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-[#d21404] to-[#b91c1c] rounded-full shadow-xl ring-4 ring-[#d21404]/30 flex items-center justify-center group-hover:scale-110 group-hover:ring-[#d21404]/50 transition-all duration-300">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#22c55e] to-[#16a34a] rounded-full shadow-xl ring-4 ring-[#22c55e]/30 flex items-center justify-center group-hover:scale-110 group-hover:ring-[#22c55e]/50 transition-all duration-300">
               <Play className="w-8 h-8 text-white fill-current ml-1" />
             </div>
           </button>
@@ -157,7 +157,7 @@ export function VideoTile({
 
       {/* Caption */}
       <div className="flex items-center gap-1 text-gray-700">
-        <Play className="w-3 h-3 text-[#d21404]" />
+        <Play className="w-3 h-3 text-[#22c55e]" />
         <span className="text-sm">{title}</span>
       </div>
     </div>
@@ -369,7 +369,7 @@ export function TestimonialsSection() {
 
         {/* See All Testimonials Button - Centered */}
         <div className="flex justify-center">
-          <Button asChild variant="outline" size="lg" className="border-[#d21404] text-[#d21404] hover:bg-[#d21404] hover:text-white transition-colors">
+          <Button asChild variant="outline" size="lg" className="border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-white transition-colors">
             <Link to="/testimonials">See All Testimonials</Link>
           </Button>
         </div>

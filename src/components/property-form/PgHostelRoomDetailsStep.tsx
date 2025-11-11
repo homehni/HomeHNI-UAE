@@ -193,7 +193,7 @@ export function PgHostelRoomDetailsStep({
                       currencySymbol={currencySymbol}
                     />
                     {errors[roomType]?.expectedRent && (
-                      <p className="text-sm text-red-500 mt-1">{errors[roomType].expectedRent}</p>
+                      <p className="text-sm text-[#22c55e] mt-1">{errors[roomType].expectedRent}</p>
                     )}
                     {/* Expected rent in words display */}
                     {roomDetails.expectedRent && roomDetails.expectedRent > 0 && !errors[roomType]?.expectedRent && (
@@ -217,7 +217,7 @@ export function PgHostelRoomDetailsStep({
                       currencySymbol={currencySymbol}
                     />
                     {errors[roomType]?.expectedDeposit && (
-                      <p className="text-sm text-red-500 mt-1">{errors[roomType].expectedDeposit}</p>
+                      <p className="text-sm text-[#22c55e] mt-1">{errors[roomType].expectedDeposit}</p>
                     )}
                     {/* Expected deposit in words display */}
                     {roomDetails.expectedDeposit && roomDetails.expectedDeposit > 0 && !errors[roomType]?.expectedDeposit && (
