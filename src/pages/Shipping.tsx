@@ -39,7 +39,7 @@ const Shipping = () => {
           ></div>
           
           {/* Leaf Green Overlay */}
-          <div className="absolute inset-0 bg-[#22c55e]/70"></div>
+          <div className="absolute inset-0 bg-[#ef4444]/70"></div>
           
           {/* Title Overlay */}
           <div className="absolute inset-0 flex items-center justify-center z-10">

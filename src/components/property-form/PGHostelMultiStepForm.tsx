@@ -834,7 +834,7 @@ const [propertyInfo, setPropertyInfo] = useState({
                 <Button 
                   type="button" 
                   onClick={handleStickyButtonClick}
-                  className="h-10 px-6 bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+                  className="h-10 px-6 bg-[#ef4444] hover:bg-[#dc2626] text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
                 >
                   {currentStep === 8 ? 'Submit Property' : 'Save & Continue'}
                 </Button>

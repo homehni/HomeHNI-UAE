@@ -314,7 +314,7 @@ export const LandPlotPreviewStep: React.FC<LandPlotPreviewStepProps> = ({
              type="button" 
              onClick={handlePreviewListing} 
              disabled={isSubmitting}
-             className="bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto"
+             className="bg-[#ef4444] hover:bg-[#dc2626] text-white w-full sm:w-auto"
              title="Click to preview your property listing"
            >
              Preview Listing

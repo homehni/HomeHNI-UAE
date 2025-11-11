@@ -100,7 +100,7 @@ export const PropertyDetailsStep: React.FC<PropertyDetailsStepProps> = ({
       {/* Form Content - Scrollable */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="text-left mb-8 pt-4 md:pt-0">
-          <h1 className="text-2xl font-semibold text-[#22c55e] mb-2">Property Details</h1>
+          <h1 className="text-2xl font-semibold text-[#ef4444] mb-2">Property Details</h1>
         </div>
         
         <Form {...form}>

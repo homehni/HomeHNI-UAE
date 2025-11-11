@@ -145,10 +145,10 @@ export function VideoTile({
           <button
             type="button"
             onClick={togglePlay}
-            className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#22c55e] rounded-2xl"
+            className="absolute inset-0 flex items-center justify-center group focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#ef4444] rounded-2xl"
             aria-label="Play video"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-[#22c55e] to-[#16a34a] rounded-full shadow-xl ring-4 ring-[#22c55e]/30 flex items-center justify-center group-hover:scale-110 group-hover:ring-[#22c55e]/50 transition-all duration-300">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#ef4444] to-[#dc2626] rounded-full shadow-xl ring-4 ring-[#ef4444]/30 flex items-center justify-center group-hover:scale-110 group-hover:ring-[#ef4444]/50 transition-all duration-300">
               <Play className="w-8 h-8 text-white fill-current ml-1" />
             </div>
           </button>
@@ -157,7 +157,7 @@ export function VideoTile({
 
       {/* Caption */}
       <div className="flex items-center gap-1 text-gray-700">
-        <Play className="w-3 h-3 text-[#22c55e]" />
+        <Play className="w-3 h-3 text-[#ef4444]" />
         <span className="text-sm">{title}</span>
       </div>
     </div>
@@ -369,7 +369,7 @@ export function TestimonialsSection() {
 
         {/* See All Testimonials Button - Centered */}
         <div className="flex justify-center">
-          <Button asChild variant="outline" size="lg" className="border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-white transition-colors">
+          <Button asChild variant="outline" size="lg" className="border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors">
             <Link to="/testimonials">See All Testimonials</Link>
           </Button>
         </div>

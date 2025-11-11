@@ -106,7 +106,7 @@ export const RentalDetailsStep: React.FC<RentalDetailsStepProps> = ({
   return (
     <div className="bg-background p-6">
       <div className="text-left mb-8 pt-4 md:pt-0">
-        <h1 className="text-2xl font-semibold text-[#22c55e] mb-2">
+        <h1 className="text-2xl font-semibold text-[#ef4444] mb-2">
           Provide rental details about your property
         </h1>
       </div>

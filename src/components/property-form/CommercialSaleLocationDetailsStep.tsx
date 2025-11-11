@@ -264,7 +264,7 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="text-left mb-8">
-        <h1 className="text-2xl font-semibold text-[#22c55e] mb-2 pt-6 sm:pt-6">Location Details</h1>
+        <h1 className="text-2xl font-semibold text-[#ef4444] mb-2 pt-6 sm:pt-6">Location Details</h1>
       </div>
 
       <Form {...form}>
@@ -344,8 +344,8 @@ export const CommercialSaleLocationDetailsStep: React.FC<CommercialSaleLocationD
                 </FormControl>
                 {locationMismatchWarning && (
                   <div className="flex items-start gap-2 p-3 bg-green-50 border border-green-200 rounded-lg mt-2">
-                    <X className="h-4 w-4 text-[#22c55e] flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-[#22c55e]">
+                    <X className="h-4 w-4 text-[#ef4444] flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-[#ef4444]">
                       Please select another locality in {locationMismatchWarning}
                     </p>
                   </div>

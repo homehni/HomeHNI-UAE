@@ -205,7 +205,7 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900">₹{firstRoomDetails.expectedRent?.toLocaleString()}</div>
                 <div className="text-sm text-gray-600">₹{firstRoomDetails.expectedDeposit?.toLocaleString()} Deposit</div>
-                <Button className="mt-2 bg-[#22c55e] hover:bg-[#16a34a] text-white">
+                <Button className="mt-2 bg-[#ef4444] hover:bg-[#dc2626] text-white">
                   Apply Loan
                 </Button>
               </div>
@@ -315,10 +315,10 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
 
             {/* Action Buttons */}
             <div className="flex space-x-4 mb-6">
-              <Button className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-white">
+              <Button className="flex-1 bg-[#ef4444] hover:bg-[#dc2626] text-white">
                 Contact
               </Button>
-              <Button className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-white">
+              <Button className="flex-1 bg-[#ef4444] hover:bg-[#dc2626] text-white">
                 Schedule Visit
               </Button>
             </div>
@@ -472,7 +472,7 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
           <Button 
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="bg-[#22c55e] hover:bg-[#16a34a] text-white"
+            className="bg-[#ef4444] hover:bg-[#dc2626] text-white"
           >
             {isSubmitting ? 'Publishing...' : 'Publish Property'}
           </Button>
@@ -498,7 +498,7 @@ export const PgHostelPreviewStep: React.FC<PgHostelPreviewStepProps> = ({
               </Button>
               <Button 
                 onClick={() => navigate('/post-property')}
-                className="flex-1 bg-[#22c55e] hover:bg-[#16a34a] text-white"
+                className="flex-1 bg-[#ef4444] hover:bg-[#dc2626] text-white"
               >
                 Post Another Property
               </Button>

@@ -102,8 +102,8 @@ const GetTenantsFasterSection: React.FC<GetTenantsFasterSectionProps> = ({ owner
             onClick={handleShowInterest}
             className={`w-full font-medium py-2 rounded-md text-white text-sm ${
               interestShown 
-                ? "bg-[#16a34a] hover:bg-[#16a34a] cursor-default opacity-70" 
-                : "bg-[#22c55e] hover:bg-[#16a34a]"
+                ? "bg-[#dc2626] hover:bg-[#dc2626] cursor-default opacity-70" 
+                : "bg-[#ef4444] hover:bg-[#dc2626]"
             }`}
             disabled={interestShown}
           >

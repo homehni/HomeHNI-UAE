@@ -180,7 +180,7 @@ export const ResaleScheduleStep: React.FC<ResaleScheduleStepProps> = ({
   return <div className="max-w-4xl">
       <div className="bg-background rounded-lg border p-8">
         <div className="text-left mb-8">
-          <h2 className="text-2xl mb-6 font-semibold text-[#22c55e]">
+          <h2 className="text-2xl mb-6 font-semibold text-[#ef4444]">
             Set your availability for property visits
           </h2>
         </div>

@@ -286,13 +286,13 @@ export const SecurePropertySearch: React.FC = () => {
       </Card>
 
       {/* Security Notice */}
-      <Card className="border-green-200 bg-green-50 border-2 border-primary">
+      <Card className="border-red-200 bg-red-50 border-2 border-primary">
         <CardContent className="p-4">
           <div className="flex items-start gap-2">
-            <Shield className="h-5 w-5 text-green-600 mt-0.5" />
+            <Shield className="h-5 w-5 text-red-600 mt-0.5" />
             <div>
-              <h4 className="font-medium text-green-800">Privacy Protected</h4>
-              <p className="text-sm text-green-700">
+              <h4 className="font-medium text-red-800">Privacy Protected</h4>
+              <p className="text-sm text-red-700">
                 Owner contact information is protected. Use the secure contact form to inquire about properties.
               </p>
             </div>

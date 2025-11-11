@@ -261,7 +261,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
   return (
     <div className="bg-background p-6">
       <div className="text-left mb-8 pt-4 md:pt-0">
-        <h1 className="text-2xl font-semibold text-[#22c55e] mb-2">Location Details</h1>
+        <h1 className="text-2xl font-semibold text-[#ef4444] mb-2">Location Details</h1>
       </div>
 
       <Form {...form}>
@@ -330,7 +330,7 @@ export const FlattmatesLocationDetailsStep: React.FC<FlattmatesLocationDetailsSt
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-[#22c55e]" />
+                  <MapPin className="h-4 w-4 text-[#ef4444]" />
                   Locality/Area *
                 </FormLabel>
                 <FormControl>

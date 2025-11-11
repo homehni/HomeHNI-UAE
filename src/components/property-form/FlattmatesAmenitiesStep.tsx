@@ -205,7 +205,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
           
           {/* Room Details Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-[#22c55e] mb-4">Room Details</h3>
+            <h3 className="text-lg font-semibold text-[#ef4444] mb-4">Room Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Bathrooms */}
               <FormField
@@ -261,7 +261,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
 
           {/* Flatmate Preference Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-[#22c55e] mb-4">Flatmate Preference</h3>
+            <h3 className="text-lg font-semibold text-[#ef4444] mb-4">Flatmate Preference</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Non-Veg Allowed */}
               <FormField
@@ -372,7 +372,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
 
           {/* Additional Details Section */}
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-[#22c55e] mb-4">Additional Details for maximum visibility</h3>
+            <h3 className="text-lg font-semibold text-[#ef4444] mb-4">Additional Details for maximum visibility</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Gym */}
               <FormField
@@ -583,7 +583,7 @@ export const FlattmatesAmenitiesStep: React.FC<FlattmatesAmenitiesStepProps> = (
 
           {/* Available Amenities */}
           <div className="mt-4 sm:mt-8">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[#22c55e]">Select the available amenities</h3>
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[#ef4444]">Select the available amenities</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
               {/* Lift */}
               <FormField

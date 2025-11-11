@@ -184,9 +184,9 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
       toast({
         title: 'Inquiry Sent Successfully',
         description: successMessage,
-        className: "bg-white border border-green-200 shadow-lg rounded-lg",
+        className: "bg-white border border-red-200 shadow-lg rounded-lg",
         style: {
-          borderLeft: "8px solid hsl(120, 100%, 25%)",
+          borderLeft: "8px solid hsl(0, 84%, 60%)",
         },
       });
 
@@ -239,7 +239,7 @@ export const SecureContactForm: React.FC<SecureContactFormProps> = ({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-green-600" />
+          <Shield className="h-5 w-5 text-red-600" />
           Contact Property Owner
         </CardTitle>
         <CardDescription>

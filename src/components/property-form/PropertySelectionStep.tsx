@@ -225,7 +225,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <Switch
               checked={whatsappUpdates}
               onCheckedChange={setWhatsappUpdates}
-              className="data-[state=checked]:bg-[#22c55e]"
+              className="data-[state=checked]:bg-[#ef4444]"
             />
           </div>
 
@@ -239,7 +239,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   onClick={() => handlePropertyTypeChange(type as 'Residential' | 'Commercial' | 'Land/Plot')}
                   className={`flex-1 py-2 px-2 text-sm font-medium transition-colors relative ${
                     selectedPropertyType === type
-                      ? 'text-[#22c55e] border-b-2 border-[#22c55e]'
+                      ? 'text-[#ef4444] border-b-2 border-[#ef4444]'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
@@ -267,7 +267,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
                   }}
                   className={`py-2 px-3 rounded-md text-sm font-medium transition-colors border ${
                     selectedListingType === type
-                      ? 'bg-[#22c55e] text-white border-[#22c55e]'
+                      ? 'bg-[#ef4444] text-white border-[#ef4444]'
                       : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
                   }`}
                 >
@@ -282,7 +282,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <Button
               onClick={handleSubmit}
               disabled={!isFormValid}
-              className="w-full h-11 bg-[#22c55e] hover:bg-[#16a34a] text-white text-base font-semibold rounded-md"
+              className="w-full h-11 bg-[#ef4444] hover:bg-[#dc2626] text-white text-base font-semibold rounded-md"
             >
               Start Posting Your Ad For FREE
             </Button>
@@ -293,7 +293,7 @@ export const PropertySelectionStep: React.FC<PropertySelectionStepProps> = ({
             <p className="text-xs text-gray-500 text-center leading-relaxed">
               By clicking 'Start Posting Your Ad' you acknowledge that you have agreed to the{' '}
               <span 
-                className="text-[#22c55e] underline cursor-pointer"
+                className="text-[#ef4444] underline cursor-pointer"
                 onClick={() => setShowTermsModal(true)}
               >
                 Terms & Conditions

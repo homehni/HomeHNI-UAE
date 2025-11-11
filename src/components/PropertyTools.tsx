@@ -25,7 +25,7 @@ const PropertyTools = () => {
       title: 'EMI Calculator',
       description: 'Calculate your home loan EMI',
       icon: DollarSign,
-      color: 'bg-green-100 text-green-600'
+      color: 'bg-red-100 text-red-600'
     },
     {
       id: 'loan-eligibility',

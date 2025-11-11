@@ -753,7 +753,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                       type="button"
                       onClick={handlePreviewListing}
                       disabled={isSubmitting}
-                      className="bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto"
+                      className="bg-[#ef4444] hover:bg-[#dc2626] text-white w-full sm:w-auto"
                     >
                       Preview Listing
                     </Button>
@@ -989,7 +989,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
                     type="button"
                     onClick={handlePreviewListing}
                     disabled={isSubmitting}
-                    className="bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto"
+                    className="bg-[#ef4444] hover:bg-[#dc2626] text-white w-full sm:w-auto"
                   >
                     Preview Listing
                   </Button>
@@ -1409,7 +1409,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
             <Button 
               type="button" 
               onClick={handleStickyButtonClick}
-              className="h-12 sm:h-10 px-6 sm:px-6 bg-[#22c55e] hover:bg-[#16a34a] text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
+              className="h-12 sm:h-10 px-6 sm:px-6 bg-[#ef4444] hover:bg-[#dc2626] text-white w-full sm:w-auto order-1 sm:order-2 font-semibold"
             >
               {currentStep === 6 ? 'Submit Property' : 'Save & Continue'}
             </Button>

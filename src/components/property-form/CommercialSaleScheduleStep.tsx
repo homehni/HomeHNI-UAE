@@ -171,7 +171,7 @@ export const CommercialSaleScheduleStep = ({
   const watchAvailableAllDay = form.watch('availableAllDay');
   return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
       <div className="mb-8 text-left">
-        <h2 className="text-2xl text-[#22c55e] mb-2 font-semibold pt-6 sm:pt-6">
+        <h2 className="text-2xl text-[#ef4444] mb-2 font-semibold pt-6 sm:pt-6">
           Schedule Property Visits
         </h2>
       </div>
@@ -186,19 +186,19 @@ export const CommercialSaleScheduleStep = ({
             <FormField control={form.control} name="availability" render={({
             field
           }) => <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button type="button" onClick={() => field.onChange('everyday')} variant={field.value === 'everyday' ? 'default' : 'outline'} className={`h-16 text-center ${field.value === 'everyday' ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white' : 'border-gray-300 text-gray-700'}`}>
+                  <Button type="button" onClick={() => field.onChange('everyday')} variant={field.value === 'everyday' ? 'default' : 'outline'} className={`h-16 text-center ${field.value === 'everyday' ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white' : 'border-gray-300 text-gray-700'}`}>
                     <div>
                       <div className="font-semibold">Everyday</div>
                       <div className="text-sm opacity-80">(Mon-Sun)</div>
                     </div>
                   </Button>
-                  <Button type="button" onClick={() => field.onChange('weekday')} variant={field.value === 'weekday' ? 'default' : 'outline'} className={`h-16 text-center ${field.value === 'weekday' ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white' : 'border-gray-300 text-gray-700'}`}>
+                  <Button type="button" onClick={() => field.onChange('weekday')} variant={field.value === 'weekday' ? 'default' : 'outline'} className={`h-16 text-center ${field.value === 'weekday' ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white' : 'border-gray-300 text-gray-700'}`}>
                     <div>
                       <div className="font-semibold">Weekdays Only</div>
                       <div className="text-sm opacity-80">(Mon-Fri)</div>
                     </div>
                   </Button>
-                  <Button type="button" onClick={() => field.onChange('weekend')} variant={field.value === 'weekend' ? 'default' : 'outline'} className={`h-16 text-center ${field.value === 'weekend' ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white' : 'border-gray-300 text-gray-700'}`}>
+                  <Button type="button" onClick={() => field.onChange('weekend')} variant={field.value === 'weekend' ? 'default' : 'outline'} className={`h-16 text-center ${field.value === 'weekend' ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white' : 'border-gray-300 text-gray-700'}`}>
                     <div>
                       <div className="font-semibold">Weekends Only</div>
                       <div className="text-sm opacity-80">(Sat-Sun)</div>

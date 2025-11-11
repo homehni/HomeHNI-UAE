@@ -224,8 +224,8 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           </div>
 
           {/* Secure Contact Form */}
-          <div className="space-y-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 border border-green-200">
-            <h3 className="text-lg font-semibold flex items-center text-green-800">
+          <div className="space-y-4 bg-gradient-to-r from-red-50 to-blue-50 rounded-lg p-6 border border-red-200">
+            <h3 className="text-lg font-semibold flex items-center text-red-800">
               <Shield className="h-5 w-5 mr-2" />
               Contact Property Owner
             </h3>

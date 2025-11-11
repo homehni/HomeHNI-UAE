@@ -89,40 +89,40 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 142 71% 45%;        /* Leaf green as primary */
+    --primary: 0 100% 50%;        /* Pure red as primary */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 15% 95%;
-    --secondary-foreground: 142 71% 45%;  /* Leaf green text on secondary */
+    --secondary-foreground: 0 100% 50%;  /* Pure red text on secondary */
 
     --muted: 0 15% 95%;
     --muted-foreground: 0 10% 50%;
 
     --accent: 0 15% 95%;
-    --accent-foreground: 142 71% 45%;  /* Leaf green text on accent */
+    --accent-foreground: 0 100% 50%;  /* Pure red text on accent */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 15% 90%;
     --input: 0 15% 90%;
-    --ring: 142 71% 45%;  /* Leaf green ring */
+    --ring: 0 100% 50%;  /* Pure red ring */
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 10% 25%;
-    --sidebar-primary: 142 76% 40%;  /* Leaf green for sidebar */
+    --sidebar-primary: 0 100% 50%;  /* Pure red for sidebar */
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 0 15% 95%;
-    --sidebar-accent-foreground: 142 76% 40%;  /* Leaf green text */
+    --sidebar-accent-foreground: 0 100% 50%;  /* Pure red text */
     --sidebar-border: 0 15% 90%;
-    --sidebar-ring: 142 71% 45%;  /* Leaf green ring */
+    --sidebar-ring: 0 100% 50%;  /* Pure red ring */
 
-    /* Brand colors - Updated to leaf green for UAE theme */
-    --brand-red: 142 71% 45%;        /* #22c55e - Leaf green (replacing red) */
-    --brand-maroon: 142 76% 40%;     /* #16a34a - Darker leaf green */
-    --brand-maroon-dark: 142 76% 35%; /* Darker leaf green for hover states */
+    /* Brand colors - Red theme */
+    --brand-red: 0 100% 50%;        /* #ff0000 - Pure red */
+    --brand-maroon: 0 84% 60%;     /* #ef4444 - Proper red */
+    --brand-maroon-dark: 0 84% 55%; /* Slightly darker red for hover states */
 
     /* Forest green theme colors for Canny's Forest Edge */
     --forest-primary: 140 65% 28%;
@@ -142,32 +142,32 @@ All colors MUST be HSL.
     --popover: 0 10% 10%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 142 71% 45%;        /* Leaf green for dark mode */
+    --primary: 0 100% 50%;        /* Pure red for dark mode */
     --primary-foreground: 0 0% 5%;
 
     --secondary: 0 10% 20%;
-    --secondary-foreground: 142 71% 45%;  /* Leaf green text */
+    --secondary-foreground: 0 100% 50%;  /* Pure red text */
 
     --muted: 0 10% 20%;
     --muted-foreground: 0 0% 65%;
 
     --accent: 0 10% 20%;
-    --accent-foreground: 142 71% 45%;  /* Leaf green text */
+    --accent-foreground: 0 100% 50%;  /* Pure red text */
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 10% 20%;
     --input: 0 10% 20%;
-    --ring: 142 71% 45%;  /* Leaf green ring */
+    --ring: 0 100% 50%;  /* Pure red ring */
     --sidebar-background: 0 10% 10%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 142 71% 45%;  /* Leaf green for dark mode sidebar */
+    --sidebar-primary: 0 100% 50%;  /* Pure red for dark mode sidebar */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 10% 15%;
-    --sidebar-accent-foreground: 142 71% 45%;  /* Leaf green text */
+    --sidebar-accent-foreground: 0 100% 50%;  /* Pure red text */
     --sidebar-border: 0 10% 15%;
-    --sidebar-ring: 142 71% 45%;  /* Leaf green ring */
+    --sidebar-ring: 0 100% 50%;  /* Pure red ring */
   }
 }
 
@@ -371,7 +371,7 @@ All colors MUST be HSL.
 
 /* Custom gradients */
 .gradient-red-maroon {
-  background: linear-gradient(135deg, hsl(142, 71%, 45%) 0%, hsl(142, 76%, 40%) 100%);
+  background: linear-gradient(135deg, hsl(0, 100%, 50%) 0%, hsl(0, 84%, 60%) 100%);
 }
 
 .gradient-light {

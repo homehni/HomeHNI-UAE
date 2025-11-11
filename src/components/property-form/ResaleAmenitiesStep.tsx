@@ -99,7 +99,7 @@ export const ResaleAmenitiesStep: React.FC<ResaleAmenitiesStepProps> = ({
     onNext(data as PropertyAmenities);
   };
   return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl mb-6 font-semibold text-[#22c55e]">Amenities</h1>
+      <h1 className="text-2xl mb-6 font-semibold text-[#ef4444]">Amenities</h1>
 
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

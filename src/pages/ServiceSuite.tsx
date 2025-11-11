@@ -284,7 +284,7 @@ const ServiceSuite = () => {
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 px-4 md:px-8 text-white overflow-hidden bg-cover bg-center bg-no-repeat" style={{
       backgroundImage: "url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')"
     }}>
-        <div className="absolute inset-0 bg-[#22c55e]/80 pointer-events-none" />
+        <div className="absolute inset-0 bg-[#ef4444]/80 pointer-events-none" />
 
         <div className="relative z-10 container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-8 items-start">

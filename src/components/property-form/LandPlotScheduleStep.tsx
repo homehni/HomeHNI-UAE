@@ -171,7 +171,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
   return (
     <div className="bg-background p-6">
         <div className="text-left mb-8 pt-4 md:pt-0">
-          <h2 className="text-2xl font-semibold text-[#22c55e] mb-2">
+          <h2 className="text-2xl font-semibold text-[#ef4444] mb-2">
             Schedule Property Visits
           </h2>
         </div>
@@ -186,7 +186,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                 type="button"
                 onClick={() => setValue('availability', 'everyday')}
                 variant={availability === 'everyday' ? 'default' : 'outline'}
-                className={`h-16 text-center ${availability === 'everyday' ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white' : 'border-gray-300 text-gray-700'}`}
+                className={`h-16 text-center ${availability === 'everyday' ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white' : 'border-gray-300 text-gray-700'}`}
               >
                 <div>
                   <div className="font-semibold">Everyday</div>
@@ -197,7 +197,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                 type="button"
                 onClick={() => setValue('availability', 'weekday')}
                 variant={availability === 'weekday' ? 'default' : 'outline'}
-                className={`h-16 text-center ${availability === 'weekday' ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white' : 'border-gray-300 text-gray-700'}`}
+                className={`h-16 text-center ${availability === 'weekday' ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white' : 'border-gray-300 text-gray-700'}`}
               >
                 <div>
                   <div className="font-semibold">Weekdays Only</div>
@@ -208,7 +208,7 @@ export const LandPlotScheduleStep: React.FC<LandPlotScheduleStepProps> = ({
                 type="button"
                 onClick={() => setValue('availability', 'weekend')}
                 variant={availability === 'weekend' ? 'default' : 'outline'}
-                className={`h-16 text-center ${availability === 'weekend' ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white' : 'border-gray-300 text-gray-700'}`}
+                className={`h-16 text-center ${availability === 'weekend' ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white' : 'border-gray-300 text-gray-700'}`}
               >
                 <div>
                   <div className="font-semibold">Weekends Only</div>

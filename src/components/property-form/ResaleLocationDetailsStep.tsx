@@ -271,7 +271,7 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
     onNext(locationData);
   };
   return <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-      <h1 className="text-2xl mb-6 font-semibold text-[#22c55e]">Location Details</h1>
+      <h1 className="text-2xl mb-6 font-semibold text-[#ef4444]">Location Details</h1>
 
       <Form {...form}>
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -321,9 +321,9 @@ export const ResaleLocationDetailsStep: React.FC<ResaleLocationDetailsStepProps>
                   <FormMessage />
                   {locationMismatchWarning && <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
                       <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center flex-shrink-0">
-                        <span className="text-[#22c55e] text-sm font-bold">✕</span>
+                        <span className="text-[#ef4444] text-sm font-bold">✕</span>
                       </div>
-                      <p className="text-sm text-[#22c55e]">{locationMismatchWarning}</p>
+                      <p className="text-sm text-[#ef4444]">{locationMismatchWarning}</p>
                     </div>}
                 </FormItem>} />
 

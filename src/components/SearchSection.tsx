@@ -671,7 +671,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       position: 'relative'
     }}>
       {/* Subtle leaf green overlay for UAE theme - very light */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#22c55e]/10 to-[#16a34a]/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#ef4444]/10 to-[#dc2626]/10" />
       {/* Additional depth overlay for better text contrast */}
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent" />
     {/* Mobile Search Section - opens full-screen overlay */}

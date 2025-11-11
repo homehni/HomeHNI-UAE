@@ -197,14 +197,14 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   const SuccessScreen = () => (
     <div className="text-center space-y-4 py-6">
       <div className="flex justify-center">
-        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-          <CheckCircle className="w-6 h-6 text-green-600" />
+        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+          <CheckCircle className="w-6 h-6 text-red-600" />
         </div>
       </div>
       
       <div className="space-y-2">
         <h2 className="text-lg font-semibold text-gray-900">Visit Booked Successfully</h2>
-        <p className="text-green-600 font-medium text-sm">{bookedDateTime}</p>
+        <p className="text-red-600 font-medium text-sm">{bookedDateTime}</p>
         <p className="text-xs text-gray-600">
           You will get all details regarding this visit on your registered number directly.
         </p>
