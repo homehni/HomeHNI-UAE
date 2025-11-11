@@ -121,9 +121,14 @@ const GrievanceRedressal = () => {
             }}
           ></div>
           
-          {/* Content overlay */}
-          <div className="relative z-10 flex items-center justify-center h-full">
-            {/* Hero section shows the banner with "GRIEVANCES" text */}
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/40"></div>
+          
+          {/* Title Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl">
+              Grievance Redressal
+            </h1>
           </div>
         </div>
 

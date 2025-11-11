@@ -42,7 +42,7 @@ const TermsAndConditions = () => {
           <div className="absolute inset-0 bg-black/40"></div>
           {/* Title Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl" style={{ fontFamily: "'Open Sans', sans-serif" }}>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl">
               Terms and Conditions
             </h1>
           </div>

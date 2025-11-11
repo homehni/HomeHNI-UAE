@@ -43,8 +43,8 @@ const LegalCompliance = () => {
           
           {/* Title Overlay */}
           <div className="absolute inset-0 flex items-center justify-center z-10">
-            <h1 className="text-3xl md:text-5xl font-bold text-white text-center px-4">
-              LEGAL COMPLIANCE
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl">
+              Legal Compliance
             </h1>
           </div>
         </div>

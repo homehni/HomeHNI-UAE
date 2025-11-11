@@ -117,6 +117,12 @@ const FAQ = () => {
         }}>
           <div className="absolute inset-0 bg-black/40"></div>
           
+          {/* Title Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl">
+              Frequently Asked Questions
+            </h1>
+          </div>
         </section>
 
         {/* FAQ Content */}

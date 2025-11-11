@@ -666,8 +666,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       )}
       {/* Hero Image Background - mobile responsive with UAE theme */}
       <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-hidden" style={{
-      backgroundImage: `url(${cmsContent?.content?.heroImage || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'})`,
+      backgroundImage: `url(${cmsContent?.content?.heroImage || 'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/hero-images/burj2.jpg'})`,
       backgroundPosition: 'center center',
+      backgroundSize: 'cover',
       position: 'relative'
     }}>
       {/* Subtle leaf green overlay for UAE theme - very light */}

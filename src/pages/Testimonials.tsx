@@ -85,7 +85,14 @@ const Testimonials = () => {
           backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           filter: 'brightness(0.7)'
         }} />
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/40" />
+          
+          {/* Title Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl">
+              Testimonials
+            </h1>
+          </div>
         </div>
 
         {/* Section Header */}
