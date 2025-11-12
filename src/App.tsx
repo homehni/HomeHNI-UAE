@@ -35,6 +35,9 @@ import CommercialOwnerPlans from "./pages/CommercialOwnerPlans";
 import CommercialSellerPlans from "./pages/CommercialSellerPlans";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import FindDevelopers from "./pages/FindDevelopers";
+import AreaInsights from "./pages/AreaInsights";
+import InsightsHub from "./pages/InsightsHub";
 import { Auth } from "./pages/Auth";
 import { Profile } from "./pages/Profile";
 import { DealRoom } from "./pages/DealRoom";
@@ -160,6 +163,9 @@ const App: React.FC = () => {
           <Route path="/commercial-seller-plans" element={<CommercialSellerPlans />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/find-developers" element={<FindDevelopers />} />
+            <Route path="/area-insights" element={<AreaInsights />} />
+            <Route path="/insights-hub" element={<InsightsHub />} />
             
             <Route path="/post-service" element={
               <ProtectedRoute>

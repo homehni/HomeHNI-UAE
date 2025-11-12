@@ -97,6 +97,47 @@ const Sidebar = ({
     hasSubmenu: false,
     onClick: handlePostPropertyClick
   }, {
+    id: 'explore',
+    label: 'Explore',
+    hasSubmenu: true,
+    submenu: [
+      {
+        label: 'Find Developers',
+        onClick: () => {
+          navigate('/find-developers');
+          onClose();
+        }
+      },
+      {
+        label: 'Area Insights',
+        onClick: () => {
+          navigate('/area-insights');
+          onClose();
+        }
+      },
+      {
+        label: 'Property Blog',
+        onClick: () => {
+          navigate('/blog');
+          onClose();
+        }
+      },
+      {
+        label: 'Insights Hub',
+        onClick: () => {
+          navigate('/insights-hub');
+          onClose();
+        }
+      },
+      {
+        label: 'Privacy Policy',
+        onClick: () => {
+          navigate('/privacy-policy');
+          onClose();
+        }
+      }
+    ]
+  }, {
     id: 'find-your-plan',
     label: 'Find Your Plan',
     hasSubmenu: false,
@@ -329,8 +370,11 @@ const Sidebar = ({
                               </svg>
                             </a>
                           </div>
-                        </div> : (item as any).submenu?.map((subItem: any) => <button key={typeof subItem === 'string' ? subItem : subItem.label} onClick={typeof subItem === 'string' ? undefined : subItem.onClick} className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors">
-                            {typeof subItem === 'string' ? subItem : subItem.label}
+                        </div> : (item as any).submenu?.map((subItem: any) => <button key={typeof subItem === 'string' ? subItem : subItem.label} onClick={typeof subItem === 'string' ? undefined : subItem.onClick} className="w-full text-left px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg transition-colors flex items-center justify-between">
+                            <span>{typeof subItem === 'string' ? subItem : subItem.label}</span>
+                            {subItem.label === 'Find Developers' && (
+                              <span className="ml-2 bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-medium uppercase">NEW</span>
+                            )}
                           </button>)}
                     </div>}
                 </div>)}

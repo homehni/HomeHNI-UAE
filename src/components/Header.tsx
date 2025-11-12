@@ -174,6 +174,33 @@ const Header = () => {
                   SELL
                 </button>
 
+                {/* EXPLORE Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className={`flex items-center space-x-1 hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                      <span>EXPLORE</span>
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56 bg-white border border-gray-200 shadow-lg">
+                    <DropdownMenuItem onClick={() => navigate('/find-developers')} className="flex items-center justify-between">
+                      <span>Find Developers</span>
+                      <span className="ml-2 bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-medium uppercase">NEW</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/area-insights')}>
+                      <span>Area Insights</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/blog')}>
+                      <span>Property Blog</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/insights-hub')}>
+                      <span>Insights Hub</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/privacy-policy')}>
+                      <span>Privacy Policy</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
               </div>
             </div>
