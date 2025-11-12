@@ -34,7 +34,7 @@ import GetTenantsFasterSection from '@/components/GetTenantsFasterSection';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import PropertyFAQSection from '@/components/PropertyFAQSection';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { User, Briefcase } from 'lucide-react';
+import { User, Briefcase, Building2, Hammer } from 'lucide-react';
 import { updateUserRole } from '@/services/profileService';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
@@ -43,7 +43,7 @@ export const PostProperty: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<FormStep>('property-selection');
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
-  const [userType, setUserType] = useState<'Owner' | 'Agent' | null>(null);
+  const [userType, setUserType] = useState<'Owner' | 'Agent' | 'Agency' | 'Builder' | null>(null);
   
   // Track currentStep changes
   React.useEffect(() => {
@@ -1853,6 +1853,70 @@ export const PostProperty: React.FC = () => {
             >
               <Briefcase className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors" />
               <span className="text-base font-medium">Agent</span>
+            </div>
+            <div
+              onClick={async () => {
+                try {
+                  setUserType('Agency');
+                  const { data: { user } } = await supabase.auth.getUser();
+                  if (user) {
+                    try {
+                      await updateUserRole(user.id, 'agency');
+                    } catch (roleError: any) {
+                      // If role already exists (duplicate key error), treat as success
+                      if (roleError?.code !== '23505') {
+                        throw roleError;
+                      }
+                      console.log('Role already set to agency');
+                    }
+                  }
+                  setShowUserTypeDialog(false);
+                  console.log('User selected type: Agency');
+                } catch (error) {
+                  console.error('Error updating user role:', error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to update role",
+                    variant: "destructive"
+                  });
+                }
+              }}
+              className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-muted rounded-lg hover:border-primary hover:bg-accent/50 transition-all cursor-pointer group"
+            >
+              <Building2 className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="text-base font-medium">Agency</span>
+            </div>
+            <div
+              onClick={async () => {
+                try {
+                  setUserType('Builder');
+                  const { data: { user } } = await supabase.auth.getUser();
+                  if (user) {
+                    try {
+                      await updateUserRole(user.id, 'builder');
+                    } catch (roleError: any) {
+                      // If role already exists (duplicate key error), treat as success
+                      if (roleError?.code !== '23505') {
+                        throw roleError;
+                      }
+                      console.log('Role already set to builder');
+                    }
+                  }
+                  setShowUserTypeDialog(false);
+                  console.log('User selected type: Builder');
+                } catch (error) {
+                  console.error('Error updating user role:', error);
+                  toast({
+                    title: "Error",
+                    description: "Failed to update role",
+                    variant: "destructive"
+                  });
+                }
+              }}
+              className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-muted rounded-lg hover:border-primary hover:bg-accent/50 transition-all cursor-pointer group"
+            >
+              <Hammer className="w-12 h-12 text-muted-foreground group-hover:text-primary transition-colors" />
+              <span className="text-base font-medium">Builder</span>
             </div>
           </div>
         </DialogContent>

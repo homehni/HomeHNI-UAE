@@ -404,6 +404,8 @@ export const Dashboard: React.FC = () => {
       'seller': 'Property Owner',
       'owner': 'Owner',
       'agent': 'Agent',
+      'agency': 'Agency',
+      'builder': 'Builder',
       'consultant': 'Consultant',
       'admin': 'Administrator',
       'user': 'User'
@@ -2429,7 +2431,7 @@ export const Dashboard: React.FC = () => {
                       <Badge 
                         variant="default" 
                         className={`text-sm px-3 py-1 ${
-                          userRole === 'owner' || userRole === 'agent' 
+                          userRole === 'owner' || userRole === 'agent' || userRole === 'agency' || userRole === 'builder'
                             ? 'bg-red-600 hover:bg-red-700' 
                             : userRole === 'seller'
                             ? 'bg-green-600 hover:bg-green-700'

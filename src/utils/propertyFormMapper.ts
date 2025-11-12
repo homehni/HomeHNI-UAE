@@ -114,7 +114,7 @@ export const mapPropertyToFormData = (property: Property): {
     name: property.owner_name || '',
     email: property.owner_email || '',
     phone: property.owner_phone || '',
-    role: property.owner_role as 'Owner' | 'Agent' | 'Builder' | 'Developer' || 'Owner',
+    role: property.owner_role as 'Owner' | 'Agent' | 'Agency' | 'Builder' | 'Developer' || 'Owner',
     whatsappUpdates: false,
     propertyType: property.property_type === 'commercial' || property.property_type === 'office' || property.property_type === 'shop' || property.property_type === 'warehouse' ? 'Commercial' : 
                   property.property_type === 'plot' || property.property_type === 'agriculture_lands' ? 'Land/Plot' : 'Residential',

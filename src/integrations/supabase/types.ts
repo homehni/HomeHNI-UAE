@@ -2796,6 +2796,8 @@ export type Database = {
         | "lead_manager"
         | "owner"
         | "agent"
+        | "agency"
+        | "builder"
       content_type:
         | "homepage"
         | "properties"
@@ -2971,6 +2973,8 @@ export const Constants = {
         "lead_manager",
         "owner",
         "agent",
+        "agency",
+        "builder",
       ],
       content_type: [
         "homepage",
