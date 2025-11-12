@@ -64,6 +64,15 @@ type GoogleMaps = {
 };
 type GoogleNS = { maps?: GoogleMaps };
 type WindowWithGoogle = Window & { google?: GoogleNS };
+
+// Hero image carousel images
+const HERO_IMAGES = [
+  'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/hero-images/burj2.jpg',
+  'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/hero-images/hero1.jpg',
+  'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/hero-images/hero2.jpg',
+  'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/hero-images/hero3.jpg',
+];
+
 const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   // Feature flags for merging Commercial & Land/Plot into Buy/Rent tabs
   const MERGE_COMM_LAND_IN_BUY_RENT = true; // Keep true for new behavior
@@ -97,6 +106,18 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [isMobile, setIsMobile] = useState(false);
   const { content: cmsContent } = useCMSContent('hero-search');
   const desktopSearchRef = useRef<HTMLDivElement>(null);
+
+  // Hero image carousel state
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Auto-rotate hero images every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % HERO_IMAGES.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Detect mobile viewport
   useEffect(() => {
@@ -664,17 +685,29 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       {openDropdown && (
         <div className="fixed inset-0 z-40" onMouseDown={() => setOpenDropdown(null)} />
       )}
-      {/* Hero Image Background - mobile responsive with UAE theme */}
-      <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-hidden" style={{
-      backgroundImage: `url(${cmsContent?.content?.heroImage || 'https://smyojibmvrhfbwodvobw.supabase.co/storage/v1/object/public/hero-images/burj2.jpg'})`,
-      backgroundPosition: 'center center',
-      backgroundSize: 'cover',
-      position: 'relative'
-    }}>
-      {/* Subtle leaf green overlay for UAE theme - very light */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#ef4444]/10 to-[#dc2626]/10" />
-      {/* Additional depth overlay for better text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent" />
+      {/* Hero Image Background - mobile responsive with UAE theme - Carousel - Extended to cover whitespace */}
+      <div className="relative min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] pb-8 sm:pb-10 md:pb-12 bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-visible">
+        {/* Carousel container with all images - extended to cover whitespace below */}
+        <div className="absolute inset-0" style={{ bottom: '-2rem' }}>
+          {HERO_IMAGES.map((image, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out ${
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{
+                backgroundImage: `url(${image})`,
+                backgroundPosition: 'center center',
+                backgroundSize: 'cover',
+                bottom: '-2rem',
+              }}
+            />
+          ))}
+        </div>
+        {/* Subtle leaf green overlay for UAE theme - very light */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#ef4444]/10 to-[#dc2626]/10 z-10" style={{ bottom: '-2rem' }} />
+        {/* Additional depth overlay for better text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent z-10" style={{ bottom: '-2rem' }} />
     {/* Mobile Search Section - opens full-screen overlay */}
   <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50" ref={mobileSearchContainerRef}>
           <div className="bg-white rounded-lg shadow-xl border border-gray-100">
@@ -1617,8 +1650,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         </div>
       </div>
       
-      {/* White background section - mobile responsive */}
-      <div className="bg-white pt-2 sm:pt-4 md:pt-10 pb-4 sm:pb-8 mx-0 px-0 mb-2 sm:mb-4 py-[6px]">
+      {/* Spacing section - now with transparent background to show hero image */}
+      <div className="relative -mt-8 sm:-mt-10 md:-mt-12 pt-2 sm:pt-4 md:pt-10 pb-4 sm:pb-8 mx-0 px-0 mb-2 sm:mb-4 py-[6px] z-0">
         <div className="container mx-auto px-2 sm:px-4">
           {/* This space allows the search section to overlap properly */}
         </div>
