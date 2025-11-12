@@ -808,13 +808,16 @@ const PropertySearch = () => {
     const apiKey = 'AIzaSyD2rlXeHN4cm0CQD-y4YGTsob9a_27YcwY';
     const loadGoogleMaps = () => {
       return new Promise((resolve, reject) => {
-  const w = window as WindowWithGoogle;
-  if (w.google?.maps?.places) {
+        const w = window as WindowWithGoogle;
+        if (w.google?.maps?.places) {
           resolve(true);
           return;
         }
+        const countryConfig = getCurrentCountryConfig();
+        const region = countryConfig.code || 'AE';
+        const language = countryConfig.language ? `${countryConfig.language}-${region}` : 'en';
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&region=${region}&language=${language}`;
         script.async = true;
         script.defer = true;
         script.onload = () => resolve(true);
@@ -827,19 +830,54 @@ const PropertySearch = () => {
       if (isSearchLocked) return; // Don't initialize if search is locked
       if (!w.google?.maps?.places || !locationInputRef.current) return;
       
-      const getOptions = () => ({
-        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
-        types: ['geocode'],
-        componentRestrictions: {
-          country: 'in' as const
-        }
-      });
+      const getOptions = () => {
+        const countryConfig = getCurrentCountryConfig();
+        const countryCode = countryConfig.code.toLowerCase();
+        console.log('🌍 Search Results - Autocomplete country restriction:', countryCode, 'for domain:', window.location.hostname);
+        return {
+          fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+          types: ['geocode'],
+          componentRestrictions: {
+            country: countryCode
+          }
+        };
+      };
       
       const autocomplete = new w.google!.maps!.places!.Autocomplete(locationInputRef.current, getOptions());
       
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         console.log('🔍 Google Places - Place selected:', place);
+        
+        // Validate country code from address components
+        const countryConfig = getCurrentCountryConfig();
+        const expectedCountryCode = countryConfig.code.toLowerCase();
+        let isValidCountry = false;
+        
+        if (place?.address_components) {
+          const countryComponent = place.address_components.find((comp: GPlaceComponent) =>
+            comp.types.includes('country')
+          );
+          
+          if (countryComponent) {
+            const selectedCountryCode = countryComponent.short_name.toLowerCase();
+            isValidCountry = selectedCountryCode === expectedCountryCode;
+            console.log('🌍 Search Results - Country validation:', {
+              selected: selectedCountryCode,
+              expected: expectedCountryCode,
+              isValid: isValidCountry
+            });
+            
+            if (!isValidCountry) {
+              console.warn('⛔ Search Results - Country mismatch! Selected:', selectedCountryCode, 'Expected:', expectedCountryCode);
+              // Clear the input and show error
+              if (locationInputRef.current) locationInputRef.current.value = '';
+              updateFilter('location', '');
+              setTempLocationText('');
+              return;
+            }
+          }
+        }
         
         let locationValue = place?.formatted_address || place?.name || '';
         console.log('🔍 Google Places - Initial value:', locationValue);
