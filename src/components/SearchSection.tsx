@@ -1307,30 +1307,44 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
        The header is rendered earlier with z-50; previously both had z-50,
        causing the search (later in DOM) to overlay dropdown menus.
        Lowering to z-30 resolves stacking without changing layout. */}
-  <div className="hidden sm:block absolute left-0 right-0 bottom-0 translate-y-3 md:translate-y-8 lg:translate-y-8 xl:translate-y-6 2xl:translate-y-3 z-30 transform-gpu will-change-transform">
+  <div className="hidden sm:block absolute left-0 right-0 top-[65%] -translate-y-1/2 z-30 transform-gpu will-change-transform">
           <div className="max-w-full md:max-w-4xl lg:max-w-5xl xl:max-w-4xl mx-auto px-4 sm:px-6">
             <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto">
               {/* Navigation Tabs */}
-              <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible">
+              <div className="bg-transparent rounded-xl overflow-visible">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 bg-transparent p-0 h-auto rounded-none border-b border-gray-200">
-                    {navigationTabs.map(tab => <TabsTrigger key={tab.id} value={tab.id} className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold transition-all rounded-none border-b-2 border-transparent data-[state=active]:border-brand-red data-[state=active]:text-brand-red data-[state=active]:bg-brand-red/5 data-[state=active]:font-bold hover:bg-brand-red/5 hover:text-brand-red">
+                  <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1 h-auto rounded-lg shadow-sm mb-3">
+                    {navigationTabs.map((tab, index) => (
+                      <TabsTrigger 
+                        key={tab.id} 
+                        value={tab.id} 
+                        className={`px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-semibold transition-all duration-200 ${
+                          index === 0 
+                            ? 'rounded-l-md rounded-r-none' 
+                            : 'rounded-r-md rounded-l-none'
+                        } ${
+                          tab.id === activeTab
+                            ? 'bg-purple-50 text-purple-800 font-bold border-2 border-brand-red'
+                            : 'bg-transparent text-gray-600 hover:text-gray-800 border-2 border-transparent'
+                        }`}
+                      >
                         {tab.label}
-                      </TabsTrigger>)}
+                      </TabsTrigger>
+                    ))}
                   </TabsList>
 
-                  <TabsContent value={activeTab} className="mt-0 px-4 sm:px-6 py-4 bg-white rounded-b-xl">
+                  <TabsContent value={activeTab} className="mt-0 px-0 py-0 bg-transparent rounded-b-xl">
                     {/* Unified Search Box with inline filters */}
-                    <div ref={desktopSearchRef} className="relative mb-4 overflow-visible">
+                    <div ref={desktopSearchRef} className="relative mb-3 overflow-visible">
                       <div
                         className="relative w-full overflow-visible"
                       >
                       {/* Search row with red border and button */}
                         <div className="flex items-center gap-2">
-                        <div className="relative px-4 pt-3 pb-2 pl-12 pr-4 flex-1 border-2 border-brand-red/40 rounded-xl bg-white shadow-md focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all duration-200 hover:shadow-lg hover:border-brand-red/60 overflow-visible" onClick={() => inputRef.current?.focus()}>
+                        <div className="relative px-3 py-1.5 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
-                          <MapPin className="absolute left-0 -ml-8 text-brand-red pointer-events-none flex-shrink-0" size={18} />
+                          <MapPin className="absolute left-0 -ml-5 text-brand-red pointer-events-none flex-shrink-0" size={14} />
                           <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0 relative">
                             <input
                               ref={inputRef}
@@ -1350,7 +1364,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 }
                               }}
                               placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Search locality...'}
-                              className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-500 font-medium"
+                              className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-700 font-medium"
                               style={{ appearance: "none" }}
                             />
                             {/* Error message for desktop */}
@@ -1387,17 +1401,17 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         </div>
 
                         {/* Filter row outside red border */}
-                        <div className="mt-3">
+                        <div className="mt-2">
                           {/* Scrollable container for tablet with visible scrollbar, grid for desktop */}
                           <div className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible filter-scroll-container">
-                            <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-2 sm:gap-3 w-full min-w-max lg:min-w-0 pb-2">
+                            <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-1.5 sm:gap-2 w-full min-w-max lg:min-w-0">
                             {/* Property type: Property Type or Land/Space Type */}
                             <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('propertyType'); }}>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'propertyType' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'propertyType' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
@@ -1443,7 +1457,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'bedroom' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">Bedroom</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
@@ -1491,7 +1505,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'availability' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
                                     >
                                       <span className="text-sm font-medium">Availability</span>
                                       <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
@@ -1535,7 +1549,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`flex-shrink-0 lg:w-full gap-2 px-5 py-2 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                      className={`flex-shrink-0 lg:w-full gap-2 px-3 py-1.5 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap bg-white/80 backdrop-blur-md ${openDropdown === 'construction' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
                                     >
                                       <span className="text-sm font-medium">Property Status</span>
                                       <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
@@ -1582,7 +1596,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'furnishing' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'furnishing' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">Furnishing</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
@@ -1627,7 +1641,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-4 py-2 rounded-lg border transition-all duration-200 hover:shadow-sm ${openDropdown === 'budget' ? 'bg-blue-50 border-blue-400 shadow-sm' : 'border-gray-300 hover:border-gray-400'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'budget' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">Budget</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
@@ -1655,7 +1669,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <input
                                       type="number"
                                       inputMode="numeric"
-                                      className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
+                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
                                       value={budget[0]}
                                       onClick={(e) => e.stopPropagation()}
                                       onPointerDown={(e) => e.stopPropagation()}
@@ -1676,7 +1690,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <input
                                       type="number"
                                       inputMode="numeric"
-                                      className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
+                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
                                       value={budget[1]}
                                       onClick={(e) => e.stopPropagation()}
                                       onPointerDown={(e) => e.stopPropagation()}

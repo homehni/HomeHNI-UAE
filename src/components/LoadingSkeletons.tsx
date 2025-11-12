@@ -33,27 +33,6 @@ export const FeaturedPropertiesSkeleton = () => (
   </section>
 );
 
-export const RealEstateSliderSkeleton = () => (
-  <section className="pb-4 -mt-4 md:-mt-6 bg-gradient-to-br from-background to-secondary/20">
-    <div className="container mx-auto px-4">
-      <div className="relative max-w-6xl mx-auto">
-        <div className="flex gap-4 overflow-x-auto px-4 py-2">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex-none w-48 bg-card rounded-xl shadow-lg overflow-hidden">
-              <Skeleton className="h-32 w-full" />
-              <div className="p-4">
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-3/4" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
 export const HomeServicesSkeleton = () => (
   <section className="py-8 md:py-12 bg-white relative">
     <div className="container mx-auto px-4">

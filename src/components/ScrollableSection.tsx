@@ -77,13 +77,13 @@ const ScrollableSection: React.FC<ScrollableSectionProps> = ({
       className="flex-none w-60 bg-card rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105 h-48"
       onClick={() => onItemClick?.(item.id)}
     >
-      <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-4 mt-2 md:mt-0">
+      <div className="h-32 overflow-hidden bg-white flex items-center justify-center p-0 mt-2 md:mt-0">
         {(item.logo || item.image) ? (
           <img
             src={item.logo || item.image}
             alt={`${item.name}`}
             loading="lazy"
-            className="w-full h-full object-contain"
+            className={`w-full h-full ${item.logo ? 'object-contain p-4' : 'object-cover'}`}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
