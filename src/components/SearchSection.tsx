@@ -803,8 +803,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         </div>
         {/* Subtle leaf green overlay for UAE theme - very light */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#ef4444]/10 to-[#dc2626]/10 z-10" style={{ bottom: '-2rem' }} />
-        {/* Additional depth overlay for better text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent z-10" style={{ bottom: '-2rem' }} />
     {/* Mobile Search Section - opens full-screen overlay */}
   <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50" ref={mobileSearchContainerRef}>
           <div className="bg-white rounded-lg shadow-xl border border-gray-100">
@@ -1341,7 +1339,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       >
                       {/* Search row with red border and button */}
                         <div className="flex items-center gap-2">
-                        <div className="relative px-3 py-1.5 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
+                        <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
                           <MapPin className="absolute left-0 -ml-5 text-brand-red pointer-events-none flex-shrink-0" size={14} />
@@ -1391,7 +1389,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         {/* Compact Search Button */}
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center h-9 w-9 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                          className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
                           aria-label="Search"
                           onClick={handleSearch}
                           disabled={selectedLocations.length === 0}
