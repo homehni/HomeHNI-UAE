@@ -319,18 +319,23 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       
       let autocompleteInstance: GAutocomplete | null = null;
       
-      const getOptions = () => ({
-        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
-        types: ['geocode'],
-        componentRestrictions: {
-          country: getCurrentCountryConfig().code.toLowerCase()
-        },
-        ...(cityBounds && selectedCity && { 
-          bounds: cityBounds, 
-          strictBounds: true,
-          // Add city restriction hint
-        })
-      });
+      const getOptions = () => {
+        const countryConfig = getCurrentCountryConfig();
+        const countryCode = countryConfig.code.toLowerCase();
+        console.log('🌍 Autocomplete country restriction:', countryCode, 'for domain:', window.location.hostname);
+        return {
+          fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+          types: ['geocode'],
+          componentRestrictions: {
+            country: countryCode
+          },
+          ...(cityBounds && selectedCity && { 
+            bounds: cityBounds, 
+            strictBounds: true,
+            // Add city restriction hint
+          })
+        };
+      };
       const inputs = [inputRef.current].filter(Boolean) as HTMLInputElement[];
       inputs.forEach(el => {
         const ac = new w.google!.maps!.places!.Autocomplete(el, getOptions());
@@ -338,6 +343,36 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         ac.addListener('place_changed', () => {
           const place = ac.getPlace();
           console.log('🔍 Google Places - Place selected:', place);
+          
+          // Validate country code from address components
+          const countryConfig = getCurrentCountryConfig();
+          const expectedCountryCode = countryConfig.code.toLowerCase();
+          let isValidCountry = false;
+          
+          if (place?.address_components) {
+            const countryComponent = place.address_components.find((comp: GPlaceComponent) =>
+              comp.types.includes('country')
+            );
+            
+            if (countryComponent) {
+              const selectedCountryCode = countryComponent.short_name.toLowerCase();
+              isValidCountry = selectedCountryCode === expectedCountryCode;
+              console.log('🌍 Country validation:', {
+                selected: selectedCountryCode,
+                expected: expectedCountryCode,
+                isValid: isValidCountry
+              });
+              
+              if (!isValidCountry) {
+                console.warn('⛔ Country mismatch! Selected:', selectedCountryCode, 'Expected:', expectedCountryCode);
+                setLocationError(`Please select a location in ${countryConfig.name}`);
+                setIsValidLocality(false);
+                if (el) el.value = '';
+                setSearchQuery('');
+                return;
+              }
+            }
+          }
           
           // Mark as valid selection from Google Places
           setIsValidLocality(true);
@@ -426,7 +461,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 geocoder.geocode(
                   { 
                     address: `${cityName}, ${countryConfig.name}`,
-                    componentRestrictions: { country: countryConfig.code }
+                    componentRestrictions: { country: countryConfig.code.toLowerCase() }
                   },
                   (results, status) => {
                     if (status === 'OK' && results && results[0]?.geometry?.viewport) {
@@ -472,11 +507,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     if (!w.google?.maps?.places || !inputRef.current) return;
     
     // Recreate autocomplete with strict bounds
+    const countryConfig = getCurrentCountryConfig();
+    const countryCode = countryConfig.code.toLowerCase();
+    console.log('🌍 Bounded autocomplete country restriction:', countryCode);
     const options = {
       fields: ['formatted_address', 'geometry', 'name', 'address_components'],
       types: ['geocode'],
       componentRestrictions: {
-        country: getCurrentCountryConfig().code.toLowerCase()
+        country: countryCode
       },
       bounds: cityBounds,
       strictBounds: true
@@ -486,6 +524,35 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     ac.addListener('place_changed', () => {
       const place = ac.getPlace();
       console.log('🔍 Google Places (Bounded) - Place selected:', place);
+      
+      // Validate country code from address components
+      const expectedCountryCode = countryCode;
+      let isValidCountry = false;
+      
+      if (place?.address_components) {
+        const countryComponent = place.address_components.find((comp: GPlaceComponent) =>
+          comp.types.includes('country')
+        );
+        
+        if (countryComponent) {
+          const selectedCountryCode = countryComponent.short_name.toLowerCase();
+          isValidCountry = selectedCountryCode === expectedCountryCode;
+          console.log('🌍 Bounded - Country validation:', {
+            selected: selectedCountryCode,
+            expected: expectedCountryCode,
+            isValid: isValidCountry
+          });
+          
+          if (!isValidCountry) {
+            console.warn('⛔ Bounded - Country mismatch! Selected:', selectedCountryCode, 'Expected:', expectedCountryCode);
+            setLocationError(`Please select a location in ${countryConfig.name}`);
+            setIsValidLocality(false);
+            if (inputRef.current) inputRef.current.value = '';
+            setSearchQuery('');
+            return;
+          }
+        }
+      }
       
       let value = place?.formatted_address || place?.name || '';
       let cityName = '';
@@ -564,6 +631,36 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     const ac = new w.google!.maps!.places!.Autocomplete(mobileInputRef.current, options);
     ac.addListener('place_changed', () => {
       const place = ac.getPlace();
+      
+      // Validate country code from address components
+      const expectedCountryCode = countryConfig.code.toLowerCase();
+      let isValidCountry = false;
+      
+      if (place?.address_components) {
+        const countryComponent = place.address_components.find((comp: GPlaceComponent) =>
+          comp.types.includes('country')
+        );
+        
+        if (countryComponent) {
+          const selectedCountryCode = countryComponent.short_name.toLowerCase();
+          isValidCountry = selectedCountryCode === expectedCountryCode;
+          console.log('🌍 Mobile - Country validation:', {
+            selected: selectedCountryCode,
+            expected: expectedCountryCode,
+            isValid: isValidCountry
+          });
+          
+          if (!isValidCountry) {
+            console.warn('⛔ Mobile - Country mismatch! Selected:', selectedCountryCode, 'Expected:', expectedCountryCode);
+            setLocationError(`Please select a location in ${countryConfig.name}`);
+            setIsValidLocality(false);
+            if (mobileInputRef.current) mobileInputRef.current.value = '';
+            setSearchQuery('');
+            return;
+          }
+        }
+      }
+      
       let value = place?.formatted_address || place?.name || '';
       let cityName = '';
       if (value && place?.address_components) {
