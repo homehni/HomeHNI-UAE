@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { calculateGSTAmount, calculateTotalWithGST, formatCurrencyDetailed } from '@/utils/gstCalculator';
+import { calculateGSTAmount, calculateTotalWithGST, formatCurrencyDetailed, getTaxRate } from '@/utils/gstCalculator';
+import { getCurrentCountryConfig } from '@/services/domainCountryService';
 
 interface GSTDisplayProps {
   basePriceInPaise: number;
@@ -8,7 +9,11 @@ interface GSTDisplayProps {
 
 const GSTDisplay: React.FC<GSTDisplayProps> = ({ basePriceInPaise, className = "" }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const gstAmount = calculateGSTAmount(basePriceInPaise);
+  const countryConfig = getCurrentCountryConfig();
+  const taxRate = getTaxRate();
+  const taxLabel = countryConfig.currency === 'AED' ? 'VAT' : 'GST';
+  const taxPercentage = Math.round(taxRate * 100);
+  const taxAmount = calculateGSTAmount(basePriceInPaise);
   const totalAmount = calculateTotalWithGST(basePriceInPaise);
 
   return (
@@ -18,7 +23,7 @@ const GSTDisplay: React.FC<GSTDisplayProps> = ({ basePriceInPaise, className = "
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        +18% GST
+        +{taxPercentage}% {taxLabel}
       </div>
       
       {isHovered && (
@@ -30,8 +35,8 @@ const GSTDisplay: React.FC<GSTDisplayProps> = ({ basePriceInPaise, className = "
             </div>
             
             <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">GST @ 18%</span>
-              <span className="font-medium">{formatCurrencyDetailed(gstAmount)}</span>
+              <span className="text-sm text-muted-foreground">{taxLabel} @ {taxPercentage}%</span>
+              <span className="font-medium">{formatCurrencyDetailed(taxAmount)}</span>
             </div>
             
             <hr className="border-border" />

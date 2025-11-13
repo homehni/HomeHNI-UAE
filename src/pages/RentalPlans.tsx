@@ -65,7 +65,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
           plan_name: planName,
           amount_paise: 0, // Free plan has 0 cost
           amount_rupees: 0,
-          currency: 'INR',
+          currency: 'AED',
           status: 'success',
           payment_method: 'free',
           payment_date: currentDate.toISOString(),
@@ -114,108 +114,108 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
     residential: [
       {
         name: "Basic",
-        price: "₹99",
-        originalPrice: "₹199",
+        price: "AED 4",
+        originalPrice: "AED 9",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "SEARCH ASSISTANCE", 
         badgeColor: "bg-blue-500",
-        amountPaise: 9900,
+        amountPaise: 400,
         isFree: true,
       },
       {
         name: "Standard", 
-        price: "₹499",
-        gst: "+18% GST",
+        price: "AED 22",
+        gst: "+5% VAT",
         badge: "VISIT COORDINATION",
         badgeColor: "bg-green-500", 
-        amountPaise: 49900,
+        amountPaise: 2200,
       },
       {
         name: "Premium",
-        price: "₹999",
-        gst: "+18% GST",
+        price: "AED 44",
+        gst: "+5% VAT",
         badge: "EXPERT ASSISTANCE",
         badgeColor: "bg-purple-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
       }
     ],
     commercial: [
       {
         name: "Business Basic",
-        price: "₹1,499",
-        gst: "+18% GST",
+        price: "AED 67",
+        gst: "+5% VAT",
         badge: "COMMERCIAL SEARCH", 
         badgeColor: "bg-blue-600",
-        amountPaise: 149900,
+        amountPaise: 6700,
       },
       {
         name: "Business Standard", 
-        price: "₹2,499",
-        gst: "+18% GST",
+        price: "AED 111",
+        gst: "+5% VAT",
         badge: "OFFICE COORDINATION",
         badgeColor: "bg-green-600", 
-        amountPaise: 249900,
+        amountPaise: 11100,
       },
       {
         name: "Business Premium",
-        price: "₹3,999",
-        gst: "+18% GST",
+        price: "AED 178",
+        gst: "+5% VAT",
         badge: "CORPORATE ASSISTANCE",
         badgeColor: "bg-purple-600",
-        amountPaise: 399900,
+        amountPaise: 17800,
       }
     ],
     industrial: [
       {
         name: "Industrial Basic",
-        price: "₹2,999",
-        gst: "+18% GST",
+        price: "AED 133",
+        gst: "+5% VAT",
         badge: "FACILITY SEARCH", 
         badgeColor: "bg-gray-600",
-        amountPaise: 299900,
+        amountPaise: 13300,
       },
       {
         name: "Industrial Standard", 
-        price: "₹4,999",
-        gst: "+18% GST",
+        price: "AED 222",
+        gst: "+5% VAT",
         badge: "SITE COORDINATION",
         badgeColor: "bg-slate-600", 
-        amountPaise: 499900,
+        amountPaise: 22200,
       },
       {
         name: "Industrial Premium",
-        price: "₹7,999",
-        gst: "+18% GST",
+        price: "AED 356",
+        gst: "+5% VAT",
         badge: "INDUSTRIAL EXPERTISE",
         badgeColor: "bg-zinc-700",
-        amountPaise: 799900,
+        amountPaise: 35600,
       }
     ],
     agricultural: [
       {
         name: "Farm Basic",
-        price: "₹799",
-        gst: "+18% GST",
+        price: "AED 36",
+        gst: "+5% VAT",
         badge: "LAND SEARCH", 
         badgeColor: "bg-green-700",
-        amountPaise: 79900,
+        amountPaise: 3600,
       },
       {
         name: "Farm Standard", 
-        price: "₹1,299",
-        gst: "+18% GST",
+        price: "AED 58",
+        gst: "+5% VAT",
         badge: "RURAL COORDINATION",
         badgeColor: "bg-emerald-600", 
-        amountPaise: 129900,
+        amountPaise: 5800,
       },
       {
         name: "Farm Premium",
-        price: "₹1,999",
-        gst: "+18% GST",
+        price: "AED 89",
+        gst: "+5% VAT",
         badge: "AGRI EXPERTISE",
         badgeColor: "bg-lime-700",
-        amountPaise: 199900,
+        amountPaise: 8900,
       }
     ]
   };
@@ -403,7 +403,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                                 onClick={() => handleFreeSubscription(`Rental - ${plan.name}`)}
                                 className={`w-full ${
                                   selectedTenantPlan[category as keyof typeof selectedTenantPlan] === index 
-                                    ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                    ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                     : 'bg-transparent text-foreground border border-border hover:bg-muted'
                                 }`}
                               >
@@ -416,7 +416,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                                 amountPaise={calculateTotalWithGST(plan.amountPaise)}
                                 className={`w-full ${
                                   selectedTenantPlan[category as keyof typeof selectedTenantPlan] === index 
-                                    ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                    ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                     : 'bg-transparent text-foreground border border-border hover:bg-muted'
                                 }`}
                               />

@@ -91,7 +91,7 @@ const Header = () => {
                 <div className="absolute left-1/2 -translate-x-1/2 z-10">
                   <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     <span>Post property</span>
-                    <span className="ml-0.5 sm:ml-1 bg-red-500 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
+                    <span className="ml-0.5 sm:ml-1 bg-[#800000] text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
               )}
@@ -105,7 +105,7 @@ const Header = () => {
                       <Button variant="ghost" className={`flex items-center space-x-1 p-1 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                         <Avatar className="h-8 w-8">
                           <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                          <AvatarFallback className="bg-brand-red text-white text-sm">
+                          <AvatarFallback className="bg-[#800000] text-white text-sm">
                             {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                           </AvatarFallback>
                         </Avatar>
@@ -212,7 +212,7 @@ const Header = () => {
                 <div>
                   <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-sm transition-all duration-500 whitespace-nowrap min-w-[75px] xl:min-w-[130px] ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     Post property
-                    <span className="ml-1 bg-red-500 text-white text-[8px] xl:text-[10px] px-1 xl:px-1.5 py-0.5 rounded-full font-medium">Free</span>
+                    <span className="ml-1 bg-[#800000] text-white text-[8px] xl:text-[10px] px-1 xl:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
               )}
@@ -226,7 +226,7 @@ const Header = () => {
                     variant="outline" 
                     size="sm" 
                     onClick={() => navigate('/auth')}
-                    className={`font-medium px-1.5 xl:px-3 py-1.5 text-[10px] xl:text-sm transition-all duration-500 whitespace-nowrap ${isScrolled ? 'bg-white text-brand-red border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
+                    className={`font-medium px-1.5 xl:px-3 py-1.5 text-[10px] xl:text-sm transition-all duration-500 whitespace-nowrap ${isScrolled ? 'bg-white text-[#800000] border-gray-300 hover:bg-gray-50' : 'bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30'}`}
                   >
                     <LogIn className="mr-0.5 xl:mr-1 h-3 w-3 xl:h-4 xl:w-4" />
                     <span className="hidden xl:inline">Login/Sign Up</span>
@@ -242,7 +242,7 @@ const Header = () => {
                     <Button variant="ghost" className={`flex items-center space-x-1 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                        <AvatarFallback className="bg-brand-red text-white text-base">
+                        <AvatarFallback className="bg-[#800000] text-white text-base">
                           {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>

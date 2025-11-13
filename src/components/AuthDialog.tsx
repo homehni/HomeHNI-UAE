@@ -270,7 +270,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                     </div>
                   )}
 
-                  <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
+                  <Button type="submit" className="w-full h-10 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200">
                     Login
                   </Button>
                 </form>
@@ -278,7 +278,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                 <div className="text-center">
                   <Button 
                     variant="link" 
-                    className="text-sm text-brand-red hover:underline p-0 h-auto"
+                    className="text-sm text-[#800000] hover:underline p-0 h-auto"
                     onClick={() => setShowForgotPassword(true)}
                   >
                     Forgot password?
@@ -402,7 +402,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                     </div>
                   )}
 
-                  <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
+                  <Button type="submit" className="w-full h-9 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200 mt-3">
                     Create Account
                   </Button>
                 </form>
@@ -509,7 +509,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                     <Button 
                       type="submit" 
                       disabled={isResetLoading}
-                      className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
+                      className="w-full h-10 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200"
                     >
                       {isResetLoading ? 'Sending...' : 'Send Reset Link'}
                     </Button>

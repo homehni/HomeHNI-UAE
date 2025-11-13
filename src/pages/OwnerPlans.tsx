@@ -67,7 +67,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
           plan_name: planName,
           amount_paise: 0, // Free plan has 0 cost
           amount_rupees: 0,
-          currency: 'INR',
+          currency: 'AED',
           status: 'success',
           payment_method: 'free',
           payment_date: currentDate.toISOString(),
@@ -101,125 +101,125 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
     residential: [
       {
         name: "Silver",
-        price: "₹100",
-        originalPrice: "₹100",
+        price: "AED 4",
+        originalPrice: "AED 4",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "ON CALL ASSISTANCE",
         badgeColor: "bg-yellow-500",
-        amountPaise: 10000,
+        amountPaise: 400,
         isFree: true,
       },
       {
         name: "Gold",
-        price: "₹5,899", 
-        gst: "+18% GST",
+        price: "AED 262", 
+        gst: "+5% VAT",
         badge: "HOUSE VISIT ASSISTANCE",
         badgeColor: "bg-green-500",
-        amountPaise: 589900,
+        amountPaise: 26200,
       },
       {
         name: "Platinum",
-        price: "₹6,999",
-        gst: "+18% GST", 
+        price: "AED 311",
+        gst: "+5% VAT", 
         badge: "EXPERT GUIDANCE",
         badgeColor: "bg-red-500",
-        amountPaise: 699900,
+        amountPaise: 31100,
       },
       {
         name: "Diamond",
-        price: "₹10,999",
-        gst: "+18% GST",
+        price: "AED 490",
+        gst: "+5% VAT",
         badge: "PERSONAL FIELD ASSISTANT", 
         badgeColor: "bg-purple-500",
-        amountPaise: 1099900,
+        amountPaise: 49000,
       }
     ],
     commercial: [
       {
         name: "Business Basic",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "COMMERCIAL SUPPORT",
         badgeColor: "bg-blue-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Business Pro",
-        price: "₹15,999", 
-        gst: "+18% GST",
+        price: "AED 710", 
+        gst: "+5% VAT",
         badge: "PREMIUM MARKETING",
         badgeColor: "bg-indigo-500",
-        amountPaise: 1599900,
+        amountPaise: 71000,
       },
       {
         name: "Business Elite",
-        price: "₹25,999",
-        gst: "+18% GST", 
+        price: "AED 1,160",
+        gst: "+5% VAT", 
         badge: "DEDICATED MANAGER",
         badgeColor: "bg-purple-600",
-        amountPaise: 2599900,
+        amountPaise: 116000,
       }
     ],
     industrial: [
       {
         name: "Industrial Starter",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "INDUSTRIAL FOCUS",
         badgeColor: "bg-gray-600",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Industrial Growth",
-        price: "₹22,999", 
-        gst: "+18% GST",
+        price: "AED 1,020", 
+        gst: "+5% VAT",
         badge: "ENTERPRISE LEVEL",
         badgeColor: "bg-slate-700",
-        amountPaise: 2299900,
+        amountPaise: 102000,
       },
       {
         name: "Industrial Premium",
-        price: "₹35,999",
-        gst: "+18% GST", 
+        price: "AED 1,600",
+        gst: "+5% VAT", 
         badge: "CUSTOM SOLUTIONS",
         badgeColor: "bg-zinc-800",
-        amountPaise: 3599900,
+        amountPaise: 160000,
       }
     ],
     agricultural: [
       {
         name: "Farm Basic",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "AGRICULTURAL LAND",
         badgeColor: "bg-green-600",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Farm Pro",
-        price: "₹8,999", 
-        gst: "+18% GST",
+        price: "AED 400", 
+        gst: "+5% VAT",
         badge: "CROP ADVISORY",
         badgeColor: "bg-emerald-600",
-        amountPaise: 899900,
+        amountPaise: 40000,
       },
       {
         name: "Farm Premium",
-        price: "₹15,999",
-        gst: "+18% GST", 
+        price: "AED 710",
+        gst: "+5% VAT", 
         badge: "FULL FARM SUPPORT",
         badgeColor: "bg-teal-600",
-        amountPaise: 1599900,
+        amountPaise: 71000,
       }
     ]
   };
@@ -470,7 +470,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
                             onClick={() => handleFreeSubscription(`Owner — ${plan.name}`)}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                           >
@@ -484,7 +484,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
                             notes={{ plan: plan.name, category: "owner", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                           />
@@ -666,7 +666,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
       </section>
 
       {/* Support Callout */}
-      <section className="py-12 px-4 bg-brand-red text-primary-foreground">
+      <section className="py-12 px-4 bg-[#800000] text-white">
         <div className="max-w-4xl mx-auto text-center">
           <Phone className="w-8 h-8 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-4">Need Assistance?</h3>

@@ -188,7 +188,7 @@ const Footer = ({
                   onClick={() => setActiveTab(tab)}
                   className={`font-poppins px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === tab
-                      ? 'border-brand-red text-brand-red bg-brand-red/5'
+                      ? 'border-[#800000] text-[#800000] bg-[#800000]/5'
                       : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
                   }`}
                 >
@@ -208,7 +208,7 @@ const Footer = ({
                     <li key={linkIndex}>
                       <button 
                         onClick={() => handleLinkClick(link)} 
-                        className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left"
+                        className="text-xs text-gray-600 hover:text-[#800000] transition-colors leading-relaxed text-left"
                       >
                         {link}
                       </button>
@@ -226,7 +226,7 @@ const Footer = ({
               <h4 className="font-semibold text-gray-900 mb-3 text-sm">{section.title}</h4>
               <ul className="space-y-1">
                 {section.links.map((link, linkIndex) => <li key={linkIndex}>
-                    <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-brand-red transition-colors leading-relaxed text-left">
+                    <button onClick={() => handleLinkClick(link)} className="text-xs text-gray-600 hover:text-[#800000] transition-colors leading-relaxed text-left">
                       {link}
                     </button>
                   </li>)}
@@ -278,7 +278,7 @@ const Footer = ({
               <button 
                 key={index} 
                 onClick={() => handleLinkClick(service)} 
-                className="text-xs text-gray-600 hover:text-brand-red transition-colors text-left"
+                className="text-xs text-gray-600 hover:text-[#800000] transition-colors text-left"
               >
                 {service}
               </button>
@@ -297,7 +297,7 @@ const Footer = ({
       </p>
       <button
         onClick={handlePostPropertyClick}
-        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+        className="bg-[#800000] text-white px-6 py-2 rounded text-sm hover:bg-[#700000] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
       >
         Post for Free
       </button>
@@ -313,7 +313,7 @@ const Footer = ({
       </p>
       <button
         onClick={() => navigate('/search')}
-        className="bg-brand-red text-white px-6 py-2 rounded text-sm hover:bg-brand-red-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+        className="bg-[#800000] text-white px-6 py-2 rounded text-sm hover:bg-[#700000] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
       >
         Browse Listings
       </button>
@@ -325,18 +325,18 @@ const Footer = ({
         {/* Footer links and social media */}
         <div className="border-t border-gray-200 pt-6">
           <div className="flex flex-wrap justify-center gap-6 mb-6 text-sm">
-            <Link to="/about?tab=about" className="text-gray-600 hover:text-brand-red transition-colors">About Us</Link>
-            <Link to="/careers" className="text-gray-600 hover:text-brand-red transition-colors">Careers</Link>
-            <Link to="/blog" className="text-gray-600 hover:text-brand-red transition-colors">Blog</Link>
-            <Link to="/about?tab=contact" className="text-gray-600 hover:text-brand-red transition-colors">Contact Us</Link>
-            <Link to="/terms-and-conditions" className="text-gray-600 hover:text-brand-red transition-colors">Terms & Conditions</Link>
-            <Link to="/privacy-policy" className="text-gray-600 hover:text-brand-red transition-colors">Privacy Policy</Link>
-            <Link to="/cancellation-refunds" className="text-gray-600 hover:text-brand-red transition-colors">Cancellation & Refunds</Link>
-            <Link to="/shipping" className="text-gray-600 hover:text-brand-red transition-colors">Shipping</Link>
-            <Link to="/legal-compliance" className="text-gray-600 hover:text-brand-red transition-colors">Legal Compliance</Link>
-            {/* <Link to="/testimonials" className="text-gray-600 hover:text-brand-red transition-colors">Testimonials</Link> */}
-            <Link to="/sitemap" className="text-gray-600 hover:text-brand-red transition-colors">Sitemap</Link>
-            <Link to="/about?tab=faq" className="text-gray-600 hover:text-brand-red transition-colors">FAQs</Link>
+            <Link to="/about?tab=about" className="text-gray-600 hover:text-[#800000] transition-colors">About Us</Link>
+            <Link to="/careers" className="text-gray-600 hover:text-[#800000] transition-colors">Careers</Link>
+            <Link to="/blog" className="text-gray-600 hover:text-[#800000] transition-colors">Blog</Link>
+            <Link to="/about?tab=contact" className="text-gray-600 hover:text-[#800000] transition-colors">Contact Us</Link>
+            <Link to="/terms-and-conditions" className="text-gray-600 hover:text-[#800000] transition-colors">Terms & Conditions</Link>
+            <Link to="/privacy-policy" className="text-gray-600 hover:text-[#800000] transition-colors">Privacy Policy</Link>
+            <Link to="/cancellation-refunds" className="text-gray-600 hover:text-[#800000] transition-colors">Cancellation & Refunds</Link>
+            <Link to="/shipping" className="text-gray-600 hover:text-[#800000] transition-colors">Shipping</Link>
+            <Link to="/legal-compliance" className="text-gray-600 hover:text-[#800000] transition-colors">Legal Compliance</Link>
+            {/* <Link to="/testimonials" className="text-gray-600 hover:text-[#800000] transition-colors">Testimonials</Link> */}
+            <Link to="/sitemap" className="text-gray-600 hover:text-[#800000] transition-colors">Sitemap</Link>
+            <Link to="/about?tab=faq" className="text-gray-600 hover:text-[#800000] transition-colors">FAQs</Link>
           </div>
 
           {/* Company Info from CMS */}
@@ -377,7 +377,7 @@ const Footer = ({
           <div className="flex flex-col items-center gap-2 mb-6 font-poppins">
             <img src="/lovable-uploads/8b28a8cb-02f0-4e86-9ba6-1845c4372e1a.png" alt="Google Play and App Store" className="h-12" />
           <div className="text-center">
-              <p className="text-sm font-bold text-brand-red mb-1">🚀 Mobile Apps Coming Soon!</p>
+              <p className="text-sm font-bold text-[#800000] mb-1">🚀 Mobile Apps Coming Soon!</p>
               <p className="text-xs text-gray-600">Download our apps for the ultimate property experience</p>
             </div>
 
@@ -391,40 +391,40 @@ const Footer = ({
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Home HNI on Facebook"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+        className="group w-10 h-10 rounded-full ring-1 ring-[#800000]/40 bg-white hover:bg-[#800000] transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
       >
-        <Facebook className="w-5 h-5 text-brand-red group-hover:text-white" />
+        <Facebook className="w-5 h-5 text-[#800000] group-hover:text-white" />
       </a>
       <a
         href="https://x.com/homehni8"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Home HNI on X (Twitter)"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+        className="group w-10 h-10 rounded-full ring-1 ring-[#800000]/40 bg-white hover:bg-[#800000] transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
       >
-        <Twitter className="w-5 h-5 text-brand-red group-hover:text-white" />
+        <Twitter className="w-5 h-5 text-[#800000] group-hover:text-white" />
       </a>
       <a
         href="https://www.instagram.com/homehni/"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Home HNI on Instagram"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+        className="group w-10 h-10 rounded-full ring-1 ring-[#800000]/40 bg-white hover:bg-[#800000] transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
       >
-        <Instagram className="w-5 h-5 text-brand-red group-hover:text-white" />
+        <Instagram className="w-5 h-5 text-[#800000] group-hover:text-white" />
       </a>
       <a
         href="https://www.linkedin.com/in/homehni/"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Home HNI on LinkedIn"
-        className="group w-10 h-10 rounded-full ring-1 ring-brand-red/40 bg-white hover:bg-brand-red transition-all flex items-center justify-center hover:scale-110
-                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-red"
+        className="group w-10 h-10 rounded-full ring-1 ring-[#800000]/40 bg-white hover:bg-[#800000] transition-all flex items-center justify-center hover:scale-110
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
       >
-        <Linkedin className="w-5 h-5 text-brand-red group-hover:text-white" />
+        <Linkedin className="w-5 h-5 text-[#800000] group-hover:text-white" />
       </a>
     </div>
 
@@ -478,7 +478,7 @@ const Footer = ({
       href="https://ranazonai.com/"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-brand-red font-semibold underline hover:text-brand-red/80 transition-colors"
+      className="text-[#800000] font-semibold underline hover:text-[#800000]/80 transition-colors"
     >
       Ranazonai Technologies
     </a>

@@ -7,19 +7,19 @@ const Stats = () => {
   const defaultStats = [
     {
       icon: Home,
-      number: '1,000+',
+      number: '1000+',
       label: 'Properties Listed',
       color: 'text-brand-red'
     },
     {
       icon: Users,
-      number: '10,00+',
+      number: '1000+',
       label: 'Happy Customers',
       color: 'text-brand-maroon'
     },
     {
       icon: Building,
-      number: '15+',
+      number: '7+',
       label: 'Countries Covered',
       color: 'text-brand-red'
     },
@@ -65,7 +65,7 @@ const Stats = () => {
   })();
 
   return (
-    <section className="py-8 bg-gradient-to-r from-[#ef4444] to-[#dc2626]">
+    <section className="hidden md:block py-8 bg-gradient-to-r from-[#800000] to-[#700000]">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Users, Shield, Headphones, Video, BarChart3, Zap, Bell, Globe, FileText, TrendingUp } from 'lucide-react';
+import { Home, Users, Shield, Headphones, Video, BarChart3, Zap, Bell, Globe, FileText, TrendingUp, CreditCard, Building2, Megaphone, UserCheck, TrendingDown, Sparkles } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -22,56 +22,56 @@ const AgentPlans = () => {
     basic: [
       {
         name: "Basic Monthly",
-        price: "₹999/month",
-        originalPrice: "₹999/month",
+        price: "AED 44/month",
+        originalPrice: "AED 44/month",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "GETTING STARTED",
         badgeColor: "bg-blue-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Basic Quarterly", 
-        price: "₹7,999/quarter",
-        gst: "+18% GST",
+        price: "AED 356/quarter",
+        gst: "+5% VAT",
         badge: "POPULAR CHOICE",
         badgeColor: "bg-green-500",
-        amountPaise: 799900,
+        amountPaise: 35600,
       },
       {
         name: "Basic Yearly",
-        price: "₹24,999/year",
-        gst: "+18% GST", 
+        price: "AED 1,110/year",
+        gst: "+5% VAT", 
         badge: "BEST VALUE",
         badgeColor: "bg-purple-500",
-        amountPaise: 2499900,
+        amountPaise: 111000,
       }
     ],
     lifetime: [
       {
         name: "Lifetime Standard",
-        price: "₹79,999",
-        gst: "+18% GST",
+        price: "AED 3,560",
+        gst: "+5% VAT",
         badge: "FOR NEW AGENTS",
         badgeColor: "bg-yellow-500",
-        amountPaise: 7999900,
+        amountPaise: 356000,
       },
       {
         name: "Lifetime Platinum", 
-        price: "₹1,49,999",
-        gst: "+18% GST",
+        price: "AED 6,670",
+        gst: "+5% VAT",
         badge: "ENHANCED VISIBILITY",
         badgeColor: "bg-green-500",
-        amountPaise: 14999900,
+        amountPaise: 667000,
       },
       {
         name: "Lifetime VIP",
-        price: "₹2,49,999",
-        gst: "+18% GST", 
+        price: "AED 11,110",
+        gst: "+5% VAT", 
         badge: "EXCLUSIVE SERVICES",
         badgeColor: "bg-red-500",
-        amountPaise: 24999900,
+        amountPaise: 1111000,
       }
     ]
   };
@@ -149,12 +149,42 @@ const AgentPlans = () => {
   };
 
   const howItWorks = [
-    "Choose your Agent Plan",
-    "Get unlimited property listings access",
-    "Access marketing tools and resources",
-    "Connect with verified property leads",
-    "Grow your agent business exponentially",
-    "Enjoy lifetime benefits and support"
+    { 
+      title: "Choose your Agent Plan", 
+      icon: CreditCard,
+      description: "Select the plan that fits your business needs",
+      color: "from-blue-500 to-blue-600"
+    },
+    { 
+      title: "Get unlimited property listings access", 
+      icon: Building2,
+      description: "Access our complete property database",
+      color: "from-green-500 to-green-600"
+    },
+    { 
+      title: "Access marketing tools and resources", 
+      icon: Megaphone,
+      description: "Use professional marketing materials",
+      color: "from-purple-500 to-purple-600"
+    },
+    { 
+      title: "Connect with verified property leads", 
+      icon: UserCheck,
+      description: "Get quality leads from verified sources",
+      color: "from-orange-500 to-orange-600"
+    },
+    { 
+      title: "Grow your agent business exponentially", 
+      icon: TrendingUp,
+      description: "Scale your real estate business",
+      color: "from-red-500 to-red-600"
+    },
+    { 
+      title: "Enjoy lifetime benefits and support", 
+      icon: Sparkles,
+      description: "Get ongoing support and updates",
+      color: "from-indigo-500 to-indigo-600"
+    }
   ];
 
   const faqs = [
@@ -241,7 +271,7 @@ const AgentPlans = () => {
                           <Button 
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                             onClick={() => {
@@ -272,7 +302,7 @@ const AgentPlans = () => {
                                     plan_name: `Agent — ${plan.name} (Free)`,
                                     amount_paise: 0,
                                     amount_rupees: 0,
-                                    currency: 'INR',
+                                    currency: 'AED',
                                     status: 'success',
                                     payment_method: 'free',
                                     payment_date: currentDate.toISOString(),
@@ -307,7 +337,7 @@ const AgentPlans = () => {
                             notes={{ plan: plan.name, category: "agent", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                           />
@@ -476,18 +506,58 @@ const AgentPlans = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-12 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {howItWorks.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-10 h-10 bg-brand-red text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-3">
-                  {index + 1}
-                </div>
-                <p className="text-gray-700 text-sm">{step}</p>
-              </div>
-            ))}
+      <section className="py-12 px-4 bg-gradient-to-br from-gray-50 via-white to-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center mb-4">
+              <Sparkles className="w-8 h-8 text-[#800000] mr-2" />
+              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#800000] to-[#700000] bg-clip-text text-transparent">
+                How It Works
+              </h2>
+              <Sparkles className="w-8 h-8 text-[#800000] ml-2" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {howItWorks.map((step, index) => {
+              const IconComponent = step.icon;
+              return (
+                <Card key={index} className="group relative overflow-hidden border-2 border-transparent hover:border-[#800000]/30 transition-all duration-300 hover:shadow-xl bg-white hover:-translate-y-2">
+                  <CardContent className="p-6 md:p-8">
+                    {/* Step Number Badge */}
+                    <div className="absolute top-4 right-4 w-10 h-10 bg-gradient-to-br from-[#800000]/10 to-[#700000]/10 text-[#800000] rounded-full flex items-center justify-center text-sm font-bold border-2 border-[#800000]/20">
+                      {index + 1}
+                    </div>
+                    
+                    {/* Icon Container */}
+                    <div className="relative mb-4 flex justify-center">
+                      <div className={`w-14 h-14 mx-auto bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 relative`}>
+                        <IconComponent className="w-7 h-7 text-white" />
+                        {/* Decorative glow effect */}
+                        <div className="absolute inset-0 bg-white/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                      </div>
+                      {/* Decorative circles */}
+                      <div className={`absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br ${step.color} rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity`}></div>
+                      <div className={`absolute -bottom-1 -left-1 w-3 h-3 bg-gradient-to-br ${step.color} rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity`}></div>
+                    </div>
+                    
+                    {/* Content */}
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#800000] transition-colors text-center">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm md:text-base text-gray-600 leading-relaxed text-center">
+                      {step.description}
+                    </p>
+                    
+                    {/* Connecting Arrow (for visual flow) */}
+                    {index < howItWorks.length - 1 && (
+                      <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-[#800000]/30 to-transparent z-10">
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-l-4 border-l-[#800000]/30 border-t-2 border-t-transparent border-b-2 border-b-transparent"></div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -507,23 +577,6 @@ const AgentPlans = () => {
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="py-12 px-4 bg-brand-red text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Ready to Transform Your Real Estate Business?
-          </h2>
-          <p className="text-base mb-6">
-            Join thousands of successful agents who have accelerated their growth with our plans
-          </p>
-          <Button 
-            onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white text-brand-red hover:bg-gray-100 font-medium px-6 py-2"
-          >
-            Choose Your Plan Now
-          </Button>
-        </div>
-      </section>
     </div>
   );
 };

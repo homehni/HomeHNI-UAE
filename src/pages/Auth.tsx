@@ -340,7 +340,7 @@ export const Auth: React.FC = () => {
       </div>
 
       {/* Modal Overlay */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
         {/* Backdrop - Dark overlay */}
         <div 
           className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -348,27 +348,27 @@ export const Auth: React.FC = () => {
         ></div>
         
         {/* Modal Content */}
-        <div className="relative w-full max-w-md">
-          <Card className="backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300">
+        <div className="relative w-full max-w-md mx-auto">
+          <Card className="backdrop-blur-sm bg-white/95 border-2 border-brand-red/30 shadow-2xl shadow-brand-red/10 rounded-xl sm:rounded-2xl animate-fade-in hover:border-brand-red/50 transition-colors duration-300 max-h-[90vh] overflow-y-auto">
             {/* Close Button */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleCloseModal}
-              className="absolute right-4 top-4 z-10 h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+              className="absolute right-2 sm:right-4 top-2 sm:top-4 z-10 h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
             >
               <X className="h-4 w-4 text-gray-500" />
             </Button>
-            <CardHeader className="text-center pb-3 pt-4">
+            <CardHeader className="text-center pb-3 pt-4 sm:pt-6">
               <div className="flex items-center justify-center mb-3">
                 <img 
                   src="/lovable-uploads/b90cb5cf-9777-4b49-b4e5-6fb3a504a2b0.png?v=1"
                   alt="Home HNI Logo" 
-                  className="h-12 w-auto"
+                  className="h-10 sm:h-12 w-auto"
                 />
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-6">
+            <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
               {isPasswordResetMode ? (
                 // Password Reset Form
                 <div className="space-y-4">
@@ -466,7 +466,7 @@ export const Auth: React.FC = () => {
                      <Button 
                        type="submit" 
                        disabled={isUpdatingPassword}
-                       className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
+                       className="w-full h-10 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200"
                      >
                        {isUpdatingPassword ? "Updating..." : "Update Password"}
                      </Button>
@@ -552,7 +552,7 @@ export const Auth: React.FC = () => {
                            </div>
                          )}
 
-                         <Button type="submit" className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200">
+                         <Button type="submit" className="w-full h-10 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200">
                           Login
                         </Button>
                       </form>
@@ -561,7 +561,7 @@ export const Auth: React.FC = () => {
                       <div className="text-center">
                         <Button 
                           variant="link" 
-                          className="text-sm text-brand-red hover:underline p-0 h-auto"
+                          className="text-sm text-[#800000] hover:underline p-0 h-auto"
                           onClick={() => setShowForgotPassword(true)}
                         >
                           Forgot password?
@@ -685,7 +685,7 @@ export const Auth: React.FC = () => {
                            </div>
                          )}
 
-                         <Button type="submit" className="w-full h-9 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200 mt-3">
+                         <Button type="submit" className="w-full h-9 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200 mt-3">
                           Create Account
                         </Button>
                       </form>
@@ -794,7 +794,7 @@ export const Auth: React.FC = () => {
                     <Button 
                       type="submit" 
                       disabled={isResetLoading}
-                      className="w-full h-10 rounded-xl bg-gradient-to-r from-brand-red to-brand-red-dark hover:shadow-lg transition-all duration-200"
+                      className="w-full h-10 rounded-xl bg-[#800000] hover:bg-[#700000] hover:shadow-lg transition-all duration-200"
                     >
                       {isResetLoading ? 'Sending...' : 'Send Reset Link'}
                     </Button>

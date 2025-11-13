@@ -14,38 +14,38 @@ const VIDEO_POSTER = "https://images.unsplash.com/photo-1613490493576-7fde63acd8
 // Enhanced testimonials data with more variety
 const testimonials = [
   {
-    name: "Rajesh Kumar",
-    roleCity: "Buyer • Bengaluru",
+    name: "Ahmed Al Mansoori",
+    roleCity: "Buyer • Dubai Marina",
     rating: 5,
     text: "Home HNI made my property search incredibly smooth. The verified listings and transparent process saved me months of searching. I found my dream home in just 3 weeks!",
     date: "Aug 2025",
     verified: true,
-    initial: "R",
+    initial: "A",
     category: "Property Purchase"
   },
   {
-    name: "Priya Sharma",
-    roleCity: "Owner • Pune",
+    name: "Fatima Al Zaabi",
+    roleCity: "Owner • Jumeirah",
     rating: 5,
     text: "Excellent service! They helped me sell my property at the best market price. The legal support and documentation process was handled professionally.",
     date: "Jul 2025",
     verified: true,
-    initial: "P",
+    initial: "F",
     category: "Property Sale"
   },
   {
-    name: "Amit Patel",
-    roleCity: "Buyer • Mumbai",
+    name: "Mohammed Hassan",
+    roleCity: "Buyer • Downtown Dubai",
     rating: 5,
     text: "Zero brokerage and complete transparency. The team guided me through every step of the buying process. Highly recommended for first-time buyers!",
     date: "Sep 2025",
     verified: true,
-    initial: "A",
+    initial: "M",
     category: "First-time Buyer"
   },
   {
-    name: "Sunita Reddy",
-    roleCity: "Owner • Hyderabad",
+    name: "Sarah Al Maktoum",
+    roleCity: "Owner • Business Bay",
     rating: 5,
     text: "Professional service from start to finish. They found genuine buyers quickly and handled all the paperwork efficiently. Great experience overall!",
     date: "Aug 2025",
@@ -54,23 +54,23 @@ const testimonials = [
     category: "Property Sale"
   },
   {
-    name: "Vikram Singh",
-    roleCity: "Buyer • Delhi",
+    name: "Omar Al Suwaidi",
+    roleCity: "Buyer • Palm Jumeirah",
     rating: 5,
     text: "The property verification process was thorough and the team was always available to answer my questions. Made the entire buying experience stress-free.",
     date: "Oct 2025",
     verified: true,
-    initial: "V",
+    initial: "O",
     category: "Property Purchase"
   },
   {
-    name: "Meera Joshi",
-    roleCity: "Owner • Chennai",
+    name: "Layla Al Shamsi",
+    roleCity: "Owner • Al Reem Island",
     rating: 5,
     text: "Outstanding customer service and quick turnaround time. They helped me get the best price for my property with minimal hassle.",
     date: "Sep 2025",
     verified: true,
-    initial: "M",
+    initial: "L",
     category: "Property Sale"
   }
 ];
@@ -79,15 +79,15 @@ export function TrustMetricsRow() {
   return (
     <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-700 mb-8">
       <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full">
-        <Star className="w-4 h-4 text-[#d21404] fill-current" />
+        <Star className="w-4 h-4 text-[#800000] fill-current" />
         <span className="font-medium">4.8/5 (2,143 reviews)</span>
       </div>
       <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full">
-        <Users className="w-4 h-4 text-[#d21404]" />
+        <Users className="w-4 h-4 text-[#800000]" />
         <span className="font-medium">12k+ owners matched</span>
       </div>
       <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full">
-        <BadgeIndianRupee className="w-4 h-4 text-[#d21404]" />
+        <BadgeIndianRupee className="w-4 h-4 text-[#800000]" />
         <span className="font-medium">₹18+ crore brokerage saved</span>
       </div>
     </div>
@@ -175,42 +175,42 @@ export function TestimonialCard({
   category
 }) {
   return (
-    <div className="group relative rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300 p-4 h-[260px] flex flex-col">
+    <div className="group relative rounded-lg sm:rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300 p-3 sm:p-4 h-auto sm:h-[260px] min-h-[240px] sm:min-h-0 flex flex-col">
       {/* Quote Icon */}
       <div className="absolute top-2 right-2 opacity-5 group-hover:opacity-10 transition-opacity">
-        <Quote className="w-5 h-5 text-[#d21404]" />
+        <Quote className="w-4 h-4 sm:w-5 sm:h-5 text-[#800000]" />
       </div>
 
       {/* Header */}
       <div className="flex items-start gap-2 mb-2">
-        <div className="w-8 h-8 bg-gradient-to-br from-[#d21404] to-[#b91c1c] rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
+        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-[#800000] to-[#700000] rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
           <span className="text-xs font-bold text-white">{initial}</span>
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-1">
-            <div>
-              <h4 className="font-semibold text-gray-900 text-sm mb-0.5">{name}</h4>
-              <div className="flex items-center gap-1 text-xs text-gray-600 mb-1">
-                <span>{roleCity}</span>
+            <div className="flex-1 min-w-0">
+              <h4 className="font-semibold text-gray-900 text-xs sm:text-sm mb-0.5 truncate">{name}</h4>
+              <div className="flex items-center gap-1 text-xs text-gray-600 mb-1 flex-wrap">
+                <span className="truncate">{roleCity}</span>
                 <span>•</span>
                 <span>{date}</span>
               </div>
             </div>
-            <div className="flex">
+            <div className="flex flex-shrink-0 ml-1">
               {[...Array(rating)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 text-[#d21404] fill-current" />
+                <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#800000] fill-current" />
               ))}
             </div>
           </div>
           <div className="flex items-center gap-1 flex-wrap">
             {verified && (
-              <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-full text-xs">
-                <ShieldCheck className="w-2.5 h-2.5" />
+              <div className="flex items-center gap-1 bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs">
+                <ShieldCheck className="w-2 h-2 sm:w-2.5 sm:h-2.5" />
                 <span>Verified</span>
               </div>
             )}
             {category && (
-              <div className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-xs">
+              <div className="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs">
                 {category}
               </div>
             )}
@@ -219,13 +219,8 @@ export function TestimonialCard({
       </div>
 
       {/* Quote */}
-      <div className="flex-1 flex items-start overflow-hidden">
-        <p className="text-gray-700 text-xs leading-relaxed text-left" style={{
-          display: '-webkit-box',
-          WebkitLineClamp: 6,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden'
-        }}>
+      <div className="flex-1 flex items-start overflow-hidden mt-2">
+        <p className="text-gray-700 text-xs sm:text-sm leading-relaxed text-left line-clamp-5 sm:line-clamp-6">
           "{text}"
         </p>
       </div>
@@ -279,33 +274,33 @@ function InfiniteTestimonialCarousel() {
   const visibleTestimonials = getVisibleTestimonials();
 
   return (
-    <div className="relative max-w-6xl mx-auto px-20">
-      {/* Navigation Arrows */}
+    <div className="relative max-w-6xl mx-auto px-4 sm:px-8 md:px-12 lg:px-20">
+      {/* Navigation Arrows - Hidden on mobile */}
       <button
         onClick={prevSlide}
         disabled={isTransitioning}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="hidden md:flex absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-lg border border-gray-200 items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Previous testimonials"
       >
-        <ChevronLeft className="w-5 h-5 text-gray-700" />
+        <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
       </button>
 
       <button
         onClick={nextSlide}
         disabled={isTransitioning}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="hidden md:flex absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full shadow-lg border border-gray-200 items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Next testimonials"
       >
-        <ChevronRight className="w-5 h-5 text-gray-700" />
+        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
       </button>
 
       {/* Carousel Container */}
       <div className="overflow-hidden">
-        <div className="flex gap-3 transition-all duration-500 ease-in-out">
+        <div className="flex gap-2 sm:gap-3 transition-all duration-500 ease-in-out">
           {visibleTestimonials.map((testimonial, index) => (
             <div
               key={`${currentIndex}-${index}`}
-              className="flex-shrink-0 w-full md:w-1/3"
+              className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 px-1 sm:px-0"
             >
               <TestimonialCard {...testimonial} />
             </div>
@@ -314,7 +309,7 @@ function InfiniteTestimonialCarousel() {
       </div>
 
       {/* Dots Indicator */}
-      <div className="flex justify-center mt-4 space-x-2">
+      <div className="flex justify-center mt-3 sm:mt-4 space-x-1.5 sm:space-x-2">
         {testimonials.map((_, index) => (
           <button
             key={index}
@@ -325,9 +320,9 @@ function InfiniteTestimonialCarousel() {
                 setTimeout(() => setIsTransitioning(false), 500);
               }
             }}
-            className={`w-2.5 h-2.5 rounded-full transition-colors ${
+            className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors ${
               index === currentIndex
-                ? 'bg-[#d21404]'
+                ? 'bg-[#800000]'
                 : 'bg-gray-300 hover:bg-gray-400'
             }`}
             aria-label={`Go to testimonial ${index + 1}`}

@@ -40,125 +40,125 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
     residential: [
       {
         name: "Silver Plan",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "BASIC PROMOTION",
         badgeColor: "bg-yellow-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Gold Plan", 
-        price: "₹9,999",
-        gst: "+18% GST",
+        price: "AED 440",
+        gst: "+5% VAT",
         badge: "SOCIAL BOOST",
         badgeColor: "bg-green-500",
-        amountPaise: 999900,
+        amountPaise: 44000,
       },
       {
         name: "Platinum Plan",
-        price: "₹14,999",
-        gst: "+18% GST", 
+        price: "AED 670",
+        gst: "+5% VAT", 
         badge: "EXPERT GUIDANCE",
         badgeColor: "bg-red-500",
-        amountPaise: 1499900,
+        amountPaise: 67000,
       },
       {
         name: "Diamond Plan",
-        price: "₹20,000",
-        gst: "+18% GST",
+        price: "AED 890",
+        gst: "+5% VAT",
         badge: "PERSONAL FIELD ASSISTANT", 
         badgeColor: "bg-purple-500",
-        amountPaise: 2000000,
+        amountPaise: 89000,
       }
     ],
     commercial: [
       {
         name: "Business Silver",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "COMMERCIAL MARKETING",
         badgeColor: "bg-blue-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Business Gold", 
-        price: "₹18,999",
-        gst: "+18% GST",
+        price: "AED 840",
+        gst: "+5% VAT",
         badge: "PREMIUM BUSINESS BOOST",
         badgeColor: "bg-indigo-500",
-        amountPaise: 1899900,
+        amountPaise: 84000,
       },
       {
         name: "Business Platinum",
-        price: "₹25,999",
-        gst: "+18% GST", 
+        price: "AED 1,160",
+        gst: "+5% VAT", 
         badge: "BUSINESS EXPERT",
         badgeColor: "bg-purple-600",
-        amountPaise: 2599900,
+        amountPaise: 116000,
       }
     ],
     industrial: [
       {
         name: "Industrial Basic",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "INDUSTRIAL PROMOTION",
         badgeColor: "bg-gray-600",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Industrial Pro", 
-        price: "₹28,999",
-        gst: "+18% GST",
+        price: "AED 1,290",
+        gst: "+5% VAT",
         badge: "ENTERPRISE MARKETING",
         badgeColor: "bg-slate-700",
-        amountPaise: 2899900,
+        amountPaise: 129000,
       },
       {
         name: "Industrial Elite",
-        price: "₹45,999",
-        gst: "+18% GST", 
+        price: "AED 2,040",
+        gst: "+5% VAT", 
         badge: "INDUSTRIAL EXPERT",
         badgeColor: "bg-zinc-800",
-        amountPaise: 4599900,
+        amountPaise: 204000,
       }
     ],
     agricultural: [
       {
         name: "Farm Silver",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "FARM MARKETING",
         badgeColor: "bg-green-600",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Farm Gold", 
-        price: "₹14,999",
-        gst: "+18% GST",
+        price: "AED 670",
+        gst: "+5% VAT",
         badge: "AGRICULTURAL BOOST",
         badgeColor: "bg-emerald-600",
-        amountPaise: 1499900,
+        amountPaise: 67000,
       },
       {
         name: "Farm Platinum",
-        price: "₹22,999",
-        gst: "+18% GST", 
+        price: "AED 1,020",
+        gst: "+5% VAT", 
         badge: "FARM EXPERT",
         badgeColor: "bg-teal-600",
-        amountPaise: 2299900,
+        amountPaise: 102000,
       }
     ]
   };
@@ -414,7 +414,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                           <Button 
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                             onClick={() => {
@@ -445,7 +445,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                                     plan_name: `Seller — ${plan.name} (Free)`,
                                     amount_paise: 0,
                                     amount_rupees: 0,
-                                    currency: 'INR',
+                                    currency: 'AED',
                                     status: 'success',
                                     payment_method: 'free',
                                     payment_date: currentDate.toISOString(),
@@ -480,7 +480,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
                             notes={{ plan: plan.name, category: "seller", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                           />

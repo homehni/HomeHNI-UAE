@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Check, Phone, Home, Users, Shield, Clock, UserCheck, Globe, Lock, FileText, TrendingUp, Camera } from 'lucide-react';
+import { Star, Check, Phone, Home, Users, Shield, Clock, UserCheck, Globe, Lock, FileText, TrendingUp, Camera, ClipboardList, Search, Calendar, Handshake, FileCheck, MapPin, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import PayButton from '@/components/PayButton';
@@ -29,117 +29,117 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
     residential: [
       {
         name: "Silver Plan",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "BASIC SEARCH",
         badgeColor: "bg-yellow-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Gold Plan", 
-        price: "₹2,499",
-        gst: "+18% GST",
+        price: "AED 110",
+        gst: "+5% VAT",
         badge: "EXPERT ASSISTANCE",
         badgeColor: "bg-green-500",
-        amountPaise: 249900,
+        amountPaise: 11000,
       },
       {
         name: "Platinum Plan",
-        price: "₹4,999",
-        gst: "+18% GST", 
+        price: "AED 220",
+        gst: "+5% VAT", 
         badge: "EXCLUSIVE SUPPORT",
         badgeColor: "bg-red-500",
-        amountPaise: 499900,
+        amountPaise: 22000,
       }
     ],
     commercial: [
       {
         name: "Business Explorer",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "COMMERCIAL SEARCH",
         badgeColor: "bg-blue-500",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Business Pro", 
-        price: "₹8,999",
-        gst: "+18% GST",
+        price: "AED 400",
+        gst: "+5% VAT",
         badge: "COMMERCIAL EXPERT",
         badgeColor: "bg-indigo-500",
-        amountPaise: 899900,
+        amountPaise: 40000,
       },
       {
         name: "Business Elite",
-        price: "₹12,999",
-        gst: "+18% GST", 
+        price: "AED 580",
+        gst: "+5% VAT", 
         badge: "VIP COMMERCIAL",
         badgeColor: "bg-purple-600",
-        amountPaise: 1299900,
+        amountPaise: 58000,
       }
     ],
     industrial: [
       {
         name: "Industrial Basic",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "INDUSTRIAL SEARCH",
         badgeColor: "bg-gray-600",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Industrial Pro", 
-        price: "₹15,999",
-        gst: "+18% GST",
+        price: "AED 710",
+        gst: "+5% VAT",
         badge: "INDUSTRIAL EXPERT",
         badgeColor: "bg-slate-700",
-        amountPaise: 1599900,
+        amountPaise: 71000,
       },
       {
         name: "Industrial Premium",
-        price: "₹25,999",
-        gst: "+18% GST", 
+        price: "AED 1,160",
+        gst: "+5% VAT", 
         badge: "PREMIUM INDUSTRIAL",
         badgeColor: "bg-zinc-800",
-        amountPaise: 2599900,
+        amountPaise: 116000,
       }
     ],
     agricultural: [
       {
         name: "Farm Finder",
-        price: "₹999",
-        originalPrice: "₹999",
+        price: "AED 44",
+        originalPrice: "AED 44",
         freePrice: "FREE",
-        gst: "+18% GST",
+        gst: "+5% VAT",
         badge: "AGRICULTURAL SEARCH",
         badgeColor: "bg-green-600",
-        amountPaise: 99900,
+        amountPaise: 4400,
         isFree: true,
       },
       {
         name: "Farm Expert", 
-        price: "₹6,999",
-        gst: "+18% GST",
+        price: "AED 310",
+        gst: "+5% VAT",
         badge: "FARM SPECIALIST",
         badgeColor: "bg-emerald-600",
-        amountPaise: 699900,
+        amountPaise: 31000,
       },
       {
         name: "Farm Premium",
-        price: "₹10,999",
-        gst: "+18% GST", 
+        price: "AED 490",
+        gst: "+5% VAT", 
         badge: "PREMIUM FARM",
         badgeColor: "bg-teal-600",
-        amountPaise: 1099900,
+        amountPaise: 49000,
       }
     ]
   };
@@ -247,7 +247,44 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
       ]
     ]
   };
-  const howItWorks = ["We gather your requirements", "Connect you with verified listings", "Schedule property visits", "Help you negotiate price", "Assist in finalizing the deal", "Provide city-level property expertise"];
+  const howItWorks = [
+    { 
+      title: "We gather your requirements", 
+      icon: ClipboardList,
+      description: "Tell us your preferences, budget, and location",
+      color: "from-blue-500 to-blue-600"
+    },
+    { 
+      title: "Connect you with verified listings", 
+      icon: Search,
+      description: "Get matched with authentic property listings",
+      color: "from-green-500 to-green-600"
+    },
+    { 
+      title: "Schedule property visits", 
+      icon: Calendar,
+      description: "Book site visits at your convenience",
+      color: "from-purple-500 to-purple-600"
+    },
+    { 
+      title: "Help you negotiate price", 
+      icon: Handshake,
+      description: "Expert assistance in getting the best deal",
+      color: "from-orange-500 to-orange-600"
+    },
+    { 
+      title: "Assist in finalizing the deal", 
+      icon: FileCheck,
+      description: "Complete documentation and legal support",
+      color: "from-red-500 to-red-600"
+    },
+    { 
+      title: "Provide city-level property expertise", 
+      icon: MapPin,
+      description: "Local insights and market knowledge",
+      color: "from-indigo-500 to-indigo-600"
+    }
+  ];
   const faqs = [{
     question: "What does a Property Expert do?",
     answer: "Helps you shortlist, schedule visits, negotiate pricing, and close deals faster."
@@ -358,7 +395,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                           <Button 
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                             onClick={() => {
@@ -389,7 +426,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                                     plan_name: `Buyer — ${plan.name} (Free)`,
                                     amount_paise: 0,
                                     amount_rupees: 0,
-                                    currency: 'INR',
+                                    currency: 'AED',
                                     status: 'success',
                                     payment_method: 'free',
                                     payment_date: currentDate.toISOString(),
@@ -424,7 +461,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
                             notes={{ plan: plan.name, category: "buyer", type: tabKey }}
                             className={`w-full ${
                               selectedPlans[tabKey as keyof typeof selectedPlans] === index 
-                                ? 'bg-brand-red hover:bg-brand-maroon-dark text-white' 
+                                ? 'bg-[#800000] hover:bg-[#700000] text-white' 
                                 : 'bg-transparent text-foreground border border-border hover:bg-muted'
                             }`}
                           />
@@ -589,22 +626,60 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
       
 
       {/* How Our Assisted Plans Work */}
-      <section className={embedded ? "py-8 px-4 bg-gray-50" : "py-16 px-4 bg-gray-50"}>
+      <section className={embedded ? "py-8 px-4 bg-gradient-to-br from-gray-50 via-white to-gray-50" : "py-16 px-4 bg-gradient-to-br from-gray-50 via-white to-gray-50"}>
         <div className="max-w-6xl mx-auto">
           <div className={embedded ? "text-center mb-6" : "text-center mb-12"}>
-            <h2 className="text-3xl font-bold mb-4">👋 Say Hello to Your House-Hunt Assistant</h2>
-            <p className="text-lg text-muted-foreground">Here's how we help you find your dream home</p>
+            <div className="inline-flex items-center justify-center mb-4">
+              <Sparkles className="w-8 h-8 text-[#800000] mr-2" />
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#800000] to-[#700000] bg-clip-text text-transparent">
+                Say Hello to Your House-Hunt Assistant
+              </h2>
+              <Sparkles className="w-8 h-8 text-[#800000] ml-2" />
+            </div>
+            <p className="text-lg md:text-xl text-muted-foreground">Here's how we help you find your dream home</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {howItWorks.map((step, index) => <Card key={index} className="p-6 text-center">
-                <CardContent className="pt-0">
-                  <div className="w-12 h-12 bg-brand-red text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                    {index + 1}
-                  </div>
-                  <p className="font-medium">{step}</p>
-                </CardContent>
-              </Card>)}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {howItWorks.map((step, index) => {
+              const IconComponent = step.icon;
+              return (
+                <Card key={index} className="group relative overflow-hidden border-2 border-transparent hover:border-[#800000]/30 transition-all duration-300 hover:shadow-xl bg-white hover:-translate-y-2">
+                  <CardContent className="p-6 md:p-8">
+                    {/* Step Number Badge */}
+                    <div className="absolute top-4 right-4 w-10 h-10 bg-gradient-to-br from-[#800000]/10 to-[#700000]/10 text-[#800000] rounded-full flex items-center justify-center text-sm font-bold border-2 border-[#800000]/20">
+                      {index + 1}
+                    </div>
+                    
+                    {/* Icon Container */}
+                    <div className="relative mb-4 flex justify-center">
+                      <div className={`w-14 h-14 mx-auto bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 relative`}>
+                        <IconComponent className="w-7 h-7 text-white" />
+                        {/* Decorative glow effect */}
+                        <div className="absolute inset-0 bg-white/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                      </div>
+                      {/* Decorative circles */}
+                      <div className={`absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br ${step.color} rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity`}></div>
+                      <div className={`absolute -bottom-1 -left-1 w-3 h-3 bg-gradient-to-br ${step.color} rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity`}></div>
+                    </div>
+                    
+                    {/* Content */}
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#800000] transition-colors text-center">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm md:text-base text-gray-600 leading-relaxed text-center">
+                      {step.description}
+                    </p>
+                    
+                    {/* Connecting Arrow (for visual flow) */}
+                    {index < howItWorks.length - 1 && (
+                      <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-[#800000]/30 to-transparent z-10">
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-l-4 border-l-[#800000]/30 border-t-2 border-t-transparent border-b-2 border-b-transparent"></div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>

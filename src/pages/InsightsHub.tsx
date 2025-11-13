@@ -75,7 +75,7 @@ const InsightsHub = () => {
       <Header />
       
       {/* Hero Section */}
-      <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
+      <div className="relative h-[45vh] sm:h-[50vh] md:h-[60vh] overflow-hidden">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -88,13 +88,13 @@ const InsightsHub = () => {
         <div className="absolute inset-0 bg-black/40"></div>
         
         {/* Content */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-center pt-24 pb-12">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-10 md:pb-12">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase tracking-wide drop-shadow-2xl mb-3 sm:mb-4">
                 Insights Hub
               </h1>
-              <p className="text-lg md:text-xl text-white/90 drop-shadow-lg">
+              <p className="text-base sm:text-lg md:text-xl text-white/90 drop-shadow-lg px-2">
                 Data-driven insights, market reports, and expert analysis for informed real estate decisions
               </p>
             </div>
@@ -103,14 +103,14 @@ const InsightsHub = () => {
       </div>
 
       {/* Category Filter */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-wrap gap-2 mb-8">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
           {categories.map((category) => (
             <Button
               key={category}
               variant={selectedCategory === category ? 'default' : 'outline'}
               onClick={() => setSelectedCategory(category)}
-              className={selectedCategory === category ? 'bg-[#800000] hover:bg-[#700000]' : ''}
+              className={`text-xs sm:text-sm ${selectedCategory === category ? 'bg-[#800000] hover:bg-[#700000]' : ''}`}
             >
               {category}
             </Button>
@@ -118,40 +118,40 @@ const InsightsHub = () => {
         </div>
 
         {/* Insights Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredInsights.map((insight) => {
             const Icon = insight.icon;
             return (
               <Card key={insight.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group">
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-40 sm:h-48 md:h-56 overflow-hidden">
                   <img
                     src={insight.image}
                     alt={insight.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
-                  <div className="absolute top-4 left-4">
-                    <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2">
-                      <Icon className="h-4 w-4 text-[#800000]" />
-                      <span className="text-xs font-semibold text-gray-900">{insight.category}</span>
+                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4">
+                    <div className="bg-white/90 backdrop-blur-sm px-2 sm:px-3 py-0.5 sm:py-1 rounded-full flex items-center gap-1.5 sm:gap-2">
+                      <Icon className="h-3 w-3 sm:h-4 sm:w-4 text-[#800000]" />
+                      <span className="text-[10px] sm:text-xs font-semibold text-gray-900">{insight.category}</span>
                     </div>
                   </div>
                 </div>
                 
-                <CardHeader>
+                <CardHeader className="p-4 sm:p-6">
                   <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
                     <Calendar className="h-3 w-3" />
                     {insight.date}
                   </div>
-                  <CardTitle className="text-xl">{insight.title}</CardTitle>
-                  <CardDescription className="line-clamp-2">
+                  <CardTitle className="text-lg sm:text-xl">{insight.title}</CardTitle>
+                  <CardDescription className="line-clamp-2 text-sm sm:text-base">
                     {insight.description}
                   </CardDescription>
                 </CardHeader>
                 
-                <CardContent>
-                  <Button variant="ghost" className="w-full group-hover:text-[#800000]">
+                <CardContent className="p-4 sm:p-6 pt-0">
+                  <Button variant="ghost" className="w-full group-hover:text-[#800000] text-sm sm:text-base">
                     Read More
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </CardContent>
               </Card>

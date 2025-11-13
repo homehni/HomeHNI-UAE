@@ -814,13 +814,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex-1 py-3 text-sm font-medium transition-all relative ${
                     activeTab === tab.id
-                      ? 'text-brand-red'
+                      ? 'text-[#800000]'
                       : 'text-gray-500'
                   }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-red" />
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#800000]" />
                   )}
                 </button>
               ))}
@@ -834,12 +834,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   {selectedLocations.map((location, index) => (
                     <div
                       key={index}
-                      className="inline-flex items-center gap-1 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium"
+                      className="inline-flex items-center gap-1 bg-[#800000] text-white px-3 py-1 rounded-full text-sm font-medium"
                     >
                       {location}
                       <button
                         onClick={() => removeLocation(location)}
-                        className="ml-1 hover:bg-brand-red-dark rounded-full p-0.5"
+                        className="ml-1 hover:bg-[#700000] rounded-full p-0.5"
                       >
                         <X size={12} />
                       </button>
@@ -860,7 +860,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 <span className="text-sm truncate">
                   {selectedLocations.length > 0 ? 'Location already selected' : selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
                 </span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-brand-red">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-[#800000]">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
               </button>
@@ -949,7 +949,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-4 py-2 text-sm font-medium ${activeTab === tab.id ? 'bg-white text-brand-red' : 'text-gray-600'}`}
+                    className={`px-4 py-2 text-sm font-medium ${activeTab === tab.id ? 'bg-white text-[#800000]' : 'text-gray-600'}`}
                   >
                     {tab.label}
                   </button>
@@ -967,7 +967,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
             <div className="px-4 pt-3 pb-24 overflow-y-auto">
               {/* Input (with in-field search icon for parity) */}
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-brand-red" size={16} />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-[#800000]" size={16} />
                 <input
                   ref={mobileInputRef}
                   type="search"
@@ -988,7 +988,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       removeLocation(selectedLocations[0]);
                     }
                   }}
-                  className={`w-full pl-9 pr-12 py-3 bg-white border rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 text-base hide-clear-button ${locationError ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 focus:ring-brand-red/20 focus:border-brand-red'}`}
+                  className={`w-full pl-9 pr-12 py-3 bg-white border rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 text-base hide-clear-button ${locationError ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 focus:ring-[#800000]/20 focus:border-[#800000]'}`}
                   autoComplete="off"
                   aria-autocomplete="both"
                 />
@@ -1010,7 +1010,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     </button>
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                      className="inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-[#800000] hover:bg-[#700000] focus:outline-none focus:ring-2 focus:ring-[#800000]/40"
                       aria-label="Search"
                       disabled={selectedLocations.length === 0}
                       onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
@@ -1021,7 +1021,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 ) : (
                   <button
                     type="button"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/40"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 w-9 rounded-full text-white bg-[#800000] hover:bg-[#700000] focus:outline-none focus:ring-2 focus:ring-[#800000]/40"
                     aria-label="Search"
                     disabled={selectedLocations.length === 0}
                     onClick={() => { handleSearch(); setIsMobileOverlayOpen(false); setOpenDropdown(null); }}
@@ -1322,7 +1322,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             : 'rounded-r-md rounded-l-none'
                         } ${
                           tab.id === activeTab
-                            ? 'bg-purple-50 text-purple-800 font-bold border-2 border-brand-red'
+                            ? 'bg-purple-50 text-purple-800 font-bold border-2 border-[#800000]'
                             : 'bg-transparent text-gray-600 hover:text-gray-800 border-2 border-transparent'
                         }`}
                       >
@@ -1339,10 +1339,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       >
                       {/* Search row with red border and button */}
                         <div className="flex items-center gap-2">
-                        <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-brand-red/30 focus-within:border-brand-red/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
+                        <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-[#800000]/30 focus-within:border-[#800000]/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
-                          <MapPin className="absolute left-0 -ml-5 text-brand-red pointer-events-none flex-shrink-0" size={14} />
+                          <MapPin className="absolute left-0 -ml-5 text-[#800000] pointer-events-none flex-shrink-0" size={14} />
                           <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0 relative">
                             <input
                               ref={inputRef}
@@ -1389,7 +1389,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                         {/* Compact Search Button */}
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-brand-red/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                          className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-[#800000] hover:bg-[#700000] focus:outline-none focus:ring-2 focus:ring-[#800000]/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
                           aria-label="Search"
                           onClick={handleSearch}
                           disabled={selectedLocations.length === 0}
@@ -1667,7 +1667,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <input
                                       type="number"
                                       inputMode="numeric"
-                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
+                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#800000]/20 focus:border-[#800000]"
                                       value={budget[0]}
                                       onClick={(e) => e.stopPropagation()}
                                       onPointerDown={(e) => e.stopPropagation()}
@@ -1688,7 +1688,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <input
                                       type="number"
                                       inputMode="numeric"
-                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red"
+                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#800000]/20 focus:border-[#800000]"
                                       value={budget[1]}
                                       onClick={(e) => e.stopPropagation()}
                                       onPointerDown={(e) => e.stopPropagation()}

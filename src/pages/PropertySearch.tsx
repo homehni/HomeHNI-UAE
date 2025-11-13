@@ -981,7 +981,7 @@ const PropertySearch = () => {
       {/* Skip to main content link for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-red focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-white"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#800000] focus:text-white focus:rounded focus:outline-none focus:ring-2 focus:ring-white"
       >
         Skip to main content
       </a>
@@ -1003,7 +1003,7 @@ const PropertySearch = () => {
               <TabsList className="grid w-full grid-cols-2 bg-white border border-gray-200 rounded-full overflow-hidden h-12 p-0.5" role="tablist" aria-label="Property listing type">
                 <TabsTrigger 
                   value="buy" 
-                  className="data-[state=active]:bg-brand-red data-[state=active]:text-white rounded-full text-base font-medium h-full" 
+                  className="data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full" 
                   role="tab" 
                   aria-selected={activeTab === 'buy'}
                 >
@@ -1011,7 +1011,7 @@ const PropertySearch = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="rent" 
-                  className="data-[state=active]:bg-brand-red data-[state=active]:text-white rounded-full text-base font-medium h-full" 
+                  className="data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full" 
                   role="tab" 
                   aria-selected={activeTab === 'rent'}
                 >
@@ -1045,12 +1045,12 @@ const PropertySearch = () => {
                 }}
               >
                 {/* Map Pin Icon */}
-                <MapPin className="text-brand-red shrink-0" size={18} />
+                <MapPin className="text-[#800000] shrink-0" size={18} />
                 
                 {/* Location Chips */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {filters.locations.map((location: string, index: number) => (
-                    <div key={index} className="flex items-center gap-1.5 bg-brand-red text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
+                    <div key={index} className="flex items-center gap-1.5 bg-[#800000] text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
                       <span className="truncate max-w-32">{location}</span>
                       <button
                         onClick={(e) => {
@@ -1109,8 +1109,8 @@ const PropertySearch = () => {
                   type="button"
                   className={`flex items-center justify-center h-10 transition-all ${!isSearchLocked && tempLocationText !== filters.location 
                     ? "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded" 
-                    : "w-auto px-5 rounded-full text-white bg-brand-red hover:bg-brand-red-dark"} 
-                    focus:outline-none focus:ring-2 focus:ring-brand-red/40 shrink-0`}
+                    : "w-auto px-5 rounded-full text-white bg-[#800000] hover:bg-[#700000]"} 
+                    focus:outline-none focus:ring-2 focus:ring-[#800000]/40 shrink-0`}
                   aria-label={isSearchLocked ? "Search" : "Add location"}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -1218,7 +1218,7 @@ const PropertySearch = () => {
                     <div className="flex gap-2">
                       <Button variant="outline" className="flex-1" onClick={clearAllFilters}>Clear All</Button>
                       <DrawerClose asChild>
-                        <Button className="flex-1 bg-brand-red hover:bg-brand-red-dark">Apply</Button>
+                        <Button className="flex-1 bg-[#800000] hover:bg-[#700000]">Apply</Button>
                       </DrawerClose>
                     </div>
                   </DrawerFooter>
@@ -1321,7 +1321,7 @@ const PropertySearch = () => {
                 </h1>
                 <p className="text-gray-600 mt-1">
                   {isLoading ? 'Searching...' : `${filteredProperties.length} results found`}
-                  {(filters.locations.length > 0 || debouncedLocation) && <span className="ml-2 text-brand-red">
+                  {(filters.locations.length > 0 || debouncedLocation) && <span className="ml-2 text-[#800000]">
                       • Real-time results for "{filters.locations.length > 0 ? filters.locations.join(', ') : debouncedLocation}"
                     </span>}
                 </p>
@@ -1517,7 +1517,7 @@ const PropertySearch = () => {
                   </Badge>
                 ))}
                   
-                  <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-brand-red hover:bg-brand-red/10">
+                  <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-[#800000] hover:bg-[#800000]/10">
                     Clear All
                   </Button>
                 </div>
@@ -1537,7 +1537,7 @@ const PropertySearch = () => {
                     updateFilter('trigger', 'search');
                     triggerSearch();
                   }}
-                  className="bg-brand-red hover:bg-brand-red-dark"
+                  className="bg-[#800000] hover:bg-[#700000]"
                 >
                   <SearchIcon className="h-4 w-4 mr-2" />
                   Search Now

@@ -277,7 +277,7 @@ const Sidebar = ({
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                    <AvatarFallback className="bg-brand-red text-white">
+                    <AvatarFallback className="bg-[#800000] text-white">
                       {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
@@ -294,7 +294,7 @@ const Sidebar = ({
                   </div>
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <Button variant="outline" className="w-full justify-start border-brand-red text-brand-red hover:bg-brand-red hover:text-white" onClick={() => {
+                  <Button variant="outline" className="w-full justify-start border-[#800000] text-[#800000] hover:bg-[#800000] hover:text-white" onClick={() => {
                 navigate('/dashboard');
                 onClose();
               }}>
@@ -314,11 +314,11 @@ const Sidebar = ({
                   </Button>
                 </div>
               </div> : <div className="flex flex-col space-y-2">
-                <Button className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white" onClick={handleAuthClick}>
+                <Button className="w-full bg-[#800000] hover:bg-[#700000] text-white" onClick={handleAuthClick}>
                   <UserPlus size={16} className="mr-2" />
                   Sign Up
                 </Button>
-                <Button variant="outline" className="w-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white" onClick={handleAuthClick}>
+                <Button variant="outline" className="w-full border-[#800000] text-[#800000] hover:bg-[#800000] hover:text-white" onClick={handleAuthClick}>
                   <LogIn size={16} className="mr-2" />
                   Login
                 </Button>
@@ -339,7 +339,7 @@ const Sidebar = ({
             {menuItems.map(item => <div key={item.id} className="mb-1" ref={item.id === 'contact-us' ? contactUsRef : null}>
                   <button onClick={item.onClick || (item.hasSubmenu ? () => toggleSection(item.id) : undefined)} className="w-full text-left px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-800 rounded-lg flex items-center justify-between transition-colors">
                     <div className="flex items-center">
-                      {item.id === 'find-your-plan' && <Search size={16} className="mr-2 text-brand-red" />}
+                      {item.id === 'find-your-plan' && <Search size={16} className="mr-2 text-[#800000]" />}
                       <span className="text-sm font-medium">{item.label}</span>
                     </div>
                     {item.hasSubmenu && <ChevronDown size={16} className={`transform transition-transform ${expandedSections.includes(item.id) ? 'rotate-180' : ''}`} />}
@@ -350,7 +350,7 @@ const Sidebar = ({
                           {/* Email Section */}
                           <div className="text-left">
                             <div className="text-xs font-medium text-gray-600 mb-0.5">Email</div>
-                            <a href="mailto:homehni8@gmail.com" className="text-xs text-gray-800 hover:text-brand-red transition-colors" title="Send Email">
+                            <a href="mailto:homehni8@gmail.com" className="text-xs text-gray-800 hover:text-[#800000] transition-colors" title="Send Email">
                               homehni8@gmail.com
                             </a>
                           </div>
@@ -358,7 +358,7 @@ const Sidebar = ({
                           {/* Phone Section */}
                           <div className="text-left">
                             <div className="text-xs font-medium text-gray-600 mb-0.5">Phone</div>
-                            <a href="tel:+918074017388" className="text-xs text-gray-800 hover:text-brand-red transition-colors" title="Call Us">+91 80740 17388</a>
+                            <a href="tel:+918074017388" className="text-xs text-gray-800 hover:text-[#800000] transition-colors" title="Call Us">+91 80740 17388</a>
                           </div>
                           
                           {/* WhatsApp Section */}

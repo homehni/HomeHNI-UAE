@@ -101,7 +101,7 @@ export default function PayButton({
                   plan_name: planName,
                   amount_paise: amountPaise,
                   amount_rupees: amountPaise / 100,
-                  currency: 'INR',
+                  currency: 'AED',
                   status: 'SUCCESS',
                   payment_method: 'razorpay',
                   payment_date: currentDate.toISOString(),

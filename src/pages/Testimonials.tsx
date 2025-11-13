@@ -20,53 +20,53 @@ const Testimonials = () => {
     }
   };
   const testimonials = [{
-    name: "Prameet",
-    role: "Tenant, Mumbai",
-    text: "Finding a roommate through Home Hni was a breeze. After six years of hunting in Mumbai, I finally met the perfect co-tenant. The platform's filters and owner-direct contact made all the difference.",
+    name: "Ahmed Al Mansoori",
+    role: "Tenant, Dubai Marina",
+    text: "Finding a roommate through Home Hni was a breeze. After six years of hunting in Dubai, I finally met the perfect co-tenant. The platform's filters and owner-direct contact made all the difference.",
     rating: 5
   }, {
-    name: "Mohammed Kouse",
-    role: "Owner, Bangalore",
+    name: "Mohammed Al Zaabi",
+    role: "Owner, Jumeirah",
     text: "Home Hni is a game‑changer. As a property owner, the platform's seamless Refer‑&‑Earn program is stellar. The app is intuitive, and within days I had quality leads—without any brokerage.",
     rating: 5
   }, {
-    name: "Ayan",
+    name: "Omar Hassan",
     role: "Property Owner",
     text: "Absolutely amazed by Home Hni. The Refer‑&‑Earn feature is brilliant—just a few clicks, and I was earning. My friends also joined and benefited. Smooth onboarding and fast payouts.",
     rating: 5
   }, {
-    name: "Balasubramaniyam",
-    role: "Owner, Hyderabad",
+    name: "Fatima Al Maktoum",
+    role: "Owner, Business Bay",
     text: "Exceptional service from Home Hni's concierge team. Quick responses, dedicated support through the paid listing plan—booked solid tenant matches within days. Highly recommend!",
     rating: 5
   }, {
-    name: "Tiasha",
-    role: "Tenant, Gurgaon",
-    text: "I signed up for the Relax Plan. My relationship manager, Sayantan, was efficient and precise with my requirements. I got multiple perfect matches and locked a great place within a week.",
+    name: "Sarah Al Suwaidi",
+    role: "Tenant, Downtown Dubai",
+    text: "I signed up for the Relax Plan. My relationship manager was efficient and precise with my requirements. I got multiple perfect matches and locked a great place within a week.",
     rating: 5
   }, {
-    name: "Balamurali",
-    role: "Tenant, Chennai",
+    name: "Khalid Al Shamsi",
+    role: "Tenant, Palm Jumeirah",
     text: "I had concerns about delays and rent pricing, but the responses from Home Hni were practically instant. Within two days, I had shortlisted properties that fit my budget and needs.",
     rating: 5
   }, {
-    name: "Tomy Thomas",
-    role: "Owner, Delhi",
+    name: "Layla Al Nuaimi",
+    role: "Owner, Al Reem Island",
     text: "Home Hni's concept impressed me—and the execution matched it. Listing my apartment was seamless, responses were genuine and direct. A hassle‑free experience that I highly recommend.",
     rating: 5
   }, {
-    name: "Venkatesh",
-    role: "Owner, Pune",
+    name: "Youssef Al Hameli",
+    role: "Owner, Dubai Hills",
     text: "Superb service. The response time was fantastic—a curated tenant call within hours. The platform is user‑friendly, efficient, and trustworthy.",
     rating: 5
   }, {
-    name: "Kriti",
-    role: "Flatmate Seeker, Mumbai",
+    name: "Amina Al Dhaheri",
+    role: "Flatmate Seeker, Dubai Marina",
     text: "Looking for a flatmate is often stressful, but Home Hni made it simple. Found a great roommate in no time—just the way it should be.",
     rating: 5
   }, {
-    name: "Anoop Nair",
-    role: "Owner, Bengaluru",
+    name: "Rashid Al Qasimi",
+    role: "Owner, Arabian Ranches",
     text: "The Relax plan delivered excellently. Found a tenant fast, paperwork handled efficiently, and zero broker interaction. Highly recommended.",
     rating: 5
   }];
@@ -80,7 +80,7 @@ const Testimonials = () => {
       {/* Main content */}
       <div className="pt-8">
         {/* Hero Banner Section */}
-        <div className="relative h-96 bg-gradient-to-r from-[#ef4444] to-[#dc2626] overflow-hidden">
+        <div className="relative h-96 bg-gradient-to-r from-[#800000] to-[#700000] overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           filter: 'brightness(0.7)'
@@ -108,46 +108,46 @@ const Testimonials = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 relative">
+        <section className="py-8 sm:py-12 md:py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 relative">
             <div className="relative">
               {/* Left Arrow */}
-              <Button variant="outline" size="icon" className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200" onClick={() => scroll('left')}>
+              <Button variant="outline" size="icon" className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200" onClick={() => scroll('left')}>
                 <ChevronLeft className="w-4 h-4" />
               </Button>
 
               {/* Right Arrow */}
-              <Button variant="outline" size="icon" className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200" onClick={() => scroll('right')}>
+              <Button variant="outline" size="icon" className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white shadow-lg hover:shadow-xl border-gray-200" onClick={() => scroll('right')}>
                 <ChevronRight className="w-4 h-4" />
               </Button>
 
               {/* Testimonials Container */}
-              <div ref={scrollRef} className="overflow-x-auto scrollbar-hide px-12" style={{
+              <div ref={scrollRef} className="overflow-x-auto scrollbar-hide px-2 sm:px-8 md:px-12 snap-x snap-mandatory" style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none'
             }}>
-                <div className="flex space-x-6 pb-4">
-                  {testimonials.map((testimonial, index) => <Card key={index} className="w-[400px] flex-shrink-0 bg-white shadow-md hover:shadow-lg transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex items-start space-x-4 mb-4">
-                          <Avatar className="w-12 h-12">
-                            <AvatarFallback className="bg-brand-red text-white font-semibold">
+                <div className="flex space-x-3 sm:space-x-4 md:space-x-6 pb-4">
+                  {testimonials.map((testimonial, index) => <Card key={index} className="w-[85vw] sm:w-[350px] md:w-[400px] flex-shrink-0 bg-white shadow-md hover:shadow-lg transition-shadow snap-center">
+                      <CardContent className="p-4 sm:p-5 md:p-6">
+                        <div className="flex items-start space-x-3 sm:space-x-4 mb-3 sm:mb-4">
+                          <Avatar className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
+                            <AvatarFallback className="bg-[#800000] text-white font-semibold text-sm sm:text-base">
                               {testimonial.name.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900 mb-1">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-gray-900 mb-1 text-sm sm:text-base truncate">
                               {testimonial.name}
                             </h4>
-                            <p className="text-sm text-gray-500 mb-2">
+                            <p className="text-xs sm:text-sm text-gray-500 mb-2 line-clamp-1">
                               {testimonial.role}
                             </p>
-                            <div className="flex space-x-1">
-                              {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" />)}
+                            <div className="flex space-x-0.5 sm:space-x-1">
+                              {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" fill="currentColor" />)}
                             </div>
                           </div>
                         </div>
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-gray-700 text-xs sm:text-sm leading-relaxed line-clamp-4 sm:line-clamp-none">
                           "{testimonial.text}"
                         </p>
                       </CardContent>
