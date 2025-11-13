@@ -23,6 +23,22 @@ const BuilderDealerPlans = () => {
     lookingTo: 'sell',
     propertyType: 'residential'
   });
+  // CONNECT PRO plan selection state
+  const [selectedConnectPlan, setSelectedConnectPlan] = useState<'connect25' | 'connect50' | null>(null);
+  const [selectedConnectOption, setSelectedConnectOption] = useState<number | null>(null);
+
+  // Helper function to parse price string to amountPaise (e.g., "AED 587" -> 58700)
+  const parsePriceToPaise = (priceString: string): number => {
+    // Remove "AED", commas, and spaces, then convert to number and multiply by 100
+    const numericValue = parseFloat(priceString.replace(/AED\s*|,/g, '').trim());
+    return Math.round(numericValue * 100);
+  };
+
+  // Initialize selection when CONNECT PRO modal opens
+  const handleConnectProOpen = () => {
+    setSelectedConnectPlan('connect50'); // Default to CONNECT 50
+    setSelectedConnectOption(2); // Default to 12 months option (index 2)
+  };
 
          const otherServices = [
            {
@@ -33,7 +49,7 @@ const BuilderDealerPlans = () => {
                  <Home className="w-6 h-6 text-white" />
                </div>
              </div>,
-             amountPaise: 89900,
+             amountPaise: 4000,
              modalContent: {
                features: [
                  "Strategic banner placement across homepage, search results, and property detail pages",
@@ -51,7 +67,7 @@ const BuilderDealerPlans = () => {
                  <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs px-1 rounded">Spotlight</div>
                </div>
              </div>,
-             amountPaise: 149900,
+             amountPaise: 6600,
              modalContent: {
                features: [
                  "Guaranteed top 2 positions in locality search results",
@@ -70,7 +86,7 @@ const BuilderDealerPlans = () => {
                  <Star className="w-4 h-4 text-yellow-500 absolute -top-1 -right-1" />
                </div>
              </div>,
-             amountPaise: 299900,
+             amountPaise: 13200,
              modalContent: {
                features: [
                  "Premium project positioning on dedicated listing pages",
@@ -83,14 +99,14 @@ const BuilderDealerPlans = () => {
            {
              title: "Elite Listing",
              description: "Transform your property listings with enhanced visuals and animations to capture buyer attention.",
-             price: "₹899 Onwards",
+             price: "AED 40 Onwards",
              icon: <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center">
                <div className="relative">
                  <Home className="w-12 h-12 text-purple-600" />
                  <Crown className="w-4 h-4 text-yellow-500 absolute -top-1 -right-1" />
                </div>
              </div>,
-             amountPaise: 89900,
+             amountPaise: 4000,
              modalContent: {
                features: [
                  "Enhanced listing display with larger, more prominent positioning",
@@ -124,22 +140,22 @@ const BuilderDealerPlans = () => {
                  options: [
                    {
                      duration: "3 months",
-                     monthlyPrice: "₹4,444",
-                     totalPrice: "₹13,334",
+                     monthlyPrice: "AED 196",
+                     totalPrice: "AED 587",
                      contacts: "Access 75 contacts",
                      savings: null
                    },
                    {
                      duration: "6 months",
-                     monthlyPrice: "₹4,189",
-                     totalPrice: "₹25,134",
+                     monthlyPrice: "AED 184",
+                     totalPrice: "AED 1,106",
                      contacts: "Access 150 contacts",
                      savings: "SAVE 7%"
                    },
                    {
                      duration: "12 months",
-                     monthlyPrice: "₹3,972",
-                     totalPrice: "₹47,672",
+                     monthlyPrice: "AED 175",
+                     totalPrice: "AED 2,098",
                      contacts: "Access 300 contacts",
                      savings: "SAVE 13%"
                    }
@@ -152,23 +168,23 @@ const BuilderDealerPlans = () => {
                  options: [
                    {
                      duration: "1 month",
-                     monthlyPrice: "₹10,502",
-                     totalPrice: "₹10,502",
+                     monthlyPrice: "AED 462",
+                     totalPrice: "AED 462",
                      contacts: "Access 50 contacts",
                      savings: null
                    },
                    {
                      duration: "6 months",
-                     monthlyPrice: "₹8,712",
-                     totalPrice: "₹52,274",
+                     monthlyPrice: "AED 383",
+                     totalPrice: "AED 2,300",
                      contacts: "Access 300 contacts",
                      savings: "SAVE 17%",
                      popular: true
                    },
                    {
                      duration: "12 months",
-                     monthlyPrice: "₹8,309",
-                     totalPrice: "₹99,710",
+                     monthlyPrice: "AED 366",
+                     totalPrice: "AED 4,387",
                      contacts: "Access 600 contacts",
                      savings: "SAVE 21%",
                      selected: true
@@ -257,9 +273,9 @@ const BuilderDealerPlans = () => {
       <Header />
       
       {/* Final Prices Ribbon */}
-      <div className="fixed top-16 lg:top-24 w-full bg-gradient-to-r from-brand-red to-brand-maroon text-white py-2 sm:py-3 shadow-md z-40">
+      <div className="fixed top-16 lg:top-24 w-full bg-gradient-to-r from-[#800000] to-[#700000] text-white py-2 sm:py-3 shadow-md z-40">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex items-center justify-center cursor-pointer hover:from-brand-maroon hover:to-brand-red transition-all duration-300" onClick={() => setIsPricingModalOpen(true)}>
+          <div className="flex items-center justify-center cursor-pointer hover:from-[#700000] hover:to-[#800000] transition-all duration-300" onClick={() => setIsPricingModalOpen(true)}>
             <Info className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 flex-shrink-0" />
             <span className="text-xs sm:text-sm font-semibold text-center px-1">
               <span className="hidden sm:inline">For Final prices, share property details</span>
@@ -279,23 +295,23 @@ const BuilderDealerPlans = () => {
               <div 
                 className={`flex items-center px-8 py-4 cursor-pointer transition-all duration-300 rounded-lg ${
                   activeTab === 'dealer' 
-                    ? 'bg-white text-brand-red shadow-md transform scale-105 border border-brand-red/20' 
+                    ? 'bg-white text-[#800000] shadow-md transform scale-105 border border-[#800000]/20' 
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                 }`}
                 onClick={() => setActiveTab('dealer')}
               >
-                <Home className={`w-5 h-5 mr-3 ${activeTab === 'dealer' ? 'text-brand-red' : 'text-gray-500'}`} />
+                <Home className={`w-5 h-5 mr-3 ${activeTab === 'dealer' ? 'text-[#800000]' : 'text-gray-500'}`} />
                 <span className="font-semibold text-base">Dealer Plans</span>
               </div>
               <div 
                 className={`flex items-center px-8 py-4 cursor-pointer transition-all duration-300 rounded-lg ${
                   activeTab === 'builder' 
-                    ? 'bg-white text-brand-red shadow-md transform scale-105 border border-brand-red/20' 
+                    ? 'bg-white text-[#800000] shadow-md transform scale-105 border border-[#800000]/20' 
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                 }`}
                 onClick={() => setActiveTab('builder')}
               >
-                <Building className={`w-5 h-5 mr-3 ${activeTab === 'builder' ? 'text-brand-red' : 'text-gray-500'}`} />
+                <Building className={`w-5 h-5 mr-3 ${activeTab === 'builder' ? 'text-[#800000]' : 'text-gray-500'}`} />
                 <span className="font-semibold text-base">Builder Plans</span>
               </div>
             </div>
@@ -311,17 +327,17 @@ const BuilderDealerPlans = () => {
             <div className="flex flex-col lg:flex-row gap-8 mb-12">
               {/* Left side - Sachet Pack */}
               <div className="lg:w-1/2">
-                <Card className="border border-brand-red/20 bg-white shadow-lg">
+                <Card className="border border-[#800000]/20 bg-white shadow-lg">
                   <CardContent className="p-6">
                      {/* Premium Package Icon */}
-                     <div className="w-16 h-16 bg-gradient-to-br from-brand-red via-brand-maroon to-yellow-400 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
+                     <div className="w-16 h-16 bg-gradient-to-br from-[#800000] via-[#700000] to-yellow-400 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
                        <div className="relative z-10 flex items-center justify-center">
                          <div className="w-10 h-10 bg-white/90 rounded-lg flex items-center justify-center shadow-lg">
-                           <Zap className="w-6 h-6 text-brand-red" />
+                           <Zap className="w-6 h-6 text-[#800000]" />
                          </div>
                        </div>
-                       <div className="absolute -top-1 -right-1 bg-yellow-400 text-brand-red text-xs px-2 py-1 rounded-full font-bold shadow-lg">
+                       <div className="absolute -top-1 -right-1 bg-yellow-400 text-[#800000] text-xs px-2 py-1 rounded-full font-bold shadow-lg">
                          HOT
                        </div>
                      </div>
@@ -332,47 +348,47 @@ const BuilderDealerPlans = () => {
                      <div className="mb-4">
                        <div className="flex items-center gap-3">
                          <span className="text-lg font-semibold text-gray-800">25 Premium Listings</span>
-                         <div className="bg-gradient-to-r from-brand-red to-brand-maroon text-white text-xs px-3 py-1 rounded-full font-bold shadow-md">
+                         <div className="bg-gradient-to-r from-[#800000] to-[#700000] text-white text-xs px-3 py-1 rounded-full font-bold shadow-md">
                            BEST VALUE
                          </div>
                        </div>
                      </div>
                     
                     <div className="mb-6">
-                      <div className="text-3xl font-bold text-gray-900 mb-1">₹13,260 Onwards</div>
-                      <GSTDisplay basePriceInPaise={1326000} />
+                      <div className="text-3xl font-bold text-gray-900 mb-1">AED 583 Onwards</div>
+                      <GSTDisplay basePriceInPaise={58300} />
                     </div>
                     
                      <PayButton
                        label="Unlock Power Pack Pro"
                        planName="Dealer — Power Pack Pro"
-                       amountPaise={calculateTotalWithGST(1326000)}
+                       amountPaise={calculateTotalWithGST(58300)}
                        notes={{ plan: "Power Pack Pro", category: "dealer", type: "listing-pack" }}
-                       className="w-full bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-red text-white font-semibold py-3 px-6 rounded-lg mb-4 shadow-lg transform hover:scale-105 transition-all duration-200"
+                       className="w-full bg-gradient-to-r from-[#800000] to-[#700000] hover:from-[#700000] hover:to-[#800000] text-white font-semibold py-3 px-6 rounded-lg mb-4 shadow-lg transform hover:scale-105 transition-all duration-200"
                      />
                     
                            <div className="space-y-3">
                              <div className="flex items-center text-sm text-gray-700">
-                               <div className="w-5 h-5 bg-brand-red/10 rounded-full flex items-center justify-center mr-3">
-                                 <Check className="w-3 h-3 text-brand-red" />
+                               <div className="w-5 h-5 bg-[#800000]/10 rounded-full flex items-center justify-center mr-3">
+                                 <Check className="w-3 h-3 text-[#800000]" />
                                </div>
                                <span className="font-medium">Up to 5X more qualified leads</span>
                                <Info className="w-3 h-3 text-gray-400 ml-1" />
                              </div>
                              <div className="flex items-center text-sm text-gray-700">
-                               <div className="w-5 h-5 bg-brand-red/10 rounded-full flex items-center justify-center mr-3">
-                                 <Check className="w-3 h-3 text-brand-red" />
+                               <div className="w-5 h-5 bg-[#800000]/10 rounded-full flex items-center justify-center mr-3">
+                                 <Check className="w-3 h-3 text-[#800000]" />
                                </div>
                                <span className="font-medium">Complimentary property verification*</span>
                                <Info className="w-3 h-3 text-gray-400 ml-1" />
                              </div>
                              <div className="flex items-center text-sm text-gray-700">
-                               <div className="w-5 h-5 bg-brand-red/10 rounded-full flex items-center justify-center mr-3">
-                                 <Check className="w-3 h-3 text-brand-red" />
+                               <div className="w-5 h-5 bg-[#800000]/10 rounded-full flex items-center justify-center mr-3">
+                                 <Check className="w-3 h-3 text-[#800000]" />
                                </div>
                                <span className="font-medium">List residential, commercial & rental properties</span>
                              </div>
-                             <div className="text-sm text-brand-red cursor-pointer hover:text-brand-maroon font-medium flex items-center">
+                             <div className="text-sm text-[#800000] cursor-pointer hover:text-[#700000] font-medium flex items-center">
                                <span>+ 3 additional advantages</span>
                                <ArrowRight className="w-3 h-3 ml-1" />
                              </div>
@@ -387,10 +403,10 @@ const BuilderDealerPlans = () => {
                        <h1 className="text-4xl font-bold text-gray-900 mb-8">Choose your success strategy for property sales</h1>
                 
                 {/* Illustration placeholder */}
-                <div className="w-full h-64 bg-gradient-to-r from-brand-red/10 to-gray-100 rounded-lg flex items-center justify-center">
+                <div className="w-full h-64 bg-gradient-to-r from-[#800000]/10 to-gray-100 rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-20 h-20 bg-brand-red/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Users className="w-10 h-10 text-brand-red" />
+                    <div className="w-20 h-20 bg-[#800000]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Users className="w-10 h-10 text-[#800000]" />
                     </div>
                            <p className="text-gray-600">Accelerate Your Property Business</p>
                   </div>
@@ -401,7 +417,7 @@ const BuilderDealerPlans = () => {
             {/* Exclusive Owner Contact Plans */}
             <div className="mb-12">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-2 bg-brand-red/10 text-brand-red text-sm font-semibold px-4 py-2 rounded-full mb-4">
+                <div className="inline-flex items-center gap-2 bg-[#800000]/10 text-[#800000] text-sm font-semibold px-4 py-2 rounded-full mb-4">
                   <Star className="w-4 h-4" />
                   <span>LIMITED TIME OFFER</span>
                 </div>
@@ -409,20 +425,20 @@ const BuilderDealerPlans = () => {
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">Connect with verified property owners and expand your business network with our revolutionary contact solution</p>
               </div>
               
-              <Card className="bg-gradient-to-r from-brand-red/5 via-white to-brand-red/5 border-2 border-brand-red/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <Card className="bg-gradient-to-r from-[#800000]/5 via-white to-[#800000]/5 border-2 border-[#800000]/30 shadow-xl hover:shadow-2xl transition-all duration-300">
                 <CardContent className="p-8">
                   <div className="flex flex-col lg:flex-row items-center gap-8">
                     {/* Left Side - Icon and Branding */}
                     <div className="flex items-center gap-6">
                       <div className="relative">
-                        <div className="w-20 h-20 bg-gradient-to-br from-brand-red to-brand-maroon rounded-xl flex items-center justify-center shadow-lg">
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#800000] to-[#700000] rounded-xl flex items-center justify-center shadow-lg">
                           <div className="flex gap-1">
                             <Lock className="w-7 h-7 text-white" />
                             <Users className="w-7 h-7 text-white" />
                             <Phone className="w-7 h-7 text-white" />
                           </div>
                         </div>
-                        <div className="absolute -top-2 -right-2 bg-yellow-400 text-brand-red text-xs px-2 py-1 rounded-full font-bold shadow-md">
+                        <div className="absolute -top-2 -right-2 bg-yellow-400 text-[#800000] text-xs px-2 py-1 rounded-full font-bold shadow-md">
                           NEW
                         </div>
                       </div>
@@ -430,7 +446,7 @@ const BuilderDealerPlans = () => {
                         <h3 className="text-2xl font-bold text-gray-900 mb-1">Introducing CONNECT PRO</h3>
                         <p className="text-sm text-gray-600 font-medium">BROKER OWNER NETWORK SOLUTION</p>
                         <div className="flex items-center gap-2 mt-2">
-                          <div className="w-2 h-2 bg-brand-red rounded-full"></div>
+                          <div className="w-2 h-2 bg-[#800000] rounded-full"></div>
                           <span className="text-xs text-gray-500">Verified Contacts Only</span>
                         </div>
                       </div>
@@ -439,27 +455,30 @@ const BuilderDealerPlans = () => {
                     {/* Middle Section - Features and Pricing */}
                     <div className="flex-1 text-center lg:text-left">
                       <div className="bg-white/50 rounded-lg p-4 mb-4">
-                        <p className="text-gray-700 mb-2 font-medium">Access up to <span className="text-brand-red font-bold">50 verified property owner contacts</span> monthly</p>
+                        <p className="text-gray-700 mb-2 font-medium">Access up to <span className="text-[#800000] font-bold">50 verified property owner contacts</span> monthly</p>
                         <div className="flex items-center justify-center lg:justify-start gap-4">
-                          <div className="text-2xl font-bold text-brand-red">₹999</div>
+                          <div className="text-2xl font-bold text-[#800000]">AED 44</div>
                           <div className="text-sm text-gray-600">
                             <div>per month</div>
-                            <div className="line-through text-gray-400">₹1,499</div>
+                            <div className="line-through text-gray-400">AED 66</div>
                           </div>
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                        <div className="bg-brand-red/10 text-brand-red text-xs px-3 py-1 rounded-full font-medium">✓ Instant Access</div>
-                        <div className="bg-brand-red/10 text-brand-red text-xs px-3 py-1 rounded-full font-medium">✓ Verified Contacts</div>
-                        <div className="bg-brand-red/10 text-brand-red text-xs px-3 py-1 rounded-full font-medium">✓ Monthly Updates</div>
+                        <div className="bg-[#800000]/10 text-[#800000] text-xs px-3 py-1 rounded-full font-medium">✓ Instant Access</div>
+                        <div className="bg-[#800000]/10 text-[#800000] text-xs px-3 py-1 rounded-full font-medium">✓ Verified Contacts</div>
+                        <div className="bg-[#800000]/10 text-[#800000] text-xs px-3 py-1 rounded-full font-medium">✓ Monthly Updates</div>
                       </div>
                     </div>
                     
                     {/* Right Side - CTA Button */}
                     <div className="flex flex-col items-center gap-3">
                       <Button 
-                        className="bg-gradient-to-r from-brand-red to-brand-maroon hover:from-brand-maroon hover:to-brand-red text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-                        onClick={() => setSelectedService(connectProService)}
+                        className="bg-gradient-to-r from-[#800000] to-[#700000] hover:from-[#700000] hover:to-[#800000] text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                        onClick={() => {
+                          handleConnectProOpen();
+                          setSelectedService(connectProService);
+                        }}
                       >
                         View Plans
                       </Button>
@@ -493,7 +512,7 @@ const BuilderDealerPlans = () => {
                             <div className="text-lg font-bold text-gray-900 mb-4">{service.price}</div>
                           )}
                           <div 
-                            className="flex items-center text-brand-red cursor-pointer hover:text-brand-maroon"
+                            className="flex items-center text-[#800000] cursor-pointer hover:text-[#700000]"
                             onClick={() => setSelectedService(service)}
                           >
                             <span className="text-sm font-medium">Know More</span>
@@ -516,16 +535,16 @@ const BuilderDealerPlans = () => {
 
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                        <div className="text-center">
-                         <div className="w-16 h-16 bg-brand-red/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                           <Building className="w-8 h-8 text-brand-red" />
+                         <div className="w-16 h-16 bg-[#800000]/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                           <Building className="w-8 h-8 text-[#800000]" />
                          </div>
                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Enhanced Visibility</h3>
                          <p className="text-gray-600 text-sm">Achieve up to 5X more qualified leads with premium positioning</p>
                        </div>
 
                        <div className="text-center">
-                         <div className="w-16 h-16 bg-brand-red/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                           <BarChart3 className="w-8 h-8 text-brand-red" />
+                         <div className="w-16 h-16 bg-[#800000]/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                           <BarChart3 className="w-8 h-8 text-[#800000]" />
                          </div>
                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Advanced Analytics</h3>
                          <p className="text-gray-600 text-sm">Monitor performance with comprehensive insights and detailed reporting</p>
@@ -557,7 +576,7 @@ const BuilderDealerPlans = () => {
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">{service.title}</h3>
                         <p className="text-gray-600 mb-4 text-sm leading-relaxed">{service.description}</p>
                         <div 
-                          className="flex items-center text-brand-red cursor-pointer hover:text-brand-maroon"
+                          className="flex items-center text-[#800000] cursor-pointer hover:text-[#700000]"
                           onClick={() => setSelectedService(service)}
                         >
                           <span className="text-sm font-medium">Know More</span>
@@ -574,7 +593,14 @@ const BuilderDealerPlans = () => {
       </div>
 
       {/* Service Details Modal */}
-      <Dialog open={!!selectedService} onOpenChange={() => setSelectedService(null)}>
+      <Dialog open={!!selectedService} onOpenChange={(open) => {
+        if (!open) {
+          setSelectedService(null);
+          // Reset selection when modal closes
+          setSelectedConnectPlan(null);
+          setSelectedConnectOption(null);
+        }
+      }}>
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-gray-900 border-b pb-2">
@@ -592,7 +618,7 @@ const BuilderDealerPlans = () => {
                 {/* Pricing Cards */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* CONNECT 25 Card */}
-                  <Card className="border-2 border-gray-200 hover:border-brand-red/30 transition-colors">
+                  <Card className="border-2 border-gray-200 hover:border-[#800000]/30 transition-colors">
                     <CardContent className="p-6">
                       <div className="text-center mb-6">
                         <h3 className="text-lg font-semibold text-gray-600 mb-1">CONNECT 25</h3>
@@ -601,43 +627,75 @@ const BuilderDealerPlans = () => {
                       </div>
                       
                       <div className="space-y-4">
-                        {selectedService.modalContent.plans.connect25.options.map((option, index) => (
-                          <div key={index} className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                            option.selected ? 'border-brand-red bg-brand-red/5' : 'border-gray-200 hover:border-gray-300'
-                          }`}>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-4 h-4 rounded-full border-2 ${
-                                  option.selected ? 'border-brand-red bg-brand-red' : 'border-gray-300'
-                                }`}></div>
-                                <span className="font-medium">{option.duration}</span>
-                                {option.popular && (
-                                  <Badge className="bg-brand-red text-white text-xs">POPULAR</Badge>
+                        {selectedService.modalContent.plans.connect25.options.map((option, index) => {
+                          const isSelected = selectedConnectPlan === 'connect25' && selectedConnectOption === index;
+                          return (
+                            <div 
+                              key={index} 
+                              className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                                isSelected ? 'border-[#800000] bg-[#800000]/5' : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                              onClick={() => {
+                                setSelectedConnectPlan('connect25');
+                                setSelectedConnectOption(index);
+                              }}
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-3">
+                                  <div className={`w-4 h-4 rounded-full border-2 ${
+                                    isSelected ? 'border-[#800000] bg-[#800000]' : 'border-gray-300'
+                                  }`}></div>
+                                  <span className="font-medium">{option.duration}</span>
+                                  {option.popular && (
+                                    <Badge className="bg-[#800000] text-white text-xs">POPULAR</Badge>
+                                  )}
+                                </div>
+                                {option.savings && (
+                                  <Badge className="bg-green-100 text-green-800 text-xs">{option.savings}</Badge>
                                 )}
                               </div>
-                              {option.savings && (
-                                <Badge className="bg-green-100 text-green-800 text-xs">{option.savings}</Badge>
-                              )}
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <div className="text-lg font-bold text-gray-900">{option.monthlyPrice}/mo.</div>
-                                <div className="text-sm text-gray-600">Total: {option.totalPrice}</div>
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <div className="text-lg font-bold text-gray-900">{option.monthlyPrice}/mo.</div>
+                                  <div className="text-sm text-gray-600">Total: {option.totalPrice}</div>
+                                </div>
+                                <div className="text-sm text-gray-600 text-right">{option.contacts}</div>
                               </div>
-                              <div className="text-sm text-gray-600 text-right">{option.contacts}</div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                       
-                      <Button className="w-full mt-6 bg-brand-red hover:bg-brand-maroon-dark text-white">
-                        Buy CONNECT 25
-                      </Button>
+                      {selectedConnectPlan === 'connect25' && selectedConnectOption !== null && (() => {
+                        const selectedOption = selectedService.modalContent.plans.connect25.options[selectedConnectOption];
+                        const baseAmountPaise = parsePriceToPaise(selectedOption.totalPrice);
+                        // The price shown is the base price, VAT will be added
+                        return (
+                          <div className="mt-6">
+                            <div className="mb-3">
+                              <GSTDisplay basePriceInPaise={baseAmountPaise} />
+                            </div>
+                            <PayButton
+                              label="Buy CONNECT 25"
+                              planName={`Dealer — CONNECT 25 — ${selectedOption.duration}`}
+                              amountPaise={calculateTotalWithGST(baseAmountPaise)}
+                              notes={{ 
+                                plan: "CONNECT 25", 
+                                category: "dealer", 
+                                type: "connect-pro",
+                                duration: selectedOption.duration,
+                                contacts: selectedOption.contacts
+                              }}
+                              className="w-full bg-[#800000] hover:bg-[#700000] text-white"
+                            />
+                          </div>
+                        );
+                      })()}
                     </CardContent>
                   </Card>
 
                   {/* CONNECT 50 Card */}
-                  <Card className="border-2 border-brand-red/30 bg-gradient-to-br from-brand-red/5 to-white">
+                  <Card className="border-2 border-[#800000]/30 bg-gradient-to-br from-[#800000]/5 to-white">
                     <CardContent className="p-6">
                       <div className="text-center mb-6">
                         <h3 className="text-lg font-semibold text-gray-600 mb-1">CONNECT 50</h3>
@@ -646,38 +704,70 @@ const BuilderDealerPlans = () => {
                       </div>
                       
                       <div className="space-y-4">
-                        {selectedService.modalContent.plans.connect50.options.map((option, index) => (
-                          <div key={index} className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                            option.selected ? 'border-brand-red bg-brand-red/5' : 'border-gray-200 hover:border-gray-300'
-                          }`}>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-4 h-4 rounded-full border-2 ${
-                                  option.selected ? 'border-brand-red bg-brand-red' : 'border-gray-300'
-                                }`}></div>
-                                <span className="font-medium">{option.duration}</span>
-                                {option.popular && (
-                                  <Badge className="bg-brand-red text-white text-xs">POPULAR</Badge>
+                        {selectedService.modalContent.plans.connect50.options.map((option, index) => {
+                          const isSelected = selectedConnectPlan === 'connect50' && selectedConnectOption === index;
+                          return (
+                            <div 
+                              key={index} 
+                              className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                                isSelected ? 'border-[#800000] bg-[#800000]/5' : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                              onClick={() => {
+                                setSelectedConnectPlan('connect50');
+                                setSelectedConnectOption(index);
+                              }}
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-3">
+                                  <div className={`w-4 h-4 rounded-full border-2 ${
+                                    isSelected ? 'border-[#800000] bg-[#800000]' : 'border-gray-300'
+                                  }`}></div>
+                                  <span className="font-medium">{option.duration}</span>
+                                  {option.popular && (
+                                    <Badge className="bg-[#800000] text-white text-xs">POPULAR</Badge>
+                                  )}
+                                </div>
+                                {option.savings && (
+                                  <Badge className="bg-green-100 text-green-800 text-xs">{option.savings}</Badge>
                                 )}
                               </div>
-                              {option.savings && (
-                                <Badge className="bg-green-100 text-green-800 text-xs">{option.savings}</Badge>
-                              )}
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <div className="text-lg font-bold text-gray-900">{option.monthlyPrice}/mo.</div>
-                                <div className="text-sm text-gray-600">Total: {option.totalPrice}</div>
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <div className="text-lg font-bold text-gray-900">{option.monthlyPrice}/mo.</div>
+                                  <div className="text-sm text-gray-600">Total: {option.totalPrice}</div>
+                                </div>
+                                <div className="text-sm text-gray-600 text-right">{option.contacts}</div>
                               </div>
-                              <div className="text-sm text-gray-600 text-right">{option.contacts}</div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                       
-                      <Button className="w-full mt-6 bg-brand-red hover:bg-brand-maroon-dark text-white">
-                        Buy 12 months plan
-                      </Button>
+                      {selectedConnectPlan === 'connect50' && selectedConnectOption !== null && (() => {
+                        const selectedOption = selectedService.modalContent.plans.connect50.options[selectedConnectOption];
+                        const baseAmountPaise = parsePriceToPaise(selectedOption.totalPrice);
+                        // The price shown is the base price, VAT will be added
+                        return (
+                          <div className="mt-6">
+                            <div className="mb-3">
+                              <GSTDisplay basePriceInPaise={baseAmountPaise} />
+                            </div>
+                            <PayButton
+                              label={`Buy CONNECT 50 — ${selectedOption.duration}`}
+                              planName={`Dealer — CONNECT 50 — ${selectedOption.duration}`}
+                              amountPaise={calculateTotalWithGST(baseAmountPaise)}
+                              notes={{ 
+                                plan: "CONNECT 50", 
+                                category: "dealer", 
+                                type: "connect-pro",
+                                duration: selectedOption.duration,
+                                contacts: selectedOption.contacts
+                              }}
+                              className="w-full bg-[#800000] hover:bg-[#700000] text-white"
+                            />
+                          </div>
+                        );
+                      })()}
                     </CardContent>
                   </Card>
                 </div>
@@ -691,8 +781,8 @@ const BuilderDealerPlans = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-brand-red font-bold text-lg">01</span>
+                      <div className="w-12 h-12 bg-[#800000]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#800000] font-bold text-lg">01</span>
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">Get an edge over competition</h4>
@@ -701,8 +791,8 @@ const BuilderDealerPlans = () => {
                     </div>
                     
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-brand-red font-bold text-lg">02</span>
+                      <div className="w-12 h-12 bg-[#800000]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#800000] font-bold text-lg">02</span>
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">Enjoy uninterrupted access</h4>
@@ -711,8 +801,8 @@ const BuilderDealerPlans = () => {
                     </div>
                     
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-brand-red font-bold text-lg">03</span>
+                      <div className="w-12 h-12 bg-[#800000]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#800000] font-bold text-lg">03</span>
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">No middleman brokerage</h4>
@@ -721,8 +811,8 @@ const BuilderDealerPlans = () => {
                     </div>
                     
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-brand-red font-bold text-lg">04</span>
+                      <div className="w-12 h-12 bg-[#800000]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#800000] font-bold text-lg">04</span>
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900 mb-1">Close property deals faster</h4>
@@ -736,12 +826,12 @@ const BuilderDealerPlans = () => {
               // Regular Service Modal
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-lg text-brand-red">Key Features:</h3>
+                  <h3 className="font-semibold text-lg text-[#800000]">Key Features:</h3>
                   <ul className="space-y-3">
                     {selectedService?.modalContent?.features.map((feature, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-brand-red/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="w-4 h-4 text-brand-red" />
+                        <div className="w-6 h-6 bg-[#800000]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="w-4 h-4 text-[#800000]" />
                         </div>
                         <span className="text-sm text-gray-700 leading-relaxed">{feature}</span>
                       </li>
@@ -752,13 +842,13 @@ const BuilderDealerPlans = () => {
                 {selectedService?.price && (
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="text-lg font-semibold text-gray-900 mb-2">Pricing</div>
-                    <div className="text-2xl font-bold text-brand-red">{selectedService.price}</div>
+                    <div className="text-2xl font-bold text-[#800000]">{selectedService.price}</div>
                   </div>
                 )}
 
                 <div className="pt-4">
                   <Button 
-                    className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white"
+                    className="w-full bg-[#800000] hover:bg-[#700000] text-white"
                     onClick={() => {
                       setSelectedService(null);
                       setIsCallbackDialogOpen(true);
@@ -851,7 +941,7 @@ const BuilderDealerPlans = () => {
 
             {/* View Plans Button */}
             <Button 
-              className="w-full bg-brand-red hover:bg-brand-maroon-dark text-white py-3 text-lg font-semibold"
+              className="w-full bg-[#800000] hover:bg-[#700000] text-white py-3 text-lg font-semibold"
               onClick={() => {
                 // Handle form submission
                 console.log('Pricing form submitted:', pricingForm);

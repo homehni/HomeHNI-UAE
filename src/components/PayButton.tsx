@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthDialog } from "@/components/AuthDialog";
+import { getCurrentCountryConfig } from "@/services/domainCountryService";
+import { getCurrentUserProfile } from "@/services/profileService";
 
 type PayButtonProps = {
   label?: string;
@@ -55,16 +57,52 @@ export default function PayButton({
 
       console.log("Creating Razorpay options with amount:", amountPaise);
       
+      // Get currency from country config (AED for UAE, INR for India)
+      const countryConfig = getCurrentCountryConfig();
+      const currency = countryConfig.currency;
+      
+      // Fetch user profile to populate prefill data
+      let userPrefill = prefill || {};
+      if (currentUser) {
+        try {
+          const userProfile = await getCurrentUserProfile();
+          if (userProfile) {
+            userPrefill = {
+              name: userProfile.full_name || currentUser.user_metadata?.full_name || prefill?.name || '',
+              email: currentUser.email || prefill?.email || '',
+              contact: userProfile.phone || prefill?.contact || ''
+            };
+          } else {
+            // Fallback to user metadata if profile not found
+            userPrefill = {
+              name: currentUser.user_metadata?.full_name || prefill?.name || '',
+              email: currentUser.email || prefill?.email || '',
+              contact: prefill?.contact || ''
+            };
+          }
+        } catch (profileError) {
+          console.error('Error fetching user profile for prefill:', profileError);
+          // Use fallback prefill
+          userPrefill = {
+            name: currentUser.user_metadata?.full_name || prefill?.name || '',
+            email: currentUser.email || prefill?.email || '',
+            contact: prefill?.contact || ''
+          };
+        }
+      }
+      
+      console.log("Using currency:", currency, "Prefill data:", userPrefill);
+      
       // TODO (Later): replace with a backend-created order_id and signature verification.
       const options = {
         key,
         amount: amountPaise,
-        currency: "INR",
+        currency: currency,
         name: "Home HNI",
         description: planName,
         notes,
-        prefill,
-        theme: { color: "#d21404" },
+        prefill: userPrefill,
+        theme: { color: "#800000" },
         handler: async function (response: any) {
           console.log("Payment response received:", response);
           
@@ -101,7 +139,7 @@ export default function PayButton({
                   plan_name: planName,
                   amount_paise: amountPaise,
                   amount_rupees: amountPaise / 100,
-                  currency: 'AED',
+                  currency: currency,
                   status: 'SUCCESS',
                   payment_method: 'razorpay',
                   payment_date: currentDate.toISOString(),
@@ -261,7 +299,7 @@ export default function PayButton({
                       paymentDate: paymentDate,
                       paymentId: response.razorpay_payment_id,
                       paymentMethod: 'Razorpay',
-                      currency: 'INR',
+                      currency: currency,
                       customerName: displayName,
                       customerEmail: recipientEmail,
                       customerPhone: prefill?.contact || '',
@@ -327,7 +365,7 @@ export default function PayButton({
                     plan_name: planName,
                     amount_paise: amountPaise,
                     amount_rupees: amountPaise / 100,
-                    currency: 'INR',
+                    currency: currency,
                     status: 'failed',
                     payment_method: 'razorpay',
                     payment_date: currentDate.toISOString(),
@@ -376,7 +414,7 @@ export default function PayButton({
                     plan_name: planName,
                     amount_paise: amountPaise,
                     amount_rupees: amountPaise / 100,
-                    currency: 'INR',
+                    currency: currency,
                     status: 'cancelled',
                     payment_method: 'razorpay',
                     payment_date: currentDate.toISOString(),
