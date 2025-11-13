@@ -23,7 +23,7 @@ import { validatePropertySubmission } from '@/utils/propertyValidation';
 import { mapBhkType, mapPropertyType, mapListingType, validateMappedValues, mapFurnishing } from '@/utils/propertyMappings';
 import { generatePropertyName } from '@/utils/propertyNameGenerator';
 import { createPropertyContact } from '@/services/propertyContactService';
-import { updateUserProfile } from '@/services/profileService';
+import { updateUserProfile, getCurrentUserProfile } from '@/services/profileService';
 import { PropertyDraftService } from '@/services/propertyDraftService';
 import { DraftResumeModal } from '@/components/property-form/DraftResumeModal';
 import Header from '@/components/Header';
@@ -36,6 +36,16 @@ import PropertyFAQSection from '@/components/PropertyFAQSection';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { User, Briefcase, Building2, Hammer } from 'lucide-react';
 import { updateUserRole } from '@/services/profileService';
+import { getAgentDetails } from '@/services/agentService';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 type FormStep = 'property-selection' | 'owner-info' | 'rental-form' | 'resale-form' | 'pg-hostel-form' | 'flatmates-form' | 'commercial-rental-form' | 'commercial-sale-form' | 'land-plot-form';
 
@@ -68,12 +78,40 @@ export const PostProperty: React.FC = () => {
   const [incompleteDraft, setIncompleteDraft] = useState<any>(null);
   const [isCheckingDrafts, setIsCheckingDrafts] = useState(false);
   const [forceProceed, setForceProceed] = useState(false);
+  const [showAgencyPrompt, setShowAgencyPrompt] = useState(false);
   
   const { user } = useAuth();
   const { settings: appSettings } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  // Check if user is a verified agent and auto-set userType
+  useEffect(() => {
+    const checkVerifiedAgent = async () => {
+      if (!user || userType) return;
+      
+      try {
+        // Check user's role
+        const userProfile = await getCurrentUserProfile();
+        if (userProfile?.role === 'agent') {
+          // Check if agent is verified
+          const agentDetails = await getAgentDetails();
+          if (agentDetails && agentDetails.verification_status === 'verified') {
+            // Auto-set userType to Agent and skip dialog
+            setUserType('Agent');
+            const key = `pp_role_confirmed_${user.id}`;
+            localStorage.setItem(key, 'true');
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error checking agent status:', error);
+      }
+    };
+    
+    checkVerifiedAgent();
+  }, [user, userType]);
 
   // Decide whether to show the role dialog based on a persistent flag
   useEffect(() => {
@@ -1840,6 +1878,8 @@ export const PostProperty: React.FC = () => {
                   }
                   setShowUserTypeDialog(false);
                   console.log('User selected type: Agent');
+                  // Redirect to dashboard profile section
+                  navigate('/dashboard?tab=profile&showAgentVerification=true');
                 } catch (error) {
                   console.error('Error updating user role:', error);
                   toast({
@@ -1857,6 +1897,13 @@ export const PostProperty: React.FC = () => {
             <div
               onClick={async () => {
                 try {
+                  // Check if user selected Agent first
+                  if (!userType || userType !== 'Agent') {
+                    // Show agency prompt
+                    setShowAgencyPrompt(true);
+                    return;
+                  }
+                  
                   setUserType('Agency');
                   const { data: { user } } = await supabase.auth.getUser();
                   if (user) {
@@ -1921,6 +1968,23 @@ export const PostProperty: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Agency Prompt Dialog */}
+      <AlertDialog open={showAgencyPrompt} onOpenChange={setShowAgencyPrompt}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Agency Registration</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please contact your agency or register with the "Agency" details from the post property page.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowAgencyPrompt(false)}>
+              OK
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

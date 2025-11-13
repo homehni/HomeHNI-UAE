@@ -741,3 +741,34 @@ export async function sendCallbackRequestAdminAlert(
     source: data.source || 'Builder/Dealer Plans'
   });
 }
+
+// 29. Agent Verification - Admin Notification - Notify admin when an independent agent submits verification details
+export async function sendAgentVerificationAdminAlert(
+  adminEmail: string,
+  agentData: {
+    name: string;
+    email: string;
+    previousWork?: string;
+    reraNumber?: string;
+    verificationDocuments?: Array<{
+      type: string;
+      url: string;
+      name: string;
+    }>;
+    documents?: Array<{
+      type: string;
+      url: string;
+      name: string;
+    }>;
+  }
+) {
+  return sendEmail('/send-agent-verification-admin-alert', {
+    adminEmail,
+    name: agentData.name,
+    email: agentData.email,
+    previousWork: agentData.previousWork || '',
+    reraNumber: agentData.reraNumber || '',
+    verificationDocuments: agentData.verificationDocuments || [],
+    documents: agentData.documents || []
+  });
+}

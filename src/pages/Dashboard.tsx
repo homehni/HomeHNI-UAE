@@ -36,6 +36,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { PropertyDraftService, type PropertyDraft } from '@/services/propertyDraftService';
 import { generatePropertyUrl } from '@/utils/propertyUrlGenerator';
 import { getCurrentUserProfile } from '@/services/profileService';
+import { AgentVerificationDialog } from '@/components/AgentVerificationDialog';
+import { hasAgentProfile, getAgentDetails } from '@/services/agentService';
 
 interface Property {
   id: string;
@@ -230,6 +232,11 @@ export const Dashboard: React.FC = () => {
   });
   const [contactMessage, setContactMessage] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+
+  // Agent verification state
+  const [showAgentVerification, setShowAgentVerification] = useState(false);
+  const [hasSubmittedAgentVerification, setHasSubmittedAgentVerification] = useState(false);
+  const [agentVerificationStatus, setAgentVerificationStatus] = useState<'pending' | 'verified' | 'rejected' | null>(null);
 
   // Fetch properties where the current user has contacted owners
   const fetchContactedOwnersData = useCallback(async () => {
@@ -460,7 +467,16 @@ export const Dashboard: React.FC = () => {
     const tabFromUrl = searchParams.get('tab') || 'properties';
     setActiveTab(tabFromUrl);
     setActiveSidebarItem(getSidebarItemFromTab(tabFromUrl));
-  }, [location.search]);
+    
+    // Check if agent verification dialog should be shown
+    const showVerification = searchParams.get('showAgentVerification') === 'true';
+    if (showVerification) {
+      setShowAgentVerification(true);
+      // Remove the parameter from URL to avoid showing it again on refresh
+      searchParams.delete('showAgentVerification');
+      navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+    }
+  }, [location.search, navigate, location.pathname]);
 
   // Handle tab change
   const handleTabChange = (newTab: string) => {
@@ -469,6 +485,100 @@ export const Dashboard: React.FC = () => {
     searchParams.set('tab', newTab);
     navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
   };
+
+  // Check if agent needs verification when profile tab is active and user is an agent
+  useEffect(() => {
+    const checkAgentVerification = async () => {
+      if (activeSidebarItem === 'profile' && userRole === 'agent' && !showAgentVerification) {
+        // Check if user has indicated they work with an agency
+        if (user) {
+          const key = `agent_works_with_agency_${user.id}`;
+          const worksWithAgency = localStorage.getItem(key) === 'true';
+          if (worksWithAgency) {
+            // User has already indicated they work with an agency, don't show dialog
+            // Set status to unverified
+            setHasSubmittedAgentVerification(false);
+            setAgentVerificationStatus(null);
+            return;
+          }
+        }
+
+        try {
+          const agentDetails = await getAgentDetails();
+          // If user is an agent but hasn't completed verification, show dialog
+          if (!agentDetails) {
+            setShowAgentVerification(true);
+            setHasSubmittedAgentVerification(false);
+            setAgentVerificationStatus(null);
+          } else {
+            // Agent has submitted verification
+            setHasSubmittedAgentVerification(true);
+            setAgentVerificationStatus(agentDetails.verification_status);
+          }
+        } catch (error) {
+          console.error('Error checking agent profile:', error);
+          setHasSubmittedAgentVerification(false);
+          setAgentVerificationStatus(null);
+        }
+      }
+    };
+    
+    checkAgentVerification();
+  }, [activeSidebarItem, userRole, showAgentVerification, user]);
+
+  // Also check when userRole changes to agent
+  useEffect(() => {
+    const checkAgentStatus = async () => {
+      if (userRole === 'agent') {
+        try {
+          const agentDetails = await getAgentDetails();
+          setHasSubmittedAgentVerification(!!agentDetails);
+          setAgentVerificationStatus(agentDetails?.verification_status || null);
+        } catch (error) {
+          console.error('Error checking agent status:', error);
+          setHasSubmittedAgentVerification(false);
+          setAgentVerificationStatus(null);
+        }
+      } else {
+        setHasSubmittedAgentVerification(false);
+        setAgentVerificationStatus(null);
+      }
+    };
+    
+    checkAgentStatus();
+  }, [userRole]);
+
+  // Set up real-time subscription for agent verification status changes
+  useEffect(() => {
+    if (userRole === 'agent' && user?.id) {
+      const channel = supabase
+        .channel('agent-verification-status')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'agents',
+            filter: `user_id=eq.${user.id}`
+          },
+          async () => {
+            // Refresh agent status when updated
+            try {
+              const agentDetails = await getAgentDetails();
+              setHasSubmittedAgentVerification(!!agentDetails);
+              setAgentVerificationStatus(agentDetails?.verification_status || null);
+            } catch (error) {
+              console.error('Error refreshing agent status:', error);
+            }
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [userRole, user?.id]);
 
   // Draft management functions
   const handleResumeDraft = async (draftId: string) => {
@@ -2428,23 +2538,59 @@ export const Dashboard: React.FC = () => {
                   <div>
                     <div className="flex items-center justify-between">
                       <label className="text-sm font-medium text-gray-700">Account Type</label>
-                      <Badge 
-                        variant="default" 
-                        className={`text-sm px-3 py-1 ${
-                          userRole === 'owner' || userRole === 'agent' || userRole === 'agency' || userRole === 'builder'
-                            ? 'bg-red-600 hover:bg-red-700' 
-                            : userRole === 'seller'
-                            ? 'bg-green-600 hover:bg-green-700'
-                            : userRole === 'buyer'
-                            ? 'bg-purple-600 hover:bg-purple-700'
-                            : 'bg-gray-600 hover:bg-gray-700'
-                        } text-white`}
-                      >
-                        {getRoleDisplayName(userRole)}
-                      </Badge>
+                      <div className="flex flex-col items-end">
+                        {/* Unverified Badge for Agents - Above the badge */}
+                        {userRole === 'agent' && (!hasSubmittedAgentVerification || agentVerificationStatus !== 'verified') && (
+                          <span className="bg-orange-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-t shadow-md border-2 border-b-0 border-white whitespace-nowrap -mb-[2px]">
+                            Unverified
+                          </span>
+                        )}
+                        <div className="relative inline-flex items-center">
+                          <Badge 
+                            variant="default" 
+                            className={`text-sm px-3 py-1 ${
+                              userRole === 'owner' || userRole === 'agent' || userRole === 'agency' || userRole === 'builder'
+                                ? 'bg-red-600 hover:bg-red-700' 
+                                : userRole === 'seller'
+                                ? 'bg-green-600 hover:bg-green-700'
+                                : userRole === 'buyer'
+                                ? 'bg-purple-600 hover:bg-purple-700'
+                                : 'bg-gray-600 hover:bg-gray-700'
+                            } text-white`}
+                          >
+                            {getRoleDisplayName(userRole)}
+                          </Badge>
+                          {/* Verified Badge for Agents */}
+                          {userRole === 'agent' && hasSubmittedAgentVerification && agentVerificationStatus === 'verified' && (
+                            <div className="absolute -top-2 -right-2 z-10">
+                              <div className="bg-green-500 rounded-full p-0.5 shadow-lg border-2 border-white">
+                                <div className="bg-white rounded-full p-0.5">
+                                  <Check className="h-3 w-3 text-green-500 font-bold" strokeWidth={3} />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-2">
                       Your account type determines how you interact with properties on HomeHNI
+                      {userRole === 'agent' && (
+                        <span className={`block mt-1 font-medium ${
+                          agentVerificationStatus === 'verified' 
+                            ? 'text-green-600' 
+                            : agentVerificationStatus === 'rejected'
+                            ? 'text-red-600'
+                            : agentVerificationStatus === 'pending'
+                            ? 'text-yellow-600'
+                            : 'text-orange-600'
+                        }`}>
+                          {agentVerificationStatus === 'verified' && '✓ Verification approved - You are a verified agent'}
+                          {agentVerificationStatus === 'rejected' && '✗ Verification rejected - Please contact support'}
+                          {agentVerificationStatus === 'pending' && '⏳ Verification submitted - Admin review pending'}
+                          {(!hasSubmittedAgentVerification || !agentVerificationStatus || agentVerificationStatus !== 'verified') && agentVerificationStatus !== 'pending' && agentVerificationStatus !== 'rejected' && '⚠️ Verify your status to post a property'}
+                        </span>
+                      )}
                     </p>
                   </div>
                 )}
@@ -3096,9 +3242,53 @@ export const Dashboard: React.FC = () => {
              >
                {isSendingMessage ? 'Sending...' : 'Send Message'}
              </Button>
-           </DialogFooter>
-         </DialogContent>
-       </Dialog>
-     </div>
-   );
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Agent Verification Dialog */}
+      <AgentVerificationDialog
+        open={showAgentVerification}
+        onOpenChange={(open) => {
+          setShowAgentVerification(open);
+          // If dialog is closed without completing verification, mark as unverified
+          if (!open && userRole === 'agent') {
+            const key = user ? `agent_works_with_agency_${user.id}` : null;
+            const worksWithAgency = key ? localStorage.getItem(key) === 'true' : false;
+            if (!worksWithAgency) {
+              // User closed dialog without selecting "works with agency"
+              // Check if they have submitted verification
+              getAgentDetails().then(agentDetails => {
+                if (!agentDetails) {
+                  setHasSubmittedAgentVerification(false);
+                  setAgentVerificationStatus(null);
+                } else {
+                  setHasSubmittedAgentVerification(true);
+                  setAgentVerificationStatus(agentDetails.verification_status);
+                }
+              }).catch(() => {
+                setHasSubmittedAgentVerification(false);
+                setAgentVerificationStatus(null);
+              });
+            } else {
+              // User works with agency
+              setHasSubmittedAgentVerification(false);
+              setAgentVerificationStatus(null);
+            }
+          }
+        }}
+        onComplete={async () => {
+          setShowAgentVerification(false);
+          // Refresh agent verification status after completion
+          try {
+            const agentDetails = await getAgentDetails();
+            setHasSubmittedAgentVerification(!!agentDetails);
+            setAgentVerificationStatus(agentDetails?.verification_status || null);
+          } catch (error) {
+            console.error('Error refreshing agent status:', error);
+          }
+        }}
+      />
+    </div>
+  );
 };

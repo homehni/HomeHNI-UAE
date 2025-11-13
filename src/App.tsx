@@ -53,6 +53,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import PropertyStatus from "./pages/admin/PropertyStatus";
 import AdminLayout from "@/components/admin/AdminLayout";
 import AdminOrEmployeeRoute from "@/components/admin/AdminOrEmployeeRoute";
+import { AdminAgents } from "./pages/AdminAgents";
 import AdminProperties from "./pages/AdminProperties";
 import EmployeeManagement from "./pages/EmployeeManagement";
 import AdminSettings from "./pages/AdminSettings";
@@ -269,6 +270,7 @@ const App: React.FC = () => {
               <Route path="seo" element={<AdminSEO />} />
               <Route path="pages" element={<AdminPageManagement />} />
               <Route path="page-management" element={<Navigate to="/admin/pages" replace />} />
+              <Route path="agents" element={<AdminAgents />} />
               
               {/* Finance Routes - Role Protected */}
               <Route path="finance" element={

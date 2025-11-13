@@ -777,7 +777,132 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       }
     }
   }));
-  return <section id="hero-search" className="relative">
+
+  // Helper: property types per tab for homepage UI (UI only)
+  function getPropertyTypesForHomepage(tab: string): string[] {
+    switch (tab) {
+      case 'rent':
+        // Rent now combines residential + commercial rentals (PG/Hostel included)
+        return MERGE_COMM_LAND_IN_BUY_RENT
+          ? [
+              // Residential rentals
+              'Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel',
+              // Commercial rentals
+              'Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial',
+              // Optional: land rentals (rare)
+              'Commercial Land', 'Industrial Land'
+            ]
+          : ['Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel'];
+      case 'buy':
+        // Buy now combines residential + commercial sale + land/plot
+        return MERGE_COMM_LAND_IN_BUY_RENT
+          ? [
+              // Residential sale
+              'Flat/Apartment', 'Independent House', 'Villa', 'Penthouse', 'Duplex', 'Builder Floor', 'Studio Apartment', 'Gated Community Villa',
+              // Commercial sale
+              'Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial',
+              // Land/Plot
+              'Commercial Land', 'Industrial Land', 'Agricultural Land'
+            ]
+          : ['Flat/Apartment', 'Independent House', 'Villa'];
+      case 'commercial':
+        return ['Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial'];
+      case 'land':
+        // Remove 'Residential Plot' from Land/Plot
+        return ['Commercial Land', 'Industrial Land', 'Agricultural Land'];
+      default:
+        return ['Flat/Apartment', 'Villa', 'Independent House'];
+    }
+  }
+
+  function getBudgetSliderMaxHome(tab: string): number {
+    if (tab === 'rent') return 500000; // 5L
+    return 50000000; // 5 Cr (align with results page)
+  }
+
+  function getBudgetSliderStepHome(tab: string): number {
+    if (tab === 'rent') return 5000; // 5K steps for rent
+    return 500000; // 5L steps for buy/commercial/land
+  }
+
+  function snapBudget(tab: string, [min, max]: [number, number]): [number, number] {
+    const step = getBudgetSliderStepHome(tab);
+    return [Math.floor(min / step) * step, Math.ceil(max / step) * step];
+  }
+
+  function formatBudget(amount: number): string {
+    if (amount >= 10000000) {
+      return `${(amount / 10000000).toFixed(1)}Cr`;
+    } else if (amount >= 100000) {
+      return `${(amount / 100000).toFixed(1)}L`;
+    } else if (amount >= 1000) {
+      return `${(amount / 1000).toFixed(0)}K`;
+    }
+    return amount.toString();
+  }
+
+  function mapStatusToConstruction(status: string): string | null {
+    if (status === 'New Launch') return 'New Project';
+    return null;
+  }
+
+  // Map furnishing labels to filter tokens expected by results filter
+  function mapFurnishingLabelToFilter(label: string): string {
+    const map: Record<string, string> = {
+      'Full': 'Furnished',
+      'Semi': 'Semi-Furnished',
+      'None': 'Unfurnished',
+    };
+    return map[label] || label;
+  }
+
+  // Map homepage labels to canonical property type tokens used in search filters
+  function mapPropertyTypeLabelToToken(label: string): string {
+    const map: Record<string, string> = {
+      'Apartment': 'APARTMENT',
+      'Flat/Apartment': 'APARTMENT',
+      'Independent House': 'INDEPENDENT HOUSE',
+      'Villa': 'VILLA',
+      'Penthouse': 'PENTHOUSE',
+      'Duplex': 'DUPLEX',
+      'Gated Community Villa': 'GATED COMMUNITY VILLA',
+      'Builder Floor': 'BUILDER FLOOR',
+      'Studio Apartment': 'STUDIO APARTMENT',
+      'Co-Living': 'CO-LIVING',
+      'Co-Working': 'CO-WORKING',
+      'Coworking': 'CO-WORKING', // Map both variants to the same token
+      'Commercial Land': 'COMMERCIAL LAND',
+      'Industrial Land': 'INDUSTRIAL LAND',
+      'Agricultural Land': 'AGRICULTURAL LAND',
+      'Office': 'OFFICE',
+      'Retail': 'RETAIL',
+      'Warehouse': 'WAREHOUSE',
+      'Showroom': 'SHOWROOM',
+      'Restaurant': 'RESTAURANT',
+      'Industrial': 'INDUSTRIAL',
+      'PG/Hostel': 'PG/HOSTEL',
+    };
+    return map[label] || label.toUpperCase();
+  }
+
+  function mapBhkSelectionsToFilters(selections: string[]): string[] {
+    const out: string[] = [];
+    selections.forEach(s => {
+      if (s === '1 RK/1 BHK') out.push('1 RK', '1 BHK');
+      else if (s === '4+ BHK') out.push('5+ BHK');
+      else out.push(s);
+    });
+    return out;
+  }
+
+  function mapStatusToAvailability(status: string): string | null {
+    if (status === 'Ready to move' || status === 'Ready') return 'Ready to Move';
+    if (status === 'Under Construction') return 'Under Construction';
+    return null;
+  }
+
+  return (
+    <section id="hero-search" className="relative">
       {/* Click outside to close open dropdowns */}
       {openDropdown && (
         <div className="fixed inset-0 z-40" onMouseDown={() => setOpenDropdown(null)} />
@@ -1311,35 +1436,31 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               {/* Navigation Tabs */}
               <div className="bg-transparent rounded-xl overflow-visible">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1 h-auto rounded-lg shadow-sm mb-3">
-                    {navigationTabs.map((tab, index) => (
-                      <TabsTrigger 
-                        key={tab.id} 
-                        value={tab.id} 
-                        className={`px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base font-semibold transition-all duration-200 ${
-                          index === 0 
-                            ? 'rounded-l-md rounded-r-none' 
-                            : 'rounded-r-md rounded-l-none'
-                        } ${
-                          tab.id === activeTab
-                            ? 'bg-purple-50 text-purple-800 font-bold border-2 border-[#800000]'
-                            : 'bg-transparent text-gray-600 hover:text-gray-800 border-2 border-transparent'
-                        }`}
-                      >
-                        {tab.label}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-
                   <TabsContent value={activeTab} className="mt-0 px-0 py-0 bg-transparent rounded-b-xl">
                     {/* Unified Search Box with inline filters */}
                     <div ref={desktopSearchRef} className="relative mb-3 overflow-visible">
-                      <div
-                        className="relative w-full overflow-visible"
-                      >
-                      {/* Search row with red border and button */}
+                      <div className="relative w-full overflow-visible">
+                        {/* Search row with BUY, RENT, search field, and search button in one line */}
                         <div className="flex items-center gap-2">
-                        <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-[#800000]/30 focus-within:border-[#800000]/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
+                          {/* BUY and RENT buttons - smaller and inline */}
+                          <TabsList className="grid grid-cols-2 bg-transparent p-0 h-10 gap-2 flex-shrink-0">
+                            {navigationTabs.map((tab) => (
+                              <TabsTrigger 
+                                key={tab.id} 
+                                value={tab.id} 
+                                className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 h-10 ${
+                                  tab.id === activeTab
+                                    ? 'bg-white text-[#800000] border-2 border-[#800000] shadow-sm'
+                                    : 'bg-white/80 text-gray-600 border-2 border-transparent hover:text-gray-800 hover:bg-white/90'
+                                }`}
+                              >
+                                {tab.label}
+                              </TabsTrigger>
+                            ))}
+                          </TabsList>
+                          
+                          {/* Search field */}
+                          <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-[#800000]/30 focus-within:border-[#800000]/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
                           <MapPin className="absolute left-0 -ml-5 text-[#800000] pointer-events-none flex-shrink-0" size={14} />
@@ -1384,19 +1505,19 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             )}
                           </div>
                         </div>
-                        </div>
+                      </div>
 
-                        {/* Compact Search Button */}
-                        <button
-                          type="button"
-                          className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-[#800000] hover:bg-[#700000] focus:outline-none focus:ring-2 focus:ring-[#800000]/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
-                          aria-label="Search"
-                          onClick={handleSearch}
-                          disabled={selectedLocations.length === 0}
-                        >
-                          <SearchIcon className="h-4 w-4" />
-                        </button>
-                        </div>
+                      {/* Compact Search Button */}
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-[#800000] hover:bg-[#700000] focus:outline-none focus:ring-2 focus:ring-[#800000]/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                        aria-label="Search"
+                        onClick={handleSearch}
+                        disabled={selectedLocations.length === 0}
+                      >
+                        <SearchIcon className="h-4 w-4" />
+                      </button>
+                    </div>
 
                         {/* Filter row outside red border */}
                         <div className="mt-2">
@@ -1792,144 +1913,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         </div>
       )}
-    </section>;
-
-  // Helper: property types per tab for homepage UI (UI only)
-  function getPropertyTypesForHomepage(tab: string): string[] {
-    switch (tab) {
-      case 'rent':
-        // Rent now combines residential + commercial rentals (PG/Hostel included)
-        return MERGE_COMM_LAND_IN_BUY_RENT
-          ? [
-              // Residential rentals
-              'Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel',
-              // Commercial rentals
-              'Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial',
-              // Optional: land rentals (rare)
-              'Commercial Land', 'Industrial Land'
-            ]
-          : ['Flat/Apartment', 'Independent House', 'Villa', 'PG/Hostel'];
-      case 'buy':
-        // Buy now combines residential + commercial sale + land/plot
-        return MERGE_COMM_LAND_IN_BUY_RENT
-          ? [
-              // Residential sale
-              'Flat/Apartment', 'Independent House', 'Villa', 'Penthouse', 'Duplex', 'Builder Floor', 'Studio Apartment', 'Gated Community Villa',
-              // Commercial sale
-              'Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial',
-              // Land/Plot
-              'Commercial Land', 'Industrial Land', 'Agricultural Land'
-            ]
-          : ['Flat/Apartment', 'Independent House', 'Villa'];
-      case 'commercial':
-        return ['Office', 'Retail', 'Warehouse', 'Showroom', 'Restaurant', 'Co-Working', 'Industrial'];
-      case 'land':
-        // Remove 'Residential Plot' from Land/Plot
-        return ['Commercial Land', 'Industrial Land', 'Agricultural Land'];
-      default:
-        return ['Flat/Apartment', 'Villa', 'Independent House'];
-    }
-  }
-
-  function getBudgetSliderMaxHome(tab: string): number {
-    if (tab === 'rent') return 500000; // 5L
-    return 50000000; // 5 Cr (align with results page)
-  }
-
-  function getBudgetSliderStepHome(tab: string): number {
-    if (tab === 'rent') return 10000; // 10K
-    return 100000; // 1L for finer control on mobile
-  }
-
-  function formatBudget(value: number): string {
-    if (value >= 10000000) return `${(value / 10000000).toFixed(value % 10000000 === 0 ? 0 : 1)} Cr`;
-    if (value >= 100000) return `${(value / 100000).toFixed(value % 100000 === 0 ? 0 : 1)} L`;
-    return value.toString();
-  }
-
-  // Snap budget values to intuitive steps based on range
-  function snapBudget(tab: string, range: [number, number]): [number, number] {
-    const roundTo = (val: number, step: number) => Math.round(val / step) * step;
-    const snapOne = (val: number) => {
-      if (tab === 'rent') {
-        if (val <= 50000) return roundTo(val, 5000); // 5K up to 50K
-        if (val <= 200000) return roundTo(val, 10000); // 10K up to 2L
-        return roundTo(val, 50000); // 50K above
-      }
-      // buy/commercial
-      if (val <= 2000000) return roundTo(val, 100000); // 1L up to 20L
-      if (val <= 10000000) return roundTo(val, 500000); // 5L up to 1Cr
-      return roundTo(val, 1000000); // 10L above
-    };
-  const [min, max] = range;
-  const snapped: [number, number] = [snapOne(min), snapOne(max)];
-    // Ensure bounds and order
-    const maxAllowed = getBudgetSliderMaxHome(tab);
-    snapped[0] = Math.max(0, Math.min(snapped[0], maxAllowed));
-    snapped[1] = Math.max(0, Math.min(snapped[1], maxAllowed));
-    if (snapped[0] > snapped[1]) snapped[0] = snapped[1];
-    return snapped;
-  }
-
-  // Map homepage labels to canonical property type tokens used in search filters
-  function mapPropertyTypeLabelToToken(label: string): string {
-    const map: Record<string, string> = {
-      'Apartment': 'APARTMENT',
-      'Flat/Apartment': 'APARTMENT',
-      'Independent House': 'INDEPENDENT HOUSE',
-      'Villa': 'VILLA',
-      'Penthouse': 'PENTHOUSE',
-      'Duplex': 'DUPLEX',
-      'Gated Community Villa': 'GATED COMMUNITY VILLA',
-      'Builder Floor': 'BUILDER FLOOR',
-      'Studio Apartment': 'STUDIO APARTMENT',
-      'Co-Living': 'CO-LIVING',
-      'Co-Working': 'CO-WORKING',
-      'Coworking': 'CO-WORKING', // Map both variants to the same token
-      'Commercial Land': 'COMMERCIAL LAND',
-      'Industrial Land': 'INDUSTRIAL LAND',
-      'Agricultural Land': 'AGRICULTURAL LAND',
-      'Office': 'OFFICE',
-      'Retail': 'RETAIL',
-      'Warehouse': 'WAREHOUSE',
-      'Showroom': 'SHOWROOM',
-      'Restaurant': 'RESTAURANT',
-      'Industrial': 'INDUSTRIAL',
-      'PG/Hostel': 'PG/HOSTEL',
-    };
-    return map[label] || label.toUpperCase();
-  }
-
-  function mapBhkSelectionsToFilters(selections: string[]): string[] {
-    const out: string[] = [];
-    selections.forEach(s => {
-      if (s === '1 RK/1 BHK') out.push('1 RK', '1 BHK');
-      else if (s === '4+ BHK') out.push('5+ BHK');
-      else out.push(s);
-    });
-    return out;
-  }
-
-  function mapStatusToAvailability(status: string): string | null {
-    if (status === 'Ready to move' || status === 'Ready') return 'Ready to Move';
-    if (status === 'Under Construction') return 'Under Construction';
-    return null;
-  }
-
-  function mapStatusToConstruction(status: string): string | null {
-    if (status === 'New Launch') return 'New Project';
-    return null;
-  }
-
-  // Map furnishing labels to filter tokens expected by results filter
-  function mapFurnishingLabelToFilter(label: string): string {
-    const map: Record<string, string> = {
-      'Full': 'Furnished',
-      'Semi': 'Semi-Furnished',
-      'None': 'Unfurnished',
-    };
-    return map[label] || label;
-  }
+    </section>
+  );
 });
 SearchSection.displayName = 'SearchSection';
 export default SearchSection;

@@ -80,6 +80,12 @@ const navigationItems = [
     group: 'Content',
   },
   {
+    title: 'Agents',
+    url: '/admin/agents',
+    icon: Shield,
+    group: 'Content',
+  },
+  {
     title: 'Regions & Localization',
     url: '/admin/regions',
     icon: MapPin,
