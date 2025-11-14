@@ -23,7 +23,7 @@ const Blog = () => {
 
   const categories = [
     'Real Estate', 'Home Services', 'Finance', 'Interiors', 'Legal',
-    'Packers & Movers', 'NRI', 'Payments', 'News'
+    'Property Investment', 'Mortgage', 'UAE Market News', 'RERA Guide'
   ];
 
   // Auto-scroll functionality for hero carousel
@@ -94,13 +94,13 @@ const Blog = () => {
             {/* Left Content */}
             <div>
               <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                The Home HNI Times
+                HomeHNI UAE Blog
               </h1>
               <p className="text-xl text-gray-600 mb-6">
-                Real Estate, Services & Inspiration Unbounded
+                Your Guide to UAE Real Estate, Home Services & Market Insights
               </p>
               <Button 
-                className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 text-lg"
+                className="bg-[#800000] hover:bg-[#700000] text-white px-8 py-3 text-lg"
                 onClick={() => setShowSubscriptionModal(true)}
               >
                 Subscribe to our blogs
@@ -127,14 +127,14 @@ const Blog = () => {
                             className="w-full h-64 object-cover rounded-lg"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 rounded-b-lg">
-                            <div className="mb-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm inline-block">
+                            <div className="mb-2 bg-[#800000] text-white px-3 py-1 rounded-full text-sm inline-block">
                               {article.category}
                             </div>
                             <h3 className="text-white font-bold text-lg mb-2 line-clamp-2">
                               {article.title}
                             </h3>
                             <p className="text-white/80 text-sm">
-                              {article.date} by <span className="text-red-300">{article.author}</span>
+                              {article.date} by <span className="text-[#800000]/80">{article.author}</span>
                             </p>
                           </div>
                         </div>
@@ -157,7 +157,7 @@ const Blog = () => {
                         key={index}
                         onClick={() => setCurrentSlide(index)}
                         className={`w-3 h-3 rounded-full transition-colors ${
-                          currentSlide === index ? 'bg-red-500' : 'bg-gray-300'
+                          currentSlide === index ? 'bg-[#800000]' : 'bg-gray-300'
                         }`}
                       />
                     ))}
@@ -261,7 +261,7 @@ const Blog = () => {
                     />
                     <Button 
                       type="submit" 
-                      className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 h-12 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="bg-gradient-to-r from-[#800000] to-[#700000] hover:from-[#700000] hover:to-[#800000] text-white px-8 h-12 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Subscribe Now
                     </Button>
@@ -320,7 +320,7 @@ const Blog = () => {
                       variant={selectedCategories.includes(category) ? "default" : "outline"}
                       className={`cursor-pointer px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm transition-colors ${
                         selectedCategories.includes(category)
-                          ? "bg-red-500 text-white hover:bg-red-600"
+                          ? "bg-[#800000] text-white hover:bg-[#700000]"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                       }`}
                       onClick={() => toggleCategory(category)}
@@ -334,7 +334,7 @@ const Blog = () => {
               <div className="text-center">
                 <Button
                   type="submit"
-                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg font-semibold"
+                  className="bg-[#800000] hover:bg-[#700000] text-white px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg font-semibold"
                 >
                   Subscribe Now
                 </Button>
@@ -347,7 +347,7 @@ const Blog = () => {
       {/* Success Modal */}
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-red-500 text-white p-6 sm:p-8 rounded-lg text-center max-w-sm w-full">
+          <div className="bg-[#800000] text-white p-6 sm:p-8 rounded-lg text-center max-w-sm w-full">
             <div className="mb-4">
               <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                 <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

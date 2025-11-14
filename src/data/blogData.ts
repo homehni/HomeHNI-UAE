@@ -2,26 +2,26 @@
 export const featuredArticles = [
   {
     id: 1,
-    title: "What is an Affiant? Definition, Duties, Responsibilities and Legal Importance in 2025",
+    title: "UAE Real Estate Market Sees Strong Growth in Q2 2024: Dubai Leads with 15% Price Increase",
     date: "September 22, 2025",
-    author: "Anda Warner",
-    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    category: "Legal Guide & Formats"
+    author: "UAE Market Analyst",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
+    category: "Real Estate News"
   },
   {
     id: 2,
-    title: "House Number 1 Numerology: Meaning, Benefits, Energy and Calculation 2025",
+    title: "RERA Compliance Guide 2025: Essential Requirements for Property Buyers in Dubai",
     date: "September 21, 2025", 
-    author: "Vivek Mishra",
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1973&q=80",
-    category: "Vastu Tips & Guides"
+    author: "Legal Expert",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    category: "Legal Guide"
   },
   {
     id: 3,
-    title: "Top Investment Areas in Mumbai for Real Estate in 2025",
+    title: "Top Investment Areas in Dubai for Real Estate in 2025: Downtown, Marina & Business Bay",
     date: "September 20, 2025",
     author: "Investment Team",
-    image: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
     category: "Real Estate Investment"
   }
 ];
@@ -47,31 +47,31 @@ export const categoryTiles = [
     color: "bg-orange-900"
   },
   {
-    title: "Home Loan Tips",
+    title: "Mortgage & Home Finance",
     count: "229+ Articles",
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80",
     color: "bg-yellow-800"
   },
   {
-    title: "Vastu Tips & Guides",
+    title: "Property Investment Guides",
     count: "189+ Articles",
     image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     color: "bg-gray-700"
   },
   {
-    title: "Real Estate News & Updates",
+    title: "UAE Real Estate News & Updates",
     count: "147+ Articles",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
     color: "bg-gray-800"
   },
   {
-    title: "Home HNI Hindi Blogs",
+    title: "Dubai Property Market Insights",
     count: "136+ Articles",
-    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
     color: "bg-gray-600"
   },
   {
-    title: "Home HNI Bengali Blogs",
+    title: "Abu Dhabi Real Estate Trends",
     count: "98+ Articles",
     image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     color: "bg-teal-700"
@@ -83,47 +83,47 @@ export const realEstateArticles = {
   featured: [
     {
       id: 1,
-      title: "Top 8 Smart Cities In Maharashtra for Connectivity and Real Estate Trends in 2025",
-      excerpt: "The Smart Cities Mission in Maharashtra is transforming major cities into sustainable, efficient, and livable urban hubs. By leveraging technology and...",
+      title: "Top 8 Investment Areas in Dubai for Real Estate in 2025: Downtown, Marina & Business Bay",
+      excerpt: "Dubai's real estate market continues to show strong growth with prime locations like Downtown Dubai, Dubai Marina, and Business Bay leading the way. These areas offer excellent connectivity...",
       date: "September 8, 2025",
-      author: "Vivek Mishra",
-      image: "https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
+      author: "Dubai Market Analyst",
+      image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80"
     },
     {
       id: 2,
-      title: "Top 11 Smart Cities in Tamil Nadu: Connectivity, Growth Opportunities and Property Trends in 2025",
+      title: "Abu Dhabi Property Market 2025: Growth Opportunities in Yas Island, Saadiyat & Al Reem",
       date: "September 7, 2025",
-      author: "Tamil Nadu Team",
+      author: "Abu Dhabi Team",
       image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2049&q=80"
     },
     {
       id: 3,
-      title: "Best 7 Smart Cities in Karnataka: Connectivity, Growth, and Real Estate Trends in 2025",
+      title: "Sharjah Real Estate Trends 2025: Affordable Housing Options and Investment Potential",
       date: "September 6, 2025",
-      author: "Karnataka Team", 
+      author: "Sharjah Team", 
       image: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
     }
   ],
   sideArticles: [
     {
-      title: "Top 6 Richest Cities of Karnataka: Connectivity, Rental Yield and Growth in 2025",
+      title: "Top 6 Premium Areas in Dubai: Palm Jumeirah, Emirates Hills & Arabian Ranches",
       date: "September 5, 2025",
-      author: "Kruthi"
+      author: "Dubai Property Expert"
     },
     {
-      title: "Top 10 Real Estate Websites in Chennai for Hassle-Free Property Buying and Renting in 2025",
+      title: "Top 10 Real Estate Websites in Dubai for Property Buying and Renting in 2025",
       date: "September 5, 2025", 
-      author: "Krishnanunni H M"
+      author: "Market Research Team"
     },
     {
-      title: "Top 10 Real Estate Websites in Mumbai for Renting and Buying Property in 2025",
+      title: "Best Areas to Rent in Dubai: Budget-Friendly Options for Expats in 2025",
       date: "September 5, 2025",
-      author: "Krishnanunni H M"
+      author: "Rental Market Analyst"
     },
     {
-      title: "Top 10 Real Estate Websites in Bangalore for Buying, Selling, and Renting Homes in 2025",
+      title: "Off-Plan Properties in Dubai: Complete Guide to Buying Pre-Construction Units in 2025",
       date: "September 4, 2025",
-      author: "Krishnanunni H M"
+      author: "Off-Plan Specialist"
     }
   ]
 };
@@ -133,22 +133,22 @@ export const homeServicesArticles = {
   featured: [
     {
       id: 1,
-      title: "Birla Opus vs Asian Paints: Comparison, Prices Coverage, Durability & Shades in 2025",
-      excerpt: "Birla Opus vs Asian Paints is a common comparison for homeowners looking for the best wall finish. Birla Opus is known for its premium wall putty, smooth...",
+      title: "Home Maintenance Services in UAE: Complete Guide to Finding Reliable Contractors in 2025",
+      excerpt: "Finding trustworthy home maintenance services in Dubai, Abu Dhabi, and other UAE cities can be challenging. This comprehensive guide covers everything from AC maintenance to plumbing...",
       date: "September 15, 2025",
-      author: "Krishnanunni H M",
+      author: "Home Services Expert",
       image: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 2,
-      title: "Royale Luxury Emulsion 20 Litre Price in India: Benefits Coverage and Durability in 2025",
+      title: "AC Maintenance in Dubai: Essential Tips for Keeping Your Home Cool in Summer 2025",
       date: "September 12, 2025",
-      author: "Paint Expert",
+      author: "HVAC Specialist",
       image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
     },
     {
       id: 3,
-      title: "Best Budget-Friendly Wallpaper Prices: Cost per Square Foot in India 2025",
+      title: "Interior Painting Services in UAE: Cost Guide and Best Practices for 2025",
       date: "September 10, 2025",
       author: "Interior Team",
       image: "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
@@ -156,29 +156,29 @@ export const homeServicesArticles = {
   ],
   sideArticles: [
     {
-      title: "Asian Paints Ultima 20 Litre Price: Variants, Finish and Coverage Per Sq Ft in 2025",
+      title: "Moving Services in Dubai: Complete Guide to Relocation in UAE 2025",
       date: "September 5, 2025",
-      author: "homehni.com"
+      author: "Relocation Expert"
     },
     {
-      title: "Ace Paint Price Per Litre 2025",
+      title: "Deep Cleaning Services in Abu Dhabi: Professional House Cleaning Guide 2025",
       date: "September 5, 2025",
-      author: "homehni.com"
+      author: "Cleaning Services Team"
     },
     {
-      title: "Nerolac Primer 20 Litre Price 2025", 
+      title: "Plumbing Services in UAE: Finding Reliable Contractors for Home Repairs", 
       date: "September 5, 2025",
-      author: "homehni.com"
+      author: "Plumbing Specialist"
     },
     {
-      title: "Dulux Exterior Paint Colour",
-      date: "September 5, 2025",
-      author: "homehni.com"
-    },
-    {
-      title: "Birla Opus Oil Paint Price List in India: Variants, Finishes and Coverage Per Sq/Ft",
+      title: "Electrical Services in Dubai: Safety Tips and Finding Certified Electricians",
       date: "September 4, 2025", 
-      author: "Krishnanunni H M"
+      author: "Electrical Expert"
+    },
+    {
+      title: "Pest Control Services in UAE: Complete Guide to Keeping Your Home Pest-Free",
+      date: "September 4, 2025", 
+      author: "Pest Control Team"
     }
   ]
 };
@@ -188,22 +188,22 @@ export const homeInteriorsArticles = {
   featured: [
     {
       id: 1,
-      title: "Modern Living Room Design Ideas: Latest Trends and Color Schemes for 2025",
-      excerpt: "Transform your living space with contemporary design elements, smart furniture choices, and trending color palettes that define modern luxury...",
+      title: "Modern Living Room Design Ideas for UAE Homes: Latest Trends and Color Schemes for 2025",
+      excerpt: "Transform your living space with contemporary design elements suited for UAE's climate, smart furniture choices, and trending color palettes that define modern luxury in Dubai and Abu Dhabi...",
       date: "September 18, 2025",
       author: "Interior Design Team",
       image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1958&q=80"
     },
     {
       id: 2,
-      title: "Kitchen Interior Design: Space Optimization and Storage Solutions for Small Homes",
+      title: "Kitchen Interior Design for UAE Apartments: Space Optimization and Storage Solutions",
       date: "September 16, 2025",
       author: "Kitchen Expert",
       image: "/images/home-interiors/kitchen.jpg"
     },
     {
       id: 3,
-      title: "Bedroom Decor Ideas: Creating Peaceful and Stylish Personal Spaces in 2025",
+      title: "Bedroom Decor Ideas for UAE Homes: Creating Peaceful and Stylish Personal Spaces in 2025",
       date: "September 14, 2025",
       author: "Decor Specialist",
       image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
@@ -211,22 +211,22 @@ export const homeInteriorsArticles = {
   ],
   sideArticles: [
     {
-      title: "Top 10 Home Lighting Ideas: LED Solutions for Every Room",
+      title: "Top 10 Home Lighting Ideas for UAE Homes: LED Solutions for Every Room",
       date: "September 12, 2025",
       author: "Lighting Expert"
     },
     {
-      title: "Sustainable Interior Design: Eco-Friendly Materials and Practices",
+      title: "Sustainable Interior Design in UAE: Eco-Friendly Materials and Practices",
       date: "September 11, 2025",
       author: "Eco Design Team"
     },
     {
-      title: "Small Space Interior Design: Maximizing Style in Compact Homes",
+      title: "Small Space Interior Design: Maximizing Style in Compact Dubai Apartments",
       date: "September 10, 2025",
       author: "Space Planning Expert"
     },
     {
-      title: "Latest Furniture Trends: What's Hot in Home Furnishing for 2025",
+      title: "Latest Furniture Trends in UAE: What's Hot in Home Furnishing for 2025",
       date: "September 9, 2025",
       author: "Furniture Specialist"
     }
@@ -238,22 +238,22 @@ export const financeArticles = {
   featured: [
     {
       id: 1,
-      title: "Home Loan Interest Rates 2025: Complete Guide to Best Deals and EMI Calculations",
-      excerpt: "Navigate the current home loan landscape with comprehensive insights into interest rates, processing fees, and smart borrowing strategies for homebuyers...",
+      title: "Mortgage Rates in UAE 2025: Complete Guide to Home Loans and Best Deals",
+      excerpt: "Navigate the UAE mortgage landscape with comprehensive insights into interest rates, processing fees, and smart borrowing strategies for homebuyers in Dubai, Abu Dhabi, and across the Emirates...",
       date: "September 20, 2025",
       author: "Finance Expert",
       image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80"
     },
     {
       id: 2,
-      title: "Tax Benefits on Home Loans: Section 80C and 24B Deductions Explained",
+      title: "Property Registration in UAE: Complete Guide to Fees, Process and Requirements 2025",
       date: "September 19, 2025",
-      author: "Tax Advisor",
+      author: "Legal Finance Team",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2015&q=80"
     },
     {
       id: 3,
-      title: "Real Estate Investment Strategies: ROI Analysis and Market Trends for 2025",
+      title: "Real Estate Investment in UAE: ROI Analysis and Market Trends for 2025",
       date: "September 17, 2025",
       author: "Investment Analyst",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
@@ -261,22 +261,22 @@ export const financeArticles = {
   ],
   sideArticles: [
     {
-      title: "Personal Loan vs Home Loan: Which is Better for Home Renovation?",
+      title: "Personal Loan vs Mortgage in UAE: Which is Better for Home Purchase?",
       date: "September 15, 2025",
       author: "Loan Advisor"
     },
     {
-      title: "Property Registration Charges: State-wise Fee Structure and Process",
+      title: "DLD Fees in Dubai: Complete Guide to Property Registration Charges 2025",
       date: "September 14, 2025",
-      author: "Legal Finance Team"
+      author: "DLD Expert"
     },
     {
-      title: "RERA Act Impact: How it Affects Home Buyers and Investment Decisions",
+      title: "RERA Compliance in UAE: How it Affects Home Buyers and Investment Decisions",
       date: "September 13, 2025",
       author: "RERA Expert"
     },
     {
-      title: "Credit Score Requirements: Minimum CIBIL Score for Home Loan Approval",
+      title: "Credit Score Requirements: Minimum Score for Mortgage Approval in UAE",
       date: "September 12, 2025",
       author: "Credit Specialist"
     }
@@ -290,7 +290,7 @@ export const blogSections = [
     tags: [
       { name: "Home Buying Tips & Guide", active: true },
       { name: "Property Selling Tips & Guides", active: false },
-      { name: "Rental Guide for Renters, Tenant & Landlord", active: false }
+      { name: "Rental Guide for Tenants & Landlords", active: false }
     ],
     viewMoreText: "View More in Home Buying Tips & Guide"
   },
@@ -298,13 +298,13 @@ export const blogSections = [
     title: "Home Services",
     data: homeServicesArticles,
     tags: [
-      { name: "Painting Tips & Color Ideas", active: true },
-      { name: "Easy Cleaning Tips", active: false },
-      { name: "Electrician Tips & Guides", active: false },
-      { name: "Home Garden Ideas & Tips", active: false },
-      { name: "Pest Control Tips & Guides for a Pest-Free Home", active: false }
+      { name: "Home Maintenance Services", active: true },
+      { name: "AC Maintenance & Repair", active: false },
+      { name: "Interior Painting Services", active: false },
+      { name: "Moving & Relocation Services", active: false },
+      { name: "Pest Control Services", active: false }
     ],
-    viewMoreText: "View More in Painting Tips & Color Ideas"
+    viewMoreText: "View More in Home Maintenance Services"
   },
   {
     title: "Home Interiors",
@@ -321,11 +321,11 @@ export const blogSections = [
     title: "Finance",
     data: financeArticles,
     tags: [
-      { name: "Home Loan Tips & Guides", active: true },
-      { name: "Tax Benefits & Deductions", active: false },
+      { name: "Mortgage & Home Loans", active: true },
+      { name: "Property Registration & Fees", active: false },
       { name: "Real Estate Investment", active: false },
-      { name: "Property Legal & Documentation", active: false }
+      { name: "RERA & Legal Compliance", active: false }
     ],
-    viewMoreText: "View More in Home Loan Tips & Guides"
+    viewMoreText: "View More in Mortgage & Home Loans"
   }
 ];
