@@ -11,8 +11,8 @@ const WhyUseSection = () => {
           <UserX className="w-8 h-8 text-[#22c55e]" />
         </div>
       ),
-      title: 'Avoid Brokers',
-      description: 'We directly connect you to verified owners to save brokerage',
+      title: 'Expert Agents',
+      description: 'Connect with certified real estate professionals for trusted guidance',
     },
     {
       icon: (
@@ -20,8 +20,8 @@ const WhyUseSection = () => {
           <Upload className="w-8 h-8 text-[#22c55e]" />
         </div>
       ),
-      title: 'Free Listing',
-      description: 'Easy listing process. Also using WhatsApp',
+      title: 'Premium Listing',
+      description: 'Professional listing service with enhanced visibility. Also using WhatsApp',
     },
     {
       icon: (

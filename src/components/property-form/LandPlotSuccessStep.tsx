@@ -168,7 +168,7 @@ export const LandPlotSuccessStep = ({
       {/* Premium Plans Section */}
       <div className="text-center mb-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
-          You just said No to Brokerage, now say No to Unwanted Calls
+          Get Professional Service & Say No to Unwanted Calls
         </h3>
       </div>
 

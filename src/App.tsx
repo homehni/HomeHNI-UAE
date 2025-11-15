@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import Index from "./pages/Index";
 import AboutUs from "./pages/AboutUs";
 import TermsAndConditions from "./pages/TermsAndConditions";
@@ -122,6 +123,7 @@ const App: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
       <SettingsProvider>
       {/* Activate alerts under the SettingsProvider so it can read settings context */}
       <RegistrationAlertsActivator />
@@ -321,6 +323,7 @@ const App: React.FC = () => {
         </GeolocationRedirect>
       </TooltipProvider>
       </SettingsProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };

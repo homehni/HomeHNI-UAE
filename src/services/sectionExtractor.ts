@@ -35,7 +35,7 @@ export const extractHomepageSections = (): ExtractedSection[] => {
       previewImage: '/lovable-uploads/a83d7fd3-19d0-43ed-9c71-0158ae789ae2.png',
       content: {
         title: 'Find Your Perfect Property',
-        subtitle: 'Discover thousands of properties across India with zero brokerage',
+        subtitle: 'Discover thousands of properties across India with professional service',
         searchPlaceholder: 'Search by city, locality, or landmark',
         backgroundImage: '/lovable-uploads/02fc42a2-c12f-49f1-92b7-9fdee8f3a419.png',
         primaryCTA: 'Search Properties',
@@ -230,8 +230,8 @@ export const extractHomepageSections = (): ExtractedSection[] => {
         title: 'Why Choose HomeHNI?',
         benefits: [
           {
-            title: 'Zero Brokerage',
-            description: 'No hidden charges or broker fees',
+            title: 'Professional Service',
+            description: 'Expert guidance with transparent service fees',
             icon: 'shield'
           },
           {
@@ -400,8 +400,8 @@ export const extractAboutPageSections = (): ExtractedSection[] => {
         title: '🛠 What Makes Us Different',
         features: [
           {
-            title: 'Zero Brokerage, Zero Hassle',
-            description: 'Enjoy a broker-free marketplace where property owners and seekers connect directly—no hidden charges, no negotiation drama.',
+            title: 'Professional Service, Transparent Process',
+            description: 'Connect with certified real estate professionals who provide expert guidance—transparent fees, professional support throughout your journey.',
             icon: 'shield',
             color: 'red'
           },
@@ -455,7 +455,7 @@ export const extractAboutPageSections = (): ExtractedSection[] => {
       sourcePage: 'About Us',
       content: {
         title: '🤝 Join Our Community',
-        content: 'Whether you\'re selling your home, hunting for a dream space, or exploring rentals, HomeHNI is built around you—no brokers, no gimmicks, just a human-centered experience.'
+        content: 'Whether you\'re selling your home, hunting for a dream space, or exploring rentals, HomeHNI is built around you—with expert agents, professional support, and a human-centered experience.'
       },
       schema: {
         title: 'string',

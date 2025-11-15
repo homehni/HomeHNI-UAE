@@ -28,6 +28,7 @@ import { useSearchTrigger } from '@/hooks/useSearchTrigger';
 import { AreaUnit } from '@/utils/areaConverter';
 import { LandAreaFilter } from '@/components/LandAreaFilter';
 import { getCurrentCountryConfig } from '@/services/domainCountryService';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Import feature flags with the same values as in SearchSection
 const MERGE_COMM_LAND_IN_BUY_RENT = true; // Keep true for new behavior
@@ -95,6 +96,7 @@ const normalizeLocation = (location: string): string => {
 
 const PropertySearch = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   // Results view mode
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   // Remove client-side pagination; rely on Load More for dataset growth
@@ -325,6 +327,9 @@ const PropertySearch = () => {
   const [uiBudget, setUiBudget] = useState<[number, number]>(filters.budget);
   const [uiLandArea, setUiLandArea] = useState<[number, number]>(filters.landArea);
   const [landAreaUnit, setLandAreaUnit] = useState<string>(filters.landAreaUnit);
+  // Budget dropdown visibility for min/max (search page filter)
+  const [showMinMenu, setShowMinMenu] = useState<boolean>(false);
+  const [showMaxMenu, setShowMaxMenu] = useState<boolean>(false);
   const budgetKey = `${filters.budget[0]}-${filters.budget[1]}`;
   const landAreaKey = `${filters.landArea[0]}-${filters.landArea[1]}-${filters.landAreaUnit}`;
   useEffect(() => { setUiBudget(filters.budget); }, [budgetKey]);
@@ -381,69 +386,90 @@ const PropertySearch = () => {
               return `${currencySymbol} ${value}`;
             })()}</span>
           </div>
-          {/* Manual Budget Input Fields */}
+          {/* Budget inputs with dropdowns (click to open, close on select) */}
           <div className="space-y-2 mb-3">
             <div className="text-sm font-medium text-gray-700">Enter Budget Range</div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label htmlFor="min-budget" className="text-xs text-gray-500 mb-1 block">Min Budget</label>
-                <Input 
-                  id="min-budget"
-                  type="number" 
-                  placeholder="Enter min budget" 
-                  value={uiBudget[0].toString()} 
-                  onChange={e => {
-                    const value = parseInt(e.target.value) || 0;
-                    if (value <= uiBudget[1]) setUiBudget([value, uiBudget[1]]);
-                  }} 
-                  onBlur={() => commitBudget(uiBudget)}
-                  onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
-                  className="h-8 text-sm"
-                  aria-label="Minimum budget amount"
+            <div className="grid grid-cols-2 gap-2 relative">
+              {/* Min input + dropdown */}
+              <div className="relative">
+                <label className="text-xs text-gray-500 mb-1 block">Min Budget</label>
+                <input
+                  readOnly
+                  onClick={() => { setShowMinMenu(prev => !prev); setShowMaxMenu(false); }}
+                  value={`AED ${uiBudget[0].toLocaleString()}`}
+                  className="w-full h-9 px-3 text-sm rounded-md border border-gray-300 bg-white/70 backdrop-blur-sm cursor-pointer"
                 />
+                {showMinMenu && (
+                  <div className="absolute z-30 mt-1 w-full max-h-48 overflow-y-auto rounded-md border border-[#800000]/50 bg-white shadow-lg">
+                    {(activeTab === 'rent' ? (() => {
+                      const arr: number[] = [];
+                      for (let i = 20000; i <= 910000; i += i < 100000 ? 10000 : (i < 500000 ? 25000 : 50000)) arr.push(i);
+                      return arr;
+                    })() : (() => {
+                      const arr: number[] = [];
+                      for (let i = 200000; i <= 9000000; i += i < 2000000 ? 100000 : (i < 5000000 ? 250000 : 500000)) arr.push(i);
+                      return arr;
+                    })()).map((val) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => {
+                          const newMin = val;
+                          const maxOptions = activeTab === 'rent'
+                            ? [50000, 75000, 100000, 125000, 150000, 175000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000, 850000, 900000, 950000, 1000000, 1010000]
+                            : [400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 5500000, 6000000, 6500000, 7000000, 7500000, 8000000, 8500000, 9000000, 9500000, 10000000];
+                          const validMax = maxOptions.find(m => m > newMin) || (activeTab === 'rent' ? 1010000 : 10000000);
+                          const newMax = uiBudget[1] <= newMin ? validMax : uiBudget[1];
+                          setUiBudget([newMin, newMax]);
+                          commitBudget([newMin, newMax]);
+                          setShowMinMenu(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 whitespace-nowrap ${uiBudget[0] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'}`}
+                      >
+                        {`AED ${val.toLocaleString()}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div>
-                <label htmlFor="max-budget" className="text-xs text-gray-500 mb-1 block">Max Budget</label>
-                <Input 
-                  id="max-budget"
-                  type="number" 
-                  placeholder="Enter max budget" 
-                  value={uiBudget[1].toString()} 
-                  onChange={e => {
-                    const value = parseInt(e.target.value) || 0;
-                    if (value >= uiBudget[0]) setUiBudget([uiBudget[0], Math.min(value, 50000000)]);
-                  }} 
-                  onBlur={() => commitBudget(uiBudget)}
-                  onKeyDown={e => { if (e.key === 'Enter') commitBudget(uiBudget); }}
-                  className="h-8 text-sm"
-                  aria-label="Maximum budget amount"
+
+              {/* Max input + dropdown */}
+              <div className="relative">
+                <label className="text-xs text-gray-500 mb-1 block">Max Budget</label>
+                <input
+                  readOnly
+                  onClick={() => { setShowMaxMenu(prev => !prev); setShowMinMenu(false); }}
+                  value={`AED ${uiBudget[1].toLocaleString()}`}
+                  className="w-full h-9 px-3 text-sm rounded-md border border-gray-300 bg-white/70 backdrop-blur-sm cursor-pointer"
                 />
+                {showMaxMenu && (
+                  <div className="absolute z-30 mt-1 w-full max-h-48 overflow-y-auto rounded-md border border-[#800000]/50 bg-white shadow-lg">
+                    <button
+                      type="button"
+                      onClick={() => { setUiBudget([uiBudget[0], activeTab === 'rent' ? 1010000 : 10000000]); commitBudget([uiBudget[0], activeTab === 'rent' ? 1010000 : 10000000]); setShowMaxMenu(false); }}
+                      className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 whitespace-nowrap ${uiBudget[1] >= (activeTab === 'rent' ? 1010000 : 10000000) ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'}`}
+                    >
+                      Any
+                    </button>
+                    {(activeTab === 'rent'
+                      ? [50000, 75000, 100000, 125000, 150000, 175000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000, 850000, 900000, 950000, 1000000, 1010000]
+                      : [400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 5500000, 6000000, 6500000, 7000000, 7500000, 8000000, 8500000, 9000000, 9500000, 10000000]
+                    ).filter(v => v > uiBudget[0]).map((val) => (
+                      <button
+                        key={val}
+                        type="button"
+                        onClick={() => { setUiBudget([uiBudget[0], val]); commitBudget([uiBudget[0], val]); setShowMaxMenu(false); }}
+                        className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 whitespace-nowrap ${uiBudget[1] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'}`}
+                      >
+                        {`AED ${val.toLocaleString()}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 mt-3">
-            <Button variant={uiBudget[0] === 0 && uiBudget[1] === 50000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([0, 50000]); commitBudget([0, 50000]); }} className="text-xs h-8">
-              Under 50K
-            </Button>
-            <Button variant={uiBudget[0] === 0 && uiBudget[1] === 100000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([0, 100000]); commitBudget([0, 100000]); }} className="text-xs h-8">
-              Under 1L
-            </Button>
-            <Button variant={uiBudget[0] === 0 && uiBudget[1] === 5000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([0, 5000000]); commitBudget([0, 5000000]); }} className="text-xs h-8">
-              Under 50L
-            </Button>
-            <Button variant={uiBudget[0] === 5000000 && uiBudget[1] === 10000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([5000000, 10000000]); commitBudget([5000000, 10000000]); }} className="text-xs h-8">
-              50L-1Cr
-            </Button>
-            <Button variant={uiBudget[0] === 10000000 && uiBudget[1] === 20000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([10000000, 20000000]); commitBudget([10000000, 20000000]); }} className="text-xs h-8">
-              1-2Cr
-            </Button>
-            <Button variant={uiBudget[0] === 20000000 && uiBudget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([20000000, 50000000]); commitBudget([20000000, 50000000]); }} className="text-xs h-8">
-              2-5Cr
-            </Button>
-            <Button variant={uiBudget[0] === 50000000 && uiBudget[1] === 50000000 ? "default" : "outline"} size="sm" onClick={() => { setUiBudget([50000000, 50000000]); commitBudget([50000000, 50000000]); }} className="text-xs h-8">
-              5Cr+
-            </Button>
-          </div>
+          
         </div>
       </div>
 
@@ -1003,7 +1029,9 @@ const PropertySearch = () => {
               <TabsList className="grid w-full grid-cols-2 bg-white border border-gray-200 rounded-full overflow-hidden h-12 p-0.5" role="tablist" aria-label="Property listing type">
                 <TabsTrigger 
                   value="buy" 
-                  className="data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full" 
+                  className={`${theme === 'opaque' 
+                    ? 'rounded-full text-base font-medium h-full text-gray-900 border border-gray-300 data-[state=active]:bg-gray-300/70 data-[state=active]:border-gray-500 data-[state=active]:ring-1 data-[state=active]:ring-gray-400 data-[state=active]:backdrop-blur-md' 
+                    : 'data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full'}`} 
                   role="tab" 
                   aria-selected={activeTab === 'buy'}
                 >
@@ -1011,7 +1039,9 @@ const PropertySearch = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="rent" 
-                  className="data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full" 
+                  className={`${theme === 'opaque' 
+                    ? 'rounded-full text-base font-medium h-full text-gray-900 border border-gray-300 data-[state=active]:bg-gray-300/70 data-[state=active]:border-gray-500 data-[state=active]:ring-1 data-[state=active]:ring-gray-400 data-[state=active]:backdrop-blur-md' 
+                    : 'data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full'}`} 
                   role="tab" 
                   aria-selected={activeTab === 'rent'}
                 >
@@ -1108,9 +1138,13 @@ const PropertySearch = () => {
                 <button
                   type="button"
                   className={`flex items-center justify-center h-10 transition-all ${!isSearchLocked && tempLocationText !== filters.location 
-                    ? "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded" 
-                    : "w-auto px-5 rounded-full text-white bg-[#800000] hover:bg-[#700000]"} 
-                    focus:outline-none focus:ring-2 focus:ring-[#800000]/40 shrink-0`}
+                    ? (theme === 'opaque' 
+                        ? "w-auto px-3 rounded-full text-gray-800 bg-transparent border border-gray-300 hover:bg-gray-200/40 search-button-expanded" 
+                        : "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded")
+                    : (theme === 'opaque' 
+                        ? "w-auto px-5 rounded-full text-gray-800 bg-transparent border border-gray-300 hover:bg-gray-200/40" 
+                        : "w-auto px-5 rounded-full text-white bg-[#800000] hover:bg-[#700000]")} 
+                    focus:outline-none focus:ring-2 ${theme === 'opaque' ? 'focus:ring-gray-400/30' : 'focus:ring-[#800000]/40'} shrink-0`}
                   aria-label={isSearchLocked ? "Search" : "Add location"}
                   onClick={(e) => {
                     e.stopPropagation();

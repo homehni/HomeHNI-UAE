@@ -330,8 +330,8 @@ const CommercialBuyerPlan = () => {
 
   const testimonials = [{
     name: "Rajesh Kumar",
-    text: "Found my perfect office space in just 2 weeks. Zero brokerage saved me ₹2 lakhs!",
-    hashtag: "#ZeroBrokerage"
+    text: "Found my perfect office space in just 2 weeks. Professional service made the process smooth and efficient!",
+    hashtag: "#ProfessionalService"
   }, {
     name: "Priya Sharma",
     text: "The expert help was amazing. They handled everything from search to documentation.",

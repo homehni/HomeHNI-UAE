@@ -338,10 +338,10 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
 
   const testimonials = [{
     text: "Home HNI's customer service was impressively prompt and friendly. Listing my flat was a memorable experience.",
-    hashtag: "#ZeroBrokerage"
+    hashtag: "#ProfessionalService"
   }, {
     text: "The premium plan helped me get the best deal for a PG in a very short time!",
-    hashtag: "#ZeroBrokerage"
+    hashtag: "#ProfessionalService"
   }];
 
   const faqs = [{
@@ -368,11 +368,11 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
     <div className={embedded ? "" : "min-h-screen bg-background"}>
       {!embedded && (
         <Helmet>
-          <title>Owner Plans - Get Tenants Quickly & Save ₹50,000 on Brokerage | HomeHNI</title>
-          <meta name="description" content="Choose owner plans for residential, commercial, industrial & agricultural properties. Get tenants quickly with zero brokerage. Silver, Gold, Platinum & Diamond plans starting FREE." />
-          <meta name="keywords" content="owner plans, property owner plans, get tenants, zero brokerage, residential property plans, commercial property plans, industrial property plans, agricultural property plans" />
-          <meta property="og:title" content="Owner Plans - Get Tenants Quickly & Save on Brokerage | HomeHNI" />
-          <meta property="og:description" content="Owner plans for all property types. Find tenants quickly with zero brokerage. Plans starting FREE." />
+          <title>Owner Plans - Get Tenants Quickly with Professional Service | HomeHNI</title>
+          <meta name="description" content="Choose owner plans for residential, commercial, industrial & agricultural properties. Get tenants quickly with expert guidance. Silver, Gold, Platinum & Diamond plans available." />
+          <meta name="keywords" content="owner plans, property owner plans, get tenants, professional service, residential property plans, commercial property plans, industrial property plans, agricultural property plans" />
+          <meta property="og:title" content="Owner Plans - Get Tenants Quickly with Professional Service | HomeHNI" />
+          <meta property="og:description" content="Owner plans for all property types. Find tenants quickly with expert guidance. Professional plans available." />
           <meta property="og:type" content="website" />
           <link rel="canonical" href={`${window.location.origin}/owner-plans`} />
         </Helmet>
@@ -390,7 +390,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
       >
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-6 pt-8">
-            Get Tenants Quickly. Save up to ₹50,000 on Brokerage!
+            Get Tenants Quickly. Expert Professional Service!
           </h1>
           <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
             Trusted by 3 Lakh+ property owners like you. Choose the plan that suits you 
@@ -416,7 +416,7 @@ const OwnerPlans = ({ embedded, showTitle = true }: OwnerPlansProps) => {
                 Owner Plans
               </h2>
               <p className={embedded ? "text-sm text-muted-foreground" : "text-lg text-muted-foreground"}>
-                Find qualified tenants quickly and save thousands on brokerage with our specialized owner plans.
+                Find qualified tenants quickly with expert guidance from our specialized owner plans.
               </p>
             </div>
           )}

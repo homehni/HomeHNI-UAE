@@ -264,17 +264,17 @@ const CommercialSellerPlans = () => {
   const testimonials = [{
     name: "Rajesh Kumar",
     text: "Their Relationship Manager helped me close my showroom deal in just 12 days!",
-    hashtag: "#ZeroBrokerage",
+    hashtag: "#ProfessionalService",
     rating: 5
   }, {
     name: "Priya Sharma",
     text: "From marketing to legal advice, everything was handled professionally.",
-    hashtag: "#ZeroBrokerage",
+    hashtag: "#ProfessionalService",
     rating: 5
   }, {
     name: "Amit Patel",
     text: "I didn't even have to step out — the team showed my property and kept me updated daily.",
-    hashtag: "#ZeroBrokerage",
+    hashtag: "#ProfessionalService",
     rating: 5
   }];
 

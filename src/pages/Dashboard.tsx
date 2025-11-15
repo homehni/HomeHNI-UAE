@@ -1895,7 +1895,7 @@ export const Dashboard: React.FC = () => {
                         onClick={() => setSelectedFilter(filter)}
                         className={`px-2.5 sm:px-3 lg:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
                           selectedFilter === filter
-                            ? 'bg-red-500 text-white'
+                            ? 'bg-transparent border border-red-500 text-red-600 hover:bg-red-50'
                             : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
                         }`}
                       >
@@ -1995,11 +1995,11 @@ export const Dashboard: React.FC = () => {
                   return (
                     <Card key={property.id} className={`relative bg-white border ${property.is_premium ? 'border-amber-200 ring-2 ring-amber-300 hover:ring-4 hover:ring-amber-400' : 'border-gray-200'} shadow-sm hover:shadow-md transition-shadow overflow-hidden`}>
                       {/* Status Badge - Top Left */}
-                      <div className={`absolute top-1.5 sm:top-2 left-1.5 sm:left-2 z-20 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded text-white ${
-                        (property.rental_status || 'available') === 'available' 
-                          ? 'bg-gray-500' 
-                          : 'bg-gray-500'
-                      }`}>
+                      <div className={`absolute top-1.5 sm:top-2 left-1.5 sm:left-2 z-20 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded bg-transparent border ${
+                        (property.rental_status || 'available') === 'available'
+                          ? 'border-gray-400 text-gray-700'
+                          : 'border-gray-400 text-gray-700'
+                      }`} style={{ borderColor: '#9CA3AF' }}>
                         {(property.rental_status || 'available') === 'available' ? 'Active' : 'Inactive'}
                       </div>
 
@@ -2077,7 +2077,7 @@ export const Dashboard: React.FC = () => {
                             {!property.is_premium && (
                               <Button
                                 onClick={() => handleUpgradeProperty(property)}
-                                className="bg-red-500 hover:bg-red-600 text-white text-[10px] sm:text-xs py-1 sm:py-1.5 px-2 sm:px-3 h-6 sm:h-7 font-normal w-auto mb-2 sm:mb-3"
+                                className="bg-transparent border border-red-600 text-red-600 hover:bg-red-50 text-[10px] sm:text-xs py-1 sm:py-1.5 px-2 sm:px-3 h-6 sm:h-7 font-normal w-auto mb-2 sm:mb-3"
                               >
                                 <Medal className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />
                                 Go Premium
@@ -2354,7 +2354,7 @@ export const Dashboard: React.FC = () => {
                           
                           {/* New Badge */}
                           <div className="absolute top-2 left-2">
-                            <span className="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded">
+                            <span className="bg-transparent border border-red-500 text-red-600 text-xs font-medium px-2 py-1 rounded">
                               New
                             </span>
                           </div>
@@ -2433,7 +2433,7 @@ export const Dashboard: React.FC = () => {
                         
                         {/* Lead Badge */}
                         <div className="absolute bottom-2 right-2">
-                          <Badge className="bg-green-600">
+                          <Badge className="bg-transparent border border-green-600 text-green-700">
                             <MessageSquare className="h-3 w-3 mr-1" />
                             Lead
                           </Badge>
@@ -2452,7 +2452,7 @@ export const Dashboard: React.FC = () => {
                           <span className="text-lg font-bold text-gray-900">
                             ₹{lead.properties.expected_price.toLocaleString('en-IN')}
                           </span>
-                          <Badge className={`${lead.properties.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'}`}>
+                          <Badge className={`${lead.properties.listing_type === 'rent' ? 'bg-transparent border border-orange-500 text-orange-600' : 'bg-transparent border border-blue-500 text-blue-600'}`}>
                             For {lead.properties.listing_type === 'rent' ? 'Rent' : 'Sale'}
                           </Badge>
                         </div>
@@ -2547,16 +2547,16 @@ export const Dashboard: React.FC = () => {
                         )}
                         <div className="relative inline-flex items-center">
                           <Badge 
-                            variant="default" 
-                            className={`text-sm px-3 py-1 ${
+                            variant="outline" 
+                            className={`text-sm px-3 py-1 bg-transparent ${
                               userRole === 'owner' || userRole === 'agent' || userRole === 'agency' || userRole === 'builder'
-                                ? 'bg-red-600 hover:bg-red-700' 
+                                ? 'border-red-600 text-red-600' 
                                 : userRole === 'seller'
-                                ? 'bg-green-600 hover:bg-green-700'
+                                ? 'border-green-600 text-green-700'
                                 : userRole === 'buyer'
-                                ? 'bg-purple-600 hover:bg-purple-700'
-                                : 'bg-gray-600 hover:bg-gray-700'
-                            } text-white`}
+                                ? 'border-purple-600 text-purple-700'
+                                : 'border-gray-400 text-gray-700'
+                            }`}
                           >
                             {getRoleDisplayName(userRole)}
                           </Badge>
@@ -2658,7 +2658,7 @@ export const Dashboard: React.FC = () => {
 
                 {/* Save button */}
                 <div className="flex justify-end pt-2">
-                  <Button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-red-500 hover:bg-red-600 text-white px-8">
+                  <Button onClick={handleSaveProfile} disabled={isSavingProfile} className="bg-transparent border border-red-600 text-red-700 hover:bg-red-50 px-8">
                     {isSavingProfile ? 'Saving...' : 'Save Profile'}
                   </Button>
                 </div>
@@ -2724,7 +2724,7 @@ export const Dashboard: React.FC = () => {
                         
                         {/* Contact Badge */}
                         <div className="absolute bottom-2 right-2">
-                          <Badge className="bg-green-600">
+                          <Badge className="bg-transparent border border-green-600 text-green-700">
                             <Phone className="h-3 w-3 mr-1" />
 
                             Contacted
@@ -2744,7 +2744,7 @@ export const Dashboard: React.FC = () => {
                           <span className="text-lg font-bold text-gray-900">
                             ₹{property.expected_price.toLocaleString('en-IN')}
                           </span>
-                          <Badge className={`${property.listing_type === 'rent' ? 'bg-orange-500' : 'bg-blue-500'}`}>
+                          <Badge className={`${property.listing_type === 'rent' ? 'bg-transparent border border-orange-500 text-orange-600' : 'bg-transparent border border-blue-500 text-blue-600'}`}>
                             For {property.listing_type === 'rent' ? 'Rent' : 'Sale'}
                           </Badge>
                         </div>
@@ -2857,7 +2857,7 @@ export const Dashboard: React.FC = () => {
                           </div>
                           <Button
                             onClick={() => setShowPremiumUpgrade(true)}
-                            className="bg-red-600 hover:bg-red-700 text-white whitespace-nowrap"
+                            className="bg-transparent border border-red-600 text-red-600 hover:bg-red-50 whitespace-nowrap"
                             size="sm"
                           >
                             <TrendingUp className="h-4 w-4 mr-2" />
@@ -3052,7 +3052,7 @@ export const Dashboard: React.FC = () => {
                   <Card className="hover:shadow-lg transition-shadow border-2 border-red-200 flex flex-col">
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <Badge className="bg-red-600 text-white">
+                        <Badge className="bg-transparent border border-red-600 text-red-700">
                           Premium
                         </Badge>
                         <span>Premium Leads</span>
@@ -3105,7 +3105,7 @@ export const Dashboard: React.FC = () => {
                             email: user?.email || '',
                             contact: profilePhone || ''
                           }}
-                          className="w-full bg-red-600 hover:bg-red-700 text-white"
+                          className="w-full bg-transparent border border-red-600 text-red-700 hover:bg-red-50"
                         />
                       </div>
                     </CardContent>
@@ -3122,7 +3122,7 @@ export const Dashboard: React.FC = () => {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Badge className="bg-red-600 text-white">
+              <Badge className="bg-transparent border border-red-600 text-red-700">
                 Premium
               </Badge>
               <span>Upgrade to Premium Leads</span>

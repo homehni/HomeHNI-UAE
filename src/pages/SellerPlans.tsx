@@ -330,7 +330,7 @@ const SellerPlans: React.FC<SellerPlansProps> = ({ embedded }) => {
     >
   <div className="container mx-auto px-4 text-center max-w-4xl">
     <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
-      Get Buyers Quickly. SAVE LAKHS on Brokerage
+      Get Buyers Quickly. Expert Professional Service
     </h1>
 
     <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto text-white">

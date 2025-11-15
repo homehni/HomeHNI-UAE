@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDown, Menu, UserPlus, LogIn, LogOut, Search } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useCMSContent } from '@/hooks/useCMSContent';
@@ -13,9 +14,11 @@ import Sidebar from './Sidebar';
 import LegalServicesForm from './LegalServicesForm';
 import CountrySwitcher from './CountrySwitcher';
 import Marquee from './Marquee';
+import { Palette } from 'lucide-react';
 
 const Header = () => {
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const { isAdmin } = useAdminAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -75,7 +78,7 @@ const Header = () => {
   return (
     <>
       <Marquee />
-      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-[#800000]'}`}>
+      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : theme === 'opaque' ? 'bg-gray-200/85 backdrop-blur-md' : 'bg-[#800000] theme-header-bg'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex items-center h-14">
             
@@ -91,7 +94,7 @@ const Header = () => {
                 <div className="absolute left-1/2 -translate-x-1/2 z-10">
                   <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     <span>Post property</span>
-                    <span className="ml-0.5 sm:ml-1 bg-[#800000] text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
+                    <span className="ml-0.5 sm:ml-1 bg-green-600 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
               )}
@@ -102,12 +105,12 @@ const Header = () => {
                 {user && (
                   <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className={`flex items-center space-x-1 p-1 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                      <Button variant="ghost" className={`flex items-center space-x-1 p-1 transition-colors duration-500 ${isScrolled || theme === 'opaque' ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                         <Avatar className="h-8 w-8">
                           <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                          <AvatarFallback className="bg-[#800000] text-white text-sm">
-                            {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
-                          </AvatarFallback>
+                        <AvatarFallback className={`${theme === 'opaque' ? 'bg-gray-300 text-gray-800' : 'bg-[#800000] text-white'} text-sm`}>
+                          {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                        </AvatarFallback>
                         </Avatar>
                       </Button>
                     </DropdownMenuTrigger>
@@ -134,7 +137,7 @@ const Header = () => {
                 )}
 
                 {/* Menu button */}
-                <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+                <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled || theme === 'opaque' ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                   <Menu size={20} />
                 </Button>
               </div>
@@ -156,28 +159,28 @@ const Header = () => {
                 <a href="/search?type=buy" onClick={e => {
                   e.preventDefault();
                   navigate('/search?type=buy');
-                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`}>
                   BUY
                 </a>
 
                 <a href="/search?type=rent" onClick={e => {
                   e.preventDefault();
                   navigate('/search?type=rent');
-                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`}>
                   RENT
                 </a>
 
                 <button onClick={e => {
                   e.preventDefault();
                   handlePostPropertyClick();
-                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                }} className={`hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`}>
                   SELL
                 </button>
 
                 {/* EXPLORE Dropdown */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className={`flex items-center space-x-1 hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
+                    <button className={`flex items-center space-x-1 hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`}>
                       <span>EXPLORE</span>
                       <ChevronDown className="h-4 w-4" />
                     </button>
@@ -202,6 +205,46 @@ const Header = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
+                {/* THEMES Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className={`flex items-center space-x-1 hover:opacity-80 transition-colors duration-500 text-sm xl:text-base font-medium uppercase ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`}>
+                      <Palette className="h-4 w-4" />
+                      <span>THEMES</span>
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56 bg-white border border-gray-200 shadow-lg">
+                    <DropdownMenuItem 
+                      onClick={() => setTheme('default')}
+                      className={theme === 'default' ? 'bg-gray-100' : ''}
+                    >
+                      <span className="flex items-center justify-between w-full">
+                        <span>Current</span>
+                        {theme === 'default' && <span className="text-green-600">✓</span>}
+                      </span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => setTheme('green-white')}
+                      className={theme === 'green-white' ? 'bg-gray-100' : ''}
+                    >
+                      <span className="flex items-center justify-between w-full">
+                        <span>Green.white</span>
+                        {theme === 'green-white' && <span className="text-green-600">✓</span>}
+                      </span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => setTheme('opaque')}
+                      className={theme === 'opaque' ? 'bg-gray-100' : ''}
+                    >
+                      <span className="flex items-center justify-between w-full">
+                        <span>Opaque</span>
+                        {theme === 'opaque' && <span className="text-green-600">✓</span>}
+                      </span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
               </div>
             </div>
 
@@ -212,7 +255,7 @@ const Header = () => {
                 <div>
                   <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-sm transition-all duration-500 whitespace-nowrap min-w-[75px] xl:min-w-[130px] ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     Post property
-                    <span className="ml-1 bg-[#800000] text-white text-[8px] xl:text-[10px] px-1 xl:px-1.5 py-0.5 rounded-full font-medium">Free</span>
+                    <span className="ml-1 bg-green-600 text-white text-[8px] xl:text-[10px] px-1 xl:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
               )}
@@ -239,14 +282,14 @@ const Header = () => {
               {user && (
                 <DropdownMenu onOpenChange={setIsUserDropdownOpen}>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className={`flex items-center space-x-1 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                    <Button variant="ghost" className={`flex items-center space-x-1 p-2 transition-colors duration-500 ${isScrolled || theme === 'opaque' ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-                        <AvatarFallback className="bg-[#800000] text-white text-base">
+                        <AvatarFallback className={`${theme === 'opaque' ? 'bg-gray-300 text-gray-800' : 'bg-[#800000] text-white'} text-base`}>
                           {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
-                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled ? 'text-gray-800' : 'text-white'}`} />
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''} ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
@@ -276,9 +319,9 @@ const Header = () => {
               )}
 
               {/* Menu button - Desktop */}
-              <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
+              <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled || theme === 'opaque' ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                 <Menu size={20} />
-                <span className={`text-sm font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>Menu</span>
+                <span className={`text-sm font-medium ${isScrolled || theme === 'opaque' ? 'text-gray-800' : 'text-white'}`}>Menu</span>
               </Button>
             </div>
           </div>

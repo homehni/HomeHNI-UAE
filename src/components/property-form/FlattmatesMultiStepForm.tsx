@@ -769,7 +769,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
                 {/* No Brokerage Message */}
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-                  <h3 className="text-base sm:text-lg font-bold text-gray-800 text-center">You just said No to Brokerage, now say No to Unwanted Calls</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-800 text-center">Get Professional Service & Say No to Unwanted Calls</h3>
                 </div>
 
                 {/* Premium Plans Card */}
@@ -1005,7 +1005,7 @@ export const FlattmatesMultiStepForm: React.FC<FlattmatesMultiStepFormProps> = (
 
               {/* No Brokerage Message */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-                <h3 className="text-base sm:text-lg font-bold text-gray-800 text-center">You just said No to Brokerage, now say No to Unwanted Calls</h3>
+                <h3 className="text-base sm:text-lg font-bold text-gray-800 text-center">Get Professional Service & Say No to Unwanted Calls</h3>
               </div>
 
               {/* Premium Plans Card */}

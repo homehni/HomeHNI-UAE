@@ -102,9 +102,9 @@ const Plans = () => {
   const getMetaTags = () => {
     const metaTags: Record<string, { title: string; description: string; keywords: string }> = {
       buyer: {
-        title: 'Property Buyer Plans - Zero Brokerage Home Buying | HomeHNI',
-        description: 'Exclusive buyer plans for finding your dream property with zero brokerage. Silver, Gold, Platinum & Diamond plans with dedicated support, site visits & legal assistance.',
-        keywords: 'buyer plans, property buying plans, zero brokerage, home buying, property search, buyer subscription, property deals'
+        title: 'Property Buyer Plans - Professional Service Home Buying | HomeHNI',
+        description: 'Exclusive buyer plans for finding your dream property with expert guidance. Silver, Gold, Platinum & Diamond plans with dedicated support, site visits & legal assistance.',
+        keywords: 'buyer plans, property buying plans, professional service, home buying, property search, buyer subscription, property deals'
       },
       seller: {
         title: 'Property Seller Plans - List & Sell Properties Fast | HomeHNI',
@@ -113,8 +113,8 @@ const Plans = () => {
       },
       rental: {
         title: 'Rental Plans - Owner & Tenant Plans for Rentals | HomeHNI',
-        description: 'Complete rental solutions for property owners & tenants. Get tenants quickly or find rental properties with zero brokerage. Plans for residential, commercial & more.',
-        keywords: 'rental plans, owner plans, tenant plans, rental property, find tenants, rental subscription, zero brokerage rent'
+        description: 'Complete rental solutions for property owners & tenants. Get tenants quickly or find rental properties with professional service. Plans for residential, commercial & more.',
+        keywords: 'rental plans, owner plans, tenant plans, rental property, find tenants, rental subscription, professional service rent'
       },
       agent: {
         title: 'Real Estate Agent Plans - Grow Your Property Business | HomeHNI',

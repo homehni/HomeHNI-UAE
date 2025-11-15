@@ -11,11 +11,11 @@ const FAQ = () => {
       questions: [
         {
           q: "What is Home Hni?",
-          a: "Home Hni is a premium real estate platform offering curated luxury properties with zero brokerage. It connects genuine buyers and sellers directly, backed by personalized concierge support."
+          a: "Home Hni is a premium real estate platform offering curated luxury properties with professional service. It connects genuine buyers and sellers with expert guidance, backed by personalized concierge support."
         },
         {
           q: "How is it different from platforms like NoBroker or 99acres?",
-          a: "Unlike generic portals, Home Hni is curated only for verified high-end listings, supports direct owner-to-buyer transactions, and offers end-to-end support—without any brokerage charges."
+          a: "Unlike generic portals, Home Hni is curated only for verified high-end listings, supports transactions with professional guidance, and offers end-to-end support—with transparent service fees."
         },
         {
           q: "Is there a mobile app or is it only web-based?",
@@ -36,7 +36,7 @@ const FAQ = () => {
         },
         {
           q: "Are there any charges to list?",
-          a: "A one-time flat listing fee applies. There are no hidden charges or post-sale brokerage fees."
+          a: "A one-time flat listing fee applies. All service charges are transparent and clearly communicated upfront."
         },
         {
           q: "Can I list through an agent?",

@@ -285,7 +285,7 @@ export const ContentManagerDashboard: React.FC = () => {
             rating: '4.8/5',
             reviewCount: '2,143 reviews',
             ownersMatched: '12k+ owners matched',
-            brokerageSaved: '₹18+ crore brokerage saved'
+            brokerageSaved: '12k+ successful transactions'
           },
           page_location: 'homepage',
           section_location: 'testimonials',

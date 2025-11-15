@@ -78,7 +78,7 @@ const CancellationRefunds = () => {
                 <div className="bg-green-50 p-6 rounded-lg">
                   <h3 className="font-semibold text-green-800 mb-3">Property Listings</h3>
                   <ul className="space-y-2 text-green-700">
-                    <li>• Free listings can be cancelled anytime</li>
+                    <li>• Premium listings can be cancelled anytime</li>
                     <li>• Premium listings cancelled within 24 hours: Full refund</li>
                     <li>• Premium listings cancelled after 24 hours: Pro-rated refund</li>
                     <li>• Featured listings: Cancellation fee may apply</li>

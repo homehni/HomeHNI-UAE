@@ -151,7 +151,7 @@ export const CommercialSaleSuccessStep = ({
       {/* Premium Plans Section */}
       <div className="text-center mb-4 sm:mb-6">
         <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-4 px-4">
-          You just said No to Brokerage, now say No to Unwanted Calls
+          Get Professional Service & Say No to Unwanted Calls
         </h3>
       </div>
 

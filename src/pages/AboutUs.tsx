@@ -81,8 +81,8 @@ const AboutUs = () => {
               </div>
               <div className="space-y-8">
                 <div className="card-border-red hover-lift p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Zero Brokerage, Zero Hassle</h3>
-                  <p className="text-gray-700">Enjoy a broker-free marketplace where property owners and seekers connect directly—no hidden charges, no negotiation drama.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Professional Service, Transparent Process</h3>
+                  <p className="text-gray-700">Connect with certified real estate professionals who provide expert guidance—transparent fees, professional support throughout your journey.</p>
                 </div>
                 <div className="card-border-blue hover-lift p-6 bg-white">
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Verified Listings Only</h3>
@@ -117,7 +117,7 @@ const AboutUs = () => {
                 <h2 className="text-3xl font-bold text-gray-900">🤝 Join Our Community</h2>
               </div>
               <p className="text-gray-700 text-lg">
-                Whether you're selling your home, hunting for a dream space, or exploring rentals, HomeHNI is built around you—no brokers, no gimmicks, just a human-centered experience.
+                Whether you're selling your home, hunting for a dream space, or exploring rentals, HomeHNI is built around you—with expert agents, professional support, and a human-centered experience.
               </p>
             </div>
 

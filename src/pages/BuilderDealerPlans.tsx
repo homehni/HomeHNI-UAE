@@ -805,7 +805,7 @@ const BuilderDealerPlans = () => {
                         <span className="text-[#800000] font-bold text-lg">03</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-1">No middleman brokerage</h4>
+                        <h4 className="font-semibold text-gray-900 mb-1">Direct professional service</h4>
                         <p className="text-sm text-gray-600">Get direct access to 600+ active owners without any third-party involvement.</p>
                       </div>
                     </div>

@@ -319,7 +319,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
       >
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-6">
-            Choose a Buyer Plan and <span className="text-yellow-400">SAVE LAKHS</span> on Brokerage
+            Choose a Buyer Plan and <span className="text-yellow-400">GET EXPERT</span> Guidance
           </h1>
 
           <p className="text-lg md:text-xl mb-6 max-w-3xl mx-auto">
@@ -705,7 +705,7 @@ const BuyerPlans = ({ embedded }: BuyerPlansProps) => {
       {/* <section className="py-16 px-4 gradient-red-maroon text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Let's Find You the Perfect Home — At Zero Brokerage!
+            Let's Find You the Perfect Home — With Professional Service!
           </h2>
           <Button className="bg白 text-brand-red hover:bg-gray-100 text-lg px-8 py-3">
             Start Your Free Plan

@@ -430,21 +430,21 @@ const CommercialOwnerPlans = () => {
       location: "Delhi",
       review: "Found a tenant for my office space within 2 weeks! The team was professional and the process was seamless.",
       rating: 5,
-      tag: "#ZeroBrokerage"
+      tag: "#ProfessionalService"
     },
     {
       name: "Priya Sharma",
       location: "Mumbai",
       review: "Excellent service! They handled everything from documentation to tenant verification. Highly recommend!",
       rating: 5,
-      tag: "#ZeroBrokerage"
+      tag: "#ProfessionalService"
     },
     {
       name: "Amit Patel",
       location: "Bangalore",
-      review: "The MoneyBack plan gave me confidence. Got a reliable tenant and saved thousands on brokerage fees.",
+      review: "The MoneyBack plan gave me confidence. Got a reliable tenant with professional service and expert guidance.",
       rating: 5,
-      tag: "#ZeroBrokerage"
+      tag: "#ProfessionalService"
     }
   ];
 

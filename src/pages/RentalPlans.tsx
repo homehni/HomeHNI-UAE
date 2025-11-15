@@ -533,7 +533,7 @@ const RentalPlans = ({ embedded }: RentalPlansProps) => {
                     <AccordionItem value="item-4">
                       <AccordionTrigger>Are there any hidden charges?</AccordionTrigger>
                       <AccordionContent>
-                        No, all charges are transparent. The plan fee is all you pay - no hidden brokerage or additional costs.
+                        No, all charges are transparent. The plan fee is all you pay - professional service with clear, upfront pricing.
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-5">

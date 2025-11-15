@@ -1,6 +1,7 @@
 import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useState } from 'react';
 import { useCMSContent } from '@/hooks/useCMSContent';
 import mortgeaseLogo from '@/assets/mortgease-logo.jpg';
@@ -16,6 +17,7 @@ const Footer = ({
   const {
     user
   } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Properties & Flats for Sale');
   const [activeServicesTab, setActiveServicesTab] = useState('Buy');
@@ -293,11 +295,15 @@ const Footer = ({
     <div className="text-center">
       <h4 className="font-semibold text-gray-900 mb-2">Post Your Property (Free)</h4>
       <p className="text-sm text-gray-600 mb-4">
-        Reach verified buyers & tenants. Zero brokerage.
+        Reach verified buyers & tenants. Professional service.
       </p>
       <button
         onClick={handlePostPropertyClick}
-        className="bg-[#800000] text-white px-6 py-2 rounded text-sm hover:bg-[#700000] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
+        className={`px-6 py-2 rounded text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+          theme === 'opaque'
+            ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400'
+            : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
+        }`}
       >
         Post for Free
       </button>
@@ -309,11 +315,15 @@ const Footer = ({
     <div className="text-center">
       <h4 className="font-semibold text-gray-900 mb-2">Search Verified Listings</h4>
       <p className="text-sm text-gray-600 mb-4">
-        Thousands of owner-listed options. No brokerage.
+        Thousands of owner-listed options. Expert guidance.
       </p>
       <button
         onClick={() => navigate('/search')}
-        className="bg-[#800000] text-white px-6 py-2 rounded text-sm hover:bg-[#700000] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#800000]"
+        className={`px-6 py-2 rounded text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+          theme === 'opaque'
+            ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400'
+            : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
+        }`}
       >
         Browse Listings
       </button>

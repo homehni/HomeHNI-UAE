@@ -1,12 +1,14 @@
 import React from 'react';
 import { Phone, ShieldCheck, Users, FileText, Calendar, HandshakeIcon } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const HowItWorksSection: React.FC = () => {
+  const { theme } = useTheme();
   const benefits = [
     {
       icon: Phone,
-      title: "No Calls From Brokers",
-      description: "Your information is kept confidential and you no longer have to worry about calls from brokers."
+      title: "Professional Communication",
+      description: "Your information is kept confidential and you'll only receive calls from verified, professional agents."
     },
     {
       icon: ShieldCheck,
@@ -15,8 +17,8 @@ const HowItWorksSection: React.FC = () => {
     },
     {
       icon: Users,
-      title: "Save Brokerage",
-      description: "No brokers means no brokerage! Why pay out of a gift that should be yours."
+      title: "Expert Guidance",
+      description: "Get professional real estate support from certified agents who understand the market."
     }
   ];
 
@@ -42,8 +44,8 @@ const HowItWorksSection: React.FC = () => {
   ];
 
   const features = [
-    { name: "Zero Brokerage", description: "Buy, sell or rent your property without paying hefty commission to agents." },
-    { name: "Free Listing", description: "Post your property advertisement for rent or resale/sell. Whether you want to sell property online or rent out property, you can do it without any charges." },
+    { name: "Professional Service", description: "Buy, sell or rent your property with expert guidance from certified real estate professionals." },
+    { name: "Premium Listing", description: "Post your property advertisement for rent or resale/sell with enhanced visibility and professional support." },
     { name: "Easy and Quick Process", description: "With HomeHNI, posting your rent advertisement or listing a property for sale is seamless. Our platform guides you through simple steps, ensuring your free property listing is attractive and effective." },
     { name: "Increased Property Visibility", description: "HomeHNI's extensive reach and network ensures that your property advertisement gets maximum visibility, increasing the chances of finding the right tenants or buyers for your property." },
     { name: "Dedicated Support", description: "HomeHNI offers dedicated support to help you with the process, ensuring that your property advertisement gets the visibility it deserves." },
@@ -64,8 +66,8 @@ const HowItWorksSection: React.FC = () => {
             {benefits.map((benefit, index) => (
               <div key={index} className="text-center">
                 <div className="flex justify-center mb-3">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <benefit.icon className="w-6 h-6 text-primary" />
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${theme === 'opaque' ? 'bg-gray-400/20' : 'bg-primary/10'}`}>
+                    <benefit.icon className={`w-6 h-6 ${theme === 'opaque' ? 'text-black' : 'text-primary'}`} />
                   </div>
                 </div>
                 <h3 className="font-semibold text-muted-foreground mb-2">{benefit.title}</h3>
@@ -87,16 +89,16 @@ const HowItWorksSection: React.FC = () => {
             <div key={index} className={`flex items-center gap-8 ${step.isLeft ? 'flex-row' : 'flex-row-reverse'}`}>
               <div className="flex-1">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <step.icon className="w-6 h-6 text-primary" />
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${theme === 'opaque' ? 'bg-gray-400/20' : 'bg-primary/10'}`}>
+                    <step.icon className={`w-6 h-6 ${theme === 'opaque' ? 'text-black' : 'text-primary'}`} />
                   </div>
                   <h3 className="text-xl font-semibold text-foreground">{step.title}</h3>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">{step.description}</p>
               </div>
               <div className="flex-1">
-                <div className="w-full h-48 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center">
-                  <step.icon className="w-16 h-16 text-primary/30" />
+                <div className={`w-full h-48 rounded-lg flex items-center justify-center ${theme === 'opaque' ? 'bg-gray-200/40' : 'bg-gradient-to-br from-primary/10 to-primary/5'}`}>
+                  <step.icon className={`w-16 h-16 ${theme === 'opaque' ? 'text-black/40' : 'text-primary/30'}`} />
                 </div>
               </div>
             </div>

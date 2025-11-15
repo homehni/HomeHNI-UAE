@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
+import { useTheme } from '@/contexts/ThemeContext';
 import { normalizeLocation } from '@/services/locationService';
 import { getCurrentCountryConfig } from '@/services/domainCountryService';
 import mortgeaseLogo from '@/assets/mortgease-logo.jpg';
@@ -78,6 +79,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const MERGE_COMM_LAND_IN_BUY_RENT = true; // Keep true for new behavior
   const SHOW_LEGACY_COMMERCIAL_LAND_TABS = false; // Set to false to hide old tabs
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('buy');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
@@ -902,13 +904,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   }
 
   return (
-    <section id="hero-search" className="relative">
+    <section id="hero-search" className="relative w-full">
       {/* Click outside to close open dropdowns */}
       {openDropdown && (
         <div className="fixed inset-0 z-40" onMouseDown={() => setOpenDropdown(null)} />
       )}
       {/* Hero Image Background - mobile responsive with UAE theme - Carousel - Extended to cover whitespace */}
-      <div className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[65vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-visible" style={{ paddingBottom: '2rem' }}>
+      <div className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[65vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-visible w-full" style={{ paddingBottom: '2rem' }}>
         {/* Carousel container with all images - extended to cover whitespace below */}
         <div className="absolute inset-0" style={{ bottom: '-2rem' }}>
           {HERO_IMAGES.map((image, index) => (
@@ -925,6 +927,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               }}
             />
           ))}
+        </div>
+        {/* Dark overlay layer for text visibility - covers full hero section */}
+        <div className="absolute inset-0 bg-black/30 z-[7]" style={{ bottom: '-2rem', left: 0, right: 0, width: '100%' }} />
+        {/* Background Text Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[8]" style={{ bottom: '-2rem' }}>
+          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white/80 select-none whitespace-nowrap">
+            HomeHNI A Premium Listing Partner
+          </h1>
         </div>
         {/* Subtle leaf green overlay for UAE theme - very light */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#ef4444]/10 to-[#dc2626]/10 z-10" style={{ bottom: '-2rem' }} />
@@ -1432,7 +1442,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
        Lowering to z-30 resolves stacking without changing layout. */}
   <div className="hidden sm:block absolute left-0 right-0 z-30 transform-gpu will-change-transform" style={{ bottom: '-6rem' }}>
           <div className="max-w-full md:max-w-4xl lg:max-w-5xl xl:max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto bg-white/80 backdrop-blur-md rounded-xl p-4 shadow-lg">
+            <div className="max-w-full md:max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto bg-white/80 backdrop-blur-md rounded-xl p-6 sm:p-7 shadow-lg">
               {/* Navigation Tabs */}
               <div className="bg-transparent rounded-xl overflow-visible">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -1449,9 +1459,13 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 key={tab.id} 
                                 value={tab.id} 
                                 className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 h-10 ${
-                                  tab.id === activeTab
-                                    ? 'bg-white text-[#800000] border border-[#800000] shadow-sm'
-                                    : 'bg-white/80 text-gray-600 border border-[#800000]/50 hover:text-gray-800 hover:bg-white/90'
+                                  theme === 'opaque'
+                                    ? (tab.id === activeTab
+                                        ? 'bg-gray-300/70 text-gray-900 border border-gray-500 ring-1 ring-gray-400 backdrop-blur-md shadow-sm'
+                                        : 'bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100')
+                                    : (tab.id === activeTab
+                                        ? 'bg-white text-[#800000] border border-[#800000] shadow-sm'
+                                        : 'bg-white/80 text-gray-600 border border-[#800000]/50 hover:text-gray-800 hover:bg-white/90')
                                 }`}
                               >
                                 {tab.label}
@@ -1460,10 +1474,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           </TabsList>
                           
                           {/* Search field */}
-                          <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-[#800000]/50 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-[#800000]/30 focus-within:border-[#800000] focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-[#800000]/70 overflow-visible" onClick={() => inputRef.current?.focus()}>
+                          <div className={`relative px-3 py-2 pl-8 pr-3 flex-1 rounded-lg focus-within:ring-2 transition-all duration-200 overflow-visible ${
+                            theme === 'opaque'
+                              ? 'border border-gray-300 bg-gray-200/75 backdrop-blur-md focus-within:ring-gray-400/30 focus-within:border-gray-400 hover:bg-gray-300/85'
+                              : 'border border-[#800000]/50 bg-white/80 backdrop-blur-md focus-within:ring-[#800000]/30 focus-within:border-[#800000] focus-within:bg-white/95 hover:bg-white/90 hover:border-[#800000]/70'
+                          }`} onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
-                          <MapPin className="absolute left-0 -ml-5 text-[#800000] pointer-events-none flex-shrink-0" size={14} />
+                          <MapPin className={`absolute left-0 -ml-5 pointer-events-none flex-shrink-0 ${theme === 'opaque' ? 'text-gray-700' : 'text-[#800000]'}`} size={14} />
                           <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0 relative">
                             <input
                               ref={inputRef}
@@ -1483,7 +1501,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 }
                               }}
                               placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Search locality...'}
-                              className="flex-1 min-w-[8rem] outline-none bg-transparent text-sm placeholder:text-gray-700 font-medium"
+                              className={`flex-1 min-w-[8rem] outline-none bg-transparent text-sm font-medium ${theme === 'opaque' ? 'placeholder:text-gray-600 text-gray-900' : 'placeholder:text-gray-700 text-gray-900'}`}
                               style={{ appearance: "none" }}
                             />
                             {/* Error message for desktop */}
@@ -1510,7 +1528,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       {/* Compact Search Button */}
                       <button
                         type="button"
-                        className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-[#800000] hover:bg-[#700000] border border-[#800000] focus:outline-none focus:ring-2 focus:ring-[#800000]/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                        className={`inline-flex items-center justify-center h-10 w-10 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0 focus:outline-none focus:ring-2 ${
+                          theme === 'opaque'
+                            ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus:ring-gray-400/30'
+                            : 'text-white bg-[#800000] hover:bg-[#700000] border border-[#800000] focus:ring-[#800000]/30'
+                        }`}
                         aria-label="Search"
                         onClick={handleSearch}
                         disabled={selectedLocations.length === 0}
@@ -1787,6 +1809,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   {/* Min Budget Dropdown */}
                                   <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1.5">Minimum</label>
+                                    {/* Selected Minimum display */}
+                                    <div className="mb-1">
+                                      <input
+                                        readOnly
+                                        value={`AED ${budget[0].toLocaleString()}`}
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white/70 backdrop-blur-sm"
+                                      />
+                                    </div>
                                     <div className="border border-[#800000]/50 rounded-lg overflow-hidden max-h-[150px] overflow-y-auto">
                                     {activeTab === 'rent' ? (
                                       <>
@@ -1807,6 +1837,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                                 const validMax = maxOptions.find(m => m > newMin) || 1010000;
                                                 const newMax = budget[1] <= newMin ? validMax : budget[1];
                                                 setBudget([newMin, newMax]);
+                                              // Close dropdown after selection
+                                              setOpenDropdown(null);
                                               }}
                                               className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
                                                 budget[0] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
@@ -1836,6 +1868,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                                 const validMax = maxOptions.find(m => m > newMin) || 10000000;
                                                 const newMax = budget[1] <= newMin ? validMax : budget[1];
                                                 setBudget([newMin, newMax]);
+                                              setOpenDropdown(null);
                                               }}
                                               className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
                                                 budget[0] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
@@ -1853,6 +1886,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   {/* Max Budget Dropdown */}
                                   <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1.5">Maximum</label>
+                                    {/* Selected Maximum display */}
+                                    <div className="mb-1">
+                                      <input
+                                        readOnly
+                                        value={`AED ${budget[1].toLocaleString()}`}
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 bg-white/70 backdrop-blur-sm"
+                                      />
+                                    </div>
                                     <div className="border border-[#800000]/50 rounded-lg overflow-hidden max-h-[150px] overflow-y-auto">
                                     {activeTab === 'rent' ? (
                                       <>
@@ -1867,6 +1908,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                                 type="button"
                                                 onClick={() => {
                                                   setBudget([budget[0], 1010000]);
+                                                setOpenDropdown(null);
                                                 }}
                                                 className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 truncate ${
                                                   budget[1] >= 1010000 ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
@@ -1880,6 +1922,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                                   type="button"
                                                   onClick={() => {
                                                     setBudget([budget[0], val]);
+                                                    setOpenDropdown(null);
                                                   }}
                                                   className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
                                                     budget[1] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
@@ -1905,6 +1948,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                                 type="button"
                                                 onClick={() => {
                                                   setBudget([budget[0], 10000000]);
+                                                setOpenDropdown(null);
                                                 }}
                                                 className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 truncate ${
                                                   budget[1] >= 10000000 ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
@@ -1918,6 +1962,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                                   type="button"
                                                   onClick={() => {
                                                     setBudget([budget[0], val]);
+                                                    setOpenDropdown(null);
                                                   }}
                                                   className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
                                                     budget[1] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'

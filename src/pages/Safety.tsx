@@ -159,7 +159,7 @@ const Safety = () => {
 
               <div className="mt-12 text-center">
                 <p className="text-xl font-semibold text-primary mb-2">Stay informed. Stay cautious.</p>
-                <p className="text-lg text-muted-foreground">Home Hni — Safe. Verified. Broker-Free.</p>
+                <p className="text-lg text-muted-foreground">Home Hni — Safe. Verified. Professional Service.</p>
               </div>
             </div>
           </div>

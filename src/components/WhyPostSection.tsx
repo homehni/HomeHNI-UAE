@@ -5,8 +5,8 @@ const WhyPostSection: React.FC = () => {
   const benefits = [
     {
       icon: ShieldCheck,
-      title: "Zero Brokerage",
-      description: "No commission charges"
+      title: "Professional Service",
+      description: "Expert guidance with transparent service fees"
     },
     {
       icon: Clock,
@@ -27,7 +27,7 @@ const WhyPostSection: React.FC = () => {
       city: "Dubai"
     },
     {
-      text: "I was amazed by how quickly I found the perfect tenant through HomeHNI. The verification process gave me confidence, and the zero brokerage policy saved me thousands. Highly recommend to all property owners!",
+      text: "I was amazed by how quickly I found the perfect tenant through HomeHNI. The verification process gave me confidence, and the professional service helped me get the best results. Highly recommend to all property owners!",
       name: "Fatima Al Zaabi",
       city: "Abu Dhabi"
     },

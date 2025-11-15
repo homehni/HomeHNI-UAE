@@ -245,7 +245,7 @@ export const AdminWebsiteCMS: React.FC = () => {
         preview: 'Clean design with centered search and CTA buttons',
         content: {
           title: 'Find Your Perfect Property',
-          subtitle: 'Discover thousands of properties across India with zero brokerage',
+          subtitle: 'Discover thousands of properties across India with professional service',
           searchPlaceholder: 'Search by city, locality, or landmark',
           primaryCTA: 'Search Properties',
           secondaryCTA: 'Post Your Property Free'
@@ -405,7 +405,7 @@ export const AdminWebsiteCMS: React.FC = () => {
               name: "Rajesh Kumar",
               location: "Mumbai",
               rating: 5,
-              text: "Found my dream home in just 2 weeks! The zero brokerage policy saved me ₹2 lakhs. Highly recommended!"
+              text: "Found my dream home in just 2 weeks! The professional service made the process smooth and efficient. Highly recommended!"
             },
             {
               name: "Priya Sharma",

@@ -230,7 +230,7 @@ const AboutSidebar = () => {
                   
                   <div className="space-y-4 text-gray-700 leading-relaxed">
                     <p className="text-sm">
-                      Home HNI gives you direct access to serious, verified luxury property buyers—without relying on traditional brokers. This means you stay in complete control of the process, save substantial brokerage fees, and ensure your property is presented to the right audience with the discretion it deserves.
+                      Home HNI gives you direct access to serious, verified luxury property buyers—with expert professional guidance. This means you stay in complete control of the process, benefit from transparent service fees, and ensure your property is presented to the right audience with the discretion it deserves.
                     </p>
                     
                     <p className="text-sm">
@@ -238,7 +238,7 @@ const AboutSidebar = () => {
                     </p>
                     
                     <p className="text-sm">
-                      By eliminating brokerage, both seller and buyer save significantly—allowing more flexibility in price negotiations. In fact, our data shows that sellers often achieve 2–4% higher sale values compared to conventional channels, as buyers are more willing to pay a fair price when there's no brokerage on either side. It's a true win-win.
+                      With transparent professional service, both seller and buyer benefit from expert guidance—allowing more flexibility in price negotiations. In fact, our data shows that sellers often achieve 2–4% higher sale values compared to conventional channels, as buyers are more willing to pay a fair price when there's professional support on both sides. It's a true win-win.
                     </p>
                     
                     <p className="text-sm">
@@ -296,7 +296,7 @@ const AboutSidebar = () => {
                     <div className="space-y-4 text-sm">
                       <div>
                         <p className="font-medium mb-2">1. Verified, Direct Listings</p>
-                        <p>Every property on Home HNI is verified and listed directly by the owner or an authorized representative. This ensures complete transparency, authenticity, and zero hidden brokerage. For sellers, this means retaining the full value of your sale; for buyers, it means your budget goes entirely into your new property, not into agent fees.</p>
+                        <p>Every property on Home HNI is verified and listed directly by the owner or an authorized representative. This ensures complete transparency, authenticity, and professional service. For sellers, this means expert guidance throughout the process; for buyers, it means your budget goes entirely into your new property with transparent service fees.</p>
                       </div>
                       
                       <div>
@@ -420,7 +420,7 @@ const AboutSidebar = () => {
                           </div>
                           <div>
                             <p className="font-medium mb-1">Do you charge any commission?</p>
-                            <p>No, Home HNI does not charge any brokerage or commission. You deal directly with buyers and retain 100% of your sale value.</p>
+                            <p>Home HNI provides professional service with transparent fees. You work with certified agents and benefit from expert guidance throughout the process.</p>
                           </div>
                         </div>
                       </AccordionContent>

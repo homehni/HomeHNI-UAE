@@ -27,7 +27,7 @@ const Testimonials = () => {
   }, {
     name: "Mohammed Al Zaabi",
     role: "Owner, Jumeirah",
-    text: "Home Hni is a game‑changer. As a property owner, the platform's seamless Refer‑&‑Earn program is stellar. The app is intuitive, and within days I had quality leads—without any brokerage.",
+    text: "Home Hni is a game‑changer. As a property owner, the platform's seamless Refer‑&‑Earn program is stellar. The app is intuitive, and within days I had quality leads—with professional service and expert guidance.",
     rating: 5
   }, {
     name: "Omar Hassan",

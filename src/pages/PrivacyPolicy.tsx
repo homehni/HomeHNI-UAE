@@ -124,14 +124,14 @@ const PrivacyPolicy = () => {
               <p className="text-gray-700 mb-4 leading-relaxed">
                 HomeHNI is not intended for individuals under the age of 18.
               </p>
-
+              
               <h3 className="text-xl font-semibold text-gray-800 mb-3">1.10 Updates</h3>
-              <p className="text-gray-700 mb-4 leading-relaxed">
+                <p className="text-gray-700 mb-4 leading-relaxed">
                 We may update this Privacy Policy periodically. The date above reflects the latest version.
               </p>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">1.11 Contact</h3>
-              <p className="text-gray-700 mb-4 leading-relaxed">
+                <p className="text-gray-700 mb-4 leading-relaxed">
                 <a href="mailto:privacy@homehni.ae" className="text-[#800000] hover:underline">privacy@homehni.ae</a>
               </p>
             </section>
@@ -151,7 +151,7 @@ const PrivacyPolicy = () => {
                 <li><strong>Analytics:</strong> behaviour tracking and performance.</li>
                 <li><strong>Advertising:</strong> personalised marketing, retargeting.</li>
                 <li><strong>Preferences:</strong> saved preferences and settings.</li>
-              </ul>
+                </ul>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">2.3 Cookie Management</h3>
               <p className="text-gray-700 mb-4 leading-relaxed">
@@ -174,7 +174,7 @@ const PrivacyPolicy = () => {
                 <li>Misuse the platform or disrupt services.</li>
                 <li>Engage in scraping, automated data collection, or security breaches.</li>
                 <li>Upload unlawful or fraudulent content.</li>
-              </ul>
+                  </ul>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">3.3 Intellectual Property</h3>
               <p className="text-gray-700 mb-4 leading-relaxed">
@@ -189,7 +189,7 @@ const PrivacyPolicy = () => {
               <h3 className="text-xl font-semibold text-gray-800 mb-3">3.5 Limitation of Liability</h3>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 HomeHNI is not liable for losses resulting from use of the platform, downtime, or third-party interactions.
-              </p>
+                  </p>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">3.6 Governing Law</h3>
               <p className="text-gray-700 mb-4 leading-relaxed">
@@ -217,7 +217,7 @@ const PrivacyPolicy = () => {
               <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
                 <li>All paid services must be prepaid.</li>
                 <li>Billing disputes must be reported within 7 days.</li>
-              </ul>
+                </ul>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">4.4 Suspension</h3>
               <p className="text-gray-700 mb-4 leading-relaxed">
@@ -285,7 +285,7 @@ const PrivacyPolicy = () => {
                 <li>Use bots or automation.</li>
                 <li>Post fraudulent listings.</li>
                 <li>Harass or abuse other users.</li>
-              </ul>
+                </ul>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 Violations may result in suspension.
               </p>
@@ -354,7 +354,7 @@ const PrivacyPolicy = () => {
               <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
                 <li>Featured listings expire based on the package purchased.</li>
                 <li>Expired ads revert to standard position.</li>
-              </ul>
+                </ul>
             </section>
 
             {/* 11. RERA Compliance Clause */}
@@ -384,7 +384,7 @@ const PrivacyPolicy = () => {
               <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
                 <li>Upload RERA-approved project documentation.</li>
                 <li>Provide escrow account details for off-plan projects.</li>
-              </ul>
+                </ul>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">11.4 Enforcement</h3>
               <p className="text-gray-700 mb-4 leading-relaxed">

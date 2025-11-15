@@ -10,7 +10,7 @@ const PropertyFAQSection: React.FC = () => {
     },
     {
       question: "Why should I use HomeHNI to advertise my home rental?",
-      answer: "HomeHNI offers verified buyers/tenants, zero brokerage, free listing, easy and quick process, increased property visibility, dedicated support, and buyer/tenant background verification. You can reach genuine prospects without dealing with brokers."
+      answer: "HomeHNI offers verified buyers/tenants, professional service, premium listing, easy and quick process, increased property visibility, dedicated support, and buyer/tenant background verification. You can reach genuine prospects with expert guidance from certified agents."
     },
     {
       question: "Can I advertise both residential and commercial properties on HomeHNI's List Your Property page?",
@@ -27,7 +27,7 @@ const PropertyFAQSection: React.FC = () => {
   ];
 
   return (
-    <div className="bg-gray-50 pt-8 pb-16">
+    <div className="bg-white pt-8 pb-16">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-12">

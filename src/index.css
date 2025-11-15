@@ -417,3 +417,465 @@ All colors MUST be HSL.
   background: hsl(var(--secondary));
 }
 
+/* Theme Styles */
+/* Default Theme (Current) - Maroon/Red theme */
+.theme-default {
+  /* Uses existing CSS variables - no changes needed */
+}
+
+/* Green.white Theme - Green and white color scheme */
+.theme-green-white {
+  --primary: 142 76% 36%;        /* Green primary */
+  --primary-foreground: 0 0% 100%;
+  --brand-red: 142 76% 36%;      /* Green instead of red */
+  --brand-maroon: 142 76% 42%;   /* Lighter green */
+  --brand-maroon-dark: 142 76% 32%; /* Darker green */
+  --accent: 142 45% 90%;
+  --accent-foreground: 142 76% 36%;
+  --secondary: 142 30% 95%;
+  --secondary-foreground: 142 76% 36%;
+  --ring: 142 76% 36%;
+  --sidebar-primary: 142 76% 36%;
+  --sidebar-accent-foreground: 142 76% 36%;
+  --sidebar-ring: 142 76% 36%;
+}
+
+.theme-green-white header {
+  background-color: hsl(142 76% 36%) !important; /* Green header */
+}
+
+.theme-green-white .bg-\[#800000\] {
+  background-color: hsl(142 76% 36%) !important;
+}
+
+.theme-green-white .text-\[#800000\] {
+  color: hsl(142 76% 36%) !important;
+}
+
+.theme-green-white .border-\[#800000\] {
+  border-color: hsl(142 76% 36%) !important;
+}
+
+.theme-green-white .bg-\[#700000\] {
+  background-color: hsl(142 76% 32%) !important;
+}
+
+/* Opaque Theme - Transparent white and grey theme with glass-morphism */
+.theme-opaque {
+  --primary: 0 0% 100%;           /* White primary */
+  --primary-foreground: 0 0% 0%; /* Black text on white */
+  --brand-red: 0 0% 100%;         /* White instead of red */
+  --brand-maroon: 0 0% 95%;       /* Light grey */
+  --brand-maroon-dark: 0 0% 90%;  /* Medium grey */
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 0%;
+  --secondary: 0 0% 94%;
+  --secondary-foreground: 0 0% 0%;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 0%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 40%;
+  --border: 0 0% 85%;
+  --input: 0 0% 95%;
+  --ring: 0 0% 50%;
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 0 0% 0%;
+  --sidebar-primary: 0 0% 100%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent: 0 0% 96%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 0 0% 85%;
+  --sidebar-ring: 0 0% 50%;
+}
+
+/* Opaque Theme - Header styling with moderate glass effect */
+.theme-opaque header:not(.sidebar) {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.theme-opaque header.bg-white\/95 {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+}
+
+.theme-opaque header a,
+.theme-opaque header button {
+  color: #000000 !important; /* Black text */
+}
+
+.theme-opaque header .text-white {
+  color: #000000 !important;
+}
+
+/* Opaque Theme - Glass-morphism background colors */
+.theme-opaque .bg-\[#800000\] {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
+}
+
+.theme-opaque .bg-\[#700000\] {
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
+}
+
+.theme-opaque .text-\[#800000\] {
+  color: #1a1a1a !important; /* Darker black text for better contrast */
+}
+
+.theme-opaque .border-\[#800000\] {
+  border-color: rgba(0, 0, 0, 0.12) !important; /* Subtle grey border */
+}
+
+/* Opaque Theme - Glass overlay effects for search section only */
+.theme-opaque #hero-search .bg-white\/80 {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(30px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
+}
+
+/* Keep other white backgrounds mostly opaque */
+.theme-opaque .bg-white {
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Opaque Theme - Grey backgrounds with glass effect */
+.theme-opaque .bg-gray-50 {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+}
+
+.theme-opaque .bg-gray-100 {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+}
+
+.theme-opaque .bg-gray-200 {
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+}
+
+/* Opaque Theme - Buttons outlined, no fill */
+html[data-theme="opaque"] button[class*="bg-"],
+html.theme-opaque button[class*="bg-"],
+.theme-opaque button.bg-\[#800000\],
+.theme-opaque button.bg-\[#700000\],
+.theme-opaque a[class*="bg-[#800000]"],
+.theme-opaque a[class*="bg-[#700000]"],
+.theme-opaque .btn-primary {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  color: #000000 !important;
+}
+
+html[data-theme="opaque"] button[class*="bg-"]:hover,
+html.theme-opaque button[class*="bg-"]:hover,
+.theme-opaque button.bg-\[#800000\]:hover,
+.theme-opaque button.bg-\[#700000\]:hover,
+.theme-opaque a[class*="bg-[#800000]"]:hover,
+.theme-opaque a[class*="bg-[#700000]"]:hover,
+.theme-opaque .btn-primary:hover {
+  background: rgba(0, 0, 0, 0.04) !important; /* subtle hover */
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Opaque Theme - Override text-white on buttons */
+html[data-theme="opaque"] button.text-white,
+html.theme-opaque button.text-white,
+.theme-opaque button.text-white {
+  color: #000000 !important;
+}
+
+/* Opaque Theme - Override specific red background utilities */
+html[data-theme="opaque"] .bg-\[#800000\],
+html.theme-opaque .bg-\[#800000\] {
+  background-color: rgba(245, 245, 245, 0.75) !important;
+}
+
+html[data-theme="opaque"] .bg-\[#700000\],
+html.theme-opaque .bg-\[#700000\] {
+  background-color: rgba(235, 235, 235, 0.75) !important;
+}
+
+/* Opaque Theme - Override hover states */
+html[data-theme="opaque"] .hover\:bg-\[#800000\]:hover,
+html.theme-opaque .hover\:bg-\[#800000\]:hover {
+  background-color: rgba(235, 235, 235, 0.85) !important;
+}
+
+html[data-theme="opaque"] .hover\:bg-\[#700000\]:hover,
+html.theme-opaque .hover\:bg-\[#700000\]:hover {
+  background-color: rgba(225, 225, 225, 0.85) !important;
+}
+
+/* Opaque Theme - Override focus ring colors */
+html[data-theme="opaque"] .focus-visible\:ring-\[#800000\]:focus-visible,
+html.theme-opaque .focus-visible\:ring-\[#800000\]:focus-visible,
+.theme-opaque button:focus-visible {
+  --tw-ring-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Opaque Theme - Override coming soon text */
+html[data-theme="opaque"] p.text-\[#800000\],
+html.theme-opaque p.text-\[#800000\] {
+  color: #333333 !important;
+}
+
+/* Opaque Theme - Cards with targeted glass effect */
+.theme-opaque .card-border,
+.theme-opaque .card-border-accent,
+.theme-opaque .card-border-red {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Opaque Theme - Text colors with strong specificity */
+html[data-theme="opaque"] .text-white,
+html.theme-opaque .text-white,
+.theme-opaque .text-white {
+  color: #000000 !important;
+}
+
+/* Opaque Theme - Force active red tabs to show red background and white text */
+html[data-theme="opaque"] .tab-red-active[data-state="active"],
+html.theme-opaque .tab-red-active[data-state="active"] {
+  background-color: #800000 !important;
+  color: #ffffff !important;
+  border-color: #800000 !important;
+}
+
+html[data-theme="opaque"] .text-\[#800000\],
+html.theme-opaque .text-\[#800000\],
+.theme-opaque .text-\[#800000\] {
+  color: #000000 !important;
+}
+
+.theme-opaque .text-gray-800 {
+  color: #000000 !important;
+}
+
+.theme-opaque .text-gray-700 {
+  color: #1a1a1a !important;
+}
+
+.theme-opaque .text-gray-600 {
+  color: #333333 !important;
+}
+
+/* Opaque Theme - Enhanced backdrop blur effects */
+.theme-opaque .backdrop-blur-md {
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+}
+
+.theme-opaque .backdrop-blur-sm {
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+}
+
+.theme-opaque .backdrop-blur {
+  backdrop-filter: blur(35px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(35px) saturate(200%) !important;
+}
+
+.theme-opaque .backdrop-blur-lg {
+  backdrop-filter: blur(50px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(50px) saturate(200%) !important;
+}
+
+.theme-opaque .backdrop-blur-xl {
+  backdrop-filter: blur(60px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(60px) saturate(200%) !important;
+}
+
+/* Opaque Theme - Search section with ultra glass effect */
+.theme-opaque .bg-white\/80.backdrop-blur-md {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(60px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(60px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1) !important;
+}
+
+/* Opaque Theme - Inputs/Selects outlined, no fill */
+.theme-opaque input:not([type="checkbox"]):not([type="radio"]),
+.theme-opaque textarea,
+.theme-opaque select {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  box-shadow: none !important;
+  color: #000000 !important;
+}
+
+.theme-opaque input:not([type="checkbox"]):not([type="radio"]):focus,
+.theme-opaque textarea:focus,
+.theme-opaque select:focus {
+  background: transparent !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+  outline: none !important;
+}
+
+/* Opaque Theme - Make hero search input match bar transparency */
+html[data-theme="opaque"] #hero-search input:not([type="checkbox"]):not([type="radio"]),
+html.theme-opaque #hero-search input:not([type="checkbox"]):not([type="radio"]) {
+  background: transparent !important; /* let container's grey glass show through */
+  backdrop-filter: none !important; /* use parent's blur for a unified glass look */
+  -webkit-backdrop-filter: none !important;
+  border: none !important; /* remove inner border */
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+html[data-theme="opaque"] #hero-search input:not([type="checkbox"]):not([type="radio"]):focus,
+html.theme-opaque #hero-search input:not([type="checkbox"]):not([type="radio"]):focus {
+  background: transparent !important; /* keep unified glass on focus */
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Opaque Theme - Gradient overlays with glass effect */
+.theme-opaque .bg-gradient-to-br.from-\[#ef4444\]\/10.to-\[#dc2626\]\/10 {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+}
+
+/* Opaque Theme - Override red/maroon gradients */
+.theme-opaque .bg-gradient-to-r.from-\[#800000\].to-\[#700000\],
+.theme-opaque .bg-gradient-to-r.from-\[#800000\],
+.theme-opaque section.bg-gradient-to-r,
+.theme-opaque .gradient-red-maroon {
+  background: rgba(245, 245, 245, 0.85) !important;
+  background-image: none !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Opaque Theme - Override all red gradients */
+.theme-opaque [class*="from-[#800000]"],
+.theme-opaque [class*="from-[#700000]"] {
+  background: rgba(245, 245, 245, 0.85) !important;
+  background-image: none !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+/* Opaque Theme - Shadows for glass elements */
+.theme-opaque .shadow-lg,
+.theme-opaque .shadow-md,
+.theme-opaque .shadow-xl,
+.theme-opaque .shadow-sm {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1) !important;
+}
+
+/* Opaque Theme - Targeted glass effects - removed universal selector to prevent layout issues */
+
+/* Opaque Theme - Dropdown menus - keeping functional */
+.theme-opaque [role="menu"]:not(.sidebar-menu) {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Opaque Theme - Keep sidebars functional */
+.theme-opaque aside,
+.theme-opaque .sidebar {
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Opaque Theme - Modal and dialog - subtle glass */
+.theme-opaque [role="dialog"]:not(.sidebar) {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+}
+
+/* Opaque Theme - Tabs with glass effect */
+.theme-opaque [role="tab"],
+.theme-opaque .tab {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.theme-opaque [role="tab"][aria-selected="true"],
+.theme-opaque .tab.active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Opaque Theme - Badges with targeted glass effect */
+.theme-opaque .badge {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Opaque Theme - Responsive glass adjustments */
+@media (max-width: 768px) {
+  .theme-opaque header,
+  .theme-opaque .bg-white\/80,
+  .theme-opaque .bg-white\/90,
+  .theme-opaque .bg-white\/95 {
+    backdrop-filter: blur(25px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+  }
+}
+
+/* Opaque Theme - Checkbox visibility */
+html[data-theme="opaque"] .checkbox-root {
+  border-color: #9CA3AF !important; /* gray-400 */
+  background: transparent !important;
+}
+
+html[data-theme="opaque"] .checkbox-root[data-state="checked"] {
+  background: rgba(156, 163, 175, 0.35) !important; /* darker grey (gray-400) with transparency */
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  color: #000000 !important; /* black tick for strong contrast */
+  border-color: #6B7280 !important; /* gray-500 border */
+}
+
+@media (max-width: 480px) {
+  .theme-opaque header,
+  .theme-opaque .bg-white\/80,
+  .theme-opaque .bg-white\/90,
+  .theme-opaque .bg-white\/95 {
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  }
+}
+

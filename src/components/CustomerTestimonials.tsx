@@ -37,7 +37,7 @@ const testimonials = [
     name: "Mohammed Hassan",
     roleCity: "Buyer • Downtown Dubai",
     rating: 5,
-    text: "Zero brokerage and complete transparency. The team guided me through every step of the buying process. Highly recommended for first-time buyers!",
+    text: "Professional service and complete transparency. The team guided me through every step of the buying process. Highly recommended for first-time buyers!",
     date: "Sep 2025",
     verified: true,
     initial: "M",
@@ -88,7 +88,7 @@ export function TrustMetricsRow() {
       </div>
       <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full">
         <BadgeIndianRupee className="w-4 h-4 text-[#800000]" />
-        <span className="font-medium">₹18+ crore brokerage saved</span>
+        <span className="font-medium">12k+ successful transactions</span>
       </div>
     </div>
   );

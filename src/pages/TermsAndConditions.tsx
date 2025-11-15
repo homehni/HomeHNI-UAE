@@ -150,7 +150,7 @@ const TermsAndConditions = () => {
                 <li>reproduce, duplicate, copy, sell, trade, resell or exploit for any commercial purpose all or any portion of the Platform or any Content;</li>
                 <li>use manual methods or any software, devices, scripts, robots or any other means or processes (including so-called 'spiders', 'bots' and 'crawlers') to scrape the Platform and/or its Content, or otherwise create or compile (in single or multiple downloads) a collection, compilation, database or directory from the Platform or its Content, or bypass or seek to bypass any robot exclusion headers we may implement; or</li>
                 <li>reverse-engineer, decompile, disassemble, decipher or otherwise attempt to derive the source code for the Platform and/or its Content.</li>
-              </ul>
+                </ul>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 We will report any breach of the restrictions listed above to the relevant law enforcement authorities and will cooperate with those authorities by disclosing your identity to them.
               </p>
@@ -185,7 +185,7 @@ const TermsAndConditions = () => {
               </p>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 You acknowledge and agree that, in respect of each Paid Service:
-              </p>
+                </p>
               <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
                 <li>any fee paid by you for a Paid Service is non-refundable in all circumstances; and</li>
                 <li>Paid Services are provided for your convenience, and do not guarantee that your Listing will be successful or result in any minimum number of leads for your Listing.</li>
@@ -225,7 +225,7 @@ const TermsAndConditions = () => {
                 <li>only advertise properties that can lawfully be leased or sold (as relevant), and subject to all applicable restrictions (such as restrictions on the number of occupiers);</li>
                 <li>comply with all applicable laws and regulations in connection with your Listing; and</li>
                 <li>act lawfully and in good faith in your dealings with Renters and Buyers.</li>
-              </ul>
+                  </ul>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 <strong>If you are a Renter or a Buyer, you must:</strong>
               </p>
@@ -234,7 +234,7 @@ const TermsAndConditions = () => {
                 <li>acknowledge that HomeHNI has no obligation to verify the veracity, accuracy or completeness of property listings, and you must conduct your own due diligence and must not rely on the contents of any Listing;</li>
                 <li>be legally permitted to rent or purchase the relevant property through the Platform; and</li>
                 <li>act lawfully and in good faith in your dealings with any Owner or Agent.</li>
-              </ul>
+                  </ul>
             </section>
 
             <section className="mb-12">
@@ -266,7 +266,7 @@ const TermsAndConditions = () => {
               </p>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 If you believe that you were the victim of fraud, you should contact the appropriate authorities (for example, the Police).
-              </p>
+                </p>
             </section>
 
             <section className="mb-12">
@@ -317,7 +317,7 @@ const TermsAndConditions = () => {
               </p>
               <p className="text-gray-700 mb-4 leading-relaxed">
                 In no event will HomeHNI's liability to you in connection with your use of the Platform or these Terms of Use, regardless of the cause of action or loss suffered by you, exceed the higher of: (i) the amount paid by you for the Paid Service which is the subject of the relevant dispute or claim (if any); or (ii) one thousand UAE Dirhams (AED 1,000).
-              </p>
+                </p>
             </section>
 
             <section className="mb-12">
