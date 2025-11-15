@@ -1971,7 +1971,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       </div>
       
       {/* Spacing section - now with transparent background to show hero image */}
-      <div className="relative -mt-8 sm:-mt-10 md:-mt-12 pt-2 sm:pt-4 md:pt-10 pb-4 sm:pb-8 mx-0 px-0 mb-2 sm:mb-4 py-[6px] z-0">
+      <div className="relative -mt-8 sm:-mt-10 md:-mt-12 pt-2 sm:pt-4 md:pt-10 pb-4 sm:pb-8 mx-0 px-0 mb-8 sm:mb-12 md:mb-16 py-[6px] z-0">
         <div className="container mx-auto px-2 sm:px-4">
           {/* This space allows the search section to overlap properly */}
         </div>
