@@ -84,7 +84,7 @@ const HomeServices = () => {
 
 
   return (
-    <section className="py-8 md:py-12 bg-white relative">
+    <section className="py-6 md:py-8 bg-white relative">
       <div className="container mx-auto px-4">
         <div className="flex justify-center items-center mb-6 md:mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">

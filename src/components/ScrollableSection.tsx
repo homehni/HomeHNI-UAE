@@ -109,7 +109,7 @@ const ScrollableSection: React.FC<ScrollableSectionProps> = ({
   }
 
   return (
-    <section className={`py-6 sm:py-8 md:py-12 bg-gradient-to-br from-background to-secondary/20 ${className}`}>
+    <section className={`pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 md:pb-8 bg-gradient-to-br from-background to-secondary/20 ${className}`}>
       <div className="container mx-auto px-4 sm:px-6">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4 sm:mb-6 text-center">
           {title}

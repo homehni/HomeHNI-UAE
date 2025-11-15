@@ -908,7 +908,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         <div className="fixed inset-0 z-40" onMouseDown={() => setOpenDropdown(null)} />
       )}
       {/* Hero Image Background - mobile responsive with UAE theme - Carousel - Extended to cover whitespace */}
-      <div className="relative min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] pb-8 sm:pb-10 md:pb-12 bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-visible">
+      <div className="relative min-h-[50vh] sm:min-h-[55vh] md:min-h-[65vh] bg-cover bg-no-repeat md:-mt-[70px] md:pt-[40px] overflow-visible" style={{ paddingBottom: '2rem' }}>
         {/* Carousel container with all images - extended to cover whitespace below */}
         <div className="absolute inset-0" style={{ bottom: '-2rem' }}>
           {HERO_IMAGES.map((image, index) => (
@@ -1430,9 +1430,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
        The header is rendered earlier with z-50; previously both had z-50,
        causing the search (later in DOM) to overlay dropdown menus.
        Lowering to z-30 resolves stacking without changing layout. */}
-  <div className="hidden sm:block absolute left-0 right-0 top-[65%] -translate-y-1/2 z-30 transform-gpu will-change-transform">
+  <div className="hidden sm:block absolute left-0 right-0 z-30 transform-gpu will-change-transform" style={{ bottom: '-6rem' }}>
           <div className="max-w-full md:max-w-4xl lg:max-w-5xl xl:max-w-4xl mx-auto px-4 sm:px-6">
-            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto">
+            <div className="max-w-full md:max-w-3xl lg:max-w-4xl mx-auto bg-white/80 backdrop-blur-md rounded-xl p-4 shadow-lg">
               {/* Navigation Tabs */}
               <div className="bg-transparent rounded-xl overflow-visible">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -1450,8 +1450,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 value={tab.id} 
                                 className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 h-10 ${
                                   tab.id === activeTab
-                                    ? 'bg-white text-[#800000] border-2 border-[#800000] shadow-sm'
-                                    : 'bg-white/80 text-gray-600 border-2 border-transparent hover:text-gray-800 hover:bg-white/90'
+                                    ? 'bg-white text-[#800000] border border-[#800000] shadow-sm'
+                                    : 'bg-white/80 text-gray-600 border border-[#800000]/50 hover:text-gray-800 hover:bg-white/90'
                                 }`}
                               >
                                 {tab.label}
@@ -1460,7 +1460,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           </TabsList>
                           
                           {/* Search field */}
-                          <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-white/30 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-[#800000]/30 focus-within:border-[#800000]/60 focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-white/50 overflow-visible" onClick={() => inputRef.current?.focus()}>
+                          <div className="relative px-3 py-2 pl-8 pr-3 flex-1 border border-[#800000]/50 rounded-lg bg-white/80 backdrop-blur-md focus-within:ring-2 focus-within:ring-[#800000]/30 focus-within:border-[#800000] focus-within:bg-white/95 transition-all duration-200 hover:bg-white/90 hover:border-[#800000]/70 overflow-visible" onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
                         <div className="relative flex items-center">
                           <MapPin className="absolute left-0 -ml-5 text-[#800000] pointer-events-none flex-shrink-0" size={14} />
@@ -1510,7 +1510,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       {/* Compact Search Button */}
                       <button
                         type="button"
-                        className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-[#800000] hover:bg-[#700000] focus:outline-none focus:ring-2 focus:ring-[#800000]/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
+                        className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white bg-[#800000] hover:bg-[#700000] border border-[#800000] focus:outline-none focus:ring-2 focus:ring-[#800000]/30 transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0"
                         aria-label="Search"
                         onClick={handleSearch}
                         disabled={selectedLocations.length === 0}
@@ -1530,7 +1530,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'propertyType' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'propertyType' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
@@ -1576,7 +1576,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'bedroom' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'bedroom' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">Bedroom</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
@@ -1624,7 +1624,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'availability' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'availability' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                     >
                                       <span className="text-sm font-medium">Availability</span>
                                       <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
@@ -1668,7 +1668,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className={`flex-shrink-0 lg:w-full gap-2 px-3 py-1.5 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap bg-white/80 backdrop-blur-md ${openDropdown === 'construction' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
+                                      className={`flex-shrink-0 lg:w-full gap-2 px-3 py-1.5 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap bg-white/80 backdrop-blur-md ${openDropdown === 'construction' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                     >
                                       <span className="text-sm font-medium">Property Status</span>
                                       <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
@@ -1715,7 +1715,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'furnishing' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'furnishing' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">Furnishing</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'furnishing' ? 'rotate-90' : ''}`} />
@@ -1760,7 +1760,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'budget' ? 'bg-white/95 border-blue-400 shadow-sm' : 'border-white/40 hover:border-white/60 hover:bg-white/90'}`}
+                                  className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'budget' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">Budget</span>
                                   <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'budget' ? 'rotate-90' : ''}`} />
@@ -1770,7 +1770,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 side="bottom" 
                                 align="start" 
                                 avoidCollisions={false} 
-                                className="w-[360px] sm:w-[480px] p-4"
+                                className="w-[280px] sm:w-[320px] p-4"
                                 onInteractOutside={(e) => {
                                   const target = (e.target as Node) || null;
                                   if (desktopSearchRef.current?.contains(target)) {
@@ -1780,69 +1780,159 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   setOpenDropdown(null);
                                 }}
                               >
-                                <h4 className="text-base font-semibold mb-4 text-foreground">Budget Range</h4>
-                                {/* Precise inputs */}
-                                <div className="grid grid-cols-2 gap-3 mb-3">
+                                <h4 className="text-base font-semibold mb-3 text-foreground">Budget Range</h4>
+                                
+                                {/* Min and Max Budget Dropdowns - Side by Side */}
+                                <div className="grid grid-cols-2 gap-2 mb-2">
+                                  {/* Min Budget Dropdown */}
                                   <div>
-                                    <label className="block text-xs font-medium text-muted-foreground mb-1.5">Min Budget</label>
-                                    <input
-                                      type="number"
-                                      inputMode="numeric"
-                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#800000]/20 focus:border-[#800000]"
-                                      value={budget[0]}
-                                      onClick={(e) => e.stopPropagation()}
-                                      onPointerDown={(e) => e.stopPropagation()}
-                                      onChange={(e) => {
-                                        const val = Math.max(0, Number(e.target.value) || 0);
-                                        setBudget([val, budget[1]]);
-                                      }}
-                                      onBlur={(e) => {
-                                        const val = Math.max(0, Number(e.target.value) || 0);
-                                        const next: [number, number] = [val, budget[1]];
-                                        setBudget(snapBudget(activeTab, next));
-                                      }}
-                                    />
-                                    <div className="text-xs text-muted-foreground mt-1">AED (UAE Dirham)</div>
+                                    <label className="block text-xs font-medium text-muted-foreground mb-1.5">Minimum</label>
+                                    <div className="border border-[#800000]/50 rounded-lg overflow-hidden max-h-[150px] overflow-y-auto">
+                                    {activeTab === 'rent' ? (
+                                      <>
+                                        {(() => {
+                                          // Rent: 20,000 to 910,000 in increments
+                                          const rentMinOptions = [];
+                                          for (let i = 20000; i <= 910000; i += i < 100000 ? 10000 : (i < 500000 ? 25000 : 50000)) {
+                                            rentMinOptions.push(i);
+                                          }
+                                          return rentMinOptions.map((val) => (
+                                            <button
+                                              key={val}
+                                              type="button"
+                                              onClick={() => {
+                                                const newMin = val;
+                                                // Ensure max is greater than new min
+                                                const maxOptions = [50000, 75000, 100000, 125000, 150000, 175000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000, 850000, 900000, 950000, 1000000, 1010000];
+                                                const validMax = maxOptions.find(m => m > newMin) || 1010000;
+                                                const newMax = budget[1] <= newMin ? validMax : budget[1];
+                                                setBudget([newMin, newMax]);
+                                              }}
+                                              className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
+                                                budget[0] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
+                                              }`}
+                                            >
+                                              {`AED ${val.toLocaleString()}`}
+                                            </button>
+                                          ));
+                                        })()}
+                                      </>
+                                    ) : (
+                                      <>
+                                        {(() => {
+                                          // Buy: 200,000 to 9,000,000 in increments
+                                          const buyMinOptions = [];
+                                          for (let i = 200000; i <= 9000000; i += i < 2000000 ? 100000 : (i < 5000000 ? 250000 : 500000)) {
+                                            buyMinOptions.push(i);
+                                          }
+                                          return buyMinOptions.map((val) => (
+                                            <button
+                                              key={val}
+                                              type="button"
+                                              onClick={() => {
+                                                const newMin = val;
+                                                // Ensure max is greater than new min
+                                                const maxOptions = [400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 5500000, 6000000, 6500000, 7000000, 7500000, 8000000, 8500000, 9000000, 9500000, 10000000];
+                                                const validMax = maxOptions.find(m => m > newMin) || 10000000;
+                                                const newMax = budget[1] <= newMin ? validMax : budget[1];
+                                                setBudget([newMin, newMax]);
+                                              }}
+                                              className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
+                                                budget[0] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
+                                              }`}
+                                            >
+                                              {`AED ${val.toLocaleString()}`}
+                                            </button>
+                                          ));
+                                        })()}
+                                      </>
+                                    )}
                                   </div>
+                                  </div>
+
+                                  {/* Max Budget Dropdown */}
                                   <div>
-                                    <label className="block text-xs font-medium text-muted-foreground mb-1.5">Max Budget</label>
-                                    <input
-                                      type="number"
-                                      inputMode="numeric"
-                                      className="w-full border rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#800000]/20 focus:border-[#800000]"
-                                      value={budget[1]}
-                                      onClick={(e) => e.stopPropagation()}
-                                      onPointerDown={(e) => e.stopPropagation()}
-                                      onChange={(e) => {
-                                        const maxAllowed = getBudgetSliderMaxHome(activeTab);
-                                        const val = Math.min(maxAllowed, Math.max(0, Number(e.target.value) || 0));
-                                        setBudget([budget[0], val]);
-                                      }}
-                                      onBlur={(e) => {
-                                        const maxAllowed = getBudgetSliderMaxHome(activeTab);
-                                        const val = Math.min(maxAllowed, Math.max(0, Number(e.target.value) || 0));
-                                        const next: [number, number] = [budget[0], val];
-                                        setBudget(snapBudget(activeTab, next));
-                                      }}
-                                    />
-                                    <div className="text-xs text-muted-foreground mt-1">AED (UAE Dirham)</div>
+                                    <label className="block text-xs font-medium text-muted-foreground mb-1.5">Maximum</label>
+                                    <div className="border border-[#800000]/50 rounded-lg overflow-hidden max-h-[150px] overflow-y-auto">
+                                    {activeTab === 'rent' ? (
+                                      <>
+                                        {(() => {
+                                          // Rent: 50,000 to 1,010,000, but only show values greater than selected min
+                                          const rentMaxOptions = [50000, 75000, 100000, 125000, 150000, 175000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000, 700000, 750000, 800000, 850000, 900000, 950000, 1000000, 1010000];
+                                          // Filter to only show options greater than selected minimum
+                                          const validMaxOptions = rentMaxOptions.filter(val => val > budget[0]);
+                                          return (
+                                            <>
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  setBudget([budget[0], 1010000]);
+                                                }}
+                                                className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 truncate ${
+                                                  budget[1] >= 1010000 ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
+                                                }`}
+                                              >
+                                                Any
+                                              </button>
+                                              {validMaxOptions.map((val) => (
+                                                <button
+                                                  key={val}
+                                                  type="button"
+                                                  onClick={() => {
+                                                    setBudget([budget[0], val]);
+                                                  }}
+                                                  className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
+                                                    budget[1] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
+                                                  }`}
+                                                >
+                                                  {`AED ${val.toLocaleString()}`}
+                                                </button>
+                                              ))}
+                                            </>
+                                          );
+                                        })()}
+                                      </>
+                                    ) : (
+                                      <>
+                                        {(() => {
+                                          // Buy: 400,000 to 10,000,000, but only show values greater than selected min
+                                          const buyMaxOptions = [400000, 500000, 600000, 700000, 800000, 900000, 1000000, 1500000, 2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 5500000, 6000000, 6500000, 7000000, 7500000, 8000000, 8500000, 9000000, 9500000, 10000000];
+                                          // Filter to only show options greater than selected minimum
+                                          const validMaxOptions = buyMaxOptions.filter(val => val > budget[0]);
+                                          return (
+                                            <>
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  setBudget([budget[0], 10000000]);
+                                                }}
+                                                className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 truncate ${
+                                                  budget[1] >= 10000000 ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
+                                                }`}
+                                              >
+                                                Any
+                                              </button>
+                                              {validMaxOptions.map((val) => (
+                                                <button
+                                                  key={val}
+                                                  type="button"
+                                                  onClick={() => {
+                                                    setBudget([budget[0], val]);
+                                                  }}
+                                                  className={`w-full text-left px-3 py-2 text-sm hover:bg-[#800000]/10 transition-colors border-b border-gray-100 last:border-b-0 truncate ${
+                                                    budget[1] === val ? 'bg-[#800000]/20 text-[#800000] font-medium' : 'text-gray-700'
+                                                  }`}
+                                                >
+                                                  {`AED ${val.toLocaleString()}`}
+                                                </button>
+                                              ))}
+                                            </>
+                                          );
+                                        })()}
+                                      </>
+                                    )}
                                   </div>
-                                </div>
-                                {/* Quick presets */}
-                                <div className="grid grid-cols-3 gap-2">
-                                  {activeTab === 'rent' ? (
-                                    <>
-                                      <Button size="sm" variant={budget[0]===0&&budget[1]===50000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([0, 50000])}>Under 50K</Button>
-                                      <Button size="sm" variant={budget[0]===0&&budget[1]===100000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([0, 100000])}>Under 1L</Button>
-                                      <Button size="sm" variant={budget[0]===100000&&budget[1]===200000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([100000, 200000])}>1L-2L</Button>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Button size="sm" variant={budget[0]===0&&budget[1]===5000000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([0, 5000000])}>Under 50L</Button>
-                                      <Button size="sm" variant={budget[0]===5000000&&budget[1]===10000000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([5000000, 10000000])}>50L-1Cr</Button>
-                                      <Button size="sm" variant={budget[0]===10000000&&budget[1]===20000000? 'default':'outline'} className="h-9 text-xs font-medium" onClick={() => setBudget([10000000, 20000000])}>1-2Cr</Button>
-                                    </>
-                                  )}
+                                  </div>
                                 </div>
                               </PopoverContent>
                             </Popover>
