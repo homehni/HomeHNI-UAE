@@ -302,7 +302,9 @@ const Footer = ({
         className={`px-6 py-2 rounded text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
           theme === 'opaque'
             ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400'
-            : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
+            : theme === 'green-white'
+              ? 'bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-600'
+              : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
         }`}
       >
         Post for Free
@@ -322,7 +324,9 @@ const Footer = ({
         className={`px-6 py-2 rounded text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
           theme === 'opaque'
             ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400'
-            : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
+            : theme === 'green-white'
+              ? 'bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-600'
+              : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
         }`}
       >
         Browse Listings

@@ -1031,7 +1031,9 @@ const PropertySearch = () => {
                   value="buy" 
                   className={`${theme === 'opaque' 
                     ? 'rounded-full text-base font-medium h-full text-gray-900 border border-gray-300 data-[state=active]:bg-gray-300/70 data-[state=active]:border-gray-500 data-[state=active]:ring-1 data-[state=active]:ring-gray-400 data-[state=active]:backdrop-blur-md' 
-                    : 'data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full'}`} 
+                    : theme === 'green-white' 
+                      ? 'rounded-full text-base font-medium h-full data-[state=active]:bg-green-600 data-[state=active]:text-white' 
+                      : 'data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full'}`} 
                   role="tab" 
                   aria-selected={activeTab === 'buy'}
                 >
@@ -1041,7 +1043,9 @@ const PropertySearch = () => {
                   value="rent" 
                   className={`${theme === 'opaque' 
                     ? 'rounded-full text-base font-medium h-full text-gray-900 border border-gray-300 data-[state=active]:bg-gray-300/70 data-[state=active]:border-gray-500 data-[state=active]:ring-1 data-[state=active]:ring-gray-400 data-[state=active]:backdrop-blur-md' 
-                    : 'data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full'}`} 
+                    : theme === 'green-white' 
+                      ? 'rounded-full text-base font-medium h-full data-[state=active]:bg-green-600 data-[state=active]:text-white' 
+                      : 'data-[state=active]:bg-[#800000] data-[state=active]:text-white rounded-full text-base font-medium h-full'}`} 
                   role="tab" 
                   aria-selected={activeTab === 'rent'}
                 >
@@ -1140,11 +1144,15 @@ const PropertySearch = () => {
                   className={`flex items-center justify-center h-10 transition-all ${!isSearchLocked && tempLocationText !== filters.location 
                     ? (theme === 'opaque' 
                         ? "w-auto px-3 rounded-full text-gray-800 bg-transparent border border-gray-300 hover:bg-gray-200/40 search-button-expanded" 
-                        : "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded")
+                        : theme === 'green-white'
+                          ? "w-auto px-3 rounded-full text-white bg-green-600 hover:bg-green-700 search-button-expanded"
+                          : "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded")
                     : (theme === 'opaque' 
                         ? "w-auto px-5 rounded-full text-gray-800 bg-transparent border border-gray-300 hover:bg-gray-200/40" 
-                        : "w-auto px-5 rounded-full text-white bg-[#800000] hover:bg-[#700000]")} 
-                    focus:outline-none focus:ring-2 ${theme === 'opaque' ? 'focus:ring-gray-400/30' : 'focus:ring-[#800000]/40'} shrink-0`}
+                        : theme === 'green-white'
+                          ? "w-auto px-5 rounded-full text-white bg-green-600 hover:bg-green-700"
+                          : "w-auto px-5 rounded-full text-white bg-[#800000] hover:bg-[#700000]")} 
+                    focus:outline-none focus:ring-2 ${theme === 'opaque' ? 'focus:ring-gray-400/30' : theme === 'green-white' ? 'focus:ring-green-600/30' : 'focus:ring-[#800000]/40'} shrink-0`}
                   aria-label={isSearchLocked ? "Search" : "Add location"}
                   onClick={(e) => {
                     e.stopPropagation();

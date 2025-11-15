@@ -58,9 +58,11 @@ const MobileAppSection = () => {
             {/* Buttons — cherry red */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <button onClick={handleDownloadClick} aria-label="Download on Google Play" className={`min-w-[200px] inline-flex items-center justify-center gap-3 rounded-lg px-6 py-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shadow-md ${
-                theme === 'opaque' 
-                  ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400' 
-                  : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
+                theme === 'opaque'
+                  ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400'
+                  : theme === 'green-white'
+                    ? 'bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-600'
+                    : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
               }`}>
                 <Download className="w-5 h-5" />
                 <span className="text-left">
@@ -70,9 +72,11 @@ const MobileAppSection = () => {
               </button>
 
               <button onClick={handleDownloadClick} aria-label="Download on the App Store" className={`min-w-[200px] inline-flex items-center justify-center gap-3 rounded-lg px-6 py-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 shadow-md ${
-                theme === 'opaque' 
-                  ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400' 
-                  : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
+                theme === 'opaque'
+                  ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus-visible:ring-gray-400'
+                  : theme === 'green-white'
+                    ? 'bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-600'
+                    : 'bg-[#800000] text-white hover:bg-[#700000] focus-visible:ring-[#800000]'
               }`}>
                 <Download className="w-5 h-5" />
                 <span className="text-left">
@@ -84,7 +88,7 @@ const MobileAppSection = () => {
 
             {/* Coming Soon indicator */}
             <div className="mt-8 text-center lg:text-left">
-              <p className={`text-sm font-bold ${theme === 'opaque' ? 'text-gray-800' : 'text-[#800000]'}`}>🚀 Coming Soon!</p>
+              <p className={`text-sm font-bold ${theme === 'opaque' ? 'text-gray-800' : theme === 'green-white' ? 'text-green-700' : 'text-[#800000]'}`}>🚀 Coming Soon!</p>
               <p className="text-xs text-gray-600">{getComingSoon()}</p>
             </div>
 

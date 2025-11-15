@@ -460,6 +460,74 @@ All colors MUST be HSL.
   background-color: hsl(142 76% 32%) !important;
 }
 
+/* Green.white Theme - Strong maroon-to-green overrides across the app */
+html[data-theme="green-white"] button[class*="bg-[#800000]"],
+html[data-theme="green-white"] button[class*="bg-[#700000]"],
+html.theme-green-white button[class*="bg-[#800000]"],
+html.theme-green-white button[class*="bg-[#700000]"],
+.theme-green-white button.bg-\[#800000\],
+.theme-green-white button.bg-\[#700000\],
+.theme-green-white .bg-\[#800000\],
+.theme-green-white .bg-\[#700000\],
+.theme-green-white a[class*="bg-[#800000]"],
+.theme-green-white a[class*="bg-[#700000]"],
+.theme-green-white .btn-primary {
+  background-color: hsl(142 76% 36%) !important; /* green */
+  background: hsl(142 76% 36%) !important;
+  background-image: none !important;
+  border: 1px solid hsl(142 76% 32%) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="green-white"] button[class*="bg-[#800000]"]:hover,
+html[data-theme="green-white"] button[class*="bg-[#700000]"]:hover,
+html.theme-green-white button[class*="bg-[#800000]"]:hover,
+html.theme-green-white button[class*="bg-[#700000]"]:hover,
+.theme-green-white button.bg-\[#800000\]:hover,
+.theme-green-white button.bg-\[#700000\]:hover,
+.theme-green-white .bg-\[#800000\]:hover,
+.theme-green-white .bg-\[#700000\]:hover,
+.theme-green-white a[class*="bg-[#800000]"]:hover,
+.theme-green-white a[class*="bg-[#700000]"]:hover,
+.theme-green-white .btn-primary:hover {
+  background-color: hsl(142 76% 32%) !important; /* darker green on hover */
+  border-color: hsl(142 76% 28%) !important;
+}
+
+/* Green.white Theme - Text, border, and ring overrides for maroon utilities */
+html[data-theme="green-white"] .text-\[#800000\],
+html.theme-green-white .text-\[#800000\] {
+  color: hsl(142 76% 36%) !important;
+}
+
+html[data-theme="green-white"] .border-\[#800000\],
+html.theme-green-white .border-\[#800000\] {
+  border-color: hsl(142 76% 36%) !important;
+}
+
+html[data-theme="green-white"] .focus-visible\:ring-\[#800000\]:focus-visible,
+html.theme-green-white .focus-visible\:ring-\[#800000\]:focus-visible,
+html[data-theme="green-white"] .focus\:ring-\[#800000\]:focus,
+html.theme-green-white .focus\:ring-\[#800000\]:focus {
+  --tw-ring-color: hsl(142 76% 36%) !important;
+}
+
+/* Green.white Theme - Gradients originally using maroon -> convert to green */
+.theme-green-white .bg-gradient-to-r.from-\[#800000\].to-\[#700000\],
+.theme-green-white .bg-gradient-to-r.from-\[#800000\],
+.theme-green-white section.bg-gradient-to-r,
+.theme-green-white .gradient-red-maroon {
+  background: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 32%) 100%) !important;
+  background-image: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 32%) 100%) !important;
+}
+
+.theme-green-white [class*="from-[#800000]"] {
+  --tw-gradient-from: hsl(142 76% 36%) !important;
+}
+.theme-green-white [class*="to-[#700000]"] {
+  --tw-gradient-to: hsl(142 76% 32%) !important;
+}
+
 /* Opaque Theme - Transparent white and grey theme with glass-morphism */
 .theme-opaque {
   --primary: 0 0% 100%;           /* White primary */
@@ -877,5 +945,148 @@ html[data-theme="opaque"] .checkbox-root[data-state="checked"] {
     backdrop-filter: blur(20px) saturate(160%) !important;
     -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
   }
+}
+
+/* Slider styles for visibility */
+[data-radix-slider-track],
+[data-radix-slider-track].bg-secondary,
+span[data-radix-slider-track],
+span[data-radix-slider-track].bg-secondary,
+.relative.h-2.bg-secondary {
+  background-color: #d1d5db !important;
+  background: #d1d5db !important;
+  height: 8px !important;
+  min-height: 8px !important;
+  border: none !important;
+  opacity: 1 !important;
+}
+
+[data-radix-slider-range],
+span[data-radix-slider-range] {
+  background-color: #800000 !important;
+  background: #800000 !important;
+  opacity: 1 !important;
+}
+
+[data-radix-slider-thumb],
+span[data-radix-slider-thumb] {
+  background-color: white !important;
+  background: white !important;
+  border: 2px solid #800000 !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+  opacity: 1 !important;
+  cursor: grab !important;
+}
+
+[data-radix-slider-thumb]:active,
+span[data-radix-slider-thumb]:active {
+  cursor: grabbing !important;
+}
+
+/* Opaque theme slider - black for better visibility */
+html[data-theme="opaque"] [data-radix-slider-track],
+html[data-theme="opaque"] span[data-radix-slider-track],
+html[data-theme="opaque"] [data-radix-slider-track].bg-secondary,
+html[data-theme="opaque"] span[data-radix-slider-track].bg-secondary,
+html[data-theme="opaque"] .relative.h-2.bg-secondary,
+html[data-theme="opaque"] span.relative.h-2.bg-secondary,
+.theme-opaque [data-radix-slider-track],
+.theme-opaque span[data-radix-slider-track],
+.theme-opaque [data-radix-slider-track].bg-secondary,
+.theme-opaque span[data-radix-slider-track].bg-secondary,
+.theme-opaque .relative.h-2.bg-secondary,
+.theme-opaque span.relative.h-2.bg-secondary {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border: 2px solid #000000 !important;
+  height: 10px !important;
+  min-height: 10px !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="opaque"] [data-radix-slider-range],
+html[data-theme="opaque"] span[data-radix-slider-range],
+.theme-opaque [data-radix-slider-range],
+.theme-opaque span[data-radix-slider-range] {
+  background-color: #4b5563 !important;
+  background: #4b5563 !important;
+  opacity: 1 !important;
+  height: 100% !important;
+}
+
+html[data-theme="opaque"] [data-radix-slider-thumb],
+html[data-theme="opaque"] span[data-radix-slider-thumb],
+html[data-theme="opaque"] [role="slider"],
+html[data-theme="opaque"] span[role="slider"],
+.theme-opaque [data-radix-slider-thumb],
+.theme-opaque span[data-radix-slider-thumb],
+.theme-opaque [role="slider"],
+.theme-opaque span[role="slider"] {
+  border-color: #1f2937 !important;
+  background-color: #1f2937 !important;
+  background: #1f2937 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* Override bg-background class for Opaque theme slider thumb */
+html[data-theme="opaque"] [data-radix-slider-thumb].bg-background,
+html[data-theme="opaque"] span[data-radix-slider-thumb].bg-background,
+html[data-theme="opaque"] [role="slider"].bg-background,
+.theme-opaque [data-radix-slider-thumb].bg-background,
+.theme-opaque span[data-radix-slider-thumb].bg-background,
+.theme-opaque [role="slider"].bg-background {
+  background-color: #1f2937 !important;
+  background: #1f2937 !important;
+}
+
+/* Green-white theme slider */
+html[data-theme="green-white"] [data-radix-slider-range],
+html[data-theme="green-white"] span[data-radix-slider-range],
+.theme-green-white [data-radix-slider-range],
+.theme-green-white span[data-radix-slider-range] {
+  background-color: #16a34a !important;
+  background: #16a34a !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="green-white"] [data-radix-slider-thumb],
+html[data-theme="green-white"] span[data-radix-slider-thumb],
+.theme-green-white [data-radix-slider-thumb],
+.theme-green-white span[data-radix-slider-thumb] {
+  border-color: #16a34a !important;
+  background-color: white !important;
+  background: white !important;
+}
+
+/* Top Category Bar - Ensure readability for active button */
+button[aria-pressed="true"] {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #111827 !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Opaque theme - even more opaque for active button */
+html[data-theme="opaque"] button[aria-pressed="true"],
+.theme-opaque button[aria-pressed="true"] {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(15px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+  color: #000000 !important;
+  border-color: #6b7280 !important;
+}
+
+/* Marquee text color for Opaque theme */
+html[data-theme="opaque"] .bg-black span,
+.theme-opaque .bg-black span {
+  color: #ffffff !important;
 }
 

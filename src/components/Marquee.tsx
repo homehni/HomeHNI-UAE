@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { fetchRealEstateNews } from '../services/newsService';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Marquee = () => {
+  const { theme } = useTheme();
   const [isPaused, setIsPaused] = useState(false);
   const [headlines, setHeadlines] = useState([
     '🇦🇪 Welcome to Home HNI UAE - Your trusted partner for secure real estate transactions in the United Arab Emirates',
@@ -56,12 +58,12 @@ const Marquee = () => {
       >
         {/* Repeated Content for Continuous Scroll */}
         {headlines.map((headline, index) => (
-          <span key={index} className="text-sm font-medium px-4 drop-shadow-lg">
+          <span key={index} className={`text-sm font-medium px-4 drop-shadow-lg ${theme === 'opaque' ? 'text-white' : ''}`}>
             {headline}
           </span>
         ))}
         {headlines.map((headline, index) => (
-          <span key={`repeat-${index}`} className="text-sm font-medium px-4 drop-shadow-lg">
+          <span key={`repeat-${index}`} className={`text-sm font-medium px-4 drop-shadow-lg ${theme === 'opaque' ? 'text-white' : ''}`}>
             {headline}
           </span>
         ))}

@@ -89,9 +89,20 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
   const [selectedBedrooms, setSelectedBedrooms] = useState<string[]>([]);
+  const [selectedBathrooms, setSelectedBathrooms] = useState<string[]>([]);
+  // Top category tabs like Properties / New Projects / Agents (visual only for now)
+  const [topCategory, setTopCategory] = useState<'properties' | 'new-projects' | 'agents'>('properties');
   const [selectedConstructionStatus, setSelectedConstructionStatus] = useState<string[]>([]);
+  // New Projects specific filters
+  const [newProjectsResidential, setNewProjectsResidential] = useState<string>('Residential');
+  const [newProjectsHandoverBy, setNewProjectsHandoverBy] = useState<string>(''); // Empty means show title
+  const [newProjectsPaymentPlan, setNewProjectsPaymentPlan] = useState<number>(100); // Percentage slider 0-100
+  const [newProjectsCompletion, setNewProjectsCompletion] = useState<string>(''); // Empty means show title
   // Rent-specific availability selections
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
+  // Rent payment frequency (Yearly/Monthly/Weekly/Daily/Any)
+  const rentFrequencyOptions = ['Yearly', 'Monthly', 'Weekly', 'Daily', 'Any'] as const;
+  const [rentFrequency, setRentFrequency] = useState<string>('Yearly');
   const [selectedFurnishing, setSelectedFurnishing] = useState<string[]>([]);
   // Budget defaults to full range based on the active tab (5Cr for buy/commercial/land, 5L for rent)
   const [budget, setBudget] = useState<[number, number]>([0, getBudgetSliderMaxHome('buy')]);
@@ -230,6 +241,14 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
       const bhkValues = mapBhkSelectionsToFilters(selectedBedrooms);
       params.set('bhk', bhkValues.join(','));
     }
+    // Bathrooms
+    if ((activeTab === 'buy' || activeTab === 'rent') && selectedBathrooms.length > 0) {
+      const baths = selectedBathrooms
+        .map(b => (b === '6+' ? '6' : b.replace(/\D/g, '')))
+        .filter(Boolean)
+        .join(',');
+      if (baths) params.set('bathrooms', baths);
+    }
 
     // Availability/Construction handling per tab (not for land)
     if (activeTab !== 'land') {
@@ -237,6 +256,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         // For RENT, use dedicated Availability values and do NOT set construction
         if (selectedAvailability.length > 0) {
           params.set('availability', selectedAvailability.join(','));
+        }
+        // Rent frequency - include when chosen (ignore 'Any')
+        if (rentFrequency && rentFrequency !== 'Any') {
+          params.set('frequency', rentFrequency.toLowerCase());
         }
       } else {
         // For BUY/COMMERCIAL, map Property Status selections
@@ -983,6 +1006,33 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                 </div>
               )}
 
+                        {/* Quick chips: All / Ready / Off-Plan (Buy only) */}
+                        {activeTab === 'buy' && (
+                          <div className="hidden md:flex items-center gap-1.5 mr-0">
+                            <Button
+                              type="button"
+                              className={`flex items-center justify-center whitespace-nowrap px-3 py-1.5 rounded-lg border text-sm font-medium transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${selectedConstructionStatus.length === 0 ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                              onClick={() => setSelectedConstructionStatus([])}
+                            >
+                              All
+                            </Button>
+                            <Button
+                              type="button"
+                              className={`flex items-center justify-center whitespace-nowrap px-3 py-1.5 rounded-lg border text-sm font-medium transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${selectedConstructionStatus.includes('Ready') && selectedConstructionStatus.length === 1 ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                              onClick={() => setSelectedConstructionStatus(['Ready'])}
+                            >
+                              Ready
+                            </Button>
+                            <Button
+                              type="button"
+                              className={`flex items-center justify-center whitespace-nowrap px-3 py-1.5 rounded-lg border text-sm font-medium transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${selectedConstructionStatus.includes('Under Construction') && selectedConstructionStatus.length === 1 ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                              onClick={() => setSelectedConstructionStatus(['Under Construction'])}
+                            >
+                              Off-Plan
+                            </Button>
+                          </div>
+                        )}
+
               {/* Tap-to-open full-screen search */}
               <button
                 type="button"
@@ -1184,44 +1234,21 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
                     )}
 
-                    {/* Bedroom (only for Buy/Rent) */}
+                    {/* Beds & Baths (only for Buy/Rent) */}
                     {(activeTab === 'buy' || activeTab === 'rent') && (
                       <div className="relative">
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom')}
+                          onClick={() => setOpenDropdown(openDropdown === 'bedbath' ? null : 'bedbath')}
                           className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'bedroom' ? 'bg-blue-50 border-blue-400' : ''}`}
                         >
-                          Bedroom <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedroom' ? 'rotate-90' : ''}`} />
+                          Beds & Baths <ChevronRight size={14} className={`transition-transform ${openDropdown === 'bedbath' ? 'rotate-90' : ''}`} />
                         </Button>
                       </div>
                     )}
 
-                    {/* Availability for RENT; Property Status for others */}
-                    {activeTab === 'rent' ? (
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'availability' ? null : 'availability')}
-                          className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'availability' ? 'bg-blue-50 border-blue-400' : ''}`}
-                        >
-                          Availability <ChevronRight size={14} className={`transition-transform ${openDropdown === 'availability' ? 'rotate-90' : ''}`} />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setOpenDropdown(openDropdown === 'construction' ? null : 'construction')}
-                          className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'construction' ? 'bg-blue-50 border-blue-400' : ''}`}
-                        >
-                          Property Status <ChevronRight size={14} className={`transition-transform ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                        </Button>
-                      </div>
-                    )}
+                    {/* Availability removed on mobile for RENT */}
 
                     {/* Furnishing */}
                     <div className="relative">
@@ -1247,6 +1274,20 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </Button>
                     </div>
 
+                    {/* Frequency (Rent only) */}
+                    {activeTab === 'rent' && (
+                      <div className="relative">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setOpenDropdown(openDropdown === 'frequency' ? null : 'frequency')}
+                          className={`h-9 text-xs flex items-center gap-1 ${openDropdown === 'frequency' ? 'bg-blue-50 border-blue-400' : ''}`}
+                        >
+                          {rentFrequency} <ChevronRight size={14} className={`transition-transform ${openDropdown === 'frequency' ? 'rotate-90' : ''}`} />
+                        </Button>
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>
@@ -1270,41 +1311,48 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       ))}
                     </div>
                   )}
-                  {openDropdown === 'bedroom' && (activeTab === 'buy' || activeTab === 'rent') && (
-                    <div className="flex flex-wrap gap-2">
-                      {['1 RK/1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
-                        <Button
-                          key={bhk}
-                          variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
-                          size="sm"
-                          className="h-8 text-xs"
-                          onClick={() => {
-                            setSelectedBedrooms(prev => prev.includes(bhk) ? prev.filter(b => b !== bhk) : [...prev, bhk]);
-                          }}
-                        >
-                          + {bhk}
-                        </Button>
-                      ))}
+                  {openDropdown === 'bedbath' && (activeTab === 'buy' || activeTab === 'rent') && (
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-sm font-medium mb-1">Bedrooms</div>
+                        <div className="flex flex-wrap gap-2">
+                          {['Studio', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
+                            <Button
+                              key={bhk}
+                              variant={selectedBedrooms.includes(bhk) ? 'default' : 'outline'}
+                              size="sm"
+                              className="h-8 text-xs"
+                              onClick={() => {
+                                setSelectedBedrooms(prev => prev.includes(bhk) ? prev.filter(b => b !== bhk) : [...prev, bhk]);
+                              }}
+                            >
+                              {bhk}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium mb-1">Bathrooms</div>
+                        <div className="flex flex-wrap gap-2">
+                          {['1', '2', '3', '4', '5', '6+'].map(b => (
+                            <Button
+                              key={b}
+                              variant={selectedBathrooms.includes(b) ? 'default' : 'outline'}
+                              size="sm"
+                              className="h-8 text-xs"
+                              onClick={() => {
+                                setSelectedBathrooms(prev => prev.includes(b) ? prev.filter(x => x !== b) : [...prev, b]);
+                              }}
+                            >
+                              {b}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   )}
-                  {openDropdown === 'construction' && activeTab !== 'land' && activeTab !== 'rent' && (
-                    <div className="flex flex-wrap gap-2">
-                      {['Under Construction', 'Ready'].map(status => (
-                        <Button
-                          key={status}
-                          variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
-                          size="sm"
-                          className="h-8 text-xs"
-                          onClick={() => {
-                            setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
-                          }}
-                        >
-                          + {status}
-                        </Button>
-                      ))}
-                    </div>
-                  )}
-                  {openDropdown === 'availability' && activeTab === 'rent' && (
+                  {/* Construction (Property Status) removed from mobile inline panel */}
+                  {false && (
                     <div className="grid grid-cols-2 gap-2">
                       {['Immediate', 'Within 15 Days', 'Within 30 Days', 'After 30 Days'].map(option => (
                         <Button
@@ -1317,6 +1365,21 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           }}
                         >
                           {option}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                  {openDropdown === 'frequency' && activeTab === 'rent' && (
+                    <div className="grid grid-cols-1 gap-2">
+                      {rentFrequencyOptions.map(opt => (
+                        <Button
+                          key={opt}
+                          variant={rentFrequency === opt ? 'default' : 'outline'}
+                          size="sm"
+                          className="h-8 text-xs"
+                          onClick={() => { setRentFrequency(opt); setOpenDropdown(null); }}
+                        >
+                          {opt}
                         </Button>
                       ))}
                     </div>
@@ -1442,6 +1505,28 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
        Lowering to z-30 resolves stacking without changing layout. */}
   <div className="hidden sm:block absolute left-0 right-0 z-30 transform-gpu will-change-transform" style={{ bottom: '-6rem' }}>
           <div className="max-w-full md:max-w-4xl lg:max-w-5xl xl:max-w-4xl mx-auto px-4 sm:px-6">
+            {/* Top Category Bar - outside the search box */}
+            <div className="hidden md:flex items-center justify-center gap-2 mb-2">
+              {[
+                { id: 'properties', label: 'Properties' },
+                { id: 'new-projects', label: 'New Projects' },
+                { id: 'agents', label: 'Agents' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setTopCategory(tab.id as 'properties' | 'new-projects' | 'agents')}
+                  className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                    topCategory === tab.id
+                      ? 'bg-white/95 text-gray-900 border-gray-400 shadow-md backdrop-blur-md'
+                      : 'bg-white/80 text-gray-600 border-gray-200 hover:bg-white/90 backdrop-blur-sm'
+                  }`}
+                  aria-pressed={topCategory === tab.id}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
             <div className="max-w-full md:max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto bg-white/80 backdrop-blur-md rounded-xl p-6 sm:p-7 shadow-lg">
               {/* Navigation Tabs */}
               <div className="bg-transparent rounded-xl overflow-visible">
@@ -1452,26 +1537,32 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       <div className="relative w-full overflow-visible">
                         {/* Search row with BUY, RENT, search field, and search button in one line */}
                         <div className="flex items-center gap-2">
-                          {/* BUY and RENT buttons - smaller and inline */}
-                          <TabsList className="grid grid-cols-2 bg-transparent p-0 h-10 gap-2 flex-shrink-0">
-                            {navigationTabs.map((tab) => (
-                              <TabsTrigger 
-                                key={tab.id} 
-                                value={tab.id} 
-                                className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 h-10 ${
-                                  theme === 'opaque'
-                                    ? (tab.id === activeTab
-                                        ? 'bg-gray-300/70 text-gray-900 border border-gray-500 ring-1 ring-gray-400 backdrop-blur-md shadow-sm'
-                                        : 'bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100')
-                                    : (tab.id === activeTab
-                                        ? 'bg-white text-[#800000] border border-[#800000] shadow-sm'
-                                        : 'bg-white/80 text-gray-600 border border-[#800000]/50 hover:text-gray-800 hover:bg-white/90')
-                                }`}
-                              >
-                                {tab.label}
-                              </TabsTrigger>
-                            ))}
-                          </TabsList>
+                          {/* BUY and RENT buttons - smaller and inline (hidden for New Projects) */}
+                          {topCategory !== 'new-projects' && (
+                            <TabsList className="grid grid-cols-2 bg-transparent p-0 h-10 gap-2 flex-shrink-0">
+                              {navigationTabs.map((tab) => (
+                                <TabsTrigger 
+                                  key={tab.id} 
+                                  value={tab.id} 
+                                  className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 h-10 ${
+                                    theme === 'opaque'
+                                      ? (tab.id === activeTab
+                                          ? 'bg-gray-300/70 text-gray-900 border border-gray-500 ring-1 ring-gray-400 backdrop-blur-md shadow-sm'
+                                          : 'bg-transparent text-gray-900 border border-gray-300 hover:bg-gray-100')
+                                      : theme === 'green-white'
+                                        ? (tab.id === activeTab
+                                            ? 'bg-white text-green-700 border border-green-600 shadow-sm'
+                                            : 'bg-white/80 text-gray-600 border border-green-600/50 hover:text-gray-800 hover:bg-white/90')
+                                        : (tab.id === activeTab
+                                            ? 'bg-white text-[#800000] border border-[#800000] shadow-sm'
+                                            : 'bg-white/80 text-gray-600 border border-[#800000]/50 hover:text-gray-800 hover:bg-white/90')
+                                  }`}
+                                >
+                                  {tab.label}
+                                </TabsTrigger>
+                              ))}
+                            </TabsList>
+                          )}
                           
                           {/* Search field */}
                           <div className={`relative px-3 py-2 pl-8 pr-3 flex-1 rounded-lg focus-within:ring-2 transition-all duration-200 overflow-visible ${
@@ -1526,13 +1617,15 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </div>
 
                       {/* Compact Search Button */}
-                      <button
+                        <button
                         type="button"
-                        className={`inline-flex items-center justify-center h-10 w-10 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0 focus:outline-none focus:ring-2 ${
-                          theme === 'opaque'
-                            ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus:ring-gray-400/30'
-                            : 'text-white bg-[#800000] hover:bg-[#700000] border border-[#800000] focus:ring-[#800000]/30'
-                        }`}
+                         className={`inline-flex items-center justify-center h-10 w-10 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0 focus:outline-none focus:ring-2 ${
+                           theme === 'opaque'
+                             ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus:ring-gray-400/30'
+                             : theme === 'green-white'
+                               ? 'text-white bg-green-600 hover:bg-green-700 border border-green-600 focus:ring-green-600/30'
+                               : 'text-white bg-[#800000] hover:bg-[#700000] border border-[#800000] focus:ring-[#800000]/30'
+                         }`}
                         aria-label="Search"
                         onClick={handleSearch}
                         disabled={selectedLocations.length === 0}
@@ -1541,11 +1634,334 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       </button>
                     </div>
 
-                        {/* Filter row outside red border */}
-                        <div className="mt-2">
-                          {/* Scrollable container for tablet with visible scrollbar, grid for desktop */}
-                          <div className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible filter-scroll-container">
-                            <div className="flex sm:flex lg:grid lg:grid-cols-5 gap-1.5 sm:gap-2 w-full min-w-max lg:min-w-0">
+                        {/* Filter row outside red border - hidden for Agents */}
+                        {topCategory !== 'agents' && (
+                          <div className="mt-2">
+                            {/* Scrollable container for tablet with visible scrollbar, grid for desktop */}
+                            <div className="overflow-x-auto sm:overflow-x-auto lg:overflow-visible filter-scroll-container">
+                              {topCategory === 'new-projects' ? (
+                              <div className="flex sm:flex lg:grid lg:grid-cols-4 gap-1.5 sm:gap-2 lg:gap-3 w-full min-w-max lg:min-w-0">
+                                {/* Residential */}
+                                <Popover open={!isMobile && openDropdown === 'newProjectsResidential'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('newProjectsResidential'); }}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'newProjectsResidential' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                                    >
+                                      <span className="text-sm font-medium">{newProjectsResidential}</span>
+                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'newProjectsResidential' ? 'rotate-90' : ''}`} />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[220px] sm:w-[260px] p-4"
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    <h4 className="text-base font-semibold mb-3 text-foreground">Residential</h4>
+                                    <div className="flex flex-col gap-1.5">
+                                      {['Residential', 'Commercial'].map(opt => (
+                                        <Button
+                                          key={opt}
+                                          variant={newProjectsResidential === opt ? 'default' : 'outline'}
+                                          size="sm"
+                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                          onClick={() => { setNewProjectsResidential(opt); setOpenDropdown(null); }}
+                                        >
+                                          {opt}
+                                        </Button>
+                                      ))}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+
+                                {/* Handover By */}
+                                <Popover open={!isMobile && openDropdown === 'newProjectsHandoverBy'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('newProjectsHandoverBy'); }}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'newProjectsHandoverBy' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                                    >
+                                      <span className="text-sm font-medium">{newProjectsHandoverBy || 'Handover By'}</span>
+                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'newProjectsHandoverBy' ? 'rotate-90' : ''}`} />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[220px] sm:w-[260px] p-4"
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    <h4 className="text-base font-semibold mb-3 text-foreground">Handover By</h4>
+                                    <div className="flex flex-col gap-1.5 max-h-[60vh] overflow-y-auto">
+                                      {['Any', 'Q4 2025', 'Q1 2026', 'Q2 2026', 'Q3 2026', 'Q4 2026', 'Q1 2027', 'Q2 2027', 'Q3 2027', 'Q4 2027'].map(opt => (
+                                        <Button
+                                          key={opt}
+                                          variant={(opt === 'Any' ? newProjectsHandoverBy === '' : newProjectsHandoverBy === opt) ? 'default' : 'outline'}
+                                          size="sm"
+                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                          onClick={() => { setNewProjectsHandoverBy(opt === 'Any' ? '' : opt); setOpenDropdown(null); }}
+                                        >
+                                          {opt}
+                                        </Button>
+                                      ))}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+
+                                {/* Payment Plan - Slider */}
+                                <Popover open={!isMobile && openDropdown === 'newProjectsPaymentPlan'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('newProjectsPaymentPlan'); }}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'newProjectsPaymentPlan' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                                    >
+                                      <span className="text-sm font-medium truncate">
+                                        {newProjectsPaymentPlan === 100 ? 'Pre-handover Payment' : `Up to ${newProjectsPaymentPlan}% Pre-handover`}
+                                      </span>
+                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'newProjectsPaymentPlan' ? 'rotate-90' : ''}`} />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[300px] sm:w-[350px] p-4"
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    <h4 className="text-base font-semibold mb-4 text-foreground">Pre-handover Payment</h4>
+                                    <div className="mb-6">
+                                      <div className="flex justify-between items-center mb-2">
+                                        <span className="text-sm text-gray-500">0%</span>
+                                        <span className="text-sm text-gray-500">100%</span>
+                                      </div>
+                                      <div className="relative w-full">
+                                        <Slider
+                                          value={[newProjectsPaymentPlan]}
+                                          onValueChange={(value) => setNewProjectsPaymentPlan(value[0])}
+                                          min={0}
+                                          max={100}
+                                          step={1}
+                                          className="w-full"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="flex gap-2 justify-end">
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className={`px-4 py-2 text-sm font-medium ${
+                                          theme === 'opaque'
+                                            ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                                            : theme === 'green-white'
+                                              ? 'bg-white border border-green-600 text-gray-800 hover:bg-gray-50'
+                                              : 'bg-white border border-[#800000] text-gray-800 hover:bg-gray-50'
+                                        }`}
+                                        onClick={() => {
+                                          setNewProjectsPaymentPlan(100);
+                                        }}
+                                      >
+                                        Reset
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        className={`px-4 py-2 text-sm font-medium ${
+                                          theme === 'opaque'
+                                            ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                                            : theme === 'green-white'
+                                              ? 'bg-green-600 hover:bg-green-700 text-white'
+                                              : 'bg-[#800000] hover:bg-[#700000] text-white'
+                                        }`}
+                                        onClick={() => {
+                                          setOpenDropdown(null);
+                                        }}
+                                      >
+                                        Done
+                                      </Button>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+
+                                {/* % Completion */}
+                                <Popover open={!isMobile && openDropdown === 'newProjectsCompletion'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('newProjectsCompletion'); }}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'newProjectsCompletion' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                                    >
+                                      <span className="text-sm font-medium">{newProjectsCompletion || '% Completion'}</span>
+                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'newProjectsCompletion' ? 'rotate-90' : ''}`} />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[220px] sm:w-[260px] p-4"
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    <h4 className="text-base font-semibold mb-3 text-foreground">% Completion</h4>
+                                    <div className="flex flex-col gap-1.5">
+                                      {['Any', '0-25%', '25-50%', '50-75%', '75-100%'].map(opt => (
+                                        <Button
+                                          key={opt}
+                                          variant={(opt === 'Any' ? newProjectsCompletion === '' : newProjectsCompletion === opt) ? 'default' : 'outline'}
+                                          size="sm"
+                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                          onClick={() => { setNewProjectsCompletion(opt === 'Any' ? '' : opt); setOpenDropdown(null); }}
+                                        >
+                                          {opt}
+                                        </Button>
+                                      ))}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            ) : (
+                              <div className="flex sm:flex lg:grid lg:grid-cols-6 gap-1.5 sm:gap-2 lg:gap-3 w-full min-w-max lg:min-w-0">
+                              {/* Status dropdown: All / Ready / Off-Plan (only for Buy) */}
+                              {activeTab === 'buy' && (
+                                <Popover open={!isMobile && openDropdown === 'status'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('status'); }}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'status' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                                    >
+                                      <span className="text-sm font-medium">
+                                        {selectedConstructionStatus.length === 0 
+                                          ? 'All' 
+                                          : selectedConstructionStatus.includes('Ready') 
+                                            ? 'Ready' 
+                                            : selectedConstructionStatus.includes('Under Construction')
+                                              ? 'Off-Plan'
+                                              : 'All'}
+                                      </span>
+                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'status' ? 'rotate-90' : ''}`} />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[220px] sm:w-[260px] p-4"
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    <h4 className="text-base font-semibold mb-3 text-foreground">Status</h4>
+                                    <div className="flex flex-col gap-1.5">
+                                      <Button
+                                        variant={selectedConstructionStatus.length === 0 ? 'default' : 'outline'}
+                                        size="sm"
+                                        className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                        onClick={() => { setSelectedConstructionStatus([]); setOpenDropdown(null); }}
+                                      >
+                                        All
+                                      </Button>
+                                      <Button
+                                        variant={selectedConstructionStatus.includes('Ready') && selectedConstructionStatus.length === 1 ? 'default' : 'outline'}
+                                        size="sm"
+                                        className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                        onClick={() => { setSelectedConstructionStatus(['Ready']); setOpenDropdown(null); }}
+                                      >
+                                        Ready
+                                      </Button>
+                                      <Button
+                                        variant={selectedConstructionStatus.includes('Under Construction') && selectedConstructionStatus.length === 1 ? 'default' : 'outline'}
+                                        size="sm"
+                                        className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                        onClick={() => { setSelectedConstructionStatus(['Under Construction']); setOpenDropdown(null); }}
+                                      >
+                                        Off-Plan
+                                      </Button>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              )}
+                              {/* Rent Frequency - only for rent */}
+                              {activeTab === 'rent' && (
+                                <Popover open={!isMobile && openDropdown === 'frequency'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('frequency'); }}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'frequency' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
+                                    >
+                                      <span className="text-sm font-medium">{rentFrequency}</span>
+                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'frequency' ? 'rotate-90' : ''}`} />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent 
+                                    side="bottom" 
+                                    align="start" 
+                                    avoidCollisions={false} 
+                                    className="w-[220px] sm:w-[260px] p-4"
+                                    onInteractOutside={(e) => {
+                                      const target = (e.target as Node) || null;
+                                      if (desktopSearchRef.current?.contains(target)) {
+                                        e.preventDefault();
+                                        return;
+                                      }
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    <h4 className="text-base font-semibold mb-3 text-foreground">Payment Frequency</h4>
+                                    <div className="flex flex-col gap-1.5">
+                                      {rentFrequencyOptions.map(opt => (
+                                        <Button
+                                          key={opt}
+                                          variant={rentFrequency === opt ? 'default' : 'outline'}
+                                          size="sm"
+                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                          onClick={() => { setRentFrequency(opt); setOpenDropdown(null); }}
+                                        >
+                                          {opt}
+                                        </Button>
+                                      ))}
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              )}
                             {/* Property type: Property Type or Land/Space Type */}
                             <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('propertyType'); }}>
                               <PopoverTrigger asChild>
@@ -1638,9 +2054,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             </Popover>
                             )}
 
-                            {/* Availability for RENT; Property Status for others (not for land) */}
-                            {activeTab !== 'land' && (
-                              activeTab === 'rent' ? (
+                            {/* Availability removed for RENT */}
+                            {false && (
                                 <Popover open={!isMobile && openDropdown === 'availability'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('availability'); }}>
                                   <PopoverTrigger asChild>
                                     <Button
@@ -1684,51 +2099,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     </div>
                                   </PopoverContent>
                                 </Popover>
-                              ) : (
-                                <Popover open={!isMobile && openDropdown === 'construction'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('construction'); }}>
-                                  <PopoverTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className={`flex-shrink-0 lg:w-full gap-2 px-3 py-1.5 rounded-lg border overflow-hidden transition-all duration-200 hover:shadow-sm whitespace-nowrap bg-white/80 backdrop-blur-md ${openDropdown === 'construction' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
-                                    >
-                                      <span className="text-sm font-medium">Property Status</span>
-                                      <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'construction' ? 'rotate-90' : ''}`} />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent 
-                                    side="bottom" 
-                                    align="start" 
-                                    avoidCollisions={false} 
-                                    className="w-[250px] sm:w-[280px] p-4"
-                                    onInteractOutside={(e) => {
-                                      const target = (e.target as Node) || null;
-                                      if (desktopSearchRef.current?.contains(target)) {
-                                        e.preventDefault();
-                                        return;
-                                      }
-                                      setOpenDropdown(null);
-                                    }}
-                                  >
-                                    <h4 className="text-base font-semibold mb-3 text-foreground">Property Status</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                      {['Under Construction', 'Ready'].map(status => (
-                                        <Button
-                                          key={status}
-                                          variant={selectedConstructionStatus.includes(status) ? 'default' : 'outline'}
-                                          size="sm"
-                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm"
-                                          onClick={() => {
-                                            setSelectedConstructionStatus(prev => prev.includes(status) ? prev.filter(s => s !== status) : [...prev, status]);
-                                          }}
-                                        >
-                                          {status}
-                                        </Button>
-                                      ))}
-                                    </div>
-                                  </PopoverContent>
-                                </Popover>
-                              )
                             )}
 
                             {/* Furnishing */}
@@ -1981,9 +2351,11 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 </div>
                               </PopoverContent>
                             </Popover>
-
+                            </div>
+                            )}
                           </div>
-                          </div>
+                        </div>
+                        )}
                           {/* Clear button below, right-aligned */}
                           <div className="hidden mt-2 flex justify-end px-2">
                             <Button
@@ -2002,7 +2374,6 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                               Clear Filters
                             </Button>
                           </div>
-                        </div>
                       </div>
                     </div>
 
