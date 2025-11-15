@@ -65,6 +65,7 @@ const Index = () => {
         {/* Additional Scrollable Sections */}
         <ScrollableSection
           title="Featured Partners"
+          className="mt-8 sm:mt-10 md:mt-12"
           items={[
             { id: 'partner-1', name: 'Emaar Properties', description: 'Premium Real Estate Solutions', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300&fit=crop' },
             { id: 'partner-2', name: 'Dubai Properties', description: 'Trusted Property Advisors', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop' },
