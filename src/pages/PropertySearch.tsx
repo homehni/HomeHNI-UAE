@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PropertyCard from '@/components/PropertyCard';
-import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon, Lock, Unlock } from 'lucide-react';
+import { MapPin, Filter, Grid3X3, List, Bookmark, X, Loader2, Search as SearchIcon, Lock, Unlock, Info, Map, Bell, Home, TrendingUp } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose, DrawerTrigger } from '@/components/ui/drawer';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -20,7 +20,6 @@ import { ChevronDown } from 'lucide-react';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
 import Footer from '@/components/Footer';
-import PropertyTools from '@/components/PropertyTools';
 import ChatBot from '@/components/ChatBot';
 import { useSimplifiedSearch } from '@/hooks/useSimplifiedSearch';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -108,6 +107,17 @@ const PropertySearch = () => {
   const [tempLocationText, setTempLocationText] = useState<string>('');
   // Track search trigger state
   const { searchTriggered, triggerSearch, resetTrigger } = useSearchTrigger();
+  // Property type category for Residential/Commercial tabs
+  const [propertyTypeCategory, setPropertyTypeCategory] = useState<'residential' | 'commercial'>('residential');
+  const [isPropertyTypePopoverOpen, setIsPropertyTypePopoverOpen] = useState(false);
+  const [isMoreFiltersPopoverOpen, setIsMoreFiltersPopoverOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<string>('Dubai');
+  const [showMapView, setShowMapView] = useState<boolean>(false);
+  const [showTruCheckFirst, setShowTruCheckFirst] = useState<boolean>(false);
+  const [showFloorPlans, setShowFloorPlans] = useState<boolean>(false);
+  const [rentFrequency, setRentFrequency] = useState<string>('Yearly');
+  const rentFrequencyOptions = ['Yearly', 'Monthly', 'Weekly', 'Daily', 'Any'] as const;
+  const [isRentFrequencyPopoverOpen, setIsRentFrequencyPopoverOpen] = useState(false);
   
   // Header dropdowns removed; rely on left sidebar filters only
 
@@ -300,6 +310,40 @@ const PropertySearch = () => {
       default:
         return ['ALL', 'APARTMENT', 'VILLA', 'INDEPENDENT HOUSE', 'PENTHOUSE', 'DUPLEX'];
     }
+  };
+
+  // Helper: categorize property types into Residential and Commercial
+  const getResidentialPropertyTypes = (): string[] => {
+    return [
+      'APARTMENT',
+      'TOWNHOUSE',
+      'VILLA COMPOUND',
+      'LAND',
+      'BUILDING',
+      'VILLA',
+      'PENTHOUSE',
+      'HOTEL APARTMENT',
+      'FLOOR'
+    ];
+  };
+
+  const getCommercialPropertyTypes = (): string[] => {
+    return [
+      'OFFICE',
+      'WAREHOUSE',
+      'VILLA',
+      'LAND',
+      'BUILDING',
+      'INDUSTRIAL LAND',
+      'SHOWROOM',
+      'SHOP',
+      'LABOUR CAMP',
+      'BULK UNIT',
+      'FLOOR',
+      'FACTORY',
+      'MIXED USE LAND',
+      'OTHER COMMERCIAL'
+    ];
   };
 
   const propertyTypes = getPropertyTypes(activeTab);
@@ -504,36 +548,69 @@ const PropertySearch = () => {
           )}
         </div>
         
-        <div className="space-y-2">
-          {propertyTypes.map(type => (
-            <div key={type} className="flex items-center space-x-2">
-              <Checkbox
-                id={`property-type-${type}`}
-                checked={
-                  (filters.propertyType.length === 0 && type === 'ALL') ||
-                  (filters.propertyType.length > 0 && filters.propertyType[0] === type)
-                }
-                onCheckedChange={(checked) => {
-                  preserveScroll(() => {
-                    if (type === 'ALL') {
-                      updateFilter('propertyType', []);
-                    } else if (checked) {
-                      updateFilter('propertyType', [type]);
-                    } else {
-                      updateFilter('propertyType', []);
-                    }
-                  });
-                }}
-              />
-              <label
-                htmlFor={`property-type-${type}`}
-                className="text-sm cursor-pointer flex-1"
-              >
-                {type}
-              </label>
-            </div>
-          ))}
+        {/* Residential/Commercial Tabs */}
+        <div className="flex gap-4 mb-4 border-b">
+          <button
+            type="button"
+            onClick={() => setPropertyTypeCategory('residential')}
+            className={`pb-2 px-1 text-sm font-medium transition-colors ${
+              propertyTypeCategory === 'residential'
+                ? theme === 'opaque'
+                  ? 'text-gray-900 border-b-2 border-gray-500'
+                  : theme === 'green-white'
+                    ? 'text-green-600 border-b-2 border-green-600'
+                    : 'text-[#800000] border-b-2 border-[#800000]'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Residential
+          </button>
+          <button
+            type="button"
+            onClick={() => setPropertyTypeCategory('commercial')}
+            className={`pb-2 px-1 text-sm font-medium transition-colors ${
+              propertyTypeCategory === 'commercial'
+                ? theme === 'opaque'
+                  ? 'text-gray-900 border-b-2 border-gray-500'
+                  : theme === 'green-white'
+                    ? 'text-green-600 border-b-2 border-green-600'
+                    : 'text-[#800000] border-b-2 border-[#800000]'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Commercial
+          </button>
         </div>
+
+        {/* Property Types List */}
+        <RadioGroup
+          value={filters.propertyType[0] || ''}
+          onValueChange={(value) => {
+            preserveScroll(() => {
+              if (value) {
+                updateFilter('propertyType', [value]);
+              } else {
+                updateFilter('propertyType', []);
+              }
+            });
+          }}
+          className="max-h-[50vh] overflow-y-auto"
+        >
+          <div className="grid grid-cols-2 gap-2">
+            {(propertyTypeCategory === 'residential' 
+              ? getResidentialPropertyTypes()
+              : getCommercialPropertyTypes()
+            ).map(type => (
+              <label
+                key={type}
+                className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+              >
+                <RadioGroupItem value={type} id={`property-type-${type}`} />
+                <span className="capitalize font-medium">{type.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+              </label>
+            ))}
+          </div>
+        </RadioGroup>
       </div>
 
       {/* Show separator only if there's content after Property Type */}
@@ -1060,14 +1137,15 @@ const PropertySearch = () => {
               </TabsList>
             </Tabs>
 
-            {/* Main Search Bar with Multi-Location Support */}
-            <div className="flex-1 w-full">
-              {/* Multi-Location Search Bar */}
+            {/* Main Search Bar - Matching Homepage Style */}
+            <div className="flex-1 w-full flex items-center gap-2">
+              {/* Search field container - matching homepage */}
               <div 
-                className={`flex items-center gap-2 px-4 py-2.5 min-h-[48px] border border-gray-200 rounded-full bg-white shadow-sm transition relative
-                  ${isSearchLocked 
-                    ? 'search-container-locked cursor-pointer' 
-                    : 'search-container-unlocked search-unlock-animation focus-within:ring-2 focus-within:ring-brand-red/30'}`}
+                className={`relative px-3 py-2 pl-8 pr-3 flex-1 rounded-lg focus-within:ring-2 transition-all duration-200 overflow-visible ${
+                  theme === 'opaque'
+                    ? 'border-none bg-white backdrop-blur-md focus-within:ring-gray-400/30 hover:bg-gray-50'
+                    : 'border border-[#800000]/50 bg-white/80 backdrop-blur-md focus-within:ring-[#800000]/30 focus-within:border-[#800000] focus-within:bg-white/95 hover:bg-white/90 hover:border-[#800000]/70'
+                }`} 
                 onClick={() => {
                   // Unlock the search field when clicked
                   setIsSearchLocked(false);
@@ -1078,161 +1156,142 @@ const PropertySearch = () => {
                   }
                 }}
               >
-                {/* Map Pin Icon */}
-                <MapPin className="text-[#800000] shrink-0" size={18} />
-                
-                {/* Location Chips */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  {filters.locations.map((location: string, index: number) => (
-                    <div key={index} className="flex items-center gap-1.5 bg-[#800000] text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
-                      <span className="truncate max-w-32">{location}</span>
+                {/* Location Row */}
+                <div className="relative flex items-center">
+                  <MapPin className={`absolute left-0 -ml-5 pointer-events-none flex-shrink-0 ${theme === 'opaque' ? 'text-gray-700' : 'text-[#800000]'}`} size={14} />
+                  <div className="flex flex-wrap items-center gap-2 flex-1 min-w-0 relative">
+                    {/* Location Chips */}
+                    {filters.locations.map((location: string, index: number) => (
+                      <div key={index} className="flex items-center gap-1.5 bg-[#800000] text-white px-3 py-1 rounded-full text-sm font-medium shrink-0">
+                        <span className="truncate max-w-32">{location}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
+                            updateFilter('locations', newLocations);
+                          }}
+                          className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                          aria-label={`Remove ${location}`}
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                    
+                    {/* Input Field */}
+                    <input
+                      ref={locationInputRef}
+                      value={isSearchLocked ? filters.location : tempLocationText}
+                      onChange={e => {
+                        // Only allow typing when search is unlocked
+                        if (!isSearchLocked) {
+                          // Update the temporary text without triggering search
+                          setTempLocationText(e.target.value);
+                        }
+                      }}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' && tempLocationText.trim()) {
+                          e.preventDefault();
+                          // Only update filter but DON'T trigger search yet - wait for explicit search button click
+                          const normalizedLocation = normalizeLocation(tempLocationText);
+                          updateFilter('location', normalizedLocation);
+                          // Lock the search field after text is confirmed
+                          setIsSearchLocked(true);
+                          // Reset search triggered flag to hide results until search button is clicked
+                          resetTrigger();
+                        }
+                      }}
+                      onFocus={e => {
+                        if (!isSearchLocked) {
+                          e.target.select();
+                        }
+                      }}
+                      readOnly={isSearchLocked}
+                      placeholder="Search locality..."
+                      className={`flex-1 min-w-[8rem] outline-none border-none bg-transparent text-sm font-medium ${theme === 'opaque' ? 'placeholder:text-gray-600 text-gray-900' : 'placeholder:text-gray-700 text-gray-900'}`}
+                      style={{ appearance: "none" }}
+                    />
+                    
+                    {/* Clear button for location */}
+                    {filters.location && filters.locations.length === 0 && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          const newLocations = filters.locations.filter((_: string, i: number) => i !== index);
-                          updateFilter('locations', newLocations);
+                          updateFilter('location', '');
+                          setTempLocationText('');
                         }}
-                        className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
-                        aria-label={`Remove ${location}`}
+                        className="absolute right-0 hover:bg-gray-100 rounded-full p-1 transition-colors"
                       >
-                        <X size={12} />
+                        <X size={14} className="text-gray-500" />
                       </button>
-                    </div>
-                  ))}
+                    )}
+                  </div>
                 </div>
-                
-                {/* Lock/Unlock indicator removed */}
-                
-                {/* Input Field */}
-                <input
-                  ref={locationInputRef}
-                  value={isSearchLocked ? filters.location : tempLocationText}
-                  onChange={e => {
-                    // Only allow typing when search is unlocked
-                    if (!isSearchLocked) {
-                      // Update the temporary text without triggering search
-                      setTempLocationText(e.target.value);
-                    }
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && tempLocationText.trim()) {
-                      e.preventDefault();
-                      // Only update filter but DON'T trigger search yet - wait for explicit search button click
-                      const normalizedLocation = normalizeLocation(tempLocationText);
-                      updateFilter('location', normalizedLocation);
-                      // Lock the search field after text is confirmed
-                      setIsSearchLocked(true);
-                      // Reset search triggered flag to hide results until search button is clicked
-                      resetTrigger();
-                    }
-                  }}
-                  onFocus={e => {
-                    if (!isSearchLocked) {
-                      e.target.select();
-                    }
-                  }}
-                  readOnly={isSearchLocked}
-                  placeholder={isSearchLocked ? "Search locality..." : "Search locality..."}
-                  className={`flex-1 min-w-[120px] outline-none text-sm placeholder:text-gray-500
-                    ${isSearchLocked ? 'cursor-pointer search-input-locked' : 
-                     (tempLocationText !== filters.location ? 'bg-rose-50 text-rose-800 font-medium' : 'bg-transparent')}`}
-                />
-                
-                {/* Search Icon Button */}
-                <button
-                  type="button"
-                  className={`flex items-center justify-center h-10 transition-all ${!isSearchLocked && tempLocationText !== filters.location 
-                    ? (theme === 'opaque' 
-                        ? "w-auto px-3 rounded-full text-gray-800 bg-transparent border border-gray-300 hover:bg-gray-200/40 search-button-expanded" 
-                        : theme === 'green-white'
-                          ? "w-auto px-3 rounded-full text-white bg-green-600 hover:bg-green-700 search-button-expanded"
-                          : "w-auto px-3 rounded-full text-white bg-rose-600 hover:bg-rose-700 search-button-expanded")
-                    : (theme === 'opaque' 
-                        ? "w-auto px-5 rounded-full text-gray-800 bg-transparent border border-gray-300 hover:bg-gray-200/40" 
-                        : theme === 'green-white'
-                          ? "w-auto px-5 rounded-full text-white bg-green-600 hover:bg-green-700"
-                          : "w-auto px-5 rounded-full text-white bg-[#800000] hover:bg-[#700000]")} 
-                    focus:outline-none focus:ring-2 ${theme === 'opaque' ? 'focus:ring-gray-400/30' : theme === 'green-white' ? 'focus:ring-green-600/30' : 'focus:ring-[#800000]/40'} shrink-0`}
-                  aria-label={isSearchLocked ? "Search" : "Add location"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    
-                    // Always trigger search when the search button is clicked
-                    if (isSearchLocked) {
-                      // If locked, just trigger search with existing parameters
-                      updateFilter('trigger', 'search');
-                      // Set search as triggered to show results
-                      triggerSearch();
-                    } else {
-                      // Otherwise add the location if valid
-                      const typed = tempLocationText.trim();
-                      if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
-                        // First update the real location with our temporary text
-                        const normalizedLocation = normalizeLocation(typed);
-                        updateFilter('location', normalizedLocation);
-                        updateFilter('locations', [...filters.locations, normalizedLocation]);
-                        setTempLocationText('');
-                        // Lock the search field after adding location
-                        setIsSearchLocked(true);
-                        
-                        // Now trigger search explicitly
-                        updateFilter('trigger', 'search');
-                        // Set search as triggered to show results
-                        triggerSearch();
-                        
-                        setTimeout(() => {
-                          locationInputRef.current?.focus();
-                        }, 0);
-                      } else if (typed) {
-                        // If there's a typed location, update the real location and perform search
-                        const normalizedLocation = normalizeLocation(typed);
-                        updateFilter('location', normalizedLocation);
-                        
-                        // Now trigger search explicitly
-                        updateFilter('trigger', 'search');
-                        // Set search as triggered to show results
-                        triggerSearch();
-                        
-                        // Lock the search field after search
-                        setIsSearchLocked(true);
-                      }
-                    }
-                  }}
-                >
-                  <SearchIcon className="h-4 w-4" />
-                  {!isSearchLocked && tempLocationText !== filters.location && (
-                    <span className="ml-1 text-sm font-medium">Search</span>
-                  )}
-                </button>
-                
-                {/* Clear All Locations Button */}
-                {filters.locations.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      updateFilter('locations', []);
-                      updateFilter('location', '');
-                      updateFilter('selectedCity', '');
-                      setTempLocationText('');
-                      // Unlock the search field when clearing all locations
-                      setIsSearchLocked(false);
-                      // Trigger search with empty location
-                      updateFilter('trigger', 'search');
-                      // Set search as triggered to show results
-                      triggerSearch();
-                    }}
-                    className="flex items-center justify-center h-8 w-8 rounded-full hover:bg-gray-100 transition-colors shrink-0"
-                    aria-label="Clear all locations"
-                  >
-                    <X size={16} className="text-gray-600" />
-                  </button>
-                )}
               </div>
+
+              {/* Compact Search Button - matching homepage */}
+              <button
+                type="button"
+                className={`inline-flex items-center justify-center h-10 w-10 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0 focus:outline-none focus:ring-2 ${
+                  theme === 'opaque'
+                    ? 'bg-gray-200/75 text-gray-800 hover:bg-gray-300/85 border border-gray-300 backdrop-blur-md focus:ring-gray-400/30'
+                    : theme === 'green-white'
+                      ? 'text-white bg-green-600 hover:bg-green-700 border border-green-600 focus:ring-green-600/30'
+                      : 'text-white bg-[#800000] hover:bg-[#700000] border border-[#800000] focus:ring-[#800000]/30'
+                }`}
+                aria-label="Search"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  
+                  // Always trigger search when the search button is clicked
+                  if (isSearchLocked) {
+                    // If locked, just trigger search with existing parameters
+                    updateFilter('trigger', 'search');
+                    // Set search as triggered to show results
+                    triggerSearch();
+                  } else {
+                    // Otherwise add the location if valid
+                    const typed = tempLocationText.trim();
+                    if (typed && filters.selectedCity && filters.locations.length < 3 && !filters.locations.includes(typed)) {
+                      // First update the real location with our temporary text
+                      const normalizedLocation = normalizeLocation(typed);
+                      updateFilter('location', normalizedLocation);
+                      updateFilter('locations', [...filters.locations, normalizedLocation]);
+                      setTempLocationText('');
+                      // Lock the search field after adding location
+                      setIsSearchLocked(true);
+                      
+                      // Now trigger search explicitly
+                      updateFilter('trigger', 'search');
+                      // Set search as triggered to show results
+                      triggerSearch();
+                      
+                      setTimeout(() => {
+                        locationInputRef.current?.focus();
+                      }, 0);
+                    } else if (typed) {
+                      // If there's a typed location, update the real location and perform search
+                      const normalizedLocation = normalizeLocation(typed);
+                      updateFilter('location', normalizedLocation);
+                      
+                      // Now trigger search explicitly
+                      updateFilter('trigger', 'search');
+                      // Set search as triggered to show results
+                      triggerSearch();
+                      
+                      // Lock the search field after search
+                      setIsSearchLocked(true);
+                    }
+                  }
+                }}
+                disabled={filters.locations.length === 0 && !filters.location}
+              >
+                <SearchIcon className="h-4 w-4" />
+              </button>
             </div>
 
-            {/* Mobile Actions: Filters + Search (sticky) */}
-            <div className="w-full lg:hidden flex gap-2 sticky top-[64px] z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 py-2">
+            {/* Mobile Actions: Filters + Search (sticky) - HIDDEN: Using top filter bar instead */}
+            <div className="hidden w-full lg:hidden flex gap-2 sticky top-[64px] z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 py-2">
               {/* Filters Drawer Trigger */}
               <Drawer>
                 <DrawerTrigger asChild>
@@ -1273,12 +1332,932 @@ const PropertySearch = () => {
         </div>
       </div>
 
+      {/* Top Filter Bar - Quick Filters */}
+      {activeTab === 'buy' && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
+              {/* All / Ready / Off-Plan buttons */}
+              <Button
+                variant={filters.construction.length === 0 ? 'default' : 'outline'}
+                size="sm"
+                className={`text-xs sm:text-sm font-medium flex-shrink-0 ${
+                  filters.construction.length === 0
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : theme === 'opaque'
+                      ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                      : theme === 'green-white'
+                        ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                        : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                }`}
+                onClick={() => updateFilter('construction', [])}
+              >
+                All
+              </Button>
+              <Button
+                variant={filters.construction.includes('Ready') && filters.construction.length === 1 ? 'default' : 'outline'}
+                size="sm"
+                className={`text-xs sm:text-sm font-medium flex-shrink-0 ${
+                  filters.construction.includes('Ready') && filters.construction.length === 1
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : theme === 'opaque'
+                      ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                      : theme === 'green-white'
+                        ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                        : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                }`}
+                onClick={() => updateFilter('construction', ['Ready'])}
+              >
+                Ready
+              </Button>
+              <Button
+                variant={filters.construction.includes('Under Construction') && filters.construction.length === 1 ? 'default' : 'outline'}
+                size="sm"
+                className={`text-xs sm:text-sm font-medium flex-shrink-0 ${
+                  filters.construction.includes('Under Construction') && filters.construction.length === 1
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : theme === 'opaque'
+                      ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                      : theme === 'green-white'
+                        ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                        : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                }`}
+                onClick={() => updateFilter('construction', ['Under Construction'])}
+              >
+                Off-Plan
+              </Button>
+
+              {/* Property Type Dropdown */}
+              <Popover open={isPropertyTypePopoverOpen} onOpenChange={setIsPropertyTypePopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-sm font-medium ${
+                      theme === 'opaque'
+                        ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                        : theme === 'green-white'
+                          ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                          : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                    }`}
+                  >
+                    {filters.propertyType.length > 0 
+                      ? filters.propertyType[0].toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                      : 'Property Type'}
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[500px] sm:w-[550px] p-4">
+                  <h4 className="text-base font-semibold mb-4 text-foreground">Select Property Type</h4>
+                  
+                  {/* Residential/Commercial Tabs */}
+                  <div className="flex gap-4 mb-4 border-b">
+                    <button
+                      type="button"
+                      onClick={() => setPropertyTypeCategory('residential')}
+                      className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                        propertyTypeCategory === 'residential'
+                          ? theme === 'opaque'
+                            ? 'text-gray-900 border-b-2 border-gray-500'
+                            : theme === 'green-white'
+                              ? 'text-green-600 border-b-2 border-green-600'
+                              : 'text-[#800000] border-b-2 border-[#800000]'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      Residential
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPropertyTypeCategory('commercial')}
+                      className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                        propertyTypeCategory === 'commercial'
+                          ? theme === 'opaque'
+                            ? 'text-gray-900 border-b-2 border-gray-500'
+                            : theme === 'green-white'
+                              ? 'text-green-600 border-b-2 border-green-600'
+                              : 'text-[#800000] border-b-2 border-[#800000]'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      Commercial
+                    </button>
+                  </div>
+
+                  {/* Property Types List */}
+                  <RadioGroup
+                    value={filters.propertyType[0] || ''}
+                    onValueChange={(value) => {
+                      if (value) {
+                        updateFilter('propertyType', [value]);
+                      } else {
+                        updateFilter('propertyType', []);
+                      }
+                    }}
+                    className="max-h-[50vh] overflow-y-auto"
+                  >
+                    <div className="grid grid-cols-2 gap-2">
+                      {(propertyTypeCategory === 'residential' 
+                        ? getResidentialPropertyTypes()
+                        : getCommercialPropertyTypes()
+                      ).map(type => (
+                        <label
+                          key={type}
+                          className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+                        >
+                          <RadioGroupItem value={type} id={`top-property-type-${type}`} />
+                          <span className="capitalize font-medium">{type.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </RadioGroup>
+
+                  {/* Reset and Done Buttons */}
+                  <div className="flex gap-2 mt-4 pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`flex-1 ${
+                        theme === 'opaque'
+                          ? 'bg-transparent border-gray-300 text-gray-800 hover:bg-gray-100'
+                          : theme === 'green-white'
+                            ? 'bg-white border-green-600 text-gray-800 hover:bg-gray-50'
+                            : 'bg-white border-[#800000] text-gray-800 hover:bg-gray-50'
+                      }`}
+                      onClick={() => {
+                        updateFilter('propertyType', []);
+                      }}
+                    >
+                      Reset
+                    </Button>
+                    <Button
+                      size="sm"
+                      className={`flex-1 ${
+                        theme === 'opaque'
+                          ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                          : theme === 'green-white'
+                            ? 'bg-green-600 hover:bg-green-700 text-white'
+                            : 'bg-[#800000] hover:bg-[#700000] text-white'
+                      }`}
+                      onClick={() => {
+                        setIsPropertyTypePopoverOpen(false);
+                      }}
+                    >
+                      Done
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* Beds & Baths Dropdown */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-sm font-medium ${
+                      theme === 'opaque'
+                        ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                        : theme === 'green-white'
+                          ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                          : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                    }`}
+                  >
+                    Beds & Baths
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Bedrooms</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['Studio', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
+                          <Button
+                            key={bhk}
+                            variant={filters.bhkType.includes(bhk) ? 'default' : 'outline'}
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              if (filters.bhkType.includes(bhk)) {
+                                updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
+                              } else {
+                                updateFilter('bhkType', [...filters.bhkType, bhk]);
+                              }
+                            }}
+                          >
+                            {bhk}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Bathrooms</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['1', '2', '3', '4', '5', '6+'].map(bath => (
+                          <Button
+                            key={bath}
+                            variant="outline"
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              // Handle bathroom filter - would need to add to filter system
+                            }}
+                          >
+                            {bath}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* More Filters Button */}
+              <Popover open={isMoreFiltersPopoverOpen} onOpenChange={setIsMoreFiltersPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-sm font-medium ml-auto ${
+                      theme === 'opaque'
+                        ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                        : theme === 'green-white'
+                          ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                          : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                    }`}
+                  >
+                    <Filter className="mr-2 h-4 w-4" />
+                    More Filters
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[500px] sm:w-[550px] p-4" align="end">
+                  <div className="space-y-4">
+                    {/* Price (AED) Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Price (AED)</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Minimum</label>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={filters.budget[0] || ''}
+                            onChange={(e) => {
+                              const min = Number(e.target.value) || 0;
+                              updateFilter('budget', [min, filters.budget[1]]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Maximum</label>
+                          <Input
+                            type="number"
+                            placeholder="Any"
+                            value={filters.budget[1] === getBudgetSliderMax(activeTab) ? '' : filters.budget[1] || ''}
+                            onChange={(e) => {
+                              const max = e.target.value === '' ? getBudgetSliderMax(activeTab) : Number(e.target.value) || getBudgetSliderMax(activeTab);
+                              updateFilter('budget', [filters.budget[0], max]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Area (sqft) Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Area (sqft)</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Minimum</label>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={filters.landArea[0] || ''}
+                            onChange={(e) => {
+                              const min = Number(e.target.value) || 0;
+                              updateFilter('landArea', [min, filters.landArea[1]]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Maximum</label>
+                          <Input
+                            type="number"
+                            placeholder="Any"
+                            value={filters.landArea[1] === 100000 ? '' : filters.landArea[1] || ''}
+                            onChange={(e) => {
+                              const max = e.target.value === '' ? 100000 : Number(e.target.value) || 100000;
+                              updateFilter('landArea', [filters.landArea[0], max]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Keywords Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Keywords</h4>
+                      <Input
+                        type="text"
+                        placeholder="Add relevant keywords"
+                        className="w-full h-9 text-sm"
+                        // Would need to add keywords to filter system
+                      />
+                    </div>
+
+                    {/* Agent or Agency Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Agent or Agency</h4>
+                      <Input
+                        type="text"
+                        placeholder="Select an agent or agency"
+                        className="w-full h-9 text-sm"
+                        // Would need to add agent/agency to filter system
+                      />
+                    </div>
+
+                    {/* Developer Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Developer</h4>
+                      <Input
+                        type="text"
+                        placeholder="Select a developer"
+                        className="w-full h-9 text-sm"
+                        // Would need to add developer to filter system
+                      />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-2 pt-2 border-t">
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 text-sm"
+                          onClick={() => {
+                            updateFilter('budget', [0, getBudgetSliderMax(activeTab)]);
+                            updateFilter('landArea', [0, 100000]);
+                            // Reset other filters
+                          }}
+                        >
+                          Reset
+                        </Button>
+                        <Button
+                          size="sm"
+                          className={`flex-1 text-sm ${
+                            theme === 'opaque'
+                              ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                              : theme === 'green-white'
+                                ? 'bg-green-600 hover:bg-green-700 text-white'
+                                : 'bg-[#800000] hover:bg-[#700000] text-white'
+                          }`}
+                          onClick={() => setIsMoreFiltersPopoverOpen(false)}
+                        >
+                          Done
+                        </Button>
+                      </div>
+                      <a
+                        href="#"
+                        className={`text-xs text-center hover:underline ${
+                          theme === 'opaque'
+                            ? 'text-gray-700'
+                            : theme === 'green-white'
+                              ? 'text-green-600'
+                              : 'text-[#800000]'
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Handle alert me functionality
+                        }}
+                      >
+                        ALERT ME OF NEW PROPERTIES
+                      </a>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Top Filter Bar - Rent Filters */}
+      {activeTab === 'rent' && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
+              {/* Yearly Rent Dropdown */}
+              <Popover open={isRentFrequencyPopoverOpen} onOpenChange={setIsRentFrequencyPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className={`text-xs sm:text-sm font-medium flex-shrink-0 ${
+                      theme === 'opaque'
+                        ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                        : theme === 'green-white'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-[#800000] text-white'
+                    }`}
+                  >
+                    {rentFrequency} Rent
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[220px] sm:w-[260px] p-4">
+                  <h4 className="text-base font-semibold mb-3 text-foreground">Payment Frequency</h4>
+                  <div className="flex flex-col gap-1.5">
+                    {rentFrequencyOptions.map(opt => (
+                      <Button
+                        key={opt}
+                        variant={rentFrequency === opt ? 'default' : 'outline'}
+                        size="sm"
+                        className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                        onClick={() => {
+                          setRentFrequency(opt);
+                          setIsRentFrequencyPopoverOpen(false);
+                        }}
+                      >
+                        {opt}
+                      </Button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* Property Type Dropdown */}
+              <Popover open={isPropertyTypePopoverOpen} onOpenChange={setIsPropertyTypePopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-sm font-medium ${
+                      theme === 'opaque'
+                        ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                        : theme === 'green-white'
+                          ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                          : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                    }`}
+                  >
+                    {filters.propertyType.length > 0 
+                      ? filters.propertyType[0].toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                      : 'Property Type'}
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[500px] sm:w-[550px] p-4">
+                  <h4 className="text-base font-semibold mb-4 text-foreground">Select Property Type</h4>
+                  
+                  {/* Residential/Commercial Tabs */}
+                  <div className="flex gap-4 mb-4 border-b">
+                    <button
+                      type="button"
+                      onClick={() => setPropertyTypeCategory('residential')}
+                      className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                        propertyTypeCategory === 'residential'
+                          ? theme === 'opaque'
+                            ? 'text-gray-900 border-b-2 border-gray-500'
+                            : theme === 'green-white'
+                              ? 'text-green-600 border-b-2 border-green-600'
+                              : 'text-[#800000] border-b-2 border-[#800000]'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      Residential
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPropertyTypeCategory('commercial')}
+                      className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                        propertyTypeCategory === 'commercial'
+                          ? theme === 'opaque'
+                            ? 'text-gray-900 border-b-2 border-gray-500'
+                            : theme === 'green-white'
+                              ? 'text-green-600 border-b-2 border-green-600'
+                              : 'text-[#800000] border-b-2 border-[#800000]'
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      Commercial
+                    </button>
+                  </div>
+
+                  {/* Property Types List */}
+                  <RadioGroup
+                    value={filters.propertyType[0] || ''}
+                    onValueChange={(value) => {
+                      if (value) {
+                        updateFilter('propertyType', [value]);
+                      } else {
+                        updateFilter('propertyType', []);
+                      }
+                    }}
+                    className="max-h-[50vh] overflow-y-auto"
+                  >
+                    <div className="grid grid-cols-2 gap-2">
+                      {(propertyTypeCategory === 'residential' 
+                        ? getResidentialPropertyTypes()
+                        : getCommercialPropertyTypes()
+                      ).map(type => (
+                        <label
+                          key={type}
+                          className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+                        >
+                          <RadioGroupItem value={type} id={`rent-property-type-${type}`} />
+                          <span className="capitalize font-medium">{type.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </RadioGroup>
+
+                  {/* Reset and Done Buttons */}
+                  <div className="flex gap-2 mt-4 pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`flex-1 ${
+                        theme === 'opaque'
+                          ? 'bg-transparent border-gray-300 text-gray-800 hover:bg-gray-100'
+                          : theme === 'green-white'
+                            ? 'bg-white border-green-600 text-gray-800 hover:bg-gray-50'
+                            : 'bg-white border-[#800000] text-gray-800 hover:bg-gray-50'
+                      }`}
+                      onClick={() => {
+                        updateFilter('propertyType', []);
+                      }}
+                    >
+                      Reset
+                    </Button>
+                    <Button
+                      size="sm"
+                      className={`flex-1 ${
+                        theme === 'opaque'
+                          ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                          : theme === 'green-white'
+                            ? 'bg-green-600 hover:bg-green-700 text-white'
+                            : 'bg-[#800000] hover:bg-[#700000] text-white'
+                      }`}
+                      onClick={() => {
+                        setIsPropertyTypePopoverOpen(false);
+                      }}
+                    >
+                      Done
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* Beds & Baths Dropdown */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-sm font-medium ${
+                      theme === 'opaque'
+                        ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                        : theme === 'green-white'
+                          ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                          : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                    }`}
+                  >
+                    Beds & Baths
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Bedrooms</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['Studio', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(bhk => (
+                          <Button
+                            key={bhk}
+                            variant={filters.bhkType.includes(bhk) ? 'default' : 'outline'}
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              if (filters.bhkType.includes(bhk)) {
+                                updateFilter('bhkType', filters.bhkType.filter(b => b !== bhk));
+                              } else {
+                                updateFilter('bhkType', [...filters.bhkType, bhk]);
+                              }
+                            }}
+                          >
+                            {bhk}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Bathrooms</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['1', '2', '3', '4', '5', '6+'].map(bath => (
+                          <Button
+                            key={bath}
+                            variant="outline"
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              // Handle bathroom filter - would need to add to filter system
+                            }}
+                          >
+                            {bath}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* TruCheck™ listings first */}
+              <Button
+                variant={showTruCheckFirst ? 'default' : 'outline'}
+                size="sm"
+                className={`text-sm font-medium ${
+                  showTruCheckFirst
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : theme === 'opaque'
+                      ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                      : theme === 'green-white'
+                        ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                        : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                }`}
+                onClick={() => setShowTruCheckFirst(!showTruCheckFirst)}
+              >
+                TruCheck™ listings first
+                <Info className="ml-1 h-3 w-3" />
+              </Button>
+
+              {/* Properties with floor plans */}
+              <Button
+                variant={showFloorPlans ? 'default' : 'outline'}
+                size="sm"
+                className={`text-sm font-medium ${
+                  showFloorPlans
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : theme === 'opaque'
+                      ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                      : theme === 'green-white'
+                        ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                        : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                }`}
+                onClick={() => setShowFloorPlans(!showFloorPlans)}
+              >
+                Properties with floor plans
+                <Info className="ml-1 h-3 w-3" />
+              </Button>
+
+              {/* More Filters Button */}
+              <Popover open={isMoreFiltersPopoverOpen} onOpenChange={setIsMoreFiltersPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-sm font-medium ml-auto ${
+                      theme === 'opaque'
+                        ? 'bg-transparent text-gray-900 border-gray-300 hover:bg-gray-100'
+                        : theme === 'green-white'
+                          ? 'bg-white text-gray-600 border-green-600/50 hover:bg-white/90'
+                          : 'bg-white text-gray-600 border-[#800000]/50 hover:bg-white/90'
+                    }`}
+                  >
+                    <Filter className="mr-2 h-4 w-4" />
+                    More Filters
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[500px] sm:w-[550px] p-4" align="end">
+                  <div className="space-y-4">
+                    {/* Price (AED) Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Price (AED)</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Minimum</label>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={filters.budget[0] || ''}
+                            onChange={(e) => {
+                              const min = Number(e.target.value) || 0;
+                              updateFilter('budget', [min, filters.budget[1]]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Maximum</label>
+                          <Input
+                            type="number"
+                            placeholder="Any"
+                            value={filters.budget[1] === getBudgetSliderMax(activeTab) ? '' : filters.budget[1] || ''}
+                            onChange={(e) => {
+                              const max = e.target.value === '' ? getBudgetSliderMax(activeTab) : Number(e.target.value) || getBudgetSliderMax(activeTab);
+                              updateFilter('budget', [filters.budget[0], max]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Area (sqft) Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Area (sqft)</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Minimum</label>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={filters.landArea[0] || ''}
+                            onChange={(e) => {
+                              const min = Number(e.target.value) || 0;
+                              updateFilter('landArea', [min, filters.landArea[1]]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-600 mb-1">Maximum</label>
+                          <Input
+                            type="number"
+                            placeholder="Any"
+                            value={filters.landArea[1] === 100000 ? '' : filters.landArea[1] || ''}
+                            onChange={(e) => {
+                              const max = e.target.value === '' ? 100000 : Number(e.target.value) || 100000;
+                              updateFilter('landArea', [filters.landArea[0], max]);
+                            }}
+                            className="w-full h-9 text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Keywords Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Keywords</h4>
+                      <Input
+                        type="text"
+                        placeholder="Add relevant keywords"
+                        className="w-full h-9 text-sm"
+                        // Would need to add keywords to filter system
+                      />
+                    </div>
+
+                    {/* Agent or Agency Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Agent or Agency</h4>
+                      <Input
+                        type="text"
+                        placeholder="Select an agent or agency"
+                        className="w-full h-9 text-sm"
+                        // Would need to add agent/agency to filter system
+                      />
+                    </div>
+
+                    {/* Developer Filter */}
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2">Developer</h4>
+                      <Input
+                        type="text"
+                        placeholder="Select a developer"
+                        className="w-full h-9 text-sm"
+                        // Would need to add developer to filter system
+                      />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-2 pt-2 border-t">
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 text-sm"
+                          onClick={() => {
+                            updateFilter('budget', [0, getBudgetSliderMax(activeTab)]);
+                            updateFilter('landArea', [0, 100000]);
+                            // Reset other filters
+                          }}
+                        >
+                          Reset
+                        </Button>
+                        <Button
+                          size="sm"
+                          className={`flex-1 text-sm ${
+                            theme === 'opaque'
+                              ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                              : theme === 'green-white'
+                                ? 'bg-green-600 hover:bg-green-700 text-white'
+                                : 'bg-[#800000] hover:bg-[#700000] text-white'
+                          }`}
+                          onClick={() => setIsMoreFiltersPopoverOpen(false)}
+                        >
+                          Done
+                        </Button>
+                      </div>
+                      <a
+                        href="#"
+                        className={`text-xs text-center hover:underline ${
+                          theme === 'opaque'
+                            ? 'text-gray-700'
+                            : theme === 'green-white'
+                              ? 'text-green-600'
+                              : 'text-[#800000]'
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Handle alert me functionality
+                        }}
+                      >
+                        ALERT ME OF NEW PROPERTIES
+                      </a>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header dropdowns removed: relying on left sidebar filters */}
+
+      {/* Top Header Bar */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-2 sm:px-4 py-2">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <Button
+                variant={showTruCheckFirst ? 'default' : 'outline'}
+                size="sm"
+                className={`text-[10px] sm:text-xs flex-shrink-0 ${
+                  showTruCheckFirst
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : ''
+                }`}
+                onClick={() => setShowTruCheckFirst(!showTruCheckFirst)}
+              >
+                <span className="hidden sm:inline">TruCheck™ listings first</span>
+                <span className="sm:hidden">TruCheck™</span>
+                <Info className="ml-0.5 sm:ml-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
+              </Button>
+              <Button
+                variant={showFloorPlans ? 'default' : 'outline'}
+                size="sm"
+                className={`text-[10px] sm:text-xs flex-shrink-0 ${
+                  showFloorPlans
+                    ? theme === 'opaque'
+                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                      : theme === 'green-white'
+                        ? 'bg-green-600 text-white'
+                        : 'bg-[#800000] text-white'
+                    : ''
+                }`}
+                onClick={() => setShowFloorPlans(!showFloorPlans)}
+              >
+                Properties with floor plans
+                <Info className="ml-1 h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <main id="main-content" className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Filters Sidebar (sticky on desktop) */}
-          <div className="hidden lg:block w-80">
+          {/* Filters Sidebar (sticky on desktop) - HIDDEN: Using top filter bar instead */}
+          <div className="hidden w-80">
             <div className="sticky top-[96px] pb-4">
             <Card className="max-h-[calc(100vh-120px)] overflow-hidden">
               <CardHeader className="pb-3">
@@ -1369,60 +2348,93 @@ const PropertySearch = () => {
                 </p>
               </div>
               
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
                 <Select value={filters.sortBy} onValueChange={value => updateFilter('sortBy', value)}>
-                  <SelectTrigger className="w-48" aria-label="Sort properties by">
-                    <SelectValue placeholder="Sort by" />
+                  <SelectTrigger className="w-24 sm:w-32 text-xs sm:text-sm" aria-label="Sort properties by">
+                    <SelectValue placeholder="Popular" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="relevance">Relevance</SelectItem>
+                    <SelectItem value="relevance">Popular</SelectItem>
                     <SelectItem value="price-low">Price: Low to High</SelectItem>
                     <SelectItem value="price-high">Price: High to Low</SelectItem>
                     <SelectItem value="newest">Newest First</SelectItem>
                     <SelectItem value="area">Area: Large to Small</SelectItem>
-                    {activeTab === 'commercial' && (
-                      <>
-                        <div className="px-2 pt-2 pb-1 text-xs text-muted-foreground">Commercial types</div>
-                        <SelectItem value="type-office">Office first</SelectItem>
-                        <SelectItem value="type-retail">Retail/Shop first</SelectItem>
-                        <SelectItem value="type-warehouse">Warehouse first</SelectItem>
-                        <SelectItem value="type-showroom">Showroom first</SelectItem>
-                        <SelectItem value="type-restaurant">Restaurant first</SelectItem>
-                        <SelectItem value="type-coworking">Co-working first</SelectItem>
-                      </>
-                    )}
                   </SelectContent>
                 </Select>
                 
-                {/* Save Search button - commented out until further required
-                <Button variant="ghost" size="sm" aria-label="Save current search criteria" className="hidden sm:inline-flex">
-                  <Bookmark size={16} className="mr-1" aria-hidden="true" />
-                  Save Search
-                </Button>
-                */}
-
                 {/* View mode toggles */}
-                <div className="hidden sm:flex items-center gap-1" role="group" aria-label="View mode">
+                <div className="flex items-center gap-0.5 sm:gap-1 border rounded-md" role="group" aria-label="View mode">
                   <Button
-                    variant={viewMode === 'grid' ? 'default' : 'outline'}
-                    size="icon"
-                    aria-pressed={viewMode === 'grid'}
-                    aria-label="Grid view"
-                    onClick={() => setViewMode('grid')}
+                    variant={viewMode === 'list' && !showMapView ? 'default' : 'ghost'}
+                    size="sm"
+                    className={`h-7 sm:h-8 px-2 sm:px-3 text-xs sm:text-sm ${
+                      viewMode === 'list' && !showMapView
+                        ? theme === 'opaque'
+                          ? 'bg-gray-300/70 text-gray-900'
+                          : theme === 'green-white'
+                            ? 'bg-green-600 text-white'
+                            : 'bg-[#800000] text-white'
+                        : ''
+                    }`}
+                    aria-pressed={viewMode === 'list' && !showMapView}
+                    aria-label="List view"
+                    onClick={() => {
+                      setViewMode('list');
+                      setShowMapView(false);
+                    }}
                   >
-                    <Grid3X3 className="h-4 w-4" />
+                    <List className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                    <span className="hidden sm:inline">List</span>
                   </Button>
                   <Button
-                    variant={viewMode === 'list' ? 'default' : 'outline'}
-                    size="icon"
-                    aria-pressed={viewMode === 'list'}
-                    aria-label="List view"
-                    onClick={() => setViewMode('list')}
+                    variant={showMapView ? 'default' : 'ghost'}
+                    size="sm"
+                    className={`h-7 sm:h-8 px-2 sm:px-3 text-xs sm:text-sm ${
+                      showMapView
+                        ? theme === 'opaque'
+                          ? 'bg-gray-300/70 text-gray-900'
+                          : theme === 'green-white'
+                            ? 'bg-green-600 text-white'
+                            : 'bg-[#800000] text-white'
+                        : ''
+                    }`}
+                    aria-pressed={showMapView}
+                    aria-label="Map view"
+                    onClick={() => {
+                      setShowMapView(true);
+                      setViewMode('list');
+                    }}
                   >
-                    <List className="h-4 w-4" />
+                    <Map className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                    <span className="hidden sm:inline">Map</span>
                   </Button>
                 </div>
               </div>
+            </div>
+
+            {/* Location Tabs */}
+            <div className="flex items-center gap-1 overflow-x-auto pb-2 border-b mt-3 sm:mt-4 -mx-2 sm:mx-0 px-2 sm:px-0">
+              {['Dubai', 'Ajman', 'Sharjah'].map((location) => (
+                <button
+                  key={location}
+                  onClick={() => setSelectedLocation(location)}
+                  className={`px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
+                    selectedLocation === location
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <span className="hidden sm:inline">{location} </span>
+                  <span className="sm:hidden">{location}</span>
+                  <span className="hidden sm:inline">({location === 'Dubai' ? '128,621' : location === 'Ajman' ? '71,729' : '62,417'})</span>
+                </button>
+              ))}
+              <button
+                className="px-2 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap ml-auto flex-shrink-0"
+              >
+                <span className="hidden sm:inline">VIEW ALL LOCATIONS</span>
+                <span className="sm:hidden">ALL</span>
+              </button>
             </div>
 
             {/* Active Filters - Show all active filters */}
@@ -1591,7 +2603,7 @@ const PropertySearch = () => {
               </div>
             ) : filteredProperties.length > 0 ? (
               <>
-                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                <div className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
                   {filteredProperties.map(property => (
                     <PropertyCard
                       key={property.id}
@@ -1631,11 +2643,149 @@ const PropertySearch = () => {
 
             {/* Removed client-side pagination */}
           </div>
+
+          {/* Right Sidebar */}
+          <div className="hidden xl:block w-80 flex-shrink-0">
+            <div className="sticky top-[96px] space-y-4">
+              {/* Map Widget */}
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="h-48 bg-gray-100 flex items-center justify-center relative">
+                    <div className="text-center">
+                      <Map className="h-12 w-12 mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-600">Map View</p>
+                    </div>
+                    {/* Placeholder map pins */}
+                    <div className="absolute top-4 left-4 w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="absolute bottom-4 right-4 w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="absolute top-1/2 left-1/2 w-0.5 h-16 bg-gray-300 transform -translate-x-1/2 -translate-y-1/2"></div>
+                  </div>
+                  <div className="p-4">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      size="sm"
+                    >
+                      Find Homes by Drive Time
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Sell or Rent Your Property */}
+              <Card className={`${
+                theme === 'opaque'
+                  ? 'bg-gray-200/75 border-gray-300'
+                  : theme === 'green-white'
+                    ? 'bg-green-50 border-green-200'
+                    : 'bg-[#800000]/5 border-[#800000]/20'
+              }`}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <Badge className={`${
+                      theme === 'opaque'
+                        ? 'bg-gray-400 text-gray-900'
+                        : theme === 'green-white'
+                          ? 'bg-green-600 text-white'
+                          : 'bg-[#800000] text-white'
+                    }`}>
+                      NEW
+                    </Badge>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Sell or Rent Your Property</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Connect with a trusted agent to secure the best deal, faster.
+                  </p>
+                  <Button
+                    className={`w-full ${
+                      theme === 'opaque'
+                        ? 'bg-gray-300/70 text-gray-900 hover:bg-gray-400/80'
+                        : theme === 'green-white'
+                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                          : 'bg-[#800000] hover:bg-[#700000] text-white'
+                    }`}
+                    size="sm"
+                  >
+                    Get Started &gt;
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Alert Me of New Properties */}
+              <Button
+                variant="outline"
+                className="w-full"
+                size="sm"
+              >
+                <Bell className="mr-2 h-4 w-4" />
+                ALERT ME OF NEW PROPERTIES
+              </Button>
+
+              {/* Recommended Searches */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Recommended searches</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {['Studio', '1 Bedroom', '2 Bedroom', '3 Bedroom', '4 Bedroom'].map((bedroom) => (
+                    <a
+                      key={bedroom}
+                      href="#"
+                      className="block text-sm text-gray-600 hover:text-gray-900 py-1"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        // Handle search
+                      }}
+                    >
+                      {bedroom} Properties for sale in UAE
+                    </a>
+                  ))}
+                  <a
+                    href="#"
+                    className="block text-sm text-blue-600 hover:underline py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Handle view more
+                    }}
+                  >
+                    View More
+                  </a>
+                </CardContent>
+              </Card>
+
+              {/* Invest in Off Plan */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Invest in Off Plan</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <a
+                    href="#"
+                    className="block text-sm text-gray-600 hover:text-gray-900 py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Handle search
+                    }}
+                  >
+                    Off Plan Properties in UAE
+                  </a>
+                  <a
+                    href="#"
+                    className="block text-sm text-gray-600 hover:text-gray-900 py-1"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Handle search
+                    }}
+                  >
+                    New Projects in UAE
+                  </a>
+                </CardContent>
+              </Card>
+
+            </div>
+          </div>
         </div>
       </main>
-
-      {/* Property Tools Section */}
-      <PropertyTools />
 
       <Footer />
     </div>;

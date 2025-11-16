@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { MapPin, X, ChevronRight, Search as SearchIcon } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { MapPin, X, ChevronRight, Search as SearchIcon, Info, Bookmark } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCMSContent } from '@/hooks/useCMSContent';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -88,6 +89,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   // Dropdown filter UI state (UI-only for homepage)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
+  const [propertyTypeCategory, setPropertyTypeCategory] = useState<'residential' | 'commercial'>('residential');
   const [selectedBedrooms, setSelectedBedrooms] = useState<string[]>([]);
   const [selectedBathrooms, setSelectedBathrooms] = useState<string[]>([]);
   // Top category tabs like Properties / New Projects / Agents (visual only for now)
@@ -103,6 +105,9 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   // Rent payment frequency (Yearly/Monthly/Weekly/Daily/Any)
   const rentFrequencyOptions = ['Yearly', 'Monthly', 'Weekly', 'Daily', 'Any'] as const;
   const [rentFrequency, setRentFrequency] = useState<string>('Yearly');
+  // Additional rent filters
+  const [showTruCheckFirst, setShowTruCheckFirst] = useState<boolean>(false);
+  const [showFloorPlans, setShowFloorPlans] = useState<boolean>(false);
   const [selectedFurnishing, setSelectedFurnishing] = useState<string[]>([]);
   // Budget defaults to full range based on the active tab (5Cr for buy/commercial/land, 5L for rent)
   const [budget, setBudget] = useState<[number, number]>([0, getBudgetSliderMaxHome('buy')]);
@@ -840,6 +845,40 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     }
   }
 
+  // Helper: categorize property types into Residential and Commercial
+  function getResidentialPropertyTypes(tab: string): string[] {
+    return [
+      'Apartment',
+      'Townhouse',
+      'Villa Compound',
+      'Land',
+      'Building',
+      'Villa',
+      'Penthouse',
+      'Hotel Apartment',
+      'Floor'
+    ];
+  }
+
+  function getCommercialPropertyTypes(tab: string): string[] {
+    return [
+      'Office',
+      'Warehouse',
+      'Villa',
+      'Land',
+      'Building',
+      'Industrial Land',
+      'Showroom',
+      'Shop',
+      'Labour Camp',
+      'Bulk Unit',
+      'Floor',
+      'Factory',
+      'Mixed Use Land',
+      'Other Commercial'
+    ];
+  }
+
   function getBudgetSliderMaxHome(tab: string): number {
     if (tab === 'rent') return 500000; // 5L
     return 50000000; // 5 Cr (align with results page)
@@ -1296,19 +1335,62 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
               {openDropdown && (
                 <div className="mt-3 border border-gray-200 rounded-lg bg-white shadow p-3">
                   {openDropdown === 'propertyType' && (
-                    <div className="grid grid-cols-1 gap-2">
-                      {getPropertyTypesForHomepage(activeTab).map(type => (
-                        <label key={type} className="flex items-center gap-2 text-sm">
-                          <Checkbox
-                            checked={selectedPropertyTypes.includes(type)}
-                            onCheckedChange={(checked) => {
-                              if (checked) setSelectedPropertyTypes(prev => [...prev, type]);
-                              else setSelectedPropertyTypes(prev => prev.filter(t => t !== type));
-                            }}
-                          />
-                          <span className="capitalize">{type.toLowerCase()}</span>
-                        </label>
-                      ))}
+                    <div>
+                      {/* Residential/Commercial Tabs */}
+                      <div className="flex gap-4 mb-4 border-b">
+                        <button
+                          type="button"
+                          onClick={() => setPropertyTypeCategory('residential')}
+                          className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                            propertyTypeCategory === 'residential'
+                              ? theme === 'opaque'
+                                ? 'text-gray-900 border-b-2 border-gray-500'
+                                : theme === 'green-white'
+                                  ? 'text-green-600 border-b-2 border-green-600'
+                                  : 'text-[#800000] border-b-2 border-[#800000]'
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
+                        >
+                          Residential
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPropertyTypeCategory('commercial')}
+                          className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                            propertyTypeCategory === 'commercial'
+                              ? theme === 'opaque'
+                                ? 'text-gray-900 border-b-2 border-gray-500'
+                                : theme === 'green-white'
+                                  ? 'text-green-600 border-b-2 border-green-600'
+                                  : 'text-[#800000] border-b-2 border-[#800000]'
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
+                        >
+                          Commercial
+                        </button>
+                      </div>
+                      
+                      {/* Property Types List */}
+                      <RadioGroup
+                        value={selectedPropertyTypes[0] || ''}
+                        onValueChange={(value) => {
+                          setSelectedPropertyTypes(value ? [value] : []);
+                        }}
+                        className="grid grid-cols-2 gap-2"
+                      >
+                        {(propertyTypeCategory === 'residential' 
+                          ? getResidentialPropertyTypes(activeTab)
+                          : getCommercialPropertyTypes(activeTab)
+                        ).map(type => (
+                          <label
+                            key={type}
+                            className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+                          >
+                            <RadioGroupItem value={type} id={`mobile-property-type-${type}`} />
+                            <span className="capitalize font-medium">{type.toLowerCase()}</span>
+                          </label>
+                        ))}
+                      </RadioGroup>
                     </div>
                   )}
                   {openDropdown === 'bedbath' && (activeTab === 'buy' || activeTab === 'rent') && (
@@ -1567,7 +1649,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           {/* Search field */}
                           <div className={`relative px-3 py-2 pl-8 pr-3 flex-1 rounded-lg focus-within:ring-2 transition-all duration-200 overflow-visible ${
                             theme === 'opaque'
-                              ? 'border border-gray-300 bg-gray-200/75 backdrop-blur-md focus-within:ring-gray-400/30 focus-within:border-gray-400 hover:bg-gray-300/85'
+                              ? 'border-none bg-gray-200/75 backdrop-blur-md focus-within:ring-gray-400/30 hover:bg-gray-300/85'
                               : 'border border-[#800000]/50 bg-white/80 backdrop-blur-md focus-within:ring-[#800000]/30 focus-within:border-[#800000] focus-within:bg-white/95 hover:bg-white/90 hover:border-[#800000]/70'
                           }`} onClick={() => inputRef.current?.focus()}>
                         {/* Location Row */}
@@ -1918,50 +2000,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   </PopoverContent>
                                 </Popover>
                               )}
-                              {/* Rent Frequency - only for rent */}
-                              {activeTab === 'rent' && (
-                                <Popover open={!isMobile && openDropdown === 'frequency'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('frequency'); }}>
-                                  <PopoverTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'frequency' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
-                                    >
-                                      <span className="text-sm font-medium">{rentFrequency}</span>
-                                      <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'frequency' ? 'rotate-90' : ''}`} />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent 
-                                    side="bottom" 
-                                    align="start" 
-                                    avoidCollisions={false} 
-                                    className="w-[220px] sm:w-[260px] p-4"
-                                    onInteractOutside={(e) => {
-                                      const target = (e.target as Node) || null;
-                                      if (desktopSearchRef.current?.contains(target)) {
-                                        e.preventDefault();
-                                        return;
-                                      }
-                                      setOpenDropdown(null);
-                                    }}
-                                  >
-                                    <h4 className="text-base font-semibold mb-3 text-foreground">Payment Frequency</h4>
-                                    <div className="flex flex-col gap-1.5">
-                                      {rentFrequencyOptions.map(opt => (
-                                        <Button
-                                          key={opt}
-                                          variant={rentFrequency === opt ? 'default' : 'outline'}
-                                          size="sm"
-                                          className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
-                                          onClick={() => { setRentFrequency(opt); setOpenDropdown(null); }}
-                                        >
-                                          {opt}
-                                        </Button>
-                                      ))}
-                                    </div>
-                                  </PopoverContent>
-                                </Popover>
-                              )}
+                              {/* Rent Frequency - moved to second row when rent is selected */}
                             {/* Property type: Property Type or Land/Space Type */}
                             <Popover open={!isMobile && openDropdown === 'propertyType'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('propertyType'); }}>
                               <PopoverTrigger asChild>
@@ -1978,7 +2017,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                 side="bottom" 
                                 align="start" 
                                 avoidCollisions={false} 
-                                className="w-[300px] sm:w-[350px] p-4"
+                                className="w-[500px] sm:w-[550px] p-4"
                                 onInteractOutside={(e) => {
                                   const target = (e.target as Node) || null;
                                   if (desktopSearchRef.current?.contains(target)) {
@@ -1988,21 +2027,99 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   setOpenDropdown(null);
                                 }}
                               >
-                                <h4 className="text-base font-semibold mb-3 text-foreground">Select Property Type</h4>
-                                <div className="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto">
-                                  {getPropertyTypesForHomepage(activeTab).map(type => (
-                                    <label key={type} className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors">
-                                      <Checkbox
-                                        checked={selectedPropertyTypes.includes(type)}
-                                        onCheckedChange={(checked) => {
-                                          if (checked) setSelectedPropertyTypes(prev => [...prev, type]);
-                                          else setSelectedPropertyTypes(prev => prev.filter(t => t !== type));
-                                        }}
-                                        className="rounded-md"
-                                      />
-                                      <span className="capitalize font-medium">{type.toLowerCase()}</span>
-                                    </label>
-                                  ))}
+                                <h4 className="text-base font-semibold mb-4 text-foreground">Select Property Type</h4>
+                                
+                                {/* Residential/Commercial Tabs */}
+                                <div className="flex gap-4 mb-4 border-b">
+                                  <button
+                                    type="button"
+                                    onClick={() => setPropertyTypeCategory('residential')}
+                                    className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                                      propertyTypeCategory === 'residential'
+                                        ? theme === 'opaque'
+                                          ? 'text-gray-900 border-b-2 border-gray-500'
+                                          : theme === 'green-white'
+                                            ? 'text-green-600 border-b-2 border-green-600'
+                                            : 'text-[#800000] border-b-2 border-[#800000]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                                  >
+                                    Residential
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setPropertyTypeCategory('commercial')}
+                                    className={`pb-2 px-1 text-sm font-medium transition-colors ${
+                                      propertyTypeCategory === 'commercial'
+                                        ? theme === 'opaque'
+                                          ? 'text-gray-900 border-b-2 border-gray-500'
+                                          : theme === 'green-white'
+                                            ? 'text-green-600 border-b-2 border-green-600'
+                                            : 'text-[#800000] border-b-2 border-[#800000]'
+                                        : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                                  >
+                                    Commercial
+                                  </button>
+                                </div>
+
+                                {/* Property Types List */}
+                                <RadioGroup
+                                  value={selectedPropertyTypes[0] || ''}
+                                  onValueChange={(value) => {
+                                    setSelectedPropertyTypes(value ? [value] : []);
+                                  }}
+                                  className="max-h-[50vh] overflow-y-auto"
+                                >
+                                  <div className="grid grid-cols-2 gap-2">
+                                    {(propertyTypeCategory === 'residential' 
+                                      ? getResidentialPropertyTypes(activeTab)
+                                      : getCommercialPropertyTypes(activeTab)
+                                    ).map(type => (
+                                      <label
+                                        key={type}
+                                        className="flex items-center gap-2.5 text-sm cursor-pointer hover:bg-muted/50 p-2 rounded-lg transition-colors"
+                                      >
+                                        <RadioGroupItem value={type} id={`property-type-${type}`} />
+                                        <span className="capitalize font-medium">{type.toLowerCase()}</span>
+                                      </label>
+                                    ))}
+                                  </div>
+                                </RadioGroup>
+
+                                {/* Reset and Done Buttons */}
+                                <div className="flex gap-2 mt-4 pt-4 border-t">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className={`flex-1 ${
+                                      theme === 'opaque'
+                                        ? 'bg-transparent border-gray-300 text-gray-800 hover:bg-gray-100'
+                                        : theme === 'green-white'
+                                          ? 'bg-white border-green-600 text-gray-800 hover:bg-gray-50'
+                                          : 'bg-white border-[#800000] text-gray-800 hover:bg-gray-50'
+                                    }`}
+                                    onClick={() => {
+                                      setSelectedPropertyTypes([]);
+                                    }}
+                                  >
+                                    Reset
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    className={`flex-1 ${
+                                      theme === 'opaque'
+                                        ? 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-100'
+                                        : theme === 'green-white'
+                                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                                          : 'bg-[#800000] hover:bg-[#700000] text-white'
+                                    }`}
+                                    onClick={() => {
+                                      setOpenDropdown(null);
+                                    }}
+                                  >
+                                    Done
+                                  </Button>
                                 </div>
                               </PopoverContent>
                             </Popover>
@@ -2376,6 +2493,107 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           </div>
                       </div>
                     </div>
+
+                    {/* Second Row - Additional Rent Filters */}
+                    {activeTab === 'rent' && (
+                      <div className="mt-3 pt-3 border-t border-gray-200/50">
+                        <div className="flex flex-wrap items-center gap-2">
+                          {/* Yearly Rent Dropdown */}
+                          <Popover open={!isMobile && openDropdown === 'frequency'} onOpenChange={(open) => { if (!isMobile && open) setOpenDropdown('frequency'); }}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant={rentFrequency !== 'Yearly' ? 'default' : 'default'}
+                                size="sm"
+                                className={`text-sm font-medium ${
+                                  rentFrequency !== 'Yearly'
+                                    ? theme === 'opaque'
+                                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                                      : theme === 'green-white'
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-[#800000] text-white'
+                                    : theme === 'opaque'
+                                      ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                                      : theme === 'green-white'
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-[#800000] text-white'
+                                }`}
+                              >
+                                {rentFrequency} Rent
+                                <ChevronRight size={14} className="ml-1 rotate-90" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent 
+                              side="bottom" 
+                              align="start" 
+                              className="w-[220px] sm:w-[260px] p-4"
+                            >
+                              <h4 className="text-base font-semibold mb-3 text-foreground">Payment Frequency</h4>
+                              <div className="flex flex-col gap-1.5">
+                                {rentFrequencyOptions.map(opt => (
+                                  <Button
+                                    key={opt}
+                                    variant={rentFrequency === opt ? 'default' : 'outline'}
+                                    size="sm"
+                                    className="text-sm px-3 py-1.5 rounded-lg font-medium transition-all duration-200 hover:shadow-sm text-left justify-start"
+                                    onClick={() => { setRentFrequency(opt); setOpenDropdown(null); }}
+                                  >
+                                    {opt}
+                                  </Button>
+                                ))}
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+
+                          {/* TruCheck™ listings first */}
+                          <Button
+                            variant={showTruCheckFirst ? 'default' : 'outline'}
+                            size="sm"
+                            className={`text-sm font-medium ${
+                              showTruCheckFirst
+                                ? theme === 'opaque'
+                                  ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                                  : theme === 'green-white'
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-[#800000] text-white'
+                                : ''
+                            }`}
+                            onClick={() => setShowTruCheckFirst(!showTruCheckFirst)}
+                          >
+                            TruCheck™ listings first
+                            <Info className="ml-1 h-3 w-3" />
+                          </Button>
+
+                          {/* Properties with floor plans */}
+                          <Button
+                            variant={showFloorPlans ? 'default' : 'outline'}
+                            size="sm"
+                            className={`text-sm font-medium ${
+                              showFloorPlans
+                                ? theme === 'opaque'
+                                  ? 'bg-gray-300/70 text-gray-900 border-gray-500'
+                                  : theme === 'green-white'
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-[#800000] text-white'
+                                : ''
+                            }`}
+                            onClick={() => setShowFloorPlans(!showFloorPlans)}
+                          >
+                            Properties with floor plans
+                            <Info className="ml-1 h-3 w-3" />
+                          </Button>
+
+                          {/* Save Search Button */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 ml-auto"
+                          >
+                            <Bookmark className="mr-1 h-3 w-3" />
+                            Save Search
+                          </Button>
+                        </div>
+                      </div>
+                    )}
 
                     {/* (Removed) External filter row now integrated inside the search box */}
                   </TabsContent>

@@ -417,6 +417,22 @@ All colors MUST be HSL.
   background: hsl(var(--secondary));
 }
 
+/* Make border transparent for Google Places input field */
+.pac-target-input,
+input.pac-target-input,
+.relative input[type="text"],
+.relative input[type="search"],
+input[placeholder="Search locality..."],
+input.flex-1.min-w-\[8rem\] {
+  border: 1px solid transparent !important;
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
 /* Theme Styles */
 /* Default Theme (Current) - Maroon/Red theme */
 .theme-default {

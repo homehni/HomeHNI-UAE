@@ -6,14 +6,34 @@
 }
 
 .search-container-unlocked {
-  border-color: #e11d48 !important; /* Red border when unlocked (rose-600) */
+  border: none !important; /* No border */
   box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.1);
   z-index: 20; /* Raise above other elements when in edit mode */
 }
 
 .search-container-locked {
-  border-color: #e5e7eb !important; /* Gray border when locked */
+  border: none !important; /* No border */
   background-color: #ffffff;
+}
+
+/* Make border transparent for search input field */
+.search-container-unlocked input,
+.search-container-locked input,
+input[type="text"].search-input-locked,
+input[type="search"].search-input-locked,
+.pac-target-input,
+.relative.px-3 input,
+.relative.px-3.py-2 input,
+input.flex-1.min-w-\[8rem\],
+input[placeholder="Search locality..."],
+input.pac-target-input.flex-1 {
+  border: 1px solid transparent !important;
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
 }
 
 /* Animation for the unlock transition */
