@@ -94,6 +94,7 @@ import LandlordGuide from "./pages/LandlordGuide";
 import TenantGuide from "./pages/TenantGuide";
 import PropertyDetails from "./pages/PropertyDetails";
 import PropertySearch from "./pages/PropertySearch";
+import AgentSearch from "./pages/AgentSearch";
 import PagePreview from "./pages/PagePreview";
 import DynamicPage from "./pages/DynamicPage";
 import PaymentSuccess from "./pages/payments/Success";
@@ -216,6 +217,7 @@ const App: React.FC = () => {
             <Route path="/property/:id" element={<PropertyPreviewPage />} />
             <Route path="/search" element={<PropertySearch />} />
             <Route path="/property-search" element={<PropertySearch />} />
+            <Route path="/search/agents" element={<AgentSearch />} />
             
             {/* Property Preview Route */}
             <Route path="/buy/preview/:draftId/detail" element={<PropertyPreviewPage />} />

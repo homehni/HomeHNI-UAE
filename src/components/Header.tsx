@@ -78,7 +78,7 @@ const Header = () => {
   return (
     <>
       <Marquee />
-      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : theme === 'opaque' ? 'bg-gray-200/85 backdrop-blur-md' : 'bg-[#800000] theme-header-bg'}`}>
+      <header className={`fixed md:top-8 top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : theme === 'opaque' ? 'bg-transparent' : 'bg-white/95 backdrop-blur-sm shadow-md'}`}>
         <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 pt-[6px]">
           <div className="flex items-center h-14">
             
@@ -86,18 +86,18 @@ const Header = () => {
             <div className="lg:hidden flex items-center justify-between w-full relative">
               {/* Left: Logo */}
               <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
-                <Logo variant={isScrolled ? "scrolled" : "default"} />
+                <Logo variant={isScrolled || theme !== 'opaque' ? "scrolled" : "default"} />
               </div>
               
               {/* Center: Post Property Button - Absolutely positioned for perfect centering */}
-              {location.pathname !== '/post-property' && (
+              {/* {location.pathname !== '/post-property' && (
                 <div className="absolute left-1/2 -translate-x-1/2 z-10">
                   <Button variant="outline" size="sm" onClick={() => handlePostPropertyClick()} className={`font-medium px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm transition-all duration-500 ${isScrolled ? 'bg-white text-black border-gray-300 hover:bg-gray-50' : 'bg-white text-black border-white/50 hover:bg-white/90'}`}>
                     <span>Post property</span>
                     <span className="ml-0.5 sm:ml-1 bg-green-600 text-white text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-medium">Free</span>
                   </Button>
                 </div>
-              )}
+              )} */}
               
               {/* Right: Profile and Menu */}
               <div className="flex items-center space-x-2 flex-shrink-0">
@@ -136,6 +136,35 @@ const Header = () => {
                   </DropdownMenu>
                 )}
 
+                {/* Theme Switcher - Mobile */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className={`flex items-center p-2 transition-colors duration-500 ${isScrolled || theme === 'opaque' ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
+                      <Palette size={18} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40 bg-white border border-gray-200 shadow-lg">
+                    <DropdownMenuItem onClick={() => setTheme('default')}>
+                      <div className="flex items-center w-full">
+                        <div className="w-4 h-4 rounded-full bg-[#800000] mr-2"></div>
+                        <span className={theme === 'default' ? 'font-semibold' : ''}>Default</span>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme('green-white')}>
+                      <div className="flex items-center w-full">
+                        <div className="w-4 h-4 rounded-full bg-green-600 mr-2"></div>
+                        <span className={theme === 'green-white' ? 'font-semibold' : ''}>Green</span>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme('opaque')}>
+                      <div className="flex items-center w-full">
+                        <div className="w-4 h-4 rounded-full bg-gray-700 mr-2"></div>
+                        <span className={theme === 'opaque' ? 'font-semibold' : ''}>Opaque</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 {/* Menu button */}
                 <Button variant="ghost" size="sm" className={`flex items-center space-x-2 p-2 transition-colors duration-500 ${isScrolled || theme === 'opaque' ? 'text-gray-800 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`} onClick={() => setIsSidebarOpen(true)}>
                   <Menu size={20} />
@@ -147,7 +176,7 @@ const Header = () => {
             <div className="hidden lg:flex items-center space-x-2 sm:space-x-4 flex-1">
               {/* Home HNI Logo */}
               <div onClick={handleLogoClick} className="cursor-pointer flex-shrink-0">
-                <Logo variant={isScrolled ? "scrolled" : "default"} />
+                <Logo variant={isScrolled || theme !== 'opaque' ? "scrolled" : "default"} />
               </div>
 
               {/* Desktop Navigation */}

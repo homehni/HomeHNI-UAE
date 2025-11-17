@@ -96,7 +96,7 @@ export const PostProperty: React.FC = () => {
         <div className="container mx-auto px-4 py-6 lg:py-8 xl:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Left Section - Promotional Content */}
-            <div className={`lg:col-span-2 rounded-xl p-8 lg:p-10 xl:p-14 flex flex-col justify-start relative overflow-hidden ${
+            <div className={`order-2 lg:order-1 lg:col-span-2 rounded-xl p-8 lg:p-10 xl:p-14 flex flex-col justify-start relative overflow-hidden ${
               theme === 'green-white' 
                 ? 'bg-gradient-to-br from-white to-gray-50' 
                 : theme === 'opaque'
@@ -277,7 +277,7 @@ export const PostProperty: React.FC = () => {
             </div>
 
             {/* Right Section - Form */}
-            <div className="lg:col-span-1 flex items-start pt-8 lg:pt-12 xl:pt-16">
+            <div className="order-1 lg:order-2 lg:col-span-1 flex items-start pt-6 lg:pt-12 xl:pt-16">
               <div className={`bg-white rounded-lg shadow-lg border p-6 lg:p-8 w-full ${
                 theme === 'green-white' 
                   ? 'border-green-200' 

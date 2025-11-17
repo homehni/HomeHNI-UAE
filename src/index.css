@@ -456,6 +456,17 @@ input.flex-1.min-w-\[8rem\] {
   --sidebar-ring: 142 76% 36%;
 }
 
+/* Default Red/Maroon Theme - Header styling */
+.theme-default header {
+  background-color: #800000 !important; /* Maroon/Red header */
+}
+
+/* Ensure navigation elements in header are white (but not buttons with their own styling) */
+.theme-default header nav a,
+.theme-default header > div > div a {
+  color: white !important;
+}
+
 .theme-green-white header {
   background-color: hsl(142 76% 36%) !important; /* Green header */
 }
@@ -577,7 +588,14 @@ html.theme-green-white .focus\:ring-\[#800000\]:focus {
 }
 
 /* Opaque Theme - Header styling with moderate glass effect */
-.theme-opaque header:not(.sidebar) {
+.theme-opaque header:not(.sidebar).bg-transparent {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: none !important;
+}
+
+.theme-opaque header:not(.sidebar):not(.bg-transparent) {
   background: rgba(255, 255, 255, 0.7) !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important;
@@ -930,7 +948,7 @@ html.theme-opaque #hero-search input:not([type="checkbox"]):not([type="radio"]):
 
 /* Opaque Theme - Responsive glass adjustments */
 @media (max-width: 768px) {
-  .theme-opaque header,
+  .theme-opaque header:not(.bg-transparent),
   .theme-opaque .bg-white\/80,
   .theme-opaque .bg-white\/90,
   .theme-opaque .bg-white\/95 {
@@ -954,7 +972,7 @@ html[data-theme="opaque"] .checkbox-root[data-state="checked"] {
 }
 
 @media (max-width: 480px) {
-  .theme-opaque header,
+  .theme-opaque header:not(.bg-transparent),
   .theme-opaque .bg-white\/80,
   .theme-opaque .bg-white\/90,
   .theme-opaque .bg-white\/95 {

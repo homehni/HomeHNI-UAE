@@ -230,6 +230,15 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
   };
 
   const navigateToSearch = (locations: string[]) => {
+    // If Agents tab is selected, navigate to agents search page
+    if (topCategory === 'agents') {
+      const params = new URLSearchParams();
+      params.set('locations', locations.join(','));
+      if (selectedCity) params.set('city', selectedCity);
+      navigate(`/search/agents?${params.toString()}`);
+      return;
+    }
+
     const params = new URLSearchParams();
     params.set('type', activeTab);
     params.set('locations', locations.join(','));
@@ -634,6 +643,109 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
     console.log('🔄 Autocomplete reinitialized with strict bounds for:', selectedCity);
   }, [cityBounds, selectedCity, selectedLocations]);
 
+  // Initialize Google Places for mobile input (without overlay requirement)
+  useEffect(() => {
+    if (isMobile && !isMobileOverlayOpen) {
+      const w = window as WindowWithGoogle;
+      if (!mobileInputRef.current) return;
+      if (!w.google?.maps?.places) return;
+
+      // Allow reinit only if cityBounds changed
+      const shouldReinit = cityBounds && selectedCity;
+      if (mobileAcInitRef.current && !shouldReinit) return;
+
+      const countryConfig = getCurrentCountryConfig();
+      const options = {
+        fields: ['formatted_address', 'geometry', 'name', 'address_components'],
+        types: ['geocode'],
+        componentRestrictions: { country: countryConfig.code.toLowerCase() },
+        ...(cityBounds && selectedCity && { 
+          bounds: cityBounds, 
+          strictBounds: true 
+        })
+      };
+      
+      console.log('🔄 Mobile autocomplete initializing (no overlay)');
+      
+      const ac = new w.google!.maps!.places!.Autocomplete(mobileInputRef.current, options);
+      ac.addListener('place_changed', () => {
+        const place = ac.getPlace();
+        
+        // Validate country
+        const expectedCountryCode = countryConfig.code.toLowerCase();
+        let isValidCountry = false;
+        
+        if (place?.address_components) {
+          const countryComponent = place.address_components.find((comp: GPlaceComponent) =>
+            comp.types.includes('country')
+          );
+          
+          if (countryComponent) {
+            const selectedCountryCode = countryComponent.short_name.toLowerCase();
+            isValidCountry = selectedCountryCode === expectedCountryCode;
+            
+            if (!isValidCountry) {
+              setLocationError(`Please select a location in ${countryConfig.name}`);
+              setIsValidLocality(false);
+              if (mobileInputRef.current) mobileInputRef.current.value = '';
+              setSearchQuery('');
+              return;
+            }
+          }
+        }
+        
+        // Mark as valid from Google Places
+        setIsValidLocality(true);
+        setLocationError('');
+        
+        let value = place?.formatted_address || place?.name || '';
+        let cityName = '';
+        if (value && place?.address_components) {
+          const addressComponents = place.address_components;
+          const localityComponent = addressComponents.find((comp: GPlaceComponent) =>
+            comp.types.includes('sublocality_level_1') ||
+            comp.types.includes('sublocality') ||
+            comp.types.includes('locality') ||
+            comp.types.includes('neighborhood')
+          );
+          const cityComponent = addressComponents.find((comp: GPlaceComponent) =>
+            comp.types.includes('locality')
+          );
+          if (cityComponent) cityName = cityComponent.long_name;
+          
+          if (localityComponent) {
+            value = localityComponent.long_name;
+          } else {
+            const firstPart = value.split(',')[0].trim();
+            if (firstPart) value = firstPart;
+          }
+        }
+
+        if (value) {
+          setSelectedLocations([value]);
+          if (!selectedCity && cityName) {
+            setSelectedCity(cityName);
+            // Geocode city for bounds
+            const geocoder = new (window as WindowWithGoogle).google!.maps!.Geocoder();
+            geocoder.geocode(
+              { 
+                address: `${cityName}, ${countryConfig.name}`,
+                componentRestrictions: { country: countryConfig.code }
+              },
+              (results, status) => {
+                if (status === 'OK' && results && results[0]?.geometry?.viewport) {
+                  setCityBounds(results[0].geometry.viewport);
+                }
+              }
+            );
+          }
+          setSearchQuery('');
+        }
+      });
+      mobileAcInitRef.current = true;
+    }
+  }, [isMobile, selectedCity, cityBounds, isMobileOverlayOpen]);
+
   // Initialize Google Places for mobile overlay input when overlay opens
   useEffect(() => {
     if (!isMobileOverlayOpen) return;
@@ -993,17 +1105,52 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
         {/* Dark overlay layer for text visibility - covers full hero section */}
         <div className="absolute inset-0 bg-black/30 z-[7]" style={{ bottom: '-2rem', left: 0, right: 0, width: '100%' }} />
         {/* Background Text Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[8]" style={{ bottom: '-2rem' }}>
-          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white/80 select-none whitespace-nowrap">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[8] pt-8 sm:pt-0" style={{ bottom: '-2rem' }}>
+          <h1 className="font-heading text-xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white/80 select-none px-4 text-center sm:whitespace-nowrap">
             HomeHNI A Premium Listing Partner
           </h1>
         </div>
         {/* Subtle leaf green overlay for UAE theme - very light */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#ef4444]/10 to-[#dc2626]/10 z-10" style={{ bottom: '-2rem' }} />
     {/* Mobile Search Section - opens full-screen overlay */}
-  <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50" ref={mobileSearchContainerRef}>
-          <div className="bg-white rounded-lg shadow-xl border border-gray-100">
-            {/* Tabs - Mobile */}
+  <div className="sm:hidden absolute bottom-4 left-2 right-2 transform translate-y-1/2 z-50 overflow-visible" ref={mobileSearchContainerRef}>
+          <div className="bg-white rounded-lg shadow-xl border border-gray-100 overflow-visible">
+            {/* Top Category Tabs (Properties / New Projects / Agents) */}
+            <div className="flex border-b border-gray-200 px-2 pt-2">
+              {[
+                { id: 'properties', label: 'Properties' },
+                { id: 'new-projects', label: 'New Projects' },
+                { id: 'agents', label: 'Agents' },
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setTopCategory(tab.id as 'properties' | 'new-projects' | 'agents')}
+                  className={`flex-1 py-2.5 text-xs font-medium transition-all relative ${
+                    topCategory === tab.id
+                      ? theme === 'opaque'
+                        ? 'text-gray-900'
+                        : theme === 'green-white'
+                          ? 'text-green-600'
+                          : 'text-[#800000]'
+                      : 'text-gray-500'
+                  }`}
+                >
+                  {tab.label}
+                  {topCategory === tab.id && (
+                    <div className={`absolute bottom-0 left-0 right-0 h-0.5 ${
+                      theme === 'opaque'
+                        ? 'bg-gray-900'
+                        : theme === 'green-white'
+                          ? 'bg-green-600'
+                          : 'bg-[#800000]'
+                    }`} />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Tabs - Mobile (BUY/RENT) - Hidden for Agents */}
+            {topCategory !== 'agents' && (
             <div className="flex border-b border-gray-200">
               {navigationTabs.map(tab => (
                 <button
@@ -1011,20 +1158,31 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex-1 py-3 text-sm font-medium transition-all relative ${
                     activeTab === tab.id
-                      ? 'text-[#800000]'
+                      ? theme === 'opaque'
+                        ? 'text-gray-900'
+                        : theme === 'green-white'
+                          ? 'text-green-600'
+                          : 'text-[#800000]'
                       : 'text-gray-500'
                   }`}
                 >
                   {tab.label}
                   {activeTab === tab.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#800000]" />
+                    <div className={`absolute bottom-0 left-0 right-0 h-0.5 ${
+                      theme === 'opaque'
+                        ? 'bg-gray-900'
+                        : theme === 'green-white'
+                          ? 'bg-green-600'
+                          : 'bg-[#800000]'
+                    }`} />
                   )}
                 </button>
               ))}
             </div>
+            )}
 
             {/* Search Content */}
-            <div className="p-3">
+            <div className="p-3 overflow-visible">
               {/* Selected Location Tags */}
               {selectedLocations.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-3">
@@ -1072,25 +1230,62 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           </div>
                         )}
 
-              {/* Tap-to-open full-screen search */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMobileOverlayOpen(true);
-                  setTimeout(() => mobileInputRef.current?.focus(), 100);
-                }}
-                className="w-full flex items-center justify-between gap-2 px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-500"
-              >
-                <span className="text-sm truncate">
-                  {selectedLocations.length > 0 ? 'Location already selected' : selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-[#800000]">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-              </button>
+              {/* Search input - mobile */}
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-[#800000] z-10" size={16} />
+                <input
+                  ref={mobileInputRef}
+                  type="text"
+                  placeholder={selectedCity ? `Add locality in ${selectedCity}` : 'Add Locality/Project/Landmark'}
+                  defaultValue={selectedLocations.length > 0 ? selectedLocations[0] : ''}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Backspace' && selectedLocations.length > 0 && (e.target as HTMLInputElement).value === '') {
+                      e.preventDefault();
+                      removeLocation(selectedLocations[0]);
+                    }
+                  }}
+                  className={`w-full pl-9 pr-12 py-2.5 bg-white border rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 hide-clear-button relative z-10 ${locationError ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-200 focus:ring-[#800000]/20 focus:border-[#800000]'}`}
+                  autoComplete="off"
+                />
+                {locationError && (
+                  <div className="absolute left-0 -bottom-6 text-red-600 text-xs font-medium z-10">
+                    {locationError}
+                  </div>
+                )}
+                {selectedLocations.length > 0 ? (
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 z-10">
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center h-7 w-7 rounded-full text-gray-500 hover:bg-gray-100"
+                      aria-label="Clear location"
+                      onClick={() => removeLocation(selectedLocations[0])}
+                    >
+                      <X size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-full text-white bg-[#800000] hover:bg-[#700000]"
+                      aria-label="Search"
+                      onClick={() => { handleSearch(); }}
+                    >
+                      <SearchIcon className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-8 w-8 rounded-full text-white bg-[#800000] hover:bg-[#700000] z-10"
+                    aria-label="Search"
+                    disabled={selectedLocations.length === 0}
+                    onClick={() => { handleSearch(); }}
+                  >
+                    <SearchIcon className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
 
-              {/* Mobile: Collapsible Filter Buttons */}
-              <div className="mt-3 overflow-x-auto -mx-1 px-1">
+              {/* Mobile: Collapsible Filter Buttons - Hidden on mobile for cleaner UI */}
+              <div className="mt-3 overflow-x-auto -mx-1 px-1 hidden">
                 <div className="flex gap-2 min-w-max">
                   {/* Property type: Property Type or Land Type */}
                   {activeTab !== 'commercial' && (
@@ -1098,7 +1293,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => { setOpenDropdown('propertyType'); setIsMobileOverlayOpen(true); }}
+                        onClick={() => { setOpenDropdown(openDropdown === 'propertyType' ? null : 'propertyType'); }}
                         className={`h-9 text-xs flex items-center gap-1`}
                       >
                         {activeTab === 'land' ? 'Land Type' : 'Property Type'} <ChevronRight size={14} />
@@ -1112,7 +1307,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => { setOpenDropdown('bedroom'); setIsMobileOverlayOpen(true); }}
+                      onClick={() => { setOpenDropdown(openDropdown === 'bedroom' ? null : 'bedroom'); }}
                       className={`h-9 text-xs flex items-center gap-1`}
                     >
                       Bedroom <ChevronRight size={14} />
@@ -1126,7 +1321,10 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => { setOpenDropdown(activeTab === 'rent' ? 'availability' : 'construction'); setIsMobileOverlayOpen(true); }}
+                      onClick={() => { 
+                        const dropdown = activeTab === 'rent' ? 'availability' : 'construction';
+                        setOpenDropdown(openDropdown === dropdown ? null : dropdown); 
+                      }}
                       className={`h-9 text-xs flex items-center gap-1`}
                     >
                       {activeTab === 'rent' ? 'Availability' : 'Property Status'} <ChevronRight size={14} />
@@ -1139,7 +1337,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => { setOpenDropdown('furnishing'); setIsMobileOverlayOpen(true); }}
+                      onClick={() => { setOpenDropdown(openDropdown === 'furnishing' ? null : 'furnishing'); }}
                       className={`h-9 text-xs flex items-center gap-1`}
                     >
                       Furnishing <ChevronRight size={14} />
@@ -1151,7 +1349,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => { setOpenDropdown('budget'); setIsMobileOverlayOpen(true); }}
+                      onClick={() => { setOpenDropdown(openDropdown === 'budget' ? null : 'budget'); }}
                       className={`h-9 text-xs flex items-center gap-1`}
                     >
                       Budget <ChevronRight size={14} />
@@ -1163,8 +1361,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
           </div>
         </div>
 
-        {/* Mobile Full-screen Search Overlay */}
-        {isMobileOverlayOpen && (
+        {/* Mobile Full-screen Search Overlay - REMOVED */}
+        {false && isMobileOverlayOpen && (
           <div ref={mobileSearchContainerRef} className="sm:hidden fixed inset-0 z-[60] bg-white flex flex-col">
             {/* Header with tabs and close */}
             <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b">
@@ -2544,8 +2742,8 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                             </PopoverContent>
                           </Popover>
 
-                          {/* TruCheck™ listings first */}
-                          <Button
+                          {/* TruCheck™ listings first - HIDDEN (feature not implemented) */}
+                          {false && <Button
                             variant={showTruCheckFirst ? 'default' : 'outline'}
                             size="sm"
                             className={`text-sm font-medium ${
@@ -2561,7 +2759,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                           >
                             TruCheck™ listings first
                             <Info className="ml-1 h-3 w-3" />
-                          </Button>
+                          </Button>}
 
                           {/* Properties with floor plans */}
                           <Button

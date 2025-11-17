@@ -1,4 +1,4 @@
-import { Heart, MapPin, Bed, Bath, Square, Phone, Edit2, ToggleLeft, ToggleRight, Crown } from 'lucide-react';
+import { Heart, MapPin, Bed, Bath, Square, Phone, Edit2, ToggleLeft, ToggleRight, Crown, Mail, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -33,6 +33,10 @@ interface PropertyCardProps {
   ownerId?: string; // Add owner ID to check ownership
   showOwnerActions?: boolean; // Flag to show/hide owner actions
   is_premium?: boolean; // Premium status based on payment
+  amenities?: string[]; // Key amenities/features
+  agentName?: string; // Agent name
+  agentPhone?: string; // Agent phone
+  lastVisited?: string; // Agent last visited date
 }
 
 const PropertyCard = ({
@@ -52,7 +56,11 @@ const PropertyCard = ({
   property_status,
   ownerId,
   showOwnerActions = false,
-  is_premium = false
+  is_premium = false,
+  amenities,
+  agentName,
+  agentPhone,
+  lastVisited
 }: PropertyCardProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -672,6 +680,12 @@ const PropertyCard = ({
                   ) : null}
                 </div>
               )}
+              {/* Amenities/Features */}
+              {amenities && amenities.length > 0 && (
+                <div className="mt-2 text-xs text-gray-600 line-clamp-1">
+                  {amenities.slice(0, 3).join(' | ')}
+                </div>
+              )}
               {/* Footer actions */}
               <div className="mt-3 flex justify-between items-center">
                 {showOwnerActions && isOwner ? (
@@ -725,29 +739,52 @@ const PropertyCard = ({
                     )}
                   </div>
                 ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 text-xs px-3 border-gray-200 hover:bg-gray-50 card-border"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowContactModal(true);
-                    }}
-                  >
-                    <Phone size={12} className="mr-1" />
-                    <span>Contact</span>
-                  </Button>
+                  <div className="flex gap-2 items-center">
+                    <button
+                      className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `mailto:${agentPhone}@example.com`;
+                      }}
+                    >
+                      <Mail size={18} />
+                    </button>
+                    <button
+                      className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `tel:${agentPhone}`;
+                      }}
+                    >
+                      <Phone size={18} />
+                    </button>
+                    <button
+                      className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 text-green-600"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(`https://wa.me/${agentPhone.replace(/\D/g, '')}`, '_blank');
+                      }}
+                    >
+                      <MessageCircle size={18} />
+                    </button>
+                  </div>
                 )}
-                <div className="text-lg font-bold text-black">{formatPrice(price)}</div>
+                <div className="text-xl font-bold text-black">{formatPrice(price)}</div>
               </div>
             </>
           ) : (
             <>
               <h3 className="font-semibold mb-1 truncate text-gray-900 text-xs h-4">{getDisplayTitle()}</h3>
-              <div className="flex items-center text-gray-500 mb-2">
+              <div className="flex items-center text-gray-500 mb-1">
                 <MapPin size={10} className="mr-1 flex-shrink-0" />
                 <span className="text-xs line-clamp-1 text-uniform">{location}</span>
               </div>
+              {/* Amenities/Features - Compact */}
+              {amenities && amenities.length > 0 && (
+                <div className="text-[10px] text-gray-600 line-clamp-1 mb-1">
+                  {amenities.slice(0, 2).join(' | ')}
+                </div>
+              )}
               <div className="flex justify-between items-end mt-auto">
                 {showOwnerActions && isOwner ? (
                   // Owner action buttons for compact view
@@ -797,20 +834,37 @@ const PropertyCard = ({
                     </Button>
                   </div>
                 ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-5 text-xs border-gray-200 hover:bg-gray-50 px-3 py-1 card-border"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowContactModal(true);
-                    }}
-                  >
-                    <Phone size={7} className="mr-0.5 sm:mr-0.5 mr-0" />
-                    <span className="hidden sm:inline">Contact</span>
-                  </Button>
+                  <div className="flex gap-1 items-center">
+                    <button
+                      className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `mailto:${agentPhone}@example.com`;
+                      }}
+                    >
+                      <Mail size={14} />
+                    </button>
+                    <button
+                      className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `tel:${agentPhone}`;
+                      }}
+                    >
+                      <Phone size={14} />
+                    </button>
+                    <button
+                      className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 text-green-600"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(`https://wa.me/${agentPhone.replace(/\D/g, '')}`, '_blank');
+                      }}
+                    >
+                      <MessageCircle size={14} />
+                    </button>
+                  </div>
                 )}
-                <div className="text-xs font-bold text-black">{formatPrice(price)}</div>
+                <div className="text-sm font-bold text-black">{formatPrice(price)}</div>
               </div>
             </>
           )}

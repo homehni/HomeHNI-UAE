@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Phone, MessageCircle, Search } from 'lucide-react';
+import { X, ChevronDown, User, UserPlus, LogIn, LogOut, Settings, Shield, Mail, Phone, MessageCircle, Search, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useToast } from '@/hooks/use-toast';
 import LegalServicesForm from './LegalServicesForm';
@@ -23,6 +24,7 @@ const Sidebar = ({
     user,
     signOut
   } = useAuth();
+  const { theme, setTheme } = useTheme();
   const {
     isAdmin,
     loading: adminLoading
@@ -331,6 +333,48 @@ const Sidebar = ({
                   Admin Login
                  </Button> */}
               </div>}
+          </div>
+
+          {/* Theme Switcher */}
+          <div className="p-4 border-t border-gray-200">
+            <div className="space-y-2">
+              <div className="flex items-center text-sm font-medium text-gray-700 mb-2">
+                <Palette size={16} className="mr-2" />
+                <span>Choose Theme</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => setTheme('default')}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    theme === 'default'
+                      ? 'bg-[#800000] text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Default
+                </button>
+                <button
+                  onClick={() => setTheme('green-white')}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    theme === 'green-white'
+                      ? 'bg-green-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Green
+                </button>
+                <button
+                  onClick={() => setTheme('opaque')}
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    theme === 'opaque'
+                      ? 'border-2 border-gray-700 text-gray-700'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Opaque
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Menu Items */}

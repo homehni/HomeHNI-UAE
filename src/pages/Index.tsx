@@ -55,12 +55,12 @@ const Index = () => {
       <Header />
       {/* Content starts immediately after marquee */}
       <div className="md:pt-8"> {/* Only add padding on desktop where marquee is visible */}
-        <div className="relative">
+        <div className="relative pb-20 sm:pb-0">
           <SearchSection ref={searchSectionRef} />
           <DirectorySection />
         </div>
         
-        <MobilePostPropertyBanner />
+        {/* <MobilePostPropertyBanner /> */}
         
         {/* Additional Scrollable Sections */}
         <ScrollableSection
