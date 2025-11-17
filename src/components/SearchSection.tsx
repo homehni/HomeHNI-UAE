@@ -1946,12 +1946,12 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                     >
                                       <span className="text-sm font-medium">
                                         {selectedConstructionStatus.length === 0 
-                                          ? 'All' 
+                                          ? 'Status' 
                                           : selectedConstructionStatus.includes('Ready') 
                                             ? 'Ready' 
                                             : selectedConstructionStatus.includes('Under Construction')
                                               ? 'Off-Plan'
-                                              : 'All'}
+                                              : 'Status'}
                                       </span>
                                       <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'status' ? 'rotate-90' : ''}`} />
                                     </Button>
@@ -2010,7 +2010,7 @@ const SearchSection = forwardRef<SearchSectionRef>((_, ref) => {
                                   className={`flex-shrink-0 lg:w-full flex items-center justify-between whitespace-nowrap gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:shadow-sm bg-white/80 backdrop-blur-md ${openDropdown === 'propertyType' ? 'bg-white/95 border-[#800000] shadow-sm' : 'border-[#800000]/50 hover:border-[#800000]/70 hover:bg-white/90'}`}
                                 >
                                   <span className="text-sm font-medium">{activeTab === 'land' ? 'Land Type' : activeTab === 'commercial' ? 'Space Type' : 'Property Type'}</span>
-                                  <ChevronRight size={14} className={`transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
+                                  <ChevronRight size={14} className={`flex-shrink-0 transition-transform duration-200 ${openDropdown === 'propertyType' ? 'rotate-90' : ''}`} />
                                 </Button>
                               </PopoverTrigger>
                               <PopoverContent 
