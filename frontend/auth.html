@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login / Sign Up</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <main>
+    <h1>Login</h1>
+    <form id="auth-form">
+      <label for="role">Select Role:</label>
+      <select id="role" name="role" required>
+        <option value="owner">Owner</option>
+        <option value="agent">Agent</option>
+        <option value="builder">Builder</option>
+        <option value="agency">Agency</option>
+        <option value="service">Service Provider</option>
+        <option value="buyer">Buyer/Tenant</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required placeholder="Email">
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required placeholder="Password">
+
+      <button type="submit">Login</button>
+    </form>
+  </main>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>
