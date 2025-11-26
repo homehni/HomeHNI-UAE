@@ -27,7 +27,7 @@ async function loadJSON(path) {
 
 // Prefer backend API, fallback to static JSON
 async function loadProperties() {
-  const apiBase = window.HOMENI_API_BASE || 'https://hni-uae-2.vercel.app/api';
+const apiBase = window.HOMEHNI_API_BASE || 'https://hni-uae-2.vercel.app/api';
   try {
     const res = await fetch(apiBase + "/properties");
 
