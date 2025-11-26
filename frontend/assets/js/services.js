@@ -7,7 +7,7 @@ function svcGetParams() {
 
 // Prefer backend /services, fallback to static JSON
 async function loadServices() {
-  const apiBase = window.HOMEHNI_API_BASE || "http://localhost:4000";
+ const apiBase = window.HOMEHNI_API_BASE || 'https://hni-uae-2.vercel.app/api';
   try {
     const res = await fetch(apiBase + "/services");
     if (res.ok) {
