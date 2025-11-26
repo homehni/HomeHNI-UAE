@@ -27,17 +27,17 @@ async function loadJSON(path) {
 
 // Prefer backend API, fallback to static JSON
 async function loadProperties() {
-  const apiBase = window.HOMEHNI_API_BASE || "http://localhost:4000";
+  const apiBase = window.HOMENI_API_BASE || 'https://hni-uae-2.vercel.app/api';
   try {
     const res = await fetch(apiBase + "/properties");
-    if (res.ok) {
+
       return res.json();
     }
   } catch (e) {
     console.warn("Backend API not reachable, falling back to static properties.json");
   }
   return loadJSON("assets/data/properties.json");
-}
+
 
 function formatPrice(aed) {
   if (aed == null) return "";
