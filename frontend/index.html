@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HomeHNI UAE</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Header / Hero -->
+  <header class="hero">
+    <h1>Find your dream home in the UAE</h1>
+    <form id="hero-search-form">
+      <select name="purpose">
+        <option value="">Purpose</option>
+        <option value="rent">Rent</option>
+        <option value="buy">Buy</option>
+      </select>
+      <select name="city">
+        <option value="">City</option>
+        <option value="Dubai">Dubai</option>
+        <option value="Abu Dhabi">Abu Dhabi</option>
+        <option value="Sharjah">Sharjah</option>
+      </select>
+      <select name="type">
+        <option value="">Property Type</option>
+        <option value="apartment">Apartment</option>
+        <option value="villa">Villa</option>
+      </select>
+      <button type="submit">Search</button>
+    </form>
+  </header>
+
+  <main>
+    <section>
+      <h2>Featured Properties</h2>
+      <div id="featured-properties" class="grid"></div>
+    </section>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
