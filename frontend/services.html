@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services Marketplace - HomeHNI UAE</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/services.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Services Marketplace</h1>
+  </header>
+  <main>
+    <section class="filters">
+      <form id="services-filters">
+        <label>
+          Category:
+          <select name="category">
+            <option value="">All</option>
+            <option value="packers">Packers & Movers</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="interiors">Interiors</option>
+          </select>
+        </label>
+        <label>
+          City:
+          <select name="city">
+            <option value="">All</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+            <option value="Sharjah">Sharjah</option>
+          </select>
+        </label>
+        <button type="submit">Filter</button>
+      </form>
+    </section>
+    <section id="services-grid" class="services-grid">
+      <!-- Services list will be loaded here -->
+    </section>
+  </main>
+</body>
+</html>
