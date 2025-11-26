@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listings - HomeHNI UAE</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Property Listings</h1>
+  </header>
+  <main>
+    <form id="filters-form">
+      <select name="purpose">
+        <option value="">Purpose</option>
+        <option value="rent">Rent</option>
+        <option value="buy">Buy</option>
+      </select>
+      <select name="city">
+        <option value="">City</option>
+        <option value="Dubai">Dubai</option>
+        <option value="Abu Dhabi">Abu Dhabi</option>
+        <option value="Sharjah">Sharjah</option>
+      </select>
+      <select name="type">
+        <option value="">Type</option>
+        <option value="apartment">Apartment</option>
+        <option value="villa">Villa</option>
+      </select>
+      <input type="number" name="beds" placeholder="Beds" min="0">
+      <input type="number" name="minPrice" placeholder="Min Price">
+      <input type="number" name="maxPrice" placeholder="Max Price">
+      <button type="submit">Apply</button>
+    </form>
+    <h2 id="listing-title">Properties</h2>
+    <p id="listing-count"></p>
+    <div id="listing-grid" class="grid"></div>
+  </main>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
