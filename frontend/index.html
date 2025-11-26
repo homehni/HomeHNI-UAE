@@ -10,30 +10,69 @@
   <header class="hero">
     <h1>Find your dream home in the UAE</h1>
     <form id="hero-search-form">
-      <select name="purpose">
-        <option value="">Purpose</option>
-        <option value="rent">Rent</option>
-        <option value="buy">Buy</option>
-      </select>
-      <select name="city">
-        <option value="">City</option>
-        <option value="Dubai">Dubai</option>
-        <option value="Abu Dhabi">Abu Dhabi</option>
-        <option value="Sharjah">Sharjah</option>
-      </select>
-      <select name="type">
-        <option value="">Property Type</option>
-        <option value="apartment">Apartment</option>
-        <option value="villa">Villa</option>
-      </select>
-      <button type="submit">Search</button>
+      <div class="search-fields">
+        <select name="purpose">
+          <option value="">Purpose</option>
+          <option value="rent">Rent</option>
+          <option value="buy">Buy</option>
+        </select>
+        <select name="city">
+          <option value="">City</option>
+          <option value="Dubai">Dubai</option>
+          <option value="Abu Dhabi">Abu Dhabi</option>
+          <option value="Sharjah">Sharjah</option>
+        </select>
+        <select name="type">
+          <option value="">Property Type</option>
+          <option value="apartment">Apartment</option>
+          <option value="villa">Villa</option>
+        </select>
+        <select name="beds">
+          <option value="">Beds</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+        </select>
+        <input type="number" name="minPrice" placeholder="Min Price">
+        <input type="number" name="maxPrice" placeholder="Max Price">
+        <button type="submit">Search</button>
+      </div>
     </form>
   </header>
 
   <main>
+    <!-- Featured properties -->
     <section>
       <h2>Featured Properties</h2>
-      <div id="featured-properties" class="grid"></div>
+      <div id="featured-properties" class="property-grid"></div>
+    </section>
+
+    <!-- Role links -->
+    <section class="roles">
+      <h2>For Owners, Agents, Builders & Service Providers</h2>
+      <div class="role-cards">
+        <div class="role-card">
+          <h3>Owners</h3>
+          <p>List your property and manage leads.</p>
+          <a href="auth.html?role=owner" class="btn">Get Started</a>
+        </div>
+        <div class="role-card">
+          <h3>Agents</h3>
+          <p>Promote listings and track your leads.</p>
+          <a href="auth.html?role=agent" class="btn">Get Started</a>
+        </div>
+        <div class="role-card">
+          <h3>Builders</h3>
+          <p>Showcase projects and manage inventories.</p>
+          <a href="auth.html?role=builder" class="btn">Get Started</a>
+        </div>
+        <div class="role-card">
+          <h3>Service Providers</h3>
+          <p>Offer your services to property seekers.</p>
+          <a href="auth.html?role=service" class="btn">Get Started</a>
+        </div>
+      </div>
     </section>
   </main>
 
