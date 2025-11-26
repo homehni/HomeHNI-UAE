@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "name": "Dubai Pearl Packers & Movers",
+    "category": "Packers & Movers",
+    "cities": ["Dubai", "Sharjah"],
+    "rating": 4.6,
+    "reviews": 120,
+    "description": "Professional moving and packing services with years of experience.",
+    "services": ["Home Relocation", "Office Relocation", "Storage"],
+    "image": "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg"
+  },
+  {
+    "id": 2,
+    "name": "Abu Dhabi Sparkle Cleaning",
+    "category": "Cleaning",
+    "cities": ["Abu Dhabi", "Al Ain"],
+    "rating": 4.8,
+    "reviews": 95,
+    "description": "Residential and commercial cleaning solutions for spotless spaces.",
+    "services": ["Deep Cleaning", "Office Cleaning", "Move-in/Move-out"],
+    "image": "https://images.pexels.com/photos/4792499/pexels-photo-4792499.jpeg"
+  },
+  {
+    "id": 3,
+    "name": "Dubai Elite Interiors",
+    "category": "Interiors",
+    "cities": ["Dubai", "Abu Dhabi"],
+    "rating": 4.7,
+    "reviews": 60,
+    "description": "Creative interior design and fit-out services for homes and offices.",
+    "services": ["Interior Design", "Fit-out", "Renovation"],
+    "image": "https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg"
+  },
+  {
+    "id": 4,
+    "name": "Legal Consultants UAE",
+    "category": "Legal",
+    "cities": ["Dubai", "Abu Dhabi"],
+    "rating": 4.5,
+    "reviews": 40,
+    "description": "Expert legal advice and consultation services.",
+    "services": ["Property Registration", "Contract Drafting", "Dispute Resolution"],
+    "image": "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
+  }
+]
