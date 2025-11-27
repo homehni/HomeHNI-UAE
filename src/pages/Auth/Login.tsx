@@ -12,7 +12,7 @@ export default function LoginPage() {
     const res = await sendLoginOtp(email);
     if (res.error) {
       setStatus('error');
-      setMessage(res.error.message || JSON.stringify(res.error));
+      setMessage(res.error.message || 'An error occurred. Please try again.');
     } else {
       setStatus('sent');
       setMessage('Check your email for a login link.');
